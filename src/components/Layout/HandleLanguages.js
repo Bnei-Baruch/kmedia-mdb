@@ -8,18 +8,27 @@ import { ALL_LANGUAGES, LANGUAGES, LANG_UI_LANGUAGES } from '../../helpers/const
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { updateHtmlLang } from '../../helpers/language';
 
-import { selectors as settings, actions } from '../../redux/modules/settings';
+import { actions } from '../../redux/modules/settings';
 import Link from '../Language/MultiLanguageLink';
+import {
+  settingsGetContentLanguagesSelector,
+  settingsGetShowAllContentSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector,
+  settingsGetUrlLangSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../redux/selectors';
 
 const HandleLanguages = ({ t }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const showAllContent          = useSelector(state => settings.getShowAllContent(state.settings));
+  const showAllContent          = useSelector(settingsGetShowAllContentSelector);
 
-  const urlLang          = useSelector(state => settings.getUrlLang(state.settings));
-  const origUILang       = useSelector(state => settings.getUILang(state.settings, true /* skipUrl */));
-  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings, true /* skipUrl */));
+  const urlLang          = useSelector(settingsGetUrlLangSelector);
+  const origUILang       = useSelector(state => settingsGetUILangSelector(state, true /* skipUrl */));
+  const uiDir            = useSelector(settingsGetUIDirSelector);
+  const leftRight        = useSelector(settingsGetLeftRightByDirSelector);
+  const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
   const popupStyle       = { direction: uiDir };
   const dispatch         = useDispatch();
 
@@ -41,7 +50,7 @@ const HandleLanguages = ({ t }) => {
   };
 
   const setShowAllContent = () => dispatch(actions.setShowAllContent(!showAllContent));
-  const handlePopup = () => setIsActive(!isActive);
+  const handlePopup       = () => setIsActive(!isActive);
 
   const Trigger = React.forwardRef((props, ref) => (
     <div onClick={handlePopup} ref={ref}>
@@ -95,7 +104,7 @@ const HandleLanguages = ({ t }) => {
       id="handleLanguagesPopup"
       key="handleLangs"
       flowing
-      position={`bottom ${uiDir === 'rtl' ? 'left' : 'right'}`}
+      position={`bottom ${leftRight}`}
       trigger={<Trigger />}
       open={isActive}
       onOpen={handlePopup}
@@ -109,7 +118,9 @@ const HandleLanguages = ({ t }) => {
           <Link language={origUILang}>{t('languages.url_language_here')}</Link>
           {t('languages.url_language_suffix')}</div>}
         {<div className="language-ui">
-          <h4 className={!!urlLang ? 'disabled' : ''}>{t('languages.ui_language')}</h4>
+          <h4 className={`margin-left-4 margin-right-4 ${!!urlLang ? 'disabled' : ''}`}>
+            {t('languages.ui_language')}
+          </h4>
           <Dropdown disabled={!!urlLang} text={LANGUAGES[origUILang].name} item scrolling>
             <Dropdown.Menu>
               {
@@ -135,7 +146,8 @@ const HandleLanguages = ({ t }) => {
             <LanguagesDropdown
               disabled={!!urlLang}
               allLanguages={ALL_LANGUAGES}
-              trigger={<Button disabled={!!urlLang} basic color="grey" size="small">{t('languages.add_languages')}</Button>}
+              trigger={
+                <Button disabled={!!urlLang} basic color="grey" size="small">{t('languages.add_languages')}</Button>}
               selected={lang => addLanguage(lang)} />
           </List.Item>
         </List>
@@ -152,7 +164,7 @@ const HandleLanguages = ({ t }) => {
 };
 
 HandleLanguages.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(HandleLanguages);

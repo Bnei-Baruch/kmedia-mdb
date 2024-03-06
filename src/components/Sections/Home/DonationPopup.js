@@ -10,11 +10,15 @@ import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME
 import { getQuery } from '../../../helpers/url';
 import banner from '../../../images/DonationBanner.jpg';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/auth';
+import {
+  settingsGetContentLanguagesSelector,
+  authGetUserSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector
+} from '../../../redux/selectors';
 
 function DonationPopup({ t }) {
-  const user       = useSelector(state => selectors.getUser(state.auth));
+  const user       = useSelector(authGetUserSelector);
   const shouldOpen = () => {
     if (user?.name === KC_BOT_USER_NAME) return false;
     const query = getQuery(location);
@@ -36,11 +40,11 @@ function DonationPopup({ t }) {
     return false;
   };
 
-  const location = useLocation();
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const uiLang = useSelector(state => settings.getUILang(state.settings));
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const isRTL = isLanguageRtl(uiLang);
+  const location         = useLocation();
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const uiLang           = useSelector(settingsGetUILangSelector);
+  const uiDir            = useSelector(settingsGetUIDirSelector);
+  const isRTL            = isLanguageRtl(uiLang);
 
   const [open, setOpen]    = React.useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -60,7 +64,7 @@ function DonationPopup({ t }) {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
     >
-      {isMobileDevice ? <Header className="popupHeader" /> : ''}
+      {isMobileDevice ? <Header className="popupHeader"/> : ''}
       <Modal.Content scrolling>
         <Grid>
           <Grid.Row columns={isMobileDevice ? 1 : 2}>
@@ -69,10 +73,10 @@ function DonationPopup({ t }) {
                 src={banner}
                 href={link}
                 as="a"
-                target="_blank" />
+                target="_blank"/>
             </Grid.Column>
             <Grid.Column>
-              <div dangerouslySetInnerHTML={{ __html: t('home.donate-modal') }} />
+              <div dangerouslySetInnerHTML={{ __html: t('home.donate-modal') }}/>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -96,7 +100,7 @@ const DONATION_LINKS_DETAILS = new Map([
   [LANG_HEBREW, { linkLang: '', utmTerm: 'heb' }],
   [LANG_ENGLISH, { linkLang: 'en', utmTerm: 'eng' }],
   [LANG_RUSSIAN, { linkLang: 'ru', utmTerm: 'rus' }],
-  [LANG_SPANISH, { linkLang: 'es', utmTerm: 'spa' }],
+  [LANG_SPANISH, { linkLang: 'es', utmTerm: 'spa' }]
 ]);
 
 const getDonateLinkDetails = contentLanguages => {

@@ -6,8 +6,8 @@ import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as settings } from '../../../redux/modules/settings';
 import TagSourceItem from './TagSourceItem';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 3;
 const buildRowArr   = n => {
@@ -17,20 +17,21 @@ const buildRowArr   = n => {
 };
 
 const TagSourceItemModal = props => {
-  const {
-    baseItems,
-    filterName,
-    parent,
-    open,
-    onClose,
-    getById,
-    getPath,
-    t
-  } = props;
+  const
+    {
+      baseItems,
+      filterName,
+      parent,
+      open,
+      onClose,
+      getById,
+      getPath,
+      t
+    } = props;
 
   const [query, setQuery] = useState('');
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   if (!parent || !parent.children) return null;
 
@@ -61,14 +62,14 @@ const TagSourceItemModal = props => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i} />;
+    if (!item) return <Table.Cell key={i}/>;
 
     return (
       <Table.Cell
         className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
         key={i}
       >
-        <TagSourceItem {...props} id={item.id} deep={-1} />
+        <TagSourceItem {...props} id={item.id} deep={-1}/>
       </Table.Cell>
     );
   };
@@ -81,7 +82,7 @@ const TagSourceItemModal = props => {
       className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
       dir={uiDir}
       onClose={handleClose}
-      closeIcon={<Icon name="times circle outline" />}
+      closeIcon={<Icon name="times circle outline"/>}
     >
       <Modal.Header className="no-border">
         <div>{parent[field]}</div>
@@ -102,7 +103,7 @@ const TagSourceItemModal = props => {
         </Table>
       </Modal.Content>
       <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={handleClose} />
+        <Button primary content={t('buttons.close')} onClick={handleClose}/>
       </Modal.Actions>
     </Modal>
   );

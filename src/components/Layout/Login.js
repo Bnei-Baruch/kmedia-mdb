@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
 import { Button, Divider, List, Popup } from 'semantic-ui-react';
-import { selectors } from '../../redux/modules/auth';
-import { selectors as settings } from '../../redux/modules/settings';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Link from '../Language/MultiLanguageLink';
-import { login, logout } from '../../pkg/ksAdapter/adapter';
+import { login, logout, KC_API_WITH_REALM } from '../../pkg/ksAdapter/adapter';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
+import { settingsGetUIDirSelector, settingsGetUILangSelector, authGetUserSelector } from '../../redux/selectors';
 
 const Login = ({ t }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const uiLang                  = useSelector(state => settings.getUILang(state.settings));
-  const uiDir                   = useSelector(state => settings.getUIDir(state.settings));
+  const uiLang                  = useSelector(settingsGetUILangSelector);
+  const uiDir                   = useSelector(settingsGetUIDirSelector);
   const popupStyle              = { uiDir };
-  const user                    = useSelector(state => selectors.getUser(state.auth));
+  const user                    = useSelector(authGetUserSelector);
+  const nameLetter              = !!user && !!user.name ? user.name[0].toUpperCase() : '';
   const loggedIn                = useIsLoggedIn();
 
   const handlePopupOpen  = () => setIsActive(true);
@@ -36,7 +36,7 @@ const Login = ({ t }) => {
           circular
           compact
           className={'auth-button'}
-          content={user?.name[0].toUpperCase()}
+          content={nameLetter}
           onClick={handlePopupClose}
         />
       }
@@ -47,8 +47,8 @@ const Login = ({ t }) => {
       style={popupStyle}
       hideOnScroll
     >
-      <Popup.Header content={user?.name} />
-      <Divider />
+      <Popup.Header content={user?.name}/>
+      <Divider/>
       <Popup.Content>
         <List>
           <List.Item
@@ -60,7 +60,7 @@ const Login = ({ t }) => {
           <List.Item
             key="account"
             as="a"
-            href={`https://accounts.kab.info/auth/realms/main/account/?kc_locale=${uiLang}`}
+            href={`${KC_API_WITH_REALM}/account/?kc_locale=${uiLang}`}
             content={t('personal.account')}
           />
           <List.Item
@@ -92,6 +92,6 @@ const Login = ({ t }) => {
   return loggedIn ? renderAccount() : renderLogin();
 };
 
-Login.propTypes = { t: PropTypes.func.isRequired, };
+Login.propTypes = { t: PropTypes.func.isRequired };
 
 export default withTranslation()(Login);

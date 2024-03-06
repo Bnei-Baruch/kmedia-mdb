@@ -67,16 +67,14 @@
   }
 }
 
-.label_bar {
+.label_marks {
   height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -10px;
+  position: relative;
+  width: 20px;
 
   .label_mark {
     position: absolute;
-    width: 0px;
+    width: 0;
     border-left: 1px solid $blue;
     left: 0;
     vertical-align: middle;
@@ -111,7 +109,7 @@
   }
 }
 
-.ltr.label_bar {
+.ltr .label_marks {
   right: auto;
   left: -10PX;
 }

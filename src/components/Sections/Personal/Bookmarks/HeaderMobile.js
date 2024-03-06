@@ -8,20 +8,24 @@ import {
   MY_BOOKMARK_FILTER_QUERY,
   MY_NAMESPACE_FOLDERS
 } from '../../../../helpers/consts';
-import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
-import { selectors as my } from '../../../../redux/modules/my';
+import { actions as filtersActions } from '../../../../redux/modules/bookmarkFilter';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import {
+  bookmarkFilterGetByKeySelector,
+  myGetItemByKeySelector,
+  settingsGetUIDirSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../../../redux/selectors';
 
 const BookmarkHeaderMobile = ({ t }) => {
   const [open, setOpen] = useState();
 
-  const folder_id = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
-  const query = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
+  const folder_id = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
+  const query     = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
 
   const { key: fKey } = getMyItemKey(MY_NAMESPACE_FOLDERS, { id: folder_id });
-  const folder = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, fKey));
+  const folder        = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_FOLDERS, fKey));
 
   const dispatch = useDispatch();
 
@@ -36,7 +40,8 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir     = useSelector(settingsGetUIDirSelector);
+  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
 
   const trigger = (
     <Container>
@@ -48,10 +53,10 @@ const BookmarkHeaderMobile = ({ t }) => {
         color="blue"
         onClick={handleToggle}
       >
-        <Icon name="folder outline" color="grey"/>
+        <Icon name="folder outline" color="grey" />
         {t('personal.bookmark.folders')}
         <Icon
-          name={`caret ${uiDir === 'ltr' ? 'right' : 'left'}`}
+          name={`caret ${leftRight}`}
           className="margin-left-8 margin-right-8"
         />
       </Label>
@@ -86,7 +91,7 @@ const BookmarkHeaderMobile = ({ t }) => {
   return (
     <Container className="padded">
       <Header as={'h2'} className="my_header padding-top_1em">
-        <Icon name="bookmark outline" className="display-iblock"/>
+        <Icon name="bookmark outline" className="display-iblock" />
         {t('personal.bookmark.title')}
       </Header>
 
@@ -101,7 +106,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         <Modal.Content>
           <Grid className="no-padding">
             <Grid.Row>
-              <FolderList close={handleToggle}/>
+              <FolderList close={handleToggle} />
             </Grid.Row>
           </Grid>
         </Modal.Content>

@@ -7,11 +7,10 @@ import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
 const AVUnitWithDep = ({ unit }) => {
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   // if unit.description doesn't exist, use the collection description
   let { description } = unit;
@@ -31,13 +30,13 @@ const AVUnitWithDep = ({ unit }) => {
     .map(file => ({
       ...file,
       ...getVideoRes(file.video_size, videoDate),
-      url: physicalFile(file, true),
+      url: physicalFile(file, true)
     }));
 
   return (
     <div>
-      <Basic title={unit.name} description={description} />
-      <Image unitOrUrl={unit} />
+      <Basic title={unit.name} description={description}/>
+      <Image unitOrUrl={unit}/>
       {videoFiles.map(file => <Video key={file.id} releaseDate={unit.film_date} {...file} />)}
 
       {/* // /!*TODO: add Helmets.Basic:url ? *!/ */}
@@ -57,10 +56,12 @@ const areEqual = (prevProps, nextProps) =>
 const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
 
 const AVUnit = ({ id }) => {
-  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   if (!unit || !unit.files) {
     return null;
   }
-  return <AVUnitMemo unit={unit} />;
+
+  return <AVUnitMemo unit={unit}/>;
 };
+
 export default AVUnit;

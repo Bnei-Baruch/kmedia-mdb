@@ -1,37 +1,40 @@
 import React from 'react';
 import StartEnd from './StartEnd';
 import { useSelector } from 'react-redux';
-import { selectors as player, selectors } from '../../../redux/modules/player';
-import { PLAYER_OVER_MODES, MT_VIDEO } from '../../../helpers/consts';
-import { selectors as playlist } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { toHumanReadableTime } from '../../../helpers/time';
 import TagVideoLabelBtn from '../../Pages/WithPlayer/widgets/Info/TagVideoLabelBtn';
 import SavePlaylistItemBtn from '../../Pages/WithPlayer/widgets/Info/SavePlaylistItemBtn';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  playerGetOverModeSelector,
+  playerGetShareStartEndSelector
+} from '../../../redux/selectors';
 
 const LabelVideo = () => {
-  const mode     = useSelector(state => player.getOverMode(state.player));
-  const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
-  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const mode     = useSelector(playerGetOverModeSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
+  const unit     = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
 
-  const { start = 0, end } = useSelector(state => selectors.getShareStartEnd(state.player));
+  const { start = 0, end } = useSelector(playerGetShareStartEndSelector);
 
   if (![PLAYER_OVER_MODES.tagging, PLAYER_OVER_MODES.playlist].includes(mode)) return null;
 
   const label  = {
-    properties: { sstart: toHumanReadableTime(start), send: toHumanReadableTime(end) },
+    properties  : { sstart: toHumanReadableTime(start), send: toHumanReadableTime(end) },
     content_unit: unit.id,
-    media_type: 'media'
+    media_type  : 'media'
   };
   const action = mode === PLAYER_OVER_MODES.tagging ? (
-    <TagVideoLabelBtn label={label} />
+    <TagVideoLabelBtn label={label}/>
   ) : (
-    <SavePlaylistItemBtn label={label} />
+    <SavePlaylistItemBtn label={label}/>
   );
 
   return (
     <div className="sharing">
-      <StartEnd action={action} />
+      <StartEnd action={action}/>
     </div>
   );
 };

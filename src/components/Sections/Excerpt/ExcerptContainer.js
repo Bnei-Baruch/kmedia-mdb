@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../redux/modules/settings';
 import excerpts from './excerpts';
 import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
-import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectSuitableLanguage } from '../../../helpers/language';
 
 const renderer = ({ minutes, seconds, completed }) => {
@@ -29,11 +26,11 @@ const calculateTimeLeft = finalDate => {
   const difference = (finalDate - +new Date()) / 1000;
 
   return {
-    days: Math.floor(difference / (60 * 60 * 24)),
-    hours: Math.floor((difference / (60 * 60)) % 24),
-    minutes: Math.floor((difference / 60) % 60),
-    seconds: Math.floor(difference % 60),
-    completed: difference <= 0,
+    days     : Math.floor(difference / (60 * 60 * 24)),
+    hours    : Math.floor((difference / (60 * 60)) % 24),
+    minutes  : Math.floor((difference / 60) % 60),
+    seconds  : Math.floor(difference % 60),
+    completed: difference <= 0
   };
 };
 
@@ -58,9 +55,8 @@ const Countdown = ({ finalDate }) => {
 };
 
 const ExcerptContainer = () => {
-  const excerptsLanguages = Object.keys(excerpts);
-  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings));
-  const defaultLanguage = selectSuitableLanguage(excerptsLanguages, excerptsLanguages, DEFAULT_CONTENT_LANGUAGE);
+  const excerptsLanguages                       = Object.keys(excerpts);
+  const defaultLanguage                         = selectSuitableLanguage(excerptsLanguages, excerptsLanguages, DEFAULT_CONTENT_LANGUAGE);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
   const [excerpt, setExcerpt]     = useState(chooseExcerpt(selectedLanguage));
@@ -71,7 +67,7 @@ const ExcerptContainer = () => {
     setFinalDate(nowPlus5min());
   }, [selectedLanguage]);
 
-  const handleLanguageChanged = (selectedLanguage) => setSelectedLanguage(selectedLanguage);
+  const handleLanguageChanged = selectedLanguage => setSelectedLanguage(selectedLanguage);
 
   return (
     <div style={{ padding: '20px', textAlign: 'justify' }}>
@@ -82,13 +78,13 @@ const ExcerptContainer = () => {
         multiSelect={false}
       />
       <Header as="h1" textAlign="center" color="green" size="huge">
-        <Countdown finalDate={finalDate} />
+        <Countdown finalDate={finalDate}/>
       </Header>
       <Container text>
         {excerpt}
       </Container>
-      <br />
-      <br />
+      <br/>
+      <br/>
     </div>
   );
 };

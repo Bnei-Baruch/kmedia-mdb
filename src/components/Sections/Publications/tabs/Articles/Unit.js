@@ -1,59 +1,51 @@
 import React, { Fragment, useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
-import { actions, selectors } from '../../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
-import TranscriptionContainer
-  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import Share from '../../../Library/Share';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
-import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import TagsByUnit from '../../../../shared/TagsByUnit';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
+import ArticleToolbarMobile from './ArticleToolbarMobile';
+import ArticleToolbarWeb from './ArticleToolbarWeb';
+import {
+  mdbGetDenormContentUnitSelector,
+  mdbGetErrorsSelector,
+  settingsGetUIDirSelector,
+  mdbGetWipFn
+} from '../../../../../redux/selectors';
+import TextLayoutMobile from '../../../../Pages/WithText/TextLayoutMobile';
 
-const renderHeader = (unit, t, uiDir) => {
-  const position = uiDir === 'rtl' ? 'right' : 'left';
+const renderHeader = (unit, t) => {
   const subText2 = t(`publications.header.subtext2`);
 
   return (
     <div className="section-header">
       <Container className="padded">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h1">
-                <Header.Content>
-                  {unit.name}
-                  {
-                    unit.description &&
-                    <Header.Subheader>{unit.description}</Header.Subheader>
-                  }
-                  {
-                    subText2 &&
-                    <Header.Subheader className="section-header__subtitle2">
-                      {subText2}
-                    </Header.Subheader>
-                  }
-                </Header.Content>
-              </Header>
-              <Header as="h4" color="grey" className="display-inline">
-                {t('values.date', { date: unit.film_date })}
-              </Header>
-              <span className="share-publication">
-                <Share position={position} />
-              </span>
-              <TagsByUnit id={unit.id} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Header as="h1">
+          <Header.Content>
+            {unit.name}
+            {
+              unit.description &&
+              <Header.Subheader>{unit.description}</Header.Subheader>
+            }
+            {
+              subText2 &&
+              <Header.Subheader className="section-header__subtitle2">
+                {subText2}
+              </Header.Subheader>
+            }
+          </Header.Content>
+        </Header>
+        <Header as="h4" color="grey" className="display-inline">
+          {t('values.date', { date: unit.film_date })}
+        </Header>
       </Container>
     </div>
   );
@@ -66,30 +58,18 @@ const renderHelmet = unit => (
   </Fragment>
 );
 
-const renderArticle = (unit, chroniclesAppend) => (
-  <Grid padded>
-    <Grid.Row>
-      <Grid.Column>
-        <TranscriptionContainer unit={unit} />
-      </Grid.Column>
-    </Grid.Row>
-    <Grid.Row>
-      <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
-);
+const ArticlePage = () => {
+  const { id }   = useParams();
+  const location = useLocation();
+  const { t }    = useTranslation();
 
-const ArticlePage = ({ t }) => {
-  const location   = useLocation();
-  const { id }     = useParams();
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip   = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err   = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const wip   = useSelector(mdbGetWipFn).units[id];
+  const err   = useSelector(mdbGetErrorsSelector).units[id];
 
   const dispatch = useDispatch();
 
@@ -98,7 +78,7 @@ const ArticlePage = ({ t }) => {
       return;
     }
 
-    dispatch(actions.fetchUnit(id));
+    dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip]);
 
   const wipErr = WipErr({ wip, err, t });
@@ -111,8 +91,9 @@ const ArticlePage = ({ t }) => {
   }
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
+  const toolbar          = isMobileDevice ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
+  const { embed }        = getEmbedFromQuery(location);
 
-  const embed = getEmbedFromQuery(location);
   return !embed
     ? (
       <>
@@ -126,12 +107,29 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    {renderArticle(unit, chroniclesAppend)}
+                    <Grid padded>
+                      <Grid.Row>
+                        <Grid.Column>
+                          {
+                            isMobileDevice ? (
+                              <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+                            ) : (
+                              <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+                            )
+                          }
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit} />
+                <Recommended cuId={unit.id} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -142,8 +140,4 @@ const ArticlePage = ({ t }) => {
     );
 };
 
-ArticlePage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(ArticlePage);
+export default ArticlePage;

@@ -3,15 +3,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
-import {
-  CT_CLIP,
-  CT_CLIPS,
-  CT_VIDEO_PROGRAM,
-  CT_VIDEO_PROGRAM_CHAPTER
-} from '../../../helpers/consts';
+import { CT_CLIP, CT_CLIPS, CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 
-import { selectors as settings } from '../../../redux/modules/settings';
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -22,15 +17,15 @@ const buildRowArr   = n => {
 
 export const cCtByUnitCt = {
   [CT_VIDEO_PROGRAM_CHAPTER]: CT_VIDEO_PROGRAM,
-  [CT_CLIP]: CT_CLIPS,
-  [CT_VIDEO_PROGRAM]: CT_VIDEO_PROGRAM_CHAPTER,
-  [CT_CLIPS]: CT_CLIP
+  [CT_CLIP]                 : CT_CLIPS,
+  [CT_VIDEO_PROGRAM]        : CT_VIDEO_PROGRAM_CHAPTER,
+  [CT_CLIPS]                : CT_CLIP
 };
 
 const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   const [query, setQuery] = useState('');
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const reg         = new RegExp(query, 'i');
   const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
@@ -49,11 +44,11 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i} />;
+    if (!item) return <Table.Cell key={i}/>;
 
     return (
       <Table.Cell className="tree_item_modal_content" key={item.id}>
-        <CollectionItem namespace={namespace} item={item} />
+        <CollectionItem namespace={namespace} item={item}/>
       </Table.Cell>
     );
   };
@@ -66,7 +61,7 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
       dir={uiDir}
       onClose={handleClose}
       className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-      closeIcon={<Icon name="times circle outline" />}
+      closeIcon={<Icon name="times circle outline"/>}
       size="fullscreen"
     >
       <Modal.Header className="no-border nowrap">
@@ -88,7 +83,7 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
         </Table>
       </Modal.Content>
       <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={handleClose} />
+        <Button primary content={t('buttons.close')} onClick={handleClose}/>
       </Modal.Actions>
     </Modal>
   );

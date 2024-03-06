@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
-import { Button, Header, Icon } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { actions, selectors as player } from '../../../redux/modules/player';
+import { useSelector } from 'react-redux';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import QualityControl from './QualityControl';
 import PlayerLanguages from './PlayerLanguages';
@@ -12,14 +10,12 @@ import RateControl from './RateControl';
 import CloseBtn from '../Controls/CloseBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import SubsControl from './SubsControl';
+import { playerGetOverModeSelector } from '../../../redux/selectors';
 
 const Settings = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const mode                      = useSelector(state => player.getOverMode(state.player));
-  const dispatch                  = useDispatch();
-
-  const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));
+  const mode = useSelector(playerGetOverModeSelector);
 
   return (
     <div className="settings">

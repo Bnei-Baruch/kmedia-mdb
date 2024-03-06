@@ -1,36 +1,45 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
-import { selectors as sources } from '../../../../redux/modules/sources';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { cuPartNameByCCUType } from '../../../../helpers/utils';
+import { cuPartNameByCCUType, canonicalCollection } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
-import { selectors } from '../../../../redux/modules/playlist';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  sourcesGetPathByIDSelector
+} from '../../../../redux/selectors';
 
 const PlaylistHeader = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
-  const { cId, cuId, name } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const collection          = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const getPath             = useSelector(state => sources.getPathByID(state.sources));
+  const { cId, cuId, name } = useSelector(playlistGetInfoSelector);
+  const { id: paramsId }    = useParams();
+  const unit                = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
+  const c                   = canonicalCollection(unit);
+  const collection          = useSelector(state => mdbGetDenormCollectionSelector(state, cId || (c && c.id) || paramsId));
+  const getPath             = useSelector(sourcesGetPathByIDSelector);
+
+  if (!unit) {
+    return null;
+  }
 
   const { content_type, number, film_date, start_date, end_date, tag_id, source_id, likutim_id } = collection || false;
-
-  const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
+  const isLesson                                                                                 = COLLECTION_DAILY_LESSONS.includes(content_type);
 
   const getTitle = () => {
     if (!collection)
       return (
         <>
-          <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
+          <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF"/>
           {t('personal.playlist', { name })}
         </>
       );
@@ -54,9 +63,10 @@ const PlaylistHeader = () => {
     if (likutim_id?.length > 0) {
       return `${t('likutim.item-header')} ${name}`;
     }
+
     if (source_id && getPath) {
       const path         = getPath(source_id);
-      const nameFromPath = path[0]?.name ? path[0].name + ' - ' : '';
+      const nameFromPath = path[0]?.name ? `${path[0].name} - ` : '';
       return `${t('player.header.series-by-topic')} ${nameFromPath}${name}`;
     }
 
@@ -92,7 +102,7 @@ const PlaylistHeader = () => {
 
     return (
       <>
-        {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
+        {isLesson && !isMobileDevice && <LessonDatePickerContainer/>}
         {getTitle()}
         {
           subheader && (
@@ -119,8 +129,8 @@ const PlaylistHeader = () => {
 
   return (
     <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
-      <Header.Content content={getTitleByCO()} />
-      {isLesson && isMobileDevice && <LessonDatePickerContainer />}
+      <Header.Content content={getTitleByCO()}/>
+      {isLesson && isMobileDevice && <LessonDatePickerContainer/>}
     </Header>
   );
 };

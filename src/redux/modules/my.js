@@ -1,116 +1,15 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
 import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACES } from '../../helpers/consts';
 import { getMyItemKey } from '../../helpers/my';
 
-/* Types */
-const SET_PAGE = 'My/SET_PAGE';
-
-const FETCH         = 'My/FETCH';
-const FETCH_SUCCESS = 'My/FETCH_SUCCESS';
-const FETCH_FAILURE = 'My/FETCH_FAILURE';
-
-const FETCH_ONE         = 'My/FETCH_ONE';
-const FETCH_ONE_SUCCESS = 'My/FETCH_ONE_SUCCESS';
-
-const ADD         = 'My/ADD';
-const ADD_SUCCESS = 'My/ADD_SUCCESS';
-
-const EDIT         = 'My/EDIT';
-const EDIT_SUCCESS = 'My/EDIT_SUCCESS';
-
-const REMOVE         = 'My/REMOVE';
-const REMOVE_SUCCESS = 'My/REMOVE_SUCCESS';
-
-const SET_DELETED = 'My/SET_DELETED';
-
-const REACTION_COUNT         = 'My/REACTION_COUNT';
-const REACTION_COUNT_SUCCESS = 'My/REACTION_COUNT_SUCCESS';
-
-export const types = {
-  SET_PAGE,
-
-  FETCH,
-  FETCH_SUCCESS,
-  FETCH_FAILURE,
-
-  FETCH_ONE,
-  FETCH_ONE_SUCCESS,
-
-  ADD,
-  ADD_SUCCESS,
-
-  EDIT,
-  EDIT_SUCCESS,
-
-  REMOVE,
-  REMOVE_SUCCESS,
-
-  SET_DELETED,
-
-  REACTION_COUNT,
-  REACTION_COUNT_SUCCESS,
-};
-
-/* Actions */
-
-const setPage = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
-
-const fetch        = createAction(FETCH, (namespace, params) => ({ namespace, ...params }));
-const fetchSuccess = createAction(FETCH_SUCCESS);
-const fetchFailure = createAction(FETCH_FAILURE);
-
-const fetchOne        = createAction(FETCH_ONE, (namespace, params) => ({ namespace, ...params }));
-const fetchOneSuccess = createAction(FETCH_ONE_SUCCESS);
-
-const add        = createAction(ADD, (namespace, params) => ({ namespace, ...params }));
-const addSuccess = createAction(ADD_SUCCESS);
-
-const edit        = createAction(EDIT, (namespace, params) => ({ namespace, ...params }));
-const editSuccess = createAction(EDIT_SUCCESS);
-
-const remove        = createAction(REMOVE, (namespace, params) => ({ namespace, ...params }));
-const removeSuccess = createAction(REMOVE_SUCCESS);
-
-const setDeleted = createAction(SET_DELETED, (namespace, deleted) => ({ namespace, deleted }));
-
-const reactionsCount        = createAction(REACTION_COUNT);
-const reactionsCountSuccess = createAction(REACTION_COUNT_SUCCESS);
-
-export const actions = {
-  setPage,
-
-  fetch,
-  fetchSuccess,
-  fetchFailure,
-
-  fetchOne,
-  fetchOneSuccess,
-
-  add,
-  addSuccess,
-
-  edit,
-  editSuccess,
-
-  remove,
-  removeSuccess,
-
-  setDeleted,
-
-  reactionsCount,
-  reactionsCountSuccess,
-};
-
-/* Reducer */
 const newNamespace      = {
-  keys: [],
-  byKey: {},
-  total: 0,
-  wip: false,
-  errors: null,
-  pageNo: 0,
+  keys   : [],
+  byKey  : {},
+  total  : 0,
+  wip    : false,
+  errors : null,
+  pageNo : 0,
   deleted: false
 };
 const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
@@ -118,160 +17,180 @@ const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
   return acc;
 }, {});
 
-const onSetPage = (draft, { namespace, pageNo }) => draft[namespace].pageNo = pageNo;
+const onFetch = (state, { namespace, addToList = true }) => {
+  if (!state[namespace]) state[namespace] = { ...newNamespace };
 
-const onFetch = (draft, { namespace, addToList = true }) => {
-  if (!draft[namespace]) draft[namespace] = { ...newNamespace };
-
-  addToList && (draft[namespace].total = 0);
-  draft[namespace].wip     = true;
-  draft[namespace].errors  = false;
-  draft[namespace].fetched = false;
-  return draft;
+  addToList && (state[namespace].total = 0);
+  state[namespace].wip     = true;
+  state[namespace].errors  = false;
+  state[namespace].fetched = false;
 };
 
-const onFetchSuccess = (draft, { namespace, addToList = true, items, total }) => {
-  draft[namespace].total   = total;
-  draft[namespace].wip     = false;
-  draft[namespace].errors  = false;
-  draft[namespace].fetched = true;
+const onFetchSuccess = (state, { namespace, addToList = true, items, total }) => {
+  state[namespace].total   = total;
+  state[namespace].wip     = false;
+  state[namespace].errors  = false;
+  state[namespace].fetched = true;
 
-  const keys = addToList ? [] : draft[namespace].keys;
+  const keys = addToList ? [] : state[namespace].keys;
   Object.values(items).forEach(x => {
     const { key } = getMyItemKey(namespace, x);
     addToList && keys.push(key);
-    draft[namespace].byKey[key] = x;
+    state[namespace].byKey[key] = x;
   });
 
-  draft[namespace].keys = keys;
+  state[namespace].keys = keys;
 };
 
-const onFetchFailure = (draft, { namespace }) => {
-  draft[namespace].wip     = false;
-  draft[namespace].errors  = true;
-  draft[namespace].fetched = true;
-  return draft;
+const onFetchFailure = (state, { namespace }) => {
+  state[namespace].wip     = false;
+  state[namespace].errors  = true;
+  state[namespace].fetched = true;
 };
 
-const onFetchOne = (draft, { namespace }) => {
-  draft[namespace].wip    = true;
-  draft[namespace].errors = false;
-  return draft;
+const onFetchOne = (state, { namespace }) => {
+  state[namespace].wip    = true;
+  state[namespace].errors = false;
 };
 
-const onFetchOneSuccess = (draft, { namespace, item }) => {
+const onFetchOneSuccess = (state, { namespace, item }) => {
   const { key }               = getMyItemKey(namespace, item);
-  draft[namespace].byKey[key] = item;
+  state[namespace].byKey[key] = item;
 
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
-  return draft;
+  state[namespace].wip    = false;
+  state[namespace].errors = false;
 };
 
-const onAddSuccess = (draft, { namespace, item }) => {
+const onAddSuccess = (state, { namespace, item }) => {
   const { key }               = getMyItemKey(namespace, item);
-  draft[namespace].byKey[key] = item;
-  draft[namespace].keys       = [key, ...draft[namespace].keys];
-  draft[namespace].total      = draft[namespace].total + 1;
-  if (namespace === MY_NAMESPACE_REACTIONS)
-    draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] + 1 : 1;
-
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
-
-  return draft;
+  state[namespace].byKey[key] = item;
+  state[namespace].keys       = [key, ...state[namespace].keys];
+  state[namespace].total      = state[namespace].total + 1;
+  state[namespace].wip        = false;
+  state[namespace].errors     = false;
+  if (namespace === MY_NAMESPACE_REACTIONS) {
+    state.reactionsCount[key] = state.reactionsCount[key] ? state.reactionsCount[key] + 1 : 1;
+  }
 };
 
-const onEditSuccess = (draft, { namespace, item, changeItems }) => {
+const onEditSuccess = (state, { namespace, item, changeItems }) => {
   const { key } = getMyItemKey(namespace, item);
-  const byKey   = { ...draft[namespace].byKey[key], ...item };
+  const byKey   = { ...state[namespace].byKey[key], ...item };
   if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
-    byKey.total_items = draft[namespace].byKey[key].total_items;
-    byKey.items       = draft[namespace].byKey[key].items;
+    byKey.total_items = state[namespace].byKey[key].total_items;
+    byKey.items       = state[namespace].byKey[key].items;
   }
 
-  draft[namespace].byKey[key] = byKey;
+  state[namespace].byKey[key] = byKey;
 
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
-  return draft;
+  state[namespace].wip    = false;
+  state[namespace].errors = false;
 };
 
-const onRemoveSuccess = (draft, { namespace, key }) => {
-  draft[namespace].keys       = draft[namespace].keys.filter(k => k !== key);
-  draft[namespace].byKey[key] = null;
-  draft[namespace].deleted    = true;
-  draft[namespace].total      = draft[namespace].total - 1;
-  if (namespace === MY_NAMESPACE_REACTIONS)
-    draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] - 1 : 0;
-
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
-  return draft;
+const onRemoveSuccess = (state, { namespace, key }) => {
+  state[namespace].keys       = state[namespace].keys.filter(k => k !== key);
+  state[namespace].byKey[key] = null;
+  state[namespace].deleted    = true;
+  state[namespace].total      = state[namespace].total - 1;
+  state[namespace].wip        = false;
+  state[namespace].errors     = false;
+  if (namespace === MY_NAMESPACE_REACTIONS) {
+    state.reactionsCount[key] = state.reactionsCount[key] ? state.reactionsCount[key] - 1 : 0;
+  }
 };
 
-const onSetDeleted = (draft, { namespace, deleted }) => {
-  draft[namespace].deleted = deleted;
-  return draft;
+const onSetDeleted = (state, { namespace, deleted }) => {
+  state[namespace].deleted = deleted;
 };
 
-const onReactionsCountSuccess = (draft, data) => {
+const onReactionsCountSuccess = (state, data) => {
   if (Array.isArray(data)) {
     data.reduce((acc, x) => {
       const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
       acc[key]      = x.total;
       return acc;
-    }, draft.reactionsCount);
+    }, state.reactionsCount);
   }
-
-  return draft;
 };
 
-export const reducer = handleActions({
-  [SET_PAGE]: onSetPage,
-
-  [FETCH]: onFetch,
-  [FETCH_SUCCESS]: onFetchSuccess,
-  [FETCH_FAILURE]: onFetchFailure,
-
-  [FETCH_ONE]: onFetchOne,
-  [FETCH_ONE_SUCCESS]: onFetchOneSuccess,
-
-  [ADD_SUCCESS]: onAddSuccess,
-  [EDIT_SUCCESS]: onEditSuccess,
-  [REMOVE_SUCCESS]: onRemoveSuccess,
-
-  [SET_DELETED]: onSetDeleted,
-
-  [REACTION_COUNT_SUCCESS]: onReactionsCountSuccess,
-}, { reactionsCount: {}, ...initialNamespaces });
-
-/* Selectors */
-const getList      = (state, namespace) => state[namespace]?.keys.map(key => getItemByKey(state, namespace, key));
 const getItemByKey = (state, namespace, key) => state[namespace].byKey[key];
 
-const getWIP            = (state, namespace) => state[namespace]?.wip || false;
-const getErr            = (state, namespace) => state[namespace]?.errors || null;
-const getInfo           = (state, namespace) => (
-  {
-    err: state[namespace]?.errors || null,
-    wip: state[namespace]?.wip || false,
-    fetched: state[namespace]?.fetched || false
-  }
-);
-const getDeleted        = (state, namespace) => state[namespace].deleted;
-const getPageNo         = (state, namespace) => state[namespace].pageNo;
-const getTotal          = (state, namespace) => state[namespace].total;
-const getReactionsCount = (state, key) => state.reactionsCount[key];
+const mySlice = createSlice({
+  name        : 'my',
+  initialState: {
+    reactionsCount: {},
+    ...initialNamespaces
+  },
 
-export const selectors = {
-  getList,
-  getItemByKey,
-  getWIP,
-  getErr,
-  getInfo,
-  getDeleted,
-  getPageNo,
-  getTotal,
-  getReactionsCount,
-};
+  reducers: {
+    setPage: {
+      prepare: (namespace, pageNo) => ({ payload: { namespace, pageNo } }),
+      reducer: (state, { payload: { namespace, pageNo } }) => void (state[namespace].pageNo = pageNo)
+    },
+
+    fetch       : {
+      prepare: (namespace, params) => ({ payload: { namespace, ...params } }),
+      reducer: (state, { payload }) => void (onFetch(state, payload))
+    },
+    fetchSuccess: (state, { payload }) => void (onFetchSuccess(state, payload)),
+    fetchFailure: (state, { payload }) => void (onFetchFailure(state, payload)),
+
+    fetchOne       : {
+      prepare: (namespace, params) => ({ payload: { namespace, ...params } }),
+      reducer: (state, { payload }) => void (onFetchOne(state, payload))
+    },
+    fetchOneSuccess: (state, { payload }) => void (onFetchOneSuccess(state, payload)),
+
+    add          : {
+      prepare: (namespace, params) => ({ payload: { namespace, ...params } }),
+      reducer: () => void ({})
+    },
+    addSuccess   : (state, { payload }) => void (onAddSuccess(state, payload)),
+    edit         : {
+      prepare: (namespace, params) => ({ payload: { namespace, ...params } }),
+      reducer: () => void ({})
+    },
+    editSuccess  : (state, { payload }) => void (onEditSuccess(state, payload)),
+    remove       : {
+      prepare: (namespace, params) => ({ payload: { namespace, ...params } }),
+      reducer: () => void ({})
+    },
+    removeSuccess: (state, { payload }) => void (onRemoveSuccess(state, payload)),
+
+    setDeleted: {
+      prepare: (namespace, deleted) => ({ payload: { namespace, deleted } }),
+      reducer: (state, { payload }) => void (onSetDeleted(state, payload))
+    },
+
+    reactionsCount       : () => void ({}),
+    reactionsCountSuccess: (state, { payload }) => void (onReactionsCountSuccess(state, payload))
+  },
+
+  selectors: {
+    getList          : (state, namespace) => state[namespace]?.keys.map(key => getItemByKey(state, namespace, key)),
+    getItemByKey,
+    getWIP           : (state, namespace) => state[namespace]?.wip || false,
+    getErr           : (state, namespace) => state[namespace]?.errors || null,
+    getDeleted       : (state, namespace) => state[namespace].deleted,
+    getPageNo        : (state, namespace) => state[namespace].pageNo,
+    getTotal         : (state, namespace) => state[namespace].total,
+    getReactionsCount: (state, key) => state.reactionsCount[key],
+    getInfo          : (state, namespace) => (
+      {
+        err    : state[namespace]?.errors || null,
+        wip    : state[namespace]?.wip || false,
+        fetched: state[namespace]?.fetched || false
+      }
+    )
+  }
+});
+
+export default mySlice.reducer;
+
+export const { actions } = mySlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(mySlice.actions).map(a => [a.type, a.type])
+));
+
+export const selectors = mySlice.getSelectors();

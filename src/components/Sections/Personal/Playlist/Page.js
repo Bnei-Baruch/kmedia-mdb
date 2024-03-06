@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Popup } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions, selectors } from '../../../../redux/modules/my';
+import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as auth } from '../../../../redux/modules/auth';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
@@ -20,18 +18,26 @@ import { FrownSplash } from '../../../shared/Splash/Splash';
 import { stopBubbling } from '../../../../helpers/utils';
 import { withRouter } from '../../../../helpers/withRouterPatch';
 import { stringify } from '../../../../helpers/url';
+import {
+  myGetDeletedSelector,
+  myGetErrSelector,
+  myGetItemByKeySelector,
+  myGetWipSelector,
+  settingsGetUILangSelector,
+  authGetUserSelector
+} from '../../../../redux/selectors';
 
 const Page = ({ t }) => {
   const { id } = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
-  const uiLang             = useSelector(state => settings.getUILang(state.settings));
-  const playlist           = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key));
-  const wip                = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLISTS));
-  const err                = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLISTS));
-  const deleted            = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_PLAYLISTS));
-  const user               = useSelector(state => auth.getUser(state.auth));
+  const uiLang             = useSelector(settingsGetUILangSelector);
+  const playlist           = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_PLAYLISTS, key));
+  const wip                = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_PLAYLISTS));
+  const err                = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_PLAYLISTS));
+  const deleted            = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_PLAYLISTS));
+  const user               = useSelector(authGetUserSelector);
   const dispatch           = useDispatch();
 
   useEffect(() => {
@@ -119,18 +125,18 @@ const Page = ({ t }) => {
     <Grid className="avbox no-background">
       <Grid.Row>
         <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-          <PlaylistHeaderContainer playlist={playlist} />
-          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+          <PlaylistHeaderContainer playlist={playlist}/>
+          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
           {
             items?.length > 0 ? (
               <Container className="padded">
                 {items.map(renderItem)}
               </Container>
-            ) : <FrownSplash text={t('messages.not-found')} />
+            ) : <FrownSplash text={t('messages.not-found')}/>
           }
         </Grid.Column>
         {
-          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6} />
+          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6}/>
         }
       </Grid.Row>
     </Grid>

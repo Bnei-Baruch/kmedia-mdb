@@ -9,23 +9,26 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { settingsGetUIDirSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
 
-const LatestUpdatesCardList = ({
-  t,
-  title,
-  maxItems,
-  cts,
-  itemsByCT,
-  itemsPerRow = 4,
-  itemsCount = 4,
-  stackable = true
-}) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const [pageNo, setPageNo] = useState(0);
-  const [pageStart, setPageStart] = useState(0);
+const LatestUpdatesCardList = (
+  {
+    t,
+    title,
+    maxItems,
+    cts,
+    itemsByCT,
+    itemsPerRow = 4,
+    itemsCount = 4,
+    stackable = true
+  }
+) => {
+  const { isMobileDevice }          = useContext(DeviceInfoContext);
+  const [pageNo, setPageNo]         = useState(0);
+  const [pageStart, setPageStart]   = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir                       = useSelector(settingsGetUIDirSelector);
+  const leftRight                   = useSelector(settingsGetLeftRightByDirSelector);
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
 
@@ -97,19 +100,16 @@ const LatestUpdatesCardList = ({
     );
   };
 
-  const renderScrollLeft = () => {
-    const dir = uiDir === 'rtl' ? 'left' : 'right';
-    return (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
-      <Button
-        icon={`chevron ${dir}`}
-        basic
-        size="large"
-        onClick={onScrollRight}
-        className="scroll_intents left"
-        style={{ [dir]: '-45px' }}
-      />
-    );
-  };
+  const renderScrollLeft = () => (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
+    <Button
+      icon={`chevron ${leftRight}`}
+      basic
+      size="large"
+      onClick={onScrollRight}
+      className="scroll_intents left"
+      style={{ [leftRight]: '-45px' }}
+    />
+  );
 
   useEffect(() => {
     initCardsArray();

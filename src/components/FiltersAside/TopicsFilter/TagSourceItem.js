@@ -1,30 +1,36 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, List } from 'semantic-ui-react';
 
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions } from '../../../redux/modules/filters';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import React, { useMemo, useState } from 'react';
-import { selectors as settings } from '../../../redux/modules/settings';
 import clsx from 'clsx';
 import TagSourceItemModal from './TagSourceItemModal';
+import {
+  filtersAsideGetStatsSelector,
+  filtersGetFilterByNameSelector,
+  filtersAsideGetMultipleStatsSelector,
+  sourcesGetPathByIDSelector,
+  tagsGetPathByIDSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../../redux/selectors';
 
 const TagSourceItem = props => {
   const { namespace, id, baseItems, filterName, deep, defaultSel = false } = props;
 
   const [open, setOpen] = useState(false);
 
-  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, filterName));
+  const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, filterName));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  const stat           = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, filterName)(id));
-  const getSourceById  = useSelector(state => sources.getSourceById(state.sources));
-  const getPathSources = useSelector(state => sources.getPathByID(state.sources));
-  const getTagById     = useSelector(state => tags.getTagById(state.tags));
-  const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
-  const uiDir          = useSelector(state => settings.getUIDir(state.settings));
+  const stat           = useSelector(state => filtersAsideGetStatsSelector(state, namespace, filterName))(id);
+  const getSourceById  = useSelector(sourcesGetSourceByIdSelector);
+  const getPathSources = useSelector(sourcesGetPathByIDSelector);
+  const getTagById     = useSelector(tagsGetTagByIdSelector);
+  const getPathTags    = useSelector(tagsGetPathByIDSelector);
+  const leftRight      = useSelector(settingsGetLeftRightByDirSelector);
 
   const isTag = filterName === FN_TOPICS_MULTI;
 
@@ -35,7 +41,7 @@ const TagSourceItem = props => {
 
   const item          = getById(id) || false;
   const childrenIDs   = useMemo(() => item.children?.filter(x => baseItems.includes(x)) || [], [baseItems, item]);
-  const childrenStats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, filterName)(childrenIDs));
+  const childrenStats = useSelector(state => filtersAsideGetMultipleStatsSelector(state, namespace, filterName, childrenIDs));
   const finalStat     = stat || childrenStats.reduce((sum, s) => sum + s, 0);
   const isSelected    = selected.includes(id) || defaultSel;
 
@@ -93,7 +99,7 @@ const TagSourceItem = props => {
               basic
               color="blue"
               className="clear_button no-shadow"
-              icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+              icon={`caret ${leftRight}`}
               onClick={toggleOpen}
               size="medium"
               disabled={finalStat === 0}

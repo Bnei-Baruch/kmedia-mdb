@@ -5,9 +5,7 @@ import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
-import { actions, selectors } from '../../../../redux/modules/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as auth } from '../../../../redux/modules/auth';
+import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
@@ -18,20 +16,30 @@ import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
 import NeedToLogin from '../NeedToLogin';
 import { withRouter } from '../../../../helpers/withRouterPatch';
+import {
+  settingsGetContentLanguagesSelector,
+  myGetDeletedSelector,
+  myGetListSelector,
+  myGetErrSelector,
+  myGetPageNoSelector,
+  myGetTotalSelector,
+  myGetWipSelector,
+  authGetUserSelector
+} from '../../../../redux/selectors';
 
 export const PAGE_SIZE = 20;
 
-const Page      = ({ location, t }) => {
+const Page = ({ location, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const pageNo           = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_HISTORY));
-  const total            = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_HISTORY));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const items            = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_HISTORY));
-  const wip              = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_HISTORY));
-  const err              = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_HISTORY));
-  const deleted          = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_HISTORY));
-  const user             = useSelector(state => auth.getUser(state.auth));
+  const pageNo           = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
+  const total            = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_HISTORY));
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const items            = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY));
+  const wip              = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_HISTORY));
+  const err              = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_HISTORY));
+  const deleted          = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_HISTORY));
+  const user             = useSelector(authGetUserSelector);
 
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo)), [dispatch]);
@@ -63,12 +71,12 @@ const Page      = ({ location, t }) => {
     const mx     = moment(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (<Header as="h3" content={t('values.date', { date: x.timestamp })} />);
+      newDay = (<Header as="h3" content={t('values.date', { date: x.timestamp })}/>);
     }
 
     const item = (
       <ContentItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
-        <Actions history={x} />
+        <Actions history={x}/>
       </ContentItemContainer>
     );
     return (
@@ -86,12 +94,12 @@ const Page      = ({ location, t }) => {
           <Container className="padded">
             <div className="summary-container align_items_center">
               <Header as={'h2'} className="my_header">
-                <Icon name="history" className="display-iblock" />
+                <Icon name="history" className="display-iblock"/>
                 {t('personal.history')}
               </Header>
             </div>
           </Container>
-          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
           {
             items?.length > 0 ? (
               <Container className="padded">
@@ -109,7 +117,7 @@ const Page      = ({ location, t }) => {
           </Container>
         </Grid.Column>
         {
-          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6} />
+          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6}/>
         }
       </Grid.Row>
     </Grid>

@@ -2,21 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment, } from 'semantic-ui-react';
+import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment } from 'semantic-ui-react';
 import { useSwipeable } from 'react-swipeable';
 
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
-import { selectors as mdb } from '../../redux/modules/mdb';
-import { selectors as recommended } from '../../redux/modules/recommended';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
-import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
-import { actions as publicationActions, selectors as publicationSelectors } from '../../redux/modules/publications';
-import { selectors as settingsSelectors } from '../../redux/modules/settings';
+import { actions as listsActions } from '../../redux/modules/lists';
+import { actions as publicationActions } from '../../redux/modules/publications';
 
 import {
   CT_ARTICLE,
@@ -34,9 +27,8 @@ import {
   SEARCH_INTENT_INDEX_TOPIC,
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
-  iconByContentTypeMap,
+  iconByContentTypeMap
 } from '../../helpers/consts';
-import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
 import { stringify } from '../../helpers/url';
@@ -45,6 +37,24 @@ import TooltipIfNeed from '../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
 import UnitLogo from '../shared/Logo/UnitLogo';
 import WipErr from '../shared/WipErr/WipErr';
+import {
+  mdbGetDenormContentUnitSelector,
+  filtersGetFiltersSelector,
+  lessonsGetWipSelector,
+  listsGetNamespaceStateSelector,
+  lessonsGetSeriesBySourceIdSelector,
+  lessonsGetSeriesByTagIdSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  publicationsGetTweetsErrorSelector,
+  publicationsGetTweetsWipSelector,
+  settingsGetUILangSelector,
+  recommendedGetViewsSelector,
+  settingsGetUIDirSelector,
+  mdbNestedDenormCollectionWUnitsSelector,
+  publicationsGetTwitterSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../redux/selectors';
 
 const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
@@ -100,7 +110,7 @@ const highlightWrapToLink = (__html, index, to) => {
   const search = {
     srchstart: searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
     srchend: searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
-    highlightAll: true,
+    highlightAll: true
   };
 
   return (<Link
@@ -162,12 +172,12 @@ const searchResultClick = (chronicles, dispatch, clickData) => link => {
 
 export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = false, onlyViewsAndDate = false }) => {
   const { t }      = useTranslation();
-  const views      = useSelector(state => recommended.getViews(cu.id, state.recommended));
+  const views      = useSelector(state => recommendedGetViewsSelector(state, cu.id));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
 
   const to  = canonicalLink(cu, mediaLanguage);
@@ -191,7 +201,7 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
     collectionTitle: onlyViewsAndDate ? undefined : ccu.name,
     // collectionLink,
     t,
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -199,12 +209,12 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
 
 export const SearchResultPost = ({ id, post, highlight, clickData }) => {
   const { t }      = useTranslation();
-  const views      = useSelector(state => recommended.getViews(id, state.recommended));
+  const views      = useSelector(state => recommendedGetViewsSelector(state, id));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
   // Should I replace POST with CT_BLOG_POST everywhere?
   const link          = canonicalLink({ id, content_type: 'POST' }, mediaLanguage);
@@ -218,7 +228,7 @@ export const SearchResultPost = ({ id, post, highlight, clickData }) => {
     date: post.created_at || '',
     views,
     t,
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -226,12 +236,12 @@ export const SearchResultPost = ({ id, post, highlight, clickData }) => {
 
 export const SearchResultCollection = ({ c, highlight, clickData }) => {
   const { t }      = useTranslation();
-  const views      = useSelector(state => recommended.getViews(c.id, state.recommended));
+  const views      = useSelector(state => recommendedGetViewsSelector(state, c.id));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
   const to            = canonicalLink(c, mediaLanguage);
 
@@ -247,7 +257,7 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
     parts: c.content_units.length,
     views,
     t,
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -255,24 +265,24 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
 
 export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   const { t }      = useTranslation();
-  const views      = useSelector(state => recommended.getViews(id, state.recommended));
+  const views      = useSelector(state => recommendedGetViewsSelector(state, id));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
   const to            = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
-    id: id,
+    id,
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType('sources', t, to),
     content: renderSnippet(to, highlight, null /* No default description */, t),
     views,
     t,
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -295,27 +305,28 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
     link: to,
     logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
     content: renderSnippet(to, null /* No highlights for landing pages. */, subText, t),
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
 };
 
-export const SearchResultOneItem = (props) => {
-  const {
-    id,
-    title,
-    link,
-    logo,
-    content,
-    part,
-    parts,
-    date,
-    views,
-    collectionTitle,
-    collectionLink,
-    click,
-  } = props;
+export const SearchResultOneItem = props => {
+  const
+    {
+      id,
+      title,
+      link,
+      logo,
+      content,
+      part,
+      parts,
+      date,
+      views,
+      collectionTitle,
+      collectionLink,
+      click
+    }         = props;
   const { t } = useTranslation();
 
   const description = [];
@@ -365,16 +376,16 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
     const params = {
       content_type: type,
       page_size: 3,
-      [index === SEARCH_INTENT_INDEX_SOURCE ? 'source' : 'tag']: id,
+      [index === SEARCH_INTENT_INDEX_SOURCE ? 'source' : 'tag']: id
     };
     dispatch(listsActions.fetchList(namespace, 1, params));
   }, [dispatch]);
-  const { items, wip, err, total } = useSelector(state => lists.getNamespaceState(state.lists, namespace));
+  const { items, wip, err, total } = useSelector(state => listsGetNamespaceStateSelector(state, namespace));
   // MAP items to SearchResultOneItem
-  const cuItems                    = useSelector(state => (items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)));
+  const cuItems                    = useSelector(state => (items || []).map(x => mdbGetDenormContentUnitSelector(state, x)));
 
-  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
+  const getTagById    = useSelector(tagsGetTagByIdSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   const section    = SEARCH_INTENT_SECTIONS[type];
   const intentType = SEARCH_INTENT_NAMES[index];
@@ -410,7 +421,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
     err,
     items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true} />),
     parts: total,
-    click: searchResultClick(chronicles, dispatch, clickData),
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultManyItems {...props} />;
@@ -469,16 +480,17 @@ const getLowestLevelSeries = (series, rootId) => {
     return root;
   }
 
-  if (!root) return series[series.length - 1];
+  if (!root || !root.id) return series[series.length - 1];
   return getLowestLevelSeries(series, root.id);
 };
 
 const renderSerie = (s, click, link, t) =>
   (
-    <Button basic size="tiny" className="link_to_cu" key={s.id}
-            as={Link} to={link}
-            onClick={() => click(link)}
-            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+    <Button
+      basic size="tiny" className="link_to_cu" key={s.id}
+      as={Link} to={link}
+      onClick={() => click(link)}
+      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
@@ -494,14 +506,14 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const { t }                        = useTranslation();
   const chronicles                   = useContext(ClientChroniclesContext);
   const dispatch                     = useDispatch();
-  const nestedDenormCollectionWUnits = useSelector(state => mdb.nestedDenormCollectionWUnits(state.mdb));
-  const getSerieBySource             = useSelector(state => lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources));
-  const getSerieByTag                = useSelector(state => lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags));
-  const filters                      = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const nestedDenormCollectionWUnits = useSelector(mdbNestedDenormCollectionWUnitsSelector);
+  const getSerieBySource             = useSelector(state => lessonsGetSeriesBySourceIdSelector(state, state, state));
+  const getSerieByTag                = useSelector(state => lessonsGetSeriesByTagIdSelector(state, state, state));
+  const filters                      = useSelector(state => filtersGetFiltersSelector(state, 'search'));
 
   const click                            = searchResultClick(chronicles, dispatch, clickData);
   const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
-  const { lectures: wipL, series: wipS } = useSelector(state => lessonsSelectors.getWip(state.lessons));
+  const { lectures: wipL, series: wipS } = useSelector(lessonsGetWipSelector);
   const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
   const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
   const series                           = id.split('_').map(getSerie);
@@ -515,10 +527,14 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   }
 
   const collections = s.collections.filter(c => c.id !== mdbUid);
-  collections.unshift(s.collections.find(c => c.id === mdbUid));
+  const found       = s.collections.find(c => c.id === mdbUid);
+  if (found) {
+    collections.unshift(found);
+  }
 
-  const wipError      = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
-// If filter used for specific language, make sure the link will redirect to that language.
+  const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
+
+  // If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
 
   return (
@@ -532,13 +548,15 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
           </Header>
         </div>
         {wipError}
-        {!wipError && (<Grid columns="equal">
-          <Grid.Row>
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
-              {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
-            </div>
-          </Grid.Row>
-        </Grid>)}
+        {!wipError && (
+          <Grid columns="equal">
+            <Grid.Row>
+              <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
+                {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
+              </div>
+            </Grid.Row>
+          </Grid>
+        )}
       </List.Content>
     </List.Item>
   );
@@ -547,20 +565,21 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
 const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
   const content = tweet && tweet.highlight && tweet.highlight.content;
   const mdb_uid = tweet && tweet._source && tweet._source.mdb_uid;
-  const twitter = publicationSelectors.getTwitter(state.publications, mdb_uid);
+  const twitter = publicationsGetTwitterSelector(state, mdb_uid);
   return { twitter, highlight: content };
 });
 
 export const SearchResultTweets = ({ source }) => {
   const { t }              = useTranslation();
   const ids                = source.map(x => x._source.mdb_uid) || [];
-  const wip                = useSelector(state => publicationSelectors.getTweetsWip(state.publications));
-  const err                = useSelector(state => publicationSelectors.getTweetsError(state.publications));
+  const wip                = useSelector(publicationsGetTweetsWipSelector);
+  const err                = useSelector(publicationsGetTweetsErrorSelector);
   const wipError           = WipErr({ wip, err, t });
   const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const uiLang             = useSelector(state => settingsSelectors.getUILang(state.settings));
-  const uiDir             = useSelector(state => settingsSelectors.getUIDir(state.settings));
+  const uiLang             = useSelector(settingsGetUILangSelector);
+  const uiDir              = useSelector(settingsGetUIDirSelector);
+  const leftRight          = useSelector(settingsGetLeftRightByDirSelector);
 
   const [pageNo, setPageNo] = useState(0);
   const pageSize            = isMobileDevice ? 1 : 3;
@@ -629,17 +648,16 @@ export const SearchResultTweets = ({ source }) => {
 
   const renderScrollLeft = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
-    const dir           = uiDir === 'rtl' ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
       <Button
-        icon={`chevron ${dir}`}
+        icon={`chevron ${leftRight}`}
         circular
         basic
         size="large"
         onClick={onScrollRight}
         className="scroll_tweets"
-        style={{ [dir]: '5px' }}
+        style={{ [leftRight]: '5px' }}
       />
     );
   };

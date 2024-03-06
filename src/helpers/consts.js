@@ -272,10 +272,11 @@ export const AUDIO_BLOG_LANGUAGES = [
   LANG_ENGLISH
 ];
 
-export const DEFAULT_UI_LANGUAGE = LANG_ENGLISH;
-export const DEFAULT_CONTENT_LANGUAGE = LANG_ENGLISH;
+export const DEFAULT_UI_LANGUAGE       = LANG_ENGLISH;
+export const DEFAULT_CONTENT_LANGUAGE  = LANG_ENGLISH;
 export const DEFAULT_CONTENT_LANGUAGES = [DEFAULT_CONTENT_LANGUAGE];
-export const DEFAULT_UI_DIR = 'ltr'
+export const DEFAULT_UI_DIR            = 'ltr';
+export const LANGUAGE_LONG_TRANSLATION = [LANG_RUSSIAN, LANG_SPANISH];
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
@@ -353,8 +354,9 @@ export const RH_ZOHAR    = 'AwGBQX2L';
 export const RH_ARTICLES = 'rQ6sIUZK';
 export const RH_RECORDS  = '2GAdavz0';
 
+export const BS_TAAS_LAST_PAGE = 2096;
 // This is exptected to be sorted by values
-export const BS_TAAS_PARTS = {
+export const BS_TAAS_PARTS     = {
   '7scSATcZ': 1,
   'LIMg3y94': 9,
   'rhRuFdIP': 13,
@@ -499,10 +501,10 @@ export const BS_TAAS_PARTS_PARTS_ONLY = {
 // Persons
 export const RABASH_PERSON_UID = 'KxApZ4pI';
 
-export const COOKIE_UI_LANG              = 'archive_UIlang';
-export const COOKIE_CONTENT_LANGS        = 'archive_ContentLang';
-export const COOKIE_SHOW_ALL_CONTENT     = 'archive_ShowAllContent';
-export const LANG_UI_LANGUAGES           = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_ARABIC, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH, LANG_CZECH];
+export const COOKIE_UI_LANG          = 'archive_UIlang';
+export const COOKIE_CONTENT_LANGS    = 'archive_ContentLang';
+export const COOKIE_SHOW_ALL_CONTENT = 'archive_ShowAllContent';
+export const LANG_UI_LANGUAGES       = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_ARABIC, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH, LANG_CZECH, LANG_BULGARIAN];
 
 // Search
 
@@ -803,4 +805,4 @@ export const PLAYER_OVER_MODES = {
   none: null,
 };
 
-export const KC_BOT_USER_NAME = "@__||bot||__@"
+export const KC_BOT_USER_NAME = '@__||bot||__@';

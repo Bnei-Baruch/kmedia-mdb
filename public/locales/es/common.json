@@ -260,7 +260,8 @@
     "trimmed-title-wip": "Preparamos para usted el archivo",
     "trimmed-content-wip": "Un par de minutos...",
     "add-new-note": "Escriba notas, cosas que escuchó durante las lecciones o cualquier cosa importante para guardar para el futuro...",
-    "confirm-remove-note": "¿Seguro que quieres eliminar?"
+    "confirm-remove-note": "¿Seguro que quieres eliminar?",
+    "unit-tags": "Tags"
   },
   "search": {
     "header": {
@@ -602,7 +603,8 @@
     "default": "Por Omisión",
     "filter": "Filtro...",
     "share-title": "Lee este artículo",
-    "play-audio-file": "Reproducir el archivo de audio"
+    "play-audio-file": "Reproducir el archivo de audio",
+    "play-source": "Escuche este artículo"
   },
   "topics": {
     "header": {
@@ -836,6 +838,44 @@
       "ending": "Acabado",
       "contentCreate": "¿Quieres que todos vean el extracto que marcaste?\nEtiquételo en la sección de temas del sitio",
       "labelCreated": "El extracto se ha etiquetado correctamente. Puede encontrarlo en la sección de temas debajo de los temas que etiquetó."
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "A todas las lecciones sobre el artículo",
+        "text-settings": "Cambiar formato de texto",
+        "languages": "Cambiar idioma",
+        "play-by-text": "¡Nuevo! Reproducir un videoclip",
+        "add-tag": "Agregar etiquetas",
+        "add-bookmark": "Añadir a marcadores",
+        "add-comment": "Añadir un comentario en el texto",
+        "share": "Compartir",
+        "search": "Buscar en la pagina",
+        "expand-comments": "Mostrar todos los comentarios",
+        "collapse-comments": "Ocultar todos los comentarios",
+        "download": "Descargar",
+        "print": "Imprimir",
+        "fullscreen-on": "Pantalla completa",
+        "fullscreen-off": "Salir de pantalla completa",
+        "hide-additions": "Ocultar todos los comentarios",
+        "show-additions": "Mostrar todos los comentarios",
+        "scan": "Escaneado del texto original",
+        "more-buttons": "Más",
+        "copy-link": "Copiar enlace"
+      },
+      "mobile": {
+        "lessons": "Lecciones",
+        "text-settings": "Formato",
+        "languages": "Idioma",
+        "add-bookmark": "Guardar",
+        "share": "Compartir",
+        "search": "Buscar",
+        "download": "Descargar",
+        "more-buttons": "Más",
+        "toc": "Contenido",
+        "copy-link": "Enlace"
+      }
     }
   }
 }

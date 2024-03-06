@@ -1,232 +1,37 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Grid, Header, Image } from 'semantic-ui-react';
-import clsx from 'clsx';
 
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
-import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
-import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, strCmp } from '../../../helpers/utils';
-import { SectionLogo } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/links';
-import { selectSuitableLanguage } from '../../../helpers/language';
-import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';
-import LibraryBar from '../Library/LibraryBar';
-import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
-import Link from '../../../components/Language/MultiLanguageLink';
-import WipErr from '../../shared/WipErr/WipErr';
-import Download from '../../shared/Download/Download';
-import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
-import TagsByUnit from '../../shared/TagsByUnit';
-import LikutAudioPlayer from './LikutAudioPlayer';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
+import Helmets from '../../shared/Helmets';
+import TextLayoutMobile from '../../Pages/WithText/TextLayoutMobile';
+import TextLayoutWeb from '../../Pages/WithText/TextLayoutWeb';
+import { usePrepareLikutAudio } from './usePrepareLikutAudio';
+import LikutToolbarMobile from './LikutToolbarMobile';
+import LikutToolbarWeb from './LikutToolbarWeb';
 
-const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
-export const selectLikutFile = (files, language, idx = 0) => {
-  if (!files) return null;
+const LikutContainer = () => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  let file = files.find(x => x.language === language && x.type === MT_TEXT);
-  if (file) return file;
-  if (idx >= DEFAULT_LANGUAGES.length) {
-    file = files.find(x => x.type === MT_TEXT);
-    return file;
-  }
-  return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
-};
-
-// Expected unit of type Likutim.
-const Likut                  = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
-  const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const fetched         = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
-  const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const uiLang           = useSelector(state => siteSettings.getUILang(state.settings));
-  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings));
-  const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
 
-  const [isReadable, setIsReadable]               = useState(false);
-  const [settings, setSettings]                   = useState(null);
-
-  const likutimLanguages = ((unit && unit.files) || []).map(f => f.language);
-  const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
-  const [selectedLanguage, setSelectedLanguage]   = useState('');
-  const finalLanguage = selectedLanguage || defaultLanguage;
-  const [scrollTopPosition, setScrollTopPosition] = useState(0);
-  const [scrollingElement, setScrollingElement]   = useState(null);
-  const articleRef                                = useRef();
-
-  useEffect(() => {
-    const scrollingElement = isReadable ? articleRef.current : document.scrollingElement;
-    setScrollingElement(scrollingElement);
-
-    if (articleRef) {
-      scrollingElement.scrollTop = scrollTopPosition;
-    }
-  }, [isReadable, scrollTopPosition]);
-
-  const handleIsReadable = () => {
-    setScrollTopPosition(scrollingElement?.scrollTop || 0);
-    setIsReadable(!isReadable);
-  };
-
-  const handleLanguageChanged = (language) => setSelectedLanguage(language);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    (!fetched) && dispatch(actions.fetchUnit(id));
-  }, [dispatch, id, fetched]);
-
-  const file      = selectLikutFile(unit?.files, finalLanguage);
-  const lang      = file?.language || finalLanguage;
-  const needFetch = !doc2htmlById[file?.id];
-  useEffect(() => {
-    if (file?.id && needFetch) {
-      dispatch(assetsActions.doc2html(file.id));
-    }
-  }, [dispatch, file?.id, needFetch]);
-
-  if (!unit) {
-    return null;
-  }
-
-  const wipErr = WipErr({ wip, err, t });
-  if (wipErr) {
-    return wipErr;
-  }
-
-  const { data } = doc2htmlById[file?.id] || {};
-
-  const { theme = 'light', fontType, fontSize = 0 } = settings || {};
-  const direction                                   = getLanguageDirection(finalLanguage);
-  const gridDirection                               = getLangPropertyDirection(uiLang);
-
-  const { name, film_date, files = [], source_units } = unit;
-
-  const url                = file && physicalFile(file, true);
-  const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
-  const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: uiLang };
-  const labelSource        = { content_unit: unit.id, language: uiLang };
-
-  const mp3File = files.find(f => f.language === finalLanguage && f.type === MT_AUDIO);
+  usePrepareLikutAudio();
 
   return (
-    <div
-      ref={articleRef}
-      className={clsx('source likutim', {
-        'is-readable': isReadable,
-        [`is-${theme}`]: true,
-        [`is-${fontType}`]: true,
-        [`size${fontSize}`]: true,
-      })}>
-      <Grid padded>
-        <Grid.Column mobile={16} tablet={16 - relatedLessonsSize} computer={16 - relatedLessonsSize}>
-          <div className="section-header likut">
-            <Header as="h2" className="topics__title-font">
-              <Header.Content>
-                {`${t('likutim.item-header')} ${name}`}
-                <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
-              </Header.Content>
-            </Header>
-            {/* toolbar */}
-            <Grid className="likut__toolbar" columns={2} stackable>
-              <Grid.Column>
-                <TagsByUnit id={id} />
-              </Grid.Column>
-              <Grid.Column>
-                <div className="source__header-toolbar">
-                  <div className="display-iblock margin-right-8 margin-left-8">
-                    {
-                      file && (
-                        <Download
-                          path={url}
-                          mimeType={file.mimetype}
-                          downloadAllowed={true}
-                          filename={file.name}
-                        />
-                      )
-                    }
-                    <LibraryBar
-                      fontSize={fontSize}
-                      isReadable={isReadable}
-                      handleIsReadable={handleIsReadable}
-                      handleSettings={setSettings}
-                      source={bookmarkSource}
-                      label={labelSource}
-                    />
-                  </div>
-                  <div className="library-language-container">
-                    <MenuLanguageSelector
-                      languages={likutimLanguages}
-                      selected={finalLanguage}
-                      onLanguageChange={handleLanguageChanged}
-                      multiSelect={false}
-                    />
-                  </div>
-                </div>
-              </Grid.Column>
-            </Grid>
-          </div>
-          <div className="likut__audio">
-            <LikutAudioPlayer file={mp3File} id={id} lang={lang} />
-          </div>
-
-          {/* content */}
-          <div
-            className={`source__content-wrapper font_settings-wrapper size${fontSize}`}
-          >
-            <div
-              className="font_settings doc2html"
-              style={{ direction }}
-            >
-              {
-                data && (
-                  <ScrollToSearch
-                    language={uiLang}
-                    data={data}
-                    source={bookmarkSource}
-                    label={labelSource}
-                  />
-                )
-              }
-            </div>
-          </div>
-        </Grid.Column>
-        {relatedLessonsSize > 0 &&
-          <Grid.Column mobile={16} tablet={relatedLessonsSize} computer={relatedLessonsSize}>
-            {/* links to other pages */}
-            <Grid padded relaxed="very" className="section-header likut__grid" stackable>
-              <Grid.Row>
-                <Header icon textAlign={gridDirection} as="h3">
-                  <Image size="big" verticalAlign="middle">
-                    <SectionLogo name="lessons" />
-                  </Image>
-                  {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
-                </Header>
-              </Grid.Row>
-              <Grid.Row columns={3}>
-                {
-                  // sort by film date desc
-                  relatedLessons
-                    .sort((u1, u2) => strCmp(u2.film_date, u1.film_date))
-                    .map(u =>
-                      <Grid.Column key={u.id}>
-                        <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
-                      </Grid.Column>)
-                }
-              </Grid.Row>
-            </Grid>
-          </Grid.Column>
-        }
-      </Grid>
-    </div>
+    <>
+      <Helmets.Basic title={`${t('likutim.item-header')} ${cu?.name}`} />
+      {
+        isMobileDevice
+          ? <TextLayoutMobile toolbar={<LikutToolbarMobile />} />
+          : <TextLayoutWeb toolbar={<LikutToolbarWeb />} />
+      }
+    </>
   );
 };
 
-export default Likut;
+export default LikutContainer;

@@ -6,11 +6,9 @@ import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
 import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { actions } from '../../../redux/modules/lists';
 
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
-import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
@@ -20,14 +18,20 @@ import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
 
 const MainPage = () => {
-  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
-  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
-  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
+  const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_PROGRAMS)) || {};
+  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize                   = useSelector(settingsGetPageSizeSelector);
+  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_PROGRAMS), isEqual);
 
   const { t }   = useTranslation();
   const prevSel = usePrevious(selected);
@@ -49,24 +53,24 @@ const MainPage = () => {
       dispatch(actions.fetchList(PAGE_NS_PROGRAMS, pageNo, {
         content_type: UNIT_PROGRAMS_TYPE,
         pageSize,
-        withViews: true
+        withViews   : true
       }));
     }
   }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr          = WipErr({ wip, err, t });
-  const filterComponent = <Filters namespace={PAGE_NS_PROGRAMS} baseParams={FILTER_PARAMS} />;
+  const filterComponent = <Filters namespace={PAGE_NS_PROGRAMS} baseParams={FILTER_PARAMS}/>;
 
   return (
     <>
-      <SectionHeader section="programs" />
-      <SectionFiltersWithMobile  namespace={PAGE_NS_PROGRAMS} filters={filterComponent}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+      <SectionHeader section="programs"/>
+      <SectionFiltersWithMobile namespace={PAGE_NS_PROGRAMS} filters={filterComponent}>
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+        <FilterLabels namespace={PAGE_NS_PROGRAMS}/>
         {
-          wipErr || items?.map((id, i) => <ItemOfList id={id} key={i} />)
+          wipErr || items?.map((id, i) => <ItemOfList id={id} key={i}/>)
         }
-        <Divider fitted />
+        <Divider fitted/>
         <Container className="padded pagination-wrapper" textAlign="center">
           {total > 0 && <Pagination
             pageNo={pageNo}

@@ -3,12 +3,13 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Segment, Divider, Button, Input, Grid, Icon, Header, Container } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/my';
+import { actions } from '../../../../../redux/modules/my';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
+import { actions as filtersActions } from '../../../../../redux/modules/bookmarkFilter';
 import FolderItem from './Item';
 import clsx from 'clsx';
+import { bookmarkFilterGetByKeySelector, myGetListSelector } from '../../../../../redux/selectors';
 
 const FolderList = ({ t, close }) => {
   const [editFolder, setEditFolder]         = useState(false);
@@ -17,7 +18,7 @@ const FolderList = ({ t, close }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
+  const items = useSelector(state => myGetListSelector(state, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,7 +27,7 @@ const FolderList = ({ t, close }) => {
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  let selectedId = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
+  let selectedId = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
   if (isMobileDevice) selectedId = selectedMobile;
 
   const selectFolder = id => {
@@ -62,7 +63,7 @@ const FolderList = ({ t, close }) => {
   const renderHeader = () => (
     <Grid verticalAlign="middle" className="folders padded">
       <Grid.Column width="7">
-        <Header as="h3" content={t('personal.bookmark.folders')} />
+        <Header as="h3" content={t('personal.bookmark.folders')}/>
       </Grid.Column>
       <Grid.Column width="9">
         <Input
@@ -73,8 +74,8 @@ const FolderList = ({ t, close }) => {
           className="bookmark_search"
           defaultValue={query}
         >
-          <input />
-          <Icon name="search" />
+          <input/>
+          <Icon name="search"/>
         </Input>
       </Grid.Column>
     </Grid>
@@ -137,19 +138,20 @@ const FolderList = ({ t, close }) => {
             />
             {renderEdit()}
             {
-              items.map(f => (
-                <FolderItem
-                  folder={f}
-                  key={f.id}
-                  selectedId={selectedId}
-                  selectFolder={selectFolder}
-                />
-              )
+              items.map(f =>
+                (
+                  <FolderItem
+                    folder={f}
+                    key={f.id}
+                    selectedId={selectedId}
+                    selectFolder={selectFolder}
+                  />
+                )
               )
             }
           </Grid>
         </Container>
-        <Divider />
+        <Divider/>
         {renderActions()}
       </Segment>
     </Grid.Column>

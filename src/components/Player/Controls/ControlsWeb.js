@@ -9,13 +9,13 @@ import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/player';
 import { PlayerContext } from '../PlayerContainer';
+import { playerIsLoadedSelector } from '../../../redux/selectors';
 
 const ControlsWeb = ({ fullscreenRef }) => {
 
   const ctx    = useContext(PlayerContext);
-  const loaded = useSelector(state => selectors.isLoaded(state.player));
+  const loaded = useSelector(playerIsLoadedSelector);
 
   const handleMouseLeave = () => ctx.showControls();
   const handleMouseEnter = () => ctx.showControls(false);

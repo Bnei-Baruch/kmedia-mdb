@@ -1,62 +1,53 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 import { ALL_PAGE_NS } from '../../helpers/consts';
 
-import { handleActions, types as settings } from './settings';
-import { types as ssr } from './ssr';
+import { actions as settingsActions } from './settings';
+import { actions as ssrActions } from './ssr';
 
-/* Types */
-const RECEIVE_COLLECTIONS = 'Page/RECEIVE_COLLECTIONS';
-const FETCH_COLLECTIONS   = 'Page/FETCH_COLLECTIONS';
-
-export const types = {
-  RECEIVE_COLLECTIONS,
-  FETCH_COLLECTIONS,
-};
-
-/* Actions */
-const fetchCollections   = createAction(FETCH_COLLECTIONS, (namespace, p) => ({ namespace, ...p }));
-const receiveCollections = createAction(RECEIVE_COLLECTIONS);
-
-export const actions = {
-  fetchCollections,
-  receiveCollections,
-};
-
-/* Reducer */
 const initialState = ALL_PAGE_NS.reduce((acc, ns) => ({
   ...acc, [ns]: {
     collectionsFetched: false, wip: false, error: null
   }
 }), {});
 
-const onSetLanguage = draft => {
-  for (const ns in draft) {
-    draft[ns].collectionsFetched = false;
+const preparePageSlice = createSlice({
+  name: 'preparePage',
+  initialState,
+
+  reducers     : {
+    receiveCollections: (state, { payload: { namespace } }) => void (
+      state => state[namespace] = { collectionsFetched: true, err: null, wip: false }
+    ),
+    fetchCollections  : {
+      prepare: (namespace, p) => ({ payload: { namespace, ...p } }),
+      reducer: () => void ({})
+    }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, state => {
+        if (state.err) {
+          state.err = state.err.toString();
+        }
+      })
+      .addCase(settingsActions.setContentLanguages, state => {
+        for (const ns in state) {
+          state[ns].collectionsFetched = false;
+        }
+      });
+  },
+
+  selectors: {
+    wasFetchedByNS: (state, ns) => state[ns]?.collectionsFetched
   }
-};
+});
 
-const onSSRPrepare = draft => {
-  if (draft.err) {
-    draft.err = draft.err.toString();
-  }
-};
+export default preparePageSlice.reducer;
 
-const onReceiveCollections = (draft, namespace) => {
-  draft[namespace] = { collectionsFetched: true, err: null, wip: false };
-  return draft;
-};
+export const { actions } = preparePageSlice;
 
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
+export const types = Object.fromEntries(new Map(
+  Object.values(preparePageSlice.actions).map(a => [a.type, a.type])
+));
 
-  [RECEIVE_COLLECTIONS]: onReceiveCollections,
-}, initialState);
-
-/* Selectors */
-
-const wasFetchedByNS = (state, ns) => state[ns]?.collectionsFetched;
-
-export const selectors = {
-  wasFetchedByNS,
-};
+export const selectors = preparePageSlice.getSelectors();

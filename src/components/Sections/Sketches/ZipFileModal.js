@@ -2,18 +2,17 @@ import React, { useRef, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
-import { selectors as assets } from '../../../redux/modules/assets';
-import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import FallbackImage from '../../shared/FallbackImage';
 import { assetUrl } from '../../../helpers/Api';
-import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
+import { settingsGetUIDirSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
 
 const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
 
-  const getZipById = useSelector(state => assets.nestedGetZipById(state.assets));
-  const uiDir      = useSelector(state => settings.getUIDir(state.settings));
+  const getZipById = useSelector(assetsNestedGetZipByIdSelector);
+  const uiDir      = useSelector(settingsGetUIDirSelector);
   const ref        = useRef();
 
   const { data: { uniq, full } } = getZipById(id);

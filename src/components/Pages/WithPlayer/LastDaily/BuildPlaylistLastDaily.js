@@ -1,33 +1,41 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors, actions } from '../../../../redux/modules/mdb';
+import { actions as mdbActions } from '../../../../redux/modules/mdb';
 
-import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
-import { getEmbedFromQuery } from '../../../../helpers/player';
+import { getEmbedFromQuery, EMBED_INDEX_BY_TYPE } from '../../../../helpers/player';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetErrorsSelector,
+  mdbGetLastLessonIdSelector,
+  myGetListSelector,
+  settingsGetUILangSelector,
+  mdbGetWipFn,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../../../redux/selectors';
 
 const BuildPlaylistLastDaily = () => {
-  const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
-  const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
-  const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
-  const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
-  const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
-  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
-  const navigate     = useNavigate();
-  const location     = useLocation();
-  const embed        = getEmbedFromQuery(location);
-  const uiLang       = useSelector(state => settings.getUILang(state.settings));
+  const lastLessonId    = useSelector(mdbGetLastLessonIdSelector);
+  const wip             = useSelector(mdbGetWipFn).lastLesson;
+  const err             = useSelector(mdbGetErrorsSelector).lastLesson;
+  const ccu             = useSelector(state => mdbGetDenormCollectionSelector(state, lastLessonId)) || false;
+  const denormCU        = useSelector(mdbNestedGetDenormContentUnitSelector);
+  const historyItems    = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY));
+  const navigate        = useNavigate();
+  const location        = useLocation();
+  const uiLang          = useSelector(settingsGetUILangSelector);
+  const { embed, type } = getEmbedFromQuery(location);
+  const embedIdx        = EMBED_INDEX_BY_TYPE[type];
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!wip && !err && !lastLessonId) {
-      dispatch(actions.fetchLatestLesson());
+      dispatch(mdbActions.fetchLatestLesson());
     }
   }, [lastLessonId, wip, err, dispatch]);
 
@@ -47,9 +55,9 @@ const BuildPlaylistLastDaily = () => {
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
     const to   = canonicalLink(denormCU(cuId), null, ccu);
-    if (embed) to.search = 'embed=1';
+    if (embed) to.search = `embed=${embedIdx}`;
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` }, { replace: true });
-  }, [ccu, historyItems, navigate, embed]);
+  }, [ccu, historyItems, navigate, embed, embedIdx]);
 
   return null;
 };

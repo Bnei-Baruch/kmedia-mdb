@@ -1,44 +1,37 @@
-import React, { useMemo, useState, useContext, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
+import React, { useMemo, useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector,
+  tagsGetDisplayRootsSelector,
+  tagsGetTagByIdSelector
+} from '../../../redux/selectors';
 
-import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/tags';
-import { actions } from '../../../redux/modules/mdb';
-import { getTree } from '../../../helpers/topricTree';
-import NeedToLogin from '../../Sections/Personal/NeedToLogin';
-import AlertModal from '../AlertModal';
-import TopicBranch from './TopicBranch';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+const SelectTopicsModal = ({open, onClose, label, trigger}) => {
+  const {t} = useTranslation();
 
-const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
-  const [match, setMatch]       = useState('');
-  const [name, setName]         = useState('');
+  const [match, setMatch] = useState('');
+  const [name, setName] = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const {isMobileDevice} = useContext(DeviceInfoContext);
 
-  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
-  const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
-  const getTagById       = useSelector(state => selectors.getTagById(state.tags));
-  const tree             = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
+  const roots = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const getTagById = useSelector(tagsGetTagByIdSelector);
+  const tree = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
 
-  const language = useSelector(state => settings.getUILang(state.settings));
-  const dir      = useSelector(state => settings.getUIDir(state.settings));
+  const language = useSelector(settingsGetUILangSelector);
+  const dir = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
 
   const create = () => {
-    const { content_unit, properties, language: l = language, media_type = 'text' } = label;
+    const {content_unit, properties, language: l = language, media_type = 'text'} = label;
 
     const params = {
       i18n: {
-        [l]: { name, language: l }
+        [l]: {name, language: l}
       },
       tags: selected,
       content_unit,
@@ -46,7 +39,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
       media_type
     };
 
-    dispatch(actions.createLabel(params));
+    dispatch(mdbActions.createLabel(params));
   };
 
   const clear = () => {
@@ -98,11 +91,11 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
 
   const handleSetSelected = useCallback((sel) => setSelected(sel), []);
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin({t});
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir}/>
       <Modal
         open={open}
         onClose={onClose}
@@ -111,14 +104,14 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
         trigger={trigger}
         dir={dir}
       >
-        <Modal.Header content={t('personal.label.header')} className="no-border" />
+        <Modal.Header content={t('personal.label.header')} className="no-border"/>
         {
           !!needToLogin ?
             (
               <Modal.Content>{needToLogin}</Modal.Content>
             ) : (
               <>
-                <Modal.Content style={{ paddingTop: 0 }}>
+                <Modal.Content style={{paddingTop: 0}}>
                   <Input
                     defaultValue={name}
                     onChange={handleSetName}
@@ -131,11 +124,11 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
                       basic
                       className="no-border"
                     />
-                    <input autoFocus />
+                    <input autoFocus/>
                   </Input>
                 </Modal.Content>
-                <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
+                <Modal.Content style={{paddingTop: 0, paddingBottom: 0}}>
+                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
                   <Input
                     className="search-omnibox"
                     placeholder={t('personal.label.search')}
@@ -148,7 +141,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
                       <Grid columns={isMobileDevice ? 1 : tree.children.length}>
                         <Grid.Row>
                           {
-                            areSourcesLoaded && tree.children.map(renderColumn)
+                            tree.children.map(renderColumn)
                           }
                         </Grid.Row>
                       </Grid>
@@ -175,10 +168,4 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   );
 };
 
-SelectTopicsModal.propTypes = {
-  t: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(SelectTopicsModal);
+export default SelectTopicsModal;

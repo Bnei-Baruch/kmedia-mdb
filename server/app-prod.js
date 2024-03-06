@@ -19,6 +19,7 @@ const app = express();
 const router = express.Router();
 
 // middleware
+app.use(middleware.duration);
 // app.use(middleware.logAll);
 app.use(middleware.logErrors);
 app.use(middleware.errorHandler);
@@ -79,6 +80,7 @@ app.use(helmet({
       'img-src': [
         '\'self\'',
         'data:',
+        'blob:',
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',

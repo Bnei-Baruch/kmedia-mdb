@@ -4,28 +4,27 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 
-import { selectors } from '../../../redux/modules/tags';
-import { selectors as settings } from '../../../redux/modules/settings';
 import Filters from './Filters';
 import VideoList from './VideoList';
 import TextList from './TextList';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
+import { tagsGetPathByIDSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
 
 const RenderPage = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
-  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const uiDir       = useSelector(state => settings.getUIDir(state.settings));
+  const getPathByID = useSelector(tagsGetPathByIDSelector);
+  const leftRight   = useSelector(settingsGetLeftRightByDirSelector);
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${uiDir === 'rtl' ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${leftRight} angle`;
   const baseParams     = useMemo(() => ({ tag: id }), [id]);
 
   return (
@@ -57,4 +56,5 @@ const RenderPage = () => {
     </>
   );
 };
+
 export default RenderPage;

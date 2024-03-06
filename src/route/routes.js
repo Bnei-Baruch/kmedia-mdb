@@ -5,9 +5,9 @@ import Help from './../components/Sections/Help/Help';
 import HomePage from './../components/Sections/Home/Container';
 import LessonCollection from './../components/Sections/Lesson/LessonPage';
 import Lessons from './../components/Sections/Lessons/MainPage';
-import LibraryHomepage from './../components/Sections/Library/Homepage';
-import LibraryContainer from './../components/Sections/Library/LibraryContainer';
-import LibraryPerson from './../components/Sections/Library/LibraryPerson';
+import LibraryHomepage from '../components/Sections/Sources/Homepage';
+import SourceContainer from '../components/Sections/Source/SourceContainer';
+import LibraryPerson from '../components/Sections/Sources/LibraryPerson';
 import Likut from './../components/Sections/Likutim/Likut';
 import LikutimMain from './../components/Sections/Likutim/MainPage';
 import Music from './../components/Sections/Music/Music';
@@ -148,7 +148,7 @@ const useRoutes = playerContainer => ([
   },
 
   { path: 'sources', component: <LibraryHomepage /> },
-  { path: 'sources/:id', component: <LibraryContainer />, ssrData: ssrDataLoaders.libraryPage },
+  { path: 'sources/:id', component: <SourceContainer />, ssrData: ssrDataLoaders.libraryPage },
   { path: 'topics', component: <Topics /> },
   { path: 'topics/:id', component: <Topic />, ssrData: ssrDataLoaders.topicsPage },
   { path: 'persons/:id', component: <LibraryPerson />, ssrData: ssrDataLoaders.libraryPage },

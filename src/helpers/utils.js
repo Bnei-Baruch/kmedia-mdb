@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
@@ -7,7 +7,6 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
-import * as consts from './consts';
 import {
   CT_ARTICLE,
   CT_CLIP,
@@ -21,7 +20,6 @@ import {
   CT_MEAL,
   CT_SONGS,
   CT_SPECIAL_LESSON,
-  CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
@@ -33,7 +31,7 @@ import {
   LANG_ITALIAN,
   LANG_RUSSIAN,
   LANG_SPANISH,
-  LANG_TURKISH,
+  LANG_TURKISH
 } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
@@ -181,6 +179,7 @@ export const physicalFile = (file, ext = false) => {
   if (file.is_hls || file.video_size === VS_HLS) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
+
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
@@ -188,6 +187,7 @@ export const physicalFile = (file, ext = false) => {
 
   return `${CDN_URL}${file.id}${suffix}`;
 };
+
 export const downloadLink = (file, ext = false) => {
   if (file.is_hls) {
     const { lang3 } = LANGUAGES[file.language];
@@ -230,7 +230,7 @@ export const canonicalCollectionImpl = unit => {
 export const canonicalCollection = unit => {
   const c = canonicalCollectionImpl(unit);
   return c;
-}
+};
 
 /**
  * Return n adjacent indices in array around idx (excluding idx).
@@ -287,9 +287,9 @@ export const getEscapedRegExp = term => {
 
 const RSS_FEED_LANGUAGES = new Map([
   [LANG_ENGLISH, 'KabbalahVideoEng'],
-  [LANG_HEBREW,  'KabbalahVideoHeb'],
+  [LANG_HEBREW, 'KabbalahVideoHeb'],
   [LANG_RUSSIAN, 'KabbalahVideoRus'],
-  [LANG_SPANISH, 'kabbalah-archive/spa'],
+  [LANG_SPANISH, 'kabbalah-archive/spa']
 ]);
 
 // Finds the RSS feed by first matching content language.
@@ -309,7 +309,7 @@ const PODCAST_LINKS = new Map([
   [LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
   [LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
   [LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
-  [LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw'],
+  [LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw']
 ]);
 
 export const getPodcastLinkByLangs = contentLanguages => {
@@ -399,7 +399,7 @@ export const usePrevious = value => {
 //   source = {a: {b: 2, c: 3, d: {e: 1, f: 2}}}
 //   what {a: {b: true, f: }
 // will yield: {a: {b: 2}}
-export const partialAssign       = (target, source, what = true) => {
+export const partialAssign = (target, source, what = true) => {
   if (what === true) {
     target = source;
     return source;
@@ -431,6 +431,7 @@ export const partialAssign       = (target, source, what = true) => {
   console.error('Unexpected what for partialAssign:', what);
   return {};
 };
+
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
 
@@ -464,3 +465,24 @@ export const getSourcesCollections = (sources, getPathById) =>
 
       return acc;
     }, {})).filter(source => source && source.children && source.children.length);
+
+export const buildById = items => {
+  const byId = {};
+
+  // We BFS the tree, extracting each item by its ID
+  // and normalizing its children
+  let s = [...items];
+  while (s.length > 0) {
+    const node = s.pop();
+    if (node.children) {
+      s = s.concat(node.children);
+    }
+
+    byId[node.id] = {
+      ...node,
+      children: node.children ? node.children.map(x => x.id) : []
+    };
+  }
+
+  return byId;
+};

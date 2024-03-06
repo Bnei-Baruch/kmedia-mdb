@@ -3,18 +3,21 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as assets } from '../../../redux/modules/assets';
 import MediaHelper from '../../../helpers/media';
 import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo } from '../../shared/ContentItem/helper';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
-import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
 import { stringify } from '../../../helpers/url';
+import {
+  settingsGetContentLanguagesSelector,
+  mdbGetDenormContentUnitSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  assetsNestedGetZipByIdSelector
+} from '../../../redux/selectors';
 
 const findZipFile = (cu, contentLanguages) => {
   const zips = cu.files
@@ -31,11 +34,11 @@ const findZipFile = (cu, contentLanguages) => {
 };
 
 const UnitItem = ({ id, t }) => {
-  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const getZipById       = useSelector(state => assets.nestedGetZipById(state.assets));
-  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
-  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const getZipById       = useSelector(assetsNestedGetZipByIdSelector);
+  const getPathByID      = useSelector(sourcesGetPathByIDSelector);
+  const uiDir            = useSelector(settingsGetUIDirSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (!cu) return null;
 
@@ -54,9 +57,9 @@ const UnitItem = ({ id, t }) => {
       {
         imgs?.map(f => (
           <Card key={f.id}>
-            <ImageFileModal file={f} />
+            <ImageFileModal file={f}/>
             <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name} />
+              <Card.Description as={Link} to={to} content={cu.name}/>
             </Card.Content>
             <Card.Meta className={`cu_info_description ${uiDir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
@@ -67,9 +70,9 @@ const UnitItem = ({ id, t }) => {
       {
         uniq?.map(path => (
           <Card key={path}>
-            <GalleryModal id={zip.id} path={path} />
+            <GalleryModal id={zip.id} path={path}/>
             <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name} />
+              <Card.Description as={Link} to={to} content={cu.name}/>
             </Card.Content>
 
             <Card.Meta className={`cu_info_description ${uiDir}`}>

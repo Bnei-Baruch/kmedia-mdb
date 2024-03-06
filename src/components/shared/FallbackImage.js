@@ -4,23 +4,25 @@ import { Image } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { selectors, actions } from '../../redux/modules/fetchImage';
+import { actions } from '../../redux/modules/fetchImage';
 import WipErr from './WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
+import { fetchImageGetBySrcSelector } from '../../redux/selectors';
 
 const FallbackImage = props => {
-  const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          width         = 'auto',
-          height        = 'auto',
+  const
+    {
+      src,
+      fallbackImage = ['default'],
+      className,
+      width         = 'auto',
+      height        = 'auto',
 
-          floated,
-          ...rest
-        } = props;
+      floated,
+      ...rest
+    } = props;
 
-  const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.fetchImage, src));
+  const { src: imageSource, wip, err } = useSelector(state => fetchImageGetBySrcSelector(state, src));
   const dispatch                       = useDispatch();
   const { t }                          = useTranslation();
 
@@ -28,12 +30,13 @@ const FallbackImage = props => {
     if (!imageSource && !wip && !err) {
       dispatch(actions.fetch(src, fallbackImage));
     }
-  }, [fallbackImage, src, imageSource, wip, err]);
+  }, [fallbackImage, src, imageSource, wip, err, dispatch]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
     return null;
   }
+
   const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
   if (wipErr) return wipErr;
 

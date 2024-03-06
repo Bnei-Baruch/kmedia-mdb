@@ -4,13 +4,13 @@ import { withTranslation } from 'react-i18next';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import CountryItem from './CountryItem';
 import { getTitle } from './helper';
+import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const Locations = ({ namespace, t }) => {
-  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LOCATIONS));
+  const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_LOCATIONS));
 
   if (isEmpty(items))
     return null;
@@ -19,7 +19,7 @@ const Locations = ({ namespace, t }) => {
     .filter(id => !!id)
     .map(id => {
       const desc = getTitle(id, t);
-      return { id, desc }
+      return { id, desc };
     });
 
   return (
@@ -30,7 +30,7 @@ const Locations = ({ namespace, t }) => {
           {
             locs
               .sort((t1, t2) => t1.desc < t2.desc ? -1 : 1)
-              .map(loc => <CountryItem namespace={namespace} loc={loc} key={loc.id} />)
+              .map(loc => <CountryItem namespace={namespace} loc={loc} key={loc.id}/>)
           }
         </>
       }

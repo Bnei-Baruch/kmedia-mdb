@@ -6,11 +6,16 @@ import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-r
 
 import { CT_VIRTUAL_LESSON, CT_VIRTUAL_LESSONS, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside, selectors } from '../../../redux/modules/filtersAside';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/filters';
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import {
+  filtersAsideGetStatsSelector,
+  filtersAsideGetTreeSelector,
+  filtersGetFilterByNameSelector,
+  settingsGetUIDirSelector,
+  mdbNestedGetCollectionByIdSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -23,19 +28,19 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   const [open, setOpen]   = useState(false);
   const [query, setQuery] = useState('');
 
-  const uiDir             = useSelector(state => settings.getUIDir(state.settings));
-  const ids               = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
-  const getById           = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
-  const stat              = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(ct));
-  const selectedFilters   = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI));
+  const uiDir             = useSelector(settingsGetUIDirSelector);
+  const leftRight         = useSelector(settingsGetLeftRightByDirSelector);
+  const ids               = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_COLLECTION_MULTI));
+  const getById           = useSelector(mdbNestedGetCollectionByIdSelector);
+  const stat              = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(ct);
+  const selectedFilters   = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_COLLECTION_MULTI));
   const selected          = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
-  const selectedCTFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE));
+  const selectedCTFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE));
   const selectedCT        = useMemo(() => selectedCTFilters?.values || [], [selectedCTFilters]);
 
   const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids, getById]);
   const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1))
     .filter(x => x.content_type === CT_VIRTUAL_LESSONS);
-
 
   const reg         = new RegExp(query, 'i');
   const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
@@ -90,7 +95,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+          icon={`caret ${leftRight}`}
           onClick={toggleOpen}
           size="medium"
           disabled={stat === 0}

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
-
 const getYears = () => {
   const fromYear = 1970;
   const toYear   = new Date().getFullYear();

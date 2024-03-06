@@ -16,6 +16,7 @@ import {
   CT_PUBLICATION,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
+  INSERT_TYPE_SUMMARY,
   MT_AUDIO,
   MT_IMAGE,
   MT_TEXT,
@@ -31,6 +32,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
 import { sizeByQuality } from './helper';
+import { settingsGetContentLanguagesSelector } from '../../../../redux/selectors';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -74,7 +76,7 @@ class MediaDownloads extends Component {
       if (state.uiLang !== uiLang
         || state.contentLanguages !== contentLanguages) {
         const selectedLanguage = selectSuitableLanguage(contentLanguages, state.availableLanguages, unit.original_language);
-        if (state.selectedLanguage !== selectedLanguage ) {
+        if (state.selectedLanguage !== selectedLanguage) {
           return { ...state, selectedLanguage };
         }
       }
@@ -106,7 +108,7 @@ class MediaDownloads extends Component {
     const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
     hls?.hls_languages.forEach(l => {
       const byType = new Map();
-      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null}]);
+      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null }]);
       const videos = hls.video_qualities.map(q => ({
         ...hls,
         type: MT_VIDEO,
@@ -118,7 +120,12 @@ class MediaDownloads extends Component {
       groups.set(l, byType);
     });
 
-    files.filter(f => !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))).forEach(file => {
+    files.filter(f =>
+      // Keep non video/audio/hls files.
+      !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))
+      // And skip summary files for download.
+      && f.insert_type !== INSERT_TYPE_SUMMARY
+    ).forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -141,7 +148,7 @@ class MediaDownloads extends Component {
     // fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
-      groups.forEach(byType => {
+      fallbackImage && groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
         }
@@ -155,7 +162,7 @@ class MediaDownloads extends Component {
     const imageLanguages = images.map(image => image.language);
     const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    return [images.find(image => image.language === imageSelectedLanguage)];
+    return [images.find(image => image.language === imageSelectedLanguage) || images.find(image => image.language === originalLanguage)];
   };
 
   static getDerivedFilesByContentType = (units, contentLanguages, originalLanguage) => {
@@ -199,7 +206,7 @@ class MediaDownloads extends Component {
     );
   }
 
-  handleChangeLanguage = (selectedLanguage) => {
+  handleChangeLanguage = selectedLanguage => {
     this.setState({ selectedLanguage });
   };
 
@@ -407,6 +414,6 @@ export default connect(state => (
   {
     publisherById: selectors.getPublisherById(state.publications),
     uiLang: settings.getUILang(state.settings),
-    contentLanguages: settings.getContentLanguages(state.settings),
+    contentLanguages: settingsGetContentLanguagesSelector(state),
   })
 )(withTranslation()(MediaDownloads));

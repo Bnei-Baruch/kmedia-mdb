@@ -27,6 +27,7 @@ function* bufferFetch({ payload }) {
       yield fetch(p);
     }
   }
+
   buffer.run = false;
 }
 
@@ -42,18 +43,23 @@ function* fetch(payload) {
       img = arr[i];
       break;
     }
+
     try {
       img = yield call(tryFetch, arr[i]);
-      if (img) break;
+      if (img) {
+        break;
+      }
     } catch (e) {
-      console.log(src, e);
+      console.log('fetchImage catch', src, e);
     }
   }
+
   if (img) {
     yield put(actions.fetchSuccess({ src, img }));
   } else {
     yield put(actions.fetchFailure({ src, err: 'cant load image' }));
   }
+
   buffer.wip = false;
 }
 
@@ -65,12 +71,11 @@ async function tryFetch(src) {
 
     displayImage.src = src;
   });
-  const res     = await promise;
-  return res;
+  return await promise;
 }
 
 function* watchTrim() {
-  yield takeEvery([types.FETCH], bufferFetch);
+  yield takeEvery([types['image/fetch']], bufferFetch);
 }
 
-export const sagas = [watchTrim,];
+export const sagas = [watchTrim];

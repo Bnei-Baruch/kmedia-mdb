@@ -18,6 +18,7 @@ import {
 import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
 import Layout from '../Layout/Layout';
 import PlayerContainer from '../Player/PlayerContainer';
+import StyleShadowDOM from '../../pkg/StyleShadowDOM';
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);
@@ -40,6 +41,7 @@ const App = props => {
         <ClientChroniclesContext.Provider value={clientChronicles}>
           <AbTestingContext.Provider value={abTesting}>
             <DeviceInfoContext.Provider value={deviceInfoContext}>
+              <StyleShadowDOM />
               <SessionInfoContext.Provider value={sessionInfo}>
                 <ChroniclesActions />
                 <ConnectedRouter history={history}>

@@ -3,10 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { selectors, actions } from '../../../redux/modules/mdb';
-import { selectors as recommended } from '../../../redux/modules/recommended';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import {
   CT_CLIPS,
   CT_CONGRESS,
@@ -15,7 +12,7 @@ import {
   CT_SPECIAL_LESSON,
   CT_TAG,
   CT_VIDEO_PROGRAM,
-  CT_VIRTUAL_LESSONS,
+  CT_VIRTUAL_LESSONS
 } from '../../../helpers/consts';
 import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -23,6 +20,14 @@ import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
 import { stringify } from '../../../helpers/url';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbGetDenormLabelSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  recommendedGetViewsSelector
+} from '../../../redux/selectors';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
@@ -40,8 +45,8 @@ const TagItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const tag                = useSelector(state => tags.getTagById(state.tags)(id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
+  const tag                = useSelector(tagsGetTagByIdSelector)(id);
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!tag) return null;
   if (withInfo === undefined) {
@@ -53,13 +58,13 @@ const TagItemContainerHook = (
 
   const props = {
     tag,
-    link: link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
-    withCUInfo: false,
+    link       : link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
+    withCUInfo : false,
     withCCUInfo: withInfo,
     description,
-    size: !isMobileDevice ? size : '',
+    size       : !isMobileDevice ? size : '',
     selected,
-    label,
+    label
   };
 
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
@@ -79,8 +84,8 @@ const SourceItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const source             = useSelector(state => sources.getSourceById(state.sources)(id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
+  const source             = useSelector(state => sourcesGetSourceByIdSelector(state))(id);
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!source) return null;
   if (withInfo === undefined) {
@@ -92,13 +97,13 @@ const SourceItemContainerHook = (
 
   const props = {
     source,
-    link: link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
-    withCUInfo: false,
+    link       : link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
+    withCUInfo : false,
     withCCUInfo: withInfo,
     description,
-    size: !isMobileDevice ? size : '',
+    size       : !isMobileDevice ? size : '',
     selected,
-    label,
+    label
   };
 
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
@@ -125,15 +130,15 @@ const ContentItemContainer = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
-  const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
-  const denormLabel        = useSelector(state => selectors.getDenormLabel(state.mdb));
+  const unit               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
+  const ccu                = useSelector(state => mdbGetDenormCollectionSelector(state, ccuId)) || canonicalCollection(unit);
+  const denormLabel        = useSelector(mdbGetDenormLabelSelector);
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (!unit) {
-      dispatch(actions.fetchUnit(id));
+      dispatch(mdbActions.fetchUnit(id));
     }
   }, [id, unit, dispatch]);
 
@@ -192,16 +197,16 @@ const ContentItemContainer = (
 };
 
 ContentItemContainer.propTypes = {
-  id: PropTypes.string.isRequired,
-  link: PropTypes.object,
-  asList: PropTypes.bool,
-  playTime: PropTypes.number,
+  id      : PropTypes.string.isRequired,
+  link    : PropTypes.object,
+  asList  : PropTypes.bool,
+  playTime: PropTypes.number
 };
 
 SourceItemContainerHook.propTypes = {
-  id: PropTypes.string.isRequired,
-  link: PropTypes.object,
-  asList: PropTypes.bool,
+  id    : PropTypes.string.isRequired,
+  link  : PropTypes.object,
+  asList: PropTypes.bool
 };
 
 export default withTranslation()(ContentItemContainer);

@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions, selectors } from '../../../redux/modules/player';
+import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery } from '../../../helpers/player';
+import { playerGetOverModeSelector, playerIsFullScreenSelector } from '../../../redux/selectors';
 
 const lockLandscape = () => {
   try {
@@ -29,7 +30,7 @@ const unlockLandscape = () => {
 };
 
 export const FullscreenBtn = ({ fullscreenRef }) => {
-  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+  const isFullScreen = useSelector(playerIsFullScreenSelector);
   const { t }        = useTranslation();
 
   const handleClick = () => {
@@ -73,19 +74,19 @@ export const FullscreenBtn = ({ fullscreenRef }) => {
       position="top right"
       trigger={
         <div className="controls__fullscreen" onClick={handleClick}>
-          <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
+          <Icon fitted name={isFullScreen ? 'compress' : 'expand'}/>
         </div>
-      } />
+      }/>
   );
 };
 
 export const ShareBtn = () => {
-  const mode     = useSelector(state => selectors.getOverMode(state.player));
+  const mode     = useSelector(playerGetOverModeSelector);
   const dispatch = useDispatch();
   const { t }    = useTranslation();
   const location = useLocation();
 
-  if (getEmbedFromQuery(location)) return null;
+  if (getEmbedFromQuery(location).embed) return null;
 
   const handleOpen = e => {
     stopBubbling(e);
@@ -101,7 +102,7 @@ export const ShareBtn = () => {
           className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
           onClick={handleOpen}
         >
-          <Icon fitted name="share alternate" />
+          <Icon fitted name="share alternate"/>
         </div>
       }
     />
@@ -109,7 +110,7 @@ export const ShareBtn = () => {
 };
 
 export const SettingsBtn = () => {
-  const mode     = useSelector(state => selectors.getOverMode(state.player));
+  const mode     = useSelector(playerGetOverModeSelector);
   const { t }    = useTranslation();
   const dispatch = useDispatch();
 
@@ -127,7 +128,7 @@ export const SettingsBtn = () => {
           className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
           onClick={handleOpen}
         >
-          <Icon fitted name="setting" />
+          <Icon fitted name="setting"/>
         </div>
       }
     />

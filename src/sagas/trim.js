@@ -13,9 +13,9 @@ export function* trim(action) {
 }
 
 function* watchTrim() {
-  yield takeEvery([types.TRIM], trim);
+  yield takeEvery(types['trim/trim'], trim);
 }
 
 export const sagas = [
-  watchTrim,
+  watchTrim
 ];

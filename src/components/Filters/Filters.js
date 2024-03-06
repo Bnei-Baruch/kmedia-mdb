@@ -23,35 +23,36 @@ class Filters extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
-    rightItems: PropTypes.arrayOf(PropTypes.node),
-    onChange: PropTypes.func.isRequired,
-    onHydrated: PropTypes.func.isRequired,
-    onSearch: PropTypes.func,
-    onClear: PropTypes.func,
+    namespace     : PropTypes.string.isRequired,
+    filters       : PropTypes.arrayOf(shapes.filterPropShape).isRequired,
+    rightItems    : PropTypes.arrayOf(PropTypes.node),
+    onChange      : PropTypes.func.isRequired,
+    onHydrated    : PropTypes.func.isRequired,
+    onSearch      : PropTypes.func,
+    onClear       : PropTypes.func,
     setFilterValue: PropTypes.func.isRequired,
-    resetFilter: PropTypes.func.isRequired,
-    filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
-    uiDir: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-    sqDataWipErr: PropTypes.bool,
-    letters: PropTypes.arrayOf(PropTypes.string),
-    onLetterClick: PropTypes.func
+    resetFilter   : PropTypes.func.isRequired,
+    filtersData   : PropTypes.objectOf(PropTypes.object).isRequired,
+    uiDir         : PropTypes.string.isRequired,
+    uiLang        : PropTypes.string.isRequired,
+    t             : PropTypes.func.isRequired,
+    sqDataWipErr  : PropTypes.bool,
+    letters       : PropTypes.arrayOf(PropTypes.string),
+    onLetterClick : PropTypes.func
   };
 
   static defaultProps = {
-    rightItems: null,
+    rightItems: null
   };
 
   state = {
-    activeFilter: null,
+    activeFilter : null,
     searchClicked: false
   };
 
   shouldComponentUpdate(nextProps, nextState) {
     const { namespace, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
-    const { activeFilter } = this.state;
+    const { activeFilter }                                                       = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
@@ -87,12 +88,12 @@ class Filters extends Component {
   };
 
   renderFilters = store => {
-    const { filters, namespace, t, filtersData, uiDir } = this.props;
-    const { activeFilter }                              = this.state;
-    const { isMobileDevice }                            = this.context;
+    const { filters, namespace, t, filtersData, uiDir, uiLang } = this.props;
+    const { activeFilter }                                      = this.state;
+    const { isMobileDevice }                                    = this.context;
 
     const popupStyle = {
-      direction: uiDir,
+      direction: uiDir
     };
 
     return filters.map(item => {
@@ -129,11 +130,11 @@ class Filters extends Component {
                   {t(`filters.${name}.label`)}
                 </small>
                 <span className="filter__state">
-                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
+                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }}/>
                   {
                     isActive
-                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" />
-                      : <Icon className="filter__fold-icon" name="dropdown" />
+                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically"/>
+                      : <Icon className="filter__fold-icon" name="dropdown"/>
                   }
                 </span>
               </div>
@@ -147,7 +148,7 @@ class Filters extends Component {
                         size="tiny"
                         onClick={e => this.handleResetFilter(e, name)}
                       >
-                        <Icon name="times" />
+                        <Icon name="times"/>
                       </Label>
                     </div>
                   )
@@ -169,6 +170,7 @@ class Filters extends Component {
                 value={value}
                 onCancel={this.handlePopupClose}
                 onApply={x => this.handleApply(name, x)}
+                language={uiLang}
               />
             </div>
           }
@@ -183,7 +185,7 @@ class Filters extends Component {
 
     return (
       <div className="filters">
-        <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
+        <FiltersHydrator namespace={namespace} onHydrated={onHydrated}/>
         <Container className="padded">
           <Menu className="filters__menu" stackable>
             <Menu.Item
@@ -196,15 +198,15 @@ class Filters extends Component {
             </ReactReduxContext.Consumer>
             {
               onSearch &&
-                 <Menu.Item>
-                   <SearchInput onSearch={onSearch} onClear={onClear} />
-                 </Menu.Item>
+              <Menu.Item>
+                <SearchInput onSearch={onSearch} onClear={onClear}/>
+              </Menu.Item>
             }
             {
               !isEmpty(letters) &&
-                 <Menu.Item className="alphabetFilter">
-                   <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
-                 </Menu.Item>
+              <Menu.Item className="alphabetFilter">
+                <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
+              </Menu.Item>
             }
             {
               rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
@@ -219,13 +221,14 @@ class Filters extends Component {
 export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
-    uiDir: settings.getUIDir(state.settings),
+    uiDir      : settings.getUIDir(state.settings),
+    uiLang     : settings.getUILang(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
-    sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
+    sqDataWipErr: mdb.getSQDataWipErr(state.mdb)
   }),
   dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue,
-    resetFilter: actions.resetFilter,
+    resetFilter   : actions.resetFilter
   }, dispatch)
 )(withTranslation()(Filters));

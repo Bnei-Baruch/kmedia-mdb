@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../redux/modules/filtersAside';
-import { selectors as search, actions as searchActions } from '../../redux/modules/search';
+import { actions } from '../../redux/modules/filtersAside';
+import { actions as searchActions } from '../../redux/modules/search';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
 import FiltersHydrator from '../Filters/FiltersHydrator';
@@ -15,11 +15,12 @@ import TagSourceFilter from '../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentType from '../FiltersAside/ContentTypeFilter/ContentType';
 import PersonFilter from '../FiltersAside/PersonFilter/Person';
 import OriginalLanguageFilter from '../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
+import { filtersAsideGetWipErrSelector, searchGetSortBySelector } from '../../redux/selectors';
 
 const SORTS = ['relevance', 'newertoolder', 'oldertonewer'];
 
 const SortBy = ({ namespace, t }) => {
-  const sortBy = useSelector(state => search.getSortBy(state.search, namespace));
+  const sortBy = useSelector(state => searchGetSortBySelector(state, namespace));
 
   const dispatch = useDispatch();
 
@@ -56,7 +57,7 @@ const Filters = ({ namespace }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const { t }        = useTranslation();
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
+  const { wip, err } = useSelector(state => filtersAsideGetWipErrSelector(state, namespace));
 
   const dispatch = useDispatch();
 
@@ -70,16 +71,16 @@ const Filters = ({ namespace }) => {
 
   return (
     <Container className="padded">
-      <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
-      <Header as="h3" content={t('filters.aside-filter.filters-title')} />
-      <ContentType namespace={namespace} />
-      <PersonFilter namespace={namespace} />
-      <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
-      <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
-      <Language namespace={namespace} />
-      <OriginalLanguageFilter namespace={namespace} />
-      <DateFilter namespace={namespace} />
-      <SortBy namespace={namespace} t={t} />
+      <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
+      <Header as="h3" content={t('filters.aside-filter.filters-title')}/>
+      <ContentType namespace={namespace}/>
+      <PersonFilter namespace={namespace}/>
+      <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
+      <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI}/>
+      <Language namespace={namespace}/>
+      <OriginalLanguageFilter namespace={namespace}/>
+      <DateFilter namespace={namespace}/>
+      <SortBy namespace={namespace} t={t}/>
     </Container>
   );
 };

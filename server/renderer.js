@@ -17,7 +17,7 @@ import {
   COOKIE_SHOW_ALL_CONTENT,
   LANG_UI_LANGUAGES,
   LANG_UKRAINIAN,
-  KC_BOT_USER_NAME,
+  KC_BOT_USER_NAME
 } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
@@ -37,7 +37,25 @@ const helmetContext = {};
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL   = process.env.REACT_APP_BASE_URL;
+const BASE_URL     = process.env.REACT_APP_BASE_URL;
+const KC_API_URL   = process.env.REACT_KC_API_URL;
+const KC_REALM     = process.env.REACT_KC_REALM;
+const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID;
+
+const windowEnvVariables = () => {
+  const vars = [];
+  if (KC_API_URL) {
+    vars.push(`window.KC_API_URL = '${KC_API_URL}';`);
+  }
+  if (KC_REALM) {
+    vars.push(`window.KC_REALM = '${KC_REALM}';`);
+  }
+  if (KC_CLIENT_ID) {
+    vars.push(`window.KC_CLIENT_ID = '${KC_CLIENT_ID}';`);
+  }
+  return vars.join('');
+};
+
 let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.includes('anonymous')) return;
@@ -69,31 +87,16 @@ export default function serverRender(req, res, next, htmlData) {
 }
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
-  const rootDiv = `
-    <style>
-      .loader {
-        margin: auto;
-        border: 16px solid #f3f3f3;
-        border-top: 16px solid #3498db;
-        border-radius: 50%;
-        width: 120px;
-        height: 120px;
-        animation: spin 2s linear infinite;
-      }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    </style>
-    <div class="container">
-      <div class="loader"></div>
-    </div>
-    <script>window.__isAuthApp = true;</script>
-    `;
-  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
-
   show_console && console.log('serverRender: AuthApp server render');
+  const rootDiv = `
+    <div id="root"></div>
+    <script>
+      ${windowEnvVariables()}
+    </script>
+  `;
+
+  const html = htmlData
+    .replace(/<div id="root"><\/div>/, rootDiv);
   res.send(html);
 }
 
@@ -112,29 +115,29 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     }
 
     const history = createMemoryHistory({
-      initialEntries: [req.originalUrl],
+      initialEntries: [req.originalUrl]
     });
 
     const cookies = cookieParse(req.headers.cookie || '');
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
-    let cookieUILang = cookies[COOKIE_UI_LANG] || uiLang;
+    let cookieUILang           = cookies[COOKIE_UI_LANG] || uiLang;
     let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
-    if (typeof cookieContentLanguages === 'string' || cookieContentLanguages  instanceof String) {
+    if (typeof cookieContentLanguages === 'string' || cookieContentLanguages instanceof String) {
       cookieContentLanguages = cookieContentLanguages.split(',');
     }
 
     const initialState = {
       settings: {
         ...settingsInitialState,
-        showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false,
-      },
+        showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false
+      }
     };
     // Update settings store with languages info.
     show_console && console.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
-    onSetUILanguage(initialState.settings, {uiLang: cookieUILang});
-    onSetContentLanguages(initialState.settings, {contentLanguages: cookieContentLanguages});
+    onSetUILanguage(initialState.settings, { uiLang: cookieUILang });
+    onSetContentLanguages(initialState.settings, { contentLanguages: cookieContentLanguages });
     if (uiLang !== cookieUILang) {
       onSetUrlLanguage(initialState.settings, uiLang);
     }
@@ -144,6 +147,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     }
 
     const store = createStore(initialState, history);
+
     // Dispatching languages change updates tags and sources.
     store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
@@ -152,7 +156,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
       req,
       data: {},
       head: [],
-      i18n: i18nServer,
+      i18n: i18nServer
     };
 
     const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
@@ -207,7 +211,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
             const { helmet } = helmetContext;
             hrend            = process.hrtime(hrstart);
-            show_console && console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+            show_console && console.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
               // Somewhere a `<Redirect>` was rendered.
@@ -219,11 +223,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
               const i18nData = serialize(
                 {
-                  initialLanguage: context.i18n.language,
+                  initialLanguage : context.i18n.language,
                   initialI18nStore: pick(context.i18n.services.resourceStore.data, [
                     context.i18n.language,
-                    context.i18n.options.fallbackLng,
-                  ]),
+                    context.i18n.options.fallbackLng
+                  ])
                 }
               );
 
@@ -238,6 +242,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
                   window.__botKCInfo = ${storeData.auth?.user?.name === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
                   window.__data = ${storeDataStr};
                   window.__i18n = ${i18nData};
+                  ${windowEnvVariables()}
                 </script>
                 `;
 

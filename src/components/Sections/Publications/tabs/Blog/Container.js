@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
@@ -10,6 +10,7 @@ import { actions, selectors } from '../../../../../redux/modules/publications';
 import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';
 import Page from './Page';
+import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
 class BlogContainer extends withPagination {
   static propTypes = {
@@ -80,6 +81,7 @@ class BlogContainer extends withPagination {
     if (!blogs.length) {
       blogs.push('laitman-com');
     }
+
     return { blog: blogs };
   }
 
@@ -101,7 +103,7 @@ class BlogContainer extends withPagination {
   }
 
   render() {
-    const { items, wip, err, pageNo, total, pageSize, language, namespace, location } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, namespace, location } = this.props;
 
     return (
       <Page
@@ -127,7 +129,7 @@ export const mapState = (state, ownProps) => ({
   err: selectors.getBlogError(state.publications),
   pageNo: selectors.getBlogPageNo(state.publications),
   pageSize: settings.getPageSize(state.settings),
-  contentLanguages: settings.getContentLanguages(state.settings),
+  contentLanguages: settingsGetContentLanguagesSelector(state),
   isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
 });
 

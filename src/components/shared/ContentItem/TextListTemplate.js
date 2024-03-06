@@ -7,20 +7,24 @@ import { useSelector } from 'react-redux';
 import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as sources } from '../../../redux/modules/sources';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo, textPartLink } from './helper';
+import {
+  sourcesAreLoadedSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbGetDenormLabelSelector,
+  sourcesGetPathByIDSelector
+} from '../../../redux/selectors';
 
 const TextListTemplate = ({ cuID, lID, t }) => {
-  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuID));
-  const label            = useSelector(state => mdb.getDenormLabel(state.mdb)(lID));
-  const areSourcesLoaded = useSelector(state => sources.areSourcesLoaded(state.sources));
-  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
+  const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
+  const label            = useSelector(state => mdbGetDenormLabelSelector(state))(lID);
+  const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
+  const getPathByID      = useSelector(sourcesGetPathByIDSelector);
 
   if (!cu) return null;
   const icon = !!label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
-  const to = textPartLink(label?.properties, cu);
+  const to   = textPartLink(label?.properties, cu);
 
   const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);
   return (
@@ -29,12 +33,12 @@ const TextListTemplate = ({ cuID, lID, t }) => {
       className="text_item"
     >
       <Image verticalAlign="top">
-        <SectionLogo name={icon} height="60" width="60" />
+        <SectionLogo name={icon} height="60" width="60"/>
       </Image>
       <Container className="text_item__content">
         <Header as={Link} to={to}>
-          <Header.Content content={title} />
-          {subTitle && <Header.Subheader content={subTitle} />}
+          <Header.Content content={title}/>
+          {subTitle && <Header.Subheader content={subTitle}/>}
         </Header>
         <Container className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
@@ -46,7 +50,7 @@ const TextListTemplate = ({ cuID, lID, t }) => {
 
 TextListTemplate.propTypes = {
   cuID: PropTypes.string,
-  lID: PropTypes.string,
+  lID : PropTypes.string
 
 };
 

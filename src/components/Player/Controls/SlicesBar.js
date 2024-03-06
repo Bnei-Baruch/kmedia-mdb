@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import { selectors as player, selectors } from '../../../redux/modules/player';
 import { timeToPercent } from './helper';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
+import {
+  playerGetFileSelector,
+  playerGetOverModeSelector,
+  playerGetShareStartEndSelector
+} from '../../../redux/selectors';
 
 const htmlParamsByStartEnd = (duration, start, end) => {
   let width = 0;
@@ -22,11 +26,11 @@ export const SlicesBar = () => {
   const [left, setLeft]   = useState(null);
   const [width, setWidth] = useState(null);
 
-  const { start, end } = useSelector(state => selectors.getShareStartEnd(state.player));
-  const mode           = useSelector(state => player.getOverMode(state.player), shallowEqual);
+  const { start, end } = useSelector(playerGetShareStartEndSelector);
+  const mode           = useSelector(playerGetOverModeSelector, shallowEqual);
   const isShare        = mode === PLAYER_OVER_MODES.share;
 
-  const duration = useSelector(state => player.getFile(state.player).duration);
+  const { duration } = useSelector(playerGetFileSelector);
   useEffect(() => {
     const { width: w, left: l } = htmlParamsByStartEnd(duration, start, end);
     setLeft(l);

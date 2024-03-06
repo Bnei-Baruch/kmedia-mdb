@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';
 
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions } from '../../../redux/modules/filters';
+import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const MediaTypeItem = ({ namespace, id, t }) => {
-  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_MEDIA_TYPE));
+  const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_MEDIA_TYPE));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
-  const stat            = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_MEDIA_TYPE)(id));
+  const stat            = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_MEDIA_TYPE))(id);
 
   const dispatch = useDispatch();
 

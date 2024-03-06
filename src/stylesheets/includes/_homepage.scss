@@ -6,7 +6,7 @@
   flex: 1 1 auto;
 
   &__featured {
-    padding-top:4em !important;
+    padding-top: 4em !important;
   }
 
   &__section {
@@ -20,7 +20,7 @@
     .ui.horizontal.divider {
       &::before,
       &::after {
-        background-image: linear-gradient(to right,  lighten($blue, 40%), lighten($blue, 40%));
+        background-image: linear-gradient(to right, lighten($blue, 40%), lighten($blue, 40%));
         background-size: 100% 1px;
       }
     }
@@ -46,7 +46,6 @@
     }
 
 
-
     &__latestUpdates {
       background: rgba(44, 144, 220, 0.05);
       border-top: 2px solid #DBECF9;
@@ -57,25 +56,26 @@
       }
 
       .cardsTitle {
-        width:100%;
+        width: 100%;
         padding: 2em 0 0 0;
         font-size: 1.5em;
         font-weight: 700;
         color: #134D78;
-        margin-bottom:0.5em;
+        margin-bottom: 0.5em;
         @include mobile {
           font-size: 1.5em;
           padding: 2em 0 0 0em;
-          margin-bottom:0;
+          margin-bottom: 0;
         }
       }
     }
   }
 
   .latestUpdateSection {
-    padding-top:1em;
+    padding-top: 1em;
+
     .row {
-      padding-top:0 !important;
+      padding-top: 0 !important;
     }
   }
 
@@ -92,11 +92,9 @@
       padding-top: 1rem;
     }
     background-attachment: fixed, scroll, scroll;
-    background-image:
-    linear-gradient(to bottom, $blue, transparent),
-    radial-gradient(ellipse at bottom center, lighten($blue, 15%) 0, transparent 50%),
-    linear-gradient(to bottom, $blue, lighten($blue, 5%))
-    ;
+    background-image: linear-gradient(to bottom, $blue-semantic, transparent),
+    radial-gradient(ellipse at bottom center, lighten($blue-semantic, 15%) 0, transparent 50%),
+    linear-gradient(to bottom, $blue-semantic, lighten($blue-semantic, 5%));
     background-position: center $main-menu-height, center center, center center;
     background-repeat: no-repeat;
     background-size: 100% 5rem, cover, cover;
@@ -106,7 +104,9 @@
   }
 
   &__title {
-    @include mobile {display: none;}
+    @include mobile {
+      display: none;
+    }
     margin-bottom: .4em !important;
   }
 
@@ -123,7 +123,7 @@
 
   &__iconsrow {
     background: #F3F4F5;
-    border-top:  2px solid #DBECF9;
+    border-top: 2px solid #DBECF9;
     padding-top: 1.5em !important;
 
     .iconsTitleRow {
@@ -159,6 +159,7 @@
       align-items: stretch;
       display: flex !important;
       justify-content: center;
+
       &.topIcon {
 
         padding-bottom: 3em;
@@ -262,7 +263,7 @@
     position: absolute;
     right: .5em;
     text-shadow: 0 1px $black, 0 2px $black;
-    transition: transform .5s ;
+    transition: transform .5s;
     z-index: 2;
 
     .content,
