@@ -32,7 +32,7 @@ const PrevNextBtns = () => {
   }
 
   const fullPath = getFullPath(id, getPathByID);
-  const len = fullPath.length;
+  const len      = fullPath.length;
   if (len < 2) {
     return null;
   }
@@ -43,8 +43,8 @@ const PrevNextBtns = () => {
   }
 
   const { children } = fullPath[len - 2];
-  const prevId = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
-  const nextId = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
+  const prevId       = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
+  const nextId       = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
 
   return (
     <div className={clsx('source_prev_next', {
@@ -61,13 +61,13 @@ const PrevNextBtns = () => {
 const PrevBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir = useSelector(settingsGetUIDirSelector);
+  const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon = uiDir === 'ltr' ? 'chevron left' : 'chevron right';
+  const icon          = uiDir === 'ltr' ? 'chevron left' : 'chevron right';
 
   const source = getSourceById(id);
 
-  const arrowSide= uiDir === 'ltr'? 'left' : 'right';
+  const arrowSide           = uiDir === 'ltr'? 'left' : 'right';
   const btnContentClassName = `btn-content prev ${arrowSide}`;
 
   return (
@@ -90,12 +90,12 @@ const PrevBtn = ({ id }) => {
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir = useSelector(settingsGetUIDirSelector);
+  const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon = uiDir !== 'ltr' ? 'chevron left' : 'chevron right';
+  const icon          = uiDir !== 'ltr' ? 'chevron left' : 'chevron right';
 
-  const source = getSourceById(id);
-  const arrowSide= uiDir === 'ltr'? 'right' : 'left';
+  const source              = getSourceById(id);
+  const arrowSide           = uiDir === 'ltr'? 'right' : 'left';
   const btnContentClassName = `btn-content next ${arrowSide}`;
 
 
