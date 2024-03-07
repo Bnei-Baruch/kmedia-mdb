@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
@@ -25,36 +25,31 @@ const SourceTab = ({ id }) => {
   const sources = Object.values(pageCu?.sources || {}).map(getSourceById).map(x => ({ ...x, content_type: CT_SOURCE }));
 
   const subjects                  = [...sources, ...dCus];
-  const subject                   = subjects[0];
-  const [subjectId, setSubjectId] = useState(subject?.id);
+  const [subjectId, setSubjectId] = useState(subjects[0]?.id);
 
+  const subject  = subjects.find(s => s.id === subjectId);
   const pathname = canonicalLink(subject).pathname.slice(1);
-
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
 
   const handleSelectCu = useCallback(id => setSubjectId(id), [setSubjectId]);
 
-  useEffect(() => {
-    setSubjectId(subject?.id);
-  }, [subject?.id]);
+  if (!subject) return <NotFound textKey="materials.sources.no-sources"/>;
 
-  if (!subject) return <NotFound textKey="materials.sources.no-sources" />;
-
-  const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu} />;
+  const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu}/>;
   return (
     <div className="player_page_tab">
       {
         isMobileDevice ? (
           <TextLayoutMobile
             id={subjectId}
-            toolbar={<SourceTabToolbarMobile toc={toc} />}
+            toolbar={<SourceTabToolbarMobile toc={toc}/>}
             playerPage={true}
           />
         ) : (
           <TextLayoutWeb
             id={subjectId}
-            toolbar={<SourceTabToolbarWeb toc={toc} />}
+            toolbar={<SourceTabToolbarWeb toc={toc}/>}
             playerPage={true}
           />
         )

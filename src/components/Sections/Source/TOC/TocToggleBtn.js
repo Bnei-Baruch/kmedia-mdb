@@ -1,29 +1,33 @@
 import React, { useContext } from 'react';
 import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import { actions } from '../../../../redux/modules/textPage';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import ToolbarBtnTooltip from '../../../Pages/WithText/Buttons/ToolbarBtnTooltip';
+import { textPageGetTocIsActiveSelector } from '../../../../redux/selectors';
 
 const TocToggleBtn = ({ withText = true }) => {
-  const { t }              = useTranslation();
-  const dispatch           = useDispatch();
+  const { t }    = useTranslation();
+  const dispatch = useDispatch();
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
 
   const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
   if (isMobileDevice) {
     const triggerProps = {
       className: 'clear_button',
-      icon: <span className="material-symbols-outlined">view_list</span>,
-      onClick: handleTocIsActive,
-      content: withText ? '' : <span className="title">{t('page-with-text.buttons.web.toc')}</span>,
+      icon     : <span className="material-symbols-outlined">view_list</span>,
+      onClick  : handleTocIsActive,
+      active   : tocIsActive,
+      content  : withText ? '' : <span className="title">{t('page-with-text.buttons.web.toc')}</span>,
     };
 
-    return (withText ? <ToolbarBtnTooltip textKey="toc" {...triggerProps} /> : <Button {...triggerProps} basic />);
+    return (withText ? <ToolbarBtnTooltip textKey="toc" {...triggerProps} /> : <Button {...triggerProps} basic/>);
   }
 
   return (
