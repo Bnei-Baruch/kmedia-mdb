@@ -20,7 +20,7 @@ const TocToggleBtn = ({ withText = true }) => {
       className: 'clear_button',
       icon: <span className="material-symbols-outlined">view_list</span>,
       onClick: handleTocIsActive,
-      content: withText ? '' : <span className="title">{t('sources-library.toc')}</span>,
+      content: withText ? '' : <span className="title">{t('page-with-text.buttons.web.toc')}</span>,
     };
 
     return (withText ? <ToolbarBtnTooltip textKey="toc" {...triggerProps} /> : <Button {...triggerProps} basic />);
@@ -32,7 +32,7 @@ const TocToggleBtn = ({ withText = true }) => {
       className={clsx('toc_trigger clear_button', { 'flex_basis_150': !isMobileDevice })}
       icon={<span className="material-symbols-outlined">view_list</span>}
       onClick={handleTocIsActive}
-      content={<span>{t('sources-library.toc')}</span>}
+      content={<span>{t('page-with-text.buttons.web.toc')}</span>}
     />
   );
 };

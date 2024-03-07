@@ -11,10 +11,10 @@ import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
-const SourceTabToolbarMobile = ({ needTOC }) => (
+const SourceTabToolbarMobile = ({ toc }) => (
   <div className="text_toolbar">
     <div className="text_toolbar__buttons">
-      {needTOC && <TocToggleBtn />}
+      {toc}
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />

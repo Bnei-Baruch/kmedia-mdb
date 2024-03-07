@@ -1,40 +1,56 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import clsx from 'clsx';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { textPageGetTocIsActiveSelector, textPageGetSubjectSelector } from '../../../../../../redux/selectors';
-import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
-import { actions } from '../../../../../../redux/modules/textPage';
+import { textPageGetSubjectSelector } from '../../../../../../redux/selectors';
+import { Dropdown } from 'semantic-ui-react';
+import ToolbarBtnTooltip from '../../../../WithText/Buttons/ToolbarBtnTooltip';
 
 const SourceTabTOC = ({ cus, onClick }) => {
-  const tocIsActive = useSelector(textPageGetTocIsActiveSelector);
-  const { id }      = useSelector(textPageGetSubjectSelector);
-
-  const dispatch = useDispatch();
+  const { id }          = useSelector(textPageGetSubjectSelector);
+  const [open, setOpen] = useState(false);
 
   if (cus.length < 2) return null;
-  const handleClick = cuId => {
-    dispatch(actions.setTocIsActive());
+  const handleClick  = cuId => {
     onClick(cuId);
+    setOpen(false);
   };
+  const handleToggle = () => setOpen(!open);
 
   return (
-    <div className={clsx('player_page_source_toc no_print', { 'active': tocIsActive })}>
-      <TocToggleBtn withText={false} />
-      <div>
+    <Dropdown
+      item
+      icon={null}
+      trigger={
+        (
+          <ToolbarBtnTooltip
+            textKey="toc"
+            active={open}
+            icon={<span className="material-symbols-outlined">view_list</span>}
+            onClick={handleToggle}
+          />
+        )
+      }
+      open={open}
+      onClose={handleToggle}
+      onOpen={handleToggle}
+    >
+      <Dropdown.Menu>
         {
           cus.map(cu => (
-            <div
-              onClick={() => handleClick(cu.id)}
-              className={clsx('player_page_source_toc_item', { 'active': cu.id === id })}
-            >
-              {cu.name}
-            </div>
-          )
+              <Dropdown.Item
+                onClick={() => handleClick(cu.id)}
+                active={cu.id === id}
+                className="player_page_source_toc_item"
+              >
+                <a>
+                  {cu.name}
+                </a>
+              </Dropdown.Item>
+            )
           )
         }
-      </div>
-    </div>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 };
 
