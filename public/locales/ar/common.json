@@ -601,7 +601,6 @@
       "subtext": "مجموعة من أهم النصوص الأصلية لدراسة الكابالا، والتي كتبها أعظم علماء الكابالا."
     },
     "no-source": "الرجاء تحديد المصدر",
-    "toc": "جدول المحتويات",
     "az": "أ ي",
     "default": "الافتراضي",
     "filter": "فرز...",
@@ -863,6 +862,7 @@
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
         "more-buttons": "More",
+        "toc": "جدول المحتويات",
         "copy-link": "أنسخ الرابط"
       },
       "mobile": {

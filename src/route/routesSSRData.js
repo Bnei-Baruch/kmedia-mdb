@@ -280,7 +280,7 @@ function firstLeafId(sourceId, state) {
 const fetchSQData = async (store, uiLang, contentLanguages) => {
   let sourcesList;
   return await Api.sqdata({
-    ui_language: uiLang,
+    ui_language      : uiLang,
     content_languages: contentLanguages
   }).then(({ data }) => {
     sourcesList = data.sources;
@@ -314,7 +314,6 @@ export const libraryPage = async (store, match, show_console = false) => {
 
   if (!file.isPdf) {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
-    store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
   }
 };
 
@@ -337,12 +336,9 @@ export const likutPage = async (store, match, show_console = false) => {
     .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id, sourceLanguage))
     .done
     .then(() => {
-      const state  = store.getState();
-      const uiLang = query.language || settingsGetUILangSelector(state);
-      const file   = textPageGetFileSelector(state) || {};
-
+      const state = store.getState();
+      const file  = textPageGetFileSelector(state) || {};
       store.dispatch(assetsActions.doc2html(file.id));
-      store.dispatch(mdbActions.fetchLabels({ content_unit: id, language: uiLang }));
     });
 };
 

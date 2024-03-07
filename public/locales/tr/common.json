@@ -599,7 +599,6 @@
       "subtext": "Kabala öğrenmek için, büyük Kabalistler tarafından yazılmış olan en önemli orijinal metinlerin bir derlemesi."
     },
     "no-source": "Lütfen kaynağı seçin",
-    "toc": "İçindekiler",
     "az": "AZ",
     "default": "Varsayılan",
     "filter": "Filtre...",
@@ -864,6 +863,7 @@
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
         "more-buttons": "More",
+        "toc": "İçindekiler",
         "copy-link": "Bağlantıyı kopyala"
       },
       "mobile": {
@@ -875,7 +875,7 @@
         "search": "Search",
         "download": "Download",
         "more-buttons": "More",
-        "toc": "Content",
+        "toc": "İçindekiler",
         "copy-link": "Link"
       }
     }

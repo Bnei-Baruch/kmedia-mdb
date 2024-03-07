@@ -1,21 +1,19 @@
-import React, { useMemo, useState, useContext } from 'react';
+import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
-
-import { getTree } from '../../../helpers/topicTree';
-import NeedToLogin from '../../Sections/Personal/NeedToLogin';
-import AlertModal from '../AlertModal';
-import TopicBranch from './TopicBranch';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { actions as mdbActions } from '../../../redux/modules/mdb';
 import {
-  tagsGetDisplayRootsSelector,
-  tagsGetTagByIdSelector,
   settingsGetUIDirSelector,
-  settingsGetUILangSelector
+  settingsGetUILangSelector,
+  tagsGetDisplayRootsSelector,
+  tagsGetTagByIdSelector
 } from '../../../redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { Header, Grid, Modal, Container, Input, Label, Button } from 'semantic-ui-react';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getTree } from '../../../helpers/topicTree';
+import { actions } from '../../../redux/modules/mdb';
+import AlertModal from '../AlertModal';
+import NeedToLogin from '../../Sections/Personal/NeedToLogin';
+import TopicBranch from './TopicBranch';
 
 const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   const { t } = useTranslation();
@@ -27,9 +25,9 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const roots = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const roots      = useSelector(tagsGetDisplayRootsSelector);
   const getTagById = useSelector(tagsGetTagByIdSelector);
-  const tree = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
+  const tree       = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
 
   const language = useSelector(settingsGetUILangSelector);
   const dir      = useSelector(settingsGetUIDirSelector);
@@ -49,7 +47,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
       media_type
     };
 
-    dispatch(mdbActions.createLabel(params));
+    dispatch(actions.createLabel(params));
   };
 
   const clear = () => {
@@ -65,17 +63,22 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
         content={col.text}
         className="topic_row_title topics__title"
       />
-      {
-        col.children?.map(r => (
-          <TopicBranch
-            key={r.value}
-            match={match}
-            root={r}
-            selected={selected}
-            setSelected={setSelected}
-          />
-        ))
-      }
+      <Container className="padded">
+        {
+          col.children?.filter(ch => ch.matched).map(ch => (
+            <Grid.Column key={ch.value} className="topics_card">
+              <Header as="h3" className="topics_title">
+                {ch.text}
+              </Header>
+              <TopicBranch
+                leafs={ch.children}
+                selected={selected}
+                setSelected={handleSetSelected}
+              />
+            </Grid.Column>
+          ))
+        }
+      </Container>
     </Grid.Column>
   );
 
@@ -94,11 +97,13 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
     clear();
   };
 
+  const handleSetSelected = useCallback(sel => setSelected(sel), []);
+
   const needToLogin = NeedToLogin({ t });
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir}/>
       <Modal
         open={open}
         onClose={onClose}
@@ -107,7 +112,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
         trigger={trigger}
         dir={dir}
       >
-        <Modal.Header content={t('personal.label.header')} className="no-border" />
+        <Modal.Header content={t('personal.label.header')} className="no-border"/>
         {
           !!needToLogin ?
             (
@@ -127,11 +132,11 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                       basic
                       className="no-border"
                     />
-                    <input autoFocus />
+                    <input autoFocus/>
                   </Input>
                 </Modal.Content>
                 <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
+                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
                   <Input
                     className="search-omnibox"
                     placeholder={t('personal.label.search')}

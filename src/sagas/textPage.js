@@ -2,7 +2,7 @@ import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/textPage';
 import { selectSuitableLanguage } from '../helpers/language';
 import { cuToSubject, selectTextFile } from '../components/Pages/WithText/helper';
-import { fetchUnit } from './mdb';
+import { fetchUnit, fetchLabels } from './mdb';
 import {
   mdbGetDenormContentUnitSelector,
   settingsGetContentLanguagesSelector,
@@ -40,6 +40,7 @@ export function* fetchSubject(action) {
 
     const file = selectTextFile(subject.files, id, language, isSource, fileFilter);
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
+    yield fetchLabels({ content_unit: id, language });
   } catch (err) {
     yield put(actions.fetchSubjectFailure(err));
   }
