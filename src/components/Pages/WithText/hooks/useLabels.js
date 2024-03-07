@@ -15,10 +15,10 @@ export const useLabels = () => {
   const byId         = useSelector(mdbGetLabelsById);
 
   const labels = useMemo(() => ids?.map(_id => byId[_id])
-      .filter(l => (l.properties?.srchstart || l.properties?.srchend))
-      .filter(l => l.properties?.language === language)
-      .map(l => ({ type: 'label', ...l }))
-    , [byId, ids]) || [];
+    .filter(l => (l.properties?.srchstart || l.properties?.srchend))
+    .filter(l => l.properties?.language === language)
+    .map(l => ({ type: 'label', ...l }))
+  , [byId, ids]) || [];
 
   const offsets = buildOffsets(labels);
 
