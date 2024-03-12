@@ -38,6 +38,7 @@ const ContentTypeFilter = ({ namespace }) => {
               if (x === CT_VIRTUAL_LESSON) {
                 return <CollectionsModal namespace={namespace} ct={CT_VIRTUAL_LESSON} key={x}/>;
               }
+
               if (x === CT_LESSON_PART || x === CT_DAILY_LESSON) {
                 return <PartOfDayFilterModal namespace={namespace} ct={x} key={x}/>;
               }

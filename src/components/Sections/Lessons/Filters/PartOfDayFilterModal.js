@@ -39,6 +39,7 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
 
     dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, ct));
   };
+
   return (
     <>
       <List.Item key={`${FN_COLLECTION_MULTI}_${ct}`} disabled={stat === 0} className="filters-aside-ct">
