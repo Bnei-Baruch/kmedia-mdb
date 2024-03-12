@@ -23,15 +23,16 @@ const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
 };
 const defaultStatParams    = {
-  with_sources: true,
-  with_tags: true,
-  with_collections: false,
-  with_languages: true,
-  with_content_types: true,
-  with_persons: false,
+  with_sources           : true,
+  with_tags              : true,
+  with_collections       : false,
+  with_languages         : true,
+  with_content_types     : true,
+  with_persons           : false,
   with_original_languages: false,
-  with_media: false,
-  with_locations: false,
+  with_media             : false,
+  with_locations         : false,
+  with_day_part          : false,
 };
 
 const setAllStatParamsFalse = params => {
@@ -44,6 +45,7 @@ const setAllStatParamsFalse = params => {
   params.with_locations          = false;
   params.with_languages          = false;
   params.with_content_types      = false;
+  params.with_day_part           = false;
   params.media_language && delete params.media_language;
   return params;
 };
@@ -100,7 +102,7 @@ export function* fetchStat(action) {
     const requests = [];
     countCU && requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
     countC && requests.push(call(Api.collectionsStats, {
-      id: filterParams.collection, ...filterParams,
+      id            : filterParams.collection, ...filterParams,
       with_languages: false
     }));
     countL && requests.push(call(Api.labelsStats, filterParams));
@@ -189,7 +191,7 @@ export function* fetchElasticStat(action) {
   try {
     const { data } = yield call(Api.elasticStats, {
       q,
-      ui_language: uiLang,
+      ui_language      : uiLang,
       content_languages: contentLanguages,
     });
 

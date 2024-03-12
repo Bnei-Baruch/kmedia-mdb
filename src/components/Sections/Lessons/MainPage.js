@@ -28,10 +28,10 @@ import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
-import CollectionItem from './Collectiontem';
-import DailyLessonItem from './DailyLessonItem';
+import CollectionItem from './Filters/Collectiontem';
+import DailyLessonItem from './Filters/DailyLessonItem';
 import Filters from './Filters';
-import UnitItem from './UnitItem';
+import UnitItem from './Filters/UnitItem';
 import {
   settingsGetContentLanguagesSelector,
   listsGetNamespaceStateSelector,

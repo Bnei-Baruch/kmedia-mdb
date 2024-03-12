@@ -4,10 +4,10 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 
-import { CT_VIRTUAL_LESSON, CT_VIRTUAL_LESSONS, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
-import { actions } from '../../../redux/modules/filters';
-import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import { CT_VIRTUAL_LESSON, CT_VIRTUAL_LESSONS, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../../helpers/consts';
+import { isEmpty } from '../../../../helpers/utils';
+import { actions } from '../../../../redux/modules/filters';
+import CollectionItem from '../../../FiltersAside/CollectionFilter/CollectionItem';
 import {
   filtersAsideGetStatsSelector,
   filtersAsideGetTreeSelector,
@@ -15,7 +15,7 @@ import {
   settingsGetUIDirSelector,
   mdbNestedGetCollectionByIdSelector,
   settingsGetLeftRightByDirSelector
-} from '../../../redux/selectors';
+} from '../../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
