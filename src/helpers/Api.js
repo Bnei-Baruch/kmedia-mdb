@@ -107,19 +107,19 @@ export class Requests {
 
 class Api {
   static collection = ({
-                         id,
-                         ui_language,
-                         content_languages
-                       }) => Requests.get(`collections/${id}?${Requests.makeParams({
+    id,
+    ui_language,
+    content_languages
+  }) => Requests.get(`collections/${id}?${Requests.makeParams({
     ui_language,
     content_languages
   })}`);
 
   static unit = ({
-                   id,
-                   ui_language,
-                   content_languages
-                 }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+    id,
+    ui_language,
+    content_languages
+  }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
     ui_language,
@@ -127,9 +127,9 @@ class Api {
   })}`);
 
   static latestLesson = ({
-                           ui_language,
-                           content_languages
-                         }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+    ui_language,
+    content_languages
+  }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
     ui_language,
@@ -191,15 +191,15 @@ class Api {
   })}`);
 
   static search = ({
-                     q,
-                     ui_language,
-                     content_languages,
-                     pageNo: page_no,
-                     pageSize: page_size,
-                     sortBy: sort_by,
-                     deb,
-                     searchId: search_id
-                   }) => (
+    q,
+    ui_language,
+    content_languages,
+    pageNo: page_no,
+    pageSize: page_size,
+    sortBy: sort_by,
+    deb,
+    searchId: search_id
+  }) => (
     Requests.get(`search?${Requests.makeParams({
       q,
       ui_language,

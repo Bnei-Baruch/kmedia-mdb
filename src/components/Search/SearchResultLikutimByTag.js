@@ -6,11 +6,16 @@ import { Container, Grid, Header, List, Image, Icon, Button, } from 'semantic-ui
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { SectionLogo } from '../../helpers/images';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as likutim, actions } from '../../redux/modules/likutim';
 import WipErr from '../shared/WipErr/WipErr';
 import Link from '../Language/MultiLanguageLink';
 import { canonicalLink } from '../../helpers/links';
+import {
+  likutimGetByTag,
+  likutimGetWipByKey,
+  likutimGetErrByKey,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../redux/selectors';
 
 const MIN_SHOWED                      = 3;
 export const SearchResultLikutimByTag = ({ hit }) => {
@@ -19,11 +24,12 @@ export const SearchResultLikutimByTag = ({ hit }) => {
   const { _source: { title }, _uid: key } = hit;
 
   const { t } = useTranslation();
-  const byKey = useSelector(state => likutim.getByTag(state.likutim));
-  const wip   = useSelector(state => likutim.getWip(state.likutim, key));
-  const err   = useSelector(state => likutim.getError(state.likutim, key));
 
-  const denormCU = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
+  const byKey = useSelector(likutimGetByTag);
+  const wip   = useSelector(state => likutimGetWipByKey(state, key));
+  const err   = useSelector(state => likutimGetErrByKey(state, key));
+
+  const denormCU = useSelector(mdbNestedGetDenormContentUnitSelector);
   const dispatch = useDispatch();
 
   const items = byKey(key);
@@ -46,7 +52,7 @@ export const SearchResultLikutimByTag = ({ hit }) => {
         <Container className={clsx('padded', { 'padding_r_l_0': !isMobileDevice })}>
           <Header as="div">
             <Image size="small" verticalAlign="bottom">
-              <SectionLogo name={'likutim'} height="50" width="50" />
+              <SectionLogo name={'likutim'} height="50" width="50"/>
             </Image>
             {title}
           </Header>
@@ -58,17 +64,17 @@ export const SearchResultLikutimByTag = ({ hit }) => {
                 .filter((x, i) => isMore || i < MIN_SHOWED)
                 .flatMap(id => denormCU(id))
                 .map(item => (
-                  <Grid.Column key={item.id} className="likutim_item_of_list">
-                    <List.Item className="media_item">
-                      <div className="media_item__content">
-                        <Header as={Link} to={canonicalLink(item)} content={item.name} />
-                        <span className="description">
+                    <Grid.Column key={item.id} className="likutim_item_of_list">
+                      <List.Item className="media_item">
+                        <div className="media_item__content">
+                          <Header as={Link} to={canonicalLink(item)} content={item.name}/>
+                          <span className="description">
                           {t('values.date', { date: item.film_date })}
                         </span>
-                      </div>
-                    </List.Item>
-                  </Grid.Column>
-                )
+                        </div>
+                      </List.Item>
+                    </Grid.Column>
+                  )
                 )
             }
           </Grid.Row>
@@ -80,7 +86,7 @@ export const SearchResultLikutimByTag = ({ hit }) => {
               className="clear_button no-background margin-top-8 no-padding-bottom centered"
               onClick={handleShowMore}
             >
-              <Icon name={`angle double ${isMore ? 'up' : 'down'}`} />
+              <Icon name={`angle double ${isMore ? 'up' : 'down'}`}/>
               {isMore ? 'show less' : `show all ${items?.length}`}
             </Button>
           )

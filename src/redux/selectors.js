@@ -27,6 +27,7 @@ import { selectors as trimSel } from './modules/trim';
 import { selectors as fetchImageSel } from './modules/fetchImage';
 import { selectors as myNotesSel } from './modules/myNotes';
 import { selectors as textPageSel } from './modules/textPage';
+import { selectors as likutimSel } from './modules/likutim';
 
 // Select part of state (first parameter)
 export const getMDB     = state => state.mdb;
@@ -56,6 +57,7 @@ const getTrim           = state => state.trim;
 const getFetchImage     = state => state.fetchImage;
 const getMyNotes        = state => state.myNotes;
 const getTextPage       = state => state.textPage;
+const getLikutim        = state => state.likutim;
 
 // Select additional parameters
 const _2 = (_, param) => param;
@@ -282,3 +284,8 @@ export const textPageGetTextOnlySelector     = createSelector([getTextPage], t =
 export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
 export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
 export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
+
+//likutim
+export const likutimGetByTag    = createSelector([getLikutim], l => likutimSel.getByTag(l));
+export const likutimGetWipByKey = createSelector(getLikutim, _2, (l, key) => likutimSel.getWip(l, key));
+export const likutimGetErrByKey = createSelector(getLikutim, _2, (l, key) => likutimSel.getError(l, key));

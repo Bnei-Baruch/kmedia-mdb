@@ -25,7 +25,6 @@ const likutimSlice = createSlice({
         });
       }
 
-      console.log('likutim onByKeySuccess', key);
       state.wip[key] = false;
     },
     fetchByTagFailure: (state, { payload }) => {
