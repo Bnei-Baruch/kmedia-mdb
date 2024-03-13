@@ -2,7 +2,9 @@ import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 
-const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
+//const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
+//DONT PUSH TO PROD
+const API_BACKEND             = 'https://19700.bbdev1.kbb1.com/';
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 export const IMAGINARY_URL    = process.env.REACT_APP_IMAGINARY_URL;
@@ -104,15 +106,35 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({ id, ui_language, content_languages }) => Requests.get(`collections/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+  static collection = ({
+                         id,
+                         ui_language,
+                         content_languages
+                       }) => Requests.get(`collections/${id}?${Requests.makeParams({
+    ui_language,
+    content_languages
+  })}`);
 
-  static unit = ({ id, ui_language, content_languages }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+  static unit = ({
+                   id,
+                   ui_language,
+                   content_languages
+                 }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({ ui_language, content_languages })}`);
+  static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
+    ui_language,
+    content_languages
+  })}`);
 
-  static latestLesson = ({ ui_language, content_languages }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+  static latestLesson = ({
+                           ui_language,
+                           content_languages
+                         }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({ ui_language, content_languages })}`);
+  static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
+    ui_language,
+    content_languages
+  })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`)
@@ -162,19 +184,32 @@ class Api {
 
   static tagDashboard = params => Requests.get(`tags/dashboard?${Requests.makeParams(params)}`);
 
-  static autocomplete = ({ q, ui_language, content_languages }) => Requests.get(`autocomplete?${Requests.makeParams({ q, ui_language, content_languages })}`);
-
-  static search = ({
+  static autocomplete = ({ q, ui_language, content_languages }) => Requests.get(`autocomplete?${Requests.makeParams({
     q,
     ui_language,
-    content_languages,
-    pageNo  : page_no,
-    pageSize: page_size,
-    sortBy  : sort_by,
-    deb,
-    searchId: search_id
-  }) => (
-    Requests.get(`search?${Requests.makeParams({ q, ui_language, content_languages, page_no, page_size, sort_by, deb, search_id })}`)
+    content_languages
+  })}`);
+
+  static search = ({
+                     q,
+                     ui_language,
+                     content_languages,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     searchId: search_id
+                   }) => (
+    Requests.get(`search?${Requests.makeParams({
+      q,
+      ui_language,
+      content_languages,
+      page_no,
+      page_size,
+      sort_by,
+      deb,
+      search_id
+    })}`)
   );
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
@@ -199,16 +234,16 @@ class Api {
       uid,
       languages,
       skipUids: skip_uids,
-      size    : more_items,
+      size: more_items,
       spec,
       specs,
       watchingNowMin: watching_now_min,
-      popularMin    : popular_min
+      popularMin: popular_min
     }
   ) => ({
     more_items,
     'current_feed': [],
-    'options'     : {
+    'options': {
       'recommend': {
         uid
       },
@@ -223,10 +258,10 @@ class Api {
 
   static recommended = requestData => {
     const config = {
-      method : 'post',
-      url    : feedUrl('recommend'),
+      method: 'post',
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify(requestData)
+      data: JSON.stringify(requestData)
     };
 
     return axios(config);
@@ -234,10 +269,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('views'),
+      method: 'post',
+      url: feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -245,10 +280,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('watchingnow'),
+      method: 'post',
+      url: feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids })
     };
 
     return axios(config);
