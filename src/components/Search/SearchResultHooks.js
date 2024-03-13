@@ -74,7 +74,7 @@ const titleFromHighlight = (highlight, defVal) => {
     title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
   }
 
-  return <span dangerouslySetInnerHTML={{ __html: title }} />;
+  return <span dangerouslySetInnerHTML={{ __html: title }}/>;
 };
 
 // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -86,7 +86,7 @@ const snippetFromHighlight = (highlight, props) => {
   }
 
   const __html = `...${highlight[prop].join('.....')}...`;
-  return <span dangerouslySetInnerHTML={{ __html }} />;
+  return <span dangerouslySetInnerHTML={{ __html }}/>;
 };
 
 const clearStringForLink = str => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
@@ -119,7 +119,7 @@ const highlightWrapToLink = (__html, index, to) => {
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
     to={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
-    <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
+    <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }}/>
   </Link>);
 };
 
@@ -153,7 +153,7 @@ const renderSnippet = (to, highlight, defaultDescription, t) => {
 const iconByContentType = (type, t, to) => {
   const icon    = iconByContentTypeMap.get(type) || null;
   const content = <div className="icon">
-    <SectionLogo name={icon} width="70" height="70" />
+    <SectionLogo name={icon} width="70" height="70"/>
     <span>{t(`constants.content-types.${type}`)}</span>
   </div>;
 
@@ -186,7 +186,7 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
   // const collectionLink = canonicalLink(ccu, mediaLanguage);
 
   const logo = cu.content_type === CT_ARTICLE ?
-    iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144} />;
+    iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144}/>;
 
   const props = {
     id: cu.id,
@@ -247,7 +247,7 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
   const to            = canonicalLink(c, mediaLanguage);
 
   const logo = c.content_type !== CT_VIDEO_PROGRAM ? iconByContentType(c.content_type, t, to) :
-    <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
+    <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144}/></div>;
 
   const props = {
     id: c.id,
@@ -289,7 +289,7 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   return <SearchResultOneItem {...props} />;
 };
 
-export const SearchResultLikut  = ({ cu, title, highlight, clickData }) => {
+export const SearchResultLikut = ({ cu, title = cu.name, highlight, clickData }) => {
   const { t }      = useTranslation();
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -363,8 +363,8 @@ export const SearchResultOneItem = props => {
     <List.Item key={id} className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
-        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />
-        {content && (<TooltipIfNeed text={content} Component={Container} content={content} />)}
+        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title}/>
+        {content && (<TooltipIfNeed text={content} Component={Container} content={content}/>)}
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {collectionLink && (<span className="opacity_1">
@@ -414,7 +414,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
   const intentType = SEARCH_INTENT_NAMES[index];
   const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
-  const logo        = <SectionLogo name={type} height="50" width="50" />;
+  const logo        = <SectionLogo name={type} height="50" width="50"/>;
   const getById     = getFilterById(getTagById, getSourceById, index);
   const link        = intentSectionLink(section, [{ name: filterName, values: [id] }]);
   const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
@@ -442,7 +442,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
     description,
     wip,
     err,
-    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true} />),
+    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true}/>),
     parts: total,
     click: searchResultClick(chronicles, dispatch, clickData)
   };
@@ -487,8 +487,9 @@ export const SearchResultManyItems = (
           </Grid>)
         }
         <Container textAlign={'right'} className="no-border padded" fluid>
-          <Icon name="tasks" size="small" style={{ display: 'inline' }} />
-          <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
+          <Icon name="tasks" size="small" style={{ display: 'inline' }}/>
+          <Link to={link}
+                onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
         </Container>
       </List.Content>
     </List.Item>
@@ -518,7 +519,7 @@ const renderSerie = (s, click, link, t) =>
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
         <span className="margin-right-8 margin-left-8">
-          <Icon name="tasks" size="small" style={{ display: 'inline-block' }} />
+          <Icon name="tasks" size="small" style={{ display: 'inline-block' }}/>
           {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
         </span>
       </Link>
@@ -535,7 +536,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const filters                      = useSelector(state => filtersGetFiltersSelector(state, 'search'));
 
   const click                            = searchResultClick(chronicles, dispatch, clickData);
-  const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
+  const logo                             = <SectionLogo name={'lessons'} height="50" width="50"/>;
   const { lectures: wipL, series: wipS } = useSelector(lessonsGetWipSelector);
   const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
   const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
@@ -545,7 +546,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   if (s.collections.length === 1) {
     const c = nestedDenormCollectionWUnits(s.collections[0].id);
     return (
-      <SearchResultCollection c={c} clickData={clickData} />
+      <SearchResultCollection c={c} clickData={clickData}/>
     );
   }
 
@@ -637,7 +638,7 @@ export const SearchResultTweets = ({ source }) => {
     <Card key={twitter.twitter_id} className="bg_hover_grey home-twitter" raised>
       <Card.Content>
         <Feed className="min-height-200">
-          <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
+          <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]}/>
         </Feed>
       </Card.Content>
     </Card>
@@ -647,7 +648,7 @@ export const SearchResultTweets = ({ source }) => {
     const pages         = new Array(numberOfPages).fill('a');
     const content       = pages.map((p, i) => (
       <Button onClick={() => onScrollChange(i)} key={i} icon className="bg_transparent">
-        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
+        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small"/>
       </Button>
     ));
 

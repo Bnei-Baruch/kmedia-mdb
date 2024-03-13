@@ -16,12 +16,11 @@ import ContentTypeItemGroup from './ContentTypeItemGroup';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const groupByName = {
-  sources: { cts: [CT_SOURCE], key: 'sources', order: 1 },
-  likutim: { cts: [CT_LIKUTIM], key: 'likutim', order: 2 },
-  lessons: { cts: [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE], key: 'lessons', order: 3 },
-  events: { cts: UNIT_EVENTS_TYPE, key: 'events', order: 4 },
-  programs: { cts: UNIT_PROGRAMS_TYPE, key: 'programs', order: 5 },
-  publications: { cts: UNIT_PUBLICATIONS_TYPE, key: 'publications', order: 6 },
+  sources: { cts: [CT_SOURCE, CT_LIKUTIM], key: 'sources', order: 1 },
+  lessons: { cts: [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE], key: 'lessons', order: 2 },
+  events: { cts: UNIT_EVENTS_TYPE, key: 'events', order: 3 },
+  programs: { cts: UNIT_PROGRAMS_TYPE, key: 'programs', order: 4 },
+  publications: { cts: UNIT_PUBLICATIONS_TYPE, key: 'publications', order: 5 },
 };
 const cts         = Object.values(groupByName).flatMap(x => x.cts);
 
@@ -37,9 +36,9 @@ const ContentType = ({ namespace }) => {
           {
             Object.values(groupByName)
               .sort((g1, g2) => g1.order - g2.order)
-              .map(g => <ContentTypeItemGroup group={g} namespace={namespace} key={g.key} />)
+              .map(g => <ContentTypeItemGroup group={g} namespace={namespace} key={g.key}/>)
           }
-          {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
+          {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id}/>)}
         </>
       }
     />
