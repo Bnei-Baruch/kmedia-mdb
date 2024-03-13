@@ -489,7 +489,7 @@ export const SearchResultManyItems = (
         <Container textAlign={'right'} className="no-border padded" fluid>
           <Icon name="tasks" size="small" style={{ display: 'inline' }}/>
           <Link to={link}
-                onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
+            onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
         </Container>
       </List.Content>
     </List.Item>
