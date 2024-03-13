@@ -29,7 +29,7 @@ export const SearchResultLikutimByTag = ({ hit }) => {
   const items = byKey(key);
   useEffect(() => {
     if (!wip && !err && !items) {
-      dispatch(actions.fetchLikutimByTags(key));
+      dispatch(actions.fetchByTag(key));
     }
   }, [key, wip, err, !items]);
 

@@ -1,19 +1,17 @@
-import { actions as ssrActions } from './ssr';
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const likutimSlice = createSlice({
   name: 'likutim',
   initialState: {
-    wip: false,
-    err: null,
+    wip: {},
+    err: {},
     byKey: {}
   },
 
   reducers: {
-    fetchByTag: (state, { payload: { payload: { key } } }) => {
-      state.err[key] = null;
-      state.wip[key] = true;
+    fetchByTag: (state, { payload }) => {
+      state.err[payload] = null;
+      state.wip[payload] = true;
     },
 
     fetchByTagSuccess: (state, { payload }) => {
@@ -36,14 +34,6 @@ const likutimSlice = createSlice({
       state.wip[key]     = false;
     }
   },
-  extraReducers: builder => {
-    builder.addCase(ssrActions.prepare, state => {
-      if (state.err) {
-        state.err = state.err.toString();
-      }
-    });
-  },
-
   selectors: {
     getWip: (state, key) => state.wip[key],
     getError: (state, key) => state.err[key],
