@@ -31,17 +31,17 @@ const SourceTabTOC = ({ cus, onClick }) => {
       <Dropdown.Menu>
         {
           cus.map(cu => (
-              <Dropdown.Item
-                key={cu.id}
-                onClick={() => handleClick(cu.id)}
-                active={cu.id === id}
-                className="player_page_source_toc_item"
-              >
-                <a>
-                  {cu.name}
-                </a>
-              </Dropdown.Item>
-            )
+            <Dropdown.Item
+              key={cu.id}
+              onClick={() => handleClick(cu.id)}
+              active={cu.id === id}
+              className="player_page_source_toc_item"
+            >
+              <a>
+                {cu.name}
+              </a>
+            </Dropdown.Item>
+          )
           )
         }
       </Dropdown.Menu>

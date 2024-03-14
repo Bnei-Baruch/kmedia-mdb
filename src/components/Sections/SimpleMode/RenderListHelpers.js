@@ -70,14 +70,13 @@ const renderHorizontalFilesList = (files, contentType, t, chroniclesAppend) => (
   files.sort(sortMediaFiles).map(file => {
     const url   = downloadLink(file);
     const label = labelTextByFile(file, contentType, t);
-
     return (
-      <List.Item key={`${file.id}_${file.type}_${file.video_size}`} className="media-file-button">
+      <List.Item key={`${file.id}_${file.type}_${file.video_size}_${file.language}`} className="media-file-button">
         <List.Content>
           <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })}>
             {label} ({file.language})
             <Image className="file-list-icon">
-              <SectionLogo name="downloads" />
+              <SectionLogo name="downloads"/>
             </Image>
           </a>
         </List.Content>
@@ -131,7 +130,7 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
 };
 
 // REFACTOR THIS TO COMMON LIBRARY
-// SHOULD CONFIDER ORIGINAL LANGUAGE TOO!
+// SHOULD CONSIDER ORIGINAL LANGUAGE TOO!
 const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => files
   .filter(file => contentLanguages.includes(file.language))
   .sort((a, b) => {
@@ -140,7 +139,7 @@ const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) =
       return media;
     }
 
-    const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language)
+    const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language);
     if (lang !== 0) {
       if (a.language === originalLanguage) {
         return -1;
@@ -154,7 +153,8 @@ const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) =
     }
 
     return 0;
-  }).filter((file, index, files) => index === 0 || sortMediaFiles(files[index-1], files[index]) !== 0)
+  })
+  .filter((file, index, files) => index === 0 || sortMediaFiles(files[index - 1], files[index]) !== 0);
 
 const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppend) => (
   units.filter(unit => unit).map((unit, index, unitsArray) => {
@@ -206,13 +206,16 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
               files.length
                 ? files
                 : (
-                  <List.Item key={unit.id} className="no-files">
-                    <SectionLogo name="info" />
+                  <List.Item key={`${unit.id}-no-files`} className="no-files">
+                    <SectionLogo name="info"/>
                     <List.Content className="margin-right-8 margin-left-8">
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
-                      <br />
+                      <br/>
                       {t('simple-mode.try-different-language')}
-                      <Button className="choose-language-button" onClick={helpChooseLang}>{t('simple-mode.language-click')}</Button>
+                      <Button
+                        className="choose-language-button"
+                        onClick={helpChooseLang}>{t('simple-mode.language-click')}
+                      </Button>
                     </List.Content>
                   </List.Item>
                 )
@@ -274,7 +277,7 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
             <div className="type-header-top-margin">
               <h2>
                 <Image className="simple-mode-type-icon">
-                  <SectionLogo name={icon} />
+                  <SectionLogo name={icon}/>
                 </Image>
                 {t(`nav.sidebar.${title.toLowerCase()}`)}
               </h2>

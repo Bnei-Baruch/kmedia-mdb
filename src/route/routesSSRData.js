@@ -46,7 +46,6 @@ import { actions as prepareActions } from './../redux/modules/preparePage';
 import { actions as publicationsActions } from './../redux/modules/publications';
 import { actions as searchActions } from './../redux/modules/search';
 import { selectors as settings } from './../redux/modules/settings';
-import { actions as simpleModeActions } from './../redux/modules/simpleMode';
 import { actions as sources } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
 import { actions as textPageActions } from '../redux/modules/textPage';
@@ -72,6 +71,7 @@ import {
   sourcesGetSourceByIdSelector
 } from '../redux/selectors';
 import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
+import { simpleModeApi } from '../redux/api/simpleMode';
 
 export const home = store => {
   const state            = store.getState();
@@ -246,10 +246,12 @@ export const programsPage = (store, match) => {
 };
 
 export const simpleMode = (store, match) => {
+  const { uiLang = 'en', contentLanguages = ['en'] } = match;
+
   const query = getQuery(match.parsedURL);
   const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
-  store.dispatch(simpleModeActions.fetchForDate({ date }));
+  store.dispatch(simpleModeApi.endpoints.simpleMode.initiate({ date, uiLang, filesLanguages: contentLanguages }));
   return Promise.resolve(null);
 };
 
