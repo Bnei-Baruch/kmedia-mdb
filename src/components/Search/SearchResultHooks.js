@@ -489,7 +489,7 @@ export const SearchResultManyItems = (
         <Container textAlign={'right'} className="no-border padded" fluid>
           <Icon name="tasks" size="small" style={{ display: 'inline' }}/>
           <Link to={link}
-            onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
+                onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
         </Container>
       </List.Content>
     </List.Item>
@@ -545,9 +545,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
 
   if (s.collections.length === 1) {
     const c = nestedDenormCollectionWUnits(s.collections[0].id);
-    return (
-      <SearchResultCollection c={c} clickData={clickData}/>
-    );
+    return c && <SearchResultCollection c={c} clickData={clickData}/>;
   }
 
   const collections = s.collections.filter(c => c.id !== mdbUid);
