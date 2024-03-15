@@ -17,6 +17,7 @@ import ContentTypeItem from './ContentTypeItem';
 import { LESSON_AS_COLLECTION, LESSON_AS_UNIT } from '../MainPage';
 import { filtersAsideGetTreeSelector, filtersGetNotEmptyFiltersSelector } from '../../../../redux/selectors';
 import PartOfDayFilterModal from './PartOfDayFilterModal';
+import PartOfDayFilterList from './PartOfDayFilterList';
 
 const ContentTypeFilter = ({ namespace }) => {
   const fetchedCTs = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
@@ -40,7 +41,7 @@ const ContentTypeFilter = ({ namespace }) => {
               }
 
               if (x === CT_LESSON_PART || x === CT_DAILY_LESSON) {
-                return <PartOfDayFilterModal namespace={namespace} ct={x} key={x}/>;
+                return <PartOfDayFilterList namespace={namespace} ct={x} key={x}/>;
               }
 
               return <ContentTypeItem namespace={namespace} id={x} key={x}/>;

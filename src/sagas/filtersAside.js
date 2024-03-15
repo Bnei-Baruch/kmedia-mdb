@@ -2,15 +2,7 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import {
-  CT_DAILY_LESSON,
-  CT_LESSONS,
-  CT_LESSON_PART,
-  FN_CONTENT_TYPE,
-  FN_LANGUAGES,
-  FN_SHOW_LESSON_AS_UNITS,
-  PAGE_NS_LESSONS,
-} from '../helpers/consts';
+import { FN_LANGUAGES, FN_SHOW_LESSON_AS_UNITS, PAGE_NS_LESSONS, CT_LESSONS, } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
@@ -50,34 +42,25 @@ const setAllStatParamsFalse = params => {
   return params;
 };
 
-function patchLessonFilters(filters) {
-  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
-  if (ctFilter) {
-    ctFilter.values = ctFilter.values.map(ct => (CT_LESSONS.includes(ct)) ? CT_LESSON_PART : ct);
-  }
-
+function checkIsLessonAsCollection(filters) {
   return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
 }
 
-function prepareDailyLessonParams(params) {
-  setAllStatParamsFalse(params);
-  params.with_content_types = true;
-  params.content_type       = [...params.content_type.filter(ct => ct === CT_LESSON_PART), CT_DAILY_LESSON];
-  return params;
-}
-
 export function* fetchStat(action) {
-  const { namespace, params, options: { isPrepare } } = action.payload;
+  const { namespace, options: { isPrepare } }         = action.payload;
+  let { params }                                      = action.payload;
   let { options: { countC = false, countL = false } } = action.payload;
 
   let filterParams       = {};
   let lessonAsCollection = false;
-  if (!isPrepare) {
-    const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    if (namespace === PAGE_NS_LESSONS)
-      lessonAsCollection = patchLessonFilters(filters);
 
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  if (!isPrepare) {
     filterParams = filtersTransformer.toApiParams(filters) || {};
+  }
+  if (namespace === PAGE_NS_LESSONS) {
+    lessonAsCollection        = checkIsLessonAsCollection(filters);
+    filterParams.content_type = [...params.content_type, ...CT_LESSONS];
   }
 
   //need when was filtered by base param (for example filter by topics on the topic page)
@@ -114,8 +97,6 @@ export function* fetchStat(action) {
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
 
-    lessonAsCollection && requests.push(call(Api.collectionsStats, prepareDailyLessonParams({ ...params })));
-
     const responses = yield all(requests);
 
     const dataCU                            = countCU ? responses.shift()?.data : {};
@@ -133,10 +114,10 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
-
     if (lessonAsCollection) {
-      const ct           = responses.shift()?.data.content_type;
-      dataC.content_type = { ...ct, ...dataC.content_type };
+      dataCU['day_part'] = {};
+    } else if (namespace === PAGE_NS_LESSONS) {
+      dataC['day_part'] = {};
     }
 
     yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));

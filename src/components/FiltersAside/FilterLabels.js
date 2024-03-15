@@ -15,7 +15,7 @@ import {
   FN_SOURCES_MULTI,
   FN_TOPICS,
   FN_TOPICS_MULTI,
-  LANGUAGES
+  LANGUAGES, FN_PART_OF_DAY
 } from '../../helpers/consts';
 import { actions } from '../../redux/modules/filters';
 import { getTitle } from './LocationsFilter/helper';
@@ -44,7 +44,7 @@ const FilterLabels = ({ namespace, t }) => {
       case FN_LANGUAGES:
         return LANGUAGES[val]?.name;
       case FN_PERSON:
-        return getPersonById(val).name;
+        return getPersonById(val)?.name;
       case FN_COLLECTION_MULTI:
         return getCById(val).name;
       case FN_MEDIA_TYPE:
@@ -55,6 +55,8 @@ const FilterLabels = ({ namespace, t }) => {
         return getTitle(val, t);
       case FN_FREE_TEXT:
         return `${t('filters.aside-filter.free-text')}: ${val}`;
+      case FN_PART_OF_DAY:
+        return t(`lessons.list.nameByNum_${val}`);
       default:
         return null;
     }
