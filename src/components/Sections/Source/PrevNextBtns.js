@@ -60,6 +60,7 @@ const PrevNextBtns = () => {
 
 const PrevBtn = ({ id }) => {
   const { t } = useTranslation();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
@@ -80,8 +81,8 @@ const PrevBtn = ({ id }) => {
       className="prev-next-btn"
     >
       <div className={btnContentClassName}>
-        <Icon name={icon} className="prev-next-btn-icon" />
-        {t('buttons.previous-article')}
+        <Icon name={icon} className="prev-next-btn-icon"/>
+        {isMobileDevice ? (''): (<span>{t('buttons.previous-article')}</span>)}
       </div>
     </Button>
   );
@@ -89,6 +90,7 @@ const PrevBtn = ({ id }) => {
 
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
@@ -109,8 +111,8 @@ const NextBtn = ({ id }) => {
       className="prev-next-btn"
     >
       <div className={btnContentClassName}>
-        {t('buttons.next-article')}
-        <Icon name={icon} className="prev-next-btn-icon" />
+      {isMobileDevice ? (''): (<span>{t('buttons.next-article')}</span>)}
+        <Icon name={icon} className="prev-next-btn-icon"/>
       </div>
     </Button>
   );
