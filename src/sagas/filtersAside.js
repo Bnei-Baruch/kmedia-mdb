@@ -42,13 +42,13 @@ const setAllStatParamsFalse = params => {
   return params;
 };
 
-function checkIsLessonAsCollection(filters) {
-  return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+export function checkIsLessonAsCollection(filters) {
+  return !filters?.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
 }
 
 export function* fetchStat(action) {
   const { namespace, options: { isPrepare } }         = action.payload;
-  let { params }                                      = action.payload;
+  const { params }                                    = action.payload;
   let { options: { countC = false, countL = false } } = action.payload;
 
   let filterParams       = {};
@@ -58,6 +58,7 @@ export function* fetchStat(action) {
   if (!isPrepare) {
     filterParams = filtersTransformer.toApiParams(filters) || {};
   }
+
   if (namespace === PAGE_NS_LESSONS) {
     lessonAsCollection        = checkIsLessonAsCollection(filters);
     filterParams.content_type = [...params.content_type, ...CT_LESSONS];
@@ -100,12 +101,12 @@ export function* fetchStat(action) {
     const responses = yield all(requests);
 
     const dataCU                            = countCU ? responses.shift()?.data : {};
-    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
+    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: {} };
     const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
       const dataCUPart                            = countCU ? responses.shift()?.data : {};
-      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
+      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : { data: {} };
       const dataLPart                             = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
@@ -114,6 +115,7 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
+
     if (lessonAsCollection) {
       dataCU['day_part'] = {};
     } else if (namespace === PAGE_NS_LESSONS) {
