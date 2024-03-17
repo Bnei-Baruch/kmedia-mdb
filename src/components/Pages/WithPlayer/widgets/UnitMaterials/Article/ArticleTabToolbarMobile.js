@@ -9,30 +9,32 @@ import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const ArticleTabToolbarMobile = () => (
+const ArticleTabToolbarMobile = ({ hasToc }) => (
   <div className="text_toolbar">
+    {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
-      <LanguageTextBtn />
-      <TextSettings />
-      <SearchOnPageBtn />
-      <AddBookmarkBtn />
+      <LanguageTextBtn/>
+      <TextSettings/>
+      <SearchOnPageBtn/>
+      <AddBookmarkBtn/>
       <Dropdown
         item
         icon={null}
-        trigger={<MoreOptionsBtn />}
+        trigger={<MoreOptionsBtn/>}
         className="text_toolbar__dropdown"
         direction="left"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
-            <DownloadTextBtn />
+            <DownloadTextBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <ShareTextModalBtn />
+            <ShareTextModalBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <CopyLinkBtn />
+            <CopyLinkBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
