@@ -161,6 +161,11 @@
   .player_page_tab & {
     position: absolute;
     height: 100%;
+    transform: translate3d(-380px, 0, 0);
+
+    .rtl & {
+      transform: translate3d(380px, 0, 0);
+    }
   }
 }
 

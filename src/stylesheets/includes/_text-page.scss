@@ -70,6 +70,10 @@
 
   &.is-web:not(.with_breadcrumb) {
     padding-top: 1em;
+
+    .player_page_tab & {
+      padding-top: 0;
+    }
   }
 
   .text__content-wrapper {

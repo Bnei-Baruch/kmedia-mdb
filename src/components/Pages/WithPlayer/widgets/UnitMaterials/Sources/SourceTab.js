@@ -43,13 +43,15 @@ const SourceTab = ({ id }) => {
         isMobileDevice ? (
           <TextLayoutMobile
             id={subjectId}
-            toolbar={<SourceTabToolbarMobile toc={toc}/>}
+            toc={toc}
+            toolbar={<SourceTabToolbarMobile hasToc={subjects.length > 1}  />}
             playerPage={true}
           />
         ) : (
           <TextLayoutWeb
             id={subjectId}
-            toolbar={<SourceTabToolbarWeb toc={toc}/>}
+            toc={toc}
+            toolbar={<SourceTabToolbarWeb hasToc={subjects.length > 1} />}
             playerPage={true}
           />
         )

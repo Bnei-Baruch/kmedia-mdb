@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { List } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import { textPageGetTocIsActiveSelector, textPageGetSubjectSelector } from '../../../../../../redux/selectors';
 import { actions } from '../../../../../../redux/modules/textPage';
-import { Dropdown } from 'semantic-ui-react';
-import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
+import TOCControl from '../../../../../Sections/Source/TOC/TOCControl';
 
 const SourceTabTOC = ({ cus, onClick }) => {
   const tocIsActive = useSelector(textPageGetTocIsActiveSelector);
@@ -18,34 +19,26 @@ const SourceTabTOC = ({ cus, onClick }) => {
     onClick(cuId);
   };
 
-  const handleToggle = () => dispatch(actions.setTocIsActive());
-
   return (
-    <Dropdown
-      item
-      icon={null}
-      trigger={<TocToggleBtn withText={false}/>}
-      open={tocIsActive}
-      onClose={handleToggle}
-    >
-      <Dropdown.Menu>
+    <div className={clsx('toc no_print', { 'toc_active': tocIsActive })}>
+      <TOCControl/>
+      <List>
         {
           cus.map(cu => (
-              <Dropdown.Item
+              <List.Item
                 key={cu.id}
                 onClick={() => handleClick(cu.id)}
-                active={cu.id === id}
-                className="player_page_source_toc_item"
+                className="player_page_source_toc_item toc_single_level accordion"
               >
-                <a>
+                <div className={clsx('title', { 'active': cu.id === id })}>
                   {cu.name}
-                </a>
-              </Dropdown.Item>
+                </div>
+              </List.Item>
             )
           )
         }
-      </Dropdown.Menu>
-    </Dropdown>
+      </List>
+    </div>
   );
 };
 
