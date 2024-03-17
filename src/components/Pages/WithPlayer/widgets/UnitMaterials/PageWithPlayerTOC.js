@@ -26,16 +26,16 @@ const PageWithPlayerTOC = ({ cus, onClick }) => {
       <List>
         {
           cus.map(cu => (
-              <List.Item
-                key={cu.id}
-                onClick={() => handleClick(cu.id)}
-                className="player_page_source_toc_item toc_single_level accordion"
-              >
-                <div className={clsx('title', { 'active': cu.id === id })}>
-                  {cu.name}
-                </div>
-              </List.Item>
-            )
+            <List.Item
+              key={cu.id}
+              onClick={() => handleClick(cu.id)}
+              className="player_page_source_toc_item toc_single_level accordion"
+            >
+              <div className={clsx('title', { 'active': cu.id === id })}>
+                {cu.name}
+              </div>
+            </List.Item>
+          )
           )
         }
       </List>
