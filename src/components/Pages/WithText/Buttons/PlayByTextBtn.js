@@ -6,7 +6,8 @@ import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
 import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetWordOffsetSelector
+  textPageGetWordOffsetSelector,
+  textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
@@ -16,6 +17,7 @@ const PlayByTextBtn = () => {
   const wordOffset    = useSelector(textPageGetWordOffsetSelector);
   const hasTimeCode   = useSelector(state => assets.hasTimeCode(state.assets));
   const timeCodeByPos = useSelector(state => assets.getTimeCode(state.assets));
+  const hasNoSel      = !useSelector(textPageGetUrlInfoSelector).select;
 
   const dispatch = useDispatch();
 
@@ -34,6 +36,8 @@ const PlayByTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="play-by-text"
+      className="text_mark_on_select_btn"
+      disabled={hasNoSel}
       onClick={handlePlay}
       icon={<span className="material-symbols-outlined">play_arrow</span>}
     />

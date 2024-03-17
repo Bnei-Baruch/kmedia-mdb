@@ -332,7 +332,7 @@
     transition: all 0.2s ease-in-out 0s;
 
     &.stick_toolbar_fixed {
-      transform: translate3d(0px, -1 * $breadcrumb-height, 0px) !important;
+      transform: translate3d(0px, 0, 0px) !important;
     }
 
     transform: translate3d(0px, -$text-bar-height, 0px);
