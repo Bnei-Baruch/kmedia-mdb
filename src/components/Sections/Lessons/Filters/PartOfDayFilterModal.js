@@ -69,7 +69,7 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
         onClose={toggleOpen}
         className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
         closeIcon={<Icon name="times circle outline"/>}
-        size="fullscreen"
+        size="large"
       >
         <Modal.Header className="no-border nowrap">
           {t(`filters.content-types.${ct}`)}
