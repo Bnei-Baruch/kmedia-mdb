@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Trans, withTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -10,7 +9,9 @@ import {
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
   SEARCH_INTENT_HIT_TYPES,
-  BLOGS
+  BLOGS,
+  SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG,
+  CT_LIKUTIM
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
@@ -18,7 +19,6 @@ import { getQuery, isDebMode } from '../../helpers/url';
 import { actions } from '../../redux/modules/search';
 
 import { filtersTransformer } from '../../filters';
-import WipErr from '../shared/WipErr/WipErr';
 import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
@@ -30,13 +30,15 @@ import {
   SearchResultPost,
   SearchResultSeries,
   SearchResultSource,
-  SearchResultTweets
+  SearchResultTweets,
+  SearchResultLikut
 } from './SearchResultHooks';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
 import FilterLabels from '../FiltersAside/FilterLabels';
 import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
+import { SearchResultLikutimByTag } from './SearchResultLikutimByTag';
 import {
   sourcesAreLoadedSelector,
   tagsAreLoadedSelector,
@@ -100,7 +102,8 @@ const cMapFromState = (state, results) => (
     : {}
 );
 
-const SearchResults = ({ t }) => {
+const SearchResults = () => {
+  const { t }         = useTranslation();
   const queryResult   = useSelector(searchGetQueryResultSelector) || false;
   const searchResults = queryResult.search_result;
 
@@ -152,20 +155,36 @@ const SearchResults = ({ t }) => {
     } else if (type === 'tweets_many') {
       result = <SearchResultTweets source={hit._source} clickData={clickData}/>;
     } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
-      result = <SearchResultSeries id={hit._uid} type={type} mdbUid={hit._source.mdb_uid} clickData={clickData}/>;
+      result = <SearchResultSeries id={hit._uid} type={type} mdbUid={mdbUid} clickData={clickData} />;
+    } else if (type === SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG) {
+      result = <SearchResultLikutimByTag hit={hit} type={type} clickData={clickData} key={hit._uid} />;
     } else {
       const cu = cuMap[mdbUid];
       const c  = cMap[mdbUid];
       const p  = postMap[mdbUid];
-      if (cu) {
-        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData}/>;
+      if (cu?.content_type === CT_LIKUTIM) {
+        result = <SearchResultLikut cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
+      } else if (cu) {
+        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
       } else if (c) {
-        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData}/>;
+        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
       } else if (p) {
-        result = <SearchResultPost id={hit._source.mdb_uid} post={p} highlight={hit.highlight} clickData={clickData}/>;
+        result = <SearchResultPost
+          id={mdbUid}
+          post={p}
+          highlight={hit.highlight}
+          clickData={clickData}
+          key={mdbUid}
+        />;
       } else if (resultType === 'sources') {
         result =
-          <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData}/>;
+          <SearchResultSource
+            id={mdbUid}
+            title={hit._source.title}
+            highlight={hit.highlight}
+            clickData={clickData}
+            key={mdbUid}
+          />;
       } else {
         console.error('Unexpected result type!');
       }
@@ -182,40 +201,6 @@ const SearchResults = ({ t }) => {
       </>
     );
   };
-
-  /* Requested by Mizrahi
-  const hideNote = () => setShowNote(false);
-
-  const renderTopNote = () => {
-    if (!showNote) {
-      return null;
-    }
-
-    const language = t(`constants.languages.${contentLanguage}`);
-    return (
-      <Message info className="search-result-note">
-        <Image floated="left">
-          <SectionLogo name='info' />
-        </Image>
-        <Button floated="right" icon="close" size="tiny" circular onClick={hideNote} />
-        <Container>
-          <strong>
-            {t('search.topNote.tip')}
-            :
-            {' '}
-          </strong>
-          {t('search.topNote.first', { language })}
-        </Container>
-        <Container>{t('search.topNote.second')}</Container>
-      </Message>
-    );
-  };
-   */
-
-  const wipErr = WipErr({ wip: wip || !areSourcesLoaded || !areTagsLoaded, err, t });
-  if (wipErr) {
-    return wipErr;
-  }
 
   // Query from URL (not changed until pressed Enter)
   const query = getQuery(location).q;
@@ -258,7 +243,7 @@ const SearchResults = ({ t }) => {
         {total !== 0 && <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t}/>}
         <FilterLabels namespace={'search'}/>
         {/* Requested by Mizrahi renderTopNote() */}
-        {wipErr || hits.map((h, rank) => renderHit(h, rank, searchId, searchLanguage, deb))}
+        {hits.map((h, rank) => renderHit(h, rank, searchId, searchLanguage, deb))}
         <Divider fitted/>
         <Container className="padded pagination-wrapper" textAlign="center">
           {total > 0 && <Pagination
@@ -272,10 +257,6 @@ const SearchResults = ({ t }) => {
     </>);
 };
 
-SearchResults.propTypes = {
-  t: PropTypes.func.isRequired
-};
-
 SearchResults.defaultProps = {
   queryResult  : null,
   cMap         : {},
@@ -285,4 +266,4 @@ SearchResults.defaultProps = {
   getSourcePath: undefined
 };
 
-export default withTranslation()(SearchResults);
+export default SearchResults;
