@@ -15,7 +15,7 @@ import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = ({hasToc}) => (
+const SourceTabToolbarWeb = ({ hasToc }) => (
   <div className="text_toolbar">
     {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
