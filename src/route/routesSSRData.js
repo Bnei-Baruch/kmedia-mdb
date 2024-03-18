@@ -296,8 +296,6 @@ const fetchSQData = async (store, uiLang, contentLanguages) => {
 };
 
 export const libraryPage = async (store, match, show_console = false) => {
-  show_console = true;
-
   const state            = store.getState();
   const location         = state?.router.location ?? {};
   const query            = getQuery(location);

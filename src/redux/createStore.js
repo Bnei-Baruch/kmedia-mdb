@@ -22,7 +22,6 @@ import search from './modules/search';
 import assets from './modules/assets';
 import home from './modules/home';
 import stats from './modules/stats';
-import simpleMode from './modules/simpleMode';
 import recommended from './modules/recommended';
 import chronicles from './modules/chronicles';
 import music from './modules/music';
@@ -82,7 +81,6 @@ const setupReducers = history => ({
   assets,
   home,
   stats,
-  simpleMode,
   recommended,
   chronicles,
   music,
@@ -112,6 +110,5 @@ export default function createStore(preloadedState, history) {
   store.rootSagaPromise = sagaMiddleware.run(rootSaga).done;
   store.stopSagas       = () => store.dispatch(END);
   store.sagaMiddleWare  = sagaMiddleware;
-
   return store;
 }

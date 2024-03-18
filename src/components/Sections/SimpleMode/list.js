@@ -33,7 +33,7 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
   const wipErr = WipErr({ isLoading, isError, t });
   if (wipErr) {
     if (error) {
-      console.error('========> SimpleModeList', error);
+      console.error('========> SimpleModeList error', error);
     }
 
     return wipErr;
@@ -43,6 +43,7 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
     return <FrownSplash text={t('simple-mode.no-files-found-for-date')}/>;
   }
 
+  const renderedLessonUnits = lessons.map(x => renderUnit(x, filesLanguages, t));
   return (
     <div>
       {
@@ -55,7 +56,7 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
             {t('simple-mode.today-lessons')}
           </h2>
           <List size="large">
-            {lessons.map(x => renderUnit(x, filesLanguages, t))}
+            {renderedLessonUnits}
           </List>
         </div>
       }
