@@ -8,6 +8,7 @@ import {
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
+import Tagging from '../../../../images/icons/Tagging';
 
 const TagTextBtn = () => {
   const { select, search } = useSelector(textPageGetUrlInfoSelector);
@@ -45,8 +46,8 @@ const TagTextBtn = () => {
       trigger={
         <ToolbarBtnTooltip
           textKey="add-tag"
-          className="text_mark_on_select_btn"
-          icon={<span className="material-symbols-outlined">tag</span>}
+          className="text_mark_on_select_btn no_fill"
+          icon={<Tagging />}
           onClick={handleOpen}
         />
       }
