@@ -29,7 +29,7 @@ const PlayByTextBtn = () => {
   if (!hasTimeCode) return null;
 
   const handlePlay = () => {
-    const startTime = timeCodeByPos(wordOffset - 2);
+    const startTime = timeCodeByPos(wordOffset);
     seek(startTime).play();
     setPip(true);
   };
@@ -40,7 +40,7 @@ const PlayByTextBtn = () => {
       className="text_mark_on_select_btn no_stroke"
       disabled={hasNoSel}
       onClick={handlePlay}
-      icon={<PlayByText />}
+      icon={<PlayByText/>}
     />
   );
 };
