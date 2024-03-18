@@ -97,7 +97,7 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
   const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
   if (!hls) return files;
 
-  const resp = hls.hls_languages.reduce((acc, l) => {
+  return hls.hls_languages.reduce((acc, l) => {
     acc.push({ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null });
     if (content_type !== CT_KITEI_MAKOR) {
       hls.video_qualities.forEach(q => {
@@ -114,7 +114,6 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
 
     return acc;
   }, []);
-  return resp;
 };
 
 const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {

@@ -10,34 +10,34 @@ import { isEmpty } from '../../helpers/utils';
 import { backendApi } from '../api/backendApi';
 
 const freshStore = () => ({
-  cById: {},
-  cuById: {},
-  labelById: {},
-  cWindow: {},
-  countCU: {},
-  labelsByCU: {},
-  personById: {},
+  cById       : {},
+  cuById      : {},
+  labelById   : {},
+  cWindow     : {},
+  countCU     : {},
+  labelsByCU  : {},
+  personById  : {},
   datepickerCO: null,
-  wip: {
-    units: {},
-    collections: {},
-    cWindow: {},
+  wip         : {
+    units       : {},
+    collections : {},
+    cWindow     : {},
     datepickerCO: false,
-    lastLesson: false,
-    sqData: false,
-    countCU: false
+    lastLesson  : false,
+    sqData      : false,
+    countCU     : false
   },
-  errors: {
-    units: {},
-    collections: {},
-    cWindow: {},
+  errors      : {
+    units       : {},
+    collections : {},
+    cWindow     : {},
     datepickerCO: null,
-    lastLesson: null,
-    sqData: null,
-    countCU: null
+    lastLesson  : null,
+    sqData      : null,
+    countCU     : null
   },
-  fetched: {
-    units: {},
+  fetched     : {
+    units      : {},
     collections: {}
   }
 });
@@ -347,11 +347,11 @@ const getDenormCollectionWUnits = (state, id) => {
 };
 
 const mdbSlice = createSlice({
-  name: 'mdb',
+  name        : 'mdb',
   initialState: freshStore(),
 
-  reducers: {
-    fetchUnit: (state, action) => {
+  reducers     : {
+    fetchUnit       : (state, action) => {
       state.wip.units ||= {};
       state.wip.units[action.payload] = true;
     },
@@ -366,7 +366,7 @@ const mdbSlice = createSlice({
       state.errors.units[action.payload.id] = action.payload.err;
     },
 
-    fetchUnitsByIDs: (state, action) => {
+    fetchUnitsByIDs       : (state, action) => {
       const units     = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
       state.wip.units = { ...state.wip.units, ...units };
     },
@@ -374,7 +374,7 @@ const mdbSlice = createSlice({
       const data = action.payload.data || [];
       onReceiveContentUnits(state, data);
       const units        = data.reduce((acc, { id }) => ({
-        wip: { ...acc.wip, [id]: false },
+        wip   : { ...acc.wip, [id]: false },
         errors: { ...acc.errors, [id]: null }
       }), { wip: {}, errors: {} });
       state.wip.units    = { ...state.wip.units, ...units.wip };
@@ -382,37 +382,37 @@ const mdbSlice = createSlice({
     },
     fetchUnitsByIDsFailure: (state, action) => {
       const units        = action.payload.id?.reduce((acc, id) => ({
-        wip: { ...acc.wip, [id]: false },
+        wip   : { ...acc.wip, [id]: false },
         errors: { ...acc.errors, [id]: action.payload.err }
       }), { wip: {}, errors: {} });
       state.wip.units    = { ...state.wip.units, ...units.wip };
       state.errors.units = { ...state.errors.units, ...units.errors };
     },
 
-    fetchCollection: (state, action) => {
+    fetchCollection             : (state, action) => {
       state.collections ||= {};
       state.collections[action.payload] = true;
     },
-    fetchCollectionSuccess: (state, action) => {
+    fetchCollectionSuccess      : (state, action) => {
       onReceiveCollections(state, [action.payload.data]);
       state.wip.collections[action.payload.id]     = false;
       state.errors.collections[action.payload.id]  = null;
       state.fetched.collections[action.payload.id] = true;
     },
-    fetchCollectionFailure: (state, action) => {
+    fetchCollectionFailure      : (state, action) => {
       state.wip.collections[action.payload.id]    = false;
       state.errors.collections[action.payload.id] = action.payload.err;
     },
     fetchCollectionsByIDsFailure: (state, action) => {
       const collections        = action.payload.id?.reduce((acc, id) => ({
-        wip: { ...acc.wip, [id]: false },
+        wip   : { ...acc.wip, [id]: false },
         errors: { ...acc.errors, [id]: action.payload.err }
       }), { wip: {}, errors: {} });
       state.wip.collections    = { ...state.wip.collections, ...collections.wip };
       state.errors.collections = { ...state.errors.collections, ...collections.errors };
     },
 
-    fetchLatestLesson: state => void (state.wip.lastLesson = true),
+    fetchLatestLesson       : state => void (state.wip.lastLesson = true),
     fetchLatestLessonSuccess: (state, { payload: { data } }) => {
       onReceiveCollections(state, [data]);
       state.lastLessonId                 = data.id;
@@ -427,7 +427,7 @@ const mdbSlice = createSlice({
       state.errors.lastLesson = action.payload.err;
     },
 
-    fetchWindow: (state, action) => {
+    fetchWindow       : (state, action) => {
       state.wip.cWindow ||= {};
       state.wip.cWindow[action.payload.id] = true;
     },
@@ -442,7 +442,7 @@ const mdbSlice = createSlice({
       state.errors.cWindow = action.payload.err;
     },
 
-    fetchDatepickerCO: state => void (state.wip.datepickerCO = true),
+    fetchDatepickerCO       : state => void (state.wip.datepickerCO = true),
     fetchDatepickerCOSuccess: (state, { payload: { data: { collections } } }) => {
       onReceiveCollections(state, collections);
       state.datepickerCO        = minBy(collections, a => a.number)?.id;
@@ -454,9 +454,9 @@ const mdbSlice = createSlice({
       state.wip.datepickerCO    = false;
       state.errors.datepickerCO = action.payload.err;
     },
-    nullDatepickerCO: state => void (state.datepickerCO = null),
+    nullDatepickerCO        : state => void (state.datepickerCO = null),
 
-    fetchSQData: state => void (state.wip.sqData = true),
+    fetchSQData       : state => void (state.wip.sqData = true),
     fetchSQDataSuccess: state => {
       state.wip.sqData    = false;
       state.errors.sqData = null;
@@ -470,7 +470,7 @@ const mdbSlice = createSlice({
       }
     },
 
-    countCU: {
+    countCU       : {
       prepare: (type, { namespace, params }) => ({ payload: { namespace, params } }),
       reducer: onCountCU
     },
@@ -480,7 +480,7 @@ const mdbSlice = createSlice({
       state.errors.countCU = action.payload.err;
     },
 
-    receiveCollections: (state, action) => onReceiveCollections(state, action.payload),
+    receiveCollections : (state, action) => onReceiveCollections(state, action.payload),
     receiveContentUnits: (state, action) => onReceiveContentUnits(state, action.payload),
 
     receivePersons: onReceivePersons,
@@ -506,31 +506,31 @@ const mdbSlice = createSlice({
     getCollectionById,
     getWip,
     getErrors,
-    nestedGetCollectionById: state => id => getCollectionById(state, id),
-    getUnitById: (state, id) => state.cuById[id],
-    getLastLessonId: state => state.lastLessonId,
-    getFullUnitFetched: state => state.fetched.units,
-    getFullCollectionFetched: state => state.fetched.collections,
-    getCollections: state => state.items,
-    getWindow: state => state.cWindow,
-    getDatepickerCO: state => state.datepickerCO,
-    getSQDataWipErr: state => !(getWip(state).sqData || getErrors(state).sqData),
-    getDenormLabel: state => id => state.labelById[id],
-    getCountCu: (state, namespace) => state.countCU[namespace],
-    skipFetchedCO: (state, ids) => ids.filter(id => !getDenormCollection(state, id)),
-    getLabelsByCU: (state, id) => state.labelsByCU[id],
-    getPersonById: state => id => state.personById[id],
-    getLabelById: state => state.labelById,
-    skipFetchedCU: (state, ids, with_files) => ids.filter(id => {
+    nestedGetCollectionById     : state => id => getCollectionById(state, id),
+    getUnitById                 : (state, id) => state.cuById[id],
+    getLastLessonId             : state => state.lastLessonId,
+    getFullUnitFetched          : state => state.fetched.units,
+    getFullCollectionFetched    : state => state.fetched.collections,
+    getCollections              : state => state.items,
+    getWindow                   : state => state.cWindow,
+    getDatepickerCO             : state => state.datepickerCO,
+    getSQDataWipErr             : state => !(getWip(state).sqData || getErrors(state).sqData),
+    getDenormLabel              : state => id => state.labelById[id],
+    getCountCu                  : (state, namespace) => state.countCU[namespace],
+    skipFetchedCO               : (state, ids) => ids.filter(id => !getDenormCollection(state, id)),
+    getLabelsByCU               : (state, id) => state.labelsByCU[id],
+    getPersonById               : state => id => state.personById[id],
+    getLabelById                : state => state.labelById,
+    skipFetchedCU               : (state, ids, with_files) => ids.filter(id => {
       const cu = getDenormContentUnit(state, id);
       if (!with_files) return !cu;
       return !cu?.files?.length;
     }),
     getDenormContentUnit,
     getDenormCollection,
-    nestedGetDenormCollection: state => id => getDenormCollection(state, id),
+    nestedGetDenormCollection   : state => id => getDenormCollection(state, id),
     getDenormCollectionWUnits,
-    nestedGetDenormContentUnit: state => id => getDenormContentUnit(state, id),
+    nestedGetDenormContentUnit  : state => id => getDenormContentUnit(state, id),
     nestedDenormCollectionWUnits: state => id => getDenormCollectionWUnits(state, id)
   }
 });

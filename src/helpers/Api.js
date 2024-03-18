@@ -108,19 +108,19 @@ export class Requests {
 
 class Api {
   static collection = ({
-    id,
-    ui_language,
-    content_languages
-  }) => Requests.get(`collections/${id}?${Requests.makeParams({
+                         id,
+                         ui_language,
+                         content_languages
+                       }) => Requests.get(`collections/${id}?${Requests.makeParams({
     ui_language,
     content_languages
   })}`);
 
   static unit = ({
-    id,
-    ui_language,
-    content_languages
-  }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+                   id,
+                   ui_language,
+                   content_languages
+                 }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
     ui_language,
@@ -128,9 +128,9 @@ class Api {
   })}`);
 
   static latestLesson = ({
-    ui_language,
-    content_languages
-  }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+                           ui_language,
+                           content_languages
+                         }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
     ui_language,
@@ -196,9 +196,9 @@ class Api {
       q,
       ui_language,
       content_languages,
-      pageNo: page_no,
+      pageNo  : page_no,
       pageSize: page_size,
-      sortBy: sort_by,
+      sortBy  : sort_by,
       deb,
       searchId: search_id
     }
@@ -237,16 +237,16 @@ class Api {
       uid,
       languages,
       skipUids: skip_uids,
-      size: more_items,
+      size    : more_items,
       spec,
       specs,
       watchingNowMin: watching_now_min,
-      popularMin: popular_min
+      popularMin    : popular_min
     }
   ) => ({
     more_items,
     'current_feed': [],
-    'options': {
+    'options'     : {
       'recommend': {
         uid
       },
@@ -261,10 +261,10 @@ class Api {
 
   static recommended = requestData => {
     const config = {
-      method: 'post',
-      url: feedUrl('recommend'),
+      method : 'post',
+      url    : feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify(requestData)
+      data   : JSON.stringify(requestData)
     };
 
     return axios(config);
@@ -272,10 +272,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('views'),
+      method : 'post',
+      url    : feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids })
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -283,10 +283,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('watchingnow'),
+      method : 'post',
+      url    : feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids })
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);

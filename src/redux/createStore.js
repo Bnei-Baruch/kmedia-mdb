@@ -112,6 +112,5 @@ export default function createStore(preloadedState, history) {
   store.rootSagaPromise = sagaMiddleware.run(rootSaga).done;
   store.stopSagas       = () => store.dispatch(END);
   store.sagaMiddleWare  = sagaMiddleware;
-
   return store;
 }

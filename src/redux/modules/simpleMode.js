@@ -1,34 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { actions as settingsActions } from './settings';
-import { actions as ssrActions } from './ssr';
+import { backendApi } from '../api/backendApi';
+import { wholeSimpleMode } from '../api/simpleMode';
+
+const invalidateSimpleMode = state => state.dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
 
 const simpleModeSlice = createSlice({
-  name: 'simpleMode',
-  initialState: {
-    items: {
-      lessons: [],
-      others: []
-    },
-    wip: false,
-    err: null
-  },
+  name        : 'simpleMode',
+  initialState: {},
 
   extraReducers: builder => {
     builder
-      .addCase(ssrActions.prepare, state => {
-        if (state.err) {
-          state.err = state.err.toString();
-        }
-      })
-      .addCase(settingsActions.setContentLanguages, state => {
-        state.items.lessons = [];
-        state.items.others  = [];
-      })
-      .addCase(settingsActions.setUILanguage, state => {
-        state.items.lessons = [];
-        state.items.others  = [];
-      });
+      .addCase(settingsActions.setContentLanguages, invalidateSimpleMode)
+      .addCase(settingsActions.setUILanguage, invalidateSimpleMode);
   },
 });
 
