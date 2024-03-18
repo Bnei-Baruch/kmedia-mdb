@@ -22,7 +22,6 @@ import { selectors as listsSel } from './modules/lists';
 import { selectors as lessonsSel } from './modules/lessons';
 import { selectors as musicSel } from './modules/music';
 import { selectors as bookmarkFilterSel } from './modules/bookmarkFilter';
-import { selectors as simpleModeSel } from './modules/simpleMode';
 import { selectors as trimSel } from './modules/trim';
 import { selectors as fetchImageSel } from './modules/fetchImage';
 import { selectors as myNotesSel } from './modules/myNotes';
@@ -51,7 +50,6 @@ const getLists          = state => state.lists;
 const getLessons        = state => state.lessons;
 const getMusic          = state => state.music;
 const getBookmarkFilter = state => state.bookmarkFilter;
-const getSimpleMode     = state => state.simpleMode;
 const getTrim           = state => state.trim;
 const getFetchImage     = state => state.fetchImage;
 const getMyNotes        = state => state.myNotes;
@@ -246,11 +244,6 @@ export const musicGetDataSelector  = createSelector([getMusic], m => musicSel.ge
 
 // bookmarkFilter
 export const bookmarkFilterGetByKeySelector = createSelector(getBookmarkFilter, _2, (b, ns) => bookmarkFilterSel.getByKey(b, ns));
-
-// simpleMode
-export const simpleModeGetItemsSelector = createSelector([getSimpleMode], s => simpleModeSel.getItems(s));
-export const simpleModeGetWipSelector   = createSelector([getSimpleMode], s => simpleModeSel.getWip(s));
-export const simpleModeGetErrorSelector = createSelector([getSimpleMode], s => simpleModeSel.getError(s));
 
 // trim
 export const trimGetListSelector = createSelector([getTrim], t => trimSel.getList(t));
