@@ -38,6 +38,7 @@ import { pick } from 'lodash/object';
 import { HelmetProvider } from 'react-helmet-async';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 import { backendApi } from '../src/redux/api/backendApi';
+import { wholeSimpleMode } from '../src/redux/api/simpleMode';
 
 const helmetContext = {};
 
@@ -54,12 +55,15 @@ const windowEnvVariables = () => {
   if (KC_API_URL) {
     vars.push(`window.KC_API_URL = '${KC_API_URL}';`);
   }
+
   if (KC_REALM) {
     vars.push(`window.KC_REALM = '${KC_REALM}';`);
   }
+
   if (KC_CLIENT_ID) {
     vars.push(`window.KC_CLIENT_ID = '${KC_CLIENT_ID}';`);
   }
+
   return vars.join('');
 };
 
@@ -107,6 +111,19 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
   res.send(html);
 }
 
+const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, show_console, { route, params }) => {
+  show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
+  return route.ssrData
+    ? route.ssrData(
+      store, {
+        params,
+        parsedURL       : new URL(originalUrl, 'https://example.com'),
+        uiLang          : cookieUILang,
+        contentLanguages: cookieContentLanguages,
+      }, show_console)
+    : Promise.resolve(null);
+};
+
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
   show_console && console.log('serverRenderAuthorised uiLang', uiLang);
 
@@ -129,7 +146,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
-    let cookieUILang           = cookies[COOKIE_UI_LANG] || uiLang;
+    const cookieUILang         = cookies[COOKIE_UI_LANG] || uiLang;
     let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
     if (typeof cookieContentLanguages === 'string' || cookieContentLanguages instanceof String) {
       cookieContentLanguages = cookieContentLanguages.split(',');
@@ -158,6 +175,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     // Dispatching languages change updates tags and sources.
     store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
+    store.dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
 
     const context = {
       req,
@@ -170,28 +188,16 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
 
-    let hrstart    = process.hrtime();
-    const promises = branch.map(({ route, params }) => {
-        show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
-        return route.ssrData
-          ? route.ssrData(store, {
-              params,
-              parsedURL: new URL(req.originalUrl, 'https://example.com'),
-              uiLang: cookieUILang,
-              contentLanguages: cookieContentLanguages,
-            },
-            show_console)
-          : Promise.resolve(null);
-      }
-    );
-    let hrend      = process.hrtime(hrstart);
+    let hrstart = process.hrtime();
 
+    show_console && console.log('serverRender: ');
+    const promises    = branch.map(b => getPromises(store, req.originalUrl, cookieUILang, cookieContentLanguages, show_console, b));
+    const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
+    show_console && console.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
+    rtkPromises.forEach(promise => promises.push(promise));
+    let hrend = process.hrtime(hrstart);
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
-    const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
-    show_console && console.log('serverRender: RTK promises', rtkPromises.length);
-    Promise.all(rtkPromises);
-    show_console && console.log('serverRender: promises', promises.length);
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
@@ -239,7 +245,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
               const i18nData = serialize(
                 {
-                  initialLanguage: context.i18n.language,
+                  initialLanguage : context.i18n.language,
                   initialI18nStore: pick(context.i18n.services.resourceStore.data, [
                     context.i18n.language,
                     context.i18n.options.fallbackLng
@@ -276,6 +282,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               if (context.code) {
                 res.status(context.code);
               }
+
               res.send(html);
             }
           })

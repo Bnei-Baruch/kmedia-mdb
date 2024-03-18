@@ -18,6 +18,8 @@ import {
   settingsGetUrlLangSelector,
   settingsGetLeftRightByDirSelector
 } from '../../redux/selectors';
+import { backendApi } from '../../redux/api/backendApi';
+import { wholeSimpleMode } from '../../redux/api/simpleMode';
 
 const HandleLanguages = ({ t }) => {
   const [isActive, setIsActive] = useState(false);
@@ -35,18 +37,21 @@ const HandleLanguages = ({ t }) => {
   const uiLanguageSelected = language => {
     updateHtmlLang(language);
     dispatch(actions.setUILanguage({ uiLang: language }));
+    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
   };
 
   const addLanguage = language => {
     const newLanguages = contentLanguages.filter(lang => lang !== language);
     newLanguages.push(language);
     dispatch(actions.setContentLanguages({ contentLanguages: newLanguages }));
+    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
   };
 
   const removeLanguage = idx => {
     const newLanguages = contentLanguages.slice();
     newLanguages.splice(idx, 1);
     dispatch(actions.setContentLanguages({ contentLanguages: newLanguages }));
+    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
   };
 
   const setShowAllContent = () => dispatch(actions.setShowAllContent(!showAllContent));

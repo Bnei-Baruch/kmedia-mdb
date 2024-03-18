@@ -97,16 +97,16 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
   const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
   if (!hls) return files;
 
-  const resp = hls.hls_languages.reduce((acc, l) => {
+  return hls.hls_languages.reduce((acc, l) => {
     acc.push({ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null });
     if (content_type !== CT_KITEI_MAKOR) {
       hls.video_qualities.forEach(q => {
         const f = {
           ...hls,
-          type: MT_VIDEO,
+          type      : MT_VIDEO,
           video_size: q,
-          language: l,
-          size: sizeByQuality(q, hls.duration)
+          language  : l,
+          size      : sizeByQuality(q, hls.duration)
         };
         acc.push(f);
       });
@@ -114,7 +114,6 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
 
     return acc;
   }, []);
-  return resp;
 };
 
 const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
@@ -129,16 +128,19 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
     : [];
 };
 
-// REFACTOR THIS TO COMMON LIBRARY
-// SHOULD CONSIDER ORIGINAL LANGUAGE TOO!
+// TODO: bbdev REFACTOR THIS TO COMMON LIBRARY
+// Order files by types and languages; remove some duplicates
 const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => files
+  // filter by requested languages
   .filter(file => contentLanguages.includes(file.language))
   .sort((a, b) => {
+    // sort by media type (i.e. files in all languages are sorted by media type first)
     const media = sortMediaFiles(a, b);
     if (media !== 0) {
       return media;
     }
 
+    // inside media type group sort by language (original language is preferable)
     const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language);
     if (lang !== 0) {
       if (a.language === originalLanguage) {
@@ -154,7 +156,16 @@ const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) =
 
     return 0;
   })
-  .filter((file, index, files) => index === 0 || sortMediaFiles(files[index - 1], files[index]) !== 0);
+  // Remove duplicated media types on the same language
+  .filter((file, index, files) => {
+    if (index === 0) {
+      return true;
+    }
+
+    const media         = sortMediaFiles(files[index - 1], files[index]);
+    const diffLanguages = files[index - 1].language !== files[index].language;
+    return media !== 0 || diffLanguages;
+  });
 
 const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppend) => (
   units.filter(unit => unit).map((unit, index, unitsArray) => {
@@ -298,9 +309,9 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
 
 export const mergeTypesToCollections = byType => {
   const collections = {
-    LESSONS: [],
-    EVENTS: [],
-    PROGRAMS: [],
+    LESSONS     : [],
+    EVENTS      : [],
+    PROGRAMS    : [],
     PUBLICATIONS: []
   };
 

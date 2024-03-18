@@ -44,7 +44,7 @@ const TextLayoutWeb = props => {
   const subject            = useSelector(textPageGetSubjectSelector);
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
   const { theme }          = useSelector(textPageGetSettings);
-  const textOnly           = useSelector(textPageGetTextOnlySelector);
+  const additionsMode      = useSelector(textPageGetAdditionsModeSelector);
   const isSearch           = useSelector(textPageGetIsSearchSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

@@ -814,4 +814,4 @@ export const TEXT_PAGE_ADDITIONS_MODS = {
   hideAll: -1
 };
 
-export const LOCALSTORAGE_KEY_ADDITIONS_MODS = "additions_mods_localstorage_key"
+export const LOCALSTORAGE_KEY_ADDITIONS_MODS = 'additions_mods_localstorage_key'

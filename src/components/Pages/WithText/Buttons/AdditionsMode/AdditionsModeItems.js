@@ -35,14 +35,14 @@ const AdditionsModeItems = () => {
         Object
           .entries(TEXT_PAGE_ADDITIONS_MODS)
           .map(([key, val]) => (
-              <Menu.Item
-                onClick={() => handleSet(val)}
-                active={mode === val}
-              >
-                {t(`page-with-text.buttons.web.additions.${key}`)}
-                <span className="material-symbols-outlined">{iconsByMode[val]}</span>
-              </Menu.Item>
-            )
+            <Menu.Item
+              onClick={() => handleSet(val)}
+              active={mode === val}
+            >
+              {t(`page-with-text.buttons.web.additions.${key}`)}
+              <span className="material-symbols-outlined">{iconsByMode[val]}</span>
+            </Menu.Item>
+          )
           )
       }
     </Menu>
