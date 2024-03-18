@@ -10,6 +10,7 @@ import {
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
+import { PlayByText } from '../../../../images/icons';
 
 const PlayByTextBtn = () => {
   const { id }        = useSelector(textPageGetSubjectSelector);
@@ -36,10 +37,10 @@ const PlayByTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="play-by-text"
-      className="text_mark_on_select_btn"
+      className="text_mark_on_select_btn no_stroke"
       disabled={hasNoSel}
       onClick={handlePlay}
-      icon={<span className="material-symbols-outlined">play_arrow</span>}
+      icon={<PlayByText />}
     />
   );
 };
