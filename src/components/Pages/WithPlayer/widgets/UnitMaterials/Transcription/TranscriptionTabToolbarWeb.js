@@ -26,6 +26,7 @@ const TranscriptionTabToolbarWeb = () => (
       <AddCommentBtn />
       <ShareTextBtn />
       <CopyLinkBtn />
+      <PlayByTextBtn />
       <div className="divider" />
       <SearchOnPageBtn />
       <div className="computer-only">
@@ -36,9 +37,6 @@ const TranscriptionTabToolbarWeb = () => (
       </div>
       <div className="computer-only">
         <AdditionsVisibilityBtn />
-      </div>
-      <div className="computer-only">
-        <PlayByTextBtn />
       </div>
       <Dropdown
         item
