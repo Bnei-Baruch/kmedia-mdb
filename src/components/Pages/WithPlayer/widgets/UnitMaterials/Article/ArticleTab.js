@@ -44,7 +44,7 @@ const ArticleTab = ({ id }) => {
                 cus={cus}
                 onClick={handleSelectCu}
               />
-          }
+            }
           />
         ) : (
           <TextLayoutWeb

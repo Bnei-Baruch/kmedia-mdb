@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import TocToggleBtn from './TocToggleBtn';
 
-const TocControl = ({textKey}) => {
+const TocControl = ({ textKey }) => {
   const dispatch    = useDispatch();
   const handleClose = () => dispatch(actions.setTocIsActive());
 
