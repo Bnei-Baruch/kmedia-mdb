@@ -859,7 +859,8 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "Inhalt",
-        "copy-link": "Link kopieren"
+        "copy-link": "Link kopieren",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",

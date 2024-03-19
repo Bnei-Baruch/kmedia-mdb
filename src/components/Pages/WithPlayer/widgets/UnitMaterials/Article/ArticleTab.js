@@ -31,7 +31,6 @@ const ArticleTab = ({ id }) => {
 
   if (isEmpty(cus)) return <NotFound textKey="materials.articles.no-content"/>;
 
-  const toc = <PageWithPlayerTOC cus={cus} onClick={handleSelectCu}/>;
   return (
     <div className="player_page_tab">
       {
@@ -40,14 +39,25 @@ const ArticleTab = ({ id }) => {
             toolbar={<ArticleTabToolbarMobile hasToc={cus.length > 1}/>}
             playerPage={true}
             id={selectedId}
-            toc={toc}
+            toc={
+              <PageWithPlayerTOC
+                cus={cus}
+                onClick={handleSelectCu}
+              />
+          }
           />
         ) : (
           <TextLayoutWeb
             toolbar={<ArticleTabToolbarWeb hasToc={cus.length > 1}/>}
             playerPage={true}
             id={selectedId}
-            toc={toc}
+            toc={
+              <PageWithPlayerTOC
+                cus={cus}
+                onClick={handleSelectCu}
+                textKey="article-toc"
+              />
+            }
           />
         )
       }
