@@ -19,14 +19,12 @@ export const useLabels = () => {
   const additionsMode = useSelector(textPageGetAdditionsModeSelector);
   const userName      = useSelector(authGetUserSelector)?.name;
 
-  const labels = useMemo(() => {
-      return ids?.map(_id => byId[_id])
-        .filter(l => additionsMode !== TEXT_PAGE_ADDITIONS_MODS.showMy || l.author === userName)
-        .filter(l => (l.properties?.srchstart || l.properties?.srchend))
-        .filter(l => l.properties?.language === language)
-        .map(l => ({ type: 'label', ...l }));
-    }
-    , [byId, ids, additionsMode, userName]) || [];
+  const labels = useMemo(() => ids?.map(_id => byId[_id])
+    .filter(l => additionsMode !== TEXT_PAGE_ADDITIONS_MODS.showMy || l.author === userName)
+    .filter(l => (l.properties?.srchstart || l.properties?.srchend))
+    .filter(l => l.properties?.language === language)
+    .map(l => ({ type: 'label', ...l }))
+  , [byId, ids, additionsMode, userName]) || [];
 
   const offsets = buildOffsets(labels);
 
