@@ -7,7 +7,7 @@ import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibilityBtn';
+import AdditionsModeBtn from '../../../../WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
@@ -34,7 +34,7 @@ const ResearchTabToolbarWeb = () => (
         <DownloadTextBtn />
       </div>
       <div className="computer-only">
-        <AdditionsVisibilityBtn />
+        <AdditionsModeBtn />
       </div>
       <Dropdown
         item
@@ -48,7 +48,7 @@ const ResearchTabToolbarWeb = () => (
             <DownloadTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <AdditionsVisibilityBtn />
+            <AdditionsModeBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

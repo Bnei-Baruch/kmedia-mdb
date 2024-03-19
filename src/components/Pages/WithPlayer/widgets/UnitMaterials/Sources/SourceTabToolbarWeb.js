@@ -7,7 +7,7 @@ import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibilityBtn';
+import AdditionsModeBtn from '../../../../WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
@@ -29,13 +29,13 @@ const SourceTabToolbarWeb = ({ toc }) => (
       <div className="divider"/>
       <SearchOnPageBtn/>
       <div className="computer-only">
-        <PrintBtn/>
-      </div>
-      <div className="computer-only">
         <DownloadTextBtn/>
       </div>
       <div className="computer-only">
-        <AdditionsVisibilityBtn/>
+        <PrintBtn/>
+      </div>
+      <div className="computer-only">
+        <AdditionsModeBtn/>
       </div>
       <Dropdown
         item
@@ -48,7 +48,7 @@ const SourceTabToolbarWeb = ({ toc }) => (
             <DownloadTextBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <AdditionsVisibilityBtn/>
+            <AdditionsModeBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

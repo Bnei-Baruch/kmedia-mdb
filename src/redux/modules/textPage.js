@@ -6,7 +6,7 @@ import { getPathnameWithHost, getQuery } from '../../helpers/url';
 import { actions as settingsActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 import { selectSuitableLanguage } from '../../helpers/language';
-import { CT_SOURCE } from '../../helpers/consts';
+import { CT_SOURCE, TEXT_PAGE_ADDITIONS_MODS } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
   localStorage.setItem('library-settings', JSON.stringify(state.settings));
@@ -52,24 +52,25 @@ const onChangeLanguage = (state, lang) => {
 };
 
 const textPageSlice = createSlice({
-  name: 'textPage',
+  name        : 'textPage',
   initialState: {
-    settings: { zoomSize: 2, pdfZoom: 1 },
-    tocIsActive: false,
-    scrollDir: 0,
-    match: '',
-    subject: {},
-    wipErr: {
+    settings     : { zoomSize: 2, pdfZoom: 1 },
+    tocIsActive  : false,
+    additionsMode: TEXT_PAGE_ADDITIONS_MODS.showMy,
+    scrollDir    : 0,
+    match        : '',
+    subject      : {},
+    wipErr       : {
       wip: false, err: null
     },
-    urlInfo: {
+    urlInfo      : {
       search: {}
     },
-    tocInfo: { sortByAZ: true }
+    tocInfo      : { sortByAZ: true }
   },
 
-  reducers: {
-    setZoomSize: (state, { payload }) => {
+  reducers     : {
+    setZoomSize        : (state, { payload }) => {
       let size     = state.settings.zoomSize ?? 2;
       const _isPdf = state.file?.isPdf;
       if (_isPdf) size = state.settings.pdfZoom ?? 1;
@@ -93,22 +94,22 @@ const textPageSlice = createSlice({
 
       updateLocalStorage(state);
     },
-    setFontType: (state, { payload }) => {
+    setFontType        : (state, { payload }) => {
       state.settings.fontType = payload;
       updateLocalStorage(state);
     },
-    setTheme: (state, { payload }) => {
+    setTheme           : (state, { payload }) => {
       state.settings.theme = payload;
       updateLocalStorage(state);
     },
-    setTocIsActive: (state, { payload }) => {
+    setTocIsActive     : (state, { payload }) => {
       state.tocInfo.match = '';
       state.tocIsActive   = payload ?? !state.tocIsActive;
     },
-    setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
-    setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
-    changeLanguage: (state, { payload }) => onChangeLanguage(state, payload),
-    setUrlInfo: (state, { payload }) => {
+    setTocMatch        : (state, { payload }) => void (state.tocInfo.match = payload),
+    setTocSortBy       : state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
+    changeLanguage     : (state, { payload }) => onChangeLanguage(state, payload),
+    setUrlInfo         : (state, { payload }) => {
       if (!payload) {
         state.urlInfo.url      = buildUrl(state);
         state.urlInfo.isCastom = false;
@@ -119,14 +120,14 @@ const textPageSlice = createSlice({
 
       state.urlInfo.search = buildUrlSearch(state, { ...payload?.search });
     },
-    setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
-    setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
-    setFullscreen: (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
-    setScrollDir: (state, { payload }) => void (state.scrollDir = payload),
-    setSideOffset: (state, { payload }) => void (state.sideOffset = payload),
-    toggleTextOnly: (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
-    setIsSearch: state => void (state.isSearch = !state.isSearch),
-    fetchSubject: {
+    setUrlSelect       : (state, { payload }) => void (state.urlInfo.select = payload || null),
+    setWordOffset      : (state, { payload }) => void (state.wordOffset = payload),
+    setFullscreen      : (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
+    setScrollDir       : (state, { payload }) => void (state.scrollDir = payload),
+    setSideOffset      : (state, { payload }) => void (state.sideOffset = payload),
+    setAdditionsMode   : (state, { payload }) => void (state.additionsMode = payload),
+    setIsSearch        : state => void (state.isSearch = !state.isSearch),
+    fetchSubject       : {
       prepare: (_id, source_language) => {
         const { uid: id, isGr } = checkRabashGroupArticles(_id);
         return ({ payload: { id, source_language, isGr } });
@@ -152,7 +153,7 @@ const textPageSlice = createSlice({
       }
     },
     fetchSubjectFailure: (state, { payload }) => void (state.wipErr = { wip: false, err: payload }),
-    setFileFilter: (state, { payload }) => void (state.fileFilter = payload)
+    setFileFilter      : (state, { payload }) => void (state.fileFilter = payload)
   },
   extraReducers: builder => {
     builder
@@ -170,22 +171,22 @@ const textPageSlice = createSlice({
   },
 
   selectors: {
-    getSettings: state => state.settings,
-    getTocIsActive: state => state.tocIsActive,
-    getTocInfo: state => state.tocInfo,
-    getSubject: state => state.subject,
-    getWipErr: state => state.wipErr,
-    getFile: state => state.file,
-    getUrlInfo: state => state.urlInfo,
-    getWordOffset: state => state.wordOffset || 0,
-    getMP3: state => state.mp3,
-    getIsFullscreen: state => state.isFullscreen,
-    getScrollDir: state => state.scrollDir,
-    getSideOffset: state => state.sideOffset,
-    getTextOnly: state => state.textOnly,
-    getScanFile: state => state.scanFile,
-    getIsSearch: state => state.isSearch,
-    getFileFilter: state => state.fileFilter
+    getSettings     : state => state.settings,
+    getTocIsActive  : state => state.tocIsActive,
+    getTocInfo      : state => state.tocInfo,
+    getSubject      : state => state.subject,
+    getWipErr       : state => state.wipErr,
+    getFile         : state => state.file,
+    getUrlInfo      : state => state.urlInfo,
+    getWordOffset   : state => state.wordOffset || 0,
+    getMP3          : state => state.mp3,
+    getIsFullscreen : state => state.isFullscreen,
+    getScrollDir    : state => state.scrollDir,
+    getSideOffset   : state => state.sideOffset,
+    getAdditionsMode: state => state.additionsMode,
+    getScanFile     : state => state.scanFile,
+    getIsSearch     : state => state.isSearch,
+    getFileFilter   : state => state.fileFilter
   }
 });
 

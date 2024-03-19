@@ -16,15 +16,16 @@ import {
   textPageGetSettings,
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetTextOnlySelector
+  textPageGetAdditionsModeSelector
 } from '../../../../redux/selectors';
 import NotFound from '../../../shared/NotFound';
+import { TEXT_PAGE_ADDITIONS_MODS } from '../../../../helpers/consts';
 
 const TextContentWeb = ({ playerPage }) => {
   const [parentTop, setParentTop] = useState(0);
 
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
-  const textOnly               = useSelector(textPageGetTextOnlySelector);
+  const additionsMode               = useSelector(textPageGetAdditionsModeSelector);
   const subject                = useSelector(textPageGetSubjectSelector);
   const file                   = useSelector(textPageGetFileSelector);
 
@@ -65,7 +66,7 @@ const TextContentWeb = ({ playerPage }) => {
   return (
     <div className={`text__content-wrapper is-${fontType} zoom_size_${!pdf ? zoomSize : 2}`}>
       {
-        !textOnly && (
+        additionsMode !== TEXT_PAGE_ADDITIONS_MODS.hideAll && (
           <div className="text__content-markers no_print">
             <NoteMarks parentTop={parentTop} />
             <LabelMarks labels={labels} offsets={offsets} />
