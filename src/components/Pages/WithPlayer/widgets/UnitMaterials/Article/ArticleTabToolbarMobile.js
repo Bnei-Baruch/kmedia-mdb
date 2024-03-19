@@ -13,8 +13,8 @@ import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
 const ArticleTabToolbarMobile = ({ hasToc }) => (
   <div className="text_toolbar">
-    {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
+      {hasToc && <TocToggleBtn/>}
       <LanguageTextBtn/>
       <TextSettings/>
       <SearchOnPageBtn/>

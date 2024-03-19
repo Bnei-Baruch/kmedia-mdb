@@ -17,7 +17,7 @@ import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
 const SourceTabToolbarWeb = ({ hasToc }) => (
   <div className="text_toolbar">
-    {hasToc && <TocToggleBtn/>}
+      {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
       <TextSettings/>
       <LanguageTextBtn/>
