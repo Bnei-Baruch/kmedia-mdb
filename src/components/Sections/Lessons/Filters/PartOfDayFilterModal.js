@@ -3,7 +3,13 @@ import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, List, Modal } from 'semantic-ui-react';
 
-import { FN_COLLECTION_MULTI, FN_CONTENT_TYPE, CT_DAILY_LESSON, FN_PART_OF_DAY } from '../../../../helpers/consts';
+import {
+  FN_COLLECTION_MULTI,
+  FN_CONTENT_TYPE,
+  CT_DAILY_LESSON,
+  FN_PART_OF_DAY,
+  CT_LESSONS
+} from '../../../../helpers/consts';
 import { isEmpty } from '../../../../helpers/utils';
 import { actions } from '../../../../redux/modules/filters';
 import {
@@ -20,24 +26,24 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
   const [open, setOpen] = useState(false);
   const { t }           = useTranslation();
 
-  const uiDir        = useSelector(settingsGetUIDirSelector);
-  const leftRight    = useSelector(settingsGetLeftRightByDirSelector);
-  const stat         = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(ct);
+  const uiDir     = useSelector(settingsGetUIDirSelector);
+  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
+  const stat      = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(ct);
 
   const selectedCTFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE));
   const selectedCT        = useMemo(() => selectedCTFilters?.values || [], [selectedCTFilters]);
   const selectedDayPart   = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_PART_OF_DAY))?.values;
-  const itemsDayPart = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_PART_OF_DAY));
-  const toggleOpen = () => setOpen(!open);
+  const itemsDayPart      = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_PART_OF_DAY));
+  const toggleOpen        = () => setOpen(!open);
 
   const dispatch       = useDispatch();
   const handleSelectCt = (e, { checked }) => {
-    const val = [...selectedCT].filter(x => x !== ct);
+    const val = [...selectedCT].filter(x => !CT_LESSONS.includes(x));
     if (checked) {
       val.push(ct);
     }
 
-    dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, ct));
+    dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
   };
 
   return (
