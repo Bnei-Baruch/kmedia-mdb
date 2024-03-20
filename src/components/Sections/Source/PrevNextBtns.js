@@ -72,12 +72,12 @@ const PrevBtn = ({ id }) => {
   const btnContentClassName = `btn-content prev ${arrowSide}`;
 
   return (
-    <Button 
-      primary icon 
-      as={Link} 
-      to={`sources/${id}`} 
-      size="medium" 
-      title={source.name} 
+    <Button
+      primary icon
+      as={Link}
+      to={`sources/${id}`}
+      size="medium"
+      title={source.name}
       className="prev-next-btn"
     >
       <div className={btnContentClassName}>
@@ -102,16 +102,16 @@ const NextBtn = ({ id }) => {
 
 
   return (
-    <Button 
-      primary icon 
-      as={Link} 
-      to={`sources/${id}`} 
-      size="medium" 
-      title={source.name} 
+    <Button
+      primary icon
+      as={Link}
+      to={`sources/${id}`}
+      size="medium"
+      title={source.name}
       className="prev-next-btn"
     >
       <div className={btnContentClassName}>
-      {isMobileDevice ? (''): (<span>{t('buttons.next-article')}</span>)}
+        {isMobileDevice ? (''): (<span>{t('buttons.next-article')}</span>)}
         <Icon name={icon} className="prev-next-btn-icon"/>
       </div>
     </Button>

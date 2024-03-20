@@ -153,6 +153,7 @@
     &.toc_single_level > .title {
       border-bottom: 1px solid rgba(0, 86, 151, 0.1);
       padding: 16px 0;
+      cursor: pointer;
 
       @include theme_stroke;
     }
@@ -161,6 +162,11 @@
   .player_page_tab & {
     position: absolute;
     height: 100%;
+    transform: translate3d(-380px, 0, 0);
+
+    .rtl & {
+      transform: translate3d(380px, 0, 0);
+    }
   }
 }
 

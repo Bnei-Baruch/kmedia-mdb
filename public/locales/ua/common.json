@@ -952,7 +952,8 @@
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
         "more-buttons": "More",
-        "copy-link": "Копіювати посилання"
+        "copy-link": "Копіювати посилання",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",
