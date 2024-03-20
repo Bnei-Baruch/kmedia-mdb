@@ -955,8 +955,8 @@
         "additions": {
           "review": "סקירת תיוגים והערות",
           "showMy": "הצג את שלי",
-          "showAll": "הסתר הכל",
-          "hideAll": "Hide all"
+          "showAll": "הצג את של כולם",
+          "hideAll": "הסתר הכל"
         },
         "scan": "סריקה של הטקסט המקורי",
         "more-buttons": "עוד",
