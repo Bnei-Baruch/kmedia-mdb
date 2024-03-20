@@ -15,7 +15,7 @@ const AdditionsModeBtn = () => {
       trigger={
         <div>
           <ToolbarBtnTooltip
-            textKey={'show-additions'}
+            textKey={'additions.review'}
             active={open}
             className="text_mark_on_select_btn no_stroke"
             icon={<AdditionsMode/>}

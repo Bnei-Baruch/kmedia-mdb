@@ -31,7 +31,7 @@ const AdditionsModeItems = () => {
               onClick={() => handleSet(val)}
               active={mode === val}
             >
-              {t(`page-with-text.buttons.web.${key}`)}
+              {t(`page-with-text.buttons.web.additions.${key}`)}
               <span className="material-symbols-outlined">{iconsByMode[val]}</span>
             </Menu.Item>
           )
