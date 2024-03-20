@@ -867,7 +867,8 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "جدول المحتويات",
-        "copy-link": "أنسخ الرابط"
+        "copy-link": "أنسخ الرابط",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",

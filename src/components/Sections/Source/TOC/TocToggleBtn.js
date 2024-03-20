@@ -9,7 +9,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import ToolbarBtnTooltip from '../../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 import { textPageGetTocIsActiveSelector } from '../../../../redux/selectors';
 
-const TocToggleBtn = ({ withText = true }) => {
+const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
   const { t }    = useTranslation();
   const dispatch = useDispatch();
 
@@ -24,10 +24,10 @@ const TocToggleBtn = ({ withText = true }) => {
       icon     : <span className="material-symbols-outlined">view_list</span>,
       onClick  : handleTocIsActive,
       active   : tocIsActive,
-      content  : withText ? '' : <span className="title">{t('page-with-text.buttons.web.toc')}</span>,
+      content  : withText ? '' : <span className="title">{t(`page-with-text.buttons.web.${textKey}`)}</span>,
     };
 
-    return (withText ? <ToolbarBtnTooltip textKey="toc" {...triggerProps} /> : <Button {...triggerProps} basic/>);
+    return (withText ? <ToolbarBtnTooltip textKey={textKey} {...triggerProps} /> : <Button {...triggerProps} basic/>);
   }
 
   return (
@@ -36,7 +36,7 @@ const TocToggleBtn = ({ withText = true }) => {
       className={clsx('toc_trigger clear_button', { 'flex_basis_150': !isMobileDevice })}
       icon={<span className="material-symbols-outlined">view_list</span>}
       onClick={handleTocIsActive}
-      content={<span>{t('page-with-text.buttons.web.toc')}</span>}
+      content={<span>{t(`page-with-text.buttons.web.${textKey}`)}</span>}
     />
   );
 };

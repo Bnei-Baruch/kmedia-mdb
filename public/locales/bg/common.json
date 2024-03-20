@@ -874,7 +874,8 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "Съдържание",
-        "copy-link": "Copy Link"
+        "copy-link": "Copy Link",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",

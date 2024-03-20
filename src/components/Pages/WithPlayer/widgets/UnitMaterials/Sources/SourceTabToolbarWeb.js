@@ -13,11 +13,12 @@ import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = ({ toc }) => (
+const SourceTabToolbarWeb = ({ hasToc }) => (
   <div className="text_toolbar">
+    {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
-      {toc}
       <TextSettings/>
       <LanguageTextBtn/>
       <div className="divider"/>

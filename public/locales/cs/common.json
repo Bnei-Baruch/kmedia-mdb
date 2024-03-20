@@ -879,7 +879,8 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "Obsah",
-        "copy-link": "Kopírovat odkaz"
+        "copy-link": "Kopírovat odkaz",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",
