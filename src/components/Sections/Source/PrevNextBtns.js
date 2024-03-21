@@ -73,7 +73,8 @@ const PrevBtn = ({ id }) => {
 
   return (
     <Button 
-      primary icon 
+      basic 
+      icon 
       as={Link} 
       to={`sources/${id}`} 
       size="medium" 
@@ -103,7 +104,8 @@ const NextBtn = ({ id }) => {
 
   return (
     <Button 
-      primary icon 
+      basic 
+      icon 
       as={Link} 
       to={`sources/${id}`} 
       size="medium" 
