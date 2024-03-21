@@ -108,6 +108,7 @@ export const mdbGetDenormCollectionWUnitsSelector    = createSelector(getMDB, _2
 export const mdbGetDenormContentUnitSelector         = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormContentUnit(m, id));
 export const mdbGetDenormLabelSelector               = createSelector([getMDB], m => mdbSel.getDenormLabel(m));
 export const mdbGetLabelsByCUSelector                = createSelector(getMDB, _2, (m, id) => mdbSel.getLabelsByCU(m, id));
+export const mdbGetLabelsById                        = createSelector(getMDB, m => mdbSel.getLabelById(m));
 
 // publications
 export const publicationsLatestBlogPostsSelector  = createSelector([getPublications], pubs => publicationsSel.getBlogPosts(pubs));

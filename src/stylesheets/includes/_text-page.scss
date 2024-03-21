@@ -1,20 +1,32 @@
 @mixin theme_color() {
   color: $light-text;
+  fill: $light-text;
+  stroke: $light-text;
   .is-dark & {
     color: $dark-text;
+    fill: $dark-text;
+    stroke: $dark-text;
   }
   .is-sepia & {
     color: $sepia-text;
+    fill: $sepia-text;
+    stroke: $sepia-text;
   }
 }
 
 @mixin theme_color_active() {
   color: $light-active-text;
+  fill: $light-active-text;
+  stroke: $light-active-text;
   .is-dark & {
     color: $dark-active-text;
+    fill: $dark-active-text;
+    stroke: $dark-active-text;
   }
   .is-sepia & {
     color: $sepia-active-text;
+    fill: $sepia-active-text;
+    stroke: $sepia-active-text;
   }
 }
 
@@ -40,7 +52,7 @@
 
 @mixin theme_btn() {
   @include theme_color;
-  .material-symbols-outlined {
+  .material-symbols-outlined, svg {
     @include theme_color
   }
 
@@ -58,7 +70,7 @@
       @include theme_color_active;
     }
 
-    .material-symbols-outlined {
+    .material-symbols-outlined, svg {
       @include theme_color_active
     }
   }
@@ -70,6 +82,10 @@
 
   &.is-web:not(.with_breadcrumb) {
     padding-top: 1em;
+
+    .player_page_tab & {
+      padding-top: 0;
+    }
   }
 
   .text__content-wrapper {
@@ -95,6 +111,7 @@
   }
 
   &.is-mobile {
+    overflow: hidden;
     .text__content {
       padding: 1.5em 0;
     }
@@ -138,7 +155,7 @@
     align-items: center;
 
     span {
-      min-height: 20px;
+      min-height: 14px;
 
       &:last-child {
         margin: 0 8px;
@@ -328,7 +345,7 @@
     transition: all 0.2s ease-in-out 0s;
 
     &.stick_toolbar_fixed {
-      transform: translate3d(0px, -1 * $breadcrumb-height, 0px) !important;
+      transform: translate3d(0px, 0, 0px) !important;
     }
 
     transform: translate3d(0px, -$text-bar-height, 0px);
@@ -435,8 +452,10 @@
         }
       }
 
-      .text_selected &.text_mark_on_select_btn .material-symbols-outlined {
+      .text_selected &.text_mark_on_select_btn .material-symbols-outlined, .text_selected &.text_mark_on_select_btn svg {
         color: $blue;
+        fill: $blue;
+        stroke: $blue;
       }
     }
 
@@ -631,7 +650,7 @@
       background: #606060;
     }
 
-    .button, .button .material-symbols-outlined {
+    .button, .button .material-symbols-outlined, .button svg {
       color: $white !important;
     }
   }
@@ -853,5 +872,13 @@
       color: $blue;
     }
   }
+}
+
+.no_fill svg {
+  fill: none !important;
+}
+
+.no_stroke svg {
+  stroke: none !important;
 }
 

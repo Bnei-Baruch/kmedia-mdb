@@ -601,7 +601,6 @@
        "subtext": "Сборник от всички най-важни оригинални текстове за изучаване на кабала, написани от най-великите кабалисти."
     },
     "no-source": "Моля, изберете източник",
-    "toc": "Съдържание",
     "az": "АЯ",
     "default": "По подразбиране",
     "filter": "Филтър...",
@@ -846,6 +845,46 @@
       "ending": "Край",
       "contentCreate": "Искате ли всички да видят откъса, който сте маркирали?\nПоставете го в секцията за теми на сайта",
       "labelCreated": "Откъсът е успешно избран. Можете да го намерите в секцията теми, под темите, които сте избрали"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "To all lessons on the article",
+        "text-settings": "Change text formatting",
+        "languages": "Change language",
+        "play-by-text": "New! Play a video clip",
+        "add-tag": "Add tagging",
+        "add-bookmark": "Add to bookmarks",
+        "add-comment": "Add a comment in the text",
+        "share": "Share",
+        "search": "Search on the page",
+        "expand-comments": "Show all comments",
+        "collapse-comments": "Hide all comments",
+        "download": "Download",
+        "print": "Print",
+        "fullscreen-on": "Full screen",
+        "fullscreen-off": "Exit full screen",
+        "hide-additions": "Hide all remarks",
+        "show-additions": "Show all remarks",
+        "scan": "Scan of the original text",
+        "more-buttons": "More",
+        "toc": "Съдържание",
+        "copy-link": "Copy Link",
+        "article-toc": "All Articles"
+      },
+      "mobile": {
+        "lessons": "Lessons",
+        "text-settings": "Text",
+        "languages": "Language",
+        "add-bookmark": "Save",
+        "share": "Share",
+        "search": "Search",
+        "download": "Download",
+        "more-buttons": "More",
+        "toc": "Съдържание",
+        "copy-link": "Link"
+      }
     }
   }
 }

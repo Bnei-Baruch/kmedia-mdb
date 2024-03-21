@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import TocToggleBtn from './TocToggleBtn';
 
-const TocControl = () => {
+const TocControl = ({ textKey }) => {
   const dispatch    = useDispatch();
   const handleClose = () => dispatch(actions.setTocIsActive());
 
   return (
     <div className="toc_control">
-      <TocToggleBtn withText={false} />
+      <TocToggleBtn withText={false} textKey={textKey} />
       <Button
         basic
         className="toc_close clear_button"

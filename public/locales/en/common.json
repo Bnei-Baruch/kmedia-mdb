@@ -601,7 +601,6 @@
       "subtext": "A collection of all the most important original texts for the study of Kabbalah, written by the greatest Kabbalists."
     },
     "no-source": "Please select source",
-    "toc": "Table of contents",
     "az": "AZ",
     "default": "Default",
     "filter": "Filter...",
@@ -870,7 +869,9 @@
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
         "more-buttons": "More",
-        "copy-link": "Copy Link"
+        "toc": "Table of contents",
+        "copy-link": "Copy Link",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",

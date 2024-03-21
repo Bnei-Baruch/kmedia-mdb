@@ -609,7 +609,6 @@
       "subtext": "Sbírka všech nejdůležitějších originálních textů pro studium Kabaly, napsané největšími kabalisty."
     },
     "no-source": "Prosím vyberte zdroj",
-    "toc": "Obsah",
     "az": "AZ",
     "default": "Výchozí",
     "filter": "Filtr...",
@@ -875,7 +874,9 @@
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
         "more-buttons": "More",
-        "copy-link": "Kopírovat odkaz"
+        "toc": "Obsah",
+        "copy-link": "Kopírovat odkaz",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -886,7 +887,7 @@
         "search": "Search",
         "download": "Download",
         "more-buttons": "More",
-        "toc": "Content",
+        "toc": "Obsah",
         "copy-link": "Link"
       }
     }

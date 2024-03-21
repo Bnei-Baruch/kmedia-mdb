@@ -13,7 +13,7 @@ const MIN_NUMBER_WORDS_IN_LINK     = 5;
 
 export const textMarksPrefixByType = {
   label: { start: 'l_start_', end: 'l_end_', class: 'label_pos' },
-  note: { start: 'n_start_', end: 'n_end_', class: 'note_pos' }
+  note : { start: 'n_start_', end: 'n_end_', class: 'note_pos' }
 };
 
 /***
@@ -150,6 +150,8 @@ const findOffsetOfDOMNode = (node, offset) => {
       .slice(0, offset)
       .replace(SPACES_RE, ' ')
       .replace(/\s+/gi, ' ')
+      .split(' ')
+      .filter(x => !!x)
       .length;
     return { offset, wordOffset };
   }
@@ -191,7 +193,7 @@ export const urlParamFromSelect = () => {
 
   const query = {
     srchstart: sStart + OFFSET_TEXT_SEPARATOR + sOffset,
-    srchend: sEnd + OFFSET_TEXT_SEPARATOR + eOffset
+    srchend  : sEnd + OFFSET_TEXT_SEPARATOR + eOffset
   };
   return { query, wordOffset: sWordOffset };
 };
