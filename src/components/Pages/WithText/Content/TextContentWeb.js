@@ -25,7 +25,7 @@ const TextContentWeb = ({ playerPage }) => {
   const [parentTop, setParentTop] = useState(0);
 
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
-  const additionsMode               = useSelector(textPageGetAdditionsModeSelector);
+  const additionsMode          = useSelector(textPageGetAdditionsModeSelector);
   const subject                = useSelector(textPageGetSubjectSelector);
   const file                   = useSelector(textPageGetFileSelector);
 
@@ -47,7 +47,7 @@ const TextContentWeb = ({ playerPage }) => {
   }, [dispatch]);
 
   if (!file)
-    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;
+    return <NotFound textKey={playerPage && 'materials.transcription.no-content'}/>;
   const handleDataRef = r => {
     if (!r) return;
 
@@ -68,8 +68,8 @@ const TextContentWeb = ({ playerPage }) => {
       {
         additionsMode !== TEXT_PAGE_ADDITIONS_MODS.hideAll && (
           <div className="text__content-markers no_print">
-            <NoteMarks parentTop={parentTop} />
-            <LabelMarks labels={labels} offsets={offsets} />
+            <NoteMarks parentTop={parentTop}/>
+            <LabelMarks labels={labels} offsets={offsets}/>
           </div>
         )
       }
@@ -82,7 +82,7 @@ const TextContentWeb = ({ playerPage }) => {
             />
           ) : (
             <div ref={handleDataRef} className="position_relative">
-              <ContentHtml labels={labels} />
+              <ContentHtml labels={labels}/>
             </div>
           )
         }

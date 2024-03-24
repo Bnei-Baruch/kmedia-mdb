@@ -6,7 +6,7 @@ import { getPathnameWithHost, getQuery } from '../../helpers/url';
 import { actions as settingsActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 import { selectSuitableLanguage } from '../../helpers/language';
-import { CT_SOURCE, TEXT_PAGE_ADDITIONS_MODS } from '../../helpers/consts';
+import { CT_SOURCE, LOCALSTORAGE_KEY_ADDITIONS_MODS } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
   localStorage.setItem('library-settings', JSON.stringify(state.settings));
@@ -48,7 +48,6 @@ const onChangeLanguage = (state, lang) => {
 
   const search         = state.urlInfo.isCastom ? state.urlInfo.search : {};
   state.urlInfo.search = buildUrlSearch(state, search);
-
 };
 
 const textPageSlice = createSlice({
@@ -56,7 +55,6 @@ const textPageSlice = createSlice({
   initialState: {
     settings     : { zoomSize: 2, pdfZoom: 1 },
     tocIsActive  : false,
-    additionsMode: TEXT_PAGE_ADDITIONS_MODS.showMy,
     scrollDir    : 0,
     match        : '',
     subject      : {},
@@ -125,7 +123,10 @@ const textPageSlice = createSlice({
     setFullscreen      : (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
     setScrollDir       : (state, { payload }) => void (state.scrollDir = payload),
     setSideOffset      : (state, { payload }) => void (state.sideOffset = payload),
-    setAdditionsMode   : (state, { payload }) => void (state.additionsMode = payload),
+    setAdditionsMode   : (state, { payload }) => {
+      state.additionsMode = payload;
+      localStorage.setItem(LOCALSTORAGE_KEY_ADDITIONS_MODS, payload);
+    },
     setIsSearch        : state => void (state.isSearch = !state.isSearch),
     fetchSubject       : {
       prepare: (_id, source_language) => {
