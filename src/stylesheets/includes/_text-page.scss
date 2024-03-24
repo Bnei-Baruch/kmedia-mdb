@@ -882,3 +882,35 @@
   stroke: none !important;
 }
 
+.additions_mode_popup.ui.menu {
+  padding: 0 1em;
+
+  .item {
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover, &.active:hover {
+      background: none;
+    }
+
+    &.active {
+      background: none;
+      color: $light-active-text;
+      font-weight: bold;
+    }
+
+
+    span {
+      margin-left: 8px;
+
+      &.ltr {
+        margin-left: auto;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+

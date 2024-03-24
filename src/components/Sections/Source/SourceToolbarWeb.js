@@ -8,7 +8,7 @@ import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings
 import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
-import AdditionsVisibilityBtn from '../../Pages/WithText/Buttons/AdditionsVisibilityBtn';
+import AdditionsModeBtn from '../../Pages/WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
 import ToggleScanBtn from '../../Pages/WithText/Buttons/ToggleScanBtn';
 import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
@@ -22,54 +22,54 @@ const SourceToolbarWeb = () => (
   <div className="text_toolbar">
     <TocToggleBtn />
     <div className="text_toolbar__buttons">
-      <TextSettings />
-      <LanguageTextBtn />
-      <div className="divider" />
-      <TagTextBtn />
-      <AddBookmarkBtn />
-      <AddCommentBtn />
-      <ShareTextBtn />
-      <CopyLinkBtn />
-      <div className="divider" />
-      <SearchOnPageBtn />
+      <TextSettings/>
+      <LanguageTextBtn/>
+      <div className="divider"/>
+      <TagTextBtn/>
+      <AddBookmarkBtn/>
+      <AddCommentBtn/>
+      <ShareTextBtn/>
+      <CopyLinkBtn/>
+      <div className="divider"/>
+      <SearchOnPageBtn/>
       <div className="computer-only">
-        <PrintBtn />
+        <DownloadTextBtn/>
       </div>
       <div className="computer-only">
-        <DownloadTextBtn />
+        <PrintBtn/>
       </div>
-      <div className="computer-only">
-        <AdditionsVisibilityBtn />
-      </div>
-      <div className="divider computer-only" />
+      <div className="divider computer-only"/>
 
       <div className="computer-only">
-        <LinkToLessonsBtn />
+        <AdditionsModeBtn/>
       </div>
       <div className="computer-only">
-        <ToggleScanBtn />
+        <LinkToLessonsBtn/>
       </div>
-      <div className="divider computer-only" />
-      <FullscreenTextBtn />
+      <div className="computer-only">
+        <ToggleScanBtn/>
+      </div>
+      <div className="divider computer-only"/>
+      <FullscreenTextBtn/>
       <Dropdown
         item
         icon={null}
-        trigger={<MoreOptionsBtn />}
+        trigger={<MoreOptionsBtn/>}
         pointing="top right"
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
-            <DownloadTextBtn />
+            <DownloadTextBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <AdditionsVisibilityBtn />
+            <AdditionsModeBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <LinkToLessonsBtn />
+            <LinkToLessonsBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <ToggleScanBtn />
+            <ToggleScanBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

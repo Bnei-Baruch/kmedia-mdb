@@ -10,22 +10,23 @@ import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
 import {
   textPageGetSubjectSelector,
-  textPageGetTextOnlySelector,
+  textPageGetAdditionsModeSelector,
   sourcesGetPathByIDSelector,
   settingsGetUIDirSelector,
   sourcesGetSourceByIdSelector,
   textPageGetFileSelector
 } from '../../../redux/selectors';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const PrevNextBtns = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { id }         = useSelector(textPageGetSubjectSelector);
-  const { isPdf }      = useSelector(textPageGetFileSelector);
-  const textOnly       = useSelector(textPageGetTextOnlySelector);
-  const getPathByID    = useSelector(sourcesGetPathByIDSelector);
-  const getSourceById  = useSelector(sourcesGetSourceByIdSelector);
+  const { id }        = useSelector(textPageGetSubjectSelector);
+  const { isPdf }     = useSelector(textPageGetFileSelector);
+  const additionsMode = useSelector(textPageGetAdditionsModeSelector);
+  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   if (isTaas(id) && isPdf) {
     return null;
@@ -48,18 +49,18 @@ const PrevNextBtns = () => {
 
   return (
     <div className={clsx('source_prev_next', {
-      'text_align_to_text': (!isMobileDevice),
-      'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+      'text_align_to_text'          : (!isMobileDevice),
+      'text_align_to_text_text_only': additionsMode === TEXT_PAGE_ADDITIONS_MODS.hideAll && (!isMobileDevice)
     })}>
-      {prevId && <PrevBtn id={prevId} />}
-      <span />
-      {nextId && <NextBtn id={nextId} />}
+      {prevId && <PrevBtn id={prevId}/>}
+      <span/>
+      {nextId && <NextBtn id={nextId}/>}
     </div>
   );
 };
 
 const PrevBtn = ({ id }) => {
-  const { t } = useTranslation();
+  const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
@@ -68,7 +69,7 @@ const PrevBtn = ({ id }) => {
 
   const source = getSourceById(id);
 
-  const arrowSide           = uiDir === 'ltr'? 'left' : 'right';
+  const arrowSide           = uiDir === 'ltr' ? 'left' : 'right';
   const btnContentClassName = `btn-content prev ${arrowSide}`;
 
   return (
@@ -82,14 +83,14 @@ const PrevBtn = ({ id }) => {
     >
       <div className={btnContentClassName}>
         <Icon name={icon} className="prev-next-btn-icon"/>
-        {isMobileDevice ? (''): (<span>{t('buttons.previous-article')}</span>)}
+        {isMobileDevice ? ('') : (<span>{t('buttons.previous-article')}</span>)}
       </div>
     </Button>
   );
 };
 
 const NextBtn = ({ id }) => {
-  const { t } = useTranslation();
+  const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
@@ -97,9 +98,8 @@ const NextBtn = ({ id }) => {
   const icon          = uiDir !== 'ltr' ? 'chevron left' : 'chevron right';
 
   const source              = getSourceById(id);
-  const arrowSide           = uiDir === 'ltr'? 'right' : 'left';
+  const arrowSide           = uiDir === 'ltr' ? 'right' : 'left';
   const btnContentClassName = `btn-content next ${arrowSide}`;
-
 
   return (
     <Button
@@ -111,7 +111,7 @@ const NextBtn = ({ id }) => {
       className="prev-next-btn"
     >
       <div className={btnContentClassName}>
-        {isMobileDevice ? (''): (<span>{t('buttons.next-article')}</span>)}
+        {isMobileDevice ? ('') : (<span>{t('buttons.next-article')}</span>)}
         <Icon name={icon} className="prev-next-btn-icon"/>
       </div>
     </Button>

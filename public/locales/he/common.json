@@ -952,8 +952,12 @@
         "print": "הדפסה",
         "fullscreen-on": "מסך מלא",
         "fullscreen-off": "יציאה ממסך מלא",
-        "hide-additions": "להסתיר הערות",
-        "show-additions": "להראות הערות",
+        "additions": {
+          "review": "סקירת תיוגים והערות",
+          "showMy": "הצג את שלי",
+          "showAll": "הצג את של כולם",
+          "hideAll": "הסתר הכל"
+        },
         "scan": "סריקה של הטקסט המקורי",
         "more-buttons": "עוד",
         "toc": "תוכן עניינים",

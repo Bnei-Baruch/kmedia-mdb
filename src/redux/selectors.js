@@ -267,19 +267,19 @@ export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNo
 
 //textPage
 
-export const textPageGetSettings             = createSelector([getTextPage], t => textPageSel.getSettings(t));
-export const textPageGetTocIsActiveSelector  = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
-export const textPageGetTocInfoSelector      = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
-export const textPageGetSubjectSelector      = createSelector([getTextPage], t => textPageSel.getSubject(t));
-export const textPageGetWipErrSelector       = createSelector([getTextPage], t => textPageSel.getWipErr(t));
-export const textPageGetFileSelector         = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
-export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
-export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
-export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));
-export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
-export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
-export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
-export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
-export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
-export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
-export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
+export const textPageGetSettings              = createSelector([getTextPage], t => textPageSel.getSettings(t));
+export const textPageGetTocIsActiveSelector   = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
+export const textPageGetTocInfoSelector       = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
+export const textPageGetSubjectSelector       = createSelector([getTextPage], t => textPageSel.getSubject(t));
+export const textPageGetWipErrSelector        = createSelector([getTextPage], t => textPageSel.getWipErr(t));
+export const textPageGetFileSelector          = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
+export const textPageGetUrlInfoSelector       = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
+export const textPageGetWordOffsetSelector    = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
+export const textPageGetMP3Selector           = createSelector([getTextPage], t => textPageSel.getMP3(t));
+export const textPageGetIsFullscreenSelector  = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
+export const textPageGetScrollDirSelector     = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
+export const textPageGetSideOffsetSelector    = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
+export const textPageGetAdditionsModeSelector = createSelector([getTextPage], t => textPageSel.getAdditionsMode(t));
+export const textPageGetScanFileSelector      = createSelector([getTextPage], t => textPageSel.getScanFile(t));
+export const textPageGetIsSearchSelector      = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetFileFilterSelector    = createSelector([getTextPage], t => textPageSel.getFileFilter(t));

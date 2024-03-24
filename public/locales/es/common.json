@@ -857,8 +857,12 @@
         "print": "Imprimir",
         "fullscreen-on": "Pantalla completa",
         "fullscreen-off": "Salir de pantalla completa",
-        "hide-additions": "Ocultar todos los comentarios",
-        "show-additions": "Mostrar todos los comentarios",
+        "additions": {
+          "review": "Revisar etiquetado y comentarios",
+          "showMy": "Muestra el mío",
+          "showAll": "Mostrar los de todos",
+          "hideAll": "Ocultar todo"
+        },
         "scan": "Escaneado del texto original",
         "more-buttons": "Más",
         "toc": "Tabla de Contenido",
