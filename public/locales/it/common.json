@@ -946,12 +946,17 @@
         "print": "Print",
         "fullscreen-on": "Full screen",
         "fullscreen-off": "Exit full screen",
-        "hide-additions": "Hide all remarks",
-        "show-additions": "Show all remarks",
+        "additions": {
+          "review": "Review labeling and comments",
+          "showMy": "Show mine",
+          "showAll": "Show everyone's",
+          "hideAll": "Hide all"
+        },
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "Table of contents",
-        "copy-link": "Copia link"
+        "copy-link": "Copia link",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",

@@ -7,7 +7,7 @@ import TextSettings from '../../../../Pages/WithText/Buttons/TextSettings/TextSe
 import AddBookmarkBtn from '../../../../Pages/WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../Pages/WithText/Buttons/DownloadTextBtn';
-import AdditionsVisibilityBtn from '../../../../Pages/WithText/Buttons/AdditionsVisibilityBtn';
+import AdditionsModeBtn from '../../../../Pages/WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../Pages/WithText/Buttons/PrintBtn';
@@ -36,7 +36,7 @@ const ArticleToolbarWeb = () => (
         <DownloadTextBtn />
       </div>
       <div className="computer-only">
-        <AdditionsVisibilityBtn />
+        <AdditionsModeBtn />
       </div>
       <div className="divider computer-only" />
 
@@ -57,7 +57,7 @@ const ArticleToolbarWeb = () => (
             <DownloadTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <AdditionsVisibilityBtn />
+            <AdditionsModeBtn />
           </Dropdown.Item>
           <Dropdown.Item>
             <LinkToLessonsBtn />

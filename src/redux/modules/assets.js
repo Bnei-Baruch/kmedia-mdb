@@ -86,8 +86,8 @@ const onSSRPrepare = state => {
 };
 
 const recursiveFindPrevTimeByPos = (pos, state) => {
-  if (pos === 0 || state.timeCode.size === 0) return 0;
-  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
+  if (pos === 0 || Object.keys(state.timeCode).length === 0) return 0;
+  if (state.timeCode[pos]) return state.timeCode[pos];
   return recursiveFindPrevTimeByPos(pos - 1, state);
 };
 
@@ -193,7 +193,7 @@ const assetsSlice = createSlice({
     getAsset          : state => state.asset,
     getPerson         : state => state.person,
     getTimeCode       : state => pos => recursiveFindPrevTimeByPos(pos, state),
-    hasTimeCode       : state => state.timeCode?.size > 0,
+    hasTimeCode       : state => Object.keys(state.timeCode).length > 0,
     getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]
   }
 });

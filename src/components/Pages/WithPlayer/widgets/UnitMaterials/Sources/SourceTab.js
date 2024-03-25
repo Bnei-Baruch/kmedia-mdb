@@ -11,7 +11,7 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
-import SourceTabTOC from './SourceTabTOC';
+import PageWithPlayerTOC from '../PageWithPlayerTOC';
 
 const SourceTab = ({ id }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -36,20 +36,22 @@ const SourceTab = ({ id }) => {
 
   if (!subject) return <NotFound textKey="materials.sources.no-sources"/>;
 
-  const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu}/>;
+  const toc = <PageWithPlayerTOC cus={subjects} onClick={handleSelectCu}/>;
   return (
     <div className="player_page_tab">
       {
         isMobileDevice ? (
           <TextLayoutMobile
             id={subjectId}
-            toolbar={<SourceTabToolbarMobile toc={toc}/>}
+            toc={toc}
+            toolbar={<SourceTabToolbarMobile hasToc={subjects.length > 1}  />}
             playerPage={true}
           />
         ) : (
           <TextLayoutWeb
             id={subjectId}
-            toolbar={<SourceTabToolbarWeb toc={toc}/>}
+            toc={toc}
+            toolbar={<SourceTabToolbarWeb hasToc={subjects.length > 1} />}
             playerPage={true}
           />
         )

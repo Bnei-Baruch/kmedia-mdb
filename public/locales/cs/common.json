@@ -870,12 +870,17 @@
         "print": "Print",
         "fullscreen-on": "Full screen",
         "fullscreen-off": "Exit full screen",
-        "hide-additions": "Hide all remarks",
-        "show-additions": "Show all remarks",
+        "additions": {
+          "review": "Review labeling and comments",
+          "showMy": "Show mine",
+          "showAll": "Show everyone's",
+          "hideAll": "Hide all"
+        },
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "Obsah",
-        "copy-link": "Kopírovat odkaz"
+        "copy-link": "Kopírovat odkaz",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",
