@@ -2,12 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
-import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
+import { canonicalLink, getCuByCcuSkipPreparation } from '../../../../helpers/links';
 
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
-import { CT_LESSON_PART } from '../../../helpers/consts';
-import { mdbGetDenormCollectionSelector } from '../../../redux/selectors';
+import Link from '../../../Language/MultiLanguageLink';
+import UnitLogoWithDuration from '../../../shared/UnitLogoWithDuration';
+import { CT_LESSON_PART } from '../../../../helpers/consts';
+import { mdbGetDenormCollectionSelector } from '../../../../redux/selectors';
 
 const DailyLessonItem = ({ id }) => {
   const ccu   = useSelector(state => mdbGetDenormCollectionSelector(state, id));

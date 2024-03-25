@@ -3,9 +3,9 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
-import { CT_LESSONS, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { actions } from '../../../redux/modules/filters';
-import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
+import { CT_LESSONS, FN_CONTENT_TYPE } from '../../../../helpers/consts';
+import { actions } from '../../../../redux/modules/filters';
+import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../../redux/selectors';
 
 const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   const isLesson = CT_LESSONS.includes(id);

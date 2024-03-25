@@ -25,6 +25,7 @@ import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+import { checkIsLessonAsCollection } from './filtersAside';
 
 const endpointByNamespace = {
   [PAGE_NS_LESSONS] : Api.lessons,
@@ -78,7 +79,7 @@ function* fetchList(action) {
 function patchLessonFilters(filters) {
   const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
   if (!ctFilter) return;
-  const asUnit    = filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+  const asUnit    = !checkIsLessonAsCollection(filters);
   ctFilter.values = ctFilter.values.map(ct => {
     if (CT_LESSONS.includes(ct)) {
       return asUnit ? CT_LESSON_PART : CT_DAILY_LESSON;

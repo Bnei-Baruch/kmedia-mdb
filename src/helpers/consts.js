@@ -770,6 +770,7 @@ export const FN_SORT_BY_FILTER     = 'sort-by-filter';
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
 export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+export const FN_PART_OF_DAY      = 'part-of-day';
 
 export const SEARCH_INTENT_FILTER_NAMES = {
   [SEARCH_INTENT_INDEX_TOPIC] : FN_TOPICS_MULTI,

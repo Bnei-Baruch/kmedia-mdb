@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { CT_LESSONS_SERIES, MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
-import { fromToLocalized } from '../../../helpers/date';
-import { canonicalLink } from '../../../helpers/links';
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
-import { mdbGetDenormCollectionSelector, myGetListSelector } from '../../../redux/selectors';
+import { CT_LESSONS_SERIES, MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
+import { fromToLocalized } from '../../../../helpers/date';
+import { canonicalLink } from '../../../../helpers/links';
+import Link from '../../../Language/MultiLanguageLink';
+import UnitLogoWithDuration, { getLogoUnit } from '../../../shared/UnitLogoWithDuration';
+import { mdbGetDenormCollectionSelector, myGetListSelector } from '../../../../redux/selectors';
 
 const CollectionItem = ({ id }) => {
   const { t }        = useTranslation();

@@ -4,13 +4,13 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { COLLECTION_DAILY_LESSONS } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/links';
-import { isEmpty } from '../../../helpers/utils';
-import Link from '../../Language/MultiLanguageLink';
-import TooltipIfNeed from '../../shared/TooltipIfNeed';
-import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
-import { mdbGetDenormContentUnitSelector, recommendedGetViewsSelector } from '../../../redux/selectors';
+import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
+import { canonicalLink } from '../../../../helpers/links';
+import { isEmpty } from '../../../../helpers/utils';
+import Link from '../../../Language/MultiLanguageLink';
+import TooltipIfNeed from '../../../shared/TooltipIfNeed';
+import UnitLogoWithDuration from '../../../shared/UnitLogoWithDuration';
+import { mdbGetDenormContentUnitSelector, recommendedGetViewsSelector } from '../../../../redux/selectors';
 
 const UnitItem = ({ id, t }) => {
   const cu    = useSelector(state => mdbGetDenormContentUnitSelector(state, id));

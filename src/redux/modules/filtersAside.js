@@ -10,7 +10,8 @@ import {
   FN_ORIGINAL_LANGUAGES,
   FN_PERSON,
   FN_SOURCES_MULTI,
-  FN_TOPICS_MULTI
+  FN_TOPICS_MULTI,
+  FN_PART_OF_DAY
 } from '../../helpers/consts';
 
 const fieldNameByFilter = {
@@ -22,7 +23,8 @@ const fieldNameByFilter = {
   [FN_COLLECTION_MULTI]  : 'collections',
   [FN_PERSON]            : 'persons',
   [FN_MEDIA_TYPE]        : 'media_types',
-  [FN_ORIGINAL_LANGUAGES]: 'original_languages'
+  [FN_ORIGINAL_LANGUAGES]: 'original_languages',
+  [FN_PART_OF_DAY]       : 'day_part'
 };
 
 const FILTER_NAMES = [
@@ -34,7 +36,8 @@ const FILTER_NAMES = [
   FN_PERSON,
   FN_MEDIA_TYPE,
   FN_ORIGINAL_LANGUAGES,
-  FN_LANGUAGES
+  FN_LANGUAGES,
+  FN_PART_OF_DAY
 ];
 
 const onFetchStatsSuccess = (state, { payload: { dataCU, dataC, dataL, namespace, isPrepare } }) => {
@@ -98,7 +101,16 @@ const onFetchElasticStatsSuccess = (state, { payload: { data, namespace } }) => 
   state[namespace] = { ...ns, wip: false, err: null, isReady: true };
 };
 
-const onReceiveSingleTypeStats = (status, { payload: { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn } }) => {
+const onReceiveSingleTypeStats = (status, {
+  payload: {
+    dataCU = {},
+    dataC = {},
+    dataL = {},
+    namespace,
+    isPrepare,
+    fn
+  }
+}) => {
   const statsByFN = status[namespace]?.[fn] || { byId: {}, tree: [] };
 
   if (isPrepare) {

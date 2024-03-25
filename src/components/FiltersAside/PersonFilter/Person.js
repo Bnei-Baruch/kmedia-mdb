@@ -1,5 +1,4 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { FN_PERSON } from '../../../helpers/consts';
@@ -7,7 +6,7 @@ import FilterHeader from '../FilterHeader';
 import PersonItem from './PersonItem';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
-const Person = ({ namespace, t }) => {
+const Person = ({ namespace }) => {
   const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_PERSON));
 
   return (
@@ -22,4 +21,4 @@ const Person = ({ namespace, t }) => {
   );
 };
 
-export default withTranslation()(Person);
+export default Person;

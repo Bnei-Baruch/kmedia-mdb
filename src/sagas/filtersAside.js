@@ -2,15 +2,7 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import {
-  CT_DAILY_LESSON,
-  CT_LESSONS,
-  CT_LESSON_PART,
-  FN_CONTENT_TYPE,
-  FN_LANGUAGES,
-  FN_SHOW_LESSON_AS_UNITS,
-  PAGE_NS_LESSONS,
-} from '../helpers/consts';
+import { FN_LANGUAGES, FN_SHOW_LESSON_AS_UNITS, PAGE_NS_LESSONS, CT_LESSONS, } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
@@ -23,15 +15,16 @@ const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
 };
 const defaultStatParams    = {
-  with_sources: true,
-  with_tags: true,
-  with_collections: false,
-  with_languages: true,
-  with_content_types: true,
-  with_persons: false,
+  with_sources           : true,
+  with_tags              : true,
+  with_collections       : false,
+  with_languages         : true,
+  with_content_types     : true,
+  with_persons           : false,
   with_original_languages: false,
-  with_media: false,
-  with_locations: false,
+  with_media             : false,
+  with_locations         : false,
+  with_day_part          : false,
 };
 
 const setAllStatParamsFalse = params => {
@@ -44,38 +37,31 @@ const setAllStatParamsFalse = params => {
   params.with_locations          = false;
   params.with_languages          = false;
   params.with_content_types      = false;
+  params.with_day_part           = false;
   params.media_language && delete params.media_language;
   return params;
 };
 
-function patchLessonFilters(filters) {
-  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
-  if (ctFilter) {
-    ctFilter.values = ctFilter.values.map(ct => (CT_LESSONS.includes(ct)) ? CT_LESSON_PART : ct);
-  }
-
-  return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
-}
-
-function prepareDailyLessonParams(params) {
-  setAllStatParamsFalse(params);
-  params.with_content_types = true;
-  params.content_type       = [...params.content_type.filter(ct => ct === CT_LESSON_PART), CT_DAILY_LESSON];
-  return params;
+export function checkIsLessonAsCollection(filters) {
+  return !filters?.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
 }
 
 export function* fetchStat(action) {
-  const { namespace, params, options: { isPrepare } } = action.payload;
+  const { namespace, options: { isPrepare } }         = action.payload;
+  const { params }                                    = action.payload;
   let { options: { countC = false, countL = false } } = action.payload;
 
   let filterParams       = {};
   let lessonAsCollection = false;
-  if (!isPrepare) {
-    const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    if (namespace === PAGE_NS_LESSONS)
-      lessonAsCollection = patchLessonFilters(filters);
 
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  if (!isPrepare) {
     filterParams = filtersTransformer.toApiParams(filters) || {};
+  }
+
+  if (namespace === PAGE_NS_LESSONS) {
+    lessonAsCollection        = checkIsLessonAsCollection(filters);
+    filterParams.content_type = [...params.content_type, ...CT_LESSONS];
   }
 
   //need when was filtered by base param (for example filter by topics on the topic page)
@@ -100,7 +86,7 @@ export function* fetchStat(action) {
     const requests = [];
     countCU && requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
     countC && requests.push(call(Api.collectionsStats, {
-      id: filterParams.collection, ...filterParams,
+      id            : filterParams.collection, ...filterParams,
       with_languages: false
     }));
     countL && requests.push(call(Api.labelsStats, filterParams));
@@ -112,17 +98,15 @@ export function* fetchStat(action) {
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
 
-    lessonAsCollection && requests.push(call(Api.collectionsStats, prepareDailyLessonParams({ ...params })));
-
     const responses = yield all(requests);
 
     const dataCU                            = countCU ? responses.shift()?.data : {};
-    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
+    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: {} };
     const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
       const dataCUPart                            = countCU ? responses.shift()?.data : {};
-      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
+      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : { data: {} };
       const dataLPart                             = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
@@ -133,8 +117,9 @@ export function* fetchStat(action) {
     }
 
     if (lessonAsCollection) {
-      const ct           = responses.shift()?.data.content_type;
-      dataC.content_type = { ...ct, ...dataC.content_type };
+      dataCU['day_part'] = {};
+    } else if (namespace === PAGE_NS_LESSONS) {
+      dataC['day_part'] = {};
     }
 
     yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));
@@ -189,7 +174,7 @@ export function* fetchElasticStat(action) {
   try {
     const { data } = yield call(Api.elasticStats, {
       q,
-      ui_language: uiLang,
+      ui_language      : uiLang,
       content_languages: contentLanguages,
     });
 
