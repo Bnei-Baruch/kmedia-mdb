@@ -70,18 +70,26 @@ export const playableItem = (unit, preImageUrl) => {
     language: f.language
   })) || [];
 
-  if (typeof window !== 'undefined' && window.location.search.includes('subs=srt')) {
+  if (typeof window !== 'undefined' && window.location.search.includes('subs=1')) {
     subtitles = [{
       src     : '/.well-known/result.srt',
       language: 'he'
     }];
   }
+  if (typeof window !== 'undefined' && window.location.search.includes('subs=srt')) {
+    subtitles = [{
+      src     : '/.well-known/result_srt.srt',
+      language: 'he'
+    }];
+  }
+
   if (typeof window !== 'undefined' && window.location.search.includes('subs=wlevel')) {
     subtitles = [{
       src     : '/.well-known/result_wlevel.srt',
       language: 'he'
     }];
   }
+
   const hls = findHLS(unit.files);
   if (hls) {
     return {
