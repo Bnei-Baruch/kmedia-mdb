@@ -76,6 +76,7 @@ export const playableItem = (unit, preImageUrl) => {
       language: 'he'
     }];
   }
+
   if (typeof window !== 'undefined' && window.location.search.includes('subs=srt')) {
     subtitles = [{
       src     : '/.well-known/result_srt.srt',
