@@ -56,11 +56,11 @@ export const playableItem = (unit, preImageUrl) => {
   }
 
   const resp = {
-    id: unit.id,
-    name: unit.name,
-    properties: unit.properties,
+    id           : unit.id,
+    name         : unit.name,
+    properties   : unit.properties,
     preImageUrl,
-    mtByLang: {},
+    mtByLang     : {},
     qualityByLang: {}
   };
   if (!unit?.files) return resp;
@@ -69,12 +69,20 @@ export const playableItem = (unit, preImageUrl) => {
     src: physicalFile(f),
     language: f.language
   })) || [];
+  subtitles.push([{
+    src     : '/.well-known/result.srt',
+    language: 'en'
+  }])
+  subtitles.push([{
+    src     : '/.well-known/result_wlevel.srt',
+    language: 'ru'
+  }])
   const hls       = findHLS(unit.files);
   if (hls) {
     return {
       ...resp,
-      file: { ...hls, src: physicalFile(hls, true) },
-      isHLS: true,
+      file     : { ...hls, src: physicalFile(hls, true) },
+      isHLS    : true,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
       subtitles
@@ -199,7 +207,7 @@ const EMBED_TYPE = {
 };
 
 export const EMBED_INDEX_BY_TYPE = {
-  [EMBED_TYPE_PLAYER]: 1,
+  [EMBED_TYPE_PLAYER]  : 1,
   [EMBED_TYPE_PLAYLIST]: 2
 };
 
