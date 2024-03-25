@@ -65,19 +65,24 @@ export const playableItem = (unit, preImageUrl) => {
   };
   if (!unit?.files) return resp;
 
-  const subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
-    src: physicalFile(f),
+  let subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
+    src     : physicalFile(f),
     language: f.language
   })) || [];
-  subtitles.push([{
-    src     : '/.well-known/result.srt',
-    language: 'en'
-  }])
-  subtitles.push([{
-    src     : '/.well-known/result_wlevel.srt',
-    language: 'ru'
-  }])
-  const hls       = findHLS(unit.files);
+
+  if (typeof window !== 'undefined' && window.location.search.includes('subs=srt')) {
+    subtitles = [{
+      src     : '/.well-known/result.srt',
+      language: 'he'
+    }];
+  }
+  if (typeof window !== 'undefined' && window.location.search.includes('subs=wlevel')) {
+    subtitles = [{
+      src     : '/.well-known/result_wlevel.srt',
+      language: 'he'
+    }];
+  }
+  const hls = findHLS(unit.files);
   if (hls) {
     return {
       ...resp,
