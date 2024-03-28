@@ -115,6 +115,10 @@
     .text__content {
       padding: 1.5em 0;
     }
+    .text__scroll-top.ui.icon.button{
+      padding: 7px 8px ;
+      bottom: 88px;
+    }
   }
 
   .text_align_to_text {
@@ -185,17 +189,19 @@
     font-family: Georgia, 'Times New Roman ', Times, serif;
   }
 
-  .text__scroll-top {
+  .text__scroll-top.ui.icon.button {
     position: absolute;
-    bottom: 1em;
-    left: 1em;
-
+    bottom: 18px;
+    padding: 11.5px 12.5px;
+    box-shadow: 0px 4px 4px 0px #00000026;
+    left:18px;
+    
     .rtl & {
       left: auto;
-      right: 1em;
+      right: 18px ;
     }
   }
-
+  
   .text_mobile_padding {
     padding-left: 16px;
     padding-right: 16px;

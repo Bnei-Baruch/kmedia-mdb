@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import SearchOnPageBar from './SearchOnPageBar';
 import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
+import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
 import {
@@ -79,7 +80,7 @@ const TextLayoutMobile = props => {
     >
       {(playerPage && !isSearch) && renderToolbar()}
       <div className="text_mobile_padding">
-
+        <ScrollToTopBtn />
         <div
           className={
             clsx('stick_toolbar no_print', {
