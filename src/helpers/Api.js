@@ -172,13 +172,8 @@ class Api {
     pageSize: page_size,
     sortBy  : sort_by,
     deb,
-    searchId: search_id
   }) => (
-    Requests.get(`search?${Requests.makeParams({ q, ui_language, content_languages, page_no, page_size, sort_by, deb, search_id })}`)
-  );
-
-  static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
-    Requests.get(`click?${Requests.makeParams({ mdb_uid, index, result_type: type, rank, search_id, deb })}`)
+    Requests.get(`search?${Requests.makeParams({ q, ui_language, content_languages, page_no, page_size, sort_by, deb })}`)
   );
 
   static getAsset = path => Requests.getAsset(path);
