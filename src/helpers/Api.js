@@ -107,30 +107,34 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({
-                         id,
-                         ui_language,
-                         content_languages
-                       }) => Requests.get(`collections/${id}?${Requests.makeParams({
-    ui_language,
-    content_languages
-  })}`);
+  static collection = (
+    {
+      id,
+      ui_language,
+      content_languages
+    }) => Requests.get(`collections/${id}?${Requests.makeParams({
+      ui_language,
+      content_languages
+    })}`
+  );
 
-  static unit = ({
-                   id,
-                   ui_language,
-                   content_languages
-                 }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+  static unit = (
+    {
+      id,
+      ui_language,
+      content_languages
+    }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
     ui_language,
     content_languages
   })}`);
 
-  static latestLesson = ({
-                           ui_language,
-                           content_languages
-                         }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+  static latestLesson = (
+    {
+      ui_language,
+      content_languages
+    }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
     ui_language,
@@ -209,7 +213,7 @@ class Api {
       page_no,
       page_size,
       sort_by,
-      deb
+      deb,
     })}`)
   );
 
