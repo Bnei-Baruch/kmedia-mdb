@@ -60,5 +60,6 @@ export const getSavedTime = (cuId, ht) => {
   } else if (!lt) {
     return ht.data?.current_time || 0;
   }
+
   return moment(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data?.current_time || 0;
 };
