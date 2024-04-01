@@ -6,15 +6,16 @@
 <body>
 <div id="jwplayer"></div>
 <script>
-  jwplayer("jwplayer").setup({
+  window.jwplayer("jwplayer").setup({
     "playlist": [{
       "file": "https://cdn.kabbalahmedia.info/XaS3ne0v.mp4",
       "title": "test",
     }]
   })
+
   setTimeout(() => {
-    console.log(jwplayer("jwplayer"));
-    jwplayer("jwplayer").seek(10);
+    console.log(window.jwplayer("jwplayer"));
+    window.jwplayer("jwplayer").seek(100);
   }, 500)
 
 </script>
