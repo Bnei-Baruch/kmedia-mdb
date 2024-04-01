@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://cdn.jwplayer.com/libraries/mxNkRalL.js"></script>
+</head>
+<body>
+<div id="jwplayer"></div>
+<script>
+  jwplayer("jwplayer").setup({
+    "playlist": [{
+      "file": "https://cdn.kabbalahmedia.info/XaS3ne0v.mp4",
+      "title": "test",
+    }]
+  })
+  setTimeout(() => {
+    console.log(jwplayer("jwplayer"));
+    jwplayer("jwplayer").seek(10);
+  }, 500)
+
+</script>
+
+</body>
+</html>
