@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
@@ -22,32 +22,30 @@ export const getLogoUnit = (content_units, historyItems) => {
 };
 
 const UnitLogoWithDuration = ({ unit, ...propz }) => {
-  const [playTime, setPlayTime] = useState();
-  const { id, duration }        = unit;
+        const { id, duration } = unit;
 
-  const historyItems = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit  = historyItems.find(x => x.content_unit_uid === id);
-  useEffect(() => {
-    setPlayTime(getSavedTime(id, historyUnit));
-  }, [id, historyUnit]);
+        const historyItems = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY)) || [];
+        const historyUnit  = historyItems.find(x => x.content_unit_uid === id);
+        const current_time = getSavedTime(id, historyUnit);
 
-  const { width = 140, displayDuration = true, totalDuration, ...rest } = propz;
+        const { width = 140, displayDuration = true, totalDuration, ...rest } = propz;
 
-  const durationToDisplay = displayDuration ? totalDuration || duration : null;
+        const durationToDisplay = displayDuration ? totalDuration || duration : null;
 
-  return (
-    <div className="with_duration" style={{ minWidth: width }}>
-      {
-        durationToDisplay && (
-          <div className="duration">
-            {formatDuration(durationToDisplay, null)}
+        return (
+          <div className="with_duration" style={{ minWidth: width }}>
+            {
+              durationToDisplay && (
+                <div className="duration">
+                  {formatDuration(durationToDisplay, null)}
+                </div>
+              )
+            }
+            <UnitProgress unit={unit} playTime={current_time}/>
+            <UnitLogo unitId={unit.id} width={width} {...rest} />
           </div>
-        )
+        );
       }
-      <UnitProgress unit={unit} playTime={playTime}/>
-      <UnitLogo unitId={unit.id} width={width} {...rest} />
-    </div>
-  );
-};
+;
 
 export default UnitLogoWithDuration;
