@@ -48,7 +48,8 @@ export const getPlaylistItem = () => functionByName('getPlaylistItem', noop);
 export const play = () => functionByName('play');
 export const stop = () => functionByName('stop');
 
-export const pause      = () => functionByName('pause', false);
+//export const pause      = () => functionByName('pause', false);
+export const pause      = () => document.getElementsByClassName('jw-video')[0]?.pause();
 export const togglePlay = () => {
   const state = functionByName('getState');
   if (!state) return;
