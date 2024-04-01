@@ -22,7 +22,6 @@ import search from './modules/search';
 import assets from './modules/assets';
 import home from './modules/home';
 import stats from './modules/stats';
-import simpleMode from './modules/simpleMode';
 import recommended from './modules/recommended';
 import chronicles from './modules/chronicles';
 import music from './modules/music';
@@ -36,6 +35,7 @@ import player from './modules/player';
 import playlist from './modules/playlist';
 import fetchImage from './modules/fetchImage';
 import textPage from './modules/textPage';
+import { backendApi } from './api/backendApi';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const verboseDebug = false;
@@ -51,6 +51,7 @@ const setupMiddleware = history => getDefaultMiddleware => {
     actionCreatorCheck: false
   }).concat(
     createMultiLanguageRouterMiddleware(history),
+    backendApi.middleware,
     sagaMiddleware
   );
   // Conditionally add another middleware in dev
@@ -62,7 +63,9 @@ const setupMiddleware = history => getDefaultMiddleware => {
 };
 
 const setupReducers = history => ({
-  router: connectRouter(history),
+  router                  : connectRouter(history),
+  [backendApi.reducerPath]: backendApi.reducer,
+
   settings,
   preparePage,
   events,
@@ -78,7 +81,6 @@ const setupReducers = history => ({
   assets,
   home,
   stats,
-  simpleMode,
   recommended,
   chronicles,
   music,
@@ -108,6 +110,5 @@ export default function createStore(preloadedState, history) {
   store.rootSagaPromise = sagaMiddleware.run(rootSaga).done;
   store.stopSagas       = () => store.dispatch(END);
   store.sagaMiddleWare  = sagaMiddleware;
-
   return store;
 }
