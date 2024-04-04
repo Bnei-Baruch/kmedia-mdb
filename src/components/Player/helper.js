@@ -55,5 +55,11 @@ export const getSavedTime = (cuId, ht) => {
     console.error('broken json', json);
   }
 
-  return lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt : ht || false;
+  if (!ht) {
+    return lt?.current_time || 0;
+  } else if (!lt) {
+    return ht.data?.current_time || 0;
+  }
+
+  return moment(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data?.current_time || 0;
 };

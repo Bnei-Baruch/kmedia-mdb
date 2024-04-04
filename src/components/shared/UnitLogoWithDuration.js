@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
@@ -22,14 +22,11 @@ export const getLogoUnit = (content_units, historyItems) => {
 };
 
 const UnitLogoWithDuration = ({ unit, ...propz }) => {
-  const [playTime, setPlayTime] = useState();
-  const { id, duration }        = unit;
+  const { id, duration } = unit;
 
   const historyItems = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY)) || [];
   const historyUnit  = historyItems.find(x => x.content_unit_uid === id);
-  useEffect(() => {
-    setPlayTime(getSavedTime(id, historyUnit));
-  }, [id, historyUnit]);
+  const current_time = getSavedTime(id, historyUnit);
 
   const { width = 140, displayDuration = true, totalDuration, ...rest } = propz;
 
@@ -44,7 +41,7 @@ const UnitLogoWithDuration = ({ unit, ...propz }) => {
           </div>
         )
       }
-      <UnitProgress unit={unit} playTime={playTime}/>
+      <UnitProgress unit={unit} playTime={current_time}/>
       <UnitLogo unitId={unit.id} width={width} {...rest} />
     </div>
   );
