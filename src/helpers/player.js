@@ -69,18 +69,9 @@ export const playableItem = (unit, preImageUrl) => {
     src     : physicalFile(f),
     language: f.language
   })) || [];
-  const cu_uids = {
-    'a8dNCD4s': 'dFGson6E',
-    'C4YbRUf1': '8OYrAaXc',
-    'ji9cWJSn': 'AvC30oCE',
-    'KXRZGI5U': 'wonTYxDD',
-    'grC7Q9Rg': 'iZ1Ej78p',
-    '9n3pTfRO': 'vSUwIZKX',
-    'dq4ssebq': 'c3pdhFeA',
-    'hZIEbyry': 'c27ff0Ow',
-    '2YvxzuPq': 'FvoO2Shw',
-    'JvPGQQpb': 'AhP3l9oR'
-  };
+  //const cu_uids = ['fC14uS2A', 'C4YbRUf1', 'ji9cWJSn', 'KXRZGI5U', 'grC7Q9Rg', '9n3pTfRO', 'dq4ssebq', 'hZIEbyry', '2YvxzuPq', 'JvPGQQpb'];
+  const cu_uids = ['Z8ufH5Ek', 'ALQL6gi0', 'XWF0h2xw', 'emGVKYhP', 'PRIcLtx4', 'MiAm6IeN', 'c1VDSuFh', 'qgw9NXZi', 'SUJfzWgR', 'fthw244n']
+  ;
   if (typeof window !== 'undefined' && Object.keys(cu_uids).includes(unit.id)) {
     subtitles = [{
       src     : `/.well-known/${unit.id}.srt`,
