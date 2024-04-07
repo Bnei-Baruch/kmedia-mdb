@@ -69,24 +69,21 @@ export const playableItem = (unit, preImageUrl) => {
     src     : physicalFile(f),
     language: f.language
   })) || [];
-
-  if (typeof window !== 'undefined' && window.location.search.includes('subs=1')) {
+  const cu_uids = {
+    'a8dNCD4s': 'dFGson6E',
+    'C4YbRUf1': '8OYrAaXc',
+    'ji9cWJSn': 'AvC30oCE',
+    'KXRZGI5U': 'wonTYxDD',
+    'grC7Q9Rg': 'iZ1Ej78p',
+    '9n3pTfRO': 'vSUwIZKX',
+    'dq4ssebq': 'c3pdhFeA',
+    'hZIEbyry': 'c27ff0Ow',
+    '2YvxzuPq': 'FvoO2Shw',
+    'JvPGQQpb': 'AhP3l9oR'
+  };
+  if (typeof window !== 'undefined' && Object.keys(cu_uids).includes(unit.id)) {
     subtitles = [{
-      src     : '/.well-known/result.srt',
-      language: 'he'
-    }];
-  }
-
-  if (typeof window !== 'undefined' && window.location.search.includes('subs=srt')) {
-    subtitles = [{
-      src     : '/.well-known/result_srt.srt',
-      language: 'he'
-    }];
-  }
-
-  if (typeof window !== 'undefined' && window.location.search.includes('subs=wlevel')) {
-    subtitles = [{
-      src     : '/.well-known/result_wlevel.srt',
+      src     : `/.well-known/${unit.id}.srt`,
       language: 'he'
     }];
   }
