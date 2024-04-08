@@ -227,9 +227,9 @@ export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLat
   }));
 
 export const musicPage = (store, match) => {
-  const { id, uiLanguage = 'en', contentLanguages = ['en'] } = match;
+  const { uiLanguage = 'en', contentLanguages = ['en'] } = match;
 
-  store.dispatch(musicApi.endpoints.music.initiate({ id, uiLanguage, filesLanguages: contentLanguages }));
+  store.dispatch(musicApi.endpoints.music.initiate({ uiLanguage, contentLanguages }));
   return Promise.resolve(null);
 };
 

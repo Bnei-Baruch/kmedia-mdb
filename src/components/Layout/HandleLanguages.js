@@ -101,7 +101,7 @@ const HandleLanguages = ({ t }) => {
           <div>{idx + 1}. {LANGUAGES[language].name}</div>
         </div>
         <Icon disabled={!!urlLang || disabled} className="language-trigger" name="close"
-              onClick={lang => removeLanguage(idx)}/>
+          onClick={lang => removeLanguage(idx)}/>
       </div>
     </List.Item>
   );

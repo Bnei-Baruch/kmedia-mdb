@@ -7,7 +7,8 @@ export const backendApi = createApi({
   baseQuery        : fetchBaseQuery({
     baseUrl: API_BACKEND
   }),
+
   // Real endpoints are injected in api files
-  endpoints        : builder => ({})
+  endpoints: builder => ({})
 });
 
