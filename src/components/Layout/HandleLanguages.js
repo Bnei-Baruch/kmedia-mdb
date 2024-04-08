@@ -20,6 +20,7 @@ import {
 } from '../../redux/selectors';
 import { backendApi } from '../../redux/api/backendApi';
 import { wholeSimpleMode } from '../../redux/api/simpleMode';
+import { wholeMusic } from '../../redux/api/music';
 
 const HandleLanguages = ({ t }) => {
   const [isActive, setIsActive] = useState(false);
@@ -37,21 +38,21 @@ const HandleLanguages = ({ t }) => {
   const uiLanguageSelected = language => {
     updateHtmlLang(language);
     dispatch(actions.setUILanguage({ uiLang: language }));
-    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
+    dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
   };
 
   const addLanguage = language => {
     const newLanguages = contentLanguages.filter(lang => lang !== language);
     newLanguages.push(language);
     dispatch(actions.setContentLanguages({ contentLanguages: newLanguages }));
-    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
+    dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
   };
 
   const removeLanguage = idx => {
     const newLanguages = contentLanguages.slice();
     newLanguages.splice(idx, 1);
     dispatch(actions.setContentLanguages({ contentLanguages: newLanguages }));
-    dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
+    dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
   };
 
   const setShowAllContent = () => dispatch(actions.setShowAllContent(!showAllContent));
@@ -61,11 +62,11 @@ const HandleLanguages = ({ t }) => {
     <div onClick={handlePopup} ref={ref}>
       {
         isMobileDevice
-          ? <Icon size="big" name="language" className="no-margin" />
+          ? <Icon size="big" name="language" className="no-margin"/>
           : (
             <div className="language-trigger">
-              {urlLang && <Icon name="unlink" />}
-              {!urlLang && <Icon name="sliders horizontal" />}
+              {urlLang && <Icon name="unlink"/>}
+              {!urlLang && <Icon name="sliders horizontal"/>}
               {t('languages.language')}
             </div>
           )
@@ -99,7 +100,8 @@ const HandleLanguages = ({ t }) => {
         <div className={disabled ? 'disabled' : ''}>
           <div>{idx + 1}. {LANGUAGES[language].name}</div>
         </div>
-        <Icon disabled={!!urlLang || disabled} className="language-trigger" name="close" onClick={lang => removeLanguage(idx)} />
+        <Icon disabled={!!urlLang || disabled} className="language-trigger" name="close"
+              onClick={lang => removeLanguage(idx)}/>
       </div>
     </List.Item>
   );
@@ -110,7 +112,7 @@ const HandleLanguages = ({ t }) => {
       key="handleLangs"
       flowing
       position={`bottom ${leftRight}`}
-      trigger={<Trigger />}
+      trigger={<Trigger/>}
       open={isActive}
       onOpen={handlePopup}
       onClose={handlePopup}
@@ -153,7 +155,7 @@ const HandleLanguages = ({ t }) => {
               allLanguages={ALL_LANGUAGES}
               trigger={
                 <Button disabled={!!urlLang} basic color="grey" size="small">{t('languages.add_languages')}</Button>}
-              selected={lang => addLanguage(lang)} />
+              selected={lang => addLanguage(lang)}/>
           </List.Item>
         </List>
         <Checkbox
@@ -161,7 +163,7 @@ const HandleLanguages = ({ t }) => {
           label={t('languages.show_all_content')}
           disabled={!!urlLang}
           checked={showAllContent}
-          onChange={() => setShowAllContent()} />
+          onChange={() => setShowAllContent()}/>
         <div className="language-subtext">{t('languages.show_all_content_explanation')}</div>
       </Popup.Content>
     </Popup>

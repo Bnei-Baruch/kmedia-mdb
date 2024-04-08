@@ -41,7 +41,6 @@ import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
 import { actions as listsActions } from './../redux/modules/lists';
 import { actions as mdbActions } from './../redux/modules/mdb';
-import { actions as musicActions } from './../redux/modules/music';
 import { actions as prepareActions } from './../redux/modules/preparePage';
 import { actions as publicationsActions } from './../redux/modules/publications';
 import { actions as searchActions } from './../redux/modules/search';
@@ -52,7 +51,6 @@ import { actions as textPageActions } from '../redux/modules/textPage';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
-import * as musicSagas from './../sagas/music';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
@@ -72,6 +70,7 @@ import {
 } from '../redux/selectors';
 import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
 import { simpleModeApi } from '../redux/api/simpleMode';
+import { musicApi } from '../redux/api/music';
 
 export const home = store => {
   const state            = store.getState();
@@ -227,7 +226,12 @@ export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLat
     store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
   }));
 
-export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
+export const musicPage = (store, match) => {
+  const { id, uiLanguage = 'en', contentLanguages = ['en'] } = match;
+
+  store.dispatch(musicApi.endpoints.music.initiate({ id, uiLanguage, filesLanguages: contentLanguages }));
+  return Promise.resolve(null);
+};
 
 export const eventsPage = store => {
   // CollectionList

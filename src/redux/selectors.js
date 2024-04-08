@@ -20,7 +20,6 @@ import { selectors as chroniclesSel } from './modules/chronicles';
 import { selectors as searchSel } from './modules/search';
 import { selectors as listsSel } from './modules/lists';
 import { selectors as lessonsSel } from './modules/lessons';
-import { selectors as musicSel } from './modules/music';
 import { selectors as bookmarkFilterSel } from './modules/bookmarkFilter';
 import { selectors as trimSel } from './modules/trim';
 import { selectors as fetchImageSel } from './modules/fetchImage';
@@ -48,7 +47,6 @@ const getChronicles     = state => state.chronicles;
 const getSearch         = state => state.search;
 const getLists          = state => state.lists;
 const getLessons        = state => state.lessons;
-const getMusic          = state => state.music;
 const getBookmarkFilter = state => state.bookmarkFilter;
 const getTrim           = state => state.trim;
 const getFetchImage     = state => state.fetchImage;
@@ -236,11 +234,6 @@ export const lessonsGetSeriesBySourceIdSelector = createSelector(getLessons, get
 export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, getMDB, getTags, (l, m, t) => lessonsSel.getSerieByTagId(l, m, t));
 export const lessonsGetWipSelector              = createSelector([getLessons], l => lessonsSel.getWip(l));
 export const lessonsGetSeriesLoaded             = createSelector([getLessons], l => lessonsSel.getSeriesLoaded(l));
-
-// music
-export const musicGetWipSelector   = createSelector([getMusic], m => musicSel.getWip(m));
-export const musicGetErrorSelector = createSelector([getMusic], m => musicSel.getError(m));
-export const musicGetDataSelector  = createSelector([getMusic], m => musicSel.getMusicData(m));
 
 // bookmarkFilter
 export const bookmarkFilterGetByKeySelector = createSelector(getBookmarkFilter, _2, (b, ns) => bookmarkFilterSel.getByKey(b, ns));

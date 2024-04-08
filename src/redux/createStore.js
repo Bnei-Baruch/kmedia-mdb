@@ -24,7 +24,6 @@ import home from './modules/home';
 import stats from './modules/stats';
 import recommended from './modules/recommended';
 import chronicles from './modules/chronicles';
-import music from './modules/music';
 import auth from './modules/auth';
 import my from './modules/my';
 import myNotes from './modules/myNotes';
@@ -83,7 +82,6 @@ const setupReducers = history => ({
   stats,
   recommended,
   chronicles,
-  music,
   auth,
   my,
   myNotes,
