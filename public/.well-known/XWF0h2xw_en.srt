@@ -1,0 +1,926 @@
+0
+00:00:14,220 --> 00:00:16,259
+Shalom to you,
+ thank you for joining me.
+
+1
+00:00:16,360 --> 00:00:19,520
+We are here with a brief summary
+ of the series of programs with
+
+2
+00:00:19,620 --> 00:00:21,959
+Dr. Michael Eitman
+ and Yael Leshed Arel.
+
+3
+00:00:22,060 --> 00:00:24,959
+Today in the program we will
+ try to find a real solution,
+
+4
+00:00:25,060 --> 00:00:27,660
+a solution from the
+ root to cyber threats.
+
+5
+00:00:27,760 --> 00:00:29,520
+For those who are not
+ familiar with the details,
+
+6
+00:00:29,640 --> 00:00:33,180
+we are in a time when there are
+ cyber attacks, cyber wars.
+
+7
+00:00:33,280 --> 00:00:37,199
+A cyber attack means that we
+ are using a remote control over
+
+8
+00:00:37,300 --> 00:00:39,900
+a person's account, an organization's
+ or a state's account,
+
+9
+00:00:40,000 --> 00:00:43,580
+in order to destroy their life cycle.
+ How do we solve this?
+
+10
+00:00:43,700 --> 00:00:46,900
+This is what I want to
+ discuss today, a very,
+
+11
+00:00:47,000 --> 00:00:49,460
+very challenging question.
+ Let's start with the first part.
+
+12
+00:00:49,560 --> 00:00:51,710
+Time to wake up, please.
+
+13
+00:00:52,280 --> 00:00:55,640
+In the past,
+ we had something to wake up.
+
+14
+00:00:55,740 --> 00:00:57,360
+There was a record that
+ you could enter into,
+
+15
+00:00:57,460 --> 00:01:00,120
+and before that there was a
+ kind of shield that you could put
+
+16
+00:01:00,220 --> 00:01:03,160
+in front of your body,
+ and after that it couldn't reach you.
+
+17
+00:01:03,300 --> 00:01:06,120
+Today, you're really, really,
+ really, really exposed.
+
+18
+00:01:06,320 --> 00:01:09,320
+How do you deal, in your opinion,
+ how can you deal,
+
+19
+00:01:09,420 --> 00:01:13,250
+in your opinion,
+ with this abstract phenomenon?
+
+20
+00:01:14,000 --> 00:01:18,060
+I don't know what to tell you.
+ You have a bank of money.
+
+21
+00:01:18,560 --> 00:01:23,840
+Suddenly, there's a zero.
+ Or even a minus, let's say. Even worse.
+
+22
+00:01:24,040 --> 00:01:25,610
+Yes, 50 ,000 dollars.
+
+23
+00:01:25,740 --> 00:01:32,370
+And you say, no, it can't
+ be, but there is a fact,
+
+24
+00:01:32,700 --> 00:01:38,400
+yes, with everything,
+ in the hospital, everywhere,
+
+25
+00:01:39,040 --> 00:01:43,480
+suddenly all the medical
+ supplies are taken away,
+
+26
+00:01:43,580 --> 00:01:51,060
+they bring you, I mean,
+ it can be, we are not aware of it.
+
+27
+00:01:51,160 --> 00:02:01,070
+But if we go into the industry,
+ nuclear power plants, and trains,
+
+28
+00:02:01,300 --> 00:02:04,620
+planes in the sky, all kinds of...
+
+29
+00:02:04,720 --> 00:02:14,590
+It's all controlled by the system.
+ It's thought. We can't just...
+
+30
+00:02:15,300 --> 00:02:18,440
+find ourselves here.
+ How do you deal with it?
+
+31
+00:02:18,960 --> 00:02:23,640
+This is already known,
+ what I said. How do we deal with it?
+
+32
+00:02:24,660 --> 00:02:31,860
+In the end, we cannot deal with
+ it until we change ourselves.
+
+33
+00:02:32,640 --> 00:02:38,040
+Because dealing with it is only
+ possible if the human beings
+
+34
+00:02:38,140 --> 00:02:41,280
+are good and do not
+ want to hurt each other.
+
+35
+00:02:41,660 --> 00:02:47,000
+Or at least not all human beings,
+ but states, governments,
+
+36
+00:02:47,320 --> 00:02:56,820
+all kinds of large
+ organizations that are strong enough to do
+
+37
+00:02:56,920 --> 00:03:01,720
+this. so at least
+ those and we will be
+
+38
+00:03:01,820 --> 00:03:10,880
+able to act for the whole world
+ as a system of great protection
+
+39
+00:03:10,980 --> 00:03:15,160
+Is there in the development of
+ the will of humanity some stage
+
+40
+00:03:15,260 --> 00:03:18,120
+where the will of the person
+ will become a will for good?
+
+41
+00:03:18,220 --> 00:03:21,240
+No So how did it happen?
+
+42
+00:03:21,340 --> 00:03:21,920
+It was already done by special
+
+43
+00:03:22,020 --> 00:03:31,460
+education but to decide that we
+ must We have to live in a world
+
+44
+00:03:31,560 --> 00:03:33,899
+where everyone is
+ open to everyone.
+
+45
+00:03:34,140 --> 00:03:38,060
+We are all connected to each other.
+ We can all be hurt.
+
+46
+00:03:38,200 --> 00:03:41,200
+A small child can
+ hurt the whole world.
+
+47
+00:03:41,480 --> 00:03:45,430
+Well, theoretically,
+ but in any case. So we have no choice.
+
+48
+00:03:45,540 --> 00:03:50,620
+We have to think about what
+ we are doing in the trial.
+
+49
+00:03:51,200 --> 00:03:54,140
+Mike Roms, it still
+ sounds like something very,
+
+50
+00:03:54,280 --> 00:03:54,440
+very good to me.
+
+51
+00:03:54,540 --> 00:03:57,900
+What will really cause people,
+ and certainly governments,
+
+52
+00:03:58,180 --> 00:04:02,000
+who have some kind of desire to use
+ all their strength and control
+
+53
+00:04:02,100 --> 00:04:06,180
+and all these games,
+ what will really cause them, in the end,
+
+54
+00:04:06,280 --> 00:04:11,220
+to decide that they want to
+ act in the direction of good?
+
+55
+00:04:11,340 --> 00:04:13,060
+To teach in the direction of good?
+
+56
+00:04:13,160 --> 00:04:20,640
+Fear, fear, and fear of loss,
+ something big, something important.
+
+57
+00:04:20,740 --> 00:04:21,739
+What does this mean,
+
+58
+00:04:21,839 --> 00:04:25,479
+that they will work so that they
+ really want to start fighting
+
+59
+00:04:25,580 --> 00:04:27,700
+one with the other and not
+ control one with the other,
+
+60
+00:04:27,800 --> 00:04:28,940
+that this is the situation today?
+
+61
+00:04:29,340 --> 00:04:31,580
+Today it is also so obvious
+ that you already know, you don't
+
+62
+00:04:31,680 --> 00:04:34,470
+even hide it. No, it is clear.
+
+63
+00:04:34,700 --> 00:04:37,930
+If people see that
+ they have no choice,
+
+64
+00:04:38,040 --> 00:04:40,470
+and they are
+ completely dependent on it,
+
+65
+00:04:40,700 --> 00:04:45,840
+that my life is in the hands of someone,
+ then there is no choice,
+
+66
+00:04:45,940 --> 00:04:50,330
+I am looking for how I can be
+ with him and it is a success.
+
+67
+00:04:50,740 --> 00:04:53,560
+So there has to be a danger of
+ life here in order for something
+
+68
+00:04:53,660 --> 00:04:56,580
+to happen? Yes,
+ but we have a clear danger of life here.
+
+69
+00:04:56,680 --> 00:05:01,400
+This cyber is... Is it leading to there?
+ It's not leading.
+
+70
+00:05:01,500 --> 00:05:08,320
+It's in terms of the closest,
+ the most direct to the human life.
+
+71
+00:05:08,940 --> 00:05:12,050
+To this place,
+ the complex and the complex,
+
+72
+00:05:12,180 --> 00:05:13,870
+we arrived by means of
+ research and development.
+
+73
+00:05:13,980 --> 00:05:16,299
+We developed from generation to generation,
+ from year to year,
+
+74
+00:05:16,400 --> 00:05:19,640
+and we developed technologies
+ that connect us all today in one
+
+75
+00:05:19,740 --> 00:05:52,060
+small village, Let's
+ see the next slide. I mean, what is it?
+
+76
+00:05:52,160 --> 00:05:55,039
+This cyber exists because
+ someone implements it.
+
+77
+00:05:55,620 --> 00:05:59,860
+I can implement it for good,
+ I can implement it for bad.
+
+78
+00:06:00,560 --> 00:06:04,240
+So who does it depend on?
+ On a person, on human beings.
+
+79
+00:06:04,480 --> 00:06:05,539
+So you're
+ saying that the change...
+
+80
+00:06:05,640 --> 00:06:08,990
+On a person's character,
+ on his development level.
+
+81
+00:06:09,320 --> 00:06:09,780
+So you're
+
+82
+00:06:09,880 --> 00:06:11,719
+saying that this is the only
+ solution that you can see at the
+
+83
+00:06:11,820 --> 00:06:13,140
+moment? There is no
+ other solution.
+
+84
+00:06:13,440 --> 00:06:16,840
+If I stand,
+ I already said this to Oren,
+
+85
+00:06:16,940 --> 00:06:19,820
+if I stand and I have the
+ possibility to press the button and
+
+86
+00:06:19,920 --> 00:06:22,919
+do what I want in the world,
+ or this, or that,
+
+87
+00:06:23,020 --> 00:06:25,730
+or all kinds of things.
+ That's it. So I press.
+
+88
+00:06:26,060 --> 00:06:28,850
+So I press the button
+ and give an order.
+
+89
+00:06:29,080 --> 00:06:32,679
+Please destroy this city,
+ but before that,
+
+90
+00:06:32,780 --> 00:06:36,070
+send me pizza and cola.
+ What will cause us... That's it.
+
+91
+00:06:36,280 --> 00:06:37,840
+Instead of
+ developing today all kinds
+
+92
+00:06:37,940 --> 00:06:40,320
+of technological or
+ commercial ideas,
+
+93
+00:06:40,420 --> 00:06:43,979
+what will cause us as a human
+ being to develop good human beings?
+
+94
+00:06:44,080 --> 00:06:45,320
+That this will be our
+ next development,
+
+95
+00:06:45,420 --> 00:06:48,200
+instead of developing all kinds of...
+ So they have to do it.
+
+96
+00:06:48,300 --> 00:06:55,640
+There is such a program called
+ Kabbalah that can teach people
+
+97
+00:06:55,740 --> 00:07:00,400
+to be good people and to
+ inspire them and to influence them
+
+98
+00:07:00,500 --> 00:07:06,669
+and to change the whole human society.
+ What is it? It exists.
+
+99
+00:07:06,960 --> 00:07:12,419
+And it is really waiting
+ for such a situation in
+
+100
+00:07:12,520 --> 00:07:20,140
+humanity And what
+ would make it possible,
+
+101
+00:07:20,240 --> 00:07:24,510
+what would be the motivation of people,
+ of countries,
+
+102
+00:07:24,720 --> 00:07:27,500
+to live in peace,
+ to do good to each other?
+
+103
+00:07:27,660 --> 00:07:30,080
+What would be this
+ inner motivation?
+
+104
+00:07:30,200 --> 00:07:32,919
+Oh, this is a completely
+ different inner motivation.
+
+105
+00:07:33,020 --> 00:07:37,760
+It's not just to live well in
+ this world and to enjoy all kinds
+
+106
+00:07:37,860 --> 00:07:39,780
+of things in silence and in peace,
+
+107
+00:07:39,880 --> 00:07:42,140
+that you have a
+ family and children.
+
+108
+00:07:42,320 --> 00:07:44,900
+We don't want a family, we don't
+ want children, we don't
+
+109
+00:07:45,000 --> 00:07:49,480
+even want to live. And that remains,
+ you say? These are nonsense.
+
+110
+00:07:50,420 --> 00:07:55,859
+By changing our nature,
+ we are moving to another life,
+
+111
+00:07:55,960 --> 00:07:56,940
+to a different dimension.
+
+112
+00:07:57,160 --> 00:08:00,659
+Because in our dimension,
+ we have already been blinded.
+
+113
+00:08:00,760 --> 00:08:02,730
+We don't want to live at all.
+
+114
+00:08:03,020 --> 00:08:06,520
+I include all my life that I live in.
+
+115
+00:08:07,260 --> 00:08:11,880
+you know how many people in the
+ world are in depression and
+
+116
+00:08:11,980 --> 00:08:14,719
+want to get rid of this life
+ and they are getting rid of it
+
+117
+00:08:14,820 --> 00:08:18,200
+with as much joy as possible so
+ they go to Samis it's like that,
+
+118
+00:08:18,300 --> 00:08:18,780
+they exist,
+
+119
+00:08:18,900 --> 00:08:19,140
+there is no
+
+120
+00:08:19,240 --> 00:08:24,520
+choice but the change of
+ nature of man is not only that gives
+
+121
+00:08:24,620 --> 00:08:26,919
+us the security to exist it doesn't
+
+122
+00:08:27,020 --> 00:08:28,179
+matter for this
+ security it doesn't
+
+123
+00:08:28,280 --> 00:08:28,500
+matter to
+
+124
+00:08:28,600 --> 00:08:34,659
+exist I need to show people
+ that they have a new age a new
+
+125
+00:08:34,760 --> 00:08:52,880
+level What kind of world?
+
+126
+00:09:04,940 --> 00:09:07,939
+We will see an endless world,
+ a perfect one,
+
+127
+00:09:08,040 --> 00:09:14,030
+where there will be endless
+ opportunities and abilities,
+
+128
+00:09:14,200 --> 00:09:17,319
+and everything
+ before everyone else.
+
+129
+00:09:17,780 --> 00:09:23,760
+What I understood is that the
+ world we love is the result or
+
+130
+00:09:23,860 --> 00:09:26,079
+the reflection of who
+ we are as human beings.
+
+131
+00:09:26,180 --> 00:09:29,480
+It turns out that if we change
+ ourselves as human beings,
+
+132
+00:09:29,580 --> 00:09:31,000
+we will also receive
+ a different world.
+
+133
+00:09:31,100 --> 00:09:33,840
+Let's see in the next section
+ how Rabbi Leitman continues to
+
+134
+00:09:33,940 --> 00:09:48,200
+develop this amazing idea.
+
+135
+00:10:01,720 --> 00:10:06,260
+He enjoys the fact that he
+ influences and gives to everyone
+
+136
+00:10:06,360 --> 00:10:11,350
+instead of receiving
+ and collecting. Why?
+
+137
+00:10:11,720 --> 00:10:13,270
+Because then he is not limited.
+
+138
+00:10:13,440 --> 00:10:15,120
+Because in the
+ houses that I receive,
+
+139
+00:10:15,220 --> 00:10:17,260
+there is a limit to how
+ much I can receive.
+
+140
+00:10:17,520 --> 00:10:21,600
+In food, money, family,
+ money, how much can I receive?
+
+141
+00:10:21,700 --> 00:10:22,859
+I am very limited.
+
+142
+00:10:23,040 --> 00:10:26,620
+In the end, from the fact that
+ I am trying to kill myself,
+
+143
+00:10:26,720 --> 00:10:34,050
+I die. But for a person who lives
+ in the direction of influence,
+
+144
+00:10:34,180 --> 00:10:36,310
+he is not limited.
+
+145
+00:10:36,500 --> 00:10:40,130
+Because you can influence,
+ from your life you have no end.
+
+146
+00:10:40,360 --> 00:10:44,780
+And therefore you can enjoy the
+ influence in an unlimited way.
+
+147
+00:10:45,080 --> 00:10:49,500
+A person who advances to the level of
+ this recognition and understanding
+
+148
+00:10:49,600 --> 00:10:50,630
+of reality,
+
+149
+00:10:50,760 --> 00:10:53,980
+is he in your eyes the same good
+ man you talked about earlier,
+
+150
+00:10:54,080 --> 00:10:55,880
+First of all,
+ he can only protect the world.
+
+151
+00:10:55,980 --> 00:10:58,500
+As long as we are good in ourselves,
+
+152
+00:10:58,740 --> 00:11:01,250
+then this world will be
+ a safe place. Right.
+
+153
+00:11:01,400 --> 00:11:04,520
+Now, I understood the
+ perception of the world of one person.
+
+154
+00:11:04,700 --> 00:11:05,540
+Let's be a little more careful.
+
+155
+00:11:05,640 --> 00:11:10,520
+A society that has good people in it.
+ Yes. How does it function?
+
+156
+00:11:10,640 --> 00:11:12,780
+A world that has good people in it.
+ How does it function?
+
+157
+00:11:12,880 --> 00:11:14,560
+What is it different
+ from our world today?
+
+158
+00:11:14,700 --> 00:11:17,360
+They function in a friendly way,
+ this, this, this, this.
+
+159
+00:11:17,600 --> 00:11:22,220
+That everyone gives to everyone
+ and everyone keeps everyone.
+
+160
+00:11:22,320 --> 00:11:27,980
+And then they are in a state of
+ general love between them,
+
+161
+00:11:28,080 --> 00:11:32,540
+and then they create between
+ them such an area of love that
+
+162
+00:11:32,640 --> 00:11:35,760
+gives them the
+ feeling of the next level,
+
+163
+00:11:35,860 --> 00:11:39,640
+that they live in
+ giving and love, and don't
+
+164
+00:11:39,740 --> 00:11:44,420
+need to get anything at all.
+ How do we use the cyber space?
+
+165
+00:11:44,520 --> 00:11:50,760
+You want to connect with
+ everyone in the most open program that
+
+166
+00:11:50,860 --> 00:11:57,260
+can be, and to connect
+ with everyone so that
+
+167
+00:11:57,360 --> 00:12:03,590
+the connection will be
+ completely open between everyone,
+
+168
+00:12:03,690 --> 00:12:11,460
+And everyone will become one brain,
+ one will, one promotion.
+
+169
+00:12:11,990 --> 00:12:17,610
+And all humanity,
+ in its individuality, will disappear.
+
+170
+00:12:17,710 --> 00:12:21,810
+And every person will feel
+ everything that is in everyone.
+
+171
+00:12:22,490 --> 00:12:24,390
+That is, he will be boundless.
+
+172
+00:12:24,630 --> 00:12:27,530
+Is there also a heart in this story?
+
+173
+00:12:27,630 --> 00:12:29,960
+Or is it all just
+ rational and cold and magic?
+
+174
+00:12:30,090 --> 00:12:33,430
+Everything is in a feeling
+ and in a brain, together.
+
+175
+00:12:33,690 --> 00:12:39,579
+Shiluv, so in the end,
+ I have to say more, so in the end,
+
+176
+00:12:39,680 --> 00:12:45,199
+the human beings
+ become so connected.
+
+177
+00:12:45,300 --> 00:12:51,290
+They become human, like there was once,
+ one will, one thought,
+
+178
+00:12:51,440 --> 00:12:55,710
+one feeling, one person,
+ and divided into many parts,
+
+179
+00:12:55,960 --> 00:12:56,980
+to human beings.
+
+180
+00:12:57,080 --> 00:13:01,960
+Again, these people connect
+ together in one desire, in one thought,
+
+181
+00:13:02,200 --> 00:13:09,099
+in one heart. And that's
+ what exists in complete. Another question.
+
+182
+00:13:09,290 --> 00:13:12,030
+What would be the result of
+ this situation where they're
+
+183
+00:13:12,130 --> 00:13:13,690
+all connected like one?
+
+184
+00:13:13,810 --> 00:13:18,780
+No child will get up and press
+ enter and do this. Exactly.
+
+185
+00:13:19,010 --> 00:13:24,200
+Because the general idea
+ that we have in our eyes,
+
+186
+00:13:24,310 --> 00:13:25,450
+communication and love,
+
+187
+00:13:25,570 --> 00:13:27,530
+is that he will hold
+ everyone to be like that.
+
+188
+00:13:27,630 --> 00:13:30,569
+This is a kind of anti 
+-virus.
+
+189
+00:13:30,670 --> 00:13:32,610
+This is a general field of anti
+
+190
+00:13:32,710 --> 00:13:36,770
+-virus. The general field of
+ communication and love is to keep
+
+191
+00:13:36,870 --> 00:13:38,770
+us safe. Happy life. All the best.
+

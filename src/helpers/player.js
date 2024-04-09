@@ -70,13 +70,20 @@ export const playableItem = (unit, preImageUrl) => {
     language: f.language
   })) || [];
   //const cu_uids = ['fC14uS2A', 'C4YbRUf1', 'ji9cWJSn', 'KXRZGI5U', 'grC7Q9Rg', '9n3pTfRO', 'dq4ssebq', 'hZIEbyry', '2YvxzuPq', 'JvPGQQpb'];
-  const cu_uids = ['Z8ufH5Ek', 'ALQL6gi0', 'XWF0h2xw', 'emGVKYhP', 'PRIcLtx4', 'MiAm6IeN', 'c1VDSuFh', 'qgw9NXZi', 'SUJfzWgR', 'fthw244n']
-  ;
+  const cu_uids = ['Z8ufH5Ek', 'ALQL6gi0', 'XWF0h2xw', 'emGVKYhP', 'PRIcLtx4', 'MiAm6IeN', 'c1VDSuFh', 'qgw9NXZi', 'SUJfzWgR', 'fthw244n'];
   if (typeof window !== 'undefined' && cu_uids.includes(unit.id)) {
     subtitles = [{
       src     : `/.well-known/${unit.id}.srt`,
       language: 'he'
     }];
+  }
+  const ml_cu_uids = ['SlI8hhd1', 'dJujJWOQ', 'XWF0h2xw']
+  const langs   = ['he', 'ru', 'en'];
+  if (typeof window !== 'undefined' && ml_cu_uids.includes(unit.id)) {
+    subtitles = langs.map(l => ({
+      src     : `/.well-known/${unit.id}_${l}.srt`,
+      language: l
+    }));
   }
 
   const hls = findHLS(unit.files);
