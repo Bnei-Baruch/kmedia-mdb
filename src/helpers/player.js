@@ -72,7 +72,7 @@ export const playableItem = (unit, preImageUrl) => {
   //const cu_uids = ['fC14uS2A', 'C4YbRUf1', 'ji9cWJSn', 'KXRZGI5U', 'grC7Q9Rg', '9n3pTfRO', 'dq4ssebq', 'hZIEbyry', '2YvxzuPq', 'JvPGQQpb'];
   const cu_uids = ['Z8ufH5Ek', 'ALQL6gi0', 'XWF0h2xw', 'emGVKYhP', 'PRIcLtx4', 'MiAm6IeN', 'c1VDSuFh', 'qgw9NXZi', 'SUJfzWgR', 'fthw244n']
   ;
-  if (typeof window !== 'undefined' && Object.keys(cu_uids).includes(unit.id)) {
+  if (typeof window !== 'undefined' && cu_uids.includes(unit.id)) {
     subtitles = [{
       src     : `/.well-known/${unit.id}.srt`,
       language: 'he'
