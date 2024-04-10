@@ -20,9 +20,9 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
   const uiLanguage = useSelector(settingsGetUILangSelector);
 
   const { isError, isLoading, isSuccess, error, data } = useSimpleModeQuery({
-    date: selectedDate,
+    date            : selectedDate,
     uiLanguage,
-    filesLanguages
+    contentLanguages: filesLanguages
   });
 
   const dataLessons = isSuccess ? data.lessons : [];
@@ -72,9 +72,9 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
 
 SimpleModeList.propTypes = {
   filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  t: PropTypes.func.isRequired,
-  renderUnit: PropTypes.func.isRequired,
-  selectedDate: PropTypes.string.isRequired,
+  t             : PropTypes.func.isRequired,
+  renderUnit    : PropTypes.func.isRequired,
+  selectedDate  : PropTypes.string.isRequired,
 };
 
 export default withTranslation()(SimpleModeList);
