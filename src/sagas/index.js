@@ -15,7 +15,6 @@ import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 import { sagas as stats } from './stats';
 import { sagas as recommended } from './recommended';
-import { sagas as music } from './music';
 import { sagas as my } from './my';
 import { sagas as myNotes } from './myNotes';
 import { sagas as likutim } from './likutim';
@@ -40,10 +39,8 @@ const allSagas = [
   ...home,
   ...stats,
   ...recommended,
-  ...music,
   ...my,
   ...myNotes,
-  ...music,
   ...likutim,
   ...trim,
   ...playlist,

@@ -2,13 +2,13 @@ import { backendApi } from './backendApi';
 import moment from 'moment/moment';
 import { Requests } from '../../helpers/Api';
 
-export const wholeSimpleMode = ['SimpleMode'];
+export const wholeSimpleMode = 'SimpleMode';
 
 export const simpleModeApi = backendApi.injectEndpoints({
-  tagTypes : wholeSimpleMode,
+  tagTypes : [wholeSimpleMode],
   endpoints: builder => ({
     simpleMode: builder.query({
-      provideTags: wholeSimpleMode,
+      provideTags: [wholeSimpleMode],
 
       query: ({ date, uiLanguage, contentLanguage }) => {
         const formattedDate = moment(date).format('YYYY-MM-DD');

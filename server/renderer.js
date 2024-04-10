@@ -39,6 +39,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 import { backendApi } from '../src/redux/api/backendApi';
 import { wholeSimpleMode } from '../src/redux/api/simpleMode';
+import { wholeMusic } from '../src/redux/api/music';
 
 const helmetContext = {};
 
@@ -175,7 +176,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     // Dispatching languages change updates tags and sources.
     store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
-    store.dispatch(backendApi.util.invalidateTags(wholeSimpleMode));
+    store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
 
     const context = {
       req,

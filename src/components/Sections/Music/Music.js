@@ -1,37 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation, useTranslation } from 'react-i18next';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
-import { actions } from '../../../redux/modules/music';
 import List from './List';
-import { musicGetDataSelector, musicGetErrorSelector, musicGetWipSelector } from '../../../redux/selectors';
+import { useMusicQuery } from '../../../redux/api/music';
+import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../../../redux/selectors';
+import NotFound from '../../shared/NotFound';
 
 const Music = () => {
-  const wip                         = useSelector(musicGetWipSelector);
-  const err                         = useSelector(musicGetErrorSelector);
-  const items                       = useSelector(musicGetDataSelector);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const { t } = useTranslation();
 
-  const dispatch = useDispatch();
-  const { t }    = useTranslation();
+  const uiLanguage                                     = useSelector(settingsGetUILangSelector);
+  const contentLanguages                               = useSelector(settingsGetContentLanguagesSelector);
+  const { isError, isLoading, isSuccess, error, data } = useMusicQuery({
+    uiLanguage,
+    contentLanguages
+  });
 
-  useEffect(() => {
-    if (!wip && !err && !dataLoaded) {
-      dispatch(actions.fetchMusic());
-      setDataLoaded(true);
+  let wipErr = WipErr({ isLoading, isError, t });
+  if (wipErr) {
+    if (error) {
+      console.error('========> Music error', error);
     }
+  }
 
-  }, [dispatch, wip, err, dataLoaded]);
+  const music = data?.collections;
+  if (!isSuccess || !music) {
+    wipErr = <NotFound/>;
+  }
 
-  const content = WipErr({ wip, err, t }) || (
+  const content = wipErr || (
     <Container className="padded">
-      <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length || 0}/>
+      <ResultsPageHeader pageNo={1} pageSize={1000} total={music.length || 0}/>
       <Divider fitted/>
-      <List items={items}/>
+      <List items={music}/>
     </Container>
   );
 
@@ -44,4 +50,4 @@ const Music = () => {
   );
 };
 
-export default withTranslation()(Music);
+export default Music;

@@ -42,8 +42,6 @@ const makeParams = params => (
 );
 
 export class Requests {
-  static encode = encodeURIComponent;
-
   static get = async path => {
     try {
       return await axios.get(backendUrl(path));
@@ -225,10 +223,6 @@ class Api {
   };
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
-
-  static simpleMode = ({ ui_language, content_languages, startDate: start_date, endDate: end_date }) => (
-    Requests.get(`simple?${Requests.makeParams({ ui_language, content_languages, start_date, end_date })}`)
-  );
 
   static recommendedRequestData = (
     {

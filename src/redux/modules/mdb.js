@@ -499,6 +499,13 @@ const mdbSlice = createSlice({
           onReceiveCollections(state, lessons);
           onReceiveContentUnits(state, others);
         }
+      )
+      .addMatcher(
+        backendApi.endpoints.music.matchFulfilled,
+        (state, { payload }) => {
+          const { music } = payload;
+          onReceiveCollections(state, music);
+        }
       );
   },
 
