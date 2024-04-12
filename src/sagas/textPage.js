@@ -39,8 +39,12 @@ export function* fetchSubject(action) {
     const language = selectSuitableLanguage([...contentLanguages, prefereLanguage], subject.languages, prefereLanguage);
 
     const file = selectTextFile(subject.files, id, language, isSource, fileFilter);
-    yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
-    yield fetchLabels({ content_unit: id, language });
+    if (!file) {
+      yield put(actions.fetchSubjectFailure(`Failed finding text file for ${id}`));
+    } else {
+      yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
+      yield fetchLabels({ content_unit: id, language });
+    }
   } catch (err) {
     yield put(actions.fetchSubjectFailure(err));
   }

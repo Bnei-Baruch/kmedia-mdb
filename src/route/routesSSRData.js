@@ -95,6 +95,10 @@ export const cuPage = async (store, match) => {
   const state = store.getState();
 
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
+  if (!cuID || !unit) {
+    console.error(`Error, failed fetching unit ${cuID}: ${unit}`);
+    return Promise.reject();
+  }
 
   let activeTab = 'transcription';
 
@@ -214,7 +218,14 @@ export const playlistCollectionPage = (store, match) => {
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
+      if (!cuId && !c?.cuIDs) {
+        // This can happen when collection is empty (unit is not secure or published).
+        console.error(`Failed fetching unit for ${cuId} for ${cID}`);
+        return Promise.reject();
+      }
+
       store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
+      return Promise.resolve(null);
     });
 };
 
