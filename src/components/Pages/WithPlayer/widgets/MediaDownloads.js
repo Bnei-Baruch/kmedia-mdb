@@ -72,7 +72,7 @@ class MediaDownloads extends Component {
     const { unit: stateUnit, isCopyPopupOpen = {} }            = state;
 
     if (stateUnit && isEqual(stateUnit, unit)) {
-      // only language changed
+      // Only language changed.
       if (state.uiLang !== uiLang
         || state.contentLanguages !== contentLanguages) {
         const selectedLanguage = selectSuitableLanguage(contentLanguages, state.availableLanguages, unit.original_language);
@@ -85,7 +85,7 @@ class MediaDownloads extends Component {
 
     }
 
-    // no unit or a different unit - create new state
+    // No unit or a different unit - create new state.
     const groups = MediaDownloads.getFilesByLanguage(unit.files, contentLanguages, unit.original_language);
     const availableLanguages = [...groups.keys()];
     const selectedLanguage = selectSuitableLanguage(contentLanguages, availableLanguages, unit.original_language);
@@ -98,11 +98,9 @@ class MediaDownloads extends Component {
   static getFilesByLanguage = (files = [], contentLanguages, originalLanguage) => {
     const groups = new Map();
 
-    // keep track of image files. These are a special case.
-    // Images, unlike other types, are language agnostic by nature.
-    // However, since they might contain text in them we do have language attached to such files.
-    // For other languages, whom don't have a dedicated translation of these images
-    // we give them the images of their fallback language.
+    // Keep track of image files. These are a special case. Images, unlike other types, are language agnostic by nature.
+    // However, since they might contain text in them we do have language attached to such files. For other languages,
+    // whom don't have a dedicated translation of these images we give them the images of their fallback language.
     const images = [];
 
     const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
@@ -142,10 +140,10 @@ class MediaDownloads extends Component {
       }
     });
 
-    // sort file lists by size
+    // Sort file lists by size.
     groups.forEach(byType => byType.forEach(v => v.sort((a, b) => a.size - b.size)));
 
-    // fill in images fallback into every language
+    // Fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
       fallbackImage && groups.forEach(byType => {
@@ -162,7 +160,11 @@ class MediaDownloads extends Component {
     const imageLanguages = images.map(image => image.language);
     const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    return [images.find(image => image.language === imageSelectedLanguage) || images.find(image => image.language === originalLanguage)];
+    // Try looking for selected language, if not exist try looking for original language, otherwise ignore.
+    return [
+      images.find(image => image.language === imageSelectedLanguage) ||
+      images.find(image => image.language === originalLanguage)
+    ].filter(image => !!image);
   };
 
   static getDerivedFilesByContentType = (units, contentLanguages, originalLanguage) => {
