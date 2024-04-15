@@ -1,8 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { ulid } from 'ulid';
-import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
+import { chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
@@ -16,14 +15,27 @@ import {
   chroniclesGetLastActionSelector,
   settingsGetUILangSelector
 } from '../redux/selectors';
+import { chroniclesApi } from '../redux/api/chronicles';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter', end: 'page-leave', subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'unit-page-enter', end: 'unit-page-leave', subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'collection-page-enter', end: 'collection-page-leave', subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  {
+    start   : 'page-enter',
+    end     : 'page-leave',
+    subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start   : 'unit-page-enter',
+    end     : 'unit-page-leave',
+    subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start   : 'collection-page-enter',
+    end     : 'collection-page-leave',
+    subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
@@ -68,6 +80,8 @@ export default class ClientChronicles {
     this.namespace = 'archive';
 
     this.abTesting = {};
+
+    this.store = store;
 
     const authStore = store.getState().auth;
     this.keycloakId = authStore?.user?.id || null;
@@ -126,9 +140,9 @@ export default class ClientChronicles {
       }, true);
     });
 
-    this.prevHref        = window.location.href;
-    this.currentHref     = window.location.href;
-    this.prevPathname    = window.location.pathname;
+    this.prevHref    = window.location.href;
+    this.currentHref = window.location.href;
+
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
     history.listen(historyEvent => {
@@ -138,7 +152,6 @@ export default class ClientChronicles {
           this.appendPage('leave');
         }
 
-        this.prevPathname    = this.currentPathname;
         this.currentPathname = historyEvent.location.pathname;
         this.appendPage('enter');
       }
@@ -324,7 +337,7 @@ export default class ClientChronicles {
     return this.isPlayerPlaying() || this.lastEventType().eventType !== 'user-inactive';
   }
 
-  flushAppends(sync = false) {
+  async flushAppends(sync = false) {
     const nowTimestampMs           = Date.now();
     const appends                  = {
       append_requests: this.timestampedAppends.map(timestampAppend => ({
@@ -332,15 +345,12 @@ export default class ClientChronicles {
         offset: timestampAppend.timestamp - nowTimestampMs
       }))
     };
-    // Clear bulk without checking if post worked or not.
+    // Clear bulk without checking whether post worked or not.
     this.timestampedAppends.length = 0;
+
+    const promise = this.store.dispatch(chroniclesApi.endpoints.appends.initiate(appends));
     if (sync) {
-      (async () => await axios.post(chroniclesUrl('appends'), appends))();
-    } else {
-      axios.post(chroniclesUrl('appends'), appends)
-        .catch(error => {
-          console.warn(error);
-        });
+      await promise;
     }
   }
 
