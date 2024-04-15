@@ -4,7 +4,7 @@ import { actions as search } from './search';
 import { actions as player } from './player';
 
 const onAction = (state, action) => {
-  state.actionsCount = state.actionsCount + 1;
+  state.actionsCount += 1;
   state.lastAction   = action;
 };
 
