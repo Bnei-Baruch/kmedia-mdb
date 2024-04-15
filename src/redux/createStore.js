@@ -52,6 +52,7 @@ const setupMiddleware = history => getDefaultMiddleware => {
   }).concat(
     createMultiLanguageRouterMiddleware(history),
     backendApi.middleware,
+    chroniclesApi.middleware,
     sagaMiddleware
   );
   // Conditionally add another middleware in dev
