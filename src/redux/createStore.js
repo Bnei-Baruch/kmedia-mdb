@@ -35,6 +35,7 @@ import playlist from './modules/playlist';
 import fetchImage from './modules/fetchImage';
 import textPage from './modules/textPage';
 import { backendApi } from './api/backendApi';
+import { chroniclesApi } from './api/chronicles';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const verboseDebug = false;
@@ -51,6 +52,7 @@ const setupMiddleware = history => getDefaultMiddleware => {
   }).concat(
     createMultiLanguageRouterMiddleware(history),
     backendApi.middleware,
+    chroniclesApi.middleware,
     sagaMiddleware
   );
   // Conditionally add another middleware in dev
@@ -62,8 +64,9 @@ const setupMiddleware = history => getDefaultMiddleware => {
 };
 
 const setupReducers = history => ({
-  router                  : connectRouter(history),
-  [backendApi.reducerPath]: backendApi.reducer,
+  router                     : connectRouter(history),
+  [backendApi.reducerPath]   : backendApi.reducer,
+  [chroniclesApi.reducerPath]: chroniclesApi.reducer,
 
   settings,
   preparePage,
