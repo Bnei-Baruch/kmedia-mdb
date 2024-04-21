@@ -4,8 +4,8 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../helpers/consts';
 
 let timeout;
 const CopyShareUrl = ({ t }) => {

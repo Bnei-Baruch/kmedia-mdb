@@ -115,8 +115,9 @@
     .text__content {
       padding: 1.5em 0;
     }
-    .text__scroll-top.ui.icon.button{
-      padding: 7px 8px ;
+
+    .text__scroll-top.ui.icon.button {
+      padding: 7px 8px;
       bottom: 88px;
     }
   }
@@ -194,14 +195,14 @@
     bottom: 18px;
     padding: 11.5px 12.5px;
     box-shadow: 0px 4px 4px 0px #00000026;
-    left:18px;
-    
+    left: 18px;
+
     .rtl & {
       left: auto;
-      right: 18px ;
+      right: 18px;
     }
   }
-  
+
   .text_mobile_padding {
     padding-left: 16px;
     padding-right: 16px;
@@ -829,8 +830,10 @@
       min-height: 20px;
     }
   }
+}
 
-  .input_wrapper.ui.input {
+.pdf_input_wrapper.ui.input {
+  &, .pdf_pagination & {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -920,3 +923,62 @@
   }
 }
 
+
+.text__scan {
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+
+  .text__scan_content {
+    display: flex;
+    justify-content: space-between;
+
+    & > .text__scan_prev_next {
+      transform: translate(0, 40VH);
+      margin: 0 1em;
+    }
+
+    .text__scan_pdf {
+      width: $max-readble-width;
+    }
+  }
+
+  .text__scan_toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: $white;
+    align-items: center;
+    padding: 8px 0;
+  }
+}
+
+.btn_group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  color: $blue;
+
+  .divider {
+    background-color: $light-stroke;
+    width: 1px;
+    min-height: 1em;
+  }
+}
+
+.scan_btn {
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  cursor: pointer;
+  color: $blue;
+  padding: 0 8px;
+  margin: 0 4px;
+
+  .material-symbols-outlined {
+    margin: 0 4px;
+  }
+}

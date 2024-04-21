@@ -4,8 +4,7 @@ import { Popup, } from 'semantic-ui-react';
 
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import { useTranslation } from 'react-i18next';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../helpers/consts';
 
 const CopyWithPopupBtn = ({ text, children }) => {
   const { t }           = useTranslation();

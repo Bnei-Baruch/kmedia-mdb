@@ -29,13 +29,13 @@ import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -87,7 +87,11 @@ const TextLayoutWeb = props => {
   );
 
   return (
-    <div className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`} ref={ref}>
+    <div
+      className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`}
+      ref={ref}
+      id="text_layout"
+    >
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
       <div className={clsx({

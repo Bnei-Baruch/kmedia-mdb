@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
-import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../Player/Sharing/helper';
 import { useSelector } from 'react-redux';
 import { textPageGetUrlInfoSelector, textPageGetFileSelector } from '../../../../redux/selectors';
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
 let timeout;
 const CopyLinkBtn = () => {

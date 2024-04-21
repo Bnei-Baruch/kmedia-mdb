@@ -10,8 +10,8 @@ import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const ShareTextModalBtn = () => {
   const { t }                         = useTranslation();

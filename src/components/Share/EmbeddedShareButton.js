@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../helpers/consts';
 
 const getEmbed = url => {
   const appendChar = url.indexOf('?') !== -1 ? '&' : '?';

@@ -21,7 +21,7 @@ import {
   MT_IMAGE,
   MT_TEXT,
   MT_VIDEO,
-  VS_NAMES
+  VS_NAMES, POPOVER_CONFIRMATION_TIMEOUT
 } from '../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../helpers/language';
 import { downloadLink } from '../../../../helpers/utils';
@@ -41,7 +41,6 @@ const MEDIA_ORDER = [
   MT_IMAGE,
 ];
 
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class MediaDownloads extends Component {
   static contextType = DeviceInfoContext;
