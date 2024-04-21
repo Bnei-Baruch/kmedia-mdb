@@ -147,7 +147,7 @@ const assetsSlice = createSlice({
       state.asset.err = action.payload;
     },
 
-    fetchPerson           : (state, _) => state.person.wip = true,
+    fetchPerson           : (state, _) => void (state.person.wip = true),
     fetchPersonSuccess    : (state, action) => {
       state.person.data = action.payload;
       state.person.wip  = false;

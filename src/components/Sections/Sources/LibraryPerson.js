@@ -41,10 +41,10 @@ const convertImages = content => {
 const LibraryPerson = ({ t }) => {
   const { id: sourceId }            = useParams();
   const contentLanguages            = useSelector(settingsGetContentLanguagesSelector);
-  const { wip, err, data: content } = useSelector(assetsGetPersonSelector);
+  const { wip, err, data } = useSelector(assetsGetPersonSelector);
   const dispatch                    = useDispatch();
 
-  const _needFetch = !wip && !err && !content;
+  const _needFetch = !wip && !err && !data;
   useEffect(
     () => {
       if (_needFetch) {
@@ -59,7 +59,7 @@ const LibraryPerson = ({ t }) => {
     return wipErr;
   }
 
-  if (!content) {
+  if (!data) {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
@@ -68,7 +68,7 @@ const LibraryPerson = ({ t }) => {
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(content) }} />
+            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(data.content) }} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
