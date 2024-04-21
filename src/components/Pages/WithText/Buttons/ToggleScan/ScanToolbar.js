@@ -37,14 +37,13 @@ const ScanToolbar = ({ numPages, page = 1, goToPage, close }) => {
 
   return (
     <div className="text__scan_toolbar">
+
       <div className="btn_group">
-        <ScanBtnTpl
-          onClick={close}
-          icon="close"
-          text={t('buttons.close')}
-        />
+        <DownloadScanBtn/>
         <div className="divider"></div>
-        <ScanZoom/>
+        <AddScanBookmarkBtn/>
+        <div className="divider"></div>
+        <ShareScanBtn/>
       </div>
       <Input
         className="pdf_input_wrapper"
@@ -53,13 +52,14 @@ const ScanToolbar = ({ numPages, page = 1, goToPage, close }) => {
         placeholder={`${page}/${numPages}`}
         onKeyDown={onKeyDown}
       />
-
       <div className="btn_group">
-        <AddScanBookmarkBtn/>
+        <ScanZoom/>
+        <ScanBtnTpl
+          onClick={close}
+          icon="close"
+          text={t('buttons.close')}
+        />
         <div className="divider"></div>
-        <DownloadScanBtn/>
-        <div className="divider"></div>
-        <ShareScanBtn/>
       </div>
     </div>
   );

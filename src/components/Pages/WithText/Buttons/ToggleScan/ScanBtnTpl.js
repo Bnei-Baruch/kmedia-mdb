@@ -16,8 +16,8 @@ const ScanBtnTpl = ({ onClick, icon, textKey, text }) => {
       className="scan_btn"
       onClick={handleClick}
     >
-      {text && text}
       <span className="material-symbols-outlined">{icon}</span>
+      {text && text}
     </div>
   );
 };
