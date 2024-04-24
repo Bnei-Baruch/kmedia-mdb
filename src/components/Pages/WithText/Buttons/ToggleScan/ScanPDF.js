@@ -35,7 +35,7 @@ const ScanPDF = () => {
     return () => {
       window.removeEventListener('resize', setDivSize);
     };
-  }, [file]);
+  }, []);
 
   const close = useCallback(() => {
     navigate({ pathname: location.pathname, search: stringify(query) });

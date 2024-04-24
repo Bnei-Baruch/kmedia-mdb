@@ -16,15 +16,7 @@ const AddScanBookmarkBtn = () => {
 
   const handleOpen = () => setOpen(true);
 
-  const handleClose = (e, el, isCreated) => {
-    if (!isCreated) {
-      setOpen(false);
-      return;
-    }
-
-    setOpen(false);
-  };
-
+  const handleClose = () => setOpen(false);
   return (
     <>
       <Modal
