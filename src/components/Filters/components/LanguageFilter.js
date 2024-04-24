@@ -24,7 +24,7 @@ const LanguageFilter = ({ value = null, namespace, onCancel = noop, onApply = no
             icon="remove"
             onClick={onCancel}
           />
-          <Header size="small" textAlign="center" content={t('filters.language-filter.label')} />
+          <Header size="small" textAlign="center" content={t('filters.language-filter.label')}/>
         </div>
       </Segment>
       <Segment className="filter-popup__body language-filter">
@@ -51,9 +51,9 @@ const LanguageFilter = ({ value = null, namespace, onCancel = noop, onApply = no
 
 LanguageFilter.propTypes = {
   namespace: PropTypes.string,
-  value: PropTypes.string,
-  onCancel: PropTypes.func,
-  onApply: PropTypes.func,
+  value    : PropTypes.string,
+  onCancel : PropTypes.func,
+  onApply  : PropTypes.func,
 };
 
 export default LanguageFilter;

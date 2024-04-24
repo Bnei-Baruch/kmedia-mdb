@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty, noop } from '../../../helpers/utils';
@@ -20,16 +19,14 @@ const SimpleModeContainer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [filesLanguages, setFilesLanguages]   = useState(contentLanguages);
-  const [blinkLangSelect, setBlinkLangSelect] = useState(false);
+  const [filesLanguages, setFilesLanguages] = useState(contentLanguages);
 
   const [selectedDate, setSelectedDate] = useState(() => {
-    const query   = getQuery(location);
-    const newDate = (query.date && moment(query.date).isValid())
-      ? moment(query.date, 'YYYY-MM-DD').toDate()
+    const query = getQuery(location);
+    const qdate = query?.date;
+    return (qdate && moment(qdate).isValid())
+      ? moment(qdate, 'YYYY-MM-DD').toDate()
       : new Date();
-
-    return newDate;
   });
 
   useEffect(() => {
@@ -52,8 +49,6 @@ const SimpleModeContainer = () => {
   };
 
   const helpChooseLang = () => {
-    setBlinkLangSelect(true);
-    setTimeout(() => setBlinkLangSelect(false), 7500);
     scrollToTop();
   };
 
@@ -73,13 +68,12 @@ const SimpleModeContainer = () => {
   const pageProps = {
     selectedDate,
     filesLanguages,
-    renderUnit: renderUnitOrCollection,
-    onDayClick: handleDayClick,
+    renderUnit      : renderUnitOrCollection,
+    onDayClick      : handleDayClick,
     onLanguageChange: selected => setFilesLanguages(selected),
-    blinkLangSelect
   };
 
   return <Page {...pageProps} />;
 };
 
-export default withTranslation()(SimpleModeContainer);
+export default SimpleModeContainer;

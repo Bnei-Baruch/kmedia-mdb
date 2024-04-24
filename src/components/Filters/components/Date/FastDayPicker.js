@@ -19,15 +19,15 @@ class FastDayPicker extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    value: PropTypes.instanceOf(Date),
-    label: PropTypes.string,
+    value      : PropTypes.instanceOf(Date),
+    label      : PropTypes.string,
     onDayChange: PropTypes.func,
-    language: PropTypes.string.isRequired,
+    language   : PropTypes.string.isRequired,
   };
 
   static defaultProps = {
-    value: null,
-    label: '',
+    value      : null,
+    label      : '',
     onDayChange: noop,
   };
 
@@ -37,9 +37,9 @@ class FastDayPicker extends Component {
   }
 
   state = {
-    month: null,
-    isOpen: false,
-    value: null,
+    month      : null,
+    isOpen     : false,
+    value      : null,
     stringValue: '',
   };
 
@@ -67,7 +67,7 @@ class FastDayPicker extends Component {
   handleDayPickerRef = () => {
     if (this.myRef) {
       scrollIntoView(this.myRef, {
-        time: 150, // half a second
+        time       : 150, // half a second
         validTarget: target => target !== window,
       });
     }
@@ -98,7 +98,7 @@ class FastDayPicker extends Component {
     const { month, localeUtils } = props;
     return (
       <div>
-        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
+        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton"/>
         <YearMonthForm
           date={month}
           language={language}
@@ -106,7 +106,7 @@ class FastDayPicker extends Component {
           onChange={this.handleYearMonthChange}
           className="float-left"
         />
-        <div className="clear" />
+        <div className="clear"/>
       </div>
     );
   };
@@ -181,7 +181,7 @@ class FastDayPicker extends Component {
       <Popup
         basic
         flowing
-        on='focus'
+        on="focus"
         open={isOpen}
         onOpen={this.openPopup}
         onClose={this.closePopup}

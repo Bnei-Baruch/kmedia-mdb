@@ -7,7 +7,15 @@ import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
 import { settingsGetContentLanguagesSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false }) => {
+const MenuLanguageSelector = (
+  {
+    languages = [],
+    selected = [],
+    onLanguageChange = noop,
+    multiSelect = true,
+    upward = false
+  }
+) => {
   const uiDir              = useSelector(settingsGetUIDirSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
@@ -17,12 +25,15 @@ const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange 
 
   const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
   const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
-  const dividerArray   = !isMobileDevice || multiSelect ? [{ value: 'divider', className: 'language-selection-divider disabled' }] : [];
+  const dividerArray   = !isMobileDevice || multiSelect ? [{
+    value    : 'divider',
+    className: 'language-selection-divider disabled'
+  }] : [];
   const options        = getOptions({ languages: validLanguages }).concat(dividerArray).concat(getOptions({ languages: otherLanguages }));
   // Special case when all laguages are selected, e.g., show content with any language.
   const isAny          = languages === selected;
 
-  const value        = multiSelect ? (isAny ? ['any'] : selected) : selected;
+  const value = multiSelect ? (isAny ? ['any'] : selected) : selected;
 
   if (isMobileDevice && !multiSelect) {
     return (
