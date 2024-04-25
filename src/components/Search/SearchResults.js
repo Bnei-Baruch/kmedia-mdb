@@ -10,8 +10,9 @@ import {
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
   SEARCH_INTENT_HIT_TYPES,
   BLOGS,
-  SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG,
-  CT_LIKUTIM
+  CT_LIKUTIM,
+  SEARCH_INTENT_INDEX_TOPIC,
+  SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
@@ -40,8 +41,6 @@ import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
 import { SearchResultLikutimByTag } from './SearchResultLikutimByTag';
 import {
-  sourcesAreLoadedSelector,
-  tagsAreLoadedSelector,
   publicationsGetBlogPostSelector,
   mdbGetDenormCollectionSelector,
   mdbGetDenormContentUnitSelector,
@@ -120,12 +119,7 @@ const SearchResults = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  /* Requested by Mizrahi
-    const [showNote, setShowNote] = useState(true);
-   */
-  const filters          = useSelector(state => filtersGetFiltersSelector(state, 'search'));
-  const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
-  const areTagsLoaded    = useSelector(tagsAreLoadedSelector);
+  const filters = useSelector(state => filtersGetFiltersSelector(state, 'search'));
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
@@ -136,11 +130,11 @@ const SearchResults = () => {
   const renderHit = (hit, rank, searchId, searchLanguage, deb) => {
     const
       {
-        _source     : { mdb_uid: mdbUid, result_type: resultType },
-        _type       : type,
-        _index      : index,
+        _source: { mdb_uid: mdbUid, result_type: resultType },
+        _type: type,
+        _index: index,
         _explanation: explanation,
-        _score      : score
+        _score: score
       }             = hit;
     searchLanguage  = searchLanguageByIndex(index, searchLanguage);
     const clickData = { mdbUid, index, type: resultType, rank, searchId, search_language: searchLanguage, deb };
@@ -148,26 +142,36 @@ const SearchResults = () => {
     let result = null;
     if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
       result =
-        <SearchResultLandingPage landingPage={hit._source.landing_page} filterValues={hit._source.filter_values} clickData={clickData}/>;
+        <SearchResultLandingPage
+          landingPage={hit._source.landing_page}
+          filterValues={hit._source.filter_values}
+          clickData={clickData}
+        />;
     } else if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       result =
-        <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} clickData={clickData}/>;
+        <SearchResultIntent
+          id={hit._source.mdb_uid}
+          name={hit._source.name}
+          type={hit._type}
+          index={index}
+          clickData={clickData}
+        />;
     } else if (type === 'tweets_many') {
       result = <SearchResultTweets source={hit._source} clickData={clickData}/>;
     } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
-      result = <SearchResultSeries id={hit._uid} type={type} mdbUid={mdbUid} clickData={clickData} />;
-    } else if (type === SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG) {
-      result = <SearchResultLikutimByTag hit={hit} type={type} clickData={clickData} key={hit._uid} />;
+      result = <SearchResultSeries id={hit._uid} type={type} mdbUid={mdbUid} clickData={clickData}/>;
+    } else if (type === SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG && index === SEARCH_INTENT_INDEX_TOPIC) {
+      result = <SearchResultLikutimByTag hit={hit} key={hit._uid}/>;
     } else {
       const cu = cuMap[mdbUid];
       const c  = cMap[mdbUid];
       const p  = postMap[mdbUid];
       if (cu?.content_type === CT_LIKUTIM) {
-        result = <SearchResultLikut cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
+        result = <SearchResultLikut cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid}/>;
       } else if (cu) {
-        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
+        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} key={mdbUid}/>;
       } else if (c) {
-        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} key={mdbUid} />;
+        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} key={mdbUid}/>;
       } else if (p) {
         result = <SearchResultPost
           id={mdbUid}
@@ -258,11 +262,11 @@ const SearchResults = () => {
 };
 
 SearchResults.defaultProps = {
-  queryResult  : null,
-  cMap         : {},
-  cuMap        : {},
-  wip          : false,
-  err          : null,
+  queryResult: null,
+  cMap: {},
+  cuMap: {},
+  wip: false,
+  err: null,
   getSourcePath: undefined
 };
 

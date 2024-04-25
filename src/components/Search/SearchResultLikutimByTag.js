@@ -21,23 +21,23 @@ const MIN_SHOWED                      = 3;
 export const SearchResultLikutimByTag = ({ hit }) => {
   const { isMobileDevice }                = useContext(DeviceInfoContext);
   const [isMore, setIsMore]               = useState(false);
-  const { _source: { title }, _uid: key } = hit;
+  const { _source: { title, mdb_uid } } = hit;
 
   const { t } = useTranslation();
 
   const byKey = useSelector(likutimGetByTag);
-  const wip   = useSelector(state => likutimGetWipByKey(state, key));
-  const err   = useSelector(state => likutimGetErrByKey(state, key));
+  const wip   = useSelector(state => likutimGetWipByKey(state, mdb_uid));
+  const err   = useSelector(state => likutimGetErrByKey(state, mdb_uid));
 
   const denormCU = useSelector(mdbNestedGetDenormContentUnitSelector);
   const dispatch = useDispatch();
 
-  const items = byKey(key);
+  const items = byKey(mdb_uid);
   useEffect(() => {
     if (!wip && !err && !items) {
-      dispatch(actions.fetchByTag(key));
+      dispatch(actions.fetchByTag(mdb_uid));
     }
-  }, [key, wip, err, !items]);
+  }, [mdb_uid, wip, err, !items]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
