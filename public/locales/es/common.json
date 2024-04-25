@@ -598,7 +598,6 @@
       "subtext": "Colección de todos los textos originales más importantes para el estudio de la Cabalá, escritos por los más grandes cabalistas."
     },
     "no-source": "Seleccione fuente",
-    "toc": "Tabla de Contenido",
     "az": "AZ",
     "default": "Por Omisión",
     "filter": "Filtro...",
@@ -858,11 +857,17 @@
         "print": "Imprimir",
         "fullscreen-on": "Pantalla completa",
         "fullscreen-off": "Salir de pantalla completa",
-        "hide-additions": "Ocultar todos los comentarios",
-        "show-additions": "Mostrar todos los comentarios",
+        "additions": {
+          "review": "Revisar etiquetado y comentarios",
+          "showMy": "Muestra el mío",
+          "showAll": "Mostrar los de todos",
+          "hideAll": "Ocultar todo"
+        },
         "scan": "Escaneado del texto original",
         "more-buttons": "Más",
-        "copy-link": "Copiar enlace"
+        "toc": "Tabla de Contenido",
+        "copy-link": "Copiar enlace",
+        "article-toc": "Todos los artículos"
       },
       "mobile": {
         "lessons": "Lecciones",

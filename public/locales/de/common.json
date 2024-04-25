@@ -595,7 +595,6 @@
       "subtext": "Die wichtigste Sammlung von Original-Texten für das Studium der Kabbala, geschrieben von den größten Kabbalisten."
     },
     "no-source": "Quelle auswählen",
-    "toc": "Inhalt",
     "az": "А-Z",
     "default": "Standard",
     "filter": "Filter...",
@@ -855,11 +854,17 @@
         "print": "Print",
         "fullscreen-on": "Full screen",
         "fullscreen-off": "Exit full screen",
-        "hide-additions": "Hide all remarks",
-        "show-additions": "Show all remarks",
+        "additions": {
+          "review": "Review labeling and comments",
+          "showMy": "Show mine",
+          "showAll": "Show everyone's",
+          "hideAll": "Hide all"
+        },
         "scan": "Scan of the original text",
         "more-buttons": "More",
-        "copy-link": "Link kopieren"
+        "toc": "Inhalt",
+        "copy-link": "Link kopieren",
+        "article-toc": "All Articles"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -870,7 +875,7 @@
         "search": "Search",
         "download": "Download",
         "more-buttons": "More",
-        "toc": "Content",
+        "toc": "Inhalt",
         "copy-link": "Link"
       }
     }

@@ -312,6 +312,7 @@ ij_typescript_union_types_wrap = on_every_item
 ij_typescript_use_chained_calls_group_indents = false
 ij_typescript_use_double_quotes = true
 ij_typescript_use_explicit_js_extension = auto
+ij_typescript_use_import_type = auto
 ij_typescript_use_path_mapping = always
 ij_typescript_use_public_modifier = false
 ij_typescript_use_semicolon_after_statement = true
@@ -343,7 +344,7 @@ ij_javascript_align_multiline_for = true
 ij_javascript_align_multiline_parameters = true
 ij_javascript_align_multiline_parameters_in_calls = false
 ij_javascript_align_multiline_ternary_operation = false
-ij_javascript_align_object_properties = 0
+ij_javascript_align_object_properties = 2
 ij_javascript_align_union_types = false
 ij_javascript_align_var_statements = 2
 ij_javascript_array_initializer_new_line_after_left_brace = false
@@ -493,6 +494,7 @@ ij_javascript_union_types_wrap = on_every_item
 ij_javascript_use_chained_calls_group_indents = false
 ij_javascript_use_double_quotes = false
 ij_javascript_use_explicit_js_extension = auto
+ij_javascript_use_import_type = auto
 ij_javascript_use_path_mapping = always
 ij_javascript_use_public_modifier = false
 ij_javascript_use_semicolon_after_statement = true
@@ -501,7 +503,7 @@ ij_javascript_while_brace_force = never
 ij_javascript_while_on_new_line = false
 ij_javascript_wrap_comments = false
 
-[{*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,jest.config}]
+[{*.har,*.jsb2,*.jsb3,*.json,*.jsonc,*.postman_collection,*.postman_collection.json,*.postman_environment,*.postman_environment.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,jest.config}]
 indent_size = 2
 tab_width = 2
 ij_continuation_indent_size = 2

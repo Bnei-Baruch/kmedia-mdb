@@ -2,30 +2,46 @@ import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 
-//const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
-//DONT PUSH TO PROD
-const API_BACKEND             = 'https://19700.bbdev1.kbb1.com/';
-const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
-export const IMAGINARY_URL    = process.env.REACT_APP_IMAGINARY_URL;
-const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_FEED                = process.env.REACT_APP_FEED;
-const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
-const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
-const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
-const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
+export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
+const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
+const CMS_BACKEND               = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
+const IMAGINARY_URL             = process.env.REACT_APP_IMAGINARY_URL;
+const IMAGINARY_INTERNAL_HOST   = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
+const API_FEED                  = process.env.REACT_APP_FEED;
+export const CHRONICLES_BACKEND = process.env.REACT_APP_CHRONICLES_BACKEND;
+const PERSONAL_API_BACKEND      = process.env.REACT_APP_PERSONAL_API_BACKEND;
+const FILE_TRIMMER_API          = process.env.REACT_APP_FILE_TRIMMER_API;
+const MDB_REST_API_URL          = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
 
-export const backendUrl               = path => `${API_BACKEND}${path}`;
+const backendUrl                      = path => `${API_BACKEND}${path}`;
+const imaginaryUrl                    = path => `${IMAGINARY_URL}${path}`;
+const feedUrl                         = path => `${API_FEED}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const cLogoUrl                 = path => `${cmsUrl(`images/logos/${path}`)}`;
-export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
-export const feedUrl                  = path => `${API_FEED}${path}`;
-export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
+const makeParams = params => (
+  `${Object
+    .entries(params)
+    .filter(([_, v]) => v !== undefined && v !== null)
+    .map(pair => {
+      const key   = pair[0];
+      const value = pair[1];
+
+      if (Array.isArray(value)) {
+        return value.map(val => `${key}=${encodeURIComponent(val)}`).join('&');
+      }
+
+      return `${key}=${encodeURIComponent(value)}`;
+    })
+    //can happen if parameter value is empty array
+    .filter(p => p !== '')
+    .join('&')}`
+);
+
 export class Requests {
-  static encode = encodeURIComponent;
+  static makeParams = makeParams;
 
   static get = async path => {
     try {
@@ -78,24 +94,6 @@ export class Requests {
       });
   };
 
-  static makeParams = params => (
-    `${Object.entries(params)
-      .filter(([_, v]) => v !== undefined && v !== null)
-      .map(pair => {
-        const key   = pair[0];
-        const value = pair[1];
-
-        if (Array.isArray(value)) {
-          return value.map(val => `${key}=${Requests.encode(val)}`).join('&');
-        }
-
-        return `${key}=${Requests.encode(value)}`;
-      })
-      //can happen if parameter value is empty array
-      .filter(p => p !== '')
-      .join('&')}`
-  );
-
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {
       params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
@@ -106,30 +104,34 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({
-    id,
-    ui_language,
-    content_languages
-  }) => Requests.get(`collections/${id}?${Requests.makeParams({
-    ui_language,
-    content_languages
-  })}`);
+  static collection = (
+    {
+      id,
+      ui_language,
+      content_languages
+    }) => Requests.get(`collections/${id}?${Requests.makeParams({
+      ui_language,
+      content_languages
+    })}`
+  );
 
-  static unit = ({
-    id,
-    ui_language,
-    content_languages
-  }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+  static unit = (
+    {
+      id,
+      ui_language,
+      content_languages
+    }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
     ui_language,
     content_languages
   })}`);
 
-  static latestLesson = ({
-    ui_language,
-    content_languages
-  }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+  static latestLesson = (
+    {
+      ui_language,
+      content_languages
+    }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
     ui_language,
@@ -190,16 +192,17 @@ class Api {
     content_languages
   })}`);
 
-  static search = ({
-    q,
-    ui_language,
-    content_languages,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    searchId: search_id
-  }) => (
+  static search = (
+    {
+      q,
+      ui_language,
+      content_languages,
+      pageNo: page_no,
+      pageSize: page_size,
+      sortBy: sort_by,
+      deb,
+    }
+  ) => (
     Requests.get(`search?${Requests.makeParams({
       q,
       ui_language,
@@ -208,12 +211,7 @@ class Api {
       page_size,
       sort_by,
       deb,
-      search_id
     })}`)
-  );
-
-  static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
-    Requests.get(`click?${Requests.makeParams({ mdb_uid, index, result_type: type, rank, search_id, deb })}`)
   );
 
   static getAsset = path => Requests.getAsset(path);
@@ -224,10 +222,6 @@ class Api {
   };
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
-
-  static simpleMode = ({ ui_language, content_languages, startDate: start_date, endDate: end_date }) => (
-    Requests.get(`simple?${Requests.makeParams({ ui_language, content_languages, start_date, end_date })}`)
-  );
 
   static recommendedRequestData = (
     {

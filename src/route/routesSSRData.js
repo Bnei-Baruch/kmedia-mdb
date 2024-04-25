@@ -41,19 +41,16 @@ import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
 import { actions as listsActions } from './../redux/modules/lists';
 import { actions as mdbActions } from './../redux/modules/mdb';
-import { actions as musicActions } from './../redux/modules/music';
 import { actions as prepareActions } from './../redux/modules/preparePage';
 import { actions as publicationsActions } from './../redux/modules/publications';
 import { actions as searchActions } from './../redux/modules/search';
 import { selectors as settings } from './../redux/modules/settings';
-import { actions as simpleModeActions } from './../redux/modules/simpleMode';
 import { actions as sources } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
 import { actions as textPageActions } from '../redux/modules/textPage';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
-import * as musicSagas from './../sagas/music';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
@@ -72,6 +69,8 @@ import {
   sourcesGetSourceByIdSelector
 } from '../redux/selectors';
 import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
+import { simpleModeApi } from '../redux/api/simpleMode';
+import { musicApi } from '../redux/api/music';
 
 export const home = store => {
   const state            = store.getState();
@@ -96,6 +95,10 @@ export const cuPage = async (store, match) => {
   const state = store.getState();
 
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
+  if (!cuID || !unit) {
+    console.error(`Error, failed fetching unit ${cuID}: ${unit}`);
+    return Promise.reject();
+  }
 
   let activeTab = 'transcription';
 
@@ -215,7 +218,14 @@ export const playlistCollectionPage = (store, match) => {
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
+      if (!cuId && !c?.cuIDs) {
+        // This can happen when collection is empty (unit is not secure or published).
+        console.error(`Failed fetching unit for ${cuId} for ${cID}`);
+        return Promise.reject();
+      }
+
       store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
+      return Promise.resolve(null);
     });
 };
 
@@ -227,7 +237,12 @@ export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLat
     store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
   }));
 
-export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
+export const musicPage = (store, match) => {
+  const { uiLanguage = 'en', contentLanguages = ['en'] } = match;
+
+  store.dispatch(musicApi.endpoints.music.initiate({ uiLanguage, contentLanguages }));
+  return Promise.resolve(null);
+};
 
 export const eventsPage = store => {
   // CollectionList
@@ -246,10 +261,12 @@ export const programsPage = (store, match) => {
 };
 
 export const simpleMode = (store, match) => {
+  const { uiLang = 'en', contentLanguages = ['en'] } = match;
+
   const query = getQuery(match.parsedURL);
   const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
-  store.dispatch(simpleModeActions.fetchForDate({ date }));
+  store.dispatch(simpleModeApi.endpoints.simpleMode.initiate({ date, uiLanguage: uiLang, contentLanguages }));
   return Promise.resolve(null);
 };
 
@@ -280,7 +297,7 @@ function firstLeafId(sourceId, state) {
 const fetchSQData = async (store, uiLang, contentLanguages) => {
   let sourcesList;
   return await Api.sqdata({
-    ui_language: uiLang,
+    ui_language      : uiLang,
     content_languages: contentLanguages
   }).then(({ data }) => {
     sourcesList = data.sources;
@@ -294,8 +311,6 @@ const fetchSQData = async (store, uiLang, contentLanguages) => {
 };
 
 export const libraryPage = async (store, match, show_console = false) => {
-  show_console = true;
-
   const state            = store.getState();
   const location         = state?.router.location ?? {};
   const query            = getQuery(location);
@@ -314,7 +329,6 @@ export const libraryPage = async (store, match, show_console = false) => {
 
   if (!file.isPdf) {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
-    store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
   }
 };
 
@@ -337,12 +351,9 @@ export const likutPage = async (store, match, show_console = false) => {
     .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id, sourceLanguage))
     .done
     .then(() => {
-      const state  = store.getState();
-      const uiLang = query.language || settingsGetUILangSelector(state);
-      const file   = textPageGetFileSelector(state) || {};
-
+      const state = store.getState();
+      const file  = textPageGetFileSelector(state) || {};
       store.dispatch(assetsActions.doc2html(file.id));
-      store.dispatch(mdbActions.fetchLabels({ content_unit: id, language: uiLang }));
     });
 };
 

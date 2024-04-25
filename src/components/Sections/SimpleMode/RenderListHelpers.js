@@ -18,7 +18,8 @@ import {
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
   VS_NAMES,
-  MT_VIDEO
+  MT_VIDEO,
+  LANGUAGES
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { canonicalCollection, isEmpty, downloadLink } from '../../../helpers/utils';
@@ -43,12 +44,22 @@ const getI18nTypeOverridesKey = contentType => {
   }
 };
 
+const sortMediaFilesOrder = {
+  audio        : 1,
+  'lelo-mikud' : 2,
+  'KITEI_MAKOR': 3,
+  videonHD     : 4,
+  videoHD      : 5,
+  videofHD     : 6,
+  text         : 7,
+  image        : 8,
+};
+
 const sortMediaFiles = (a, b) => {
-  const order = { audio: 0, 'lelo-mikud': 1, 'KITEI_MAKOR': 2, videonHD: 3, videoHD: 4, text: 5, image: 6 };
   const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
   const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
 
-  return order[typeA] - order[typeB];
+  return (sortMediaFilesOrder[typeA] - sortMediaFilesOrder[typeB]) ?? 0;
 };
 
 const labelTextByFile = (file, contentType, t) => {
@@ -66,25 +77,34 @@ const labelTextByFile = (file, contentType, t) => {
   return label;
 };
 
-const renderHorizontalFilesList = (files, contentType, t, chroniclesAppend) => (
-  files.sort(sortMediaFiles).map(file => {
+const renderHorizontalFilesList = (language, files, contentType, t, chroniclesAppend) => {
+  const html = files.map(file => {
     const url   = downloadLink(file);
     const label = labelTextByFile(file, contentType, t);
-
     return (
-      <List.Item key={`${file.id}_${file.type}_${file.video_size}`} className="media-file-button">
+      <List.Item key={`${file.id}_${file.type}_${file.video_size}_${file.language}`}
+        className="media-file-button">
         <List.Content>
           <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })}>
             {label} ({file.language})
             <Image className="file-list-icon">
-              <SectionLogo name="downloads" />
+              <SectionLogo name="downloads"/>
             </Image>
           </a>
         </List.Content>
       </List.Item>
     );
-  })
-);
+  });
+
+  html.unshift(
+    <List.Item key={`language`} class='list-first-item'>
+      {LANGUAGES[language].name}:&#8194;
+      <nbsp/>
+    </List.Item>
+  );
+
+  return html;
+};
 
 const filesForRenderByUnit = unit => {
   const leloMikudFiles  = unitDerivedFiles(unit, 'lelo-mikud', key => key.includes(CT_LELO_MIKUD), () => true);
@@ -98,16 +118,16 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
   const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
   if (!hls) return files;
 
-  const resp = hls.hls_languages.reduce((acc, l) => {
+  return hls.hls_languages.reduce((acc, l) => {
     acc.push({ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null });
     if (content_type !== CT_KITEI_MAKOR) {
       hls.video_qualities.forEach(q => {
         const f = {
           ...hls,
-          type: MT_VIDEO,
+          type      : MT_VIDEO,
           video_size: q,
-          language: l,
-          size: sizeByQuality(q, hls.duration)
+          language  : l,
+          size      : sizeByQuality(q, hls.duration)
         };
         acc.push(f);
       });
@@ -115,7 +135,6 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
 
     return acc;
   }, []);
-  return resp;
 };
 
 const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
@@ -130,37 +149,59 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
     : [];
 };
 
-// REFACTOR THIS TO COMMON LIBRARY
-// SHOULD CONFIDER ORIGINAL LANGUAGE TOO!
-const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => files
-  .filter(file => contentLanguages.includes(file.language))
-  .sort((a, b) => {
-    const media = sortMediaFiles(a, b);
-    if (media !== 0) {
-      return media;
+const sortByMediaFunc = (contentLanguages, originalLanguage) => (a, b) => {
+  // sort by media type (i.e. files in all languages are sorted by media type first)
+  const media = sortMediaFiles(a, b);
+  if (media !== 0) {
+    return media;
+  }
+
+  // inside media type group sort by language (original language is preferable)
+  const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language);
+  if (lang !== 0) {
+    if (a.language === originalLanguage) {
+      return -1;
     }
 
-    const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language)
-    if (lang !== 0) {
-      if (a.language === originalLanguage) {
-        return -1;
-      }
-
-      if (b.language === originalLanguage) {
-        return 1;
-      }
-
-      return lang;
+    if (b.language === originalLanguage) {
+      return 1;
     }
 
-    return 0;
-  }).filter((file, index, files) => index === 0 || sortMediaFiles(files[index-1], files[index]) !== 0)
+    return lang;
+  }
+
+  return 0;
+};
+
+// TODO: bbdev REFACTOR THIS TO COMMON LIBRARY
+// Order files by types and languages; remove some duplicates
+const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => {
+  const filtered  = files
+    // filter by requested languages
+    .filter(file => contentLanguages.includes(file.language))
+    .sort(sortByMediaFunc(contentLanguages, originalLanguage))
+    // Remove duplicated media types on the same language
+    .filter((file, index, files) => {
+      if (index === 0) {
+        return true;
+      }
+
+      const media         = sortMediaFiles(files[index - 1], files[index]);
+      const diffLanguages = files[index - 1].language !== files[index].language;
+      return media !== 0 || diffLanguages;
+    });
+  const languages = Array.from(new Set(filtered.map(item => item.language)));
+  return languages.map(language => ({
+    language,
+    files: filtered.filter(file => file.language === language)
+  }));
+};
 
 const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppend) => (
   units.filter(unit => unit).map((unit, index, unitsArray) => {
     const lastUnit  = unitsArray.length - 1;
-    const filesList = bestFileByContentLanguages(filesForRenderByUnit(unit), contentLanguages, unit.original_language);
-    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t, chroniclesAppend);
+    const filesSets = bestFileByContentLanguages(filesForRenderByUnit(unit), contentLanguages, unit.original_language);
+    const files     = filesSets && filesSets.map(set => renderHorizontalFilesList(set.language, set.files, unit.content_type, t, chroniclesAppend));
     const duration  = !!unit.duration ? formatTime(unit.duration) : null;
 
     if (!files) {
@@ -201,23 +242,27 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
       <List.Item key={unit.id} className="unit-header">
         <List.Content>
           {title}
-          <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
-            {
-              files.length
-                ? files
-                : (
-                  <List.Item key={unit.id} className="no-files">
-                    <SectionLogo name="info" />
+          {
+            files.length > 0
+              ? files.map(f => <List.List
+                className={`horizontal-list remove-bottom-border`}>{f}</List.List>)
+              : (
+                <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
+                  <List.Item key={`${unit.id}-no-files`} className="no-files">
+                    <SectionLogo name="info"/>
                     <List.Content className="margin-right-8 margin-left-8">
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
-                      <br />
+                      <br/>
                       {t('simple-mode.try-different-language')}
-                      <Button className="choose-language-button" onClick={helpChooseLang}>{t('simple-mode.language-click')}</Button>
+                      <Button
+                        className="choose-language-button"
+                        onClick={helpChooseLang}>{t('simple-mode.language-click')}
+                      </Button>
                     </List.Content>
                   </List.Item>
-                )
-            }
-          </List.List>
+                </List.List>
+              )
+          }
         </List.Content>
       </List.Item>
     );
@@ -274,7 +319,7 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
             <div className="type-header-top-margin">
               <h2>
                 <Image className="simple-mode-type-icon">
-                  <SectionLogo name={icon} />
+                  <SectionLogo name={icon}/>
                 </Image>
                 {t(`nav.sidebar.${title.toLowerCase()}`)}
               </h2>
@@ -295,9 +340,9 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
 
 export const mergeTypesToCollections = byType => {
   const collections = {
-    LESSONS: [],
-    EVENTS: [],
-    PROGRAMS: [],
+    LESSONS     : [],
+    EVENTS      : [],
+    PROGRAMS    : [],
     PUBLICATIONS: []
   };
 

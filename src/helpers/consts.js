@@ -185,40 +185,40 @@ export const LANG_ORIGINAL   = 'or';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
-  [LANG_HEBREW]: { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH, locale: 'en_US', lang3: 'ENG', name: 'English' },
-  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
-  [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
-  [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
-  [LANG_GERMAN]: { value: LANG_GERMAN, locale: 'de_DE', lang3: 'GER', name: 'Deutsch' },
-  [LANG_DUTCH]: { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
-  [LANG_FRENCH]: { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
+  [LANG_HEBREW]    : { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
+  [LANG_ENGLISH]   : { value: LANG_ENGLISH, locale: 'en_US', lang3: 'ENG', name: 'English' },
+  [LANG_RUSSIAN]   : { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
+  [LANG_SPANISH]   : { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
+  [LANG_ITALIAN]   : { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
+  [LANG_GERMAN]    : { value: LANG_GERMAN, locale: 'de_DE', lang3: 'GER', name: 'Deutsch' },
+  [LANG_DUTCH]     : { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
+  [LANG_FRENCH]    : { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TUR', name: 'Türkçe' },
-  [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
-  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
-  [LANG_FINNISH]: { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
+  [LANG_TURKISH]   : { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TUR', name: 'Türkçe' },
+  [LANG_POLISH]    : { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
+  [LANG_ARABIC]    : { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
+  [LANG_HUNGARIAN] : { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
+  [LANG_FINNISH]   : { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
   [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
-  [LANG_JAPANESE]: { value: LANG_JAPANESE, locale: 'ja_JP', lang3: 'JPN', name: '日本語' },
-  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, locale: 'bg_BG', lang3: 'BUL', name: 'Български' },
-  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული' },
+  [LANG_JAPANESE]  : { value: LANG_JAPANESE, locale: 'ja_JP', lang3: 'JPN', name: '日本語' },
+  [LANG_BULGARIAN] : { value: LANG_BULGARIAN, locale: 'bg_BG', lang3: 'BUL', name: 'Български' },
+  [LANG_GEORGIAN]  : { value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული' },
   // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
-  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
-  [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
-  [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文' },
-  [LANG_PERSIAN]: { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
-  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
-  [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
+  [LANG_NORWEGIAN] : { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
+  [LANG_SWEDISH]   : { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
+  [LANG_CROATIAN]  : { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
+  [LANG_CHINESE]   : { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文' },
+  [LANG_PERSIAN]   : { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
+  [LANG_ROMANIAN]  : { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
+  [LANG_HINDI]     : { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
+  [LANG_UKRAINIAN] : { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
   [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
-  [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
-  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak', hls: LANG_SLOVENIAN },
-  [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
+  [LANG_LATVIAN]   : { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
+  [LANG_CZECH]     : { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak', hls: LANG_SLOVENIAN },
+  [LANG_AMHARIC]   : { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
-  [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
-  [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
+  [LANG_ARMENIAN]  : { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
+  [LANG_ORIGINAL]  : { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
 };
 
 //for HLS old files
@@ -316,7 +316,7 @@ export const getVideoRes = (vsType, date) => {
 
 export const VS_NAMES = {
   [VS_NHD]: '360p',
-  [VS_HD]: '720p',
+  [VS_HD] : '720p',
   [VS_FHD]: '1080p',
 };
 
@@ -535,99 +535,99 @@ const SGLP_DOWNLOADS            = 'downloads';
 const SGLP_HELP                 = 'help';
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE = {
-  [SGLP_LESSONS]: CT_DAILY_LESSON,
-  [SGLP_VIRTUAL_LESSONS]: CT_VIRTUAL_LESSONS,
-  [SGLP_LECTURES]: CT_LECTURE,
-  [SGLP_WOMEN_LESSONS]: CT_WOMEN_LESSON,
-  [SGLP_RABASH_LESSONS]: CT_LESSON_PART,
-  [SGLP_LESSON_SERIES]: CT_LESSON_PART,
-  [SGLP_PRORGRAMS]: CT_VIDEO_PROGRAM_CHAPTER,
-  [SGLP_CLIPS]: CT_CLIPS,
-  [SGLP_LIBRARY]: CT_SOURCE,
-  [SGLP_GROUP_ARTICLES]: CT_ARTICLE,
-  [SGLP_CONVENTIONS]: CT_CONGRESS,
-  [SGLP_HOLIDAYS]: CT_EVENT_PART,
-  [SGLP_UNITY_DAYS]: CT_EVENT_PART,
+  [SGLP_LESSONS]           : CT_DAILY_LESSON,
+  [SGLP_VIRTUAL_LESSONS]   : CT_VIRTUAL_LESSONS,
+  [SGLP_LECTURES]          : CT_LECTURE,
+  [SGLP_WOMEN_LESSONS]     : CT_WOMEN_LESSON,
+  [SGLP_RABASH_LESSONS]    : CT_LESSON_PART,
+  [SGLP_LESSON_SERIES]     : CT_LESSON_PART,
+  [SGLP_PRORGRAMS]         : CT_VIDEO_PROGRAM_CHAPTER,
+  [SGLP_CLIPS]             : CT_CLIPS,
+  [SGLP_LIBRARY]           : CT_SOURCE,
+  [SGLP_GROUP_ARTICLES]    : CT_ARTICLE,
+  [SGLP_CONVENTIONS]       : CT_CONGRESS,
+  [SGLP_HOLIDAYS]          : CT_EVENT_PART,
+  [SGLP_UNITY_DAYS]        : CT_EVENT_PART,
   [SGLP_FRIENDS_GATHERINGS]: CT_EVENT_PART,
-  [SGLP_MEALS]: CT_EVENT_PART,
-  [SGLP_TOPICS]: CT_TAG,
-  [SGLP_BLOG]: CT_BLOG_POST,
-  [SGLP_TWITTER]: SCT_TWEET,
-  [SGLP_ARTICLES]: CT_ARTICLES,
-  [SGLP_DOWNLOADS]: 'downloads',
-  [SGLP_HELP]: 'help',
+  [SGLP_MEALS]             : CT_EVENT_PART,
+  [SGLP_TOPICS]            : CT_TAG,
+  [SGLP_BLOG]              : CT_BLOG_POST,
+  [SGLP_TWITTER]           : SCT_TWEET,
+  [SGLP_ARTICLES]          : CT_ARTICLES,
+  [SGLP_DOWNLOADS]         : 'downloads',
+  [SGLP_HELP]              : 'help',
 };
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
-  [SGLP_LESSONS]: 'lessons/daily',
-  [SGLP_VIRTUAL_LESSONS]: 'lessons/virtual',
-  [SGLP_LECTURES]: 'lessons/lectures',
-  [SGLP_WOMEN_LESSONS]: 'lessons/women',
-  [SGLP_RABASH_LESSONS]: 'lessons/rabash',
-  [SGLP_LESSON_SERIES]: 'lessons/series',
-  [SGLP_PRORGRAMS]: 'programs/main',
-  [SGLP_CLIPS]: 'programs/clips',
-  [SGLP_LIBRARY]: 'sources',
-  [SGLP_GROUP_ARTICLES]: 'sources/grRABASH',
-  [SGLP_CONVENTIONS]: 'events?content_type=CONGRESS',
-  [SGLP_HOLIDAYS]: 'events?content_type=HOLIDAY',
-  [SGLP_UNITY_DAYS]: 'events?content_type=UNITY_DAY',
+  [SGLP_LESSONS]           : 'lessons/daily',
+  [SGLP_VIRTUAL_LESSONS]   : 'lessons/virtual',
+  [SGLP_LECTURES]          : 'lessons/lectures',
+  [SGLP_WOMEN_LESSONS]     : 'lessons/women',
+  [SGLP_RABASH_LESSONS]    : 'lessons/rabash',
+  [SGLP_LESSON_SERIES]     : 'lessons/series',
+  [SGLP_PRORGRAMS]         : 'programs/main',
+  [SGLP_CLIPS]             : 'programs/clips',
+  [SGLP_LIBRARY]           : 'sources',
+  [SGLP_GROUP_ARTICLES]    : 'sources/grRABASH',
+  [SGLP_CONVENTIONS]       : 'events?content_type=CONGRESS',
+  [SGLP_HOLIDAYS]          : 'events?content_type=HOLIDAY',
+  [SGLP_UNITY_DAYS]        : 'events?content_type=UNITY_DAY',
   [SGLP_FRIENDS_GATHERINGS]: 'events?content_type=FRIENDS_GATHERING',
-  [SGLP_MEALS]: 'events?content_type=MEAL',
-  [SGLP_TOPICS]: 'topics',
-  [SGLP_BLOG]: 'publications/blog',
-  [SGLP_TWITTER]: 'publications/twitter',
-  [SGLP_ARTICLES]: 'publications/articles',
-  [SGLP_DOWNLOADS]: 'simple-mode',
-  [SGLP_HELP]: 'help',
+  [SGLP_MEALS]             : 'events?content_type=MEAL',
+  [SGLP_TOPICS]            : 'topics',
+  [SGLP_BLOG]              : 'publications/blog',
+  [SGLP_TWITTER]           : 'publications/twitter',
+  [SGLP_ARTICLES]          : 'publications/articles',
+  [SGLP_DOWNLOADS]         : 'simple-mode',
+  [SGLP_HELP]              : 'help',
 };
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT = {
-  [SGLP_LESSONS]: 'lessons.tabs.daily',
-  [SGLP_VIRTUAL_LESSONS]: 'lessons.tabs.virtual',
-  [SGLP_LECTURES]: 'lessons.tabs.lectures',
-  [SGLP_WOMEN_LESSONS]: 'lessons.tabs.women',
-  [SGLP_RABASH_LESSONS]: 'lessons.tabs.rabash',
-  [SGLP_LESSON_SERIES]: 'lessons.tabs.series',
-  [SGLP_PRORGRAMS]: 'programs.tabs.main',
-  [SGLP_CLIPS]: 'programs.tabs.clips',
-  [SGLP_LIBRARY]: 'sources-library.header.text',
-  [SGLP_GROUP_ARTICLES]: 'sources-library.group-articles',
-  [SGLP_CONVENTIONS]: 'events.tabs.conventions',
-  [SGLP_HOLIDAYS]: 'events.tabs.holidays',
-  [SGLP_UNITY_DAYS]: 'events.tabs.unity-days',
+  [SGLP_LESSONS]           : 'lessons.tabs.daily',
+  [SGLP_VIRTUAL_LESSONS]   : 'lessons.tabs.virtual',
+  [SGLP_LECTURES]          : 'lessons.tabs.lectures',
+  [SGLP_WOMEN_LESSONS]     : 'lessons.tabs.women',
+  [SGLP_RABASH_LESSONS]    : 'lessons.tabs.rabash',
+  [SGLP_LESSON_SERIES]     : 'lessons.tabs.series',
+  [SGLP_PRORGRAMS]         : 'programs.tabs.main',
+  [SGLP_CLIPS]             : 'programs.tabs.clips',
+  [SGLP_LIBRARY]           : 'sources-library.header.text',
+  [SGLP_GROUP_ARTICLES]    : 'sources-library.group-articles',
+  [SGLP_CONVENTIONS]       : 'events.tabs.conventions',
+  [SGLP_HOLIDAYS]          : 'events.tabs.holidays',
+  [SGLP_UNITY_DAYS]        : 'events.tabs.unity-days',
   [SGLP_FRIENDS_GATHERINGS]: 'events.tabs.friends-gatherings',
-  [SGLP_MEALS]: 'events.tabs.meals',
-  [SGLP_TOPICS]: 'topics.header.text',
-  [SGLP_BLOG]: 'publications.tabs.blog',
-  [SGLP_TWITTER]: 'publications.tabs.twitter',
-  [SGLP_ARTICLES]: 'publications.tabs.articles',
-  [SGLP_DOWNLOADS]: 'simple-mode.header.text',
-  [SGLP_HELP]: 'help.header.text',
+  [SGLP_MEALS]             : 'events.tabs.meals',
+  [SGLP_TOPICS]            : 'topics.header.text',
+  [SGLP_BLOG]              : 'publications.tabs.blog',
+  [SGLP_TWITTER]           : 'publications.tabs.twitter',
+  [SGLP_ARTICLES]          : 'publications.tabs.articles',
+  [SGLP_DOWNLOADS]         : 'simple-mode.header.text',
+  [SGLP_HELP]              : 'help.header.text',
 };
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT = {
-  [SGLP_LESSONS]: 'lessons.header.subtext',
-  [SGLP_VIRTUAL_LESSONS]: 'lessons.header.subtext',
-  [SGLP_LECTURES]: 'lessons.header.subtext',
-  [SGLP_WOMEN_LESSONS]: 'lessons.header.subtext',
-  [SGLP_RABASH_LESSONS]: 'lessons.header.subtext',
-  [SGLP_LESSON_SERIES]: 'lessons.header.subtext',
-  [SGLP_PRORGRAMS]: 'programs.header.subtext',
-  [SGLP_CLIPS]: '',  // Subtext is appropriate only for programs.
-  [SGLP_LIBRARY]: 'sources-library.header.subtext',
-  [SGLP_GROUP_ARTICLES]: 'sources-library.header.subtext',
-  [SGLP_CONVENTIONS]: 'events.header.subtext',
-  [SGLP_HOLIDAYS]: 'events.header.subtext',
-  [SGLP_UNITY_DAYS]: 'events.header.subtext',
+  [SGLP_LESSONS]           : 'lessons.header.subtext',
+  [SGLP_VIRTUAL_LESSONS]   : 'lessons.header.subtext',
+  [SGLP_LECTURES]          : 'lessons.header.subtext',
+  [SGLP_WOMEN_LESSONS]     : 'lessons.header.subtext',
+  [SGLP_RABASH_LESSONS]    : 'lessons.header.subtext',
+  [SGLP_LESSON_SERIES]     : 'lessons.header.subtext',
+  [SGLP_PRORGRAMS]         : 'programs.header.subtext',
+  [SGLP_CLIPS]             : '',  // Subtext is appropriate only for programs.
+  [SGLP_LIBRARY]           : 'sources-library.header.subtext',
+  [SGLP_GROUP_ARTICLES]    : 'sources-library.header.subtext',
+  [SGLP_CONVENTIONS]       : 'events.header.subtext',
+  [SGLP_HOLIDAYS]          : 'events.header.subtext',
+  [SGLP_UNITY_DAYS]        : 'events.header.subtext',
   [SGLP_FRIENDS_GATHERINGS]: 'events.header.subtext',
-  [SGLP_MEALS]: 'events.header.subtext',
-  [SGLP_TOPICS]: 'topics.header.subtext',
-  [SGLP_BLOG]: 'publications.header.subtext',
-  [SGLP_TWITTER]: 'publications.header.subtext',
-  [SGLP_ARTICLES]: 'publications.header.subtext',
-  [SGLP_DOWNLOADS]: 'simple-mode.header.subtext',
-  [SGLP_HELP]: 'help.header.subtext',
+  [SGLP_MEALS]             : 'events.header.subtext',
+  [SGLP_TOPICS]            : 'topics.header.subtext',
+  [SGLP_BLOG]              : 'publications.header.subtext',
+  [SGLP_TWITTER]           : 'publications.header.subtext',
+  [SGLP_ARTICLES]          : 'publications.header.subtext',
+  [SGLP_DOWNLOADS]         : 'simple-mode.header.subtext',
+  [SGLP_HELP]              : 'help.header.subtext',
 };
 
 export const SEARCH_GRAMMAR_HIT_TYPES = [SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE];
@@ -674,12 +674,12 @@ export const SEARCH_RESULT_TYPES_TEXT = ['posts', 'sources', 'units'];
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
 export const SEARCH_INTENT_NAMES = {
-  [SEARCH_INTENT_INDEX_TOPIC]: 'Topic',
+  [SEARCH_INTENT_INDEX_TOPIC] : 'Topic',
   [SEARCH_INTENT_INDEX_SOURCE]: 'Source',
 };
 
 export const SEARCH_INTENT_SECTIONS = {
-  [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
+  [SEARCH_INTENT_HIT_TYPE_LESSONS] : 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
 
@@ -707,7 +707,7 @@ export const MY_NAMESPACES = [
 ];
 
 export const MY_REACTION_KINDS = {
-  LIKE: 'like',
+  LIKE : 'like',
   SUPER: 'super',
 };
 
@@ -740,17 +740,17 @@ export const CT_SUBSCRIBE_BY_COLLECTION = [
 ];
 
 export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
-  [CT_LESSON_PART]: 'lessons/daily',
-  [CT_VIRTUAL_LESSON]: 'lessons/virtual',
-  [CT_LECTURE]: 'lessons/lectures',
-  [CT_WOMEN_LESSON]: 'lessons/women',
+  [CT_LESSON_PART]          : 'lessons/daily',
+  [CT_VIRTUAL_LESSON]       : 'lessons/virtual',
+  [CT_LECTURE]              : 'lessons/lectures',
+  [CT_WOMEN_LESSON]         : 'lessons/women',
   [CT_VIDEO_PROGRAM_CHAPTER]: 'programs/main',
-  [CT_CLIP]: 'programs/clips',
-  [CT_FRIENDS_GATHERING]: 'events/friends-gatherings',
-  [CT_MEAL]: 'events/meals',
-  [CT_BLOG_POST]: 'publications/blog',
-  [SCT_TWEET]: 'publications/twitter',
-  [CT_ARTICLE]: 'publications/articles',
+  [CT_CLIP]                 : 'programs/clips',
+  [CT_FRIENDS_GATHERING]    : 'events/friends-gatherings',
+  [CT_MEAL]                 : 'events/meals',
+  [CT_BLOG_POST]            : 'publications/blog',
+  [SCT_TWEET]               : 'publications/twitter',
+  [CT_ARTICLE]              : 'publications/articles',
 };
 
 export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
@@ -771,9 +771,10 @@ export const FN_SORT_BY_FILTER     = 'sort-by-filter';
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
 export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+export const FN_PART_OF_DAY      = 'part-of-day';
 
 export const SEARCH_INTENT_FILTER_NAMES = {
-  [SEARCH_INTENT_INDEX_TOPIC]: FN_TOPICS_MULTI,
+  [SEARCH_INTENT_INDEX_TOPIC] : FN_TOPICS_MULTI,
   [SEARCH_INTENT_INDEX_SOURCE]: FN_SOURCES_MULTI,
 };
 
@@ -795,15 +796,23 @@ export const FN_SHOW_LESSON_AS_UNITS = [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PE
 export const JWPLAYER_ID = 'jwplayer';
 
 export const PLAYER_OVER_MODES = {
-  settings: 'settings',
+  settings : 'settings',
   languages: 'languages',
-  share: 'share',
-  tagging: 'tagging',
-  playlist: 'add-to-playlist',
-  active: 'active',
-  dragKnob: 'drag-knob',
+  share    : 'share',
+  tagging  : 'tagging',
+  playlist : 'add-to-playlist',
+  active   : 'active',
+  dragKnob : 'drag-knob',
   firstTime: 'first-time',
-  none: null,
+  none     : null,
 };
 
 export const KC_BOT_USER_NAME = '@__||bot||__@';
+
+export const TEXT_PAGE_ADDITIONS_MODS = {
+  showMy : 1,
+  showAll: 2,
+  hideAll: -1
+};
+
+export const LOCALSTORAGE_KEY_ADDITIONS_MODS = 'additions_mods_localstorage_key';

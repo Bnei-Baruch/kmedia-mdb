@@ -11,12 +11,15 @@ export const Timecode = () => {
   const { cuId } = useSelector(playlistGetInfoSelector);
 
   const { time } = useSubscribeSeekAndTime();
-  const timeRef  = useRef(time);
+  const timeRef  = useRef({ time, count: 0 });
 
   useEffect(() => {
-    if (time === timeRef.current) return;
+    if (time === timeRef.current.time) return;
+    timeRef.current.time = time;
+    timeRef.current.count += 1;
+    //save to localstorage on play only
+    if (timeRef.current.count < 5) return;
     saveTimeOnLocalstorage(time, cuId);
-    timeRef.current = time;
   }, [time, cuId]);
 
   return (

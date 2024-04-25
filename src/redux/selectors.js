@@ -20,9 +20,7 @@ import { selectors as chroniclesSel } from './modules/chronicles';
 import { selectors as searchSel } from './modules/search';
 import { selectors as listsSel } from './modules/lists';
 import { selectors as lessonsSel } from './modules/lessons';
-import { selectors as musicSel } from './modules/music';
 import { selectors as bookmarkFilterSel } from './modules/bookmarkFilter';
-import { selectors as simpleModeSel } from './modules/simpleMode';
 import { selectors as trimSel } from './modules/trim';
 import { selectors as fetchImageSel } from './modules/fetchImage';
 import { selectors as myNotesSel } from './modules/myNotes';
@@ -50,9 +48,7 @@ const getChronicles     = state => state.chronicles;
 const getSearch         = state => state.search;
 const getLists          = state => state.lists;
 const getLessons        = state => state.lessons;
-const getMusic          = state => state.music;
 const getBookmarkFilter = state => state.bookmarkFilter;
-const getSimpleMode     = state => state.simpleMode;
 const getTrim           = state => state.trim;
 const getFetchImage     = state => state.fetchImage;
 const getMyNotes        = state => state.myNotes;
@@ -110,6 +106,7 @@ export const mdbGetDenormCollectionWUnitsSelector    = createSelector(getMDB, _2
 export const mdbGetDenormContentUnitSelector         = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormContentUnit(m, id));
 export const mdbGetDenormLabelSelector               = createSelector([getMDB], m => mdbSel.getDenormLabel(m));
 export const mdbGetLabelsByCUSelector                = createSelector(getMDB, _2, (m, id) => mdbSel.getLabelsByCU(m, id));
+export const mdbGetLabelsById                        = createSelector(getMDB, m => mdbSel.getLabelById(m));
 
 // publications
 export const publicationsLatestBlogPostsSelector  = createSelector([getPublications], pubs => publicationsSel.getBlogPosts(pubs));
@@ -240,18 +237,8 @@ export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, get
 export const lessonsGetWipSelector              = createSelector([getLessons], l => lessonsSel.getWip(l));
 export const lessonsGetSeriesLoaded             = createSelector([getLessons], l => lessonsSel.getSeriesLoaded(l));
 
-// music
-export const musicGetWipSelector   = createSelector([getMusic], m => musicSel.getWip(m));
-export const musicGetErrorSelector = createSelector([getMusic], m => musicSel.getError(m));
-export const musicGetDataSelector  = createSelector([getMusic], m => musicSel.getMusicData(m));
-
 // bookmarkFilter
 export const bookmarkFilterGetByKeySelector = createSelector(getBookmarkFilter, _2, (b, ns) => bookmarkFilterSel.getByKey(b, ns));
-
-// simpleMode
-export const simpleModeGetItemsSelector = createSelector([getSimpleMode], s => simpleModeSel.getItems(s));
-export const simpleModeGetWipSelector   = createSelector([getSimpleMode], s => simpleModeSel.getWip(s));
-export const simpleModeGetErrorSelector = createSelector([getSimpleMode], s => simpleModeSel.getError(s));
 
 // trim
 export const trimGetListSelector = createSelector([getTrim], t => trimSel.getList(t));
@@ -268,22 +255,22 @@ export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNo
 
 //textPage
 
-export const textPageGetSettings             = createSelector([getTextPage], t => textPageSel.getSettings(t));
-export const textPageGetTocIsActiveSelector  = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
-export const textPageGetTocInfoSelector      = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
-export const textPageGetSubjectSelector      = createSelector([getTextPage], t => textPageSel.getSubject(t));
-export const textPageGetWipErrSelector       = createSelector([getTextPage], t => textPageSel.getWipErr(t));
-export const textPageGetFileSelector         = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
-export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
-export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
-export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));
-export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
-export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
-export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
-export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
-export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
-export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
-export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
+export const textPageGetSettings              = createSelector([getTextPage], t => textPageSel.getSettings(t));
+export const textPageGetTocIsActiveSelector   = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
+export const textPageGetTocInfoSelector       = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
+export const textPageGetSubjectSelector       = createSelector([getTextPage], t => textPageSel.getSubject(t));
+export const textPageGetWipErrSelector        = createSelector([getTextPage], t => textPageSel.getWipErr(t));
+export const textPageGetFileSelector          = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
+export const textPageGetUrlInfoSelector       = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
+export const textPageGetWordOffsetSelector    = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
+export const textPageGetMP3Selector           = createSelector([getTextPage], t => textPageSel.getMP3(t));
+export const textPageGetIsFullscreenSelector  = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
+export const textPageGetScrollDirSelector     = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
+export const textPageGetSideOffsetSelector    = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
+export const textPageGetAdditionsModeSelector = createSelector([getTextPage], t => textPageSel.getAdditionsMode(t));
+export const textPageGetScanFileSelector      = createSelector([getTextPage], t => textPageSel.getScanFile(t));
+export const textPageGetIsSearchSelector      = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetFileFilterSelector    = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
 
 //likutim
 export const likutimGetByTag    = createSelector([getLikutim], l => likutimSel.getByTag(l));

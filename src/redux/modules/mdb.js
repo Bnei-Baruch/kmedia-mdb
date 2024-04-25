@@ -7,6 +7,7 @@ import MediaHelper from '../../helpers/media';
 import { actions as settingsActions } from './settings';
 import { actions as ssrActions } from './ssr';
 import { isEmpty } from '../../helpers/utils';
+import { backendApi } from '../api/backendApi';
 
 const freshStore = () => ({
   cById       : {},
@@ -482,18 +483,30 @@ const mdbSlice = createSlice({
     receiveCollections : (state, action) => onReceiveCollections(state, action.payload),
     receiveContentUnits: (state, action) => onReceiveContentUnits(state, action.payload),
 
-    receiveLabels: onReceiveLabels,
-
     receivePersons: onReceivePersons,
 
-    createLabel       : () => void ({}),
-    fetchLabels       : () => void ({}),
-    fetchLabelsSuccess: () => void ({})
+    createLabel  : () => void ({}),
+    receiveLabels: onReceiveLabels,
   },
   extraReducers: builder => {
     builder
       .addCase(ssrActions.prepare, onSSRPrepare)
-      .addCase(settingsActions.setContentLanguages, () => freshStore());
+      .addCase(settingsActions.setContentLanguages, () => freshStore())
+      .addMatcher(
+        backendApi.endpoints.simpleMode.matchFulfilled,
+        (state, { payload }) => {
+          const { lessons, others } = payload;
+          onReceiveCollections(state, lessons);
+          onReceiveContentUnits(state, others);
+        }
+      )
+      .addMatcher(
+        backendApi.endpoints.music.matchFulfilled,
+        (state, { payload }) => {
+          const { music } = payload;
+          onReceiveCollections(state, music);
+        }
+      );
   },
 
   selectors: {

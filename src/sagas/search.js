@@ -40,8 +40,12 @@ function* autocomplete(action) {
     const query            = yield select(state => selectors.getQuery(state.search));
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const request          = {
+      q: query,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+    };
     const autocompleteId   = GenerateSearchId();
-    const request          = { q: query, ui_language: uiLang, content_languages: contentLanguages };
     let suggestions        = null;
     if (query) {
       const { data }      = yield call(Api.autocomplete, request);
@@ -49,7 +53,9 @@ function* autocomplete(action) {
       suggestions         = data;
     }
 
-    yield put(actions.autocompleteSuccess({ suggestions }));
+    // We need the id only for logging, not for API call as it will break caching.
+    request.autocomplete_id = autocompleteId;
+    yield put(actions.autocompleteSuccess({ request, suggestions }));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
@@ -118,14 +124,12 @@ export function* search(action) {
       return;
     }
 
-    const searchId = GenerateSearchId();
     const request  = {
       q,
       sortBy,
       ui_language: uiLang,
       content_languages: contentLanguages,
       deb,
-      searchId,
       pageNo,
       pageSize: 20
     };
@@ -133,6 +137,9 @@ export function* search(action) {
     yield put(actions.setWip());
     const { data } = yield call(Api.search, request);
 
+    // We need the id only for logging, not for API call as it will break caching.
+    const searchId = GenerateSearchId();
+    request.searchId = searchId;
     data.search_result.searchId = searchId;
 
     if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {

@@ -235,5 +235,84 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 1em;
+  
+  @at-root .is-mobile & {
+    justify-content: center;
+    gap: 5px;
+  }
+  
 }
 
+.prev-next-btn.ui.button.basic{
+  margin: 0 ;
+  padding: 0 ;
+  display: flex;
+  color:$blue !important;
+  border: 1px solid $blue ;
+  
+  &:hover{
+    color:$light-hover-btn !important;
+    border:1px solid $light-hover-btn !important;
+  }
+  
+  &:active{
+    color:$light-active-text !important;
+    border:1px solid $light-active-text !important;
+    background-color: $white !important;
+  }
+  
+  @at-root .is-dark & {
+    background-color:$dark-bg !important; 
+    color: $blue !important;
+    border:1px solid $blue;
+    
+    &:hover{
+      color:$dark-btn-hover !important;
+      border:1px solid $dark-btn-hover  !important;
+    }
+    
+    &:active{
+      color:$dark-active-text !important;
+      border:1px solid $dark-active-text  !important;
+    }
+  }
+  
+  @at-root .is-sepia & {
+    background-color:$sepia-bg !important; 
+    color: $blue !important;
+    border:1px solid $blue;
+  }
+  
+}
+
+.btn-content{
+  display: flex;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 15px;
+  align-items: center;
+  gap:2px;
+  
+   &.left {
+    padding:11px 32px 11px 23px ;
+  }
+   &.right {
+    padding: 11px 23px 11px 32px;
+  }
+  
+  @at-root .is-mobile & {
+    padding:6.5px 24px 6.5px 24px ;
+  }
+}
+
+.prev-next-btn-icon{
+  margin: 6px 8px 5px 8px !important;
+  width:8px !important;
+  
+  &::before {
+    content: ''; 
+    display: inline-block; 
+    width: 7.41px; 
+    height: 12px; 
+  } 
+}

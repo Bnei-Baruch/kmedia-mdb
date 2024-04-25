@@ -1,20 +1,32 @@
 @mixin theme_color() {
   color: $light-text;
+  fill: $light-text;
+  stroke: $light-text;
   .is-dark & {
     color: $dark-text;
+    fill: $dark-text;
+    stroke: $dark-text;
   }
   .is-sepia & {
     color: $sepia-text;
+    fill: $sepia-text;
+    stroke: $sepia-text;
   }
 }
 
 @mixin theme_color_active() {
   color: $light-active-text;
+  fill: $light-active-text;
+  stroke: $light-active-text;
   .is-dark & {
     color: $dark-active-text;
+    fill: $dark-active-text;
+    stroke: $dark-active-text;
   }
   .is-sepia & {
     color: $sepia-active-text;
+    fill: $sepia-active-text;
+    stroke: $sepia-active-text;
   }
 }
 
@@ -40,7 +52,7 @@
 
 @mixin theme_btn() {
   @include theme_color;
-  .material-symbols-outlined {
+  .material-symbols-outlined, svg {
     @include theme_color
   }
 
@@ -58,7 +70,7 @@
       @include theme_color_active;
     }
 
-    .material-symbols-outlined {
+    .material-symbols-outlined, svg {
       @include theme_color_active
     }
   }
@@ -70,6 +82,10 @@
 
   &.is-web:not(.with_breadcrumb) {
     padding-top: 1em;
+
+    .player_page_tab & {
+      padding-top: 0;
+    }
   }
 
   .text__content-wrapper {
@@ -95,8 +111,13 @@
   }
 
   &.is-mobile {
+    //overflow: hidden;
     .text__content {
       padding: 1.5em 0;
+    }
+    .text__scroll-top.ui.icon.button{
+      padding: 7px 8px ;
+      bottom: 88px;
     }
   }
 
@@ -138,7 +159,7 @@
     align-items: center;
 
     span {
-      min-height: 20px;
+      min-height: 14px;
 
       &:last-child {
         margin: 0 8px;
@@ -168,17 +189,19 @@
     font-family: Georgia, 'Times New Roman ', Times, serif;
   }
 
-  .text__scroll-top {
+  .text__scroll-top.ui.icon.button {
     position: absolute;
-    bottom: 1em;
-    left: 1em;
-
+    bottom: 18px;
+    padding: 11.5px 12.5px;
+    box-shadow: 0px 4px 4px 0px #00000026;
+    left:18px;
+    
     .rtl & {
       left: auto;
-      right: 1em;
+      right: 18px ;
     }
   }
-
+  
   .text_mobile_padding {
     padding-left: 16px;
     padding-right: 16px;
@@ -280,10 +303,6 @@
 
   p {
     margin-bottom: 1.2em;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 
   ul,
@@ -332,7 +351,7 @@
     transition: all 0.2s ease-in-out 0s;
 
     &.stick_toolbar_fixed {
-      transform: translate3d(0px, -1 * $breadcrumb-height, 0px) !important;
+      transform: translate3d(0px, 0, 0px) !important;
     }
 
     transform: translate3d(0px, -$text-bar-height, 0px);
@@ -439,8 +458,10 @@
         }
       }
 
-      .text_selected &.text_mark_on_select_btn .material-symbols-outlined {
+      .text_selected &.text_mark_on_select_btn .material-symbols-outlined, .text_selected &.text_mark_on_select_btn svg {
         color: $blue;
+        fill: $blue;
+        stroke: $blue;
       }
     }
 
@@ -635,7 +656,7 @@
       background: #606060;
     }
 
-    .button, .button .material-symbols-outlined {
+    .button, .button .material-symbols-outlined, .button svg {
       color: $white !important;
     }
   }
@@ -855,6 +876,46 @@
       cursor: pointer;
       font-size: 25px;
       color: $blue;
+    }
+  }
+}
+
+.no_fill svg {
+  fill: none !important;
+}
+
+.no_stroke svg {
+  stroke: none !important;
+}
+
+.additions_mode_popup.ui.menu {
+  padding: 0 1em;
+
+  .item {
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover, &.active:hover {
+      background: none;
+    }
+
+    &.active {
+      background: none;
+      color: $light-active-text;
+      font-weight: bold;
+    }
+
+
+    span {
+      margin-left: 8px;
+
+      &.ltr {
+        margin-left: auto;
+        margin-right: 8px;
+      }
     }
   }
 }

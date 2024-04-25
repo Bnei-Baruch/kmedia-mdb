@@ -7,49 +7,49 @@ import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibilityBtn';
+import AdditionsModeBtn from '../../../../WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
-import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = ({ needTOC }) => (
+const SourceTabToolbarWeb = ({ hasToc }) => (
   <div className="text_toolbar">
+    {hasToc && <TocToggleBtn/>}
     <div className="text_toolbar__buttons">
-      {needTOC && <TocToggleBtn />}
-      <TextSettings />
-      <LanguageTextBtn />
-      <div className="divider" />
-      <TagTextBtn />
-      <AddBookmarkBtn />
-      <AddCommentBtn />
-      <ShareTextBtn />
-      <CopyLinkBtn />
-      <div className="divider" />
-      <SearchOnPageBtn />
+      <TextSettings/>
+      <LanguageTextBtn/>
+      <div className="divider"/>
+      <TagTextBtn/>
+      <AddBookmarkBtn/>
+      <AddCommentBtn/>
+      <ShareTextBtn/>
+      <CopyLinkBtn/>
+      <div className="divider"/>
+      <SearchOnPageBtn/>
       <div className="computer-only">
-        <PrintBtn />
+        <DownloadTextBtn/>
       </div>
       <div className="computer-only">
-        <DownloadTextBtn />
+        <PrintBtn/>
       </div>
       <div className="computer-only">
-        <AdditionsVisibilityBtn />
+        <AdditionsModeBtn/>
       </div>
       <Dropdown
         item
         icon={null}
-        trigger={<MoreOptionsBtn />}
+        trigger={<MoreOptionsBtn/>}
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
-            <DownloadTextBtn />
+            <DownloadTextBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
-            <AdditionsVisibilityBtn />
+            <AdditionsModeBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -44,8 +44,8 @@ const BuildPlaylistLastDaily = () => {
       return;
 
     const sorted = ccu.cuIDs.map(id => {
-      const ht                          = historyItems.find(x => x.content_unit_uid === id);
-      const { current_time: timestamp } = getSavedTime(id, ht);
+      const ht        = historyItems.find(x => x.content_unit_uid === id);
+      const timestamp = getSavedTime(id, ht);
       return { id, timestamp };
     }).filter(x => !!x.timestamp).sort((a, b) => {
       const mta = moment(a.timestamp);

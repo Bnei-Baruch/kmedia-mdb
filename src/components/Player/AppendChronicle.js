@@ -22,7 +22,7 @@ const buildAppendData = (autoPlay, item, file) => {
     file_uid,
     file_language,
     auto_play   : autoPlay,
-    current_time: getSavedTime(unit_uid, null)?.current_time || 0,
+    current_time: getSavedTime(unit_uid, null),
     duration    : getDuration(),
     was_muted   : getMute()
   };

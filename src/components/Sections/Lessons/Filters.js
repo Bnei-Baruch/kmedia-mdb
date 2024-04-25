@@ -14,7 +14,7 @@ import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
 import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 import PersonFilter from '../../FiltersAside/PersonFilter/Person';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentTypeFilter from './ContentTypeFilter';
+import ContentTypeFilter from './Filters/ContentTypeFilter';
 import {
   settingsGetContentLanguagesSelector,
   filtersAsideGetIsReadySelector,
@@ -31,7 +31,7 @@ const Filters = ({ namespace, baseParams }) => {
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const isReady          = useSelector(state => filtersAsideGetIsReadySelector(state, namespace));
   const { wip, err }     = useSelector(state => filtersAsideGetWipErrSelector(state, namespace));
-  const selected         = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
+  const selected         = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace));
   const prevSelRef       = useRef(-1);
 
   const dispatch = useDispatch();
@@ -50,7 +50,8 @@ const Filters = ({ namespace, baseParams }) => {
         with_collections       : true,
         with_persons           : true,
         with_media             : true,
-        with_original_languages: true
+        with_original_languages: true,
+        with_day_part          : true
       }, { isPrepare: true, countC: true }));
     }
   }, [isReady, baseParams, wip, err, namespace, dispatch]);
@@ -63,7 +64,8 @@ const Filters = ({ namespace, baseParams }) => {
         with_collections       : true,
         with_persons           : true,
         with_media             : true,
-        with_original_languages: true
+        with_original_languages: true,
+        with_day_part          : true
       }, {
         isPrepare: false,
         countC   : true
