@@ -23,26 +23,26 @@ class ButtonDayPicker extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    value: PropTypes.instanceOf(Date),
-    label: PropTypes.string,
+    value      : PropTypes.instanceOf(Date),
+    label      : PropTypes.string,
     onDayChange: PropTypes.func,
-    uiLang: PropTypes.string.isRequired,
-    uiDir: PropTypes.string.isRequired,
-    withLabel: PropTypes.bool
+    uiLang     : PropTypes.string.isRequired,
+    uiDir      : PropTypes.string.isRequired,
+    withLabel  : PropTypes.bool
   };
 
   static defaultProps = {
-    value: null,
-    label: '',
+    value      : null,
+    label      : '',
     onDayChange: noop,
   };
 
   state = {
-    month: null,
-    isPopupOpen: false,
+    month            : null,
+    isPopupOpen      : false,
     isNativePopupOpen: false,
-    value: null,
-    stringValue: null,
+    value            : null,
+    stringValue      : null,
   };
 
   localeDateFormat      = moment.localeData().longDateFormat('L');
@@ -59,12 +59,12 @@ class ButtonDayPicker extends Component {
     if (props.value !== value ||
       props.uiLang !== uiLang) {
       return {
-        value: props.value,
-        month: props.value,
+        value      : props.value,
+        month      : props.value,
         stringValue: ButtonDayPicker.formatDateValue(props.value, props.uiLang),
-        uiLang: props.uiLang,
-        uiDir: props.uiDir,
-        locale: getLanguageLocaleWORegion(props.uiLang),
+        uiLang     : props.uiLang,
+        uiDir      : props.uiDir,
+        locale     : getLanguageLocaleWORegion(props.uiLang),
       };
     }
 
@@ -82,7 +82,7 @@ class ButtonDayPicker extends Component {
   handleDayPickerRef = () => {
     if (this.myRef) {
       scrollIntoView(this.myRef, {
-        time: 150, // half a second
+        time       : 150, // half a second
         validTarget: target => target !== window,
       });
     }
@@ -131,7 +131,7 @@ class ButtonDayPicker extends Component {
     const { month, localeUtils } = props;
     return (
       <div>
-        <Navbar {...props} className="ButtonDayPicker-DayPicker-NavButton" />
+        <Navbar {...props} className="ButtonDayPicker-DayPicker-NavButton"/>
         <YearMonthForm
           date={month}
           uiLang={uiLang}
@@ -139,7 +139,7 @@ class ButtonDayPicker extends Component {
           onChange={this.handleYearMonthChange}
           className="float-left"
         />
-        <div className="clear" />
+        <div className="clear"/>
       </div>
     );
   };
@@ -190,7 +190,8 @@ class ButtonDayPicker extends Component {
           className={clsx('ui button dateButton', { 'dateButton_with_label': withLabel })}
           onClick={this.openNativeDatePicker}
         >
-          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'} />
+          <i aria-hidden="true"
+            className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'}/>
           {withLabel && label}
           <input
             className="hide-native-date-input"
@@ -224,7 +225,7 @@ class ButtonDayPicker extends Component {
               readOnly={true}
               value={selectedInLocaleFormat}
               onClick={this.openNativeDatePicker}>
-              <input />
+              <input/>
               <Button
                 primary
                 content={t('buttons.apply')}
@@ -251,7 +252,7 @@ class ButtonDayPicker extends Component {
         onClose={this.closePopup}
         trigger={
           <Button className="dateButton" onClick={this.doSearchFromClickEvent}>
-            <Icon name="calendar alternate outline" />
+            <Icon name="calendar alternate outline"/>
             {label}
           </Button>
         }
@@ -278,5 +279,5 @@ class ButtonDayPicker extends Component {
 
 export default connect(state => ({
   uiLang: settings.getUILang(state.settings),
-  uiDir: settings.getUIDir(state.settings),
+  uiDir : settings.getUIDir(state.settings),
 }))(withTranslation()(ButtonDayPicker));

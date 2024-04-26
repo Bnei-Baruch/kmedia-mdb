@@ -4,15 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
-const FlatListFilter = ({
-  options = [],
-  value = null,
-  onCancel = noop,
-  onApply = noop,
-  renderItem = x => x.text,
-  name
-}) => {
-  const { t } = useTranslation();
+const FlatListFilter = (
+  {
+    options = [],
+    value = null,
+    onCancel = noop,
+    onApply = noop,
+    renderItem = x => x.text,
+    name
+  }
+) => {
+  const { t }               = useTranslation();
   const [sValue, setSValue] = useState(value);
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const FlatListFilter = ({
             content={t('buttons.cancel')}
             onClick={onCancel}
           />
-          <Header size="small" textAlign="center" content={t(`filters.${name}.label`)} />
+          <Header size="small" textAlign="center" content={t(`filters.${name}.label`)}/>
           <Button
             primary
             compact
@@ -69,15 +71,15 @@ const FlatListFilter = ({
 };
 
 FlatListFilter.propTypes = {
-  name: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
+  name      : PropTypes.string.isRequired,
+  options   : PropTypes.arrayOf(PropTypes.shape({
+    text : PropTypes.string.isRequired,
     value: PropTypes.any.isRequired,
   })),
-  value: PropTypes.any,
-  onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  t: PropTypes.func.isRequired,
+  value     : PropTypes.any,
+  onCancel  : PropTypes.func,
+  onApply   : PropTypes.func,
+  t         : PropTypes.func.isRequired,
   renderItem: PropTypes.func,
 };
 

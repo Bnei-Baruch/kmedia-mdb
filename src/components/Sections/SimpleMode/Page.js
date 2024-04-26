@@ -4,7 +4,7 @@ import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
@@ -12,10 +12,11 @@ import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import SectionHeader from '../../shared/SectionHeader';
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
-import SimpleModeList from './list';
+import SimpleModeList from './SimpleModeList';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { settingsGetUILangSelector } from '../../../redux/selectors';
+import { isToday } from '../../../helpers/utils';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -73,22 +74,19 @@ const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   }
 };
 
-const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
-
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
 const SimpleModePage = (
   {
     selectedDate = new Date(),
-    t,
     filesLanguages,
-    blinkLangSelect,
     onLanguageChange,
     renderUnit,
     onDayClick
   }
 ) => {
+  const { t }  = useTranslation();
   const uiLang = useSelector(settingsGetUILangSelector);
 
   const [isClient, setIsClient] = useState(false);
@@ -160,7 +158,8 @@ const SimpleModePage = (
               <div className="controller">
                 <h4>{t('simple-mode.date')}</h4>
                 <div className="date-container">
-                  <button type="button" onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
+                  <button type="button"
+                    onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
                   {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo)}
                   <button
                     type="button"
@@ -202,11 +201,9 @@ const SimpleModePage = (
 SimpleModePage.propTypes = {
   selectedDate    : PropTypes.objectOf(Date),
   filesLanguages  : PropTypes.arrayOf(PropTypes.string).isRequired,
-  t               : PropTypes.func.isRequired,
   renderUnit      : PropTypes.func.isRequired,
   onDayClick      : PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
-  blinkLangSelect : PropTypes.bool.isRequired
 };
 
-export default withTranslation()(SimpleModePage);
+export default SimpleModePage;

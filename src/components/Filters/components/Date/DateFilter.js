@@ -10,21 +10,21 @@ import { CUSTOM_DAY, CUSTOM_RANGE, datePresets, isValidDateRange, presetToRange,
 
 class DateFilter extends Component {
   static propTypes = {
-    value: PropTypes.shape({
-      from: PropTypes.objectOf(Date),
-      to: PropTypes.objectOf(Date),
+    value   : PropTypes.shape({
+      from      : PropTypes.objectOf(Date),
+      to        : PropTypes.objectOf(Date),
       datePreset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     }),
     onCancel: PropTypes.func,
-    onApply: PropTypes.func,
-    t: PropTypes.func.isRequired,
+    onApply : PropTypes.func,
+    t       : PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     onCancel: noop,
-    onApply: noop,
-    value: {
+    onApply : noop,
+    value   : {
       datePreset: TODAY,
       ...presetToRange[TODAY]()
     }
@@ -42,8 +42,8 @@ class DateFilter extends Component {
       from,
       to,
       datePreset: preset,
-      showRange: preset === CUSTOM_RANGE,
-      showDay: preset === CUSTOM_DAY,
+      showRange : preset === CUSTOM_RANGE,
+      showDay   : preset === CUSTOM_DAY,
     });
   };
 
@@ -149,7 +149,7 @@ class DateFilter extends Component {
               content={t('buttons.cancel')}
               onClick={this.onCancel}
             />
-            <Header size="small" textAlign="center" content={t('filters.date-filter.label')} />
+            <Header size="small" textAlign="center" content={t('filters.date-filter.label')}/>
             <Button
               primary
               compact
@@ -206,7 +206,7 @@ class DateFilter extends Component {
                   language={language}
                   onDayChange={this.handleFromInputChange}
                 />
-                <br />
+                <br/>
                 <FastDayPicker
                   label={t('filters.date-filter.end')}
                   value={to}

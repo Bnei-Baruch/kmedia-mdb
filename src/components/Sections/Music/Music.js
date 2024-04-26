@@ -21,7 +21,7 @@ const Music = () => {
     contentLanguages
   });
 
-  let wipErr = WipErr({ isLoading, isError, t });
+  let wipErr = WipErr({ wip: isLoading, err: isError, t });
   if (wipErr) {
     if (error) {
       console.error('========> Music error', error);

@@ -377,8 +377,9 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {
-};
+export const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
+
+export const noop = () => {};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
