@@ -43,7 +43,7 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
     return wipErr;
   }
 
-  if (!isSuccess) {
+  if (!isSuccess|| (lessons.length === 0 && others.length === 0)) {
     return <FrownSplash text={t('simple-mode.no-files-found-for-date')}/>;
   }
 
