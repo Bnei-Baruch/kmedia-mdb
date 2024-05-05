@@ -57,6 +57,7 @@ const ScanPDF = () => {
     iconForward = 'arrow_back';
     iconBack    = 'arrow_forward';
   }
+
   return (
     <div className="text__scan">
       <ScanToolbar
