@@ -936,6 +936,7 @@
   .text__scan_content {
     display: flex;
     justify-content: space-between;
+    padding-top: 2em;
 
     & > .text__scan_prev_next {
       transform: translate(0, 40VH);
