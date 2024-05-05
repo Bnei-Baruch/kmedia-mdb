@@ -6,7 +6,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { ErrorSplash, LoadingSplash } from '../../../../shared/Splash/Splash';
 import { physicalFile } from '../../../../../helpers/utils';
 import { useSelector } from 'react-redux';
-import { textPageGetScanFileSelector } from '../../../../../redux/selectors';
+import { textPageGetScanFileSelector, settingsGetUIDirSelector } from '../../../../../redux/selectors';
 import { useTranslation } from 'react-i18next';
 import ScanToolbar from './ScanToolbar';
 import { ScanZoomContext } from './ScanZoomContext';
@@ -23,6 +23,7 @@ const ScanPDF = () => {
   const [numPages, setNumPages]     = useState();
   const [inputValue, setInputValue] = useState(1);
   const { zoom }                    = useContext(ScanZoomContext);
+  const uiDir                       = useSelector(settingsGetUIDirSelector);
 
   useEffect(() => {
     if (!ref.current) {
@@ -48,6 +49,14 @@ const ScanPDF = () => {
   const onDocumentLoadSuccess         = ({ numPages: _numPages }) => setNumPages(_numPages);
   const _file                         = physicalFile(file);
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  let iconBack, iconForward;
+  if (uiDir === 'ltr') {
+    iconBack    = 'arrow_back';
+    iconForward = 'arrow_forward';
+  } else {
+    iconForward = 'arrow_back';
+    iconBack    = 'arrow_forward';
+  }
   return (
     <div className="text__scan">
       <ScanToolbar
@@ -56,16 +65,16 @@ const ScanPDF = () => {
         goToPage={goToPage}
         close={close}
       />
-      <div className="text__scan_content">
+      <div className="text__scan_content" dir={uiDir}>
         <div className="text__scan_prev_next">
           {
             numPages > 1 && (
               <Button
-                icon={<span className="material-symbols-outlined">arrow_forward</span>}
-                onClick={pageNext}
-                className="text__scan-right"
+                icon={<span className="material-symbols-outlined">{iconBack}</span>}
+                onClick={pagePrev}
+                className="text__scan-left"
                 color="blue"
-                disabled={inputValue + 1 > numPages}
+                disabled={inputValue < 2}
               />
             )
           }
@@ -95,11 +104,11 @@ const ScanPDF = () => {
           {
             numPages > 1 && (
               <Button
-                icon={<span className="material-symbols-outlined">arrow_back</span>}
-                onClick={pagePrev}
-                className="text__scan-left"
+                icon={<span className="material-symbols-outlined">{iconForward}</span>}
+                onClick={pageNext}
+                className="text__scan-right"
                 color="blue"
-                disabled={inputValue < 2}
+                disabled={inputValue + 1 > numPages}
               />
             )
           }
