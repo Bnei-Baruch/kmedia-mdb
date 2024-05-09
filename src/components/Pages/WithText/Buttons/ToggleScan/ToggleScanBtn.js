@@ -26,6 +26,7 @@ const ToggleScanBtn = () => {
     });
   };
 
+  const targetHtml = window.document.getElementById('text_layout');
   return (
     <ScanZoomContext.Provider value={{ zoom, setZoom }}>
       <ToolbarBtnTooltip
@@ -33,7 +34,7 @@ const ToggleScanBtn = () => {
         icon={<span className="material-symbols-outlined">image</span>}
         onClick={toggleOpen}
       />
-      {open && createPortal(<ScanPDF/>, window.document.getElementById('text_layout'))}
+      {open && targetHtml && createPortal(<ScanPDF/>, targetHtml)}
     </ScanZoomContext.Provider>
   );
 };
