@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { textPageGetScanFileSelector } from '../../../../../redux/selectors';
 import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
@@ -8,14 +8,22 @@ import ScanPDF from './ScanPDF';
 import { createPortal } from 'react-dom';
 import { ScanZoomContext } from './ScanZoomContext';
 
+let timeout;
 const ToggleScanBtn = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const query    = getQuery(location);
-  const open     = query.scan === 'true' && typeof window !== 'undefined';
-  const file     = useSelector(textPageGetScanFileSelector);
+  const location          = useLocation();
+  const navigate          = useNavigate();
+  const query             = getQuery(location);
+  const open              = query.scan === 'true' && typeof window !== 'undefined';
+  const file              = useSelector(textPageGetScanFileSelector);
+  const [ready, setReady] = useState(false);
 
   const [zoom, setZoom] = useState(100);
+  useEffect(() => {
+    timeout = setTimeout(() => {
+      setReady(true);
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, []);
 
   if (!file) return null;
 
@@ -26,7 +34,6 @@ const ToggleScanBtn = () => {
     });
   };
 
-  const targetHtml = window.document.getElementById('text_layout');
   return (
     <ScanZoomContext.Provider value={{ zoom, setZoom }}>
       <ToolbarBtnTooltip
@@ -34,7 +41,7 @@ const ToggleScanBtn = () => {
         icon={<span className="material-symbols-outlined">image</span>}
         onClick={toggleOpen}
       />
-      {open && targetHtml && createPortal(<ScanPDF/>, targetHtml)}
+      {open && ready && createPortal(<ScanPDF/>, window.document.getElementById('text_layout'))}
     </ScanZoomContext.Provider>
   );
 };
