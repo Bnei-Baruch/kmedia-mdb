@@ -19,6 +19,7 @@ const ToggleScanBtn = () => {
 
   const [zoom, setZoom] = useState(100);
   useEffect(() => {
+    //wait for upper DOM element id="text_layout" will ready
     timeout = setTimeout(() => {
       setReady(true);
     }, 300);
