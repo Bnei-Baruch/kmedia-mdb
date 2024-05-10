@@ -9,8 +9,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { textPageGetUrlInfoSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
 const ShareTextBtn = () => {
   const { t }              = useTranslation();

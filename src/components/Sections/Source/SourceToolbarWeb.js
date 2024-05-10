@@ -10,7 +10,7 @@ import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import AdditionsModeBtn from '../../Pages/WithText/Buttons/AdditionsMode/AdditionsModeBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
-import ToggleScanBtn from '../../Pages/WithText/Buttons/ToggleScanBtn';
+import ToggleScanBtn from '../../Pages/WithText/Buttons/ToggleScan/ToggleScanBtn';
 import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
 import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
@@ -67,9 +67,6 @@ const SourceToolbarWeb = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <LinkToLessonsBtn/>
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <ToggleScanBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

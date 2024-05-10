@@ -87,7 +87,11 @@ const TextLayoutWeb = props => {
   );
 
   return (
-    <div className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`} ref={ref}>
+    <div
+      className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`}
+      ref={ref}
+      id="text_layout"
+    >
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
       <div className={clsx({
