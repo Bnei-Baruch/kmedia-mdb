@@ -817,3 +817,4 @@ export const TEXT_PAGE_ADDITIONS_MODS = {
 };
 
 export const LOCALSTORAGE_KEY_ADDITIONS_MODS = 'additions_mods_localstorage_key';
+export const POPOVER_CONFIRMATION_TIMEOUT    = 2500;

@@ -7,29 +7,29 @@ import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
-    tree: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      count: PropTypes.number,
+    name    : PropTypes.string.isRequired,
+    tree    : PropTypes.arrayOf(PropTypes.shape({
+      text    : PropTypes.string.isRequired,
+      value   : PropTypes.string.isRequired,
+      count   : PropTypes.number,
       children: PropTypes.array,
     })),
-    value: PropTypes.arrayOf(PropTypes.string),
+    value   : PropTypes.arrayOf(PropTypes.string),
     onCancel: PropTypes.func,
-    onApply: PropTypes.func,
-    t: PropTypes.func.isRequired,
+    onApply : PropTypes.func,
+    t       : PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    tree: [],
-    value: [],
+    tree    : [],
+    value   : [],
     onCancel: noop,
-    onApply: noop,
+    onApply : noop,
   };
 
   state = {
     sValue: this.props.value,
-    term: '',
+    term  : '',
   };
 
   handleTermChange = debounce((e, data) => {
@@ -39,7 +39,7 @@ class HierarchicalFilter extends Component {
   componentDidMount() {
     if (this.activeRef) {
       scrollIntoView(this.activeRef, {
-        time: 150, // half a second
+        time       : 150, // half a second
         validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
       });
     }
@@ -92,7 +92,7 @@ class HierarchicalFilter extends Component {
 
     // in term mode we trace path
     if (this.state.term) {
-      const path = this.tracepath(this.props.tree[0], data.name);
+      const path   = this.tracepath(this.props.tree[0], data.name);
       const sValue = path.slice(1);
       if (isCallApply) {
         this.props.onApply(sValue);
@@ -249,7 +249,7 @@ class HierarchicalFilter extends Component {
               content={t('buttons.cancel')}
               onClick={this.onCancel}
             />
-            <Header size="small" textAlign="center" content={t(`filters.${name}.label`)} />
+            <Header size="small" textAlign="center" content={t(`filters.${name}.label`)}/>
             <Button
               primary
               compact

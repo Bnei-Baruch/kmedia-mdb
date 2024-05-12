@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Popup } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { Reference } from '../shapes';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../helpers/consts';
 
 const TimedPopup = ({
   message,

@@ -24,8 +24,8 @@ const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
         className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
         onClick={() => onSelectionChange(x)}
       >
-        <SectionLogo name={x} />
-        <br />
+        <SectionLogo name={x}/>
+        <br/>
         {t(`nav.sidebar.${x}`)}
       </Header>
     </Grid.Column>
@@ -42,7 +42,7 @@ const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
             content={t('buttons.cancel')}
             onClick={onCancel}
           />
-          <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
+          <Header size="small" textAlign="center" content={t('filters.sections-filter.label')}/>
           <Button
             primary
             compact
@@ -67,10 +67,10 @@ const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
 };
 
 SectionsFilter.propTypes = {
-  value: PropTypes.string,
+  value   : PropTypes.string,
   onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  t: PropTypes.func.isRequired,
+  onApply : PropTypes.func,
+  t       : PropTypes.func.isRequired,
 };
 
 export default SectionsFilter;

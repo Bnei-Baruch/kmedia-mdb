@@ -40,11 +40,10 @@ export function* fetchSubject(action) {
 
     const file = selectTextFile(subject.files, id, language, isSource, fileFilter);
     if (!file) {
-      yield put(actions.fetchSubjectFailure(`Failed finding text file for ${id}`));
-    } else {
-      yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
-      yield fetchLabels({ content_unit: id, language });
+      console.warn('Did not find matching file', subject.files, id, language);
     }
+    yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
+    yield fetchLabels({ content_unit: id, language });
   } catch (err) {
     yield put(actions.fetchSubjectFailure(err));
   }
