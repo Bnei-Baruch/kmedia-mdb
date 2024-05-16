@@ -47,7 +47,6 @@ const Filters = ({ namespace, baseParams }) => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
-        with_collections       : true,
         with_persons           : true,
         with_media             : true,
         with_original_languages: true,
@@ -61,7 +60,6 @@ const Filters = ({ namespace, baseParams }) => {
     if (isHydrated && isReady && prevSelRef.current !== selLen) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
-        with_collections       : true,
         with_persons           : true,
         with_media             : true,
         with_original_languages: true,

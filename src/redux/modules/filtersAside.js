@@ -20,7 +20,6 @@ const fieldNameByFilter = {
   [FN_CONTENT_TYPE]      : 'content_types',
   [FN_DATE_FILTER]       : 'dates',
   [FN_LANGUAGES]         : 'languages',
-  [FN_COLLECTION_MULTI]  : 'collections',
   [FN_PERSON]            : 'persons',
   [FN_MEDIA_TYPE]        : 'media_types',
   [FN_ORIGINAL_LANGUAGES]: 'original_languages',
@@ -31,7 +30,6 @@ const FILTER_NAMES = [
   FN_TOPICS_MULTI,
   FN_SOURCES_MULTI,
   FN_CONTENT_TYPE,
-  FN_COLLECTION_MULTI,
   FN_DATE_FILTER,
   FN_PERSON,
   FN_MEDIA_TYPE,
@@ -101,7 +99,7 @@ const onFetchElasticStatsSuccess = (state, { payload: { data, namespace } }) => 
   state[namespace] = { ...ns, wip: false, err: null, isReady: true };
 };
 
-const onReceiveSingleTypeStats = (status, {
+const onReceiveSingleTypeStats = (state, {
   payload: {
     dataCU = {},
     dataC = {},
@@ -111,7 +109,7 @@ const onReceiveSingleTypeStats = (status, {
     fn
   }
 }) => {
-  const statsByFN = status[namespace]?.[fn] || { byId: {}, tree: [] };
+  const statsByFN = state[namespace]?.[fn] || { byId: {}, tree: [] };
 
   if (isPrepare) {
     [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
@@ -132,7 +130,7 @@ const onReceiveSingleTypeStats = (status, {
     });
   }
 
-  status[namespace] = { ...status[namespace], [fn]: statsByFN };
+  state[namespace] = { ...state[namespace], [fn]: statsByFN };
 };
 
 const onReceiveLocationsStats = (status, { payload: { locations, namespace, isPrepare } }) => {
@@ -204,7 +202,15 @@ const filtersAsideSlice = createSlice({
     },
 
     receiveLocationsStats : onReceiveLocationsStats,
-    receiveSingleTypeStats: onReceiveSingleTypeStats
+    receiveSingleTypeStats: onReceiveSingleTypeStats,
+
+    collectionsByCt: (state, action) => {
+      if (!state[action.payload.namespace]) {
+        state[action.payload.namespace] = { [FN_COLLECTION_MULTI]: { byId: {}, tree: [] } };
+      } else if (!state[action.payload.namespace][FN_COLLECTION_MULTI]) {
+        state[action.payload.namespace][FN_COLLECTION_MULTI] = { byId: {}, tree: [] };
+      }
+    },
   },
 
   selectors: {

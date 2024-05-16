@@ -2,14 +2,21 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { FN_LANGUAGES, FN_SHOW_LESSON_AS_UNITS, PAGE_NS_LESSONS, CT_LESSONS, } from '../helpers/consts';
+import {
+  FN_LANGUAGES,
+  FN_SHOW_LESSON_AS_UNITS,
+  PAGE_NS_LESSONS,
+  CT_LESSONS,
+  FN_COLLECTION_MULTI,
+} from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as settingsSelectors } from '../redux/modules/settings';
 import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
-import { settingsGetUILangSelector } from '../redux/selectors';
+import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
+import { actions as mdbActions } from '../redux/modules/mdb';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -184,6 +191,33 @@ export function* fetchElasticStat(action) {
   }
 }
 
+export function* collectionsByCt(action) {
+  const { content_type, namespace } = action.payload;
+  try {
+    const uiLang                    = yield select(settingsGetUILangSelector);
+    const contentLanguages          = yield select(settingsGetContentLanguagesSelector);
+    const result                    = yield call(Api.collections, {
+      ...action.payload,
+      ui_language      : uiLang,
+      content_languages: contentLanguages,
+      page_size        : 1000,
+      content_type
+    });
+    const { data: { collections } } = result;
+    yield put(mdbActions.receiveCollections(collections));
+    yield put(mdbActions.receiveCollectionsByCt({ collections, content_type }));
+
+    const filters           = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+    const params            = setAllStatParamsFalse(filtersTransformer.toApiParams(filters) || {});
+    params.with_collections = true;
+    params.collection      = collections.map(x => x.id);
+    const { data }          = yield call(Api.unitsStats, params);
+    yield put(actions.receiveSingleTypeStats({ dataCU: data.collections, namespace, isPrepare: true, fn: FN_COLLECTION_MULTI }));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 function* watchFetchStat() {
   yield takeEvery(types['filters_aside/fetchStats'], fetchStat);
 }
@@ -193,7 +227,12 @@ function* watchElasticFetchStat() {
   yield takeLatest(types['filters_aside/fetchElasticStats'], fetchElasticStat);
 }
 
+function* watchCollectionsByCt() {
+  yield takeEvery(types['filters_aside/collectionsByCt'], collectionsByCt);
+}
+
 export const sagas = [
   watchFetchStat,
   watchElasticFetchStat,
+  watchCollectionsByCt,
 ];

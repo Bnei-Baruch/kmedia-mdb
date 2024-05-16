@@ -105,6 +105,7 @@ export const mdbGetDenormContentUnitSelector         = createSelector(getMDB, _2
 export const mdbGetDenormLabelSelector               = createSelector([getMDB], m => mdbSel.getDenormLabel(m));
 export const mdbGetLabelsByCUSelector                = createSelector(getMDB, _2, (m, id) => mdbSel.getLabelsByCU(m, id));
 export const mdbGetLabelsById                        = createSelector(getMDB, m => mdbSel.getLabelById(m));
+export const mdbGetCollectionsByCt                   = createSelector(getMDB, _2, (m, ct) => mdbSel.getCollectionIdsByCt(m, ct));
 
 // publications
 export const publicationsLatestBlogPostsSelector  = createSelector([getPublications], pubs => publicationsSel.getBlogPosts(pubs));
@@ -252,7 +253,6 @@ export const myNotesGetSelectedSelector = createSelector([getMyNotes], n => myNo
 export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNotesSel.getStatus(n));
 
 //textPage
-
 export const textPageGetSettings              = createSelector([getTextPage], t => textPageSel.getSettings(t));
 export const textPageGetTocIsActiveSelector   = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
 export const textPageGetTocInfoSelector       = createSelector([getTextPage], t => textPageSel.getTocInfo(t));

@@ -1,12 +1,16 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import React, { useMemo, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
-import { CT_CLIP, CT_CLIPS, CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 
-import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
-import { settingsGetUIDirSelector } from '../../../redux/selectors';
+import CollectionItem from '../CollectionFilter/CollectionItem';
+import {
+  settingsGetUIDirSelector,
+  mdbNestedGetCollectionByIdSelector,
+  mdbGetCollectionsByCt
+} from '../../../redux/selectors';
+import { useTranslation } from 'react-i18next';
+import { actions } from '../../../redux/modules/filtersAside';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -15,20 +19,27 @@ const buildRowArr   = n => {
   return Array(len).fill(0);
 };
 
-export const cCtByUnitCt = {
-  [CT_VIDEO_PROGRAM_CHAPTER]: CT_VIDEO_PROGRAM,
-  [CT_CLIP]                 : CT_CLIPS,
-  [CT_VIDEO_PROGRAM]        : CT_VIDEO_PROGRAM_CHAPTER,
-  [CT_CLIPS]                : CT_CLIP
-};
-
-const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
+const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
   const [query, setQuery] = useState('');
+  const { t }             = useTranslation();
 
-  const uiDir = useSelector(settingsGetUIDirSelector);
+  const uiDir   = useSelector(settingsGetUIDirSelector);
+  const getById = useSelector(mdbNestedGetCollectionByIdSelector);
+  const ids     = useSelector(state => mdbGetCollectionsByCt(state, ct));
 
-  const reg         = new RegExp(query, 'i');
-  const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
+  const collections = useMemo(() => {
+    const reg = new RegExp(query, 'i');
+    return ids
+      .map(getById)
+      .filter(x => !!x)
+      .filter(x => !query || (x.name && reg.test(x.name)))
+      .sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1);
+  }, [ids, getById, query]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(actions.collectionsByCt({ namespace, content_type: ct }));
+  }, [dispatch, namespace]);
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
@@ -57,7 +68,7 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
 
   return (
     <Modal
-      open={!!selectedCT}
+      open={true}
       dir={uiDir}
       onClose={handleClose}
       className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
@@ -65,7 +76,7 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
       size="fullscreen"
     >
       <Modal.Header className="no-border nowrap">
-        {t(`filters.content-types.${selectedCT}`)}
+        {t(`filters.content-types.${ct}`)}
         <Input
           className="search-input"
           placeholder={t('sources-library.filter')}
@@ -89,4 +100,4 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   );
 };
 
-export default withTranslation()(CollectionsModal);
+export default CollectionsByCtModal;
