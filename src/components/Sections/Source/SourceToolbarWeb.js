@@ -66,6 +66,9 @@ const SourceToolbarWeb = () => (
             <AdditionsModeBtn/>
           </Dropdown.Item>
           <Dropdown.Item>
+            <ToggleScanBtn/>
+          </Dropdown.Item>
+          <Dropdown.Item>
             <LinkToLessonsBtn/>
           </Dropdown.Item>
         </Dropdown.Menu>
