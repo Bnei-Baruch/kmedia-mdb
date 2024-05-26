@@ -7,12 +7,12 @@ const ContentTypesFilter = ({ namespace }) => (
   <FilterHeader
     filterName={FN_CONTENT_TYPE}
     children={UNIT_PROGRAMS_TYPE.map(ct => (
-        <CollectionsByCtBtn
-          namespace={namespace}
-          key={ct}
-          ct={ct}
-        />
-      )
+      <CollectionsByCtBtn
+        namespace={namespace}
+        key={ct}
+        ct={ct}
+      />
+    )
     )}
   />
 );

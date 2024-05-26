@@ -20,6 +20,7 @@ const ContentTypesFilter = ({ namespace }) => {
               if (ct === CT_HOLIDAY) {
                 return <CollectionsByCtBtn namespace={namespace} key={ct} ct={ct}/>;
               }
+
               if (ct === CT_PUBLIC_EVENTS) {
                 return <CollectionsByCtBtn namespace={namespace} key={ct} ct={ct}/>;
               }
