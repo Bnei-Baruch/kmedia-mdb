@@ -245,7 +245,7 @@ const lessonsSlice = createSlice({
 
     fetchAllSeries       : state => void (state.wip.series = true),
     fetchAllSeriesSuccess: (state, { payload }) => {
-      payload.seriesIDs   = payload.collections.map(x => x.id);
+      state.seriesIDs   = payload.collections.map(x => x.id);
       state.wip.series    = false;
       state.errors.series = null;
       state.seriesLoaded  = true;
