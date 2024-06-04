@@ -7,8 +7,9 @@ import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 import CollectionsByCtBtn from '../../FiltersAside/CollectionsByCt/CollectionsByCtBtn';
 
 const ContentTypesFilter = ({ namespace }) => {
-  const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE))
-    .filter(ct => EVENT_PAGE_CTS.includes(ct));
+  const filter_cts = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
+  //use custom order
+  const items   = EVENT_PAGE_CTS.filter(ct => filter_cts.includes(ct));
 
   return (<>
     <FilterHeader
