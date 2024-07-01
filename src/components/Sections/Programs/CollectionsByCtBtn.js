@@ -21,9 +21,7 @@ import CollectionsByCtModal from '../../FiltersAside/CollectionsByCt/Collections
 
 const cCtByUnitCt = {
   [CT_VIDEO_PROGRAM_CHAPTER]: CT_VIDEO_PROGRAM,
-  [CT_CLIP]                 : CT_CLIPS,
-  [CT_VIDEO_PROGRAM]        : CT_VIDEO_PROGRAM_CHAPTER,
-  [CT_CLIPS]                : CT_CLIP
+  [CT_CLIP]                 : CT_CLIPS
 };
 
 const CollectionsByCtBtn = ({ namespace, ct }) => {
