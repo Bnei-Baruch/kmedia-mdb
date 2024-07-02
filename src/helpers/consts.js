@@ -17,6 +17,7 @@ export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
 export const CT_TAG                = 'TAG';
+export const CT_PUBLIC_EVENTS      = 'PUBLIC_EVENTS';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,
@@ -35,6 +36,7 @@ export const CT_COLLECTIONS = [
   CT_CLIPS,
   CT_ARTICLES,
   CT_LESSONS_SERIES,
+  CT_PUBLIC_EVENTS
 ];
 
 export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
@@ -325,7 +327,7 @@ export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const EVENT_TYPES    = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
+export const EVENT_TYPES    = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY, CT_PUBLIC_EVENTS];
 export const SORTABLE_TYPES = [CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY];
 
 // Required for Sections filter.
@@ -786,7 +788,7 @@ export const PAGE_NS_SKETCHES = 'sketches';
 
 export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS, PAGE_NS_LIKUTIM];
 
-export const EVENT_PAGE_CTS = [...EVENT_TYPES, CT_MEAL, CT_FRIENDS_GATHERING, CT_HOLIDAY];
+export const EVENT_PAGE_CTS = [CT_CONGRESS, CT_FRIENDS_GATHERING, CT_MEAL, CT_HOLIDAY, CT_PUBLIC_EVENTS, CT_UNITY_DAY, CT_PICNIC, CT_EVENT_PART];
 
 export const CT_LESSONS = [CT_LESSON_PART, CT_DAILY_LESSON];
 

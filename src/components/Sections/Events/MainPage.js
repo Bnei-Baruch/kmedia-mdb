@@ -11,7 +11,8 @@ import {
   CT_MEAL,
   EVENT_PAGE_CTS,
   EVENT_TYPES,
-  PAGE_NS_EVENTS
+  PAGE_NS_EVENTS,
+  CT_EVENT_PART
 } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/lists';
@@ -81,7 +82,7 @@ const MainPage = ({ t }) => {
             switch (true) {
               case EVENT_TYPES.includes(content_type):
                 return <CollectionItem id={id} key={i}/>;
-              case [CT_MEAL, CT_FRIENDS_GATHERING].includes(content_type):
+              case [CT_MEAL, CT_FRIENDS_GATHERING, CT_EVENT_PART].includes(content_type):
                 return <UnitItem id={id} key={i}/>;
               default:
                 return null;

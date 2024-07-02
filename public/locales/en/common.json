@@ -134,13 +134,16 @@
       "LESSON_PART": "Daily Lessons",
       "DAILY_LESSON": "Daily Lessons",
       "VIRTUAL_LESSON": "Webinars",
+      "VIRTUAL_LESSONS": "Webinars",
       "LECTURE": "Lectures",
       "WOMEN_LESSON": "Women Lessons",
       "CHILDREN_LESSON": "Children Lessons",
       "LESSONS_SERIES": "Study Series",
       "LECTURE_SERIES": "Lecture Series",
       "CLIP": "Clips",
+      "CLIPS": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programs",
+      "VIDEO_PROGRAM": "Programs",
       "ARTICLE": "Articles",
       "PUBLICATION": "Publication",
       "BLOG_POST": "Blog",
@@ -149,7 +152,8 @@
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Kabbalah Library",
       "PICNIC": "Picnic",
-      "R_TWEET": "Tweets"
+      "R_TWEET": "Tweets",
+      "PUBLIC_EVENTS": "Public Events"
     }
   },
   "buttons": {

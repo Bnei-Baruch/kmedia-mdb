@@ -81,6 +81,7 @@ export function* fetchCollectionsByIDs(action) {
   }
 }
 
+
 export function* fetchCollection(action) {
   const id = action.payload;
   try {

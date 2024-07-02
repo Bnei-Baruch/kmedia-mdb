@@ -11,6 +11,7 @@ import { backendApi } from '../api/backendApi';
 
 const freshStore = () => ({
   cById       : {},
+  cByCt       : {},
   cuById      : {},
   labelById   : {},
   cWindow     : {},
@@ -476,8 +477,11 @@ const mdbSlice = createSlice({
       state.errors.countCU = action.payload.err;
     },
 
-    receiveCollections : (state, action) => onReceiveCollections(state, action.payload),
-    receiveContentUnits: (state, action) => onReceiveContentUnits(state, action.payload),
+    receiveCollections    : (state, action) => onReceiveCollections(state, action.payload),
+    receiveCollectionsByCt: (state, action) => {
+      state.cByCt[action.payload.content_type] = action.payload.collections.map(x => x.id);
+    },
+    receiveContentUnits   : (state, action) => onReceiveContentUnits(state, action.payload),
 
     receivePersons: onReceivePersons,
 
@@ -534,7 +538,8 @@ const mdbSlice = createSlice({
     nestedGetDenormCollection   : state => id => getDenormCollection(state, id),
     getDenormCollectionWUnits,
     nestedGetDenormContentUnit  : state => id => getDenormContentUnit(state, id),
-    nestedDenormCollectionWUnits: state => id => getDenormCollectionWUnits(state, id)
+    nestedDenormCollectionWUnits: state => id => getDenormCollectionWUnits(state, id),
+    getCollectionIdsByCt        : (state, ct) => state.cByCt[ct] ?? []
   }
 });
 

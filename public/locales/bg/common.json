@@ -134,13 +134,16 @@
       "LESSON_PART": "Ежедневни уроци",
       "DAILY_LESSON": "Ежедневни уроци",
       "VIRTUAL_LESSON": "Уебинари",
+      "VIRTUAL_LESSONS": "Уебинари",
       "LECTURE": "Лекции",
       "WOMEN_LESSON": "Уроци за жени",
       "CHILDREN_LESSON": "Уроци за деца",
       "LESSONS_SERIES": "Серии уроци",
       "LECTURE_SERIES": "Серии лекции",
       "CLIP": "Клипове",
+      "CLIPS": "Клипове",
       "VIDEO_PROGRAM_CHAPTER": "Програми",
+      "VIDEO_PROGRAM": "Програми",
       "ARTICLE": "Статии",
       "PUBLICATION": "Публикации",
       "BLOG_POST": "Блог",
@@ -149,7 +152,8 @@
       "LIKUTIM": "Избрани откъси",
       "SOURCE": "Библиотека",
       "PICNIC": "Пикници",
-      "R_TWEET": "Туитове" 
+      "R_TWEET": "Туитове",
+      "PUBLIC_EVENTS": "Public Events"
     }
   },
   "buttons": {

@@ -48,7 +48,7 @@ import {
   UNIT_EVENTS_TYPE,
   UNIT_LESSONS_TYPE,
   UNIT_PROGRAMS_TYPE,
-  UNIT_PUBLICATIONS_TYPE,
+  UNIT_PUBLICATIONS_TYPE, CT_PUBLIC_EVENTS,
 } from './consts';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
@@ -150,6 +150,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     case CT_FRIENDS_GATHERINGS:
     case CT_MEALS:
     case CT_CONGRESS:
+    case CT_PUBLIC_EVENTS:
     case CT_HOLIDAY:
     case CT_PICNIC:
     case CT_UNITY_DAY:

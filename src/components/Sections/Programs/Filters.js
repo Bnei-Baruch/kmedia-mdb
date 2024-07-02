@@ -40,8 +40,7 @@ const Filters = ({ namespace, baseParams }) => {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_media             : true,
-        with_original_languages: true,
-        with_collections       : true
+        with_original_languages: true
       }, { isPrepare: true }));
     }
   }, [dispatch, isReady, baseParams]);
@@ -52,8 +51,7 @@ const Filters = ({ namespace, baseParams }) => {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_media             : true,
-        with_original_languages: true,
-        with_collections       : true
+        with_original_languages: true
       }, { isPrepare: false }));
       prevSelRef.current = selLen;
     }

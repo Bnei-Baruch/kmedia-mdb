@@ -42,6 +42,7 @@ export function* fetchSubject(action) {
     if (!file) {
       console.warn('Did not find matching file', subject.files, id, language);
     }
+
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
     yield fetchLabels({ content_unit: id, language });
   } catch (err) {

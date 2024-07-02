@@ -133,13 +133,16 @@
       "LESSON_PART": "Täglicher Unterricht",
       "DAILY_LESSON": "Täglicher Unterricht",
       "VIRTUAL_LESSON": "Virtuelle Lektionen",
+      "VIRTUAL_LESSONS": "Virtuelle Lektionen",
       "LECTURE": "Vorträge",
       "WOMEN_LESSON": "Lektionen für Frauen",
       "CHILDREN_LESSON": "Unterricht für Kinder",
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
       "LECTURE_SERIES": "Vortragsreihe",
       "CLIP": "Clips",
+      "CLIPS": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programmes",
+      "VIDEO_PROGRAM": "Programmes",
       "ARTICLE": "Artikel",
       "PUBLICATION": "Veröffentlichung",
       "BLOG_POST": "Blog",
@@ -147,7 +150,8 @@
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Bibliothek",
-      "PICNIC": "Picknick"
+      "PICNIC": "Picknick",
+      "PUBLIC_EVENTS": "Public Events"
     }
   },
   "buttons": {

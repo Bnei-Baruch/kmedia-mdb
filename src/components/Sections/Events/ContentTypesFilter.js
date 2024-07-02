@@ -1,15 +1,15 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE } from '../../../helpers/consts';
+import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE, CT_PUBLIC_EVENTS } from '../../../helpers/consts';
 import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
 import FilterHeader from '../../FiltersAside/FilterHeader';
-import Holidays from './Holidays';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
+import CollectionsByCtBtn from '../../FiltersAside/CollectionsByCt/CollectionsByCtBtn';
 
-const ContentTypesFilter = ({ namespace, t }) => {
-  const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE))
-    .filter(ct => EVENT_PAGE_CTS.includes(ct));
+const ContentTypesFilter = ({ namespace }) => {
+  const filter_cts = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
+  //use custom order
+  const items   = EVENT_PAGE_CTS.filter(ct => filter_cts.includes(ct));
 
   return (<>
     <FilterHeader
@@ -19,7 +19,11 @@ const ContentTypesFilter = ({ namespace, t }) => {
           {
             items.map(ct => {
               if (ct === CT_HOLIDAY) {
-                return <Holidays namespace={namespace} key={ct}/>;
+                return <CollectionsByCtBtn namespace={namespace} key={ct} ct={ct}/>;
+              }
+
+              if (ct === CT_PUBLIC_EVENTS) {
+                return <CollectionsByCtBtn namespace={namespace} key={ct} ct={ct}/>;
               }
 
               return <ContentTypeItem namespace={namespace} id={ct} key={ct}/>;
@@ -31,4 +35,4 @@ const ContentTypesFilter = ({ namespace, t }) => {
   </>);
 };
 
-export default withTranslation()(ContentTypesFilter);
+export default ContentTypesFilter;
