@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import mapValues from 'lodash/mapValues';
 
 import { actions as ssrActions } from './ssr';
-import { assetUrl } from '../../helpers/Api';
 
 const initialState = {
   zipIndexById   : {},
@@ -41,7 +40,7 @@ const onFetchByIdSuccess = (state, action) => {
   const { id, data }      = payload;
   const key               = getActionKey(type);
   state[key][id] ||= {};
-  state[key][id].data     = data.replaceAll('./media/', assetUrl(`api/doc2html/${id}/media/`));
+  state[key][id].data     = data;
   state[key][id].wip      = false;
 };
 
