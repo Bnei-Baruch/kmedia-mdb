@@ -11,7 +11,8 @@ import {
   VS_DEFAULT,
   VS_HLS,
   MT_SUBTITLES,
-  CT_LESSONS_SERIES
+  CT_LESSONS_SERIES,
+  CT_DAILY_LESSON
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -158,12 +159,13 @@ export const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
-    const isDESC = content_type === CT_LESSONS_SERIES;
+    const isDESC = [CT_LESSONS_SERIES, CT_DAILY_LESSON].includes(content_type);
     units.sort((x, y) => {
       const [a, b] = isDESC ? [x, y] : [y, x];
       if (collection.ccuNames[a.id] !== collection.ccuNames[b.id]) {
         return collection.ccuNames[a.id] - collection.ccuNames[b.id];
       }
+
       return new Date(a.film_date) - new Date(b.film_date);
     });
     items = units.map(x => playableItem(x));
