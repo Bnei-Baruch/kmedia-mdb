@@ -10,7 +10,9 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
   VS_HLS,
-  MT_SUBTITLES
+  MT_SUBTITLES,
+  CT_LESSONS_SERIES,
+  CT_DAILY_LESSON
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -56,25 +58,25 @@ export const playableItem = (unit, preImageUrl) => {
   }
 
   const resp = {
-    id: unit.id,
-    name: unit.name,
-    properties: unit.properties,
+    id           : unit.id,
+    name         : unit.name,
+    properties   : unit.properties,
     preImageUrl,
-    mtByLang: {},
+    mtByLang     : {},
     qualityByLang: {}
   };
   if (!unit?.files) return resp;
 
   const subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
-    src: physicalFile(f),
+    src     : physicalFile(f),
     language: f.language
   })) || [];
   const hls       = findHLS(unit.files);
   if (hls) {
     return {
       ...resp,
-      file: { ...hls, src: physicalFile(hls, true) },
-      isHLS: true,
+      file     : { ...hls, src: physicalFile(hls, true) },
+      isHLS    : true,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
       subtitles
@@ -157,7 +159,15 @@ export const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
-    units.sort((a, b) => new Date(b.film_date) - new Date(a.film_date));
+    const isDESC = [CT_LESSONS_SERIES, CT_DAILY_LESSON].includes(content_type);
+    units.sort((x, y) => {
+      const [a, b] = isDESC ? [x, y] : [y, x];
+      if (collection.ccuNames[a.id] !== collection.ccuNames[b.id]) {
+        return collection.ccuNames[a.id] - collection.ccuNames[b.id];
+      }
+
+      return new Date(a.film_date) - new Date(b.film_date);
+    });
     items = units.map(x => playableItem(x));
   }
 
@@ -199,7 +209,7 @@ const EMBED_TYPE = {
 };
 
 export const EMBED_INDEX_BY_TYPE = {
-  [EMBED_TYPE_PLAYER]: 1,
+  [EMBED_TYPE_PLAYER]  : 1,
   [EMBED_TYPE_PLAYLIST]: 2
 };
 
