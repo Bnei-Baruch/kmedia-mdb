@@ -738,7 +738,9 @@
       "LESSONS_SERIES": "Seltudy Series",
       "KTAIM_NIVCHARIM": "Punti Salienti Selezionati",
       "sources": "Kabbalah Sources",
-      "SOURCE": "Kabbalah Sources"
+      "SOURCE": "Kabbalah Sources",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Public Events"
     },
     "media-types": {
       "video": "Video",

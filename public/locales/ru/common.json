@@ -757,7 +757,8 @@
       "KTAIM_NIVCHARIM": "Избранные моменты",
       "sources": "Первоисточники",
       "SOURCE": "Первоисточники",
-      "downloads": "Скачать"
+      "downloads": "Скачать",
+      "PUBLIC_EVENTS": "Общественные события"
     },
     "media-types": {
       "video": "Видео",

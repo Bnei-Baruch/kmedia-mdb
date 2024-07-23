@@ -737,7 +737,9 @@
       "LESSONS_SERIES": "Serie de Estudios",
       "KTAIM_NIVCHARIM": "Destacados Seleccionados",
       "sources": "Fuentes",
-      "SOURCE": "Fuentes"
+      "SOURCE": "Fuentes",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Eventos publicos"
     },
     "media-types": {
       "video": "Video",
