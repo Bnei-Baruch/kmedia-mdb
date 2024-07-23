@@ -739,7 +739,9 @@
       "LESSONS_SERIES": "Вибрані серії навчання",
       "KTAIM_NIVCHARIM": "Вибрані моменти",
       "sources": "Першоджерела",
-      "SOURCE": "Першоджерела"
+      "SOURCE": "Першоджерела",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Public Events"
     },
     "media-types": {
       "video": "Відео",

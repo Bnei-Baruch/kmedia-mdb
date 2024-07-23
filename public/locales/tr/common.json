@@ -739,7 +739,9 @@
       "LESSONS_SERIES": "Seçilmiş Ders Serileri",
       "KTAIM_NIVCHARIM": "Seçilen Önemli Noktalar",
       "sources": "Kabala Kaynakları",
-      "SOURCE": "Kabala Kaynakları"
+      "SOURCE": "Kabala Kaynakları",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Public Events"
     },
     "media-types": {
       "video": "Görüntü",

@@ -750,7 +750,8 @@
       "KTAIM_NIVCHARIM": "Selected Highlights",
       "sources": "Zdroje",
       "SOURCE": "Zdroje",
-      "downloads": "Downloads"
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Public Events"
     },
     "media-types": {
       "video": "Video",

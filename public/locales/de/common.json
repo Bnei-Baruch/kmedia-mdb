@@ -734,7 +734,9 @@
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
       "KTAIM_NIVCHARIM": "Ausgewählte Highlights",
       "sources": "Primäre Quellen",
-      "SOURCE": "Primäre Quellen"
+      "SOURCE": "Primäre Quellen",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Public Events"
     },
     "media-types": {
       "video": "Video",
