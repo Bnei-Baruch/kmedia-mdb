@@ -41,6 +41,8 @@ const makeParams = params => (
 );
 
 export class Requests {
+  static makeParams = makeParams;
+
   static get = async path => {
     try {
       return await axios.get(backendUrl(path));
@@ -59,6 +61,9 @@ export class Requests {
         break;
       case 'person':
         url = `${cmsUrl('persons')}/${options.id}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
+        break;
+      case 'about':
+        url = `${cmsUrl('about')}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
         break;
       default:
         return null;
@@ -91,8 +96,6 @@ export class Requests {
         return err;
       });
   };
-
-  static makeParams = makeParams;
 
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {

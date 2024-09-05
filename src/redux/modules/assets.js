@@ -17,6 +17,11 @@ const initialState = {
     wip : false,
     err : null
   },
+  about          : {
+    data: null,
+    wip : false,
+    err : null
+  },
   timeCode       : {},
   mergedStatus   : {}
 };
@@ -83,6 +88,7 @@ const onSSRPrepare = state => {
   state.sourceIndexById = mapValues(state.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   state.asset.err       = state.asset.err ? state.asset.err.toString() : state.asset.err;
   state.person.err      = state.person.err ? state.person.err.toString() : state.person.err;
+  state.about.err       = state.about.err ? state.about.err.toString() : state.about.err;
 };
 
 const recursiveFindPrevTimeByPos = (pos, state) => {
@@ -157,6 +163,16 @@ const assetsSlice = createSlice({
       state.person.wip = false;
       state.person.err = action.payload;
     },
+    fetchAbout            : (state, _) => void (state.about.wip = true),
+    fetchAboutSuccess     : (state, action) => {
+      state.about.data = action.payload;
+      state.about.wip  = false;
+      state.about.err  = null;
+    },
+    fetchAboutFailure     : (state, action) => {
+      state.about.wip = false;
+      state.about.err = action.payload;
+    },
     fetchTimeCode         : {
       prepare: (uid, language) => ({ payload: { uid, language } }),
       reducer: void (state => state.timeCode = {})
@@ -192,6 +208,7 @@ const assetsSlice = createSlice({
     getSourceIndexById: state => state.sourceIndexById,
     getAsset          : state => state.asset,
     getPerson         : state => state.person,
+    getAbout          : state => state.about,
     getTimeCode       : state => pos => recursiveFindPrevTimeByPos(pos, state),
     hasTimeCode       : state => Object.keys(state.timeCode).length > 0,
     getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]

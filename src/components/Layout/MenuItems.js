@@ -25,6 +25,7 @@ const ITEMS = [
   'music',
   'simple-mode',
   'sketches',
+  'about',
   'help'
 ];
 

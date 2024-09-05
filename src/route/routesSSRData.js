@@ -260,6 +260,11 @@ export const programsPage = (store, match) => {
   cuListPage(PAGE_NS_PROGRAMS)(store, match);
 };
 
+export const aboutPage = (store, match) => {
+  const { contentLanguages = ['en'] } = match;
+  store.dispatch(assetsActions.fetchAbout({ contentLanguages }));
+};
+
 export const simpleMode = (store, match) => {
   const { uiLang = 'en', contentLanguages = ['en'] } = match;
 
