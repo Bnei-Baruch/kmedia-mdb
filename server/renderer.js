@@ -199,7 +199,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     let hrend = process.hrtime(hrstart);
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
-    console.log('serverRender: store before RTK Query', store);
+    console.log('serverRender: store before RTK Query', store.getState());
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
@@ -207,7 +207,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
         show_console && console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
         hrstart = process.hrtime();
 
-        console.log('serverRender: store after RTK Query', store);
+        console.log('serverRender: store after RTK Query',  store.getState());
         store.rootSagaPromise
           .then(() => {
             hrend = process.hrtime(hrstart);
