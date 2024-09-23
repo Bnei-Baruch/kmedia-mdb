@@ -229,6 +229,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               </React.StrictMode>
             );
 
+            console.log('serverRender: helmetContext', helmetContext);
             show_console && console.log('serverRender: markup', markup);
             hrend = process.hrtime(hrstart);
             show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
