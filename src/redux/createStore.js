@@ -38,7 +38,7 @@ import { backendApi } from './api/backendApi';
 import { chroniclesApi } from './api/chronicles';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const verboseDebug = false;
+const verboseDebug = true;
 
 const sagaMiddleware = createSagaMiddleware(
   verboseDebug ? { sagaMonitor: sagaMonitor(), logger: console.log } : {}
