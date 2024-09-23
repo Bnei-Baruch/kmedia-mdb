@@ -1,7 +1,9 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { types, actions } from '../redux/modules/assets';
+import { settingsGetContentLanguagesSelector } from '../redux/selectors';
+import { DEFAULT_CONTENT_LANGUAGE } from '../helpers/consts';
 
 function* unzip(action) {
   const id = action.payload;
@@ -55,11 +57,21 @@ export function* fetchPerson(action) {
   try {
     const { data } = yield call(Api.getCMS, 'person', {
       contentLanguages: action.payload.contentLanguages,
-      id: action.payload.sourceId
+      id              : action.payload.sourceId
     });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
     yield put(actions.fetchPersonFailure(err));
+  }
+}
+
+export function* fetchAbout(action) {
+  const langs = yield select(settingsGetContentLanguagesSelector);
+  try {
+    const { data } = yield call(Api.getCMS, 'about', { contentLanguages: [...langs, DEFAULT_CONTENT_LANGUAGE] });
+    yield put(actions.fetchAboutSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchAboutFailure(err));
   }
 }
 
@@ -105,6 +117,10 @@ function* watchFetchPerson() {
   yield takeLatest([types['assets/fetchPerson']], fetchPerson);
 }
 
+function* watchFetchAbout() {
+  yield takeLatest([types['assets/fetchAbout']], fetchAbout);
+}
+
 function* watchFetchTimeCode() {
   yield takeLatest([types['assets/fetchTimeCode']], fetchTimeCode);
 }
@@ -119,6 +135,7 @@ export const sagas = [
   watchDoc2Html,
   watchFetchAsset,
   watchFetchPerson,
+  watchFetchAbout,
   watchFetchTimeCode,
   watchMergeKiteiMakor
 ];
