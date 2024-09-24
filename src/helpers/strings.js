@@ -28,18 +28,19 @@ const isCharALetter = char => {
 
   // check hebrew
   const hebrewChars = new RegExp('^[\u0590-\u05FF]+$');
-  return hebrewChars.test(char)
+  return hebrewChars.test(char);
 
   // we need to add Arabic, Japanese, Chinese etc. when needed
 };
 
+export const NOT_LETTER_CHAR = '\`!@#$%^&*()_+-=[]{};\':\\|,.<>/?~';
 // returns first letter of a string
-export const getFirstLetter = str => {
+export const getFirstLetter  = str => {
   if (!str) {
-    return ''
+    return '';
   }
 
-  const specialChars = new RegExp('"/[ `!@#$%^&*()_+-=[]{};\':\\|,.<>/?~]/');
+  const specialChars = new RegExp(`'"/[${NOT_LETTER_CHAR}]/'`);
 
   for (const l of str) {
     if (!specialChars.test(l) && isCharALetter(l)) {
@@ -48,4 +49,4 @@ export const getFirstLetter = str => {
   }
 
   return str[0];
-}
+};
