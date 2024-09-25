@@ -3,6 +3,7 @@ import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 import { RenderNoSearch } from './RenderNoSearch';
+import { NOT_LETTER_CHAR } from '../../../../helpers/strings';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
@@ -187,7 +188,8 @@ export const urlParamFromSelect = () => {
     .replace(KEEP_LETTERS_RE, ' ')
     .replace(SPACES_RE, ' ')
     .replace(/\s+/gi, ' ')
-    .split(' ');
+    .split(' ')
+    .filter(w => !NOT_LETTER_CHAR.includes(w));
   const sStart   = rangeArr.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
   const sEnd     = rangeArr.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 

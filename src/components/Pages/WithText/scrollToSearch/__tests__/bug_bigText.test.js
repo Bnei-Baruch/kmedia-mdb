@@ -2,7 +2,7 @@ import { prepareScrollToSearch } from '../helper';
 
 describe('highlighted text is too big', () => {
 
-  const srchend   = (`и радуйтесь в трепете".`);
+  const srchend   = (`את+השם+יבא+ויטול+?`);
   const srchstart = (`Трепет и радость Статья`);
 
   test('test_reproduce bug', () => {
