@@ -11,7 +11,7 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
   const { cts, key } = group;
 
   const selectedItems = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
-  const items         = selectedItems.filter(ct => cts.includes(ct));
+  const items         = cts.filter(ct => selectedItems.includes(ct));
 
   let selected    = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
   selected        = selected.filter(ct => cts.includes(ct));
