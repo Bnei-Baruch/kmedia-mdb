@@ -61,64 +61,64 @@ const Materials = ({ t }) => {
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
   const items            = [
     {
-      name: 'transcription',
-      label: t('materials.transcription.header'),
-      component: <TranscriptionTab id={unit.id} />
+      name     : 'transcription',
+      label    : t('materials.transcription.header'),
+      component: <TranscriptionTab id={unit.id}/>
     },
     (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
-      name: 'sources',
-      label: t('materials.sources.header'),
-      component: <SourceTab id={unit.id} />
+      name     : 'sources',
+      label    : t('materials.sources.header'),
+      component: <SourceTab id={unit.id}/>
     },
     {
-      name: 'sketches',
-      label: t('materials.sketches.header'),
-      component: <Sketches unit={unit} />,
+      name     : 'sketches',
+      label    : t('materials.sketches.header'),
+      component: <Sketches unit={unit}/>,
     },
     {
-      name: 'downloads',
-      label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
+      name     : 'downloads',
+      label    : t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend}/>
     }
   ];
 
   if (showSummaryTab(unit, contentLanguages)) {
     items.unshift({
-      name: 'summary',
-      label: t('materials.summary.header'),
-      component: <Summary id={unit.id} />,
+      name     : 'summary',
+      label    : t('materials.summary.header'),
+      component: <Summary id={unit.id}/>,
     });
   }
 
   if (isMobileDevice) {
     const item = isSingleMedia
       ? {
-        name: 'recommended',
-        label: t('materials.recommended.default'),
-        component: <Recommended cuId={unit.id} displayTitle={false} />
+        name     : 'recommended',
+        label    : t('materials.recommended.default'),
+        component: <Recommended cuId={unit.id} displayTitle={false}/>
       }
       : {
-        name: 'playlist',
-        label: t('materials.playlist.header'),
-        component: isMy ? <PlaylistMyItems /> : <PlaylistItems />
+        name     : 'playlist',
+        label    : t('materials.playlist.header'),
+        component: isMy ? <PlaylistMyItems/> : <PlaylistItems/>
       };
 
     items.unshift(item);
   }
 
-  if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {
+  if (derivedTexts[CT_ARTICLE]) {
     items.push({
-      name: 'articles',
-      label: t('materials.articles.header'),
-      component: <ArticleTab id={unit.id} />
+      name     : 'articles',
+      label    : t('materials.articles.header'),
+      component: <ArticleTab id={unit.id}/>
     });
   }
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_RESEARCH_MATERIAL]) {
     items.push({
-      name: 'research',
-      label: t('materials.research.header'),
-      component: <ResearchTab id={unit.id} />
+      name     : 'research',
+      label    : t('materials.research.header'),
+      component: <ResearchTab id={unit.id}/>
     });
   }
 
@@ -126,19 +126,19 @@ const Materials = ({ t }) => {
     const selectedUnits = Object.values(unit.derived_units).filter(u => DERIVED_UNITS_CONTENT_TYPE.includes(u.content_type));
     if (selectedUnits.length > 0) {
       items.push({
-        name: 'derived',
-        label: t('materials.derived-units.header'),
-        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t} />
+        name     : 'derived',
+        label    : t('materials.derived-units.header'),
+        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t}/>
       });
     }
   }
 
-  return <TabsMenu items={items.filter(x => !!x)} />;
+  return <TabsMenu items={items.filter(x => !!x)}/>;
 };
 
 Materials.propTypes = {
   unit: shapes.ContentUnit,
-  t: PropTypes.func.isRequired
+  t   : PropTypes.func.isRequired
 };
 
 export default withTranslation()(Materials);
