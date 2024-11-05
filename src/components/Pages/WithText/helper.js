@@ -1,7 +1,7 @@
 import MediaHelper from '../../../helpers/media';
 import { physicalFile, isEmpty } from '../../../helpers/utils';
 import { isTaas } from '../../shared/PDF/helper';
-import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID } from './scrollToSearch/helper';
+import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID, KEEP_LETTERS_RE } from './scrollToSearch/helper';
 
 //it's not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
@@ -14,7 +14,7 @@ export function cuToSubject(cu, fileFilter = () => true) {
     type,
     original_language,
     languages: [],
-    files: []
+    files    : []
   };
   files.filter(f => MediaHelper.IsText(f) || MediaHelper.IsAudio(f))
     .forEach(f => {
@@ -23,11 +23,11 @@ export function cuToSubject(cu, fileFilter = () => true) {
       const file  = {
         ext,
         isPdf,
-        url: physicalFile(f, !isPdf),
-        name: f.name,
-        id: f.id,
-        language: f.language,
-        type: f.type,
+        url        : physicalFile(f, !isPdf),
+        name       : f.name,
+        id         : f.id,
+        language   : f.language,
+        type       : f.type,
         insert_type: f.insert_type
       };
 
@@ -121,7 +121,7 @@ export const buildOffsets = markers => markers.map(({ properties: { srchstart, s
 
   return {
     start: Math.min(start, end) || Math.max(start, end),
-    end: Math.max(start, end),
+    end  : Math.max(start, end),
     id
   };
 }).reduce((acc, l, i, arr) => {
@@ -155,8 +155,9 @@ export const searchOnPage = str => {
 
   const textNodes = prepareTextNodes(root);
 
-  const reg     = new RegExp(str.split(' ').map(word => `(${word})`).join('(.{0,5})'), 'sgi');
-  const matches = Array.from(root.textContent.matchAll(reg), m => m);
+  const _pattern = str.replace(KEEP_LETTERS_RE, '\\$&').split(' ').map(word => `(${word})`).join('(.{0,5})');
+  const reg      = new RegExp(_pattern, 'sgi');
+  const matches  = Array.from(root.textContent.matchAll(reg), m => m);
 
   const resp = [];
   matches.forEach(m => {
