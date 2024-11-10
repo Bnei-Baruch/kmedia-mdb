@@ -48,7 +48,8 @@ import {
   UNIT_EVENTS_TYPE,
   UNIT_LESSONS_TYPE,
   UNIT_PROGRAMS_TYPE,
-  UNIT_PUBLICATIONS_TYPE, CT_PUBLIC_EVENTS,
+  UNIT_PUBLICATIONS_TYPE,
+  CT_PUBLIC_EVENTS,
 } from './consts';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
@@ -133,7 +134,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
       const cuId = getCuByCcuSkipPreparation(entity);
       if (!cuId)
         return { pathname: `/lessons/daily/c/${entity.id}`, search: `ap=0` };
-      return { pathname: `/lessons/cu/${cuId}`, search: '' };
+      return { pathname: `/lessons/cu/${cuId}`, search: `c=${entity.id}` };
     case CT_VIRTUAL_LESSONS:
       return { pathname: `/lessons/virtual/c/${entity.id}`, search: '' };
     case CT_LECTURE_SERIES:
@@ -182,6 +183,10 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
 
     if (content_type === CT_LESSONS_SERIES) {
       return { pathname: `/lessons/series/cu/${entity.id}`, search: ccu ? stringify({ c: id }) : '' };
+    }
+
+    if (CT_DAILY_LESSON === content_type) {
+      return { pathname: `${mediaPrefix.get(entity.content_type)}${entity.id}`, search: stringify({ c: id }) };
     }
 
     if (content_type === CT_SONGS) {
