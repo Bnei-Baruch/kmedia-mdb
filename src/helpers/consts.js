@@ -150,41 +150,46 @@ export const SRC_LETTER     = 'LETTER';
 export const SRC_ITEM       = 'ITEM';
 
 // Languages
-export const LANG_HEBREW     = 'he';
-export const LANG_ENGLISH    = 'en';
-export const LANG_RUSSIAN    = 'ru';
-export const LANG_SPANISH    = 'es';
-export const LANG_ITALIAN    = 'it';
-export const LANG_GERMAN     = 'de';
-export const LANG_DUTCH      = 'nl';
-export const LANG_FRENCH     = 'fr';
-export const LANG_PORTUGUESE = 'pt';
-export const LANG_TURKISH    = 'tr';
-export const LANG_POLISH     = 'pl';
-export const LANG_ARABIC     = 'ar';
-export const LANG_HUNGARIAN  = 'hu';
-export const LANG_FINNISH    = 'fi';
-export const LANG_LITHUANIAN = 'lt';
-export const LANG_JAPANESE   = 'ja';
-export const LANG_BULGARIAN  = 'bg';
-export const LANG_GEORGIAN   = 'ka';
-export const LANG_NORWEGIAN  = 'no';
-export const LANG_SWEDISH    = 'sv';
-export const LANG_CROATIAN   = 'hr';
-export const LANG_CHINESE    = 'zh';
-export const LANG_PERSIAN    = 'fa';
-export const LANG_ROMANIAN   = 'ro';
-export const LANG_HINDI      = 'hi';
-export const LANG_UKRAINIAN  = 'ua';
-export const LANG_MACEDONIAN = 'mk';
-export const LANG_SLOVENIAN  = 'sl';
-export const LANG_LATVIAN    = 'lv';
-export const LANG_CZECH      = 'cs';
-export const LANG_AMHARIC    = 'am';
-export const LANG_INDONESIAN = 'id';
-export const LANG_ARMENIAN   = 'hy';
-export const LANG_ORIGINAL   = 'or';
-export const LANG_UNKNOWN    = 'xx';
+export const LANG_HEBREW      = 'he';
+export const LANG_ENGLISH     = 'en';
+export const LANG_RUSSIAN     = 'ru';
+export const LANG_SPANISH     = 'es';
+export const LANG_ITALIAN     = 'it';
+export const LANG_GERMAN      = 'de';
+export const LANG_DUTCH       = 'nl';
+export const LANG_FRENCH      = 'fr';
+export const LANG_PORTUGUESE  = 'pt';
+export const LANG_TURKISH     = 'tr';
+export const LANG_POLISH      = 'pl';
+export const LANG_ARABIC      = 'ar';
+export const LANG_HUNGARIAN   = 'hu';
+export const LANG_FINNISH     = 'fi';
+export const LANG_LITHUANIAN  = 'lt';
+export const LANG_JAPANESE    = 'ja';
+export const LANG_BULGARIAN   = 'bg';
+export const LANG_GEORGIAN    = 'ka';
+export const LANG_NORWEGIAN   = 'no';
+export const LANG_SWEDISH     = 'sv';
+export const LANG_CROATIAN    = 'hr';
+export const LANG_CHINESE     = 'zh';
+export const LANG_PERSIAN     = 'fa';
+export const LANG_ROMANIAN    = 'ro';
+export const LANG_HINDI       = 'hi';
+export const LANG_UKRAINIAN   = 'ua';
+export const LANG_MACEDONIAN  = 'mk';
+export const LANG_SLOVENIAN   = 'sl';
+export const LANG_LATVIAN     = 'lv';
+export const LANG_CZECH       = 'cs';
+export const LANG_AMHARIC     = 'am';
+export const LANG_INDONESIAN  = 'id';
+export const LANG_ARMENIAN    = 'hy';
+export const LANG_DANISH      = 'da';
+export const LANG_ESTONIAN    = 'et';
+export const LANG_GREEK       = 'el';
+export const LANG_TAGALOG     = 'tl';
+export const LANG_AZERBAIJANI = 'az';
+export const LANG_ORIGINAL    = 'or';
+export const LANG_UNKNOWN     = 'xx';
 
 export const LANGUAGES = {
   [LANG_HEBREW]    : { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
@@ -206,21 +211,26 @@ export const LANGUAGES = {
   [LANG_BULGARIAN] : { value: LANG_BULGARIAN, locale: 'bg_BG', lang3: 'BUL', name: 'Български' },
   [LANG_GEORGIAN]  : { value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული' },
   // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
-  [LANG_NORWEGIAN] : { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
-  [LANG_SWEDISH]   : { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
-  [LANG_CROATIAN]  : { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
-  [LANG_CHINESE]   : { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文' },
-  [LANG_PERSIAN]   : { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
-  [LANG_ROMANIAN]  : { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
-  [LANG_HINDI]     : { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
-  [LANG_UKRAINIAN] : { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
-  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
-  [LANG_LATVIAN]   : { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
-  [LANG_CZECH]     : { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak', hls: LANG_SLOVENIAN },
-  [LANG_AMHARIC]   : { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
-  [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
-  [LANG_ARMENIAN]  : { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
-  [LANG_ORIGINAL]  : { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
+  [LANG_NORWEGIAN]  : { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
+  [LANG_SWEDISH]    : { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
+  [LANG_CROATIAN]   : { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
+  [LANG_CHINESE]    : { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文' },
+  [LANG_PERSIAN]    : { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
+  [LANG_ROMANIAN]   : { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
+  [LANG_HINDI]      : { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
+  [LANG_UKRAINIAN]  : { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
+  [LANG_MACEDONIAN] : { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
+  [LANG_LATVIAN]    : { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
+  [LANG_CZECH]      : { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak', hls: LANG_SLOVENIAN },
+  [LANG_AMHARIC]    : { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
+  [LANG_INDONESIAN] : { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
+  [LANG_ARMENIAN]   : { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
+  [LANG_DANISH]     : { value: LANG_DANISH, locale: 'da_DK', lang3: 'DAN', name: 'Dansk' },
+  [LANG_ESTONIAN]   : { value: LANG_ESTONIAN, locale: 'et_EE', lang3: 'EST', name: 'Eesti Keel' },
+  [LANG_GREEK]      : { value: LANG_GREEK, locale: 'el_GR', lang3: 'GRE', name: 'Ελληνικά' },
+  [LANG_TAGALOG]    : { value: LANG_TAGALOG, locale: 'tl_PH', lang3: 'TGL', name: 'ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔' },
+  [LANG_AZERBAIJANI]: { value: LANG_AZERBAIJANI, locale: 'az_AZ', lang3: 'AZE', name: 'Азәрбајҹан Дили' },
+  [LANG_ORIGINAL]   : { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
 };
 
 //for HLS old files
@@ -260,6 +270,11 @@ export const ALL_LANGUAGES = [
   LANG_AMHARIC,
   LANG_INDONESIAN,
   LANG_ARMENIAN,
+  LANG_DANISH,
+  LANG_ESTONIAN,
+  LANG_GREEK,
+  LANG_TAGALOG,
+  LANG_AZERBAIJANI,
 ];
 
 export const POPULAR_LANGUAGES = [
