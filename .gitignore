@@ -39,3 +39,7 @@ node_modules/
 !src/**/semantic.rtl.min.css
 .eslintcache
 
+__MACOSX/build/._KMedia Player Api.pdf
+__MACOSX/build/._robots.txt
+__MACOSX/build/.well-known/._result.vtt
+__MACOSX/build/static/js/._main.5aa52904.js.LICENSE.txt
