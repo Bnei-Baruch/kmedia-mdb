@@ -26,9 +26,8 @@ const Summary = ({ id }) => {
   const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
   const [selectedLanguage, setSelectedLanguage] = useState('');
 
-  const finalLanguage  = selectedLanguage || defaultLanguage;
+  const finalLanguage  = selectedLanguage || unit?.original_language || defaultLanguage;
   const file           = getFile(unit, finalLanguage);
-  const selectedFileId = file?.id || null;
 
   const handleLanguageChanged = language => {
     setSelectedLanguage(language);
@@ -36,9 +35,9 @@ const Summary = ({ id }) => {
 
   useEffect(() => {
     if (file) {
-      dispatch(assetsActions.doc2html(selectedFileId));
+      dispatch(assetsActions.doc2html(file.id));
     }
-  }, [file, dispatch, selectedFileId]);
+  }, [file, dispatch]);
 
   const { data }    = doc2htmlById[file?.id] || false;
   const description = unit.description
