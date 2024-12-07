@@ -24,9 +24,9 @@ const Summary = ({ id }) => {
 
   const summaryLanguages                        = getSummaryLanguages(unit);
   const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(contentLanguages[0]);
 
-  const finalLanguage  = selectedLanguage || unit?.original_language || defaultLanguage;
+  const finalLanguage  = selectedLanguage || defaultLanguage;
   const file           = getFile(unit, finalLanguage);
 
   const handleLanguageChanged = language => {
