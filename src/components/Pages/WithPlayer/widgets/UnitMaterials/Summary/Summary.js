@@ -9,13 +9,15 @@ import MenuLanguageSelector from '../../../../../../components/Language/Selector
 import {
   settingsGetContentLanguagesSelector,
   assetsGetDoc2htmlByIdSelector,
-  mdbGetDenormContentUnitSelector
+  mdbGetDenormContentUnitSelector,
+  settingsGetUILangSelector
 } from '../../../../../../redux/selectors';
 import { getFile, getSummaryLanguages } from './helper';
 
 const Summary = ({ id }) => {
   const { t } = useTranslation();
 
+  const uiLang = useSelector(settingsGetUILangSelector);
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const unit             = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -24,7 +26,7 @@ const Summary = ({ id }) => {
 
   const summaryLanguages                        = getSummaryLanguages(unit);
   const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-  const [selectedLanguage, setSelectedLanguage] = useState(contentLanguages[0]);
+  const [selectedLanguage, setSelectedLanguage] = useState(uiLang);
 
   const finalLanguage  = selectedLanguage || defaultLanguage;
   const file           = getFile(unit, finalLanguage);
