@@ -16,9 +16,15 @@ export const KC_SEARCH_KEYS        = [KC_SEARCH_KEY_SESSION, KC_SEARCH_KEY_STATE
 export const KC_UPDATE_USER  = 'KC_UPDATE_USER';
 export const KC_UPDATE_TOKEN = 'KC_UPDATE_TOKEN';
 
-export const login = () => {
+export const login = async () => {
   const url = new URL(window.location.href);
   url.searchParams.set('authorised', 'true');
+  try {
+    await healthCheckKC();
+  } catch (e) {
+    alert('Keycloak server is down');
+    return;
+  }
   keycloak.login({ redirectUri: url.href })
     .then(r => {
       updateUser(r);
@@ -33,18 +39,17 @@ export const logout = () => {
 export const initKC = async () => {
   try {
     await healthCheckKC();
+
   } catch (e) {
-    document.cookie = 'authorised=true;max-age=10';
-    window.location.reload();
-    return null;
+    return { user: null };
   }
 
   const options   = {
     checkLoginIframe: false,
-    flow: 'standard',
-    pkceMethod: 'S256',
-    enableLogging: true,
-    onLoad: 'check-sso'
+    flow            : 'standard',
+    pkceMethod      : 'S256',
+    enableLogging   : true,
+    onLoad          : 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
@@ -74,10 +79,10 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url: KC_API_URL,
-  realm: KC_REALM,
-  clientId: KC_CLIENT_ID,
-  scope: 'profile',
+  url          : KC_API_URL,
+  realm        : KC_REALM,
+  clientId     : KC_CLIENT_ID,
+  scope        : 'profile',
   enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
