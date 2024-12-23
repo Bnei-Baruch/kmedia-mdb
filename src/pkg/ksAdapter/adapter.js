@@ -25,7 +25,6 @@ export const login = async () => {
     alert('Keycloak server is down');
     return;
   }
-
   keycloak.login({ redirectUri: url.href })
     .then(r => {
       updateUser(r);
@@ -122,7 +121,7 @@ export const kcUpdateToken = () => keycloak
   });
 
 const healthCheckKC = async () => {
-  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs__`, { cache: 'no-store' })
+  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`, { cache: 'no-store' })
     .then(resp => {
       if (resp.status >= 400) {
         throw new Error('keycloak server return bad response');
