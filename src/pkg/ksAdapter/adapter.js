@@ -25,6 +25,7 @@ export const login = async () => {
     alert('Keycloak server is down');
     return;
   }
+
   keycloak.login({ redirectUri: url.href })
     .then(r => {
       updateUser(r);
