@@ -9,13 +9,15 @@ import MenuLanguageSelector from '../../../../../../components/Language/Selector
 import {
   settingsGetContentLanguagesSelector,
   assetsGetDoc2htmlByIdSelector,
-  mdbGetDenormContentUnitSelector
+  mdbGetDenormContentUnitSelector,
+  settingsGetUILangSelector
 } from '../../../../../../redux/selectors';
 import { getFile, getSummaryLanguages } from './helper';
 
 const Summary = ({ id }) => {
   const { t } = useTranslation();
 
+  const uiLang = useSelector(settingsGetUILangSelector);
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const unit             = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -24,11 +26,10 @@ const Summary = ({ id }) => {
 
   const summaryLanguages                        = getSummaryLanguages(unit);
   const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(uiLang);
 
   const finalLanguage  = selectedLanguage || defaultLanguage;
   const file           = getFile(unit, finalLanguage);
-  const selectedFileId = file?.id || null;
 
   const handleLanguageChanged = language => {
     setSelectedLanguage(language);
@@ -36,9 +37,9 @@ const Summary = ({ id }) => {
 
   useEffect(() => {
     if (file) {
-      dispatch(assetsActions.doc2html(selectedFileId));
+      dispatch(assetsActions.doc2html(file.id));
     }
-  }, [file, dispatch, selectedFileId]);
+  }, [file, dispatch]);
 
   const { data }    = doc2htmlById[file?.id] || false;
   const description = unit.description
