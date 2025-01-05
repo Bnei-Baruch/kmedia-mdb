@@ -40,9 +40,5 @@ node_modules/
 .eslintcache
 
 build.zip
-.yarn/install-state.gz
-__MACOSX/build/._KMedia Player Api.pdf
-__MACOSX/build/._robots.txt
-__MACOSX/build/.well-known/._result.vtt
-__MACOSX/build/static/js/._main.5aa52904.js.LICENSE.txt
-.yarn/install-state.gz
+/.yarn
+/__MACOSX
