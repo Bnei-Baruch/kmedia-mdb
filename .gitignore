@@ -39,3 +39,6 @@ node_modules/
 !src/**/semantic.rtl.min.css
 .eslintcache
 
+build.zip
+/.yarn
+/__MACOSX

@@ -90,6 +90,7 @@ export const CT_UNITS = [
 ];
 
 export const INSERT_TYPE_SUMMARY = 'summary';
+export const INSERT_TYPE_TAMLIL = 'tamlil';
 
 export const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
