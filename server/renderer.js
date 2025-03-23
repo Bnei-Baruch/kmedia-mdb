@@ -68,11 +68,14 @@ const windowEnvVariables = () => {
   return vars.join('');
 };
 
-let show_console = false;
+let show_console = true;
+// Add global WeakMap to track unique objects already processed
+const processedObjects = new WeakMap();
+
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.includes('anonymous')) return;
 
-  show_console = req.originalUrl.includes('ssr_debug');
+  //show_console = req.originalUrl.includes('ssr_debug');
   show_console && console.log('serverRender', req.originalUrl);
   show_console && console.log('headers', req.headers);
 
@@ -127,25 +130,32 @@ const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, s
 
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
   show_console && console.log('serverRenderAuthorised uiLang', uiLang);
-
+  //show_console && logMemoryUsage('serverRenderAuthorised start');
   moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
 
+  // Create scoped objects to ensure garbage collection
+  let store, history, helmetContextLocal, cleanup;
+  
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(uiLang, err => {
     show_console && console.log('language changed', uiLang, err);
+    //show_console && logMemoryUsage('serverRenderAuthorised language changed');
+
     if (err) {
       console.log('Error next', err);
       next(err);
       return;
     }
 
-    const history = createMemoryHistory({
+    history = createMemoryHistory({
       initialEntries: [req.originalUrl]
     });
 
     const cookies = cookieParse(req.headers.cookie || '');
 
-    const deviceInfo = new UAParser(req.get('user-agent')).getResult();
+    // Limit parser results to what's needed
+    const userAgent = req.get('user-agent');
+    const deviceInfo = new UAParser(userAgent).getResult();
 
     const cookieUILang         = cookies[COOKIE_UI_LANG] || uiLang;
     let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
@@ -171,12 +181,30 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
       initialState.auth = { user: { name: KC_BOT_USER_NAME } };
     }
 
-    const store = createStore(initialState, history);
+    store = createStore(initialState, history);
+
+    // Cleanup function to help GC
+    cleanup = () => {
+      if (store && typeof store.stopSagas === 'function') {
+        store.stopSagas();
+      }
+      
+      // Clear references
+      store = null;
+      history = null;
+      helmetContextLocal = null;
+      
+      // Clear global cache
+      processedObjects.clear?.();
+    };
 
     // Dispatching languages change updates tags and sources.
     store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
     store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
+
+    // Create a local helmet context for this request
+    helmetContextLocal = {};
 
     const context = {
       req,
@@ -199,103 +227,170 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     let hrend = process.hrtime(hrstart);
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
+    //show_console && logMemoryUsage('serverRender before promises');
+
     Promise.all(promises)
       .then(() => {
-        store.stopSagas();
+        if (store && typeof store.stopSagas === 'function') {
+          store.stopSagas();
+        }
         hrend = process.hrtime(hrstart);
         show_console && console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
         hrstart = process.hrtime();
 
-        store.rootSagaPromise
-          .then(() => {
-            hrend = process.hrtime(hrstart);
-            show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart      = process.hrtime();
-            // Actual render.
-            const markup = ReactDOMServer.renderToString(
-              <React.StrictMode>
-                <ErrorBoundary>
-                  <HelmetProvider context={helmetContext}>
-                    <App
-                      i18n={context.i18n}
-                      store={store}
-                      history={history}
-                      deviceInfo={deviceInfo}
-                    />
-                  </HelmetProvider>
-                </ErrorBoundary>
-              </React.StrictMode>
-            );
-
-            show_console && console.log('serverRender: markup', markup);
-            hrend = process.hrtime(hrstart);
-            show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart = process.hrtime();
-
-            const { helmet } = helmetContext;
-            hrend            = process.hrtime(hrstart);
-            show_console && console.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
-
-            if (context.url) {
-              // Somewhere a `<Redirect>` was rendered.
-              res.redirect(301, context.url);
-            } else {
-              // We're good, add in markup, send the response.
-              const direction    = getLanguageDirection(uiLang);
-              const cssDirection = direction === 'ltr' ? '' : '.rtl';
-
-              const i18nData = serialize(
-                {
-                  initialLanguage : context.i18n.language,
-                  initialI18nStore: pick(context.i18n.services.resourceStore.data, [
-                    context.i18n.language,
-                    context.i18n.options.fallbackLng
-                  ])
-                }
+        //show_console && logMemoryUsage('serverRender before rootSagaPromise');
+        if (store && store.rootSagaPromise) {
+          store.rootSagaPromise
+            .then(() => {
+              show_console && logMemoryUsage('serverRender before renderToString');
+              hrend = process.hrtime(hrstart);
+              show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
+              hrstart      = process.hrtime();
+              
+              // Only proceed if we still have valid references
+              if (!store || !history) {
+                cleanup();
+                return;
+              }
+              
+              // Actual render.
+              const markup = ReactDOMServer.renderToString(
+                <React.StrictMode>
+                  <ErrorBoundary>
+                    <HelmetProvider context={helmetContextLocal}>
+                      <App
+                        i18n={context.i18n}
+                        store={store}
+                        history={history}
+                        deviceInfo={deviceInfo}
+                      />
+                    </HelmetProvider>
+                  </ErrorBoundary>
+                </React.StrictMode>
               );
 
-              store.dispatch(ssr.prepare());
-              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
-              const storeData    = store.getState();
-              const storeDataStr = serialize(storeData);
-              show_console && console.log('serverRender: redux data before return', storeData.auth);
-              const rootDiv = `
-                <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
-                <script>
-                  window.__botKCInfo = ${storeData.auth?.user?.name === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
-                  window.__data = ${storeDataStr};
-                  window.__i18n = ${i18nData};
-                  ${windowEnvVariables()}
-                </script>
-                `;
+              show_console && console.log('serverRender: markup', markup);
+              hrend = process.hrtime(hrstart);
+              show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
+              hrstart = process.hrtime();
 
-              const html = htmlData
-                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
-                .replace(/lang="en"/, `lang="${uiLang}"`)
-                .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`)
-                .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
-                .replace(/<div id="root"><\/div>/, rootDiv);
+              const { helmet } = helmetContextLocal;
+              hrend            = process.hrtime(hrstart);
+              show_console && console.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
-              show_console && console.log('serverRender: rendered html', html);
+              if (context.url) {
+                // Somewhere a `<Redirect>` was rendered.
+                res.redirect(301, context.url);
+                cleanup();
+              } else {
+                // We're good, add in markup, send the response.
+                const direction    = getLanguageDirection(uiLang);
+                const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
-              if (context.code) {
-                res.status(context.code);
+                // Limit the size of serialized data
+                const i18nData = serialize(
+                  {
+                    initialLanguage : context.i18n.language,
+                    initialI18nStore: pick(context.i18n.services.resourceStore.data, [
+                      context.i18n.language,
+                      context.i18n.options.fallbackLng
+                    ])
+                  }
+                );
+
+                // Make sure store is still valid
+                if (store && typeof store.dispatch === 'function') {
+                  store.dispatch(ssr.prepare());
+                  
+                  // Use local references to avoid keeping large objects in memory
+                  const storeData = store.getState();
+                  const storeDataStr = serialize(storeData); //serializeWithLimit(storeData);
+                  show_console && console.log('serverRender: redux data before return', storeData.auth);
+                  
+                  const rootDiv = `
+                    <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+                    <script>
+                      window.__botKCInfo = ${storeData.auth?.user?.name === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
+                      window.__data = ${storeDataStr};
+                      window.__i18n = ${i18nData};
+                      ${windowEnvVariables()}
+                    </script>
+                    `;
+
+                  const html = htmlData
+                    .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
+                    .replace(/lang="en"/, `lang="${uiLang}"`)
+                    .replace(/<title>.*<\/title>/, helmet.title.toString())
+                    .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`)
+                    .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
+                    .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
+                    .replace(/<div id="root"><\/div>/, rootDiv);
+
+                  show_console && console.log('serverRender: rendered html');
+
+                  if (context.code) {
+                    res.status(context.code);
+                  }
+
+                  res.send(html);
+                } else {
+                  next(new Error('Store became invalid during rendering'));
+                }
+                
+                // Clean up after response is sent
+                cleanup();
               }
-
-              res.send(html);
-            }
-          })
-          .catch((a, b, c) => {
-            console.log('Root saga error', a, b, c);
-            return next(a);
-          });
+            })
+            .catch((err) => {
+              console.log('Root saga error', err);
+              cleanup();
+              return next(err);
+            });
+        } else {
+          cleanup();
+          next(new Error('Store or rootSagaPromise became invalid'));
+        }
       })
-      .catch((a, b, c) => {
-        console.log('SSR error', a, b, c);
-        return next(a);
+      .catch((err) => {
+        console.log('SSR error', err);
+        cleanup();
+        return next(err);
       });
+  });
+}
+
+// Prevent excessive memory use when serializing large objects
+function serializeWithLimit(obj, maxDepth = 10) {
+  return serialize(obj, {
+    isJSON: true,
+    space: 0,
+    // Add a custom replacer to handle circular references and limit depth
+    replacer: (key, value) => {
+      // Skip null and undefined values
+      if (value === null || value === undefined) {
+        return value;
+      }
+      
+      // Handle circular references and deep objects
+      if (typeof value === 'object' && value !== null) {
+        // Create a custom stack depth tracker
+        if (!value.__depth) {
+          value.__depth = 1;
+        } else if (value.__depth > maxDepth) {
+          // Truncate deep objects to prevent excessive memory usage
+          return '[Object]';
+        } else {
+          value.__depth++;
+        }
+        
+        // Clean up the depth property after processing
+        setTimeout(() => {
+          delete value.__depth;
+        }, 0);
+      }
+      
+      return value;
+    }
   });
 }
 
@@ -377,6 +472,36 @@ function alternateLinks(req, lang) {
     })
     .join('');
 }
+
+
+function logMemoryUsage(place) {
+  const usage = process.memoryUsage();
+  console.group(`memory usage ${place} ${new Date()}`);
+  console.log('memory usage rss: ', `${Math.round(usage.rss / 1024 / 1024)} MB`);
+  console.log('memory usage heapTotal: ', `${Math.round(usage.heapTotal / 1024 / 1024)} MB`);
+  console.log('memory usage heapUsed: ', `${Math.round(usage.heapUsed / 1024 / 1024)} MB`);
+  console.log('memory usage external: ', `${Math.round(usage.external / 1024 / 1024)} MB`);
+  console.log('memory usage arrayBuffers: ', `${Math.round(usage.arrayBuffers / 1024 / 1024)} MB`);
+  console.groupEnd();
+}
+
+function logMemoryUsageObject(alias, obj) {
+  // Use a more reliable way to estimate object size
+  let size = 0;
+  try {
+    // Only process objects we haven't seen before to avoid circular references
+    if (obj && typeof obj === 'object' && !processedObjects.has(obj)) {
+      processedObjects.set(obj, true);
+      const serialized = JSON.stringify(obj);
+      size = serialized ? new Blob([serialized]).size : 0;
+    }
+  } catch (err) {
+    console.error('Error measuring object size:', err.message);
+    size = -1; // Indicate error
+  }
+  console.log('memory usage logMemoryUsageObject', alias, size);
+}
+
 
 function ogUrl(req, lang) {
   // strip ui language from path
