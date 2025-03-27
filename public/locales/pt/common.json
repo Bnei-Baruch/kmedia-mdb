@@ -1,0 +1,897 @@
+{
+  "nav": {
+    "top": {
+      "header": "Kabbalah Media"
+    },
+    "sidebar": {
+      "personal": "Área Pessoal",
+      "lessons": "Lições & Palestras",
+      "programs": "Programas & Clipes",
+      "sources": "Biblioteca Cabalista",
+      "likutim": "Extratos Diversos",
+      "events": "Congressos & Eventos",
+      "books": "Livros",
+      "topics": "Tópicos",
+      "topic": "Tópico",
+      "not-found": "Não Encontrado",
+      "publications": "Publicações",
+      "music": "Música",
+      "simple-mode": "Downloads",
+      "photos": "Fotos",
+      "design": "Design",
+      "design2": "Layout",
+      "project-status": "Status do Projeto",
+      "help": "Ajuda",
+      "old-site": "Site Antigo",
+      "podcast": "Podcast",
+      "subscribe": "Inscreva-se para Atualizações",
+      "bookmarks": "Favoritos",
+      "sketches": "Esboços",
+      "about": "Sobre o Kabbalah Media"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, Todos os direitos reservedos",
+      "bottomTextStart": " Kabbalah Media é o arquivo oficial do Bnei Baruch Kabbalah Education & Research Institute - ",
+      "bottomTextLink": "https://www.kabbalah.info",
+      "bottomTextEnd": "- atualizado regularmente com versões visualizáveis ​​e para download da Lição Diária de Cabala com o Cabalista Dr. Michael Laitman em formatos de vídeo e áudio, bem como outras lições de Cabala Bnei Baruch, palestras, programas de TV, música, videoclipes, livros e textos. Os arquivos do Kabbalah Media podem ser navegados por buscas por palavra-chave ou frase-chave, calendário, idioma, tipo de conteúdo, tipo de mídia e catálogos. Marque a página principal do Kabbalah Media para poder acessar de forma rápida e fácil os materiais de Cabala mais recentes do dia atual."
+    }
+  },
+  "filters": {
+    "by": "Filtrar por:",
+    "filters": "Filtros",
+    "hideFilters": "Ocultar Filtros",
+    "all": "Tudo",
+    "date-filter": {
+      "label": "Data",
+      "selectTitle": "Selecione intervalo de datas",
+      "presets": {
+        "TODAY": "Hoje",
+        "YESTERDAY": "Ontem",
+        "LAST_7_DAYS": "Últimos 7 Dias",
+        "LAST_30_DAYS": "Últimos 30 Dias",
+        "LAST_MONTH": "Último Mês",
+        "THIS_MONTH": "Este Mês",
+        "CUSTOM_RANGE": "Intervalo personalizado",
+        "CUSTOM_DAY": "Escolha uma Data"
+      },
+      "start": "Início",
+      "end": "Fim"
+    },
+    "language-filter": {
+      "label": "Idioma",
+      "all": "Qualquer Idioma"
+    },
+    "sources-filter": {
+      "label": "Fontes",
+      "all": "Todas as Fontes"
+    },
+    "topics-filter": {
+      "label": "Tópicos",
+      "all": "Todos os Tópicos"
+    },
+    "publishers-filter": {
+      "label": "Editores"
+    },
+    "programs-filter": {
+      "label": "Genêro/Programa",
+      "all": "Todos Programas",
+      "recently-updated": "Atualizado Recentemente",
+      "last-updated": "Última Atualização em"
+    },
+    "locations-filter": {
+      "label": "Locais",
+      "all": "Todos Locais"
+    },
+    "holidays-filter": {
+      "label": "Festividades",
+      "all": "Todas Festividades"
+    },
+    "years-filter": {
+      "label": "Ano",
+      "placeholder": "Selecione um ano"
+    },
+    "collections-filter": {
+      "label": "Coleções",
+      "all": "Todas Coleções"
+    },
+    "sections-filter": {
+      "label": "Seção",
+      "all": "Todas",
+      "lessons": "Lições & Palestras",
+      "programs": "Programas & Clipes",
+      "events": "Congressos & Eventos",
+      "publications": "Publicações",
+      "sources": "Fontes Cabalísticas",
+      "posts": "Blog"
+    },
+    "aside-filter": {
+      "filters-title": "Filtrar por interesses",
+      "sources-filter-multi": "Cabalistas",
+      "topics-filter-multi": "Tópicos",
+      "content-type-filter": "Seção",
+      "language-filter": "Idioma",
+      "date-filter": "Data",
+      "media-type-filter": "Mídia",
+      "person-filter": "Autor",
+      "original-language-filter": "Idioma Original",
+      "locations-filter": "Local",
+      "free-text": "Texto Livre",
+      "sort-by-filter": "Classificar por"
+    },
+    "media-types": {
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcrição",
+      "image": "Esboço"
+    },
+    "content-types": {
+      "CONGRESS": "Congressos",
+      "HOLIDAY": "Festividades",
+      "UNITY_DAY": "Dias de Unidade",
+      "FRIENDS_GATHERING": "Reunião de Amigos",
+      "MEAL": "Refeições",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Lições Diárias",
+      "DAILY_LESSON": "Lições Diárias",
+      "VIRTUAL_LESSON": "Webinars",
+      "VIRTUAL_LESSONS": "Webinars",
+      "LECTURE": "Palestras",
+      "WOMEN_LESSON": "Lições para Mulheres",
+      "CHILDREN_LESSON": "Lições para Crianças",
+      "LESSONS_SERIES": "Séries de Estudo",
+      "LECTURE_SERIES": "Séries de Congressos",
+      "CLIP": "Clipes",
+      "CLIPS": "Clipes",
+      "VIDEO_PROGRAM_CHAPTER": "Programas",
+      "VIDEO_PROGRAM": "Programas",
+      "ARTICLE": "Artigos",
+      "PUBLICATION": "Publicação",
+      "BLOG_POST": "Blog",
+      "TRAINING": "Treinamento",
+      "KITEI_MAKOR": "Fontes de Materiais",
+      "LIKUTIM": "Extratos Diversos",
+      "SOURCE": "Biblioteca Cabalista",
+      "PICNIC": "Piquenique",
+      "R_TWEET": "Tweets",
+      "PUBLIC_EVENTS": "Eventos Públicos"
+    }
+  },
+  "buttons": {
+    "apply": "Aplicar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "audio": "Audio",
+    "video": "Video",
+    "more": "Mais",
+    "copy-link": "Copiar Link",
+    "search": "Procurar",
+    "previous-lesson": "Para a lição anterior",
+    "next-lesson": "Para a próxima lição",
+    "previous-article": "Artigo Anterior",
+    "next-article": "Próximo artigo",
+    "copy": "Copiar",
+    "view-all": "Ver Tudo",
+    "save": "Salvar",
+    "remove": "Remover",
+    "edit": "Editar"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Arraste os ponteiros para compartilhar uma parte do vídeo"
+    },
+    "buttons": {
+      "edit-back": "Voltar para reproduzir",
+      "tap-to-unmute": "TOQUE PARA DESATIVAR O SILÊNCIO"
+    },
+    "error": {
+      "loading": "Erro ao carregar o arquivo."
+    },
+    "header": {
+      "series-by-topic": "Séries de lições sobre o tópico:"
+    },
+    "download": {
+      "icon-hover-text": "Download o extrato que você marcou",
+      "download-button": "Download",
+      "copyButton": "Copiar link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Velocidade",
+      "quality": "Qualidade",
+      "language": "Idioma",
+      "audio": "Audio",
+      "video": "Video",
+      "normal": "Normal",
+      "audio-only-on": "Audio somente ON",
+      "audio-only-off": "Audio somente OFF",
+      "subtitles": "Subtítulos"
+    },
+    "share": {
+      "title": "assista este video",
+      "start-position": "Clique para iniciar",
+      "end-position": "Clique para finalizar",
+      "embedded": "Incorporar",
+      "reset-to-full": "Redefinir por completo",
+      "download-file": "Download extrato"
+    },
+    "controls": {
+      "pause": "Pausa",
+      "play": "Play",
+      "mute": "Mudo",
+      "share": "Compartilhar",
+      "settings": "Configurações",
+      "rewind": "Rebobinar {{seek}} seg",
+      "skip": "Pular {{seek}} seg",
+      "next-video": "Próximo video",
+      "prev-video": "Video anterior",
+      "fullscreen": "Tela Cheia",
+      "fullscreen-exit": "Sair tela cheia"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Partes da lição",
+      "SPECIAL_LESSON": "Partes da lição",
+      "CONGRESS": "Partes do evento",
+      "HOLIDAY": "Partes das festividades",
+      "PICNIC": "Partes do evento",
+      "UNITY_DAY": "Partes do evento",
+      "LESSONS_SERIES": "Partes da coleção",
+      "SONGS": "Música Playlist"
+    },
+    "shuffle": "Misturar Playlist"
+  },
+  "messages": {
+    "loading": "Carregando",
+    "loading-subtext": "Segure firme",
+    "server-error": "Server Error",
+    "not-found": "Oops!",
+    "not-found-subtext": "Não conseguimos encontrar o que você está procurando",
+    "no-files": "Sem Arquivos",
+    "no-playable-files": "Nenhum arquivo reproduzível",
+    "no-results": "Sem resultados",
+    "pagination-results": "Resultados {{start}} - {{end}} de um {{total}}",
+    "link-copied-to-clipboard": "Link foi copiado!",
+    "text-copied-to-clipboard": "Text foi copiado!",
+    "unknown": "Desconhecido",
+    "unsupported-media-format": "Formato não suportado.",
+    "error-loading-file": "Erro ao carregar o arquivo.",
+    "fallback-language": "Fonte de conteúdos não foi encontrada",
+    "no-images": "Esboços não encontrados",
+    "new": "novo",
+    "trim-expiration": "* O link ficará disponível para download por apenas 7 dias",
+    "trimmed-title": "Seus arquivos estão prontos",
+    "trimmed-title-wip": "Nós preparamos o arquivo para você",
+    "trimmed-content-wip": "Alguns minutos ...",
+    "add-new-note": " Escreva notas que você ouviu durante as aulas ou qualquer coisa importante para guardar para o futuro...",
+    "confirm-remove-note": "Você tem certeza que quer deletar a nota?",
+    "unit-tags": "Marcações"
+  },
+  "search": {
+    "header": {
+      "text": "Resultados da Pesquisa",
+      "subtext": ""
+    },
+    "topNote": {
+      "tip": "Dica",
+      "first": "Resultados da Pesquisa estão em {{language}}.",
+      "second": " Você pode escolher outro idioma do conteúdo"
+    },
+    "didYouMean": "Você quis dizer: ",
+    "showAll": "Mostre tudo",
+    "lessons": "Lições",
+    "programs": "Programas",
+    "sortby": "classificar por",
+    "sorts": {
+      "relevance": "Relevância",
+      "newertoolder": "Mais Novo para Mais Velho",
+      "oldertonewer": "Mais Velho para Mais Novo"
+    },
+    "results": {
+      "empty-query": " Nenhum termo de busca fornecido. Por favor, use a caixa acima para pesquisar.",
+      "no-results": "Sua busca por <1><0>{{query}}</0></1> não encontrou resultados."
+    },
+    "result": {
+      "description": "Resumo",
+      "transcript": "Transcrição",
+      "content": "Conteúdo"
+    },
+    "intent-types": {
+      "lessons": "Lições matinais diárias",
+      "programs": "Programas"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lições sobre tópico:",
+      "lessons-source": "Lessons por fonte:",
+      "programs-topic": "Programas sobre tópico:",
+      "programs-source": "Programs por fonte:"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "Kabbalah Media",
+      "subtext": "A maior fonte de Kabbalah do mundo. Lições de Kabbalah com o cabalista Dr. Michael Laitman, fontes autênticas de Kabbalah para download, incluindo O Zohar, e programas com a visão da Kabbalah sobre relacionamentos, saúde, educação, economia e sociedade."
+    },
+    "search": "Explore a Sabedoria da Kabbalah",
+    "sections": "Seções de Arquivo",
+    "updates": "Últimas atualizações",
+    "social": "Rav Laitman na redes sociais",
+    "blog-title": "Blog de Rav Laitman",
+    "twitter-title": "Tweets",
+    "all-posts": "Todos os posts do Blog",
+    "all-tweets": "Todos Tweets",
+    "read-more-posts": "Leia mais posts",
+    "read-more-tweets": "Leia mais Tweets",
+    "last-lesson": "A mais recente lição diária",
+    "donate": "DOE AGORA",
+    "virtual-home": "CASA VIRTUAL",
+    "promoted": {
+      "header": "Congresso em Nova Jersey",
+      "subheader": "23-26 May 2019"
+    },
+    "latest-updates": {
+      "new-on-the-site": "Novo no site"
+    },
+    "donate-modal": "<p>Caros amigos,</p> <p>Antes de rolar mais adiante e aproveitar o conteúdo original do site, gostaríamos de convidá-los a se tornarem nossos parceiros no empreendimento de disseminação da associação \"Bnei Baruch - Kabbalah La'am\".</p> <p>Até o momento, distribuímos quantidades sem precedentes de material valioso e único em todo o mundo, e tudo isso graças a vocês, milhares de voluntários leais.</p> <p>Mas não é o suficiente. Dia a dia, o mundo cai em uma crise mais aguda em todas as áreas da vida, e precisa de conteúdo que somente nossa organização pode fornecer; conteúdo que explique a importância da conexão entre as pessoas e as aproxime da solução de todas as crises.</p> <p>É por isso que agora, mais do que nunca, convidamos você a doar financeiramente e participar do aumento da disseminação de nosso conteúdo para a humanidade.</p> <p>Desta forma, cada um de nós pode realizar o sonho dos cabalistas de espalhar a sabedoria da Cabala para as massas e derramar a luz da confiança para o mundo, como o Baal HaSulam escreveu: \"Somente pela expansão da sabedoria da Cabala seremos recompensados ​​com a redenção completa.\"</p> <p>Nesta ocasião, gostaríamos de agradecer aos amigos que doaram e continuam doando regularmente, e agradecemos antecipadamente a todos que agora se juntam para sua importante contribuição à disseminação da sabedoria da Cabala.</p> <p><b>A administração da associação \"Bnei Baruch - Kabbalah La'am\".</b></p>"
+  },
+  "events": {
+    "header": {
+      "text": "Congressos & Eventos",
+      "subtext": "Hoje, a sabedoria da Kabbalah já está em todo lugar no mundo. Nesta seção você poderá ver eventos, convenções e reuniões especiais da associação \"Kabbalah L’Am\" em Israel e no exterior."
+    },
+    "tabs": {
+      "conventions": "Congresso",
+      "holidays": "Festividades",
+      "unity-days": "Dias de Unidade",
+      "friends-gatherings": "Reunião de Amigos",
+      "meals": "Refeições"
+    },
+    "list": {
+      "item_from": "Item de:"
+    },
+    "ALL_EVENTS": "Todos Eventos",
+    "no-matches": "Nenhum evento correspondente encontrado",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": " Outras partes do mesmo evento "
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Preparação",
+        "lessons": "Lições",
+        "other_parts": "Outras Partes do Evento",
+        "appendices": "Apêndices"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "Palestras & Lições",
+      "subtext": "Aulas e palestras do Dr. Michael Laitman. Aulas virtuais, palestras para mulheres, gravações exclusivas do Rabino Baruch Ashlag (RABASH) e muito mais."
+    },
+    "tabs": {
+      "daily": "Lições Diárias",
+      "virtual": "Webinars",
+      "lectures": "Palestras",
+      "women": "Lições para Mulheres",
+      "rabash": "Lições do Rabash",
+      "children": "Lições para Crianças",
+      "series": "Séries para auto-estudo",
+      "seriesTree": {
+        "byTopics": "Por Tópicos",
+        "bySourcesOf": "Por fontes de"
+      }
+    },
+    "list": {
+      "related": "Relacionado a:",
+      "number": "#",
+      "nameByNum_1": "Manhã",
+      "nameByNum_2": "Tarde",
+      "nameByNum_3": "Noite",
+      "nameByNum_4": "Noite 2",
+      "item_from": "Item de:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Outros itens da mesma série"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "Outras partes da mesma lição",
+          "item-title": "Parte {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "Lição diária de Cabala - atualizada",
+      "description": "Um atalho atualizado para a última Lição Diária"
+    }
+  },
+  "likutim": {
+    "header": {
+      "text": "Extratos Diversos",
+      "subtext": " Nesta seção, você encontrará extratos dos escritos dos maiores cabalistas que aprendemos durante as aulas diárias de Cabala com o Dr. Michael Laitman. Os trechos dizem respeito ao trabalho espiritual e à estrutura dos mundos superiores."
+    },
+    "item-header": "Extratos das fontes:"
+  },
+  "programs": {
+    "header": {
+      "text": "Programas & Clipes",
+      "subtext": "Aqui você encontrará uma grande variedade de programas que incluem: conversas fascinantes sobre o significado da vida, eventos atuais, programas para toda a família, clipes e muito mais."
+    },
+    "tabs": {
+      "main": "Programas",
+      "clips": "Clipes"
+    },
+    "genres": {
+      "documentary": "Documentário",
+      "late-night": "Tarde da Noite",
+      "news": "Notícias",
+      "talk-show": "Talk Show",
+      "educational": "Educacional",
+      "children": "Crianças",
+      "movies": "Filmes",
+      "other": "Outro"
+    },
+    "list": {
+      "episode_from": "Episódio de:",
+      "item_of": "Item de:",
+      "show_all": "Para todos episódios"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Outras Partes do mesmo programa",
+          "item-title": "Episódio {{name}}"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Publicações",
+      "subtext": "Artigos sobre eventos atuais, cultura, ciência popular, relacionamentos e muito mais, apresentados a partir da perspectiva única da sabedoria da Cabala",
+      "subtext2": "O conteúdo é baseado em palestras dadas pelo Dr. Michael Laitman e é escrito e editado por seus alunos."
+    },
+    "tabs": {
+      "articles": "Artigos",
+      "twitter": "Twitter",
+      "blog": "Blog",
+      "audio-blog": "Audio Blog"
+    },
+    "list": {
+      "item_from": "Item do:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Outros artigos publicados nesta coleção"
+        }
+      }
+    },
+    "read-more": "Leia Mais"
+  },
+  "music": {
+    "header": {
+      "text": "Música",
+      "subtext": ""
+    }
+  },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads",
+      "subtext": "Todas as mídias de um certo dia"
+    },
+    "today-button": "Hoje",
+    "total-media-for-date": "Todas as mídias por data",
+    "media-language": "Mídia Idioma:",
+    "no-files-found-for-lang": "Não há arquivos para o Idioma selecionado.",
+    "try-different-language": "Tente escolhendo um ",
+    "language-click": "Idioma diferente.",
+    "no-files-found-for-date": "Não há arquivos para esta data",
+    "date": "Data:",
+    "prev": "Anterior.",
+    "next": "Próxima",
+    "choose-date": "Escolha data",
+    "today-lessons": "Lições Diárias de Kabbalah"
+  },
+  "help": {
+    "header": {
+      "text": "Ajuda",
+      "subtext": "Nesta seção você encontrará tutoriais em vídeo e melhores práticas sobre como usar o site"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Esboços",
+      "subtext": ""
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Episódio(s)",
+        "lessons-collection": "Item(s)",
+        "publications-collection": "Artigo(s)",
+        "event": "Item(s)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Fontes Cabalistas",
+        "topics": "Tópicos",
+        "collections": "Relacionado a",
+        "study-series": "Para todas as lições da coleção",
+        "episode": "Episódio {{name}}",
+        "episodes": "{{name}} episódios",
+        "lesson-episode": "Parte {{name}}",
+        "lesson-episodes": "{{name}} Partes",
+        "series-episode": "Lição {{name}}",
+        "series-episodes": "{{name}} lições",
+        "song": "Canção {{name}}",
+        "views": "{{views}} visualizações"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Outro item da mesma coleção",
+          "item-title": "Item {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Resumo",
+      "no-summary": "Resumo está faltando"
+    },
+    "transcription": {
+      "header": "Transcrição",
+      "no-content": "Transcrição está faltado no seu idioma"
+    },
+    "sources": {
+      "header": "Fontes",
+      "no-sources": "Sem fontes",
+      "no-source": "Por favor selecione a fonte",
+      "no-source-available": "Não há fonte disponível em seu idioma"
+    },
+    "sketches": {
+      "header": "Esboços"
+    },
+    "articles": {
+      "header": "Artigos",
+      "no-content": "Não existem artigos"
+    },
+    "research": {
+      "header": "Pesquisar materiais",
+      "no-content": "Nenhum material de pesquisa"
+    },
+    "derived-units": {
+      "header": "Destaques Selecionados"
+    },
+    "recommended": {
+      "same-topic": "Recomendado para o tópico",
+      "same-collection": "Recomendado capítulos a partir de",
+      "any-topic": "Qualquer Tópico",
+      "default": "Recomendado para você",
+      "popular": "Mais visualizado",
+      "watching-now": "Assistindo agora",
+      "views": "visualizações",
+      "last": "Último capítulo",
+      "next": "Próximo capítulo",
+      "prev": "Capítulo anterior",
+      "rand": "Conteúdo randômico",
+      "more": "Mais",
+      "less": "Menos",
+      "new": "Novo capítulo",
+      "same-source": "Mesma fonte"
+    },
+    "playlist": {
+      "header": "A Seguir"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Biblioteca Cabalista",
+      "subtext": " Uma coleção de todos os textos originais mais importantes para o estudo da Cabala, escritos pelos maiores cabalistas."
+    },
+    "no-source": "Por favor selecione a fonte",
+    "az": "AZ",
+    "default": "Default",
+    "filter": "Filtrar...",
+    "share-title": "Leia este artigo",
+    "group-articles": "Grupo de Artigos",
+    "play-audio-file": "Tocar o arquivo de audio",
+    "play-source": "Ouvir este artigo"
+  },
+  "topics": {
+    "header": {
+      "text": "Tópicos",
+      "subtext": "Uma coleção de todos os itens para um tópico selecionado."
+    },
+    "show-more": "Mostre mais",
+    "show-less": "Moste menos",
+    "texts-title": "Fontes Cabalistas, Transcrições, Publicações"
+  },
+  "media-downloads": {
+    "title": "Downloads",
+    "derived-title": "Mídia Derivada",
+    "type-labels": {
+      "video": "Video Principal",
+      "video-simple": "Video",
+      "audio": "Audio Principal",
+      "audio-simple": "Audio",
+      "text": "Transcrição de Texto",
+      "image": "Imagens"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Lição Video",
+        "video-simple": "Video",
+        "audio": "Lição Audio",
+        "audio-simple": "Audio",
+        "text": "Transcrição de Texto",
+        "image": "Esboços",
+        "lelo-mikud": "Sem grupo focal",
+        "text-research-material": "Pesqisar Materiais"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Programa Video",
+        "video-simple": "Video",
+        "audio": "Programa Audio",
+        "audio-simple": "Audio",
+        "text": "Transcrição de Texto",
+        "image": "Esboços",
+        "text-article": "Artigo baseado no programa",
+        "text-research-material": "Pesquisar Materiais"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "video-simple": "Video",
+        "audio": "Audio",
+        "audio-simple": "Audio",
+        "text": "Texto do Artigo",
+        "image": "Instantâneos"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebraico",
+      "en": "Inglês",
+      "ru": "Russo",
+      "es": "Espanhol",
+      "it": "Italiano",
+      "de": "Alemão",
+      "nl": "Holandês",
+      "fr": "Francês",
+      "pt": "Português",
+      "tr": "Turco",
+      "pl": "Polonês",
+      "ar": "Árabe",
+      "hu": "Húngaro",
+      "fi": "Finlandês",
+      "lt": "Lituano",
+      "ja": "Japonês",
+      "bg": "Búlgaro",
+      "ka": "Georgiano",
+      "no": "Norueguês",
+      "sv": "Sueco",
+      "hr": "Croata",
+      "zh": "Chinês",
+      "fa": "Persa",
+      "ro": "Romeno",
+      "hi": "Hindi",
+      "ua": "Ucraniano",
+      "mk": "Macedônio",
+      "sl": "Esloveno",
+      "lv": "Letão",
+      "sk": "Eslovaco",
+      "cs": "Tcheco",
+      "am": "Amárico"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Lição Diária",
+      "SPECIAL_LESSON": "Lição Especial",
+      "FRIENDS_GATHERINGS": "Reunião de Amigos",
+      "CONGRESS": "Congresso",
+      "VIDEO_PROGRAM": "Programa",
+      "LECTURE_SERIES": "Séries de Palestras",
+      "CHILDREN_LESSONS": "Lições para Crianças",
+      "WOMEN_LESSONS": "Lições para Mulheres",
+      "VIRTUAL_LESSONS": "Webinars",
+      "MEALS": "Refeições",
+      "HOLIDAY": "Festividades",
+      "PICNIC": "Piquenique",
+      "UNITY_DAY": "Dia de Unidade",
+      "CLIPS": "Clipes",
+      "ARTICLES": "Artigos",
+      "LESSON_PART": "Lição",
+      "LECTURE": "Palestra",
+      "CHILDREN_LESSON": "Lição para Crianças",
+      "WOMEN_LESSON": "Lição para Mulheres",
+      "VIRTUAL_LESSON": "Lição Virtual",
+      "FRIENDS_GATHERING": "Reunião de Amigos",
+      "MEAL": "Refeição",
+      "VIDEO_PROGRAM_CHAPTER": "Capítulo do Programa",
+      "FULL_LESSON": "Lição Completa",
+      "ARTICLE": "Artigo",
+      "UNKNOWN": "Desconhecido",
+      "EVENT_PART": "Parte do Evento",
+      "CLIP": "Clipe",
+      "TRAINING": "Treinamento",
+      "KITEI_MAKOR": "Fontes de Materiais",
+      "LIKUTIM": "Coleções",
+      "PUBLICATION": "Publicações",
+      "LELO_MIKUD": "Editado – Sem Grupo Focal",
+      "BLOG_POST": "Post do Blog",
+      "LESSONS_SERIES": "Séries de Estudo",
+      "KTAIM_NIVCHARIM": "Destaques Selecionados",
+      "sources": "Fontes Cabalistas",
+      "SOURCE": " Fontes Cabalistas ",
+      "downloads": "Downloads",
+      "PUBLIC_EVENTS": "Eventos Públicos"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Imagem",
+      "text": "Texto",
+      "sheet": "Planilha",
+      "banner": "Banner",
+      "presentation": "Apresentação"
+    }
+  },
+  "values": {
+    "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "Idioma",
+    "ui_language": "UI Idioma:",
+    "content_languages": "Idiomas Conteúdo",
+    "add_languages": "Adicionar Idioma...",
+    "show_all_content": "Mostar todo conteúdo",
+    "show_all_content_explanation": "Você verá conteúdo também em outros idiomas.",
+    "url_language_prefix": "Você está usando {lang}} da URL, clique",
+    "url_language_here": "aqui",
+    "url_language_suffix": " Para usar o seu idioma."
+  },
+  "share-text": {
+    "message-title": "Leia este fragmento",
+    "copy-link": "Copiar Link",
+    "copy-text": "Copiar Texto",
+    "disable-share": "Cancelar",
+    "pin": "Colapsar",
+    "unpin": "Expandir",
+    "share-button": "Compartilhar Link",
+    "bookmark-button": "Salvar Favorito",
+    "share-button-alt": "Compartilhar Link",
+    "link-button-alt": "Copiar link para o texto selecionado",
+    "copy-button-alt": "Copiar texto",
+    "bookmark-button-alt": "Criar favorito e salvá-lo na área pessoal",
+    "tag-button": "Marcar Texto",
+    "tag-button-alt": "Marcar o texto selecionado na seção Tópicos",
+    "docbar-title": "Você selecionou um extrato do texto o que gostaria de fazer?",
+    "play-from-text": "Reproduza o extrato escolhido",
+    "lessons-by-source": "Para todas as lições do artigo"
+  },
+  "personal": {
+    "subsNewUnits": "novos episódios",
+    "unsubscribe": "Cancelar Inscrição",
+    "subscribe": "Inscrever-se",
+    "unsubscribeSuccessful": "Inscrição removida",
+    "subscribeSuccessful": "Inscrição adicionada",
+    "newPlaylistSuccessful": "Nova playlist {{name}} criada",
+    "addToPlaylistSuccessful": "Adicionado(a)à playlist {{name}}",
+    "history": "História",
+    "reactions": "Videos curtidos",
+    "playlists": "Playlists",
+    "playlist": "Playlist \"{{name}}\"",
+    "playlistNoResult": "Não há videos nesta playlist",
+    "subscriptions": "Inscrições",
+    "playAll": "Reproduzir tudo",
+    "addToPlaylist": "Salvar para...",
+    "newPlaylistName": "Nome da Nova playlist",
+    "newPlaylist": "Criar nova playlist",
+    "editPlaylist": "Editar playlist",
+    "removedSuccessfully": "Remoção feita com sucesso",
+    "removeHistory": "Removido da história",
+    "removeLike": "Remover dos videos curtidos",
+    "removeFromPlaylist": "Remover da playlist",
+    "confirmRemovePlaylist": " Tem certeza de que deseja excluir a playlist {{name}}?\nObservação: Excluir playlists é uma ação permanente e não pode ser desfeita.",
+    "confirmUnsubscribe": "Cancelar a inscrição de {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Entre para curtir, salvar e inscrever-se para vídeos ",
+    "account": "Minha Conta",
+    "no_playlists": "Você não tem playlist, por favor crie uma",
+    "no_reactions": "Você não tem videos",
+    "no_history": "Comece a assistir aos videos que serão exibidos aqui",
+    "no_subscriptions": "Você ainda não está inscrito, inscreva-se para assisti-los aqui",
+    "bookmark": {
+      "title": "Favoritos",
+      "name": "Nome",
+      "saveBookmark": "Salvar Favorito",
+      "editBookmark": "Editar Favorito",
+      "removeBookmark": "Remover Favorito",
+      "searchBookmarks": "Pesquisar Favorito",
+      "searchFolders": "Pesquisar Pastas",
+      "folders": "Pastas",
+      "newFolder": "Nova Pasta",
+      "allFolders": "Todas",
+      "filterByFolder": "Pesquisar em",
+      "bookmarkUpdated": "Favorito atualizado com sucesso!",
+      "bookmarkCreated": "Favorito criado com sucesso!",
+      "confirmRemoveBookmark": "Você tem certeza que deseja excluir favorito {{name}}?",
+      "confirmRemoveFolder": " Você tem certeza que deseja excluir pasta {{name}}?",
+      "haveNo": "Você ainda não tem favoritos"
+    },
+    "label": {
+      "tagging": "Marcar",
+      "createdBy": "Marcado por {{author}}",
+      "name": "Título do extrato",
+      "infoAddTag": "Atribua tópicos ao trecho selecionado e clique no botão \"Tag\" na parte inferior da página:",
+      "header": "Marcando extratos na seção de tópicos",
+      "search": "Inserir tópico",
+      "ending": "Concluir",
+      "contentCreate": "Quer que todos vejam o trecho que você marcou?\nTag na seção de tópicos do site",
+      "labelCreated": " O trecho foi marcado com sucesso. Você pode encontrá-lo na seção de tópicos sob os tópicos que você marcou "
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "Para todas as lições do artigo",
+        "text-settings": "Mudar a formatação do texto",
+        "languages": "Mudar Idioma",
+        "play-by-text": "Novo! Play um video clip",
+        "add-tag": "Adicionar marcação",
+        "add-bookmark": "Adicionar em favoritos",
+        "add-comment": "Adicionar um comentário ao texto",
+        "share": "Compartilhar",
+        "search": "Pesquisar na página",
+        "expand-comments": "Mostrar todos os comentários",
+        "collapse-comments": "Ocultar todos comentários",
+        "download": "Download",
+        "print": "Imprimir",
+        "fullscreen-on": "Tela Cheia",
+        "fullscreen-off": "Sair modo tela cheia",
+        "additions": {
+          "review": "Rever rotulagem e comentários",
+          "showMy": "Mostrar o meu",
+          "showAll": "Mostar de todos",
+          "hideAll": "Ocultar todos"
+        },
+        "scan": "Digitalização do texto original",
+        "more-buttons": "Mais!",
+        "toc": "Índice",
+        "copy-link": "Copiar Link",
+        "article-toc": "Todos Artigos"
+      },
+      "mobile": {
+        "lessons": "Lições",
+        "text-settings": "Texto",
+        "languages": "Idioma",
+        "add-bookmark": "Salvar",
+        "share": "Compartilhar",
+        "search": "Pesquisar",
+        "download": "Download",
+        "more-buttons": "Mais",
+        "toc": "Conteúdo",
+        "copy-link": "Link"
+      }
+    }
+  }
+}
