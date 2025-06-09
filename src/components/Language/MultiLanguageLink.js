@@ -1,7 +1,8 @@
-import React from 'react';
-import { Link as BaseLink } from 'react-router-dom';
-import { useLocation } from 'react-router';
-import { getToWithLanguage } from '../../helpers/url';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { getToWithLanguage } from "../../helpers/url";
+import ClientLanguageLink from "./ClientLanguageLink";
+import isString from "lodash/isString";
 
 /**
  Use this component instead of react-router-dom's Link to keep the current language in the destination route
@@ -15,19 +16,24 @@ import { getToWithLanguage } from '../../helpers/url';
  i.e - use <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
 
  */
-const Link = (
-  {
-    to = undefined,
-    language = '',
-    contentLanguage = undefined,
-    staticContext,
-    ...rest
-  }
-) => {
-  const location       = useLocation();
+const Link = ({ to = undefined, language = "", contentLanguage = undefined, staticContext, ...rest }) => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const location = useLocation();
   const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
 
-  return <BaseLink to={toWithLanguage} {...rest} />;
+  if (isClient) {
+    return <ClientLanguageLink to={toWithLanguage} {...rest} />;
+  }
+
+  return (
+    <a href={isString(toWithLanguage) ? toWithLanguage : toWithLanguage.pathname} {...rest}>
+      {rest.children}
+    </a>
+  );
 };
 
 export default Link;
