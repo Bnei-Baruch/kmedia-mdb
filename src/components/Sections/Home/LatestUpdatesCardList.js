@@ -53,16 +53,17 @@ const LatestUpdatesCardList = (
     cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
     let hasItems = true;
     while (hasItems && cards.length < maxItems) {
-      hasItems = false;
+      let foundItems = false;
       cts.forEach(ct => {
         const curItems = items[ct.ct];
         let count      = ct.itemsPerPage ? ct.itemsPerPage : 1;
         while (curItems.length > 0 && count > 0) {
           cards.push((curItems.shift()));
           count--;
-          hasItems = true;
+          foundItems = true;
         }
       });
+      hasItems = foundItems;
     }
 
     setCardsArray(cards);

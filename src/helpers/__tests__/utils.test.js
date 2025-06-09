@@ -2,35 +2,27 @@ import { isEmpty } from '../utils';
 /* eslint no-use-before-define: 0 */
 describe('isEmpty', () => {
   test('object', () => {
-    {
-      expect(isEmpty({})).toBe(true);
-      expect(isEmpty({ 'a': 1 })).toBe(false);
-    }
+    expect(isEmpty({})).toBe(true);
+    expect(isEmpty({ 'a': 1 })).toBe(false);
 
-    {
-      const a = {};
-      expect(isEmpty(a)).toBe(true);
-      a.a = 1;
-      expect(isEmpty(a)).toBe(false);
-      delete a.a;
-      expect(isEmpty(a)).toBe(true);
-    }
+    const a = {};
+    expect(isEmpty(a)).toBe(true);
+    a.a = 1;
+    expect(isEmpty(a)).toBe(false);
+    delete a.a;
+    expect(isEmpty(a)).toBe(true);
   });
 
   test('array', () => {
-    {
-      expect(isEmpty([])).toBe(true);
-      expect(isEmpty([1])).toBe(false);
-    }
+    expect(isEmpty([])).toBe(true);
+    expect(isEmpty([1])).toBe(false);
 
-    {
-      const a = [];
-      expect(isEmpty(a)).toBe(true);
-      a.push(1);
-      expect(isEmpty(a)).toBe(false);
-      a.pop();
-      expect(isEmpty(a)).toBe(true);
-    }
+    const a = [];
+    expect(isEmpty(a)).toBe(true);
+    a.push(1);
+    expect(isEmpty(a)).toBe(false);
+    a.pop();
+    expect(isEmpty(a)).toBe(true);
   });
 
   test('null', () => {

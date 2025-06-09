@@ -397,19 +397,15 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
   const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
 
   let resultsType = '';
-  const path      = tracePath(getById(id), getById);
-  let display     = '';
   switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
-      display     = path[path.length - 1].label;
       resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     case SEARCH_INTENT_INDEX_SOURCE:
-      display     = path.map(y => y.name).join(' > ');
       resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
     default:
-      display = name;
+      break;
   }
 
   const props = {
