@@ -24,21 +24,6 @@ import {
   recommendedGetViewsSelector
 } from '../../../../../redux/selectors';
 
-export const makeTagLinks = (tags = [], getTagById) =>
-  Array.from(intersperse(
-    tags.map(x => {
-      const { id, label } = getTagById(x);
-      if (!label) {
-        return '';
-      }
-
-      return <Link key={id} to={`/topics/${id}`}>
-        <Button basic size="tiny" className="link_to_cu">
-          {label}
-        </Button>
-      </Link>;
-    }), ''));
-
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
   const colValues = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));

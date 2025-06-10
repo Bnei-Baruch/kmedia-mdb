@@ -126,13 +126,11 @@ const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, s
 };
 
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
-  show_console && console.log('serverRenderAuthorised uiLang', uiLang);
-
-  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+  show_console && console.log('serverRenderAuthorised i18nData uiLang', uiLang);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(uiLang, err => {
-    show_console && console.log('language changed', uiLang, err);
+    show_console && console.log('i18nData language changed', uiLang, err);
     if (err) {
       console.log('Error next', err);
       next(err);
@@ -192,6 +190,8 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     let hrstart = process.hrtime();
 
     show_console && console.log('serverRender: ');
+
+    moment.locale(context.i18n.language === LANG_UKRAINIAN ? 'uk' : context.i18n.language);
     const promises    = branch.map(b => getPromises(store, req.originalUrl, cookieUILang, cookieContentLanguages, show_console, b));
     const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
     show_console && console.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
