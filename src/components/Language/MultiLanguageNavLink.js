@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { NavLink as BaseNavLink } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { getToWithLanguage } from '../../helpers/url';
-import ClientLanguageNavLink from './ClientLanguageNavLink';
-import isString from 'lodash/isString';
 
 /**
  * Use this component instead of react-router-dom's NavLink to keep the current language in the destination route
@@ -20,34 +19,28 @@ const NavLink = React.forwardRef(
       className = undefined,
       style = undefined,
       ...rest
-    },
-    ref
+    }, ref
   ) => {
-    const [isClient, setIsClient] = useState(false);
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
-
-    const location = useLocation();
+    const location       = useLocation();
     const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
 
-    if (isClient) {
-      return <ClientLanguageNavLink to={toWithLanguage} {...rest} />;
-    }
-
-    const _className = [className, rest.active ? activeClassName : null].filter(Boolean).join(' ');
-    const _style = { ...style, ...(rest.active ? activeStyle : null) };
-    return (
-      <a
-        ref={ref}
-        {...rest}
-        href={isString(toWithLanguage) ? toWithLanguage : toWithLanguage.pathname}
-        className={_className}
-        style={_style}
-      >
-        {rest.children}
-      </a>
-    );
+    return <BaseNavLink
+      ref={ref}
+      {...rest}
+      to={toWithLanguage}
+      className={({ isActive }) =>
+        [
+          className,
+          isActive ? activeClassName : null
+        ]
+          .filter(Boolean)
+          .join(' ')
+      }
+      style={({ isActive }) => ({
+        ...style,
+        ...(isActive ? activeStyle : null)
+      })}
+    />;
   }
 );
 
