@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -552,7 +552,7 @@ const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
 
 export const SearchResultTweets = ({ source }) => {
   const { t }              = useTranslation();
-  const ids                = source.map(x => x._source.mdb_uid) || [];
+  const ids                = useMemo(() => source.map(x => x._source.mdb_uid) || [], [source]);
   const wip                = useSelector(publicationsGetTweetsWipSelector);
   const err                = useSelector(publicationsGetTweetsErrorSelector);
   const wipError           = WipErr({ wip, err, t });
