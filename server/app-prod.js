@@ -50,6 +50,7 @@ app.use(helmet({
         '*.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
+        '*.jwpcdn.com',                 // JW Player CDN for translations and other resources
       ],
       'script-src': [
         '\'self\'',
