@@ -3,13 +3,31 @@ import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../../helpers/images';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
-import { makeTagLinks } from '../../WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
 import { tagsGetTagByIdSelector } from '../../../../redux/selectors';
+import { intersperse } from '../../../../helpers/utils';
+import Link from '../../../Language/MultiLanguageLink';
+
 
 const idPrefix  = textMarksPrefixByType['label'];
+const makeTagLinks = (tags = [], getTagById) =>
+  Array.from(intersperse(
+    tags.map(x => {
+      const { id, label } = getTagById(x);
+      if (!label) {
+        return '';
+      }
+
+      return <Link key={id} to={`/topics/${id}`}>
+        <Button basic size="tiny" className="link_to_cu">
+          {label}
+        </Button>
+      </Link>;
+    }), ''));
+
+
 const LabelMark = ({ label, offset }) => {
   const { t } = useTranslation();
 

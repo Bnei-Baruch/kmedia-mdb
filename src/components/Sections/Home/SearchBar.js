@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { Grid, Header } from 'semantic-ui-react';
-import OmniBox from '../../Search/OmniBox';
+import ClientOmniBox from '../../Search/ClientOmniBox';
 
 const SearchBar = ({ t }) => (
   <Grid centered>
@@ -12,7 +12,7 @@ const SearchBar = ({ t }) => (
       </Grid.Column>
       <Grid.Column computer={12} tablet={14} mobile={16}>
         <div className="homepage__search">
-          <OmniBox isHomePage={true} />
+          <ClientOmniBox isHomePage={true} />
         </div>
       </Grid.Column>
     </Grid.Row>

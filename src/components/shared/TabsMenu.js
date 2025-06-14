@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Menu, Ref } from 'semantic-ui-react';
+import Link from '../Language/MultiLanguageLink';
 
 import { getQuery } from '../../helpers/url';
 

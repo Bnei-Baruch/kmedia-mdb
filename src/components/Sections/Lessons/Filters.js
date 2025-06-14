@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';

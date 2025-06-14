@@ -300,17 +300,25 @@
 
 }
 
-.ui.modal.filters_aside_tree_modal {
-  text-align: end;
-  width: auto;
+  .ui.modal.filters_aside_tree_modal {
+    text-align: right;
+    width: auto;
+    
+    .rtl & {
+      text-align: left;
+    }
 
   & > .header {
     display: flex;
     align-items: center;
 
-    text-align: start;
+    text-align: left;
     margin: 0;
     padding-top: 0;
+    
+    .rtl & {
+      text-align: right;
+    }
 
     .search-input.ui.input {
       margin: 0 1em;
@@ -318,8 +326,12 @@
   }
 
   & > .content {
-    text-align: start;
+    text-align: left;
     padding-bottom: 2.5em;
+    
+    .rtl & {
+      text-align: right;
+    }
   }
 
   & > .icon {

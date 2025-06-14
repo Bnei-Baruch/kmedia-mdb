@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { actions, selectors as assets } from '../../../../redux/modules/assets';
+import { actions } from '../../../../redux/modules/assets';
 import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
 import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
   textPageGetWordOffsetSelector,
-  textPageGetUrlInfoSelector
+  textPageGetUrlSelectSelector,
+  assetsHasTimeCodeSelector,
+  assetsGetTimeCodeSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 import { PlayByText } from '../../../../images/icons';
@@ -16,9 +18,9 @@ const PlayByTextBtn = () => {
   const { id }        = useSelector(textPageGetSubjectSelector);
   const { language }  = useSelector(textPageGetFileSelector);
   const wordOffset    = useSelector(textPageGetWordOffsetSelector);
-  const hasTimeCode   = useSelector(state => assets.hasTimeCode(state.assets));
-  const timeCodeByPos = useSelector(state => assets.getTimeCode(state.assets));
-  const hasNoSel      = !useSelector(textPageGetUrlInfoSelector).select;
+  const hasTimeCode   = useSelector(assetsHasTimeCodeSelector);
+  const timeCodeByPos = useSelector(assetsGetTimeCodeSelector);
+  const hasNoSel      = !useSelector(textPageGetUrlSelectSelector);
 
   const dispatch = useDispatch();
 

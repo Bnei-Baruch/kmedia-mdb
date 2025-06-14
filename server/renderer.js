@@ -125,16 +125,115 @@ const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, s
     : Promise.resolve(null);
 };
 
-async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
-  show_console && console.log('serverRenderAuthorised uiLang', uiLang);
 
-  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+const logMemoryUsage = (label, show_console = false) => {
+  if (!show_console) return;
+  
+  const usage = process.memoryUsage();
+  const formatBytes = (bytes) => Math.round(bytes / 1024 / 1024 * 100) / 100;
+  
+  console.log(`[MEMORY] ${label}:`, {
+    rss: `${formatBytes(usage.rss)}MB`,
+    heapUsed: `${formatBytes(usage.heapUsed)}MB`, 
+    heapTotal: `${formatBytes(usage.heapTotal)}MB`,
+    external: `${formatBytes(usage.external)}MB`
+  });
+  
+  // Log additional system info
+  if (global.gc) {
+    console.log(`[MEMORY] ${label} - Triggering GC...`);
+    global.gc();
+    const afterGC = process.memoryUsage();
+    console.log(`[MEMORY] ${label} - After GC:`, {
+      heapUsed: `${formatBytes(afterGC.heapUsed)}MB`,
+      heapTotal: `${formatBytes(afterGC.heapTotal)}MB`
+    });
+  }
+};
+
+const logObjectCounts = (label, objects, show_console = false) => {
+  if (!show_console) return;
+  
+  const counts = {};
+  Object.keys(objects).forEach(key => {
+    const obj = objects[key];
+    if (obj && typeof obj === 'object') {
+      if (Array.isArray(obj)) {
+        counts[`${key}_array_length`] = obj.length;
+      } else if (obj.constructor && obj.constructor.name) {
+        counts[`${key}_type`] = obj.constructor.name;
+      }
+      
+      // Count nested objects
+      if (typeof obj === 'object' && obj !== null) {
+        counts[`${key}_keys_count`] = Object.keys(obj).length;
+      }
+    }
+  });
+  
+  console.log(`[OBJECTS] ${label}:`, counts);
+};
+
+// Advanced memory leak detection
+const logAdvancedMemoryInfo = (label, show_console = false) => {
+  if (!show_console) return;
+  
+  console.log(`[ADVANCED_MEMORY] ${label}:`, {
+    // Process info
+    uptime: `${Math.round(process.uptime())}s`,
+    // Event loop info
+    eventLoopLag: process.hrtime ? 'available' : 'unavailable',
+    // Timer info
+    activeHandles: process._getActiveHandles ? process._getActiveHandles().length : 'unavailable',
+    activeRequests: process._getActiveRequests ? process._getActiveRequests().length : 'unavailable'
+  });
+  
+  // Check for common leak sources
+  if (typeof global !== 'undefined') {
+    const globalKeys = Object.keys(global).filter(key => 
+      key.startsWith('__') || key.includes('cache') || key.includes('store')
+    );
+    if (globalKeys.length > 0) {
+      console.log(`[POTENTIAL_LEAKS] Global keys that might indicate leaks:`, globalKeys);
+    }
+  }
+};
+
+// Memory monitoring for specific intervals
+let memoryInterval = null;
+const startMemoryMonitoring = (show_console = false) => {
+  if (!show_console || memoryInterval) return;
+  
+  memoryInterval = setInterval(() => {
+    logMemoryUsage('INTERVAL_CHECK', true);
+  }, 5000); // Check every 5 seconds
+};
+
+const stopMemoryMonitoring = () => {
+  if (memoryInterval) {
+    clearInterval(memoryInterval);
+    memoryInterval = null;
+  }
+};
+
+async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
+  show_console && console.log('serverRenderAuthorised i18nData uiLang', uiLang);
+  
+  // Log initial memory state
+  logMemoryUsage('START_SSR', show_console);
+  logAdvancedMemoryInfo('START_SSR', show_console);
+  
+  // Start interval monitoring for debug mode
+  if (show_console) {
+    startMemoryMonitoring(show_console);
+  }
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(uiLang, err => {
-    show_console && console.log('language changed', uiLang, err);
+    show_console && console.log('i18nData language changed', uiLang, err);
     if (err) {
       console.log('Error next', err);
+      logMemoryUsage('ERROR_I18N', show_console);
       next(err);
       return;
     }
@@ -159,6 +258,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
         showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false
       }
     };
+    
+    // Log memory after initial setup
+    logMemoryUsage('AFTER_INITIAL_SETUP', show_console);
+    logObjectCounts('INITIAL_STATE', { initialState, cookies, deviceInfo }, show_console);
+    
     // Update settings store with languages info.
     show_console && console.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
     onSetUILanguage(initialState.settings, { uiLang: cookieUILang });
@@ -178,6 +282,13 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
     store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
 
+    // Log memory after store creation
+    logMemoryUsage('AFTER_STORE_CREATION', show_console);
+    logObjectCounts('STORE_STATE', { 
+      storeState: store.getState(),
+      storeKeys: Object.keys(store.getState())
+    }, show_console);
+
     const context = {
       req,
       data: {},
@@ -192,25 +303,53 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     let hrstart = process.hrtime();
 
     show_console && console.log('serverRender: ');
+
+    moment.locale(context.i18n.language === LANG_UKRAINIAN ? 'uk' : context.i18n.language);
     const promises    = branch.map(b => getPromises(store, req.originalUrl, cookieUILang, cookieContentLanguages, show_console, b));
     const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
     show_console && console.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
     rtkPromises.forEach(promise => promises.push(promise));
     let hrend = process.hrtime(hrstart);
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
+    
+    // Log memory before promise execution
+    logMemoryUsage('BEFORE_PROMISES', show_console);
+    logObjectCounts('PROMISES_INFO', { 
+      promises: promises.length,
+      rtkPromises: rtkPromises.length,
+      branch: branch.length,
+      routes: routes.length
+    }, show_console);
+    
     hrstart = process.hrtime();
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
         hrend = process.hrtime(hrstart);
         show_console && console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
+        
+        // Log memory after promises resolve
+        logMemoryUsage('AFTER_PROMISES_RESOLVE', show_console);
+        logObjectCounts('STORE_AFTER_PROMISES', {
+          storeState: store.getState(),
+          storeKeys: Object.keys(store.getState())
+        }, show_console);
+        
         hrstart = process.hrtime();
 
         store.rootSagaPromise
           .then(() => {
             hrend = process.hrtime(hrstart);
             show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
+            
+            // Log memory after saga completion
+            logMemoryUsage('AFTER_SAGA_COMPLETION', show_console);
+            
             hrstart      = process.hrtime();
+            
+            // Log memory before rendering
+            logMemoryUsage('BEFORE_RENDERING', show_console);
+            
             // Actual render.
             const markup = ReactDOMServer.renderToString(
               <React.StrictMode>
@@ -230,6 +369,15 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
             show_console && console.log('serverRender: markup', markup);
             hrend = process.hrtime(hrstart);
             show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
+            
+            // Log memory after rendering
+            logMemoryUsage('AFTER_RENDERING', show_console);
+            logObjectCounts('RENDERING_INFO', {
+              markupLength: markup.length,
+              helmetContext: Object.keys(helmetContext).length
+            }, show_console);
+            logAdvancedMemoryInfo('AFTER_RENDERING', show_console);
+            
             hrstart = process.hrtime();
 
             const { helmet } = helmetContext;
@@ -259,6 +407,14 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               const storeData    = store.getState();
               const storeDataStr = serialize(storeData);
               show_console && console.log('serverRender: redux data before return', storeData.auth);
+              
+              // Log memory before response preparation
+              logMemoryUsage('BEFORE_RESPONSE_PREP', show_console);
+              logObjectCounts('RESPONSE_DATA', {
+                storeDataStr: storeDataStr.length,
+                storeData: Object.keys(storeData).length
+              }, show_console);
+              
               const rootDiv = `
                 <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
                 <script>
@@ -284,16 +440,39 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
                 res.status(context.code);
               }
 
+              // Log final memory state before response
+              logMemoryUsage('BEFORE_SEND_RESPONSE', show_console);
+              logObjectCounts('FINAL_HTML', {
+                htmlLength: html.length,
+                rootDivLength: rootDiv.length
+              }, show_console);
+              logAdvancedMemoryInfo('BEFORE_SEND_RESPONSE', show_console);
+
               res.send(html);
+              
+              // Stop memory monitoring and log final state
+              stopMemoryMonitoring();
+              
+              // Log memory after response sent (cleanup check)
+              setTimeout(() => {
+                logMemoryUsage('AFTER_RESPONSE_SENT', show_console);
+                logAdvancedMemoryInfo('AFTER_RESPONSE_SENT', show_console);
+              }, 100);
             }
           })
           .catch((a, b, c) => {
             console.log('Root saga error', a, b, c);
+            logMemoryUsage('ERROR_ROOT_SAGA', true); // Always log errors
+            logAdvancedMemoryInfo('ERROR_ROOT_SAGA', true);
+            stopMemoryMonitoring(); // Cleanup on error
             return next(a);
           });
       })
       .catch((a, b, c) => {
         console.log('SSR error', a, b, c);
+        logMemoryUsage('ERROR_SSR', true); // Always log errors
+        logAdvancedMemoryInfo('ERROR_SSR', true);
+        stopMemoryMonitoring(); // Cleanup on error
         return next(a);
       });
   });

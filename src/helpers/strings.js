@@ -33,7 +33,7 @@ const isCharALetter = char => {
   // we need to add Arabic, Japanese, Chinese etc. when needed
 };
 
-export const NOT_LETTER_CHAR = '\`!@#$%^&*()_+-=[]{};\':\\|,.<>/?~';
+export const NOT_LETTER_CHAR = '`!@#$%^&*()_+-=[]{};\':\\|,.<>/?~';
 // returns first letter of a string
 export const getFirstLetter  = str => {
   if (!str) {
