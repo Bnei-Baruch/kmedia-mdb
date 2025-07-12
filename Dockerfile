@@ -8,7 +8,7 @@ ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
-FROM bneibaruch/kmedia_base:30 as build
+FROM bneibaruch/kmedia_base:30 AS build
 
 LABEL maintainer="edoshor@gmail.com"
 
@@ -42,8 +42,7 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-RUN yarn set version berry && \
-    yarn install --immutable && \
+RUN yarn install --immutable && \
     yarn build:svgs && \
     yarn build:scripts && \
     yarn build:css
