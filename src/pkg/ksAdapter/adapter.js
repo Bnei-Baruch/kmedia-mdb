@@ -1,4 +1,5 @@
-import Keycloak from 'keycloak-js';
+// Remove the static import
+// import Keycloak from 'keycloak-js';
 
 // This file used loaded in SSR and in client side too.
 // Try load the constants from process and in client expect them in window global object.
@@ -16,6 +17,46 @@ export const KC_SEARCH_KEYS        = [KC_SEARCH_KEY_SESSION, KC_SEARCH_KEY_STATE
 export const KC_UPDATE_USER  = 'KC_UPDATE_USER';
 export const KC_UPDATE_TOKEN = 'KC_UPDATE_TOKEN';
 
+// Dynamic import for keycloak
+let keycloak = null;
+let keycloakPromise = null;
+
+const getKeycloak = async () => {
+  if (keycloak) {
+    return keycloak;
+  }
+  
+  if (keycloakPromise) {
+    return keycloakPromise;
+  }
+  
+  if (typeof window === 'undefined') {
+    return {};
+  }
+  
+  keycloakPromise = import('keycloak-js').then(({ default: Keycloak }) => {
+    const userManagerConfig = {
+      url          : KC_API_URL,
+      realm        : KC_REALM,
+      clientId     : KC_CLIENT_ID,
+      enableLogging: true
+    };
+    
+    keycloak = new Keycloak(userManagerConfig);
+    
+    keycloak.onTokenExpired = () => {
+      renewRetry(0);
+    };
+    
+    return keycloak;
+  }).catch(error => {
+    console.error('Failed to load keycloak-js:', error);
+    return {};
+  });
+  
+  return keycloakPromise;
+};
+
 export const login = async () => {
   const url = new URL(window.location.href);
   url.searchParams.set('authorised', 'true');
@@ -26,15 +67,21 @@ export const login = async () => {
     return;
   }
 
-  keycloak.login({ redirectUri: url.href })
+  const kc = await getKeycloak();
+  if (!kc.login) return;
+  
+  kc.login({ redirectUri: url.href })
     .then(r => {
       updateUser(r);
     })
     .catch(() => updateUser(null));
 };
 
-export const logout = () => {
-  keycloak.logout()
+export const logout = async () => {
+  const kc = await getKeycloak();
+  if (!kc.logout) return;
+  
+  kc.logout()
     .then(() => updateUser(null))
     .catch(err => {
       console.error('Logout failed:', err);
@@ -50,6 +97,11 @@ export const initKC = async () => {
     return { user: null };
   }
 
+  const kc = await getKeycloak();
+  if (!kc.init) {
+    return { user: null };
+  }
+
   const options   = {
     checkLoginIframe: false,
     flow            : 'standard',
@@ -59,14 +111,14 @@ export const initKC = async () => {
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
-  return keycloak.init(options).then(ok => {
+  return kc.init(options).then(ok => {
     if (!ok) {
       return resp;
     }
 
-    const { sub, name } = keycloak.tokenParsed;
+    const { sub, name } = kc.tokenParsed;
     resp.user           = { id: sub, name };
-    resp.token          = keycloak.token;
+    resp.token          = kc.token;
     return resp;
   }).catch(error => {
     console.error('Keycloak init error:', error);
@@ -84,22 +136,14 @@ const updateToken = token => {
   window.dispatchEvent(ev);
 };
 
-const userManagerConfig = {
-  url          : KC_API_URL,
-  realm        : KC_REALM,
-  clientId     : KC_CLIENT_ID,
-  enableLogging: true
-};
-const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
-
-keycloak.onTokenExpired = () => {
-  renewRetry(0);
-};
-
 const renewRetry = (retry, err) => {
   if (retry > 5) {
-    keycloak.clearToken();
-    updateUser(null);
+    getKeycloak().then(kc => {
+      if (kc.clearToken) {
+        kc.clearToken();
+      }
+      updateUser(null);
+    });
   } else {
     setTimeout(() => renewToken(retry), 10000);
   }
@@ -107,24 +151,32 @@ const renewRetry = (retry, err) => {
 
 const renewToken = retry => {
   retry++;
-  keycloak.updateToken(70).then(refreshed => {
-    if (refreshed) {
-      updateToken(keycloak.token);
-    } else {
-      renewRetry(retry, refreshed);
-    }
-  }).catch(err => {
-    console.error('Token renewal failed:', err);
-    renewRetry(retry, err);
+  getKeycloak().then(kc => {
+    if (!kc.updateToken) return;
+    
+    kc.updateToken(70).then(refreshed => {
+      if (refreshed) {
+        updateToken(kc.token);
+      } else {
+        renewRetry(retry, refreshed);
+      }
+    }).catch(err => {
+      console.error('Token renewal failed:', err);
+      renewRetry(retry, err);
+    });
   });
 };
 
-export const kcUpdateToken = () => keycloak
-  .updateToken(70)
-  .then(ok => {
-    if (ok) updateToken(keycloak.token);
-    return keycloak.token;
-  });
+export const kcUpdateToken = async () => {
+  const kc = await getKeycloak();
+  if (!kc.updateToken) return null;
+  
+  return kc.updateToken(70)
+    .then(ok => {
+      if (ok) updateToken(kc.token);
+      return kc.token;
+    });
+};
 
 const healthCheckKC = async () => {
   const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`, { cache: 'no-store' })
