@@ -6320,13 +6320,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-js@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "base64-js@npm:1.5.1"
-  checksum: 10c0/f23823513b63173a001030fae4f2dabe283b99a9d324ade3ad3d148e218134676f1ee8568c877cd79ec1c53158dcf2d2ba527a97c606618928ba99dd930102bf
-  languageName: node
-  linkType: hard
-
 "base@npm:^0.11.1":
   version: 0.11.2
   resolution: "base@npm:0.11.2"
@@ -13229,13 +13222,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-sha256@npm:^0.10.1":
-  version: 0.10.1
-  resolution: "js-sha256@npm:0.10.1"
-  checksum: 10c0/c63119f7c7f8afc24bfa24c1a6b51147c3b562316b6341a375a1cef88569340ec0dbf2cda429ecf472cabfbae47a0b93a0cb82b8730883de066593c3f816c53b
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -13519,13 +13505,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwt-decode@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "jwt-decode@npm:4.0.0"
-  checksum: 10c0/de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
-  languageName: node
-  linkType: hard
-
 "keyboard-key@npm:^1.1.0":
   version: 1.1.0
   resolution: "keyboard-key@npm:1.1.0"
@@ -13533,14 +13512,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"keycloak-js@npm:^23.0.7":
-  version: 23.0.7
-  resolution: "keycloak-js@npm:23.0.7"
-  dependencies:
-    base64-js: "npm:^1.5.1"
-    js-sha256: "npm:^0.10.1"
-    jwt-decode: "npm:^4.0.0"
-  checksum: 10c0/2603572a9139d42805ae0a7b5b72236e4d67aa9185ce4c617da2e4f075780dc15eb15d4ad8cd9998555a1de825065b7c05ce53bcee619ed832bb1c26d68f9715
+"keycloak-js@npm:^26.2.0":
+  version: 26.2.0
+  resolution: "keycloak-js@npm:26.2.0"
+  checksum: 10c0/a0c97c29ce90ac689f27dce9c6fed92a353b4d06b4339e03ed1adc663edbbcffac59ac9a55abf18f7df95fa57f08958683c7e8a36bc536791407ef6a02eb0de0
   languageName: node
   linkType: hard
 
@@ -13675,7 +13650,7 @@ __metadata:
     jest-axe: "npm:^8.0.0"
     jest-environment-enzyme: "npm:^7.1.2"
     jest-enzyme: "npm:^7.1.2"
-    keycloak-js: "npm:^23.0.7"
+    keycloak-js: "npm:^26.2.0"
     levenary: "npm:^1.1.1"
     lodash: "npm:^4.17.21"
     mock-local-storage: "npm:^1.1.24"
