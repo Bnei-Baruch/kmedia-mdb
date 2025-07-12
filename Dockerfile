@@ -46,8 +46,7 @@ RUN yarn set version berry && \
     yarn install --immutable && \
     yarn build:svgs && \
     yarn build:scripts && \
-    yarn build:css && \
-    yarn install --immutable
+    yarn build:css
 
 FROM node:21.6.0-slim
 
