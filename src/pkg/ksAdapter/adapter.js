@@ -55,8 +55,7 @@ export const initKC = async () => {
     flow            : 'standard',
     pkceMethod      : 'S256',
     enableLogging   : true,
-    onLoad          : 'check-sso',
-    silentCheckSsoFallback: false,
+    onLoad          : 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
