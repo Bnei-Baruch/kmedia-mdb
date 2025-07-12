@@ -34,7 +34,12 @@ export const login = async () => {
 };
 
 export const logout = () => {
-  keycloak.logout().then(() => updateUser(null));
+  keycloak.logout()
+    .then(() => updateUser(null))
+    .catch(err => {
+      console.error('Logout failed:', err);
+      updateUser(null);
+    });
 };
 
 export const initKC = async () => {
@@ -64,7 +69,7 @@ export const initKC = async () => {
     resp.token          = keycloak.token;
     return resp;
   }).catch(error => {
-    console.error(error);
+    console.error('Keycloak init error:', error);
     return resp;
   });
 };
@@ -83,7 +88,6 @@ const userManagerConfig = {
   url          : KC_API_URL,
   realm        : KC_REALM,
   clientId     : KC_CLIENT_ID,
-  scope        : 'profile',
   enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
@@ -110,6 +114,7 @@ const renewToken = retry => {
       renewRetry(retry, refreshed);
     }
   }).catch(err => {
+    console.error('Token renewal failed:', err);
     renewRetry(retry, err);
   });
 };
