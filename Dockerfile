@@ -8,7 +8,7 @@ ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
-FROM bneibaruch/kmedia_base:31 as build
+FROM bneibaruch/kmedia_base:30 as build
 
 LABEL maintainer="edoshor@gmail.com"
 
