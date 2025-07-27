@@ -8,7 +8,8 @@ ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
-FROM bneibaruch/kmedia_base:30 AS build
+# FROM bneibaruch/kmedia_base:30 AS build
+FROM node:latest AS build
 
 LABEL maintainer="edoshor@gmail.com"
 
@@ -47,7 +48,7 @@ RUN yarn install --immutable && \
     yarn build:scripts && \
     yarn build:css
 
-FROM node:21.6.0-slim
+FROM node:24-slim
 
 ARG cdn_url
 ARG cdn_hls_url
