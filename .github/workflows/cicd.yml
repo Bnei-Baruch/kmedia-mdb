@@ -79,5 +79,5 @@ jobs:
           proxy_key: ${{ secrets.BBDEPLOYMENT_SSH_PRIVATE_KEY }}
           script: |
             cd /root/archive-docker
-            docker compose pull admin_ui
-            docker compose up -d --no-deps admin_ui
+            docker compose pull kmedia_mdb
+            docker compose up -d --no-deps kmedia_mdb
