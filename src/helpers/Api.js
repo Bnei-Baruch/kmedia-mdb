@@ -200,9 +200,9 @@ class Api {
       q,
       ui_language,
       content_languages,
-      pageNo  : page_no,
+      pageNo: page_no,
       pageSize: page_size,
-      sortBy  : sort_by,
+      sortBy: sort_by,
       deb,
     }
   ) => (
@@ -231,16 +231,16 @@ class Api {
       uid,
       languages,
       skipUids: skip_uids,
-      size    : more_items,
+      size: more_items,
       spec,
       specs,
       watchingNowMin: watching_now_min,
-      popularMin    : popular_min
+      popularMin: popular_min
     }
   ) => ({
     more_items,
     'current_feed': [],
-    'options'     : {
+    'options': {
       'recommend': {
         uid
       },
@@ -255,10 +255,10 @@ class Api {
 
   static recommended = requestData => {
     const config = {
-      method : 'post',
-      url    : feedUrl('recommend'),
+      method: 'post',
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify(requestData)
+      data: JSON.stringify(requestData)
     };
 
     return axios(config);
@@ -266,10 +266,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('views'),
+      method: 'post',
+      url: feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -277,10 +277,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('watchingnow'),
+      method: 'post',
+      url: feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids })
     };
 
     return axios(config);
