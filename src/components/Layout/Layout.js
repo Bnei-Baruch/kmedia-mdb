@@ -5,7 +5,7 @@ import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 import { getEmbedFromQuery } from '../../helpers/player';
 import Link from '../Language/MultiLanguageLink';
-import OmniBox from '../Search/OmniBox';
+import ClientOmniBox from '../Search/ClientOmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import HandleLanguages from './HandleLanguages';
@@ -77,7 +77,7 @@ const Layout = ({ playerContainer }) => {
                 <Header inverted as="h1" content={t('nav.top.header')} />
               </Menu.Item>
               <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
-                {isNotHome && <OmniBox />}
+                {isNotHome && <ClientOmniBox />}
               </Menu.Item>
               <Menu.Menu position="right" className="layout__header-buttons">
                 <Menu.Item className="no-margin">
@@ -110,7 +110,7 @@ const Layout = ({ playerContainer }) => {
             isShowSearch && (
               <div ref={headerSearchRef}>
                 <Segment color="blue" inverted className="header_search">
-                  <OmniBox />
+                  <ClientOmniBox />
                 </Segment>
               </div>
             )

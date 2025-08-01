@@ -17,7 +17,7 @@ const AVUnitWithDep = ({ unit }) => {
   if (isEmpty(description)) {
     const collections = Object.values(unit.collections);
     if (collections.length > 0) {
-      description = collections[0].description;
+      ({ description } = collections[0]);
     }
   }
 

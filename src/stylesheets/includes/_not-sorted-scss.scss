@@ -1404,7 +1404,11 @@
   padding-right: 0;
   padding-left: 0;
   margin-bottom: 1em;
-  text-align: end;
+  text-align: right;
+  
+  .rtl & {
+    text-align: left;
+  }
 }
 
 .my_playlist_item {
@@ -1486,7 +1490,11 @@
   .icon {
     font-size: 1em;
     vertical-align: top;
-    text-align: start;
+    text-align: left;
+    
+    .rtl & {
+      text-align: right;
+    }
   }
 }
 

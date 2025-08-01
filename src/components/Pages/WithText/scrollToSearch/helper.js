@@ -7,7 +7,7 @@ import { NOT_LETTER_CHAR } from '../../../../helpers/strings';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
-export const SPACES_RE       = new RegExp('\r?\n+|\n+|\r+|&nbsp;+', 'gi');
+export const SPACES_RE       = /[\r\n]+|&nbsp;+/gi;
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
 const MIN_NUMBER_WORDS_IN_LINK     = 5;
