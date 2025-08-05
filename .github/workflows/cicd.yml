@@ -33,7 +33,7 @@ jobs:
               echo "PUBLIC_BASE=https://kabbalahmedia.info/" >> $GITHUB_ENV
               echo "CDN_URL=https://cdn.kabbalahmedia.info/" >> $GITHUB_ENV
               echo "FEED_API_URL=https://kabbalahmedia.info/feed_api/" >> $GITHUB_ENV
-              echo "PERSONAL_API_URL=hhttps://kabbalahmedia.info/backend/my/" >> $GITHUB_ENV
+              echo "PERSONAL_API_URL=https://kabbalahmedia.info/backend/my/" >> $GITHUB_ENV
               ;;
             staging)
               echo "PUBLIC_BASE=https://staging-archive.kabbalahmedia.info/" >> $GITHUB_ENV
