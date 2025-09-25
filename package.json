@@ -30,9 +30,7 @@
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
     "lint": "yarn run eslint src",
     "lint-fix": "yarn run lint --fix",
-    "prepare": "husky install",
-    "dev:stop": "sh misc/dev-stop.sh",
-    "dev:restart": "sh misc/dev-restart.sh"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.1",

@@ -4,14 +4,10 @@ require('file-loader');
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
-  const cleaned = filename.split('?')[0];
-  if (cleaned.endsWith('.png')
-    || cleaned.endsWith('.jpg')
-    || cleaned.endsWith('.jpeg')
-    || cleaned.endsWith('.svg')) {
-    const key = path.join('static', 'media', path.basename(cleaned));
-    const fromManifest = manifest[key];
-    module.exports = fromManifest || `/assets/${path.basename(cleaned)}`;
+  if (filename.endsWith('.png')
+    || filename.endsWith('.jpg')
+    || filename.endsWith('.jpeg')) {
+    module.exports = `${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });
 
