@@ -9,7 +9,9 @@ require('ignore-styles').default(undefined, (module, filename) => {
     || cleaned.endsWith('.jpg')
     || cleaned.endsWith('.jpeg')
     || cleaned.endsWith('.svg')) {
-    module.exports = `${manifest[path.join('static', 'media', path.basename(cleaned))]}`;
+    const key = path.join('static', 'media', path.basename(cleaned));
+    const fromManifest = manifest[key];
+    module.exports = fromManifest || `/assets/${path.basename(cleaned)}`;
   }
 });
 
