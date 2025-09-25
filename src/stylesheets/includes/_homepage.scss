@@ -91,13 +91,13 @@
       padding-bottom: 2rem;
       padding-top: 1rem;
     }
-    background-attachment: fixed, scroll, scroll;
-    background-image: linear-gradient(to bottom, $blue-semantic, transparent),
-    radial-gradient(ellipse at bottom center, lighten($blue-semantic, 15%) 0, transparent 50%),
-    linear-gradient(to bottom, $blue-semantic, lighten($blue-semantic, 5%));
-    background-position: center $main-menu-height, center center, center center;
+    // Use solid brand color, matching the top header
+    background: #1A4378 !important;
+    background-image: none !important;
+    background-attachment: scroll;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 100% 5rem, cover, cover;
+    background-size: cover;
     margin-top: 0;
     padding-bottom: 4rem;
     padding-top: 2rem;

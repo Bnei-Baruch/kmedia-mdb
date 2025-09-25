@@ -30,7 +30,7 @@ const Layout = ({ playerContainer }) => {
   const headerSearchRef     = useRef();
   const sidebarRef          = useRef();
 
-  const { t }    = useTranslation();
+  const { t, i18n }    = useTranslation();
   const location = useLocation();
   const isNotHome   = !useMatch('/:lang');
 
@@ -73,8 +73,13 @@ const Layout = ({ playerContainer }) => {
                 </Menu.Item>
               </div>
               <Menu.Item className="logo" header as={Link} to="/">
-                <Logo width="40" height="40" />
-                <Header inverted as="h1" content={t('nav.top.header')} />
+                <Logo width="120px" height="120px" />
+                <div className="logo__titles">
+                  {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
+                    <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
+                  )}
+                  <Header inverted as="h1" content={t('nav.top.header')} />
+                </div>
               </Menu.Item>
               <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                 {isNotHome && <OmniBox />}
@@ -133,8 +138,13 @@ const Layout = ({ playerContainer }) => {
             </Menu.Item>
           </div>
           <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={closeSidebar}>
-            <Logo />
-            <Header inverted as="h1" content={t('nav.top.header')} />
+            <Logo width="120px" height="120px" />
+            <div className="logo__titles">
+              {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
+                <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
+              )}
+              <Header inverted as="h1" content={t('nav.top.header')} />
+            </div>
           </Menu.Item>
         </Menu>
         <div className="layout__sidebar-menu">
