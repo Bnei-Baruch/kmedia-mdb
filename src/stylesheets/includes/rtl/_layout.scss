@@ -13,9 +13,39 @@
   }
 
   .logo {
+    display: flex;
+    flex-direction: row; // keep icon on the left, titles on the right
+    align-items: center;
+
+    .logo__titles {
+      margin-left: 0;  // space between icon (left) and titles (right)
+      margin-right: 10px;
+      text-align: right;
+    }
+
     h1.header {
       margin-left: 0;
-      margin-right: 16px;
+      margin-right: 0;
+      margin-top: 0;
+      font-size: 1.5rem;
+      font-weight: 100;
+      font-family: Lato;
+      margin-top: -3px;
+
+
+    }
+  }
+ 
+  // Hebrew: make subtitle bigger
+  .logo {
+    .logo__subtitle {
+      font-size: 2.5rem;
+      font-family: Lato;
+      font-weight: 900;
+      letter-spacing: 0;
+      @include mobile {
+        font-size: 1.4rem;
+      }
     }
   }
 

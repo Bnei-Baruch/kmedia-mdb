@@ -1,5 +1,5 @@
 $sidebar-width: 300px;
-$main-menu-height: 60px;
+$main-menu-height: 80px;
 $secondary-header-height: 10px;
 $max-readble-width: 700px;
 $breadcrumb-height: 56px;
@@ -64,6 +64,19 @@ body {
     right: 0;
     top: 0;
     z-index: 2000;
+
+    // Add horizontal breathing room on full-width header and center items vertically
+    > .menu {
+      padding-left: 15px;
+      padding-right: 15px;
+      align-items: center !important;
+    }
+
+    // Custom brand color for top header bar
+    .ui.menu.inverted {
+      background-color: #1A4378 !important; // brand blue
+    }
+
   }
 
   &__search {
@@ -122,6 +135,11 @@ body {
     &-search {
       flex: 1 0 auto !important;
     }
+
+    // Match brand color for the sidebar's own top menu bar
+    .ui.menu.inverted {
+      background-color: #1A4378 !important;
+    }
   }
 
   &__main {
@@ -151,21 +169,59 @@ body {
   }
 }
 
+// Mobile search bar container under header (outside of .layout__header)
+.header_search.ui.segment,
+.ui.segment.header_search,
+.ui.blue.inverted.segment.header_search {
+  background-color: #1A4378 !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
 .logo {
   flex: 0 1 auto !important;
   padding: 0 !important;
 
   img {
     display: inline-block !important;
+    height: 120px; // 20% bigger
+    width: auto;
+  }
+
+  .logo__titles {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    line-height: 1;
+    justify-content: center;
   }
 
   h1.header {
     @include mobile {
-      font-size: 1.28571429rem !important;
+      font-size: 1.0rem !important;
     }
-    font-size: 1.71428571rem;
-    margin-left: 16px;
-    margin-top: 0;
+    font-size: 1.25rem; // smaller than subtitle
+    font-weight: 500;
+    margin-left: 0;
+    margin-top: 0.1rem;
+  }
+
+  .logo__subtitle {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 1000;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    line-height: 1;
+    margin-bottom: 0.1rem;
+
+    @include mobile {
+      font-size: 1.2rem;
+    }
   }
 }
 
@@ -235,6 +291,23 @@ body {
 }
 
 .ui.menu {
+  .layout__sidebar-toggle.item,
+  .item.layout__sidebar-toggle {
+    @include tablet-mobile {
+      display: flex !important;
+      align-items: center !important;
+      height: $main-menu-height !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+
+  // Toggle icon size
+  .layout__sidebar-toggle .icon {
+    font-size: 1.8rem !important;
+    line-height: 1 !important;
+  }
+
   .donate-button {
     &.ui.button,
     &.ui.button:hover,

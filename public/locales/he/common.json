@@ -1,7 +1,8 @@
 {
   "nav": {
     "top": {
-      "header": "קבלה מדיה"
+      "header": "קבלה מדיה",
+      "subtitle": "בני ברוך"
     },
     "sidebar": {
       "personal": "איזור אישי",
