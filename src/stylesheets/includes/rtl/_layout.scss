@@ -29,7 +29,6 @@
       margin-top: 0;
       font-size: 1.3rem;
       font-weight: 100;
-      font-family: Lato;
       margin-top: -3px;
 
 
@@ -39,8 +38,7 @@
   // Hebrew: make subtitle bigger
   .logo {
     .logo__subtitle {
-      font-size: 2.2rem;
-      font-family: Lato;
+      font-size: 2rem;
       font-weight: 900;
       letter-spacing: -0.04em;
       @include mobile {
