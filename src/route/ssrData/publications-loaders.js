@@ -54,7 +54,7 @@ export const tweetsListPage = (store, match) => {
   const state = store.getState();
   const pageSize = settingsGetPageSizeSelector(state);
   const contentLanguages = settingsGetContentLanguagesSelector(state);
-  
+
   const username = Array.from(new Set(contentLanguages.map(contentLanguage =>
     TWITTER_USERNAMES_BY_LANG.get(contentLanguage) || TWITTER_USERNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
 
@@ -75,7 +75,7 @@ export const blogListPage = (store, match) => {
   const state = store.getState();
   const pageSize = settingsGetPageSizeSelector(state);
   const contentLanguages = settingsGetContentLanguagesSelector(state);
-  
+
   const blog = Array.from(new Set(contentLanguages.map(contentLanguage =>
     BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
 
@@ -125,7 +125,7 @@ export const articleCUPage = (store, match) => {
 
       const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
-      
+
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
       }
@@ -153,10 +153,11 @@ export const blogPostPage = (store, match) => {
 /**
  * Extra fetch params for publications
  */
-export const getPublicationsExtraParams = (ns) => {
+export const getPublicationsExtraParams = ns => {
   if (ns === 'publications-articles') {
     return { content_type: [CT_ARTICLE] };
   }
+
   return {};
 };
 

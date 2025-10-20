@@ -11,9 +11,9 @@ export const home = store => {
   const contentLanguages = settingsGetContentLanguagesSelector(state);
 
   store.dispatch(homeActions.fetchData(true));
-  fetchSocialMedia('blog', (type, id, options) => 
+  fetchSocialMedia('blog', (type, id, options) =>
     store.dispatch(publicationsActions.fetchBlogList(type, id, options)), contentLanguages);
-  fetchSocialMedia('tweet', (type, id, options) => 
+  fetchSocialMedia('tweet', (type, id, options) =>
     store.dispatch(publicationsActions.fetchTweets(type, id, options)), contentLanguages);
   store.dispatch(homeActions.fetchBanners(contentLanguages));
 

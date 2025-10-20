@@ -13,10 +13,11 @@ export const programsPage = (store, match) => {
 /**
  * Extra fetch params for programs
  */
-export const getProgramsExtraParams = (ns) => {
+export const getProgramsExtraParams = ns => {
   if (ns === PAGE_NS_PROGRAMS) {
     return { content_type: UNIT_PROGRAMS_TYPE };
   }
+
   return {};
 };
 

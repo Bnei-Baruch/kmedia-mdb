@@ -28,7 +28,7 @@ export const lessonsCollectionPage = (store, match) => {
 /**
  * Extra fetch params for lessons by tab type
  */
-export const getLessonsExtraParams = (tab) => {
+export const getLessonsExtraParams = tab => {
   switch (tab) {
     case 'lessons-virtual':
       return { content_type: [CT_VIRTUAL_LESSON] };

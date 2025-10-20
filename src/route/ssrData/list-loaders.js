@@ -12,6 +12,7 @@ function getExtraFetchParams(ns, collectionID) {
   if (collectionID) {
     return { collection: collectionID };
   }
+
   return {};
 }
 
@@ -43,7 +44,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
   if (cID) ns = `${ns}_${cID}`;
-  
+
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       cuListPage(ns, cID)(store, match);

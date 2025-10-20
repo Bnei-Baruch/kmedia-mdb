@@ -24,25 +24,24 @@ function firstLeafId(sourceId, state) {
   if (isEmpty(source?.children)) {
     return sourceId;
   }
+
   return firstLeafId(source.children[0], state);
 }
 
 /**
  * Fetches sources, tags, publishers and persons data
  */
-const fetchSQData = async (store, uiLang, contentLanguages) => {
-  return await Api.sqdata({
-    ui_language: uiLang,
-    content_languages: contentLanguages
-  }).then(({ data }) => {
-    store.dispatch(sources.receiveSources({ sources: data.sources, uiLang }));
-    store.dispatch(tagsActions.receiveTags(data.tags));
-    store.dispatch(publicationsActions.receivePublishers(data.publishers));
-    store.dispatch(mdbActions.receivePersons(data.persons));
-    store.dispatch(mdbActions.fetchSQDataSuccess());
-    return data.sources;
-  }).catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
-};
+const fetchSQData = async (store, uiLang, contentLanguages) => await Api.sqdata({
+  ui_language: uiLang,
+  content_languages: contentLanguages
+}).then(({ data }) => {
+  store.dispatch(sources.receiveSources({ sources: data.sources, uiLang }));
+  store.dispatch(tagsActions.receiveTags(data.tags));
+  store.dispatch(publicationsActions.receivePublishers(data.publishers));
+  store.dispatch(mdbActions.receivePersons(data.persons));
+  store.dispatch(mdbActions.fetchSQDataSuccess());
+  return data.sources;
+}).catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
 
 /**
  * SSR data loader for library/sources page
@@ -54,7 +53,7 @@ export const libraryPage = async (store, match, show_console = false) => {
   const uiLang = query.language || settings.getUILang(state.settings);
   const sourceLanguage = query.source_language;
   const contentLanguages = settingsGetContentLanguagesSelector(state);
-  
+
   show_console && console.log('SSR: libraryPage - fetching sources');
   await fetchSQData(store, uiLang, contentLanguages);
 

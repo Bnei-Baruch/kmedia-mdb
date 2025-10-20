@@ -14,7 +14,7 @@ export const eventsPage = store => {
 /**
  * Extra fetch params for events by type
  */
-export const getEventsExtraParams = (type) => {
+export const getEventsExtraParams = type => {
   switch (type) {
     case 'events-meals':
       return { content_type: [CT_MEAL] };
