@@ -4,7 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 
 import * as middleware from './middleware';
-import serverRender from './renderer';
+import serverRender from './ssr/renderer';
 import { kmediaContainer, kmediaSearch } from './kmedia';
 
 const indexHtml = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');

@@ -5,7 +5,7 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 //import { resourceMonitorMiddleware } from 'express-watcher';
 import * as middleware from './middleware';
-import serverRender from './renderer';
+import serverRender from './ssr/renderer';
 
 const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
 const CRA_CLIENT_HOST = process.env.CRA_CLIENT_HOST || 'localhost';
@@ -34,6 +34,27 @@ app.use(middleware.errorHandler);
 // app.use(resourceMonitorMiddleware);
 
 const router = express.Router();
+
+// SSR Cache API
+router.get('/api/ssr-cache/stats', (req, res) => {
+  try {
+    const { getCacheStats } = require('./ssr/axios-cache');
+    const stats = getCacheStats();
+    res.json({ success: true, stats, timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post('/api/ssr-cache/clear', (req, res) => {
+  try {
+    const { clearCache } = require('./ssr/axios-cache');
+    clearCache();
+    res.json({ success: true, message: 'SSR cache cleared', timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // root (/) should always serve our server rendered page
 router.use('^/$', handler);

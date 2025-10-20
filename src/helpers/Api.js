@@ -2,6 +2,18 @@ import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 
+// Setup axios caching for SSR only (server-side)
+if (typeof window === 'undefined') {
+  try {
+    // eslint-disable-next-line global-require
+    const { setupAxiosCache } = require('../../server/ssr/axios-cache');
+    setupAxiosCache(axios);
+    console.log('[SSR] Axios caching enabled');
+  } catch (error) {
+    console.log('[SSR] Axios caching not available:', error.message);
+  }
+}
+
 export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND               = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;

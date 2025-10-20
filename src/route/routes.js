@@ -44,7 +44,7 @@ import {
   PlaylistItemPageVirtual
 } from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
-import * as ssrDataLoaders from './routesSSRData';
+import * as ssrDataLoaders from './ssrData';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 import AboutPage from '../components/Sections/About/AboutPage';
 
