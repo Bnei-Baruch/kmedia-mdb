@@ -35,4 +35,5 @@ Disallow: /*/publications/blog/*
 # No need to scan personalized content
 Disallow: /feed_api/*
 Disallow: /*personal*
+Disallow: /*search*
 

@@ -119,81 +119,66 @@ export class Requests {
 }
 
 class Api {
-  static collection = (
-    {
-      id,
-      ui_language,
-      content_languages
-    }) => Requests.get(`collections/${id}?${Requests.makeParams({
-      ui_language,
-      content_languages
-    })}`
-  );
+  static collection = ({ id, ui_language, content_languages }) =>
+    Requests.get(
+      `collections/${id}?${Requests.makeParams({
+        ui_language,
+        content_languages,
+      })}`
+    );
 
-  static unit = (
-    {
-      id,
-      ui_language,
-      content_languages
-    }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
+  static unit = ({ id, ui_language, content_languages }) =>
+    Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({
-    ui_language,
-    content_languages
-  })}`);
+  static home = ({ ui_language, content_languages }) =>
+    Requests.get(
+      `home?${Requests.makeParams({
+        ui_language,
+        content_languages,
+      })}`
+    );
 
-  static latestLesson = (
-    {
-      ui_language,
-      content_languages
-    }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
+  static latestLesson = ({ ui_language, content_languages }) =>
+    Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({
-    ui_language,
-    content_languages
-  })}`);
+  static sqdata = ({ ui_language, content_languages }) =>
+    Requests.get(
+      `sqdata?${Requests.makeParams({
+        ui_language,
+        content_languages,
+      })}`
+    );
 
-  static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`)
-  );
+  static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
-  static events = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`events?${Requests.makeParams({ page_no, page_size, ...rest })}`)
-  );
+  static events = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`events?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
-  static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`collections?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`)
-  );
+  static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`collections?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
-  static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`)
-  );
+  static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
-  static unitsStats = ({ contentTypes: content_type, ...rest }) => (
-    Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
-  );
+  static unitsStats = ({ contentTypes: content_type, ...rest }) =>
+    Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
 
-  static collectionsStats = ({ contentTypes: content_type, ...rest }) => (
-    Requests.get(`stats/c_class?${Requests.makeParams({ content_type, ...rest })}`)
-  );
+  static collectionsStats = ({ contentTypes: content_type, ...rest }) =>
+    Requests.get(`stats/c_class?${Requests.makeParams({ content_type, ...rest })}`);
 
-  static labelsStats = rest => (
-    Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
-  );
+  static labelsStats = rest => Requests.get(`stats/label_class?${Requests.makeParams(rest)}`);
 
-  static elasticStats = ({ q, ui_language, content_languages }) => (
-    Requests.get(`stats/search_class?${Requests.makeParams({ q, ui_language, content_languages })}`)
-  );
+  static elasticStats = ({ q, ui_language, content_languages }) =>
+    Requests.get(`stats/search_class?${Requests.makeParams({ q, ui_language, content_languages })}`);
 
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
-  static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`)
-  );
+  static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
-  static posts = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`posts?${Requests.makeParams({ page_no, page_size, ...rest })}`)
-  );
+  static posts = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`posts?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
   static post = (blog, id) => Requests.get(`posts/${blog}/${id}`);
 
@@ -201,33 +186,27 @@ class Api {
 
   static tagDashboard = params => Requests.get(`tags/dashboard?${Requests.makeParams(params)}`);
 
-  static autocomplete = ({ q, ui_language, content_languages }) => Requests.get(`autocomplete?${Requests.makeParams({
-    q,
-    ui_language,
-    content_languages
-  })}`);
+  static autocomplete = ({ q, ui_language, content_languages }) =>
+    Requests.get(
+      `autocomplete?${Requests.makeParams({
+        q,
+        ui_language,
+        content_languages,
+      })}`
+    );
 
-  static search = (
-    {
-      q,
-      ui_language,
-      content_languages,
-      pageNo  : page_no,
-      pageSize: page_size,
-      sortBy  : sort_by,
-      deb,
-    }
-  ) => (
-    Requests.get(`search?${Requests.makeParams({
-      q,
-      ui_language,
-      content_languages,
-      page_no,
-      page_size,
-      sort_by,
-      deb,
-    })}`)
-  );
+  static search = ({ q, ui_language, content_languages, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb }) =>
+    Requests.get(
+      `search?${Requests.makeParams({
+        q,
+        ui_language,
+        content_languages,
+        page_no,
+        page_size,
+        sort_by,
+        deb,
+      })}`
+    );
 
   static getAsset = path => Requests.getAsset(path);
 
@@ -238,39 +217,37 @@ class Api {
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
 
-  static recommendedRequestData = (
-    {
-      uid,
-      languages,
-      skipUids: skip_uids,
-      size    : more_items,
-      spec,
-      specs,
-      watchingNowMin: watching_now_min,
-      popularMin    : popular_min
-    }
-  ) => ({
+  static recommendedRequestData = ({
+    uid,
+    languages,
+    skipUids: skip_uids,
+    size: more_items,
+    spec,
+    specs,
+    watchingNowMin: watching_now_min,
+    popularMin: popular_min,
+  }) => ({
     more_items,
-    'current_feed': [],
-    'options'     : {
-      'recommend': {
-        uid
+    current_feed: [],
+    options: {
+      recommend: {
+        uid,
       },
       languages,
       skip_uids,
       spec,
       specs,
       watching_now_min,
-      popular_min
-    }
+      popular_min,
+    },
   });
 
   static recommended = requestData => {
     const config = {
-      method : 'post',
-      url    : feedUrl('recommend'),
+      method: 'post',
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify(requestData)
+      data: JSON.stringify(requestData),
     };
 
     return axios(config);
@@ -278,10 +255,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('views'),
+      method: 'post',
+      url: feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids }),
     };
 
     return axios(config);
@@ -289,10 +266,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method : 'post',
-      url    : feedUrl('watchingnow'),
+      method: 'post',
+      url: feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data   : JSON.stringify({ uids })
+      data: JSON.stringify({ uids }),
     };
 
     return axios(config);
@@ -300,8 +277,7 @@ class Api {
 
   static my = (namespace, params, token, method = 'GET') => {
     let urlParam = namespace;
-    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT)
-      urlParam = MY_NAMESPACE_PLAYLISTS;
+    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT) urlParam = MY_NAMESPACE_PLAYLISTS;
 
     if (params.id) {
       urlParam = `${urlParam}/${params.id}`;
@@ -348,24 +324,24 @@ class Api {
   };
 
   static postLanguages = (data, token) => Requests.auth(data, `${PERSONAL_API_BACKEND}settings`, token, 'POST');
-  static getLanguages  = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
+  static getLanguages = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
 
   static reactionsCount = params => {
-    const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
+    const url = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };
 
   static trimFile = params => {
-    const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
+    const url = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };
 
   static mdbCreateLabel = (params, token) => {
-    const url     = `${MDB_REST_API_URL}labels/`;
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
-    const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
+    const url = `${MDB_REST_API_URL}labels/`;
+    const headers = { 'Content-Type': 'application/json', Authorization: `bearer ${token}` };
+    const config = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
   };
 }
