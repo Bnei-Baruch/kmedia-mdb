@@ -43,3 +43,4 @@ build.zip
 /.yarn
 /__MACOSX
 package.json
+.cursorrules
