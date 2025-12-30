@@ -1,8 +1,3 @@
-// Remove the static import
-// import Keycloak from 'keycloak-js';
-
-// This file used loaded in SSR and in client side too.
-// Try load the constants from process and in client expect them in window global object.
 const KC_API_URL   = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
 const KC_REALM     = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
 const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
