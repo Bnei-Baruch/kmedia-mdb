@@ -41,6 +41,7 @@ node_modules/
 
 build.zip
 /.yarn
+!/.yarn/releases/
 /__MACOSX
 package.json
 .cursorrules
