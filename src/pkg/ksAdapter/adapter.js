@@ -20,15 +20,15 @@ const getKeycloak = async () => {
   if (keycloak) {
     return keycloak;
   }
-  
+
   if (keycloakPromise) {
     return keycloakPromise;
   }
-  
+
   if (typeof window === 'undefined') {
     return {};
   }
-  
+
   keycloakPromise = import('keycloak-js').then(({ default: Keycloak }) => {
     const userManagerConfig = {
       url          : KC_API_URL,
@@ -36,19 +36,19 @@ const getKeycloak = async () => {
       clientId     : KC_CLIENT_ID,
       enableLogging: true
     };
-    
+
     keycloak = new Keycloak(userManagerConfig);
-    
+
     keycloak.onTokenExpired = () => {
       renewRetry(0);
     };
-    
+
     return keycloak;
   }).catch(error => {
     console.error('Failed to load keycloak-js:', error);
     return {};
   });
-  
+
   return keycloakPromise;
 };
 
@@ -64,7 +64,7 @@ export const login = async () => {
 
   const kc = await getKeycloak();
   if (!kc.login) return;
-  
+
   kc.login({ redirectUri: url.href })
     .then(r => {
       updateUser(r);
@@ -75,7 +75,7 @@ export const login = async () => {
 export const logout = async () => {
   const kc = await getKeycloak();
   if (!kc.logout) return;
-  
+
   kc.logout()
     .then(() => updateUser(null))
     .catch(err => {
@@ -137,6 +137,7 @@ const renewRetry = (retry, err) => {
       if (kc.clearToken) {
         kc.clearToken();
       }
+
       updateUser(null);
     });
   } else {
@@ -148,7 +149,7 @@ const renewToken = retry => {
   retry++;
   getKeycloak().then(kc => {
     if (!kc.updateToken) return;
-    
+
     kc.updateToken(70).then(refreshed => {
       if (refreshed) {
         updateToken(kc.token);
@@ -165,7 +166,7 @@ const renewToken = retry => {
 export const kcUpdateToken = async () => {
   const kc = await getKeycloak();
   if (!kc.updateToken) return null;
-  
+
   return kc.updateToken(70)
     .then(ok => {
       if (ok) updateToken(kc.token);
