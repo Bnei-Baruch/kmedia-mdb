@@ -4046,16 +4046,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@paralleldrive/cuid2@npm:3.0.6":
-  version: 3.0.6
-  resolution: "@paralleldrive/cuid2@npm:3.0.6"
+"@paralleldrive/cuid2@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@paralleldrive/cuid2@npm:3.1.0"
   dependencies:
     "@noble/hashes": "npm:^2.0.1"
     bignumber.js: "npm:^9.3.1"
     error-causes: "npm:^3.0.2"
   bin:
     cuid2: bin/cuid2.js
-  checksum: 10c0/be0a86d6aa508a65988e6a1dc9117b5aa02dfd931cd81ef4bc505f8a62fdc255e076ae26b04112eb444b85fd67e8376eab1bcf04b28023ab8d1f5f630584ce29
+  checksum: 10c0/4c32b56ef187c0ee3f6a2f7dd8cfe1fcee6cf58ed276e5d4f6ab0ab9be92ace8a86071112ed02562083281fb1eb5b4bca963ea22f7eebc35821f77f95a7d888c
   languageName: node
   linkType: hard
 
@@ -15098,7 +15098,7 @@ __metadata:
     "@babel/types": "npm:^7.28.5"
     "@lagunovsky/redux-react-router": "npm:^4.5.0"
     "@marvelapp/react-ab-test": "npm:^3.1.0"
-    "@paralleldrive/cuid2": "npm:3.0.6"
+    "@paralleldrive/cuid2": "npm:3.1.0"
     "@reduxjs/toolkit": "npm:^2.2.3"
     "@svgr/cli": "npm:^8.1.0"
     "@testing-library/jest-dom": "npm:^6.9.1"
