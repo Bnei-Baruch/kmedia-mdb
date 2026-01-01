@@ -1,11 +1,11 @@
-import fs from 'fs';
-import path from 'path';
 import express from 'express';
+import fs from 'fs';
 import helmet from 'helmet';
+import path from 'path';
 
+import { kmediaContainer, kmediaSearch } from './kmedia';
 import * as middleware from './middleware';
 import serverRender from './renderer';
-import { kmediaContainer, kmediaSearch } from './kmedia';
 
 const indexHtml = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');
 
@@ -50,6 +50,7 @@ app.use(helmet({
         '*.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
+        '*.jwplayer.com',
       ],
       'script-src': [
         '\'self\'',
