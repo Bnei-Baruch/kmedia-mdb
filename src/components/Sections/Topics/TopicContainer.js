@@ -1,22 +1,22 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
-import produce from 'immer';
+import { produce } from 'immer';
 import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
-import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
-import SectionHeader from '../../shared/SectionHeader';
-import Link from '../../Language/MultiLanguageLink';
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
+import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/filtersAside';
 import {
-  tagsGetDisplayRootsSelector,
   filtersAsideGetStatsSelector,
+  tagsGetDisplayRootsSelector,
   tagsGetTagsSelector
 } from '../../../redux/selectors';
+import Link from '../../Language/MultiLanguageLink';
+import SectionHeader from '../../shared/SectionHeader';
 
 const namespace = 'topics';
 
