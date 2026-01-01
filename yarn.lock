@@ -3940,17 +3940,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lagunovsky/redux-react-router@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "@lagunovsky/redux-react-router@npm:4.3.2"
+"@lagunovsky/redux-react-router@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@lagunovsky/redux-react-router@npm:4.5.0"
   peerDependencies:
     history: ^5
-    react: ^16.8 || ^17 || ^18
-    react-dom: ^16.8 || ^17 || ^18
+    react: ^16.8 || ^17 || ^18 || ^19
+    react-dom: ^16.8 || ^17 || ^18 || ^19
     react-redux: ^6 || ^7 || ^8 || ^9
-    react-router: ^6
+    react-router: ^6 || ^7
     redux: ^4 || ^5
-  checksum: 10c0/ad02c483b194b631f013191dc4ecd0fa9bf4a3656b6b29334fdfa56c27d8775432cd6acc87e3fb6940284d244d06dc8ec0695e9dab4004b7d09bc986f52bac47
+  checksum: 10c0/87f686ca75c6d12ad33b6fbd10ccc58633f3d3ea9b4d373abce649cbe36f51b8de6931c34ed303add4c147e9aa9d028fb15bbe53828ec49e5f0e2e4a0b602cc1
   languageName: node
   linkType: hard
 
@@ -15078,7 +15078,7 @@ __metadata:
     "@babel/register": "npm:^7.28.3"
     "@babel/traverse": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@lagunovsky/redux-react-router": "npm:^4.3.2"
+    "@lagunovsky/redux-react-router": "npm:^4.5.0"
     "@marvelapp/react-ab-test": "npm:^3.1.0"
     "@paralleldrive/cuid2": "npm:^2.2.2"
     "@reduxjs/toolkit": "npm:^2.2.3"
