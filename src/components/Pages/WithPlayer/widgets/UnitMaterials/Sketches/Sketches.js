@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Container } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Container } from 'semantic-ui-react';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
-import { strCmp, isEmpty } from '../../../../../../helpers/utils';
-import { actions } from '../../../../../../redux/modules/assets';
-import WipErr from '../../../../../shared/WipErr/WipErr';
-import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
-import { imageGalleryItem, isZipFile } from './helper';
-import { settingsGetContentLanguagesSelector, assetsNestedGetZipByIdSelector } from '../../../../../../redux/selectors';
-import SketchesGallery from './SketchesGallery';
-import NotFound from '../../../../../shared/NotFound';
 import MediaHelper from '../../../../../../helpers/media';
+import { isEmpty, strCmp } from '../../../../../../helpers/utils';
+import { actions } from '../../../../../../redux/modules/assets';
+import { assetsNestedGetZipByIdSelector, settingsGetContentLanguagesSelector } from '../../../../../../redux/selectors';
+import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
+import NotFound from '../../../../../shared/NotFound';
+import WipErr from '../../../../../shared/WipErr/WipErr';
+import SketchesGallery from './SketchesGallery';
+import { imageGalleryItem, isZipFile } from './helper';
 
 const findFiles = (files = [], language) => {
   const _files = files
@@ -31,7 +31,7 @@ const Sketches = ({ unit }) => {
   const imgFiles                = unit.files.filter(f => f.type === 'image');
   const contentLanguages        = useSelector(settingsGetContentLanguagesSelector);
   const languages               = imgFiles.map(file => file.language);
-  const _language               = selectSuitableLanguage(contentLanguages, languages, unit.original_language);
+  const _language               = selectSuitableLanguage(contentLanguages, languages, unit.original_language, languages[0]);
   const [language, setLanguage] = useState(_language || '');
   const { zipId, imgs }         = findFiles(unit.files, language);
   const { wip, err, data }      = useSelector(assetsNestedGetZipByIdSelector)(zipId) || {};
