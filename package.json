@@ -91,7 +91,7 @@
     "@babel/register": "^7.28.3",
     "@lagunovsky/redux-react-router": "^4.5.0",
     "@marvelapp/react-ab-test": "^3.1.0",
-    "@paralleldrive/cuid2": "^2.2.2",
+    "@paralleldrive/cuid2": "3.0.6",
     "@reduxjs/toolkit": "^2.2.3",
     "@svgr/cli": "^8.1.0",
     "axios": "^1.6.8",
