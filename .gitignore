@@ -40,5 +40,7 @@ node_modules/
 .eslintcache
 
 build.zip
-/.yarn
+/.yarn/*
+!/.yarn/releases/
 /__MACOSX
+.cursorrules

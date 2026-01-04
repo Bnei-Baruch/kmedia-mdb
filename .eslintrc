@@ -12,12 +12,6 @@
     "jest": true,
     "jest/globals": true
   },
-  "plugins": [
-    "react",
-    "jest",
-    "import",
-    "react-hooks"
-  ],
   "settings": {
     "parser": "@babel/eslint-parser",
     "import/parser": "@babel/eslint-parser",

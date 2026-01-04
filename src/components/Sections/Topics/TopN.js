@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { produce } from 'immer';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
-import produce from 'immer';
-import { Button, Header, Table, Image } from 'semantic-ui-react';
+import { Button, Header, Image, Table } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
-import { isNotEmptyArray, strCmp } from '../../../helpers/utils';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
+import { isNotEmptyArray, strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
 const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {

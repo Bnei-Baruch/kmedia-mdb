@@ -4,15 +4,14 @@ import Api from '../helpers/Api';
 import {
   CT_COLLECTIONS,
   CT_DAILY_LESSON,
-  CT_LESSON_PART,
   CT_LESSONS,
+  CT_LESSON_PART,
   CT_UNITS,
   CT_VIDEO_PROGRAM_CHAPTER,
   FN_CONTENT_TYPE,
-  FN_SHOW_LESSON_AS_UNITS,
+  MY_NAMESPACE_HISTORY,
   PAGE_NS_EVENTS,
   PAGE_NS_LESSONS,
-  MY_NAMESPACE_HISTORY,
   PAGE_NS_SKETCHES
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
@@ -20,12 +19,12 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
 import { actions as mbdActions, selectors as mdb } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+import { checkIsLessonAsCollection } from './filtersAside';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
-import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
-import { checkIsLessonAsCollection } from './filtersAside';
 
 const endpointByNamespace = {
   [PAGE_NS_LESSONS] : Api.lessons,
