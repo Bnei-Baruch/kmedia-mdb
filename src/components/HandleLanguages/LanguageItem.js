@@ -10,10 +10,10 @@ import { settingsGetContentLanguagesSelector, settingsGetUrlLangSelector } from 
 
 const LanguageItem = (idx, language, disabled) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
-  const contentLanguages = useSelector((state) => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
+  const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
   const dispatch = useDispatch();
 
-  const removeLanguage = (idx) => {
+  const removeLanguage = idx => {
     const newLanguages = contentLanguages.slice();
     newLanguages.splice(idx, 1);
     dispatch(actions.setContentLanguages({ contentLanguages: newLanguages }));
@@ -32,7 +32,7 @@ const LanguageItem = (idx, language, disabled) => {
           disabled={!!urlLang || disabled}
           className="language-trigger"
           name="close"
-          onClick={(lang) => removeLanguage(idx)}
+          onClick={lang => removeLanguage(idx)}
         />
       </div>
     </List.Item>

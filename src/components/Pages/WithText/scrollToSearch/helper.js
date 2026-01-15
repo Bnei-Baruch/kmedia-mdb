@@ -7,7 +7,7 @@ import { RenderNoSearch } from './RenderNoSearch';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
-// eslint-disable-next-line no-control-regex 
+// eslint-disable-next-line no-control-regex
 export const SPACES_RE       = new RegExp('\r?\n+|\n+|\r+|&nbsp;+', 'gi');
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
