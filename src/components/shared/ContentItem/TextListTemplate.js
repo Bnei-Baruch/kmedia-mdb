@@ -23,7 +23,7 @@ const TextListTemplate = ({ cuID, lID, t }) => {
   const getPathByID      = useSelector(sourcesGetPathByIDSelector);
 
   if (!cu) return null;
-  const icon = !!label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
+  const icon = label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
   const to   = textPartLink(label?.properties, cu);
 
   const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);

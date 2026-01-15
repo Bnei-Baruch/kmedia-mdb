@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Helmet } from "./helmetESM";
+import { Helmet } from './helmetESM';
 
 import { assetUrl, Requests } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';

@@ -90,7 +90,7 @@ export function* search(action) {
         pageNo = 1;
       }
 
-      if (!!filterParams) {
+      if (filterParams) {
         for (const filter of filters) {
           const { name } = filter;
           yield put(filterActions.resetFilter('search', name));

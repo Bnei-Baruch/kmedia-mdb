@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 
-import { SeekBackwardBtn, SeekForwardBtn } from './SeekBtns';
-import { NextBtn, PrevBtn } from './NextPrevBtns';
-import { FullscreenBtn, ShareBtn, SettingsBtn } from './ControlBtns';
-import PlayPauseBtn from './PlayPauseBtn';
-import VolumeCtrl from './VolumeCtrl';
-import { Timecode } from './Timecode';
-import { ProgressCtrl } from './ProgressCtrl';
-import PlayPauseBg from './PlayPauseBg';
 import { useSelector } from 'react-redux';
-import { PlayerContext } from '../PlayerContainer';
 import { playerIsLoadedSelector } from '../../../redux/selectors';
+import { PlayerContext } from '../PlayerContainerClient';
+import { FullscreenBtn, SettingsBtn, ShareBtn } from './ControlBtns';
+import { NextBtn, PrevBtn } from './NextPrevBtns';
+import PlayPauseBg from './PlayPauseBg';
+import PlayPauseBtn from './PlayPauseBtn';
+import { ProgressCtrl } from './ProgressCtrl';
+import { SeekBackwardBtn, SeekForwardBtn } from './SeekBtns';
+import { Timecode } from './Timecode';
+import VolumeCtrl from './VolumeCtrl';
 
 const ControlsWeb = ({ fullscreenRef }) => {
 

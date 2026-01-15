@@ -243,7 +243,7 @@ const onReceivePersons = (state, action) => {
   }
 
   state.personById = action.payload.reduce((acc, { id, name }) => {
-    if (!!id) {
+    if (id) {
       acc[id] = { id, name };
     }
 

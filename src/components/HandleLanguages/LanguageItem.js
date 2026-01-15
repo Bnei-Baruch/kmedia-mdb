@@ -1,12 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Icon, List } from "semantic-ui-react";
-import { LANGUAGES } from "../../helpers/consts";
-import { backendApi } from "../../redux/api/backendApi";
-import { actions } from "../../redux/modules/settings";
-import { settingsGetContentLanguagesSelector, settingsGetUrlLangSelector } from "../../redux/selectors";
-
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Icon, List } from 'semantic-ui-react';
+import { LANGUAGES } from '../../helpers/consts';
+import { backendApi } from '../../redux/api/backendApi';
+import { wholeMusic } from '../../redux/api/music';
+import { wholeSimpleMode } from '../../redux/api/simpleMode';
+import { actions } from '../../redux/modules/settings';
+import { settingsGetContentLanguagesSelector, settingsGetUrlLangSelector } from '../../redux/selectors';
 
 const LanguageItem = (idx, language, disabled) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
@@ -23,7 +23,7 @@ const LanguageItem = (idx, language, disabled) => {
   return (
     <List.Item key={language}>
       <div className="language-item">
-        <div className={disabled ? "disabled" : ""}>
+        <div className={disabled ? 'disabled' : ''}>
           <div>
             {idx + 1}. {LANGUAGES[language].name}
           </div>

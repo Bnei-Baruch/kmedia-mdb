@@ -23,7 +23,7 @@ const ShareScanBtn = () => {
   });
 
   let { url } = useSelector(textPageGetUrlInfoSelector);
-  if (!!url) {
+  if (url) {
     const _url = new URL(url);
     _url.searchParams.set('scan', true);
     url = _url.toString();

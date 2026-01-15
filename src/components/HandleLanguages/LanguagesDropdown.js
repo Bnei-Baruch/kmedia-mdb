@@ -1,13 +1,13 @@
-import React from "react";
-import { Dropdown } from "semantic-ui-react";
+import React from 'react';
+import { Dropdown } from 'semantic-ui-react';
 
-import { ALL_LANGUAGES, LANGUAGES } from "../../helpers/consts";
-import Link from "../Language/MultiLanguageLink";
+import { ALL_LANGUAGES, LANGUAGES } from '../../helpers/consts';
+import Link from '../Language/MultiLanguageLink';
 
 const LanguagesDropdown = ({ disabled, trigger, language, selected, asLink }) => (
-  <Dropdown disabled={disabled} item scrolling trigger={trigger} icon={trigger ? null : "dropdown"}>
+  <Dropdown disabled={disabled} item scrolling trigger={trigger} icon={trigger ? null : 'dropdown'}>
     <Dropdown.Menu>
-      {ALL_LANGUAGES.map((lang) => (
+      {ALL_LANGUAGES.map(lang => (
         <Dropdown.Item
           key={lang}
           as={asLink ? Link : undefined}

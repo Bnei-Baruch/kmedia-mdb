@@ -1,31 +1,31 @@
-import { parse as cookieParse } from "cookie";
-import qs from "qs";
+import { parse as cookieParse } from 'cookie';
+import qs from 'qs';
 
-import omit from "lodash/omit";
-import { KC_SEARCH_KEYS, KC_SEARCH_KEY_SESSION } from "../pkg/ksAdapter/adapter";
-import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from "./consts";
+import omit from 'lodash/omit';
+import { KC_SEARCH_KEYS, KC_SEARCH_KEY_SESSION } from '../pkg/ksAdapter/adapter';
+import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
 
-export const parse = (str) => qs.parse(str);
+export const parse = str => qs.parse(str);
 
-export const stringify = (obj) => qs.stringify(obj, { arrayFormat: "repeat", skipNulls: true });
+export const stringify = obj => qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
 
 /**
  * Test if a url is an absolute url
  * @param {string} url
  * @return {boolean}
  */
-export const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/\//i.test(url);
+export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
-const ensureStartsWithSlash = (str) => str && (str[0] === "/" ? str : `/${str}`);
+const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
-export const splitPathByLanguage = (path) => {
+export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
-  const parts = pathWithSlash.split("/");
+  const parts = pathWithSlash.split('/');
 
   if (LANGUAGES[parts[1]]) {
     return {
       language: parts[1],
-      path: ensureStartsWithSlash(parts.slice(2).join("/")) || "/",
+      path: ensureStartsWithSlash(parts.slice(2).join('/')) || '/',
     };
   }
 
@@ -34,10 +34,10 @@ export const splitPathByLanguage = (path) => {
   };
 };
 
-export const isSocialUserAgent = (userAgent) => /facebook|facebot/i.test(userAgent);
+export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
 
 export const getUILangFromPath = (path, headers, userAgent) => {
-  console.log("getUILangFromPath", path);
+  console.log('getUILangFromPath', path);
   let { language } = splitPathByLanguage(path);
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
@@ -49,7 +49,7 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   }
 
   // UI lang is set in cookie - redirect 302 to /:lang/...
-  const cookies = cookieParse(headers.cookie || "");
+  const cookies = cookieParse(headers.cookie || '');
   language = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
@@ -58,13 +58,13 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   }
 
   // Educated guess: HTTP header
-  const acceptLanguage = headers["accept-language"];
+  const acceptLanguage = headers['accept-language'];
   if (acceptLanguage) {
     const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
-    console.log(`accept-languages: ${headers["accept-language"]}\nlanguages: ${languages}`);
+    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
     const headerLanguages = languages
-      .map((lang) => lang.substr(0, 2))
-      .filter((lang) => LANG_UI_LANGUAGES.includes(lang));
+      .map(lang => lang.substr(0, 2))
+      .filter(lang => LANG_UI_LANGUAGES.includes(lang));
     if (headerLanguages.length > 0) {
       console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
@@ -87,16 +87,16 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   const { language: currentPathLangPrefix } = splitPathByLanguage(location.pathname);
 
   // priority: language from args > language from link path > language from current path
-  const language = toLanguage || languagePrefix || currentPathLangPrefix || "";
+  const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
   return language ? `/${language}${pathSuffix}` : pathSuffix;
 };
 
 // Extracts search query parameters from url, return object.
-export const getQuery = (location) => {
+export const getQuery = location => {
   if (location?.search) {
     const q = parse(location.search.slice(1));
-    if ("deb" in q) {
-      q.deb = q.deb !== "false";
+    if ('deb' in q) {
+      q.deb = q.deb !== 'false';
     }
 
     return q;
@@ -118,21 +118,21 @@ export const updateQuery = (navigate, location, updater) => {
   navigate(
     {
       search: stringify(updater(query)),
-      state: location?.state ?? "",
+      state: location?.state ?? '',
       hash: location.hash,
     },
     { replace: true }
   );
 };
 
-export const isDebMode = (location) => getQuery(location).deb || false;
+export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
   const to = getTo(navigateTo, location, language, contentLanguage);
 
   // Clear keycloak hash params from url
   if (to?.hash && to.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {
-    const h = to.hash.startsWith("#") ? to.hash.substring(1) : to.hash;
+    const h = to.hash.startsWith('#') ? to.hash.substring(1) : to.hash;
     to.hash = stringify(omit(parse(h), KC_SEARCH_KEYS));
   }
 
@@ -140,7 +140,7 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
 };
 
 const getTo = (navigateTo, location, language, contentLanguage) => {
-  if (typeof navigateTo === "string") {
+  if (typeof navigateTo === 'string') {
     return prefixWithLanguage(navigateTo, location, language);
   }
 
@@ -162,8 +162,8 @@ const getTo = (navigateTo, location, language, contentLanguage) => {
   };
 };
 
-export const getPathnameWithHost = (pathname) => {
-  if (typeof window === "undefined") return "";
+export const getPathnameWithHost = pathname => {
+  if (typeof window === 'undefined') return '';
   const { protocol, hostname, port } = window.location;
-  return `${protocol}//${hostname}${port ? `:${port}` : ""}/${pathname}`;
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${pathname}`;
 };

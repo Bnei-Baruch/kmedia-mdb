@@ -190,7 +190,7 @@ export default function createSagaMonitor({ debug = false, exportToWindow = true
     console[method](...formatter.getLog());
   }
 
-  /* eslint-disable no-cond-assign */
+
   function getEffectLog(effect) {
     let data, log;
 

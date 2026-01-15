@@ -33,7 +33,9 @@ const isCharALetter = char => {
   // we need to add Arabic, Japanese, Chinese etc. when needed
 };
 
+// eslint-disable-next-line no-useless-escape
 export const NOT_LETTER_CHAR = '\`!@#$%^&*()_+-=[]{};\':\\|,.<>/?~';
+
 // returns first letter of a string
 export const getFirstLetter  = str => {
   if (!str) {

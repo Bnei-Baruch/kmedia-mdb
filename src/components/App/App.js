@@ -1,26 +1,26 @@
-import { ReduxRouter as ConnectedRouter } from "@lagunovsky/redux-react-router";
-import PropTypes from "prop-types";
-import React, { useState } from "react";
-import { Provider } from "react-redux";
+import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
 
-import { I18nextProvider } from "react-i18next";
+import { I18nextProvider } from 'react-i18next';
 
 import {
   AbTestingContext,
   ClientChroniclesContext,
   DeviceInfoContext,
   SessionInfoContext,
-} from "../../helpers/app-contexts";
-import { ChroniclesActions } from "../../helpers/clientChronicles";
-import StyleShadowDOM from "../../pkg/StyleShadowDOM";
-import InitKCEvents from "../../pkg/ksAdapter/InitKCEvents";
-import "../../stylesheets/Kmedia.scss";
-import Layout from "../Layout/Layout";
-import PlayerContainer from "../Player/PlayerContainer";
-import * as shapes from "../shapes";
-import ScrollToTop from "../shared/ScrollToTop/ScrollToTop";
+} from '../../helpers/app-contexts';
+import { ChroniclesActions } from '../../helpers/clientChronicles';
+import StyleShadowDOM from '../../pkg/StyleShadowDOM';
+import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
+import '../../stylesheets/Kmedia.scss';
+import Layout from '../Layout/Layout';
+import PlayerContainer from '../Player/PlayerContainer';
+import * as shapes from '../shapes';
+import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 
-const App = (props) => {
+const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);
 
   const { i18n, store, history, deviceInfo, clientChronicles, abTesting } = props;

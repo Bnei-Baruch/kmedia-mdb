@@ -39,7 +39,7 @@ export const onSetUILanguage = (state, payload) => {
 };
 
 export const onSetContentLanguages = (state, payload) => {
-  console.log("onSetContentLanguages", payload);
+  console.log('onSetContentLanguages', payload);
   setCookie(COOKIE_CONTENT_LANGS, payload.contentLanguages);
   state.contentLanguages = payload.contentLanguages;
 };
@@ -67,12 +67,12 @@ const settingsSlice = createSlice({
 
   selectors: {
     getUrlLang         : state => (state.urlLanguage.length && state.urlLanguage[0]) || '',
-    getUIDir           : state => !!state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
+    getUIDir           : state => state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
     getUILang          : (state, skipUrl) => !state.urlLanguage.length || skipUrl ? state.uiLang : state.urlLanguage[0],
     getShowAllContent  : state => state.showAllContent,
     getPageSize        : state => state.pageSize,
     getContentLanguages: (state, skipFlags) => {
-      console.log("getContentLanguages", state.urlLanguage, state.showAllContent, state.contentLanguages, skipFlags);
+      console.log('getContentLanguages', state.urlLanguage, state.showAllContent, state.contentLanguages, skipFlags);
       if (state.urlLanguage.length && !skipFlags) {
         return state.urlLanguage;
       }

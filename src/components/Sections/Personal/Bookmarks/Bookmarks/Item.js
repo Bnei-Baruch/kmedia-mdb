@@ -42,9 +42,9 @@ const BookmarksItem = ({ bookmark, t }) => {
   const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
-  if (!!properties?.srchstart)
+  if (properties?.srchstart)
     citates.push(properties.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
-  if (!!properties?.srchend)
+  if (properties?.srchend)
     citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (

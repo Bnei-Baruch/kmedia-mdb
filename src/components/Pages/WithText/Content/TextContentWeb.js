@@ -75,7 +75,7 @@ const TextContentWeb = ({ playerPage }) => {
       }
       <div className={clsx('font_settings text__content', { 'text_pdf': !!pdf })}>
         {
-          !!pdf ? (
+          pdf ? (
             <PDF
               pdfFile={physicalFile(pdf)}
               startsFrom={startsFrom(subject.id) || 1}

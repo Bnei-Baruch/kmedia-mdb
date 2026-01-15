@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const PdfClient = React.lazy(() => import("./pdfClient"));
+const PdfClient = React.lazy(() => import('./pdfClient'));
 
 export default function PDF(props) {
   if (import.meta.env.SSR) {

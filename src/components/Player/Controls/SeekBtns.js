@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Icon } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
 
-import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
-import { PlayerContext } from '../PlayerContainer';
 import { playerGetKeyboardCoefSelector } from '../../../redux/selectors';
+import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { PlayerContext } from '../PlayerContainerClient';
 
 const NORMAL_SEEK = 5;
 const handleSeek  = pos => {

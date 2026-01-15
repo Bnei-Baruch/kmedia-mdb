@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Icon } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import { pause, play, getPosition } from '../../../pkg/jwpAdapter/adapter';
+import { Icon } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { PLAYER_OVER_MODES, MT_AUDIO } from '../../../helpers/consts';
-import { PlayerContext } from '../PlayerContainer';
+import { MT_AUDIO, PLAYER_OVER_MODES } from '../../../helpers/consts';
+import { getPosition, pause, play } from '../../../pkg/jwpAdapter/adapter';
 import { playerGetFileSelector, playerGetOverModeSelector, playerIsPlaySelector } from '../../../redux/selectors';
+import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { PlayerContext } from '../PlayerContainerClient';
 
 const PlayPauseBg = () => {
   const { t }                        = useTranslation();

@@ -1,18 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { actions } from '../../../../../../redux/modules/recommended';
-import * as shapes from '../../../../../shapes';
-import WipErr from '../../../../../shared/WipErr/WipErr';
-import DisplayRecommended from './DisplayRecommended';
-import useRecommendedUnits from './UseRecommendedUnits';
-import { getSourcesCollections, isEmpty, usePrevious } from '../../../../../../helpers/utils';
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
-import Link from '../../../../../Language/MultiLanguageLink';
-import { canonicalLink, landingPageSectionLink } from '../../../../../../helpers/links';
 import {
   CT_DAILY_LESSON,
   CT_SPECIAL_LESSON,
@@ -20,14 +12,22 @@ import {
   SGLP_LESSON_SERIES,
   SGLP_PRORGRAMS
 } from '../../../../../../helpers/consts';
+import { canonicalLink, landingPageSectionLink } from '../../../../../../helpers/links';
+import { getSourcesCollections, isEmpty, usePrevious } from '../../../../../../helpers/utils';
+import { actions } from '../../../../../../redux/modules/recommended';
 import {
   mdbGetDenormContentUnitSelector,
   recommendedGetErrorSelector,
+  recommendedGetWipFn,
   sourcesGetPathByIDSelector,
   sourcesGetSourceByIdSelector,
-  tagsGetTagByIdSelector,
-  recommendedGetWipFn
+  tagsGetTagByIdSelector
 } from '../../../../../../redux/selectors';
+import Link from '../../../../../Language/MultiLanguageLink';
+import * as shapes from '../../../../../shapes';
+import WipErr from '../../../../../shared/WipErr/WipErr';
+import DisplayRecommended from './DisplayRecommended';
+import useRecommendedUnits from './UseRecommendedUnits';
 
 // Number of items to try to recommend.
 const N = 12;
@@ -258,7 +258,7 @@ const Recommended = ({ t, filterOutUnits = [], displayTitle = true, cuId }) => {
   if (!isEmpty(recommendedProps)) {
     return (
       <>
-        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} />)}
+        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} key={p.id} />)}
       </>
     );
   }

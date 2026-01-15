@@ -1,12 +1,10 @@
-import { useEffect, useRef } from 'react';
-import isEqual from 'react-fast-compare';
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
 import moment from 'moment';
 import 'moment-duration-format';
+import { useEffect, useRef } from 'react';
+import isEqual from 'react-fast-compare';
 
-import { CollectionsBreakdown } from './mdb';
-import { canonicalSectionByUnit } from './links';
 import {
   CT_ARTICLE,
   CT_CLIP,
@@ -23,7 +21,6 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  VS_HLS,
   LANGUAGES,
   LANG_ENGLISH,
   LANG_GERMAN,
@@ -31,8 +28,11 @@ import {
   LANG_ITALIAN,
   LANG_RUSSIAN,
   LANG_SPANISH,
-  LANG_TURKISH
+  LANG_TURKISH,
+  VS_HLS
 } from './consts';
+import { canonicalSectionByUnit } from './links';
+import { CollectionsBreakdown } from './mdb';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
@@ -44,11 +44,11 @@ export const isEmpty = obj => {
     return true;
   }
 
-  if (obj.hasOwnProperty('length')) {
+  if (Object.prototype.hasOwnProperty.call(obj, 'length')) {
     return obj.length === 0;
   }
 
-  if (typeof obj == 'object') {
+  if (typeof obj === 'object') {
     return Object.getOwnPropertyNames(obj).length === 0;
   }
 
@@ -126,7 +126,7 @@ export const formatDuration = (duration, fmt) => {
  */
 export function* intersperse(iterable, delimiter) {
   let first = true;
-  for (const item of iterable) { // eslint-disable-line no-unused-vars
+  for (const item of iterable) {
     if (!first) {
       yield delimiter;
     }
@@ -416,7 +416,7 @@ export const partialAssign = (target, source, what = true) => {
 
   if (typeof what === 'object' && what !== null) {
     for (const property in what) {
-      if (source.hasOwnProperty(property)) {
+      if (Object.prototype.hasOwnProperty.call(source, property)) {
         if (Array.isArray(source[property])) {
           target[property] = source[property].map(sourceArrValue => partialAssign({}, sourceArrValue, what[property]));
         } else {

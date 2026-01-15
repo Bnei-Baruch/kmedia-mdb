@@ -1,12 +1,13 @@
 import { SCROLL_SEARCH_ID } from '../../../../helpers/consts';
+import { NOT_LETTER_CHAR } from '../../../../helpers/strings';
 import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 import { RenderNoSearch } from './RenderNoSearch';
-import { NOT_LETTER_CHAR } from '../../../../helpers/strings';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
+// eslint-disable-next-line no-control-regex 
 export const SPACES_RE       = new RegExp('\r?\n+|\n+|\r+|&nbsp;+', 'gi');
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
@@ -202,7 +203,7 @@ export const urlParamFromSelect = () => {
 
 const countOffset = node => {
   let offset = 0;
-  for (; !!node.previousSibling?.textContent;) {
+  for (; node.previousSibling?.textContent;) {
     if (node.id === DOM_ROOT_ID) break;
     offset += node.previousSibling.textContent.length;
     node = node.previousSibling;

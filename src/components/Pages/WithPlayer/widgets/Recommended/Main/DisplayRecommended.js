@@ -1,23 +1,23 @@
+import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Container, Header, List, Popup } from 'semantic-ui-react';
 
-import * as shapes from '../../../../../shapes';
-import { canonicalCollection, isEmpty } from '../../../../../../helpers/utils';
-import Link from '../../../../../Language/MultiLanguageLink';
+import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
+import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../../helpers/links';
+import { canonicalCollection, isEmpty } from '../../../../../../helpers/utils';
+import {
+  recommendedGetItemsSelector,
+  recommendedGetManyViewsSelector,
+  recommendedGetManyWatchingNowSelector
+} from '../../../../../../redux/selectors';
+import Link from '../../../../../Language/MultiLanguageLink';
+import * as shapes from '../../../../../shapes';
 import ContentItemContainer, {
   SourceItemContainer,
   TagItemContainer
 } from '../../../../../shared/ContentItem/ContentItemContainer';
-import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
-import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
-import {
-  recommendedGetManyViewsSelector,
-  recommendedGetManyWatchingNowSelector,
-  recommendedGetItemsSelector
-} from '../../../../../../redux/selectors';
 
 const watchingNowToString = watchingNow => {
   if (watchingNow >= 1000) {
@@ -63,7 +63,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
       if (!labelsUsed.has('watchingNow')) {
         labelsUsed.set('watchingNow', unit);
         return (
-          <div className="recommend-label">
+          <div className="recommend-label" key={unit.id}>
             <div>
               <small className="text">
                 <Popup
@@ -81,7 +81,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
     if (!labelsUsed.has('Popular') && suggesterIncludes(unit.id, 'Popular') && unitsViews[index]) {
       labelsUsed.set('Popular', unit);
       return (
-        <div className="recommend-label">
+        <div className="recommend-label" key={unit.id}>
           <div>
             <small className="text">
               <span>{t('materials.recommended.popular')}</span>
@@ -95,7 +95,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
 
     if (suggesterLabelStr) {
       return (
-        <div className="recommend-label">
+        <div className="recommend-label" key={unit.id}>
           <div>
             <small className="text">
               <span>{suggesterLabelStr}</span>

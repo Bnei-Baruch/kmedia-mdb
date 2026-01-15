@@ -59,7 +59,7 @@ const sortMediaFiles = (a, b) => {
   const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
   const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
 
-  return sortMediaFilesOrder[typeA] - sortMediaFilesOrder[typeB] ?? 0;
+  return (sortMediaFilesOrder[typeA] - sortMediaFilesOrder[typeB]) || 0;
 };
 
 const labelTextByFile = (file, contentType, t) => {
@@ -219,7 +219,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         filesSets.map(set =>
           renderHorizontalFilesList(set.language, set.files, unit.content_type, t, chroniclesAppend)
         );
-      const duration = !!unit.duration ? formatTime(unit.duration) : null;
+      const duration = unit.duration ? formatTime(unit.duration) : null;
 
       if (!files) {
         return null;
@@ -236,7 +236,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         const ccu = canonicalCollection(unit);
         const part = Number(ccu?.ccuNames[unit.id]);
         part && description.push(t('pages.unit.info.episode', { name: part }));
-        if (!!duration) description.push(duration);
+        if (duration) description.push(duration);
 
         title = (
           <List.Header className="unit-header">
@@ -267,7 +267,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
           <List.Content>
             {title}
             {files.length > 0 ? (
-              files.map(f => <List.List className={`horizontal-list remove-bottom-border`}>{f}</List.List>)
+              files.map(f => <List.List className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</List.List>)
             ) : (
               <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
                 <List.Item key={`${unit.id}-no-files`} className="no-files">

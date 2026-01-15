@@ -58,7 +58,7 @@ const TagSourceItem = props => {
     } else {
       //find more top selected parent item
       const pId = pathIds.find(x => val.includes(x));
-      if (!!pId) {
+      if (pId) {
         val = val.filter(x => !pathIds.includes(x));
         val = [...val, ...getById(pId).children.filter(x => !pathIds.includes(x))];
       }

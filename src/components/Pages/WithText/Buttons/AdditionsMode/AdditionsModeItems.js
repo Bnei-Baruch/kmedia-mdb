@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Menu } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu } from 'semantic-ui-react';
 
+import { LOCALSTORAGE_KEY_ADDITIONS_MODS, TEXT_PAGE_ADDITIONS_MODS } from '../../../../../helpers/consts';
 import { actions } from '../../../../../redux/modules/textPage';
 import { textPageGetAdditionsModeSelector } from '../../../../../redux/selectors';
-import { TEXT_PAGE_ADDITIONS_MODS, LOCALSTORAGE_KEY_ADDITIONS_MODS } from '../../../../../helpers/consts';
 
 const iconsByMode = {
   [TEXT_PAGE_ADDITIONS_MODS.showMy] : 'person',
@@ -38,6 +38,7 @@ const AdditionsModeItems = () => {
             <Menu.Item
               onClick={() => handleSet(val)}
               active={mode === val}
+              key={key}
             >
               {t(`page-with-text.buttons.web.additions.${key}`)}
               <span className="material-symbols-outlined">{iconsByMode[val]}</span>

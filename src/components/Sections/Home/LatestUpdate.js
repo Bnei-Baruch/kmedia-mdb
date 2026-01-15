@@ -1,11 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'semantic-ui-react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
-import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
+import { Card } from 'semantic-ui-react';
 import {
   CT_CLIP,
   CT_CONGRESS,
@@ -21,10 +17,14 @@ import {
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSONS
 } from '../../../helpers/consts';
-import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
-import { getRandomLatestLesson } from './LatestDailyLesson';
+import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import { sourcesGetPathByIDSelector } from '../../../redux/selectors';
+import Link from '../../Language/MultiLanguageLink';
+import * as shapes from '../../shapes';
+import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
+import UnitLogo from '../../shared/Logo/UnitLogo';
+import { getRandomLatestLesson } from './LatestDailyLesson';
 
 const LatestUpdate = ({ item, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
@@ -57,7 +57,7 @@ const LatestUpdate = ({ item, t, label }) => {
       subheader = [t('values.date', { date: film_date })];
       break;
     case CT_LESSONS_SERIES:
-      title     = [t(`player.header.series-by-topic`), `${authorName}`, ` ${name}`] || t(`constants.content-types.${content_type}`);
+      title     = [`${t(`player.header.series-by-topic`)}`, `${authorName}`, ` ${name}`];
       subheader = [fromToLocalized(start_date || film_date, end_date)];
       break;
     case CT_CONGRESS:

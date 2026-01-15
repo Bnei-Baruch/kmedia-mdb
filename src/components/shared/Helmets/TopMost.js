@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Helmet } from "./helmetESM";
+import { Helmet } from './helmetESM';
 
 import Basic from './Basic';
 import Locale from './Locale';

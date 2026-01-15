@@ -1,18 +1,14 @@
-import { takeEvery, select, put, call } from 'redux-saga/effects';
 import i18n from 'i18next';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { selectors as authSelectors } from '../redux/modules/auth';
-import { selectors as my, selectors } from '../redux/modules/my';
-import { types, actions, selectors as playlist } from '../redux/modules/playlist';
-import { selectors as mdb } from '../redux/modules/mdb';
+import { assetUrl } from '../helpers/Api';
 import {
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_REACTIONS,
   IsCollectionContentType,
-  MY_NAMESPACE_HISTORY
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS
 } from '../helpers/consts';
 import { selectSuitableLanguage } from '../helpers/language';
-import { canonicalCollection } from '../helpers/utils';
 import { getMyItemKey } from '../helpers/my';
 import {
   calcAvailableLanguages,
@@ -22,11 +18,15 @@ import {
   playableItem,
   playlist as playlistBuilder
 } from '../helpers/player';
-import { assetUrl } from '../helpers/Api';
-import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb';
-import { fetchViewsByUIDs } from './recommended';
-import { fetchOne, fetch as fetchMy } from './my';
+import { canonicalCollection } from '../helpers/utils';
+import { selectors as authSelectors } from '../redux/modules/auth';
+import { selectors as mdb } from '../redux/modules/mdb';
+import { selectors as my, selectors } from '../redux/modules/my';
+import { actions, selectors as playlist, types } from '../redux/modules/playlist';
 import { mdbGetDenormContentUnitSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
+import { fetchCollection, fetchLabels, fetchUnit, fetchUnitsByIDs } from './mdb';
+import { fetch as fetchMy, fetchOne } from './my';
+import { fetchViewsByUIDs } from './recommended';
 
 const ONE_FETCH_SIZE = 50;
 
@@ -59,8 +59,8 @@ function* build(action) {
 
   const idx     = data.items.findIndex(x => x.id === cuId);
   const fetched = {
-    from: Math.max(0, idx - ONE_FETCH_SIZE / 2),
-    to  : Math.min(data.items.length, idx + ONE_FETCH_SIZE / 2)
+    from: Math.max(0, idx - (ONE_FETCH_SIZE / 2)),
+    to  : Math.min(data.items.length, idx + (ONE_FETCH_SIZE / 2))
   };
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId, fetched }));
   const uids = data.items.slice(fetched.from, fetched.to).map(x => x.id);
@@ -114,7 +114,7 @@ function* singleMediaBuild(action) {
   const mediaType   = getMediaTypeFromQuery(location);
   // DONT COMMIT: This should also take into account files languages, not just content languages.
   const language    = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), cu.original_language);
-  const preImageUrl = !!c ? assetUrl(`logos/collections/${c.id}.jpg`) : null;
+  const preImageUrl = c ? assetUrl(`logos/collections/${c.id}.jpg`) : null;
   const item        = playableItem(cu, preImageUrl);
 
   yield put(actions.buildSuccess({ items: [item], language, mediaType, cuId, cId: c.id, isSingleMedia: true }));

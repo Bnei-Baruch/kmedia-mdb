@@ -22,7 +22,7 @@ function DonationPopup({ t }) {
   const shouldOpen = () => {
     if (user?.name === KC_BOT_USER_NAME) return false;
     const query = getQuery(location);
-    if (!!query.showPopup)
+    if (query.showPopup)
       return true;
     const d         = new Date();
     const firstWeek = d.getDate();

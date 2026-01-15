@@ -1,5 +1,5 @@
-import { createId } from "@paralleldrive/cuid2";
-import { getUILangFromPath } from "../src/helpers/url";
+import { createId } from '@paralleldrive/cuid2';
+import { getUILangFromPath } from '../src/helpers/url';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export function logErrors(err, req, res, next) {
@@ -18,16 +18,16 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
-  res.status(500).send("Internal Server Error");
+  res.status(500).send('Internal Server Error');
   return null;
 }
 
 export function logAll(req, res, next) {
-  console.info(">>> %s %s %s %s", new Date().toISOString(), req.method, req.url, req.path);
+  console.info('>>> %s %s %s %s', new Date().toISOString(), req.method, req.url, req.path);
   next();
 }
 
-const getDurationInMilliseconds = (start) => {
+const getDurationInMilliseconds = start => {
   const NS_PER_SEC = 1e9;
   const NS_TO_MS = 1e6;
   const diff = process.hrtime(start);
@@ -57,11 +57,11 @@ function createLogDuration(entry, opts, msg) {
 
 export function duration(req, res, next) {
   const id = createId();
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-  const userAgent = req.headers["user-agent"];
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const userAgent = req.headers['user-agent'];
 
   const entry = {
-    msg: "STARTED",
+    msg: 'STARTED',
     id,
     timestamp: new Date().toISOString(),
     method: req.method,
@@ -76,14 +76,14 @@ export function duration(req, res, next) {
     logged: false,
   };
 
-  res.on("finish", createLogDuration(entry, opts, "FINISHED"));
-  res.on("close", createLogDuration(entry, opts, "CLOSED"));
+  res.on('finish', createLogDuration(entry, opts, 'FINISHED'));
+  res.on('close', createLogDuration(entry, opts, 'CLOSED'));
 
   next();
 }
 
 export function noLanguageRedirect(req, res, next) {
-  const { redirect, language } = getUILangFromPath(req.originalUrl, req.headers, req.get("user-agent"));
+  const { redirect, language } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
 
   if (redirect) {
 

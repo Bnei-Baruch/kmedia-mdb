@@ -1,12 +1,12 @@
 import React from 'react';
-import { NavLink as BaseNavLink } from 'react-router-dom';
 import { useLocation } from 'react-router';
+import { NavLink as BaseNavLink } from 'react-router-dom';
 import { getToWithLanguage } from '../../helpers/url';
 
 /**
  * Use this component instead of react-router-dom's NavLink to keep the current language in the destination route
  */
-
+/* eslint-disable react/display-name */
 const NavLink = React.forwardRef(
   (
     {

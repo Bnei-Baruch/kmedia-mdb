@@ -1,13 +1,16 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
+import {
+  getSummaryLanguages,
+  showSummaryTab,
+  getFile as summaryGetFile,
+} from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/helper';
 import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as publicationsTabs } from '../components/Sections/Publications/MainPage';
-import {
-  getFile as summaryGetFile,
-  showSummaryTab,
-  getSummaryLanguages
-} from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/helper';
 
+import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
+import { fetchSocialMedia } from '../components/Sections/Home/Container';
+import Api from '../helpers/Api';
 import {
   COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
@@ -15,6 +18,7 @@ import {
   CT_LECTURE,
   CT_LESSON_PART,
   CT_MEAL,
+  CT_RESEARCH_MATERIAL,
   CT_VIRTUAL_LESSON,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
@@ -29,13 +33,25 @@ import {
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
   UNIT_PROGRAMS_TYPE,
-  CT_RESEARCH_MATERIAL
 } from '../helpers/consts';
-import MediaHelper from './../helpers/media';
+import { selectSuitableLanguage } from '../helpers/language';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
-import { selectSuitableLanguage } from '../helpers/language';
+import { musicApi } from '../redux/api/music';
+import { simpleModeApi } from '../redux/api/simpleMode';
 import { actions as assetsActions } from '../redux/modules/assets';
+import { actions as textPageActions } from '../redux/modules/textPage';
+import {
+  mdbGetCollectionByIdSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbGetLastLessonIdSelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetPageSizeSelector,
+  settingsGetUILangSelector,
+  sourcesGetSourceByIdSelector,
+  textPageGetFileSelector,
+} from '../redux/selectors';
+import MediaHelper from './../helpers/media';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
@@ -47,38 +63,30 @@ import { actions as searchActions } from './../redux/modules/search';
 import { selectors as settings } from './../redux/modules/settings';
 import { actions as sources } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
-import { actions as textPageActions } from '../redux/modules/textPage';
+import * as assetsSagas from './../sagas/assets';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
-import * as assetsSagas from './../sagas/assets';
 import * as textPageSagas from './../sagas/textPage';
-import { fetchSocialMedia } from '../components/Sections/Home/Container';
-import Api from '../helpers/Api';
-import {
-  mdbGetDenormContentUnitSelector,
-  textPageGetFileSelector,
-  settingsGetContentLanguagesSelector,
-  settingsGetUILangSelector,
-  settingsGetPageSizeSelector,
-  mdbGetCollectionByIdSelector,
-  mdbGetLastLessonIdSelector,
-  sourcesGetSourceByIdSelector
-} from '../redux/selectors';
-import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
-import { simpleModeApi } from '../redux/api/simpleMode';
-import { musicApi } from '../redux/api/music';
 
 export const home = store => {
-  const state            = store.getState();
+  const state = store.getState();
   const contentLanguages = settingsGetContentLanguagesSelector(state);
 
   store.dispatch(homeActions.fetchData(true));
-  fetchSocialMedia('blog', (type, id, options) => store.dispatch(publicationsActions.fetchBlogList(type, id, options)), contentLanguages);
-  fetchSocialMedia('tweet', (type, id, options) => store.dispatch(publicationsActions.fetchTweets(type, id, options)), contentLanguages);
+  fetchSocialMedia(
+    'blog',
+    (type, id, options) => store.dispatch(publicationsActions.fetchBlogList(type, id, options)),
+    contentLanguages
+  );
+  fetchSocialMedia(
+    'tweet',
+    (type, id, options) => store.dispatch(publicationsActions.fetchTweets(type, id, options)),
+    contentLanguages
+  );
   store.dispatch(homeActions.fetchBanners(contentLanguages));
 
   return Promise.resolve(null);
@@ -118,7 +126,7 @@ export const cuPage = async (store, match) => {
 
   // Select transcript file by language.
   let { id } = unit;
-  let file   = null;
+  let file = null;
 
   switch (activeTab) {
     case 'transcription':
@@ -136,11 +144,13 @@ export const cuPage = async (store, match) => {
       await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id)).done;
       file = textPageGetFileSelector(store.getState());
       break;
-    case 'summary':
+    case 'summary': {
       const summaryLanguages = getSummaryLanguages(unit);
-      const summaryLanguage  = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-      file                   = summaryGetFile(unit, summaryLanguage);
+      const summaryLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+      file = summaryGetFile(unit, summaryLanguage);
       break;
+    }
+
     default:
       console.warn('Unsupported active tab', activeTab);
       break;
@@ -185,57 +195,57 @@ const getExtraFetchParams = (ns, collectionID) => {
   return {};
 };
 
-export const cuListPage = (ns, collectionID = 0) => (store, match) => {
-  // hydrate filters
-  store.dispatch(filtersActions.hydrateFilters(ns));
+export const cuListPage =
+  (ns, collectionID = 0) =>
+    (store, match) => {
+    // hydrate filters
+      store.dispatch(filtersActions.hydrateFilters(ns));
 
-  // hydrate page
-  const page = getPageFromLocation(match.parsedURL);
-  store.dispatch(listsActions.setPage(ns, page));
+      // hydrate page
+      const page = getPageFromLocation(match.parsedURL);
+      store.dispatch(listsActions.setPage(ns, page));
 
-  const pageSize = settingsGetPageSizeSelector(store.getState());
+      const pageSize = settingsGetPageSizeSelector(store.getState());
 
-  // extraFetchParams
-  const extraFetchParams = getExtraFetchParams(ns, collectionID);
+      // extraFetchParams
+      const extraFetchParams = getExtraFetchParams(ns, collectionID);
 
-  // dispatch fetchList
-  store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize, withViews: true }));
+      // dispatch fetchList
+      store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize, withViews: true }));
 
-  return Promise.resolve(null);
-};
+      return Promise.resolve(null);
+    };
 
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
   if (cID) ns = `${ns}_${cID}`;
-  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
-    .then(() => {
-      cuListPage(ns, cID)(store, match);
-    });
+  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done.then(() => {
+    cuListPage(ns, cID)(store, match);
+  });
 };
 
 export const playlistCollectionPage = (store, match) => {
   const { id: cID, cuId } = match.params;
-  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
-    .then(() => {
-      const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
-      if (!cuId && !c?.cuIDs) {
-        // This can happen when collection is empty (unit is not secure or published).
-        console.error(`Failed fetching unit for ${cuId} for ${cID}`);
-        return Promise.reject();
-      }
+  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done.then(() => {
+    const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
+    if (!cuId && !c?.cuIDs) {
+      // This can happen when collection is empty (unit is not secure or published).
+      console.error(`Failed fetching unit for ${cuId} for ${cID}`);
+      return Promise.reject();
+    }
 
-      store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
-      return Promise.resolve(null);
-    });
+    store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
+    return Promise.resolve(null);
+  });
 };
 
-export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
-  .then(() => {
+export const latestLesson = store =>
+  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done.then(() => {
     const state = store.getState();
-    const cID   = mdbGetLastLessonIdSelector(state);
-    const [c]   = mdbGetCollectionByIdSelector(state, [cID]);
+    const cID = mdbGetLastLessonIdSelector(state);
+    const [c] = mdbGetCollectionByIdSelector(state, [cID]);
     store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
-  }));
+  });
 
 export const musicPage = (store, match) => {
   const { uiLanguage = 'en', contentLanguages = ['en'] } = match;
@@ -269,7 +279,10 @@ export const simpleMode = (store, match) => {
   const { uiLang = 'en', contentLanguages = ['en'] } = match;
 
   const query = getQuery(match.parsedURL);
-  const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const date =
+    query.date && moment(query.date).isValid()
+      ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      : moment().format('YYYY-MM-DD');
 
   store.dispatch(simpleModeApi.endpoints.simpleMode.initiate({ date, uiLanguage: uiLang, contentLanguages }));
   return Promise.resolve(null);
@@ -285,10 +298,11 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store => (Promise.all([
-  store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
-  store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
-]).then(() => store.dispatch(searchActions.search())));
+export const searchPage = store =>
+  Promise.all([
+    store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
+    store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done,
+  ]).then(() => store.dispatch(searchActions.search()));
 
 function firstLeafId(sourceId, state) {
   const source = sourcesGetSourceByIdSelector(state)(sourceId);
@@ -302,25 +316,27 @@ function firstLeafId(sourceId, state) {
 const fetchSQData = async (store, uiLang, contentLanguages) => {
   let sourcesList;
   return await Api.sqdata({
-    ui_language      : uiLang,
-    content_languages: contentLanguages
-  }).then(({ data }) => {
-    sourcesList = data.sources;
-    store.dispatch(sources.receiveSources({ sources: sourcesList, uiLang }));
-    store.dispatch(tagsActions.receiveTags(data.tags));
-    store.dispatch(publicationsActions.receivePublishers(data.publishers));
-    store.dispatch(mdbActions.receivePersons(data.persons));
-    store.dispatch(mdbActions.fetchSQDataSuccess());
-    return sourcesList;
-  }).catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
+    ui_language: uiLang,
+    content_languages: contentLanguages,
+  })
+    .then(({ data }) => {
+      sourcesList = data.sources;
+      store.dispatch(sources.receiveSources({ sources: sourcesList, uiLang }));
+      store.dispatch(tagsActions.receiveTags(data.tags));
+      store.dispatch(publicationsActions.receivePublishers(data.publishers));
+      store.dispatch(mdbActions.receivePersons(data.persons));
+      store.dispatch(mdbActions.fetchSQDataSuccess());
+      return sourcesList;
+    })
+    .catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
 };
 
 export const libraryPage = async (store, match, show_console = false) => {
-  const state            = store.getState();
-  const location         = state?.router.location ?? {};
-  const query            = getQuery(location);
-  const uiLang           = query.language || settings.getUILang(state.settings);
-  const sourceLanguage   = query.source_language;
+  const state = store.getState();
+  const location = state?.router.location ?? {};
+  const query = getQuery(location);
+  const uiLang = query.language || settings.getUILang(state.settings);
+  const sourceLanguage = query.source_language;
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   show_console && console.log('serverRender: libraryPage before fetch sources');
   await fetchSQData(store, uiLang, contentLanguages);
@@ -329,7 +345,8 @@ export const libraryPage = async (store, match, show_console = false) => {
   const sourceID = firstLeafId(match.params.id, store.getState());
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
 
-  await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage)).done;
+  await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage))
+    .done;
   const file = textPageGetFileSelector(store.getState()) || {};
 
   if (!file.isPdf) {
@@ -342,22 +359,21 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
   [LANG_UKRAINIAN, 'Michael_Laitman'],
   [LANG_RUSSIAN, 'Michael_Laitman'],
   [LANG_SPANISH, 'laitman_es'],
-  [LANG_ENGLISH, 'laitman']
+  [LANG_ENGLISH, 'laitman'],
 ]);
 
 export const likutPage = async (store, match, show_console = false) => {
   const { id } = match.params;
 
-  const location       = store.getState()?.router.location ?? {};
-  const query          = getQuery(location);
+  const location = store.getState()?.router.location ?? {};
+  const query = getQuery(location);
   const sourceLanguage = query.source_language;
 
   return store.sagaMiddleWare
     .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id, sourceLanguage))
-    .done
-    .then(() => {
+    .done.then(() => {
       const state = store.getState();
-      const file  = textPageGetFileSelector(state) || {};
+      const file = textPageGetFileSelector(state) || {};
       store.dispatch(assetsActions.doc2html(file.id));
     });
 };
@@ -372,11 +388,17 @@ export const tweetsListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize         = settingsGetPageSizeSelector(state);
+  const pageSize = settingsGetPageSizeSelector(state);
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   // Array of usernames.
-  const username         = Array.from(new Set(contentLanguages.map(contentLanguage =>
-    TWEETER_USERTNAMES_BY_LANG.get(contentLanguage) || TWEETER_USERTNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
+  const username = Array.from(
+    new Set(
+      contentLanguages.map(
+        contentLanguage =>
+          TWEETER_USERTNAMES_BY_LANG.get(contentLanguage) || TWEETER_USERTNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE)
+      )
+    )
+  );
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { username, pageSize }));
 
@@ -386,7 +408,7 @@ export const tweetsListPage = (store, match) => {
 export const topicsPage = (store, match) => {
   const tagID = match.params.id;
   return Promise.all([
-    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
 };
@@ -396,7 +418,7 @@ const BLOG_BY_LANG = new Map([
   [LANG_UKRAINIAN, 'laitman-ru'],
   [LANG_RUSSIAN, 'laitman-ru'],
   [LANG_SPANISH, 'laitman-es'],
-  [LANG_ENGLISH, 'laitman-com']
+  [LANG_ENGLISH, 'laitman-com'],
 ]);
 
 export const blogListPage = (store, match) => {
@@ -409,11 +431,16 @@ export const blogListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize         = settingsGetPageSizeSelector(state);
+  const pageSize = settingsGetPageSizeSelector(state);
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   // Array of blogs.
-  const blog             = Array.from(new Set(contentLanguages.map(contentLanguage =>
-    BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
+  const blog = Array.from(
+    new Set(
+      contentLanguages.map(
+        contentLanguage => BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE)
+      )
+    )
+  );
 
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchBlogList('publications-blog', page, { blog, pageSize }));
@@ -424,7 +451,7 @@ export const blogListPage = (store, match) => {
 export const publicationsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || publicationsTabs[0];
-  const ns  = `publications-${tab}`;
+  const ns = `publications-${tab}`;
 
   if (tab !== publicationsTabs[0]) {
     store.dispatch(publicationsActions.setTab(ns));
@@ -444,34 +471,33 @@ export const publicationsPage = (store, match) => {
 
 export const articleCUPage = (store, match) => {
   const cuID = match.params.id;
-  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
-    .then(() => {
-      const state = store.getState();
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done.then(() => {
+    const state = store.getState();
 
-      let language = null;
-      const uiLang = settingsGetUILangSelector(state);
+    let language = null;
+    const uiLang = settingsGetUILangSelector(state);
 
-      const unit = mdbGetDenormContentUnitSelector(state, cuID);
-      if (!unit) {
-        return;
-      }
+    const unit = mdbGetDenormContentUnitSelector(state, cuID);
+    if (!unit) {
+      return;
+    }
 
-      const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
-      const languages = uniq(textFiles.map(x => x.language));
-      if (languages.length > 0) {
-        language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
-      }
+    const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
+    const languages = uniq(textFiles.map(x => x.language));
+    if (languages.length > 0) {
+      language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
+    }
 
-      if (language) {
-        const selected = textFiles.find(x => x.language === language) || textFiles[0];
-        store.dispatch(assetsActions.doc2html(selected.id));
-      }
+    if (language) {
+      const selected = textFiles.find(x => x.language === language) || textFiles[0];
+      store.dispatch(assetsActions.doc2html(selected.id));
+    }
 
-      const c = canonicalCollection(unit);
-      if (c) {
-        store.dispatch(mdbActions.fetchCollection(c.id));
-      }
-    });
+    const c = canonicalCollection(unit);
+    if (c) {
+      store.dispatch(mdbActions.fetchCollection(c.id));
+    }
+  });
 };
 
 export const blogPostPage = (store, match) => {

@@ -114,7 +114,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
       >
         <Modal.Header content={t('personal.label.header')} className="no-border"/>
         {
-          !!needToLogin ?
+          needToLogin ?
             (
               <Modal.Content>{needToLogin}</Modal.Content>
             ) : (

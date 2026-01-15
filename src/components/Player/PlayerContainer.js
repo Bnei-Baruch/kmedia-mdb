@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-const PlayerContainerClient = React.lazy(() => import("./PlayerContainerClient"));
+const PlayerContainerClient = React.lazy(() => import('./PlayerContainerClient'));
 
 export default function PlayerContainer(props) {
-  console.log("PlayerContainer", import.meta.env);
+  console.log('PlayerContainer', import.meta.env);
   if (import.meta.env.SSR) {
     return <div className="player" dir="ltr"></div>;
   }

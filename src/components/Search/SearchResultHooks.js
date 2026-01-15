@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment } from 'semantic-ui-react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
+import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment } from 'semantic-ui-react';
 
-import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
 import { actions as listsActions } from '../../redux/modules/lists';
 import { actions as publicationActions } from '../../redux/modules/publications';
+import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
 import {
   CT_ARTICLE,
@@ -30,31 +30,31 @@ import {
   iconByContentTypeMap
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
-import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
+import { canonicalLink, intentSectionLink, landingPageSectionLink } from '../../helpers/links';
 import { stringify } from '../../helpers/url';
-import Link from '../Language/MultiLanguageLink';
-import TooltipIfNeed from '../shared/TooltipIfNeed';
-import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
-import UnitLogo from '../shared/Logo/UnitLogo';
-import WipErr from '../shared/WipErr/WipErr';
 import {
-  mdbGetDenormContentUnitSelector,
   filtersGetFiltersSelector,
-  lessonsGetWipSelector,
-  listsGetNamespaceStateSelector,
   lessonsGetSeriesBySourceIdSelector,
   lessonsGetSeriesByTagIdSelector,
-  sourcesGetSourceByIdSelector,
-  tagsGetTagByIdSelector,
+  lessonsGetWipSelector,
+  listsGetNamespaceStateSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbNestedDenormCollectionWUnitsSelector,
   publicationsGetTweetsErrorSelector,
   publicationsGetTweetsWipSelector,
-  settingsGetUILangSelector,
-  recommendedGetViewsSelector,
-  settingsGetUIDirSelector,
-  mdbNestedDenormCollectionWUnitsSelector,
   publicationsGetTwitterSelector,
-  settingsGetLeftRightByDirSelector
+  recommendedGetViewsSelector,
+  settingsGetLeftRightByDirSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector
 } from '../../redux/selectors';
+import Link from '../Language/MultiLanguageLink';
+import UnitLogo from '../shared/Logo/UnitLogo';
+import TooltipIfNeed from '../shared/TooltipIfNeed';
+import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
+import WipErr from '../shared/WipErr/WipErr';
 
 const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
@@ -419,7 +419,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
     description,
     wip,
     err,
-    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true} />),
+    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true} key={cu.id} />),
     parts: total,
     click: searchResultClick(chronicles, dispatch, clickData)
   };
@@ -459,7 +459,7 @@ export const SearchResultManyItems = (
         {
           !wipError && (<Grid columns="equal" stackable={true}>
             <Grid.Row>
-              {items.map(item => <Grid.Column>{item}</Grid.Column>)}
+              {items.map(item => <Grid.Column key={item.id}>{item}</Grid.Column>)}
             </Grid.Row>
           </Grid>)
         }
@@ -667,6 +667,7 @@ export const SearchResultTweets = ({ source }) => {
       <List.Content horizontal={!isMobileDevice} className="search__block" style={{ position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Header as="h2" color="blue">{t('home.twitter-title')}</Header>
+          {/* eslint-disable-next-line react/no-unknown-property */}
           <div textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
             <a href={`/${uiLang}/publications/twitter`}>{t('home.all-tweets')}</a>
           </div>

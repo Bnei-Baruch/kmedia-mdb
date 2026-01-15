@@ -1,7 +1,7 @@
-import React from "react";
-import { useSSR } from "react-i18next";
-import ErrorBoundary from "../ErrorBoundary";
-import { HelmetProvider } from "../shared/Helmets/helmetESM";
+import React from 'react';
+import { useSSR } from 'react-i18next';
+import ErrorBoundary from '../ErrorBoundary';
+import { HelmetProvider } from '../shared/Helmets/helmetESM';
 
 export default function AppClient(props) {
   const { i18nData, ...rest } = props;

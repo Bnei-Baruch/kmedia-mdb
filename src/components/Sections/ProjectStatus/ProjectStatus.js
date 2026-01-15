@@ -88,7 +88,7 @@ const ProjectStatus = () => {
             </li>
             <li>Bugs - ongoing bugs and fixes to make everything work for you</li>
             <li>Arrangement and improvement of the material - continuous work of arranging the material, there is quite a bit of it, that needs to be described, labeled, translated</li>
-            <li>Additional languages ​​for the interface - Spanish, Turkish and Ukrainian</li>
+            <li>Additional languages for the interface - Spanish, Turkish and Ukrainian</li>
           </ul>
 
           <Header as="h3" content="Ready soon:"/>

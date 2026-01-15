@@ -29,6 +29,7 @@ const getKeycloak = async () => {
     return {};
   }
 
+  // eslint-disable-next-line import/no-unresolved
   keycloakPromise = import('keycloak-js').then(({ default: Keycloak }) => {
     const userManagerConfig = {
       url          : KC_API_URL,
