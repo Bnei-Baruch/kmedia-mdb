@@ -141,10 +141,10 @@ export async function render(req) {
 
   logger.info("serverRender: renderToString start");
   const markup = ReactDOMServer.renderToString(
-    <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} />
+    <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />
   );
 
-  logger.info("serverRender: renderToString end");
+  logger.info("serverRender: renderToString end", helmetContext);
   const { helmet } = helmetContext;
 
   // We're good, add in markup, send the response.
@@ -176,7 +176,7 @@ export async function render(req) {
                 `;
 
   const html = htmlData
-    /*.replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
+    .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
     .replace(/lang="en"/, `lang="${uiLang}"`)
     .replace(/<title>.*<\/title>/, helmet.title.toString())
     .replace(
@@ -188,16 +188,10 @@ export async function render(req) {
     )
     .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
     .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
-    */
+    
     .replace(/<div id="root"><\/div>/, rootDiv);
 
   logger.log("serverRender: rendered html", html);
-  /*
-  if (context.code) {
-    res.status(context.code);
-  }
-*/
-  //return res.send(html);
   return html;
 }
 
