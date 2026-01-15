@@ -1,37 +1,31 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
+import { ReduxRouter as ConnectedRouter } from "@lagunovsky/redux-react-router";
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { Provider } from "react-redux";
 
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from "react-i18next";
 
-import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
-import '../../stylesheets/Kmedia.scss';
-import * as shapes from '../shapes';
-import { ChroniclesActions } from '../../helpers/clientChronicles';
 import {
   AbTestingContext,
   ClientChroniclesContext,
   DeviceInfoContext,
   SessionInfoContext,
-} from '../../helpers/app-contexts';
-import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
-import Layout from '../Layout/Layout';
-import PlayerContainer from '../Player/PlayerContainer';
-import StyleShadowDOM from '../../pkg/StyleShadowDOM';
+} from "../../helpers/app-contexts";
+import { ChroniclesActions } from "../../helpers/clientChronicles";
+import StyleShadowDOM from "../../pkg/StyleShadowDOM";
+import InitKCEvents from "../../pkg/ksAdapter/InitKCEvents";
+import "../../stylesheets/Kmedia.scss";
+import Layout from "../Layout/Layout";
+import PlayerContainer from "../Player/PlayerContainer";
+import * as shapes from "../shapes";
+import ScrollToTop from "../shared/ScrollToTop/ScrollToTop";
 
-const App = props => {
+const App = (props) => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);
 
-  const { i18n, store, history, deviceInfo, clientChronicles, abTesting, i18nData } = props;
+  const { i18n, store, history, deviceInfo, clientChronicles, abTesting } = props;
 
-  const sessionInfo       = { enableShareText: { isShareTextEnabled, setEnableShareText } };
-  const deviceInfoContext = {
-    deviceInfo,
-    isMobileDevice: deviceInfo.device?.type === 'mobile',
-    undefinedDevice: deviceInfo.device?.type === undefined,
-    isIPhone: ['iPhone Simulator', 'iPhone'].includes(deviceInfo.device?.model)
-  };
+  const sessionInfo = { enableShareText: { isShareTextEnabled, setEnableShareText } };
 
   const playerContainer = <PlayerContainer />;
   return (
@@ -40,13 +34,13 @@ const App = props => {
         <InitKCEvents />
         <ClientChroniclesContext.Provider value={clientChronicles}>
           <AbTestingContext.Provider value={abTesting}>
-            <DeviceInfoContext.Provider value={deviceInfoContext}>
+            <DeviceInfoContext.Provider value={deviceInfo}>
               <StyleShadowDOM />
               <SessionInfoContext.Provider value={sessionInfo}>
                 <ChroniclesActions />
                 <ConnectedRouter history={history}>
                   <ScrollToTop />
-                  <Layout {...i18nData} playerContainer={playerContainer} />
+                  <Layout playerContainer={playerContainer} />
                 </ConnectedRouter>
               </SessionInfoContext.Provider>
             </DeviceInfoContext.Provider>
@@ -61,14 +55,7 @@ App.propTypes = {
   i18n: PropTypes.object.isRequired,
   store: PropTypes.object.isRequired,
   history: shapes.History.isRequired,
-  initialI18nStore: PropTypes.object,
-  initialLanguage: PropTypes.string,
   deviceInfo: PropTypes.object.isRequired,
-};
-
-App.defaultProps = {
-  initialI18nStore: null,
-  initialLanguage: null,
 };
 
 export default App;

@@ -1,13 +1,30 @@
 import React from 'react';
+import {
+  PlaylistCollectionPage,
+  PlaylistItemPageEvent,
+  PlaylistItemPageLesson,
+  PlaylistItemPageProgram,
+  PlaylistItemPageSeries,
+  PlaylistItemPageVirtual
+} from '../components/Pages/WithPlayer/PlaylistPageDispecher';
+import SourceContainer from '../components/Sections/Source/SourceContainer';
+import LibraryHomepage from '../components/Sections/Sources/Homepage';
+import LibraryPerson from '../components/Sections/Sources/LibraryPerson';
+import {
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS,
+  PAGE_NS_PROGRAMS
+} from '../helpers/consts';
+import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
+import SearchResults from './../components/Search/SearchResults';
 import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
 import HomePage from './../components/Sections/Home/Container';
 import LessonCollection from './../components/Sections/Lesson/LessonPage';
 import Lessons from './../components/Sections/Lessons/MainPage';
-import LibraryHomepage from '../components/Sections/Sources/Homepage';
-import SourceContainer from '../components/Sections/Source/SourceContainer';
-import LibraryPerson from '../components/Sections/Sources/LibraryPerson';
 import Likut from './../components/Sections/Likutim/Likut';
 import LikutimMain from './../components/Sections/Likutim/MainPage';
 import Music from './../components/Sections/Music/Music';
@@ -23,32 +40,15 @@ import ArticleCollection from './../components/Sections/Publications/tabs/Articl
 import ArticlePage from './../components/Sections/Publications/tabs/Articles/Unit';
 import BlogPost from './../components/Sections/Publications/tabs/Blog/Post/Container';
 import SimpleModeContainer from './../components/Sections/SimpleMode/Container';
+import Sketches from './../components/Sections/Sketches/MainPage';
 import Topics from './../components/Sections/Topics/TopicContainer';
 import Topic from './../components/Sections/Topics/TopicPage';
-import {
-  MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_BOOKMARKS,
-  PAGE_NS_PROGRAMS
-} from '../helpers/consts';
-import Sketches from './../components/Sections/Sketches/MainPage';
-import SearchResults from './../components/Search/SearchResults';
-import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
-import {
-  PlaylistItemPageLesson,
-  PlaylistItemPageEvent,
-  PlaylistCollectionPage,
-  PlaylistItemPageSeries,
-  PlaylistItemPageProgram,
-  PlaylistItemPageVirtual
-} from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
-import * as ssrDataLoaders from './routesSSRData';
-import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 import AboutPage from '../components/Sections/About/AboutPage';
+import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
+import * as ssrDataLoaders from './routesSSRData';
 
-const useRoutes = playerContainer => ([
+const buildRoutes = playerContainer => ([
   { path: '', component: <HomePage/>, ssrData: ssrDataLoaders.home },
 
   { path: 'personal', component: <Main/> },
@@ -163,4 +163,4 @@ const useRoutes = playerContainer => ([
   { path: 'about', component: <AboutPage/>, ssrData: ssrDataLoaders.aboutPage },
 ]);
 
-export default useRoutes;
+export default buildRoutes;

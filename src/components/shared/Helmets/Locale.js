@@ -1,6 +1,6 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
+import { Helmet } from "./helmetESM";
 
 import { LANG_UI_LANGUAGES } from '../../../helpers/consts';
 import { getLanguageLocale } from '../../../helpers/i18n-utils';

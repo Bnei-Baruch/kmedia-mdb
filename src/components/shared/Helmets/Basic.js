@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet-async';
+import React, { Fragment } from 'react';
+import { Helmet } from "./helmetESM";
 
 import { isEmpty, publicFile } from '../../../helpers/utils';
 import Image from './Image';

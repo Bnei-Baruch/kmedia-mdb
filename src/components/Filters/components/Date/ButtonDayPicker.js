@@ -1,23 +1,23 @@
-import React, { Component, createRef } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { noop } from '../../../../helpers/utils';
 import moment from 'moment';
-import scrollIntoView from 'scroll-into-view';
+import PropTypes from 'prop-types';
+import React, { Component, createRef } from 'react';
 import Navbar from 'react-day-picker/build/Navbar';
-import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
-import { Button, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
+import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
+import { connect } from 'react-redux';
+import scrollIntoView from 'scroll-into-view';
+import { Button, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
+import { noop } from '../../../../helpers/utils';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import YearMonthForm from './YearMonthForm';
 import { selectors as settings } from '../../../../redux/modules/settings';
+import YearMonthForm from './YearMonthForm';
 
+import clsx from 'clsx';
 import DayPicker from 'react-day-picker';
 import { withTranslation } from 'react-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import clsx from 'clsx';
 
 class ButtonDayPicker extends Component {
   static contextType = DeviceInfoContext;
@@ -95,16 +95,16 @@ class ButtonDayPicker extends Component {
   handleNativeDateInputChange = event => {
     const date            = event.target.valueAsDate;
     const { onDayChange } = this.props;
-    const { deviceInfo }  = this.context;
+    const { isIOS }  = this.context;
     this.setState({ selectedDate: date });
-    if (deviceInfo.os.name !== 'iOS') {
+    if (!isIOS) {
       onDayChange(date);
     }
   };
 
   openNativeDatePicker = () => {
-    const { deviceInfo } = this.context;
-    if (deviceInfo.os.name === 'Android') {
+    const { isAndroid } = this.context;
+    if (isAndroid) {
       this.nativeDateInput.click();
       return;
     }
@@ -179,7 +179,7 @@ class ButtonDayPicker extends Component {
   render() {
     const { uiLang, t, value, label, withLabel }                                 = this.props;
     const { month, isPopupOpen, isNativePopupOpen, selectedDate, uiDir, locale } = this.state;
-    const { deviceInfo, isMobileDevice }                                         = this.context;
+    const { isIOS, isMobileDevice }                                         = this.context;
 
     if (isMobileDevice) {
       const selected         = selectedDate || value;
@@ -205,7 +205,7 @@ class ButtonDayPicker extends Component {
           />
         </button>
       );
-      if (deviceInfo.os.name !== 'iOS') {
+      if (!isIOS) {
         return dateButton;
       }
 

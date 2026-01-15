@@ -1,27 +1,28 @@
-import React, { useContext, useState, useRef } from 'react';
 import clsx from 'clsx';
-import { withSSR, useTranslation } from 'react-i18next';
+import React, { useContext, useRef, useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useLocation, useMatch } from 'react-router-dom';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
-import Headroom from 'react-headroom';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getEmbedFromQuery } from '../../helpers/player';
+import Logo from '../../images/icons/Logo';
+import { textPageGetIsFullscreenSelector } from '../../redux/selectors';
+import KmediaRouters from '../../route/KmediaRouters';
+import HandleLanguages from '../HandleLanguages/HandleLanguages';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
-import GAPageView from './GAPageView/GAPageView';
-import MenuItems from './MenuItems';
-import HandleLanguages from './HandleLanguages';
-import Footer from './Footer';
-import TopMost from './TopMost';
-import DonateNow, { VirtualHomeButton } from './DonateNow';
-import Logo from '../../images/icons/Logo';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
-import Login from './Login';
-import KmediaRouters from '../../route/KmediaRouters';
 import DonationPopup from '../Sections/Home/DonationPopup';
 import DownloadTrim from '../Share/DownloadTrim';
-import { useLocation, useMatch } from 'react-router-dom';
 import { useClickOutside } from '../shared/useClickOutside';
-import { useSelector } from 'react-redux';
-import { textPageGetIsFullscreenSelector } from '../../redux/selectors';
+import DonateNow, { VirtualHomeButton } from './DonateNow';
+import Footer from './Footer';
+import GAPageView from './GAPageView/GAPageView';
+import HeadroomWraper from './HeadroomWraper';
+import Login from './Login';
+import MenuItems from './MenuItems';
+import TopMost from './TopMost';
 
 const Layout = ({ playerContainer }) => {
   const toggleSidebarBtnRef = useRef();
@@ -59,7 +60,7 @@ const Layout = ({ playerContainer }) => {
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
       <GAPageView location={location} />
       <div className="headroom-z-index-802">
-        <Headroom>
+        <HeadroomWraper>
           <div className="layout__header">
             <Menu inverted borderless size="huge" color="blue">
               <div ref={toggleSidebarBtnRef}>
@@ -120,7 +121,7 @@ const Layout = ({ playerContainer }) => {
               </div>
             )
           }
-        </Headroom>
+        </HeadroomWraper>
       </div>
       <div
         ref={sidebarRef}
@@ -163,4 +164,4 @@ const Layout = ({ playerContainer }) => {
   );
 };
 
-export default withSSR()(Layout);
+export default Layout;

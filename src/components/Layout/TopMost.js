@@ -1,17 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 
-import Helmets from '../shared/Helmets';
+import { useTranslation } from 'react-i18next';
+import TopMostHelmet from '../shared/Helmets/TopMost';
 
-const TopMost = ({ t }) => (
-  <Helmets.TopMost
-    titlePostfix={t('nav.top.header')}
-  />
-);
-
-TopMost.propTypes = {
-  t: PropTypes.func.isRequired,
+const TopMost = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <TopMostHelmet
+      titlePostfix={t('nav.top.header')}
+    />
+  );
 };
 
-export default withTranslation()(TopMost);
+export default TopMost;

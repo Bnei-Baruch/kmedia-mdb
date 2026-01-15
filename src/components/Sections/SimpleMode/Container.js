@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty, noop } from '../../../helpers/utils';
+import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const SimpleModeContainer = () => {
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
-  const { deviceInfo: { browser: { name: browserName } } } = useContext(DeviceInfoContext);
-  const chronicles                                         = useContext(ClientChroniclesContext);
+  const { browserName } = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,9 +24,7 @@ const SimpleModeContainer = () => {
   const [selectedDate, setSelectedDate] = useState(() => {
     const query = getQuery(location);
     const qdate = query?.date;
-    return (qdate && moment(qdate).isValid())
-      ? moment(qdate, 'YYYY-MM-DD').toDate()
-      : new Date();
+    return qdate && moment(qdate).isValid() ? moment(qdate, 'YYYY-MM-DD').toDate() : new Date();
   });
 
   useEffect(() => {
@@ -42,7 +40,7 @@ const SimpleModeContainer = () => {
 
     updateQuery(navigate, location, query => ({
       ...query,
-      date: currentDate
+      date: currentDate,
     }));
 
     setSelectedDate(selDate);
@@ -53,23 +51,22 @@ const SimpleModeContainer = () => {
   };
 
   const scrollToTop = () => {
-    (browserName.toLowerCase() === 'chrome' || browserName.toLowerCase() === 'firefox')
+    browserName.toLowerCase() === 'chrome' || browserName.toLowerCase() === 'firefox'
       ? window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
       : window.scrollTo(0, 0);
   };
 
-  const chroniclesAppend       = chronicles ? chronicles.append.bind(chronicles) : noop;
-  const renderUnitOrCollection = (item, filesLanguages, t) => (
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
+  const renderUnitOrCollection = (item, filesLanguages, t) =>
     isEmpty(item.content_units)
       ? groupOtherMediaByType(item, filesLanguages, t, helpChooseLang, chroniclesAppend)
-      : renderCollection(item, filesLanguages, t, helpChooseLang, chroniclesAppend)
-  );
+      : renderCollection(item, filesLanguages, t, helpChooseLang, chroniclesAppend);
 
   const pageProps = {
     selectedDate,
     filesLanguages,
-    renderUnit      : renderUnitOrCollection,
-    onDayClick      : handleDayClick,
+    renderUnit: renderUnitOrCollection,
+    onDayClick: handleDayClick,
     onLanguageChange: selected => setFilesLanguages(selected),
   };
 

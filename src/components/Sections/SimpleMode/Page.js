@@ -1,22 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
-import SectionHeader from '../../shared/SectionHeader';
-import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
-import SimpleModeList from './SimpleModeList';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
-import { settingsGetUILangSelector } from '../../../redux/selectors';
 import { isToday } from '../../../helpers/utils';
+import { settingsGetUILangSelector } from '../../../redux/selectors';
+import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import SectionHeader from '../../shared/SectionHeader';
+import SimpleModeList from './SimpleModeList';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -39,8 +39,8 @@ const getNavBarElement = (props, uiLang, onDayClick) => {
   );
 };
 
-const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) =>
-  isMobileDevice
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid) =>
+  isMobile
     ? (
       <div>
         <div className="ui input">
@@ -49,7 +49,7 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
             type="text"
             readOnly
             value={data.selectedInLocaleFormat}
-            onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
+            onClick={() => openNativeDatePicker(nativeDateInput, isAndroid)}
           />
         </div>
         <input
@@ -66,8 +66,8 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
     )
     : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
 
-const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
-  if (deviceInfo.os.name === 'Android') {
+const openNativeDatePicker = (nativeDateInput, isAndroid) => {
+  if (isAndroid) {
     nativeDateInput.current.click();
   } else {
     nativeDateInput.current.focus();
@@ -102,7 +102,7 @@ const SimpleModePage = (
   });
 
   const nativeDateInput                = useRef(null);
-  const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
+  const { isMobile, isAndroid } = useContext(DeviceInfoContext);
 
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');
@@ -160,7 +160,7 @@ const SimpleModePage = (
                 <div className="date-container">
                   <button type="button"
                     onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                  {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo)}
+                  {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid)}
                   <button
                     type="button"
                     disabled={isToday(selectedDate)}

@@ -1,12 +1,12 @@
-import React, { Component, createRef } from 'react';
-import PropTypes from 'prop-types';
-import { noop } from '../../../../helpers/utils';
 import moment from 'moment';
-import scrollIntoView from 'scroll-into-view';
+import PropTypes from 'prop-types';
+import React, { Component, createRef } from 'react';
 import Navbar from 'react-day-picker/build/Navbar';
-import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
-import { Input, Label, Popup } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
+import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
+import scrollIntoView from 'scroll-into-view';
+import { Input, Label, Popup } from 'semantic-ui-react';
+import { noop } from '../../../../helpers/utils';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
@@ -86,7 +86,7 @@ class FastDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    if (this.context.deviceInfo.os.name === 'Android') {
+    if (this.context.isAndroid) {
       this.nativeDateInput.click();
       return;
     }

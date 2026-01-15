@@ -1,41 +1,41 @@
-import logger from 'redux-logger';
 import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
 import createSagaMiddleware, { END } from 'redux-saga';
 
 import { rootSaga } from '../sagas';
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
 
-import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
-import settings from './modules/settings';
-import preparePage from './modules/preparePage';
-import events from './modules/events';
-import lessons from './modules/lessons';
-import publications from './modules/publications';
-import filters from './modules/filters';
-import filtersAside from './modules/filtersAside';
-import lists from './modules/lists';
-import sources from './modules/sources';
-import tags from './modules/tags';
-import mdb from './modules/mdb';
-import search from './modules/search';
-import assets from './modules/assets';
-import home from './modules/home';
-import stats from './modules/stats';
-import recommended from './modules/recommended';
-import chronicles from './modules/chronicles';
-import auth from './modules/auth';
-import my from './modules/my';
-import myNotes from './modules/myNotes';
-import likutim from './modules/likutim';
-import bookmarkFilter from './modules/bookmarkFilter';
-import trim from './modules/trim';
-import player from './modules/player';
-import playlist from './modules/playlist';
-import fetchImage from './modules/fetchImage';
-import textPage from './modules/textPage';
 import { backendApi } from './api/backendApi';
 import { chroniclesApi } from './api/chronicles';
+import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
+import assets from './modules/assets';
+import auth from './modules/auth';
+import bookmarkFilter from './modules/bookmarkFilter';
+import chronicles from './modules/chronicles';
+import events from './modules/events';
+import fetchImage from './modules/fetchImage';
+import filters from './modules/filters';
+import filtersAside from './modules/filtersAside';
+import home from './modules/home';
+import lessons from './modules/lessons';
+import likutim from './modules/likutim';
+import lists from './modules/lists';
+import mdb from './modules/mdb';
+import my from './modules/my';
+import myNotes from './modules/myNotes';
+import player from './modules/player';
+import playlist from './modules/playlist';
+import preparePage from './modules/preparePage';
+import publications from './modules/publications';
+import recommended from './modules/recommended';
+import search from './modules/search';
+import settings from './modules/settings';
+import sources from './modules/sources';
+import stats from './modules/stats';
+import tags from './modules/tags';
+import textPage from './modules/textPage';
+import trim from './modules/trim';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const verboseDebug = false;
@@ -97,7 +97,7 @@ const setupReducers = history => ({
   textPage
 });
 
-export default function createStore(preloadedState, history) {
+export function createStore(preloadedState, history) {
   console.log('configureStore, apply middleware');
   const store = configureStore({
     preloadedState,

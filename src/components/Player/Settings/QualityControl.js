@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
-import { Button, Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Header } from 'semantic-ui-react';
 
-import { actions as playlistActions } from '../../../redux/modules/playlist';
-import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
 const QualityControl = ({ t }) => {
-  const { deviceInfo } = useContext(DeviceInfoContext);
+  const { browserName } = useContext(DeviceInfoContext);
 
   const playedItem            = useSelector(playlistGetPlayedSelector);
   const { quality, language } = useSelector(playlistGetInfoSelector);
@@ -21,7 +21,7 @@ const QualityControl = ({ t }) => {
 
   const qualities = !playedItem?.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
 
-  if (!qualities || qualities.length < 2 || (playedItem?.isHLS && deviceInfo.browser.name === 'Safari')) return null;
+  if (!qualities || qualities.length < 2 || (playedItem?.isHLS && browserName === 'Safari')) return null;
 
   const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
   return (

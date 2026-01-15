@@ -7,6 +7,7 @@ export { default as Info } from "./Info";
 export { default as Lectures } from "./Lectures";
 export { default as Likutim } from "./Likutim";
 export { default as Logo } from "./Logo";
+export { default as LogoOld } from "./LogoOld";
 export { default as PlayAudio } from "./PlayAudio";
 export { default as PlayByText } from "./PlayByText";
 export { default as PlaylistAdd } from "./PlaylistAdd";

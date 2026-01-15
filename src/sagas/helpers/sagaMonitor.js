@@ -1,25 +1,26 @@
-import { asEffect, is } from 'redux-saga/utils';
+import * as is from '@redux-saga/is';
 
-const util = require('util');
+import util from 'util';
 
-export const EFFECT_STATUS_PENDING   = 'PENDING';
-export const EFFECT_STATUS_RESOLVED  = 'RESOLVED';
-export const EFFECT_STATUS_REJECTED  = 'REJECTED';
+export const EFFECT_STATUS_PENDING = 'PENDING';
+export const EFFECT_STATUS_RESOLVED = 'RESOLVED';
+export const EFFECT_STATUS_REJECTED = 'REJECTED';
 export const EFFECT_STATUS_CANCELLED = 'CANCELLED';
 
-const DEFAULT_STYLE     = 'color: black';
-const LABEL_STYLE       = 'font-weight: bold';
+const DEFAULT_STYLE = 'color: black';
+const LABEL_STYLE = 'font-weight: bold';
 const EFFECT_TYPE_STYLE = 'color: blue';
-const ERROR_STYLE       = 'color: red';
-const CANCEL_STYLE      = 'color: #ccc';
+const ERROR_STYLE = 'color: red';
+const CANCEL_STYLE = 'color: #ccc';
 
-const IS_BROWSER = (typeof window !== 'undefined' && window.document);
+const IS_BROWSER = typeof window !== 'undefined' && window.document;
 
-export default function createSagaMonitor(
-  {
-    debug = false,
-    exportToWindow = true,
-  } = {}) {
+const asEffect = effect => {
+  if (!effect || typeof effect !== 'object') return null;
+  return effect;
+};
+
+export default function createSagaMonitor({ debug = false, exportToWindow = true } = {}) {
   const VERBOSE = debug;
 
   const time = () => {
@@ -40,7 +41,7 @@ export default function createSagaMonitor(
     effectsById[desc.effectId] = {
       ...desc,
       status: EFFECT_STATUS_PENDING,
-      start: time()
+      start: time(),
     };
   }
 
@@ -72,7 +73,7 @@ export default function createSagaMonitor(
     const now = time();
     Object.assign(effect, {
       end: now,
-      duration: now - effect.start
+      duration: now - effect.start,
     });
   }
 
@@ -104,7 +105,7 @@ export default function createSagaMonitor(
     const effect = effectsById[effectId];
     computeEffectDur(effect);
     effect.status = EFFECT_STATUS_REJECTED;
-    effect.error  = error;
+    effect.error = error;
     if (effect && asEffect.race(effect.effect)) {
       setRaceWinner(effectId, error);
     }
@@ -118,7 +119,7 @@ export default function createSagaMonitor(
 
   function setRaceWinner(raceEffectId, result) {
     const winnerLabel = Object.keys(result)[0];
-    const children    = getChildEffects(raceEffectId);
+    const children = getChildEffects(raceEffectId);
     for (let i = 0; i < children.length; i++) {
       const childEffect = effectsById[children[i]];
       if (childEffect.label === winnerLabel) {
@@ -137,7 +138,7 @@ export default function createSagaMonitor(
   // Can be overridden by the `console-group` polyfill.
   // The poor man's groups look nice, too, so whether to use
   // the polyfilled methods or the hand-made ones can be made a preference.
-  let groupPrefix   = '';
+  let groupPrefix = '';
   const GROUP_SHIFT = '   ';
   const GROUP_ARROW = '▼';
 
@@ -193,35 +194,35 @@ export default function createSagaMonitor(
   function getEffectLog(effect) {
     let data, log;
 
-    if (data = asEffect.take(effect.effect)) {
+    if ((data = asEffect.take(effect.effect))) {
       log = getLogPrefix('take', effect);
       log.formatter.addValue(data);
       logResult(effect, log.formatter);
-    } else if (data = asEffect.put(effect.effect)) {
+    } else if ((data = asEffect.put(effect.effect))) {
       log = getLogPrefix('put', effect);
       logResult({ ...effect, result: data }, log.formatter);
-    } else if (data = asEffect.call(effect.effect)) {
+    } else if ((data = asEffect.call(effect.effect))) {
       log = getLogPrefix('call', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    } else if (data = asEffect.cps(effect.effect)) {
+    } else if ((data = asEffect.cps(effect.effect))) {
       log = getLogPrefix('cps', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    } else if (data = asEffect.fork(effect.effect)) {
+    } else if ((data = asEffect.fork(effect.effect))) {
       log = getLogPrefix('', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    } else if (data = asEffect.join(effect.effect)) {
+    } else if ((data = asEffect.join(effect.effect))) {
       log = getLogPrefix('join', effect);
       logResult(effect, log.formatter);
-    } else if (data = asEffect.race(effect.effect)) {
+    } else if ((data = asEffect.race(effect.effect))) {
       log = getLogPrefix('race', effect);
       logResult(effect, log.formatter, true);
-    } else if (data = asEffect.cancel(effect.effect)) {
+    } else if ((data = asEffect.cancel(effect.effect))) {
       log = getLogPrefix('cancel', effect);
       log.formatter.appendData(data.name);
-    } else if (data = asEffect.select(effect.effect)) {
+    } else if ((data = asEffect.select(effect.effect))) {
       log = getLogPrefix('select', effect);
       log.formatter.addCall(data.selector.name, data.args);
       logResult(effect, log.formatter);
@@ -242,22 +243,12 @@ export default function createSagaMonitor(
 
   function getLogPrefix(type, effect) {
     const isCancel = effect.status === EFFECT_STATUS_CANCELLED;
-    const isError  = effect.status === EFFECT_STATUS_REJECTED;
+    const isError = effect.status === EFFECT_STATUS_REJECTED;
 
-    const method    = isError ? 'error' : 'log';
-    const winnerInd = effect && effect.winner
-      ? (isError ? '✘' : '✓')
-      : '';
+    const method = isError ? 'error' : 'log';
+    const winnerInd = effect && effect.winner ? (isError ? '✘' : '✓') : '';
 
-    const style = s => (
-      isCancel
-        ? CANCEL_STYLE
-        : (
-          isError
-            ? ERROR_STYLE
-            : s
-        )
-    );
+    const style = s => (isCancel ? CANCEL_STYLE : isError ? ERROR_STYLE : s);
 
     const formatter = logFormatter();
 
@@ -277,20 +268,12 @@ export default function createSagaMonitor(
 
     return {
       method,
-      formatter
+      formatter,
     };
   }
 
   function argToString(arg) {
-    return (
-      typeof arg === 'function'
-        ? `${arg.name}`
-        : (
-          typeof arg === 'string'
-            ? `'${arg}'`
-            : arg
-        )
-    );
+    return typeof arg === 'function' ? `${arg.name}` : typeof arg === 'string' ? `'${arg}'` : arg;
   }
 
   function logResult({ status, result, error, duration }, formatter, ignoreResult) {
@@ -315,12 +298,14 @@ export default function createSagaMonitor(
   }
 
   function isPrimitive(val) {
-    return typeof val === 'string'
-      || typeof val === 'number'
-      || typeof val === 'boolean'
-      || typeof val === 'symbol'
-      || val === null
-      || val === undefined;
+    return (
+      typeof val === 'string' ||
+      typeof val === 'number' ||
+      typeof val === 'boolean' ||
+      typeof val === 'symbol' ||
+      val === null ||
+      val === undefined
+    );
   }
 
   function logFormatter() {
@@ -331,7 +316,7 @@ export default function createSagaMonitor(
       // Remove the `%c` CSS styling that is not supported by the Node console.
       if (!IS_BROWSER && typeof msg === 'string') {
         const prevMsg = msg;
-        const newMsg  = msg.replace(/^%c\s*/, '');
+        const newMsg = msg.replace(/^%c\s*/, '');
         if (newMsg !== prevMsg) {
           // Remove the first argument which is the CSS style string.
           args.shift();
@@ -370,7 +355,7 @@ export default function createSagaMonitor(
     }
 
     function getLog() {
-      const msgs   = [];
+      const msgs = [];
       let msgsArgs = [];
       for (let i = 0; i < logs.length; i++) {
         msgs.push(logs[i].msg);
@@ -381,7 +366,11 @@ export default function createSagaMonitor(
     }
 
     return {
-      add, addValue, addCall, appendData, getLog
+      add,
+      addValue,
+      addCall,
+      appendData,
+      getLog,
     };
   }
 
@@ -390,7 +379,7 @@ export default function createSagaMonitor(
    */
   const logSaga = () => {
     console.log('');
-    console.log('Saga monitor:', Date.now(), (new Date()).toISOString());
+    console.log('Saga monitor:', Date.now(), new Date().toISOString());
     logEffectTree(0);
     console.log('');
   };
@@ -410,10 +399,12 @@ export default function createSagaMonitor(
   const getBlockingEffectsArray = () => {
     // Skip FORK and TAKE because they are auto-interrupted by the END action.
     const blockingEffects = Object.keys(effectsById)
-      .filter(effectId => (
-        effectsById[effectId].status === EFFECT_STATUS_PENDING
-        && !asEffect.fork(effectsById[effectId].effect) && !asEffect.take(effectsById[effectId].effect)
-      ))
+      .filter(
+        effectId =>
+          effectsById[effectId].status === EFFECT_STATUS_PENDING &&
+          !asEffect.fork(effectsById[effectId].effect) &&
+          !asEffect.take(effectsById[effectId].effect)
+      )
       .map(effectId => effectsById[effectId]);
 
     return blockingEffects;

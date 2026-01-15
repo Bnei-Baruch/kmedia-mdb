@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
+import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
