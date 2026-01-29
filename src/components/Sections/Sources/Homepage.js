@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
+import { sourcesGetRootsSelector, sourcesGetSourceByIdSelector } from '../../../redux/selectors';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
-import { sourcesGetRootsSelector, sourcesGetSourceByIdSelector } from '../../../redux/selectors';
 
 const Homepage = () => {
   const roots         = useSelector(sourcesGetRootsSelector);
@@ -16,7 +16,7 @@ const Homepage = () => {
       <SectionHeader section="sources-library"/>
       <Divider fitted/>
       <Container className="padded">
-        <Table basic="very" className="index-list sources__authors">
+        <Table basic="very" className="index-list sources__authors" unstackable={true}>
           <Table.Body>
             {
               roots.map(r => {

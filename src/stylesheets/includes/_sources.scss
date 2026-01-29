@@ -32,7 +32,6 @@
           &:nth-child(2) {
             > div {
               height: 100%;
-              overflow: auto;
               position: relative;
             }
           }
@@ -40,7 +39,7 @@
 
         .sources__list {
           @include mobile {
-            position: static;
+            position: static!important;
           }
 
           position: absolute;
@@ -48,7 +47,7 @@
 
         .list {
           @include mobile {
-            position: static;
+            position: static!important;
           }
 
           position: absolute;
@@ -88,11 +87,12 @@
 
       .item {
         @include mobile {
-          width: 50%;
+          width: 100%!important;
+          position: relative;
         }
 
         @include small-mobile {
-          width: 100%;
+          width: 100%!important;
         }
 
         @include tablet {
