@@ -3,7 +3,7 @@ import logger from '../../logger/logger';
 
 const HeadroomWraper = ({ children }) => {
 
-  if (import.meta.env.SSR) {
+  if (typeof window === 'undefined') {
     logger.log('HeadroomWraper render', 'SSR');
     return <div>{children}</div>;
   }

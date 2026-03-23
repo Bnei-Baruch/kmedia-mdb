@@ -1,5 +1,4 @@
 import moment from 'moment';
-import 'moment-duration-format';
 
 export const formatTime = current => {
   if (!current) return '00:00';

@@ -1,22 +1,25 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 @use "sass:math";
 
 .avbox {
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  background-color: $darkWhite;
+  background-color: colors-helpers.$darkWhite;
   width: 100% !important;
 
   .unit_container {
-    @include mobile {
+    @include responsive-helpers.mobile {
       padding-bottom: 0;
       padding-left: 0;
       padding-right: 0;
     }
 
-    background-color: $darkWhite;
+    background-color: colors-helpers.$darkWhite;
     padding: 1em;
     width: 100%
   }
@@ -53,13 +56,13 @@
   }
 
   &__player {
-    background: $black;
+    background: colors-helpers.$black;
     height: 0;
-    padding-top: percentage(math.div(9, 16));
+    padding-top: math.percentage(math.div(9, 16));
     position: relative;
 
     &--is-4x3 {
-      padding-top: percentage(3 * 0.25);
+      padding-top: math.percentage(3 * 0.25);
     }
 
     &--is-audio {
@@ -71,7 +74,7 @@
         transition: height 1s;
       }
 
-      @media screen and (min-width: $tabletBreakpoint) {
+      @media screen and (min-width: responsive-helpers.$tabletBreakpoint) {
         &--edit-mode {
           height: 310px;
         }
@@ -109,13 +112,13 @@
     max-height: 40rem;
 
     > .header, .sub {
-      color: $darkWhite;
+      color: colors-helpers.$darkWhite;
       align-items: flex-start;
     }
 
     > .header {
       background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
-      @include mobile {
+      @include responsive-helpers.mobile {
         padding: 1em 0.5em;
         font-size: 18px;
 
@@ -150,7 +153,7 @@
   }
 
   &__playlist-wrapper {
-    @include mobile {
+    @include responsive-helpers.mobile {
       display: block;
       padding-bottom: 1em;
       padding-top: -1em;
@@ -170,7 +173,7 @@
       }
     }
 
-    background: $darkWhite;
+    background: colors-helpers.$darkWhite;
     display: flex;
     flex-direction: column;
 
@@ -182,18 +185,18 @@
   }
 
   &__playlist-view {
-    border: 1px solid $midWhite;
+    border: 1px solid colors-helpers.$midWhite;
     clear: both;
     overflow-y: auto;
     position: relative;
     margin: 0;
 
     &.container {
-      border: 1px solid $midWhite;
+      border: 1px solid colors-helpers.$midWhite;
     }
 
     .header {
-      color: $blue;
+      color: colors-helpers.$blue;
     }
 
     .list {
@@ -203,7 +206,7 @@
         padding: 0 !important;
 
         .active {
-          background-color: rgba($blue, .2) !important;
+          background-color: rgba(colors-helpers.$blue, .2) !important;
         }
 
         table {
@@ -217,7 +220,7 @@
 
     .menu > .item {
       &.active {
-        background-color: rgba($blue, .2) !important;
+        background-color: rgba(colors-helpers.$blue, .2) !important;
       }
     }
   }
@@ -225,7 +228,7 @@
 
 
 .avbox__playlist-prev-button, .avbox__playlist-next-button {
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding: 0 4px;
   }
 

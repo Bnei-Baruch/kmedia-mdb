@@ -3,7 +3,7 @@ import React from 'react';
 const PdfClient = React.lazy(() => import('./pdfClient'));
 
 export default function PDF(props) {
-  if (import.meta.env.SSR) {
+  if (typeof window === 'undefined') {
     // SSR output
     return props?.file ? <a href={props.file}>Download PDF</a> : null;
   }

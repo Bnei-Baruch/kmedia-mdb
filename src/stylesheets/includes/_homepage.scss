@@ -1,6 +1,9 @@
 @use "sass:math";
 
-@import 'rtl/homepage';
+@use "sass:color";
+@use 'rtl/homepage';
+@use "colors-helpers";
+@use "responsive-helpers";
 
 .homepage {
   flex: 1 1 auto;
@@ -10,7 +13,7 @@
   }
 
   &__section {
-    @include mobile {
+    @include responsive-helpers.mobile {
       margin-bottom: 1rem;
       margin-top: 1rem;
     }
@@ -20,7 +23,7 @@
     .ui.horizontal.divider {
       &::before,
       &::after {
-        background-image: linear-gradient(to right, lighten($blue, 40%), lighten($blue, 40%));
+        background-image: linear-gradient(to right, color.adjust(colors-helpers.$blue, $lightness: 40%), color.adjust(colors-helpers.$blue, $lightness: 40%));
         background-size: 100% 1px;
       }
     }
@@ -38,7 +41,7 @@
           border: 2px solid #DBECF9;
           border-radius: 9px;
           z-index: 1;
-          @include mobile {
+          @include responsive-helpers.mobile {
             font-size: 1.5em;
           }
         }
@@ -51,7 +54,7 @@
       border-top: 2px solid #DBECF9;
       padding: 0 55px;
 
-      @include mobile {
+      @include responsive-helpers.mobile {
         padding: 1em;
       }
 
@@ -62,7 +65,7 @@
         font-weight: 700;
         color: #134D78;
         margin-bottom: 0.5em;
-        @include mobile {
+        @include responsive-helpers.mobile {
           font-size: 1.5em;
           padding: 2em 0 0 0em;
           margin-bottom: 0;
@@ -80,14 +83,14 @@
   }
 
   .home-social-section {
-    @include mobile {
+    @include responsive-helpers.mobile {
       margin-bottom: 1rem;
     }
     margin-bottom: 4em;
   }
 
   &__header {
-    @include mobile {
+    @include responsive-helpers.mobile {
       padding-bottom: 2rem;
       padding-top: 1rem;
     }
@@ -104,7 +107,7 @@
   }
 
   &__title {
-    @include mobile {
+    @include responsive-helpers.mobile {
       display: none;
     }
     margin-bottom: .4em !important;
@@ -112,11 +115,11 @@
 
   &__website-sections {
     .header {
-      color: darken($blue, 20%);
+      color: color.adjust(colors-helpers.$blue, $lightness: -20%);
       transition: color .2s ease-out;
 
       &:hover {
-        color: $blue;
+        color: colors-helpers.$blue;
       }
     }
   }
@@ -139,7 +142,7 @@
         border: 2px solid #DBECF9;
         border-radius: 9px;
         z-index: 1;
-        @include mobile {
+        @include responsive-helpers.mobile {
           font-size: 1.5em;
         }
       }
@@ -208,13 +211,13 @@
 }
 
 .thumbnail {
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin-bottom: 1rem;
-    padding-top: percentage(math.div(1, 2.5));
+    padding-top: math.percentage(math.div(1, 2.5));
   }
   height: 0;
   overflow: hidden;
-  padding-top: percentage(math.div(9, 16));
+  padding-top: math.percentage(math.div(9, 16));
   position: relative;
 
   .label {
@@ -232,7 +235,7 @@
     width: 100%;
 
     &::before {
-      background-image: linear-gradient(to top, rgba($black, .9), transparent);
+      background-image: linear-gradient(to top, rgba(colors-helpers.$black, .9), transparent);
       bottom: 0;
       content: '';
       height: 50%;
@@ -262,13 +265,13 @@
     margin: 0 !important;
     position: absolute;
     right: .5em;
-    text-shadow: 0 1px $black, 0 2px $black;
+    text-shadow: 0 1px colors-helpers.$black, 0 2px colors-helpers.$black;
     transition: transform .5s;
     z-index: 2;
 
     .content,
     .sub {
-      color: $white !important;
+      color: colors-helpers.$white !important;
       font-weight: 400;
     }
 
@@ -290,7 +293,7 @@
   }
 
   .homepage-posters & {
-    padding-top: percentage(math.div(1.6, 1));
+    padding-top: math.percentage(math.div(1.6, 1));
 
     &__image {
       background-position: center center;

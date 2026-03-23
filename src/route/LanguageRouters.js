@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { actions } from '../redux/modules/settings';
-import { LANG_UI_LANGUAGES } from '../helpers/consts';
-import { updateHtmlLang } from '../helpers/language';
-import { settingsGetUILangSelector, settingsGetUrlLangSelector } from '../redux/selectors';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
+import { LANG_UI_LANGUAGES } from "../helpers/consts";
+import { settingsGetUrlLangSelector } from "../redux/selectors";
 
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
-  const origUrlLang       = useSelector(settingsGetUrlLangSelector);
-  const uiLang            = useSelector(state => settingsGetUILangSelector(state, true /* skipUrl */));
-  const dispatch          = useDispatch();
+  const location = useLocation();
+  const origUrlLang = useSelector(settingsGetUrlLangSelector);
 
+  if (urlLang && !LANG_UI_LANGUAGES.includes(urlLang)) {
+    return <Navigate to={`/${origUrlLang}${location.pathname}`} replace />;
+  }
+
+  /*
   useEffect(() => {
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
-      if (urlLang === uiLang && origUrlLang !== '') {
+      if (urlLang === uiLang && origUrlLang !== "") {
         // Clear URL language it is the same as UI language.
         updateHtmlLang(uiLang);
-        dispatch(actions.setURLLanguage(''));
+        dispatch(actions.setURLLanguage(""));
       } else if (origUrlLang !== urlLang && urlLang !== uiLang) {
         // Set URL language.
         updateHtmlLang(urlLang);
@@ -25,12 +27,9 @@ const LanguageRouter = () => {
       }
     }
   }, [origUrlLang, urlLang, uiLang, dispatch]);
+  */
 
-  return (
-    <>
-      <Outlet/>
-    </>
-  );
+  return <Outlet />;
 };
 
 export default LanguageRouter;

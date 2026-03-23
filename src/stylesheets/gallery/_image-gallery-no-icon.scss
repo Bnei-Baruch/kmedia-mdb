@@ -1,5 +1,9 @@
-$bg-black: rgba($fullBlack, .4) !default;
-$transparent: rgba($fullBlack, 0) !default;
+@use "sass:color";
+@use "../includes/colors-helpers";
+@use "../includes/responsive-helpers";
+
+$bg-black: rgba(colors-helpers.$fullBlack, .4) !default;
+$transparent: rgba(colors-helpers.$fullBlack, 0) !default;
 
 .image-gallery {
   user-select: none;
@@ -20,11 +24,11 @@ $transparent: rgba($fullBlack, 0) !default;
   top: 0;
 
   &.fullscreen {
-    background: $black;
+    background: colors-helpers.$black;
     height: 100%;
 
     .image-gallery-slide {
-      background: $black;
+      background: colors-helpers.$black;
     }
   }
 }
@@ -40,13 +44,13 @@ $transparent: rgba($fullBlack, 0) !default;
 .image-gallery-play-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  background: rgba($black, .4) !important;
+  background: rgba(colors-helpers.$black, .4) !important;
   margin: 0 !important;
   position: absolute;
   z-index: 4;
-  &:hover { background: rgba(lighten($black, 5), .4) !important;}
-  &:focus { background: rgba(lighten($black, 8), .4) !important;}
-  &:active { background: rgba(lighten($black, 10), .4) !important; }
+  &:hover { background: rgba(color.adjust(colors-helpers.$black, $lightness: 5%), .4) !important;}
+  &:focus { background: rgba(color.adjust(colors-helpers.$black, $lightness: 8%), .4) !important;}
+  &:active { background: rgba(color.adjust(colors-helpers.$black, $lightness: 10%), .4) !important; }
 }
 
 .image-gallery-fullscreen-button,
@@ -76,7 +80,7 @@ $transparent: rgba($fullBlack, 0) !default;
   // @media (max-width: $tabletBreakpoint) {
   // }
 
-  @media (max-width: $mobileBreakpoint) {
+  @media (max-width: responsive-helpers.$mobileBreakpoint) {
     display: none !important;
   }
 }
@@ -106,7 +110,7 @@ $transparent: rgba($fullBlack, 0) !default;
 }
 
 .image-gallery-slide {
-  background: $white;
+  background: colors-helpers.$white;
   display: flex;
   height: 100%;
   justify-content: center;
@@ -133,14 +137,14 @@ $transparent: rgba($fullBlack, 0) !default;
   .image-gallery-description {
     background: $bg-black;
     bottom: 70px;
-    color: $white;
+    color: colors-helpers.$white;
     left: 0;
     line-height: 1;
     padding: 10px 20px;
     position: absolute;
     white-space: normal;
 
-    @media (max-width: $tabletBreakpoint) {
+    @media (max-width: responsive-helpers.$tabletBreakpoint) {
       bottom: 45px;
       font-size: .8em;
       padding: 8px 15px;
@@ -167,26 +171,26 @@ $transparent: rgba($fullBlack, 0) !default;
   .image-gallery-bullet {
     appearance: none;
     background-color: transparent;
-    border: 1px solid $white;
+    border: 1px solid colors-helpers.$white;
     border-radius: 50%;
-    box-shadow: 0 1px 0 lighten($black, 10%);
+    box-shadow: 0 1px 0 color.adjust(colors-helpers.$black, $lightness: 10%);
     cursor: pointer;
     display: inline-block;
     margin: 0 5px;
     outline: none;
     padding: 5px;
 
-    @media (max-width: $tabletBreakpoint) {
+    @media (max-width: responsive-helpers.$tabletBreakpoint) {
       margin: 0 3px;
       padding: 3px;
     }
 
-    @media (max-width: $tabletBreakpoint) {
+    @media (max-width: responsive-helpers.$tabletBreakpoint) {
       padding: 2.7px;
     }
 
     &.active {
-      background: $white;
+      background: colors-helpers.$white;
     }
   }
 }
@@ -200,7 +204,7 @@ $transparent: rgba($fullBlack, 0) !default;
   overflow: hidden;
   padding: 5px 0;
 
-  @media (max-width: $tabletBreakpoint) {
+  @media (max-width: responsive-helpers.$tabletBreakpoint) {
     padding: 3px 0;
   }
 
@@ -219,7 +223,7 @@ $transparent: rgba($fullBlack, 0) !default;
   transition: border .3s ease-out;
   width: 100px;
 
-  @media (max-width: $tabletBreakpoint) {
+  @media (max-width: responsive-helpers.$tabletBreakpoint) {
     width: 75px;
   }
 
@@ -233,17 +237,17 @@ $transparent: rgba($fullBlack, 0) !default;
   }
 
   &.active {
-    border: 2px solid $blue;
+    border: 2px solid colors-helpers.$blue;
     // @media (max-width: $tabletBreakpoint) {
     // }
   }
 }
 
 .image-gallery-thumbnail-label {
-  color: lighten($black, 10%);
+  color: color.adjust(colors-helpers.$black, $lightness: 10%);
   font-size: 1em;
 
-  @media(max-width: $tabletBreakpoint) {
+  @media(max-width: responsive-helpers.$tabletBreakpoint) {
     font-size: .8em;
   }
 }
@@ -251,7 +255,7 @@ $transparent: rgba($fullBlack, 0) !default;
 .image-gallery-index {
   background: $bg-black;
   bottom: .5rem;
-  color: $white;
+  color: colors-helpers.$white;
   line-height: 1;
   padding: 10px 20px;
   position: absolute;
@@ -259,7 +263,7 @@ $transparent: rgba($fullBlack, 0) !default;
   transform: translateX(50%);
   z-index: 4;
 
-  @media(max-width: $tabletBreakpoint) {
+  @media(max-width: responsive-helpers.$tabletBreakpoint) {
     font-size: .8em;
     padding: 5px 10px;
   }

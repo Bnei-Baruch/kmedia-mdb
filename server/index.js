@@ -2,7 +2,7 @@
 require('ignore-styles');
 require('file-loader');
 const path     = require('path');
-const manifest = require('../build/asset-manifest');
+const manifest = require('../public/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
   if (filename.endsWith('.png')
     || filename.endsWith('.jpg')
@@ -28,11 +28,9 @@ require('@babel/register')({
 
 require('dotenv').config();
 
-const app = process.env.NODE_ENV === 'development'
-  ? require('./app-dev')
-  : require('./app-prod');
+const app = require('./app-server');
 
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.SERVER_PORT || 3000;
 
 app.listen(PORT, error => {
   if (error) {

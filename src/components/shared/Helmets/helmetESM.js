@@ -1,5 +1,4 @@
-/* eslint-disable */
-import pkg from 'react-helmet-async';
-
-export const { Helmet, HelmetProvider, HelmetData } = pkg;
-export default pkg;
+import * as ReactHelmetAsync from "react-helmet-async";
+// eslint-disable-next-line import/namespace
+const { Helmet, HelmetProvider, HelmetData } = ReactHelmetAsync.default || ReactHelmetAsync;
+export { Helmet, HelmetData, HelmetProvider };

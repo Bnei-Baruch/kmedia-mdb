@@ -1,3 +1,6 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 .ltr .trimmed_files {
   right: 2em;
   left: auto;
@@ -10,7 +13,7 @@
       padding: 0.3em 0.5em;
     }
 
-    @media (max-width: $mobileBreakpoint) {
+    @media (max-width: responsive-helpers.$mobileBreakpoint) {
       width: auto;
       right: 150px!important;
       bottom: .5em;
@@ -24,19 +27,19 @@
   left: 2em;
   right: auto;
   width: 600px;
-  background: $white;
+  background: colors-helpers.$white;
   z-index: 1900;
-  border: 1px solid $midGrey;
+  border: 1px solid colors-helpers.$midGrey;
   border-radius: 5px 5px 0 0;
 
-  @media (max-width: $mobileBreakpoint) {
+  @media (max-width: responsive-helpers.$mobileBreakpoint) {
     width: auto;
     left: 0!important;
     right: 0!important;
   }
 
   & > .segment {
-    background: $blue;
+    background: colors-helpers.$blue;
     color: white;
     padding: 1em 0.5em;
     border-radius: 0;

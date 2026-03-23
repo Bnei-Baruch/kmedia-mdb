@@ -1,9 +1,14 @@
+@use "sass:meta";
+@use "colors-helpers";
+@use "responsive-helpers";
+@use "variables";
+
 //mixings
 @mixin small-date {
   font-size: .9em;
 
   &::after {
-    background-color: $darkWhite;
+    background-color: colors-helpers.$darkWhite;
     content: '';
     display: block;
     height: 1px;
@@ -12,28 +17,28 @@
   }
 }
 
-@import 'rtl/index';
+@include meta.load-css('rtl/index');
 //
 .collection-header,
 .section-header {
-  background: $darkWhite;
+  background: colors-helpers.$darkWhite;
 
   .ui.icon.header {
     margin: 0 !important;
   }
 
   h1.header {
-    @include mobile {
+    @include responsive-helpers.mobile {
       font-size: 2em;
     }
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       font-size: 1.4em;
     }
     font-size: 3em;
     font-weight: 400;
 
     .sub.header {
-      @include mobile {
+      @include responsive-helpers.mobile {
         font-size: 1rem;
         margin: .2rem 0;
       }
@@ -46,15 +51,15 @@
   }
 
   .menu {
-    @include tablet {
+    @include responsive-helpers.tablet {
       font-size: 1rem !important;
     }
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       font-size: 1rem !important;
     }
 
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       font-size: .92857143rem !important;
     }
 
@@ -62,7 +67,7 @@
     margin-top: -1rem !important;
   }
   .item {
-    @include mobile {
+    @include responsive-helpers.mobile {
 
       white-space: nowrap;
       overflow: hidden;
@@ -74,13 +79,13 @@
     }
 
     &:not(.active) {
-      @include mobile {
+      @include responsive-helpers.mobile {
         border-color: #d4d4d5 !important;
         border-width: 1px !important;
         flex: 0 1 auto;
 
         &::after {
-          background-image: linear-gradient(to left, $darkWhite 20%, rgba($darkWhite, 0));
+          background-image: linear-gradient(to left, colors-helpers.$darkWhite 20%, rgba(colors-helpers.$darkWhite, 0));
           content: '';
           height: 100%;
           position: absolute;
@@ -94,7 +99,7 @@
 }
 
 .index {
-  @include small-mobile {
+  @include responsive-helpers.small-mobile {
     .no-thumbnail {
       border: 0 !important;
       display: block !important;
@@ -124,7 +129,7 @@
   }
 
   &__date {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       @include small-date;
     }
 
@@ -141,14 +146,14 @@
   }
 
   &__item {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       padding: .785714em 0 0;
     }
     display: block;
   }
 
   &__thumbnail {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       width: 100px;
     }
     width: 120px;
@@ -157,7 +162,7 @@
   &__description {
     font-size: .85714286em;
     margin: .2em 0 .5em;
-    max-width: $max-readble-width;
+    max-width: variables.$max-readble-width;
   }
 
   &__collections {

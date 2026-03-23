@@ -1,4 +1,6 @@
-@import '../includes/colors-helpers';
+@use '../includes/colors-helpers';
+@use "responsive-helpers";
+
 // See TimedPopup.js, solves existing bug:
 // https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 // .popup {
@@ -52,7 +54,7 @@
       }
 
       .result {
-        background-color: $white;
+        background-color: colors-helpers.$white;
 
         //border-bottom: none !important;
         &:last-child {
@@ -62,7 +64,7 @@
 
         &:hover {
           //background-color: rgba($blue, .075) !important;
-          background-image: linear-gradient(to bottom, rgba($blue, 0.125), rgba($blue, 0)) !important;
+          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.125), rgba(colors-helpers.$blue, 0)) !important;
         }
       }
 
@@ -182,7 +184,7 @@
       opacity: 1 !important;
     }
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       & .icon {
         font-size: 1rem;
         line-height: 0.8rem
@@ -221,7 +223,7 @@
     }
 
     .highlight {
-      background-color: rgba($yellow, 0.2);
+      background-color: rgba(colors-helpers.$yellow, 0.2);
     }
 
     &.date-filter {
@@ -254,11 +256,11 @@
         padding: 4px 4px 8px !important;
 
         &:hover {
-          background-image: linear-gradient(to bottom, $darkWhite, rgba($darkWhite, 0));
+          background-image: linear-gradient(to bottom, colors-helpers.$darkWhite, rgba(colors-helpers.$darkWhite, 0));
         }
 
         &.active {
-          background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0));
+          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.3), rgba(colors-helpers.$blue, 0));
         }
       }
     }
@@ -335,7 +337,7 @@
 .ui.grid > [class*="eight wide"].column {
   width: 70% !important;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     width: 100% !important;
   }
 }
@@ -348,7 +350,7 @@
   .ui.grid > [class*="four wide"].column {
     width: 20% !important;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: 30% !important;
     }
   }
@@ -357,7 +359,7 @@
   .ui.grid > .column.row > [class*="eight wide"].column,
   .ui.grid > .row > [class*="eight wide"].column,
   .ui.grid > [class*="eight wide"].column {
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: 70% !important;
     }
   }
@@ -387,7 +389,7 @@
   margin-bottom: 1.5rem !important;
 
   &--username {
-    color: rgba($grey, .75);
+    color: rgba(colors-helpers.$grey, .75);
   }
 
   &--media {
@@ -672,7 +674,7 @@
 
 /* ************* Styles for simple mode ************* */
 .no-padding-top {
-  @media only screen and (max-width: $mobileBreakpoint) {
+  @media only screen and (max-width: responsive-helpers.$mobileBreakpoint) {
     padding-top: 0;
   }
 }
@@ -731,7 +733,7 @@
     }
   }
 
-  @media only screen and (max-width: $tabletBreakpoint) {
+  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
     .controller {
       flex-direction: column;
       margin-top: 1rem;
@@ -882,7 +884,7 @@
 }
 
 .duration {
-  color: $midGrey;
+  color: colors-helpers.$midGrey;
   font-size: 14px;
   margin: 0 1em;
   display: inline-block;
@@ -1008,7 +1010,7 @@
       font-size: 1.6em;
       margin-right: 0.2em;
 
-      @include mobile {
+      @include responsive-helpers.mobile {
         font-size: 1.5em;
       }
     }
@@ -1306,7 +1308,7 @@
   border-radius: .28571429rem !important;
 }
 
-@media only screen and (max-width: $tabletBreakpoint) {
+@media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
   .search-omnibox {
     .searchButton {
       margin-right: 5px !important;
@@ -1337,7 +1339,7 @@
     }
   }
 
-  @media only screen and (max-width: $tabletBreakpoint) {
+  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
     .search-omnibox {
       .searchButton {
         margin-right: 0px !important;
@@ -1439,7 +1441,7 @@
   .unit-logo {
     width: 100%;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       max-width: 160px;
     }
   }
@@ -1461,7 +1463,7 @@
   justify-content: space-between;
   align-items: baseline;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin-right: 0;
     margin-left: 0;
   }
@@ -1496,7 +1498,7 @@
   flex-direction: column;
   justify-content: space-between;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     display: flex;
     margin-top: -15px;
   }
@@ -1535,7 +1537,7 @@
 
 
 .my_playlist_header.ui.header {
-  @include mobile {
+  @include responsive-helpers.mobile {
     display: block;
 
     svg {
@@ -1590,7 +1592,7 @@
 }
 
 .font_black {
-  color: $black !important;
+  color: colors-helpers.$black !important;
 }
 
 .latestUpdatesCardGroup {

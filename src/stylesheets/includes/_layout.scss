@@ -1,9 +1,7 @@
-$sidebar-width: 300px;
-$main-menu-height: 80px;
-$secondary-header-height: 10px;
-$max-readble-width: 700px;
-$breadcrumb-height: 56px;
-$text-bar-height: 70px;
+@use 'rtl/layout';
+@use 'variables' as *;
+@use 'colors-helpers' as *;
+@use 'responsive-helpers' as *;
 
 @font-face {
   font-family: 'AmiriArabic';
@@ -38,7 +36,6 @@ body {
 
 }
 
-@import 'rtl/layout';
 
 .layout {
   height: 100vh;

@@ -1,52 +1,56 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+@use "variables";
+
 @mixin theme_color() {
-  color: $light-text;
-  fill: $light-text;
-  stroke: $light-text;
+  color: colors-helpers.$light-text;
+  fill: colors-helpers.$light-text;
+  stroke: colors-helpers.$light-text;
   .is-dark & {
-    color: $dark-text;
-    fill: $dark-text;
-    stroke: $dark-text;
+    color: colors-helpers.$dark-text;
+    fill: colors-helpers.$dark-text;
+    stroke: colors-helpers.$dark-text;
   }
   .is-sepia & {
-    color: $sepia-text;
-    fill: $sepia-text;
-    stroke: $sepia-text;
+    color: colors-helpers.$sepia-text;
+    fill: colors-helpers.$sepia-text;
+    stroke: colors-helpers.$sepia-text;
   }
 }
 
 @mixin theme_color_active() {
-  color: $light-active-text;
-  fill: $light-active-text;
-  stroke: $light-active-text;
+  color: colors-helpers.$light-active-text;
+  fill: colors-helpers.$light-active-text;
+  stroke: colors-helpers.$light-active-text;
   .is-dark & {
-    color: $dark-active-text;
-    fill: $dark-active-text;
-    stroke: $dark-active-text;
+    color: colors-helpers.$dark-active-text;
+    fill: colors-helpers.$dark-active-text;
+    stroke: colors-helpers.$dark-active-text;
   }
   .is-sepia & {
-    color: $sepia-active-text;
-    fill: $sepia-active-text;
-    stroke: $sepia-active-text;
+    color: colors-helpers.$sepia-active-text;
+    fill: colors-helpers.$sepia-active-text;
+    stroke: colors-helpers.$sepia-active-text;
   }
 }
 
 @mixin theme_bg() {
-  background: $white;
+  background: colors-helpers.$white;
   .is-dark & {
-    background: $dark-bg;
+    background: colors-helpers.$dark-bg;
   }
   .is-sepia & {
-    background: $sepia-bg;
+    background: colors-helpers.$sepia-bg;
   }
 }
 
 @mixin theme_stroke() {
-  border-color: $light-stroke;
+  border-color: colors-helpers.$light-stroke;
   .is-dark & {
-    border-color: $dark-stroke;
+    border-color: colors-helpers.$dark-stroke;
   }
   .is-sepia & {
-    border-color: $sepia-stroke;
+    border-color: colors-helpers.$sepia-stroke;
   }
 }
 
@@ -96,7 +100,7 @@
     padding: 1.5em 0 0;
 
     .text__content {
-      max-width: $max-readble-width;
+      max-width: variables.$max-readble-width;
       word-break: break-word;
 
       &.text_pdf {
@@ -123,7 +127,7 @@
   }
 
   .text_align_to_text {
-    width: $max-readble-width;
+    width: variables.$max-readble-width;
     transform: translate3d(-30px, 0, 0px);
     margin: 0 auto;
 
@@ -131,7 +135,7 @@
       transform: translate3d(30px, 0, 0px);
     }
 
-    @media only screen and (max-width: $max-readble-width - 1) {
+    @media only screen and (max-width: variables.$max-readble-width - 1) {
       padding: 0 1em;
       transform: translate3d(-60px, 0, 0px);
 
@@ -169,20 +173,20 @@
   }
 
   &.is-dark {
-    background: $dark-bg;
-    color: $dark-text;
+    background: colors-helpers.$dark-bg;
+    color: colors-helpers.$dark-text;
 
     .toc_trigger, .toc_trigger:hover {
-      color: $dark-text !important;
+      color: colors-helpers.$dark-text !important;
     }
   }
 
   &.is-sepia {
-    background: $sepia-bg;
-    color: $sepia-text;
+    background: colors-helpers.$sepia-bg;
+    color: colors-helpers.$sepia-text;
 
     .toc_trigger, .toc_trigger:hover {
-      color: $sepia-text !important;
+      color: colors-helpers.$sepia-text !important;
     }
   }
 
@@ -346,7 +350,7 @@
   transform: translate3d(0px, 0, 0px);
 
   &.stick_toolbar_pinned {
-    top: $main-menu-height;
+    top: variables.$main-menu-height;
     transition: all 0.2s ease-in-out 0s;
   }
 
@@ -358,10 +362,10 @@
       transform: translate3d(0px, 0, 0px) !important;
     }
 
-    transform: translate3d(0px, -$text-bar-height, 0px);
+    transform: translate3d(0px, -(variables.$text-bar-height), 0px);
 
     .with_breadcrumb & {
-      transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
+      transform: translate3d(0px, calc(-1 * (variables.$text-bar-height + variables.$breadcrumb-height)), 0px);
     }
   }
 
@@ -370,7 +374,7 @@
     bottom: 0;
 
     &.stick_toolbar_unpinned {
-      transform: translate3d(0px, $text-bar-height, 0px);
+      transform: translate3d(0px, variables.$text-bar-height, 0px);
     }
 
     &.stick_toolbar_on_end {
@@ -385,14 +389,14 @@
   justify-content: flex-start;
   align-items: center;
   flex-wrap: nowrap;
-  border-top: 1px solid $stroke-gray;
-  border-bottom: 1px solid $stroke-gray;
-  height: calc($text-bar-height - 10px);
+  border-top: 1px solid colors-helpers.$stroke-gray;
+  border-bottom: 1px solid colors-helpers.$stroke-gray;
+  height: calc(variables.$text-bar-height - 10px);
   padding: 0 1em;
   @include theme_stroke;
 
   .is-mobile & {
-    height: $text-bar-height;
+    height: variables.$text-bar-height;
     padding: 0;
     box-shadow: 0px -2px -12px 0px #00000033;
   }
@@ -411,7 +415,7 @@
 
 
   &__buttons {
-    max-width: $max-readble-width;
+    max-width: variables.$max-readble-width;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -427,17 +431,17 @@
 
     .divider {
       display: block;
-      border-left: 1px solid $stroke-gray;
+      border-left: 1px solid colors-helpers.$stroke-gray;
       align-self: center;
       height: 24px;
       margin: 0 6px;
 
       .is-sepia & {
-        border-color: $sepia-stroke;
+        border-color: colors-helpers.$sepia-stroke;
       }
 
       .is-dark & {
-        border-color: $dark-stroke;
+        border-color: colors-helpers.$dark-stroke;
       }
     }
 
@@ -447,7 +451,7 @@
       padding: 3px 3px 0 !important;
       background: none;
       margin: 0 8px;
-      color: $light-text;
+      color: colors-helpers.$light-text;
       text-align: center;
 
       @include theme_btn;
@@ -463,9 +467,9 @@
       }
 
       .text_selected &.text_mark_on_select_btn .material-symbols-outlined, .text_selected &.text_mark_on_select_btn svg {
-        color: $blue;
-        fill: $blue;
-        stroke: $blue;
+        color: colors-helpers.$blue;
+        fill: colors-helpers.$blue;
+        stroke: colors-helpers.$blue;
       }
     }
 
@@ -476,7 +480,7 @@
 
   &__dropdown.ui.dropdown {
     display: none !important;
-    @include tablet-mobile {
+    @include responsive-helpers.tablet-mobile {
       display: block !important;
     }
 
@@ -507,7 +511,7 @@
 }
 
 .player_page_tab {
-  background: $white;
+  background: colors-helpers.$white;
 }
 
 .text_toolbar__breadcrumb {
@@ -515,7 +519,7 @@
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-  color: $midGrey;
+  color: colors-helpers.$midGrey;
   padding: 1em;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -527,17 +531,17 @@
   }
 
   & > div:last-child {
-    color: $text-color;
+    color: colors-helpers.$text-color;
     font-weight: bold;
     text-overflow: ellipsis;
     overflow: hidden;
 
     .is-dark & {
-      color: $dark-text !important;
+      color: colors-helpers.$dark-text !important;
     }
 
     .is-sepia & {
-      color: $sepia-text !important;
+      color: colors-helpers.$sepia-text !important;
     }
   }
 
@@ -548,15 +552,15 @@
   }
 
   a {
-    color: $text-color;
+    color: colors-helpers.$text-color;
     text-decoration: underline;
 
     .is-dark & {
-      color: $dark-text !important;
+      color: colors-helpers.$dark-text !important;
     }
 
     .is-sepia & {
-      color: $sepia-text !important;
+      color: colors-helpers.$sepia-text !important;
     }
   }
 }
@@ -568,14 +572,14 @@
     height: 25px;
     top: 7px;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: -webkit-fill-available;
     }
   }
 
   .text_page__audio_btn {
     display: flex;
-    color: $blue;
+    color: colors-helpers.$blue;
     flex-wrap: nowrap;
     align-items: center;
     cursor: pointer;
@@ -591,7 +595,7 @@
 .share-bar {
   .social-buttons {
     align-items: center;
-    background: rgba($black, .8);
+    background: rgba(colors-helpers.$black, .8);
     border-radius: calc(36px / 2 + .5rem);
     display: flex;
     margin: auto 0 1rem;
@@ -612,7 +616,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
 
-      @include small-mobile {
+      @include responsive-helpers.small-mobile {
         max-width: 200px;
       }
     }
@@ -620,7 +624,7 @@
 }
 
 .text__search_on_page {
-  max-width: $max-readble-width;
+  max-width: variables.$max-readble-width;
   margin: 0 auto;
   display: flex;
   flex-wrap: nowrap;
@@ -629,16 +633,16 @@
   line-height: 40px;
   padding: 4px 0;
   font-size: 18px;
-  box-shadow: 0 3px 6px $light-stroke;
+  box-shadow: 0 3px 6px colors-helpers.$light-stroke;
   border-radius: 4px;
   @include theme_bg;
 
   .is-dark & {
-    box-shadow: 0 3px 6px $dark-stroke;
+    box-shadow: 0 3px 6px colors-helpers.$dark-stroke;
   }
 
   .is-sepia & {
-    box-shadow: 0 3px 6px $sepia-stroke;
+    box-shadow: 0 3px 6px colors-helpers.$sepia-stroke;
   }
 
   .is-mobile & {
@@ -649,7 +653,7 @@
 
 
     .ui.input {
-      background: $white;
+      background: colors-helpers.$white;
     }
   }
 
@@ -661,7 +665,7 @@
     }
 
     .button, .button .material-symbols-outlined, .button svg {
-      color: $white !important;
+      color: colors-helpers.$white !important;
     }
   }
 
@@ -677,7 +681,7 @@
 
   .ui.input {
     flex-grow: 3;
-    background: $white;
+    background: colors-helpers.$white;
     border-radius: 4px;
     @include theme_color;
     @include theme_bg;
@@ -697,11 +701,11 @@
     font-size: 18px;
 
     .is-web.is-dark & {
-      color: $dark-text !important;
+      color: colors-helpers.$dark-text !important;
     }
 
     .is-web.is-sepia & {
-      color: $sepia-text !important;
+      color: colors-helpers.$sepia-text !important;
     }
 
     .material-symbols-outlined {
@@ -709,11 +713,11 @@
 
 
       .is-web.is-dark & {
-        color: $dark-text;
+        color: colors-helpers.$dark-text;
       }
 
       .is-web.is-sepia & {
-        color: $sepia-text;
+        color: colors-helpers.$sepia-text;
       }
     }
   }
@@ -735,18 +739,18 @@
 }
 
 .is-dark .react-pdf__Document {
-  background: $white;
+  background: colors-helpers.$white;
 }
 
 .player_page_source_toc {
   position: absolute;
   max-width: 250px;
   padding: 8px;
-  background: $white;
+  background: colors-helpers.$white;
   z-index: 3;
   transform: translate3d(-110%, 0, 0);
   min-height: 300px;
-  border: 1px solid $stroke-gray;
+  border: 1px solid colors-helpers.$stroke-gray;
   @include theme_stroke;
 
   &.active {
@@ -757,12 +761,12 @@
   .player_page_source_toc_item {
     cursor: pointer;
     padding: 1em;
-    border-bottom: 1px solid $stroke-gray;
+    border-bottom: 1px solid colors-helpers.$stroke-gray;
 
     @include theme_stroke;
 
     &.active {
-      color: $blue;
+      color: colors-helpers.$blue;
     }
 
     &:last-child {
@@ -778,7 +782,7 @@
 
   & > .item {
     padding: 1.5em 1em !important;
-    border-bottom: 1px solid $light-stroke;
+    border-bottom: 1px solid colors-helpers.$light-stroke;
     font-size: 16px;
 
     @include theme_stroke;
@@ -787,13 +791,13 @@
 
 .text__theme-btn {
   &_dark {
-    background: $dark-bg !important;
-    color: $dark-text !important;
+    background: colors-helpers.$dark-bg !important;
+    color: colors-helpers.$dark-text !important;
   }
 
   &_sepia {
-    background: $sepia-bg !important;
-    color: $sepia-text !important;
+    background: colors-helpers.$sepia-bg !important;
+    color: colors-helpers.$sepia-text !important;
   }
 }
 
@@ -807,7 +811,7 @@
   margin: 0 auto;
 
   .is-dark & {
-    border-color: $dark-stroke;
+    border-color: colors-helpers.$dark-stroke;
   }
 
   & > .button {
@@ -820,12 +824,12 @@
 
     .material-symbols-outlined {
       .is-dark & {
-        color: $blue;
+        color: colors-helpers.$blue;
       }
     }
 
     &, &:hover, &:active, &:focus {
-      color: $blue !important;
+      color: colors-helpers.$blue !important;
       background: none !important;
     }
 
@@ -845,7 +849,7 @@
 
 
     &:focus {
-      border-color: $blue;
+      border-color: colors-helpers.$blue;
     }
 
     & > input {
@@ -855,12 +859,12 @@
       width: 100px;
       padding: 0 4px;
       border-radius: 0;
-      border-bottom: 2px solid $light-stroke;
+      border-bottom: 2px solid colors-helpers.$light-stroke;
       text-align: center;
       @include theme_stroke;
 
       &:focus {
-        border-bottom: 2px solid $blue;
+        border-bottom: 2px solid colors-helpers.$blue;
 
         &::placeholder {
           visibility: hidden;
@@ -881,7 +885,7 @@
     .material-symbols-outlined {
       cursor: pointer;
       font-size: 25px;
-      color: $blue;
+      color: colors-helpers.$blue;
     }
   }
 }
@@ -910,7 +914,7 @@
 
     &.active {
       background: none;
-      color: $light-active-text;
+      color: colors-helpers.$light-active-text;
       font-weight: bold;
     }
 
@@ -947,14 +951,14 @@
     }
 
     .text__scan_pdf {
-      width: $max-readble-width;
+      width: variables.$max-readble-width;
     }
   }
 
   .text__scan_toolbar {
     display: flex;
     justify-content: space-between;
-    background-color: $white;
+    background-color: colors-helpers.$white;
     align-items: center;
     padding: 8px 0;
   }
@@ -964,10 +968,10 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  color: $blue;
+  color: colors-helpers.$blue;
 
   .divider {
-    background-color: $light-stroke;
+    background-color: colors-helpers.$light-stroke;
     width: 1px;
     min-height: 1em;
   }
@@ -978,7 +982,7 @@
   white-space: nowrap;
   align-items: center;
   cursor: pointer;
-  color: $blue;
+  color: colors-helpers.$blue;
   padding: 0 8px;
   margin: 0 4px;
 

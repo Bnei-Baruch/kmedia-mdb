@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 
 .text__content-markers {
   min-width: 60px;
@@ -40,27 +42,27 @@
           padding: 4px !important;
           min-height: 22px;
           min-width: 22px;
-          border: 1px solid $light-stroke;
+          border: 1px solid colors-helpers.$light-stroke;
           font-size: 13px;
 
           .is-sepia & {
-            border-color: $sepia-stroke;
+            border-color: colors-helpers.$sepia-stroke;
           }
 
           .is-dark & {
-            border-color: $dark-stroke;
+            border-color: colors-helpers.$dark-stroke;
           }
         }
 
         .material-symbols-outlined {
-          color: $light-text;
+          color: colors-helpers.$light-text;
 
           .is-sepia & {
-            color: $sepia-text;
+            color: colors-helpers.$sepia-text;
           }
 
           .is-dark & {
-            color: $dark-text
+            color: colors-helpers.$dark-text
           }
         }
       }
@@ -74,11 +76,11 @@
   .link_to_cu {
     padding: 2px 3px !important;
     font-size: smaller;
-    background: $midGrey !important;
+    background: colors-helpers.$midGrey !important;
     color: white !important;
 
     &:hover {
-      background-color: $sepia-bg;
+      background-color: colors-helpers.$sepia-bg;
     }
   }
 }
@@ -152,7 +154,7 @@
     margin: 8px;
     font-size: 16px;
     line-height: 20px;
-    color: $black;
+    color: colors-helpers.$black;
     white-space: pre-line;
 
     &_short {

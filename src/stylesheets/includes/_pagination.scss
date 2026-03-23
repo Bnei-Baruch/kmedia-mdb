@@ -1,24 +1,26 @@
+@use "responsive-helpers";
+
 .pagination-wrapper {
-  @include small-mobile {
+  @include responsive-helpers.small-mobile {
     margin-top: -1px;
     padding: 0 !important;
   }
 }
 
 .pagination-menu {
-  @include tablet {
+  @include responsive-helpers.tablet {
     @for $i from 5 through 6 {
       .distance-#{$i} { display: none !important;}
     }
   }
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     @for $i from 3 through 6 {
       .distance-#{$i} { display: none !important;}
     }
   }
 
-  @include small-mobile {
+  @include responsive-helpers.small-mobile {
     margin: -1px -1px 0 0!important;
     border-radius: 0!important;
     width: 100%;

@@ -1,3 +1,7 @@
+@use '../variables' as *;
+@use '../colors-helpers' as *;
+@use '../responsive-helpers' as *;
+
 .rtl {
   .layout {
     &__sidebar {

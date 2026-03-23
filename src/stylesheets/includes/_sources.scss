@@ -1,4 +1,6 @@
-@import 'rtl/sources';
+@use 'rtl/sources';
+@use "colors-helpers";
+@use "responsive-helpers";
 
 // Library index - Collections
 .sources {
@@ -7,7 +9,7 @@
 
     tr,
     tbody {
-      @include mobile {
+      @include responsive-helpers.mobile {
         height: auto;
       }
 
@@ -15,11 +17,11 @@
     }
 
     .image {
-      @include mobile {
+      @include responsive-helpers.mobile {
         margin: 0 0 1em;
       }
 
-      @include small-mobile {
+      @include responsive-helpers.small-mobile {
         margin: 0 auto 1em;
       }
     }
@@ -39,7 +41,7 @@
         }
 
         .sources__list {
-          @include mobile {
+          @include responsive-helpers.mobile {
             position: static;
           }
 
@@ -47,7 +49,7 @@
         }
 
         .list {
-          @include mobile {
+          @include responsive-helpers.mobile {
             position: static;
           }
 
@@ -73,7 +75,7 @@
     }
 
     .list {
-      @include mobile {
+      @include responsive-helpers.mobile {
         margin-top: -.214286em !important;
       }
 
@@ -87,15 +89,15 @@
       top: 0;
 
       .item {
-        @include mobile {
+        @include responsive-helpers.mobile {
           width: 50%;
         }
 
-        @include small-mobile {
+        @include responsive-helpers.small-mobile {
           width: 100%;
         }
 
-        @include tablet {
+        @include responsive-helpers.tablet {
           width: 50%;
         }
 
@@ -180,7 +182,7 @@
     font-weight: 400;
     padding: 0.5em 0 1.5em 0;
     margin: 0 0 2em;
-    border-bottom: 1px solid $grey;
+    border-bottom: 1px solid colors-helpers.$grey;
   }
 
   h3 {
@@ -247,40 +249,40 @@
   margin: 0 ;
   padding: 0 ;
   display: flex;
-  color:$blue !important;
-  border: 1px solid $blue ;
+  color:colors-helpers.$blue !important;
+  border: 1px solid colors-helpers.$blue ;
   
   &:hover{
-    color:$light-hover-btn !important;
-    border:1px solid $light-hover-btn !important;
+    color:colors-helpers.$light-hover-btn !important;
+    border:1px solid colors-helpers.$light-hover-btn !important;
   }
   
   &:active{
-    color:$light-active-text !important;
-    border:1px solid $light-active-text !important;
-    background-color: $white !important;
+    color:colors-helpers.$light-active-text !important;
+    border:1px solid colors-helpers.$light-active-text !important;
+    background-color: colors-helpers.$white !important;
   }
   
   @at-root .is-dark & {
-    background-color:$dark-bg !important; 
-    color: $blue !important;
-    border:1px solid $blue;
+    background-color:colors-helpers.$dark-bg !important; 
+    color: colors-helpers.$blue !important;
+    border:1px solid colors-helpers.$blue;
     
     &:hover{
-      color:$dark-btn-hover !important;
-      border:1px solid $dark-btn-hover  !important;
+      color:colors-helpers.$dark-btn-hover !important;
+      border:1px solid colors-helpers.$dark-btn-hover  !important;
     }
     
     &:active{
-      color:$dark-active-text !important;
-      border:1px solid $dark-active-text  !important;
+      color:colors-helpers.$dark-active-text !important;
+      border:1px solid colors-helpers.$dark-active-text  !important;
     }
   }
   
   @at-root .is-sepia & {
-    background-color:$sepia-bg !important; 
-    color: $blue !important;
-    border:1px solid $blue;
+    background-color:colors-helpers.$sepia-bg !important; 
+    color: colors-helpers.$blue !important;
+    border:1px solid colors-helpers.$blue;
   }
   
 }

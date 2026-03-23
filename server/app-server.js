@@ -1,7 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const { createServer: createViteServer } = require('vite');
+const fs = require("fs");
+const path = require("path");
+const express = require("express");
+const { createServer: createViteServer } = require("vite");
+
+const NAMESPACE = "app-server";
 
 async function createServer() {
   const app = express();
@@ -9,14 +11,18 @@ async function createServer() {
   // Create Vite server in middleware mode
   const vite = await createViteServer({
     server: { middlewareMode: true },
-    appType: 'custom',
+    appType: "custom",
   });
 
   app.use(vite.middlewares);
 
+  // serve locales and assets
+  app.use("/locales", express.static(path.resolve(__dirname, "..", "public", "locales")));
+  app.use("/assets", express.static(path.join(__dirname, "..", "public", "assets")));
+
   app.use(async (req, res, next) => {
     const url = req.originalUrl;
-    console.log('serverRender: request received', url);
+    console.log(NAMESPACE, "request received", url);
     /*
     try {
       let template = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf-8");
@@ -40,12 +46,15 @@ async function createServer() {
       */
 
     try {
-      const { render } = await vite.ssrLoadModule('/server/renderer.js');
-      const appHtml = await render(req);
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(appHtml);
+      const { render } = await vite.ssrLoadModule("/server/renderer.js");
+      let appHtml = await render(req);
+      console.log(NAMESPACE, "appHtml", appHtml);
+      appHtml = await vite.transformIndexHtml(url, appHtml);
+      console.log(NAMESPACE, "transformed appHtml", appHtml);
+      res.status(200).set({ "Content-Type": "text/html" }).end(appHtml);
     } catch (e) {
+      console.error(NAMESPACE, "error rendering app", e);
       vite.ssrFixStacktrace(e);
-      console.log('error rendering app', e);
       next(e);
     }
   });

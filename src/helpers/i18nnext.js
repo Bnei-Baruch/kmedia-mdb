@@ -2,7 +2,6 @@ import i18next from 'i18next';
 
 import i18nextBackend from 'i18next-fs-backend';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import moment from 'moment';
 import 'moment/locale/cs';
@@ -15,8 +14,7 @@ import 'moment/locale/tr';
 import 'moment/locale/uk';
 
 import { DEFAULT_UI_LANGUAGE } from './consts';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const _dirname = typeof __dirname !== 'undefined' ? __dirname : '';
 
 let i18n;
 export const options = {
@@ -43,9 +41,10 @@ export const options = {
 };
 
 // Client side.
-export const initializeI18n = async () => {
+export const initializeI18n = async (resources) => {
   await i18next.init({
     ...options,
+    resources,
     initImmediate: false,
   });
   i18n = i18next;
@@ -53,12 +52,13 @@ export const initializeI18n = async () => {
 };
 
 export const initializeI18nBackend = async uiLang => {
+  console.log('initializeI18nBackend', uiLang);
   i18n = i18next.createInstance();
   await i18n.use(i18nextBackend).init({
     ...options,
     preload: ['en', 'he', 'ru', 'es'], // preload all languages
     backend: {
-      loadPath: path.join(__dirname, '../public/locales/{{lng}}/{{ns}}.json'),
+      loadPath: path.resolve(process.cwd(), 'public/locales/{{lng}}/{{ns}}.json'),
     },
     lng: uiLang,
   });

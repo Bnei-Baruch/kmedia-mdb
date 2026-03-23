@@ -1,11 +1,14 @@
-@import 'rtl/filters';
+@use 'rtl/filters';
+@use "colors-helpers";
+@use "responsive-helpers";
+@use "variables";
 
 .filters {
   &__menu {
     .item.alphabetFilter {
       flex: 1 1 auto !important;
 
-      @include mobile {
+      @include responsive-helpers.mobile {
         .item {
           width: inherit !important;
         }
@@ -27,7 +30,7 @@
   padding: 0 !important;
 
   &::after {
-    background: rgba($black, 0);
+    background: rgba(colors-helpers.$black, 0);
     content: '';
     transition: background .2s ease-out;
   }
@@ -46,7 +49,7 @@
     }
 
     &::after {
-      background: rgba($black, .5);
+      background: rgba(colors-helpers.$black, .5);
       height: 100%;
       left: 0;
       position: fixed;
@@ -57,7 +60,7 @@
   }
 
   &__wrapper {
-    background: $white;
+    background: colors-helpers.$white;
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
@@ -74,7 +77,7 @@
   }
 
   &__text {
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: auto;
     }
 
@@ -105,7 +108,7 @@
   }
 
   .label {
-    @include mobile {
+    @include responsive-helpers.mobile {
       left: calc(100% + 1px);
     }
 
@@ -127,15 +130,15 @@
 // Filter popups
 
 .filter-popup {
-  @include mobile {
+  @include responsive-helpers.mobile {
     width: calc(100% - 30px);
   }
 
-  @include small-mobile {
+  @include responsive-helpers.small-mobile {
     bottom: 0 !important;
     margin: .71428571em 0 !important;
     position: fixed !important;
-    top: $main-menu-height !important;
+    top: variables.$main-menu-height !important;
   }
 
   overflow: hidden !important;
@@ -159,13 +162,13 @@
   }
 
   &__content {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       height: 100%;
     }
   }
 
   &__wrapper {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       display: flex;
       height: 100%;
     }
@@ -177,7 +180,7 @@
 
 
   &__body {
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       max-height: 100vh !important;
     }
 
@@ -190,18 +193,18 @@
     }
 
     .item {
-      color: $blue;
+      color: colors-helpers.$blue;
 
       .filter__count {
-        color: $grey;
+        color: colors-helpers.$grey;
       }
 
       &.active {
-        background: $blue !important;
-        color: $white !important;
+        background: colors-helpers.$blue !important;
+        color: colors-helpers.$white !important;
 
         .filter__count {
-          color: $white !important;
+          color: colors-helpers.$white !important;
         }
       }
     }
@@ -228,10 +231,10 @@
   }
 
   & > .container {
-    background-color: $offWhite;
+    background-color: colors-helpers.$offWhite;
   }
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding: 0 !important;
 
     & > .container {
@@ -242,7 +245,7 @@
 }
 
 .filter_aside {
-  border-bottom: 1px solid $midWhite;
+  border-bottom: 1px solid colors-helpers.$midWhite;
   padding: 0 0 1em !important;
   margin: 0 !important;
 
@@ -251,7 +254,7 @@
   }
 
   & > .title {
-    color: $blue;
+    color: colors-helpers.$blue;
     font-size: 1.3em;
     font-weight: bold;
     padding: 0.5em 0;
@@ -342,7 +345,7 @@
 }
 
 .tree_item_modal_content {
-  @extend .no-shadow;
+  @extend .no-shadow !optional;
 
   .ui.table tr & {
     border-top: none;
@@ -373,7 +376,7 @@
 
     & > input {
       padding: 2px 8px;
-      border: 1px solid $blue !important;
+      border: 1px solid colors-helpers.$blue !important;
       border-radius: 8px !important;
       font-size: 14px;
     }
@@ -447,7 +450,7 @@
 }
 
 .filter_aside_labels, .pagination-results {
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding: 0 1em;
   }
 }

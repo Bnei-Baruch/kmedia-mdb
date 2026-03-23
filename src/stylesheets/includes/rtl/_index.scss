@@ -1,11 +1,14 @@
+@use "../colors-helpers";
+@use "../responsive-helpers";
+
 .rtl {
   .collection-header,
   .section-header {
     .item {
       &:not(.active) {
-        @include mobile {
+        @include responsive-helpers.mobile {
           &::after {
-            background-image: linear-gradient(to right, $darkWhite 20%, rgba($darkWhite, 0));
+            background-image: linear-gradient(to right, colors-helpers.$darkWhite 20%, rgba(colors-helpers.$darkWhite, 0));
             left: 0;
             right: auto;
           }

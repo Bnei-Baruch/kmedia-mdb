@@ -1,13 +1,16 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 
 .cu_items.ui.four.cards > .card {
   width: calc(25% - 74px);
   margin: 37px;
   overflow: hidden;
-  @include tablet {
+  @include responsive-helpers.tablet {
     width: calc(50% - 40px);
     margin: 20px;
   }
-  @include mobile {
+  @include responsive-helpers.mobile {
     width: calc(100% - 5em) !important;
     margin: 2.5em;
     &:first-child {
@@ -19,7 +22,7 @@
 .cu_item {
   -webkit-tap-highlight-color: transparent;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     .content {
       font-size: 1.3em !important;
     }
@@ -86,13 +89,13 @@
 .cu_item_duration {
   font-size: 0.8em;
   border-radius: 0;
-  background-color: $black;
+  background-color: colors-helpers.$black;
   color: white;
   margin: 1em;
   padding: 3px 4px;
   display: inline-block;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin: 4px;
   }
 }
@@ -105,8 +108,8 @@
     padding: 0 0.5em;
     font-size: .9em;
     line-height: 1em;
-    border-left: 1px $midGrey solid;
-    border-right: 1px $midGrey solid;
+    border-left: 1px colors-helpers.$midGrey solid;
+    border-right: 1px colors-helpers.$midGrey solid;
   }
 }
 
@@ -150,7 +153,7 @@
   left: 0;
   right: 0;
   padding: 0;
-  background: $grey;
+  background: colors-helpers.$grey;
   margin: 0;
   border-radius: 0;
   z-index: 2;
@@ -160,14 +163,14 @@
     background: #04eaf6;
     border-radius: 0;
     min-width: auto;
-    @include mobile {
+    @include responsive-helpers.mobile {
       height: 3px;
     }
   }
 }
 
 .ui.container.cu_item_list {
-  border-bottom: 1px solid $midWhite;
+  border-bottom: 1px solid colors-helpers.$midWhite;
   display: flex;
   justify-content: start;
   margin: 0 0 1px;
@@ -181,14 +184,14 @@
     position: relative;
   }
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding-top: 17px;
     padding-bottom: 17px;
     min-height: 120px;
   }
 
   &.selected {
-    background-color: $midWhite;
+    background-color: colors-helpers.$midWhite;
   }
 
   .column {
@@ -213,7 +216,7 @@
       margin-top: 0;
       margin-bottom: 4px;
       font-size: 1.1em;
-      color: $black;
+      color: colors-helpers.$black;
     }
 
     .cu_info_description {
@@ -253,9 +256,9 @@
   }
 
   .cu_item_info_co {
-    color: $black;
+    color: colors-helpers.$black;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       line-height: 0.8em;
     }
 
@@ -305,7 +308,7 @@
     position: relative;
     width: 100%;
     height: auto;
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: 165px;
     }
   }
@@ -315,7 +318,7 @@
     position: relative;
     width: 100%;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       position: absolute;
       padding: 0;
       top: 1em;
@@ -330,7 +333,7 @@
 
 
     &.rtl {
-      @include mobile {
+      @include responsive-helpers.mobile {
         right: 173px;
         left: 0;
 
@@ -347,13 +350,13 @@
     position: absolute;
     bottom: 1em;
     opacity: 0.43;
-    color: $black;
+    color: colors-helpers.$black;
     right: 1em;
     left: 1em;
     width: max-content;
     min-height: 1.5em;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       top: 78px;
       bottom: auto;
       left: 0;
@@ -364,10 +367,10 @@
 
   .cu_item_name {
     margin: 1em 0 2.5em;
-    color: $black;
+    color: colors-helpers.$black;
     display: inline-block;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       margin-top: 0;
       margin-bottom: 4px;
       -webkit-line-clamp: 3;
@@ -375,7 +378,7 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       max-height: 56px;
-      color: $grey;
+      color: colors-helpers.$grey;
     }
   }
 }
@@ -398,7 +401,7 @@
     }
 
     & > .icon {
-      color: $midGrey;
+      color: colors-helpers.$midGrey;
     }
   }
 }
@@ -416,7 +419,7 @@
 .text_item, .media_item {
   vertical-align: top;
   padding: 1em 0;
-  border-bottom: 1px solid $midWhite;
+  border-bottom: 1px solid colors-helpers.$midWhite;
   display: flex;
   flex-wrap: nowrap;
 
@@ -465,10 +468,10 @@
     margin-top: .5em;
 
     a {
-      color: $black;
+      color: colors-helpers.$black;
       padding: 0 .5em;
       line-height: .9em;
-      border-right: 1px solid $midGrey;
+      border-right: 1px solid colors-helpers.$midGrey;
       display: inline-block;
 
       &:first-child {
@@ -485,7 +488,7 @@
         border-right: none;
       }
 
-      @include mobile {
+      @include responsive-helpers.mobile {
         border: none;
         padding: 4px 0;
         line-height: 1.1em;
@@ -502,7 +505,7 @@
   }
 
   .description {
-    color: $midGrey;
+    color: colors-helpers.$midGrey;
     line-height: .9em;
     font-size: .9em;
     margin-top: 1em;
@@ -512,7 +515,7 @@
       opacity: 0.9;
       padding: 0 4px;
       margin: 2px 0;
-      border-right: 1px solid $midGrey;
+      border-right: 1px solid colors-helpers.$midGrey;
       display: inline-block;
 
       &:first-child {
@@ -529,7 +532,7 @@
         border-right: none;
 
         .rtl & {
-          border-right: 1px solid $midGrey;
+          border-right: 1px solid colors-helpers.$midGrey;
         }
       }
     }
@@ -559,7 +562,7 @@
   .duration {
     font-size: 0.8em;
     border-radius: 0;
-    background-color: $black;
+    background-color: colors-helpers.$black;
     color: white;
     margin: 4px;
     padding: 3px 4px;
@@ -570,7 +573,7 @@
     left: 0;
     z-index: 2;
     top: 0;
-    @include mobile {
+    @include responsive-helpers.mobile {
       margin: 4px;
     }
 

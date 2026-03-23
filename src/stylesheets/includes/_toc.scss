@@ -1,12 +1,17 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+@use "text-page";
+@use "variables";
+
 .toc {
-  background: $white;
+  background: colors-helpers.$white;
   padding: 1em;
   position: fixed;
-  height: calc(100VH - $main-menu-height - $breadcrumb-height);
+  height: calc(100VH - variables.$main-menu-height - variables.$breadcrumb-height);
   bottom: 0;
   z-index: 5;
   transition: all 0.2s ease-in-out 0s;
-  border: 1px solid $stroke-gray;
+  border: 1px solid colors-helpers.$stroke-gray;
   width: 360px;
   transform: translate3d(-360px, 0, 0);
 
@@ -15,22 +20,22 @@
   }
 
   .is-dark & {
-    background: $dark-bg !important;
-    color: $dark-text !important;
-    border-color: $dark-stroke;
+    background: colors-helpers.$dark-bg !important;
+    color: colors-helpers.$dark-text !important;
+    border-color: colors-helpers.$dark-stroke;
 
     .ui.accordion .title:not(.ui) {
-      color: $dark-text !important;
+      color: colors-helpers.$dark-text !important;
     }
   }
 
   .is-sepia & {
-    background: $sepia-bg !important;
-    color: $sepia-text !important;
-    border-color: $sepia-stroke;
+    background: colors-helpers.$sepia-bg !important;
+    color: colors-helpers.$sepia-text !important;
+    border-color: colors-helpers.$sepia-stroke;
 
     .ui.accordion .title:not(.ui) {
-      color: $sepia-text !important;
+      color: colors-helpers.$sepia-text !important;
     }
   }
 
@@ -40,7 +45,7 @@
 
 
     &.toc_selected {
-      height: calc(100VH - $main-menu-height);
+      height: calc(100VH - variables.$main-menu-height);
     }
 
     &.toc_scroll_up {
@@ -49,10 +54,10 @@
     }
 
     &.toc_scroll_down {
-      height: calc(100VH - $main-menu-height - $breadcrumb-height);
+      height: calc(100VH - variables.$main-menu-height - variables.$breadcrumb-height);
 
       &.toc_selected {
-        height: calc(100VH - $main-menu-height);
+        height: calc(100VH - variables.$main-menu-height);
       }
     }
 
@@ -62,7 +67,7 @@
       position: relative;
     }
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: 100%;
       position: fixed;
       bottom: auto;
@@ -93,11 +98,11 @@
 
     .is-dark & .toc_scroll {
       &::-webkit-scrollbar-thumb {
-        background: $grey;
+        background: colors-helpers.$grey;
       }
 
       &::-webkit-scrollbar-track {
-        background: $midWhite;
+        background: colors-helpers.$midWhite;
       }
     }
   }
@@ -155,7 +160,7 @@
       padding: 16px 0;
       cursor: pointer;
 
-      @include theme_stroke;
+      @include text-page.theme_stroke;
     }
   }
 
@@ -174,7 +179,7 @@
   display: flex;
   flex-wrap: nowrap;
   padding: 8px 0;
-  @include theme_bg;
+  @include text-page.theme_bg;
 
   .is-mobile & {
     position: sticky;
@@ -183,10 +188,10 @@
 
   .ui.input.toc_search {
     width: 100%;
-    @include theme_bg;
+    @include text-page.theme_bg;
 
     > input {
-      border-color: $blue;
+      border-color: colors-helpers.$blue;
       background: none;
       font-size: 18px;
       padding: 8px;
@@ -196,11 +201,11 @@
       }
 
       &, &::placeholder {
-        @include theme_color;
+        @include text-page.theme_color;
       }
 
       &:focus {
-        border-color: $light-active-text;
+        border-color: colors-helpers.$light-active-text;
 
         &::placeholder {
           visibility: hidden;
@@ -209,7 +214,7 @@
     }
 
     .icon {
-      color: $blue;
+      color: colors-helpers.$blue;
       opacity: 1;
       font-size: 18px;
     }
@@ -218,18 +223,18 @@
   .toc_sort_btn.ui.icon.button {
     padding: 8px;
     background: none !important;
-    border: 1px solid $blue;
+    border: 1px solid colors-helpers.$blue;
 
     &.active {
-      border-color: $light-active-text;
+      border-color: colors-helpers.$light-active-text;
 
       .material-symbols-outlined {
-        color: $light-active-text;
+        color: colors-helpers.$light-active-text;
       }
     }
 
     .material-symbols-outlined {
-      color: $blue;
+      color: colors-helpers.$blue;
     }
   }
 
@@ -256,14 +261,14 @@
   }
 
   .button span {
-    color: $light-text;
+    color: colors-helpers.$light-text;
 
     .is-dark & {
-      color: $dark-text;
+      color: colors-helpers.$dark-text;
     }
 
     .is-sepia & {
-      color: $sepia-text;
+      color: colors-helpers.$sepia-text;
     }
   }
 }

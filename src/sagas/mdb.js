@@ -2,28 +2,33 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
+import logger from '../logger/logger';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { actions as publications } from '../redux/modules/publications';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
-import { fetch as fetchMy } from './my';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+import { fetch as fetchMy } from './my';
+
+const NAMESPACE = "mdb_sagas";
 
 export function* fetchUnit(action) {
   const id = action.payload;
+  logger.log(NAMESPACE, "fetchUnit start", id);
   try {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-
+    logger.log(NAMESPACE, "fetchUnit call Api.unit", id, uiLang, contentLanguages);
     const result = yield call(Api.unit, {
       id,
       ui_language      : uiLang,
       content_languages: contentLanguages,
       with_derivations : true
     });
-
+    
     const { data, status, statusText } = result;
+    logger.log(NAMESPACE, "fetchUnit result", data, status, statusText);
     if (status >= 400) {
       const err = `${status} ${statusText}`;
       yield put(mdbActions.fetchUnitFailure({ id, err }));

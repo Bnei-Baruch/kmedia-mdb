@@ -1,7 +1,6 @@
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
 import moment from 'moment';
-import 'moment-duration-format';
 import { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -115,8 +114,21 @@ export const formatError = error => {
  * @param fmt {String} default is 'hh:mm:ss'
  */
 export const formatDuration = (duration, fmt) => {
-  fmt = duration < 60 ? '[0:]ss' : fmt || 'hh:mm:ss';
-  return moment.duration(duration, 'seconds').format(fmt);
+  const d = moment.duration(duration, 'seconds');
+  const hours = Math.floor(d.asHours());
+  const minutes = d.minutes().toString().padStart(2, '0');
+  const seconds = d.seconds().toString().padStart(2, '0');
+
+  if (duration < 60) {
+    return `0:${seconds}`;
+  }
+
+  if (fmt === 'hh:mm:ss' || hours > 0) {
+    const paddedHours = hours.toString().padStart(2, '0');
+    return `${paddedHours}:${minutes}:${seconds}`;
+  }
+
+  return `${minutes}:${seconds}`;
 };
 
 /**

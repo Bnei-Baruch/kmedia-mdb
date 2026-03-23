@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 .ltr .search-on-doc--bar-position.pinned {
   left: auto;
   right: -50px;
@@ -31,7 +33,7 @@
 
     .social-buttons {
       align-items: center;
-      background: rgba($black, .8);
+      background: rgba(colors-helpers.$black, .8);
       border-radius: calc(36px / 2 + .5rem);
       display: flex;
       margin: auto 0 1rem;
@@ -61,7 +63,7 @@
       right: auto;
       padding: 2px;
       border-radius: 8px;
-      border: 1px solid $blue;
+      border: 1px solid colors-helpers.$blue;
 
     }
   }
@@ -72,14 +74,14 @@
     box-shadow: none !important;
     transform: none !important;
     width: min-content;
-    background: $black;
+    background: colors-helpers.$black;
     margin: 0 auto;
     border-radius: 8px;
     text-align: center;
     opacity: 0.95;
 
     .pinned & {
-      background: $white;
+      background: colors-helpers.$white;
 
       & > .button {
         margin: 0 2px 4px !important;
@@ -88,7 +90,7 @@
     }
 
     & > .header {
-      color: $white;
+      color: colors-helpers.$white;
       margin-top: 4px;
       padding: 1rem 1em 0;
     }
@@ -134,21 +136,21 @@
 
       .item {
         flex-direction: column;
-        color: $white;
+        color: colors-helpers.$white;
         text-align: center;
         font-size: 0.8em;
         padding: 1.4em 2em;
 
         & > .button {
           margin-bottom: 8px;
-          background-color: $white;
+          background-color: colors-helpers.$white;
           height: 40px;
           width: 40px;
 
           svg {
             height: 2.2em;
             width: 2.2em;
-            color: $grey;
+            color: colors-helpers.$grey;
           }
 
           .icon {

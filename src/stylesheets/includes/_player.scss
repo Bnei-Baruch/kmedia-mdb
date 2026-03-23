@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 $controls-bg: rgba(27, 28, 29, .9);
 $controls-overlay: rgba(0, 0, 0, .7);
 $controls-bg-hover: rgba(27, 28, 29, 1);
@@ -7,13 +9,13 @@ $controls-radius: 4px;
 //Colors
 $whatsappColor: #25d366;
 //$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
-$whatsappDownColor: darken($whatsappColor, 10%);
+$whatsappDownColor: color.adjust($whatsappColor, $lightness: -10%);
 $telegramColor: #27a6e6;
 //$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
-$telegramDownColor: darken($telegramColor, 10%);
+$telegramDownColor: color.adjust($telegramColor, $lightness: -10%);
 $odnoklassnikiColor: #EE8208;
 //$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
-$odnoklassnikiDownColor: darken($odnoklassnikiColor, 10%);
+$odnoklassnikiDownColor: color.adjust($odnoklassnikiColor, $lightness: -10%);
 
 .flex-spacer {
   flex: 1 0 auto;
@@ -686,7 +688,7 @@ video {
         }
 
         &.active .icon:before {
-          color: $blue !important;
+          color: colors-helpers.$blue !important;
         }
       }
 

@@ -22,7 +22,7 @@ function* setLanguages(action) {
   const newUILang =
     (action.type === types['settings/setURLLanguage'] ? action.payload : action.payload.uiLang) || uiLang;
 
-  if (!import.meta.env.SSR) {
+  if (typeof window !== 'undefined') {
     i18n.changeLanguage(newUILang, err => {
       if (err) {
         console.log(`Error switching to ${newUILang}: ${err}`);

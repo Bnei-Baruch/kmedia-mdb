@@ -3,7 +3,6 @@ import fs from 'fs';
 import { createMemoryHistory } from 'history';
 import pick from 'lodash/pick';
 import moment from 'moment/moment';
-import { fileURLToPath } from 'node:url';
 import path from 'path';
 import qs from 'qs';
 import React from 'react';
@@ -45,15 +44,14 @@ import buildRoutes from '../src/route/routes';
 
 const _Empty = () => null;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const helmetContext = {};
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const getPromises = (store, originalUrl, show_console, { route, params }) => {
-  logger.log('serverRender: libraryPage source was found', route.ssrData?.name);
+const NAMESPACE = 'serverRender';
+
+const getPromises = (store, originalUrl, { route, params }) => {
+  logger.log(NAMESPACE, 'libraryPage source was found', route.ssrData?.name);
   return route.ssrData
     ? route.ssrData(
       store,
@@ -61,12 +59,12 @@ const getPromises = (store, originalUrl, show_console, { route, params }) => {
         params,
         parsedURL: new URL(originalUrl, 'https://example.com'),
       },
-      show_console
+      true
     )
     : Promise.resolve(null);
 };
 
-const htmlData = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');
+const htmlData = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
 
 export async function render(req) {
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
@@ -76,7 +74,7 @@ export async function render(req) {
   try {
     i18nServer = await initializeI18nBackend(uiLang);
   } catch (error) {
-    logger.error('Error initializing i18n backend', error);
+    logger.error(NAMESPACE, 'Error initializing i18n backend', error);
     throw error;
   }
 
@@ -105,7 +103,7 @@ export async function render(req) {
   const store = createStore(initialState, history);
 
   // Dispatching languages change updates tags and sources.
-  logger.info('serverRender: dispatching languages change', cookieUILang, cookieContentLanguages);
+  logger.info(NAMESPACE, 'dispatching languages change', cookieUILang, cookieContentLanguages);
   store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
   store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
   store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
@@ -114,36 +112,36 @@ export async function render(req) {
   const reqPath = req.originalUrl.split('?')[0];
   const branch = matchRoutes(routes, reqPath) || [];
 
-  logger.info('serverRender: prepare RTK queries');
+  logger.info(NAMESPACE, 'prepare RTK queries');
   const promises = branch.map(b => getPromises(store, req.originalUrl, b));
   const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
-  logger.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
+  logger.log(NAMESPACE, 'promises %d, RTK promises %d', promises.length, rtkPromises.length);
   rtkPromises.forEach(promise => promises.push(promise));
 
   try {
     await Promise.all(promises);
-    logger.info('serverRender: RTK queries prepared');
+    logger.info(NAMESPACE, 'RTK queries prepared');
   } catch (error) {
-    logger.error('SSR promises error', error);
+    logger.error(NAMESPACE, 'SSR promises error', error);
     throw error;
   }
 
   try {
     await store.rootSagaPromise;
-    logger.info('serverRender: root saga prepared');
+    logger.info(NAMESPACE, 'root saga prepared');
   } catch (error) {
-    logger.error('Root saga error', error);
+    logger.error(NAMESPACE, 'Root saga error', error);
     throw error;
   }
 
   const deviceInfo = prepareDeviceInfo(req);
 
-  logger.info('serverRender: renderToString start');
+  logger.info(NAMESPACE, 'renderToString start');
   const markup = ReactDOMServer.renderToString(
     <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />
   );
 
-  logger.info('serverRender: renderToString end', helmetContext);
+  logger.info(NAMESPACE, 'renderToString end', helmetContext);
   const { helmet } = helmetContext;
 
   // We're good, add in markup, send the response.
@@ -162,7 +160,7 @@ export async function render(req) {
   // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
   const storeData = store.getState();
   const storeDataStr = serialize(storeData);
-  logger.log('serverRender: redux data before return', storeData.auth);
+  logger.log(NAMESPACE, 'redux data before return', storeData.auth);
   const rootDiv = `
                 <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
                 <script>
@@ -190,7 +188,7 @@ export async function render(req) {
 
     .replace(/<div id="root"><\/div>/, rootDiv);
 
-  logger.log('serverRender: rendered html', html);
+  logger.log(NAMESPACE, 'rendered html', html);
   return html;
 }
 

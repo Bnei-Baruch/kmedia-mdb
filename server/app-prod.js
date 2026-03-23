@@ -123,13 +123,15 @@ router.use("^/$", handler);
 // On local dev machine for example
 router.use(express.static(path.resolve(__dirname, "..", "build"), { maxAge: "30d" }));
 
-router.use("/:lang(en|he|ru|es|de|tr|ua)?/ui/:cnID", kmediaContainer);
-router.use("/:cnID(index.php)$", kmediaContainer);
-router.use("/:lang(en|he|ru|es|de|tr|ua)?/ui/?", kmediaSearch);
+router.use("/ui/:cnID", kmediaContainer);
+router.use("/:lang/ui/:cnID", kmediaContainer);
+router.use("/index.php", kmediaContainer);
+router.use("/ui", kmediaSearch);
+router.use("/:lang/ui", kmediaSearch);
 
 // anything else should act as our index page
 // react-router will take care of everything
-router.use("*", handler);
+router.use(handler);
 
 // tell the app to use the above rules
 app.use(router);

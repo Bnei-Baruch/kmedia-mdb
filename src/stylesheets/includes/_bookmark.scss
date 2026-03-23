@@ -1,3 +1,6 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 .bookmark_modal.ui.modal {
   & > .header, & > .actions {
     border: none !important;
@@ -41,7 +44,7 @@
 }
 
 .folders {
-  border-bottom: 1px solid $midWhite;
+  border-bottom: 1px solid colors-helpers.$midWhite;
 
   &.ui.grid > .column {
     padding: 0;
@@ -114,14 +117,14 @@
 .bookmark_search {
   width: 30%;
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     width: 50%;
   }
 
   &.ui.input > input {
     border-width: 0 0 1px 0;
     border-radius: 0;
-    border-color: $grey;
+    border-color: colors-helpers.$grey;
     padding: 4px .5em;
   }
 }
@@ -135,12 +138,12 @@
 
   .separator {
     margin: 0 1em;
-    color: $grey;
+    color: colors-helpers.$grey;
   }
 
   .source_name {
     font-weight: normal;
-    color: $grey;
+    color: colors-helpers.$grey;
   }
 
   .description {
@@ -148,7 +151,7 @@
 
     .label {
       border: 0;
-      color: $grey;
+      color: colors-helpers.$grey;
     }
   }
 }
@@ -157,7 +160,7 @@
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   border: none;
-  background-color: $midWhite;
+  background-color: colors-helpers.$midWhite;
 }
 
 .bookmark_confirm.ui.modal{
@@ -166,7 +169,7 @@
 
   & > .header{
     font-weight: normal;
-    color: $midGrey;
+    color: colors-helpers.$midGrey;
     border: none;
   }
   & > .content{

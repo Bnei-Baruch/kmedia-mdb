@@ -1,12 +1,14 @@
+@use "responsive-helpers";
+
 .topics {
   &__section {
     width: 33.33333333%;
 
-    @include mobile {
+    @include responsive-helpers.mobile {
       width: 100% !important;
       margin-bottom: 4rem;
     }
-    @include small-mobile {
+    @include responsive-helpers.small-mobile {
       width: 100% !important;
       margin-bottom: 4rem;
     }

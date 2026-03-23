@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 .select_topic_modal {
   & > .header {
     text-align: center
@@ -33,21 +35,21 @@
   .topic_row_title {
     margin: 0 !important;
     padding: 1rem !important;
-    border-bottom: 1px solid $grey;
+    border-bottom: 1px solid colors-helpers.$grey;
     font-weight: normal;
   }
 
   .topics_card {
     margin: 1em 1em 2em;
     background: #F3F4F5;
-    color: $grey;
+    color: colors-helpers.$grey;
   }
 
   .topics_title {
-    box-shadow: 0px 3px 6px $grey;
+    box-shadow: 0px 3px 6px colors-helpers.$grey;
     padding: 4px 1em;
     margin: 0 0 8px;
-    color: $blue;
+    color: colors-helpers.$blue;
   }
 
   .label_topic_grid {
@@ -75,7 +77,7 @@
   .label_mark {
     position: absolute;
     width: 0;
-    border-left: 1px solid $blue;
+    border-left: 1px solid colors-helpers.$blue;
     left: 0;
     vertical-align: middle;
     display: flex;
@@ -100,11 +102,11 @@
   .link_to_cu {
     padding: 2px 3px !important;
     font-size: smaller;
-    background: $midGrey !important;
+    background: colors-helpers.$midGrey !important;
     color: white !important;
 
     &:hover {
-      background-color: $sepia-bg;
+      background-color: colors-helpers.$sepia-bg;
     }
   }
 }

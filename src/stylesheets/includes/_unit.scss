@@ -1,5 +1,8 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 .unit-info {
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin: 0 1em 1em 1em;
   }
   clear: both;
@@ -64,14 +67,14 @@
 }
 
 .unit-materials {
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding: 0;
   }
 
-  background: $darkWhite;
+  background: colors-helpers.$darkWhite;
 
   & > .menu {
-    @include mobile {
+    @include responsive-helpers.mobile {
       overflow-x: auto;
       overflow-y: hidden;
       border-bottom: 0 !important;
@@ -81,7 +84,7 @@
     margin: 0;
 
     .item {
-      @include mobile {
+      @include responsive-helpers.mobile {
         flex: 2 0 auto !important;
         padding: 1em 0.5em !important;
       }
@@ -117,7 +120,7 @@
       font-weight: normal;
 
       a {
-        color: $blue;
+        color: colors-helpers.$blue;
       }
 
       &:hover {
@@ -140,7 +143,7 @@
         background: rgba(51, 118, 214, 0.28);
 
         a {
-          color: $blue;
+          color: colors-helpers.$blue;
         }
 
         &:hover {

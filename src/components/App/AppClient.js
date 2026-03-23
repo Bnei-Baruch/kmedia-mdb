@@ -1,18 +1,16 @@
 import React from 'react';
-import { useSSR } from 'react-i18next';
 import ErrorBoundary from '../ErrorBoundary';
 import { HelmetProvider } from '../shared/Helmets/helmetESM';
+import App from './App';
+
+const NAME_SPACE = 'AppClient'; 
 
 export default function AppClient(props) {
-  const { i18nData, ...rest } = props;
-  useSSR(i18nData);
-
   return (
     <React.StrictMode>
       <ErrorBoundary>
         <HelmetProvider>
-          <div>AppClient</div>
-          {/*<App {...rest} />*/}
+            <App {...props} />
         </HelmetProvider>
       </ErrorBoundary>
     </React.StrictMode>

@@ -1,6 +1,8 @@
 @use "sass:math";
 
-@import 'rtl/text-helpers';
+@use 'rtl/text-helpers';
+@use "colors-helpers";
+@use "variables";
 
 .uppercase {
   text-transform: uppercase !important;
@@ -15,7 +17,7 @@
 }
 
 .readble-width {
-  max-width: $max-readble-width;
+  max-width: variables.$max-readble-width;
   // margin: 0 auto;
 }
 
@@ -25,7 +27,7 @@
 }
 
 blockquote {
-  border: 2px solid $midWhite;
+  border: 2px solid colors-helpers.$midWhite;
   border-width: 0 0 0 2px;
   margin: 2em 0 2em 2em;
   padding: 0 0 0 1em;
@@ -36,7 +38,7 @@ blockquote {
   }
 
   > em {
-    color: $grey;
+    color: colors-helpers.$grey;
   }
 
   &.following-text {
@@ -51,7 +53,7 @@ blockquote {
 
 .block-img {
   em {
-    color: $grey;
+    color: colors-helpers.$grey;
     display: block;
   }
 }

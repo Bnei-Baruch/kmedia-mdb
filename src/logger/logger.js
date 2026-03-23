@@ -3,34 +3,34 @@
 const isServer = typeof window === 'undefined';
 
 const logger = {
-  log: (...args) => {
+  log: (nameSpace, ...args) => {
     if (isServer) {
-      console.log(...args);
+      console.log(`[ ${nameSpace} ]`, ...args);
     }
   },
-  error: (...args) => {
+  error: (nameSpace, ...args) => {
     if (isServer) {
-      console.error(...args);
+      console.error(`[ ${nameSpace} ]`, ...args);
     }
   },
-  warn: (...args) => {
+  warn: (nameSpace, ...args) => {
     if (isServer) {
-      console.warn(...args);
+      console.warn(`[ ${nameSpace} ]`, ...args);
     }
   },
-  info: (...args) => {
+  info: (nameSpace, ...args) => {
     if (isServer) {
-      console.info(...args);
+      console.info(`[ ${nameSpace} ]`, ...args);
     }
   },
-  debug: (...args) => {
+  debug: (nameSpace, ...args) => {
     if (isServer) {
-      console.debug(...args);
+      console.debug(`[ ${nameSpace} ]`, ...args);
     }
   },
-  trace: (...args) => {
+  trace: (nameSpace, ...args) => {
     if (isServer) {
-      console.trace(...args);
+      console.trace(`[ ${nameSpace} ]`, ...args);
     }
   },
 };
