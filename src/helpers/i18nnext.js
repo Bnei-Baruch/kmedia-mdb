@@ -41,7 +41,7 @@ export const options = {
 };
 
 // Client side.
-export const initializeI18n = async (resources) => {
+export const initializeI18n = async resources => {
   await i18next.init({
     ...options,
     resources,

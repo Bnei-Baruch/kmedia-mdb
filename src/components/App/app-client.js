@@ -20,7 +20,7 @@ import ClientChronicles from '../../helpers/clientChronicles';
 import { DEFAULT_UI_LANGUAGE, KC_BOT_USER_NAME, LANG_UKRAINIAN } from '../../helpers/consts';
 import { initializeI18n } from '../../helpers/i18nnext';
 import { initKC } from '../../pkg/ksAdapter/adapter';
-//eslint-disable-next-line import/default
+
 import logger from '../../logger/logger';
 import { createStore } from '../../redux/createStore';
 import { actions as ssr } from '../../redux/modules/ssr';
@@ -50,7 +50,7 @@ async function hydrateApp(kcInfo) {
   setupListeners(store.dispatch);
   store.dispatch(ssr.hydrate());
 
-  const { initialLanguage ,initialI18nStore} = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
+  const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
 
   // Initialize moment global locale to default language
   moment.locale(initialLanguage === LANG_UKRAINIAN ? 'uk' : initialLanguage);

@@ -3,7 +3,7 @@ import logger from '../logger/logger';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
-const NAMESPACE = "Api_Requests";
+const NAMESPACE = 'Api_Requests';
 
 export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
@@ -48,10 +48,10 @@ export class Requests {
 
   static get = async path => {
     try {
-      logger.log(NAMESPACE, "Requests.get", path);
+      logger.log(NAMESPACE, 'Requests.get', path);
       return await axios.get(backendUrl(path));
     } catch ({ response }) {
-      logger.log(NAMESPACE, "Requests.get error", response);
+      logger.log(NAMESPACE, 'Requests.get error', response);
       return response;
     }
   };

@@ -28,6 +28,10 @@
 //////////ALL YOUR CSS IS HERE ↴
 @use 'includes/not-sorted-scss';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 .debug {
   background: yellow;
