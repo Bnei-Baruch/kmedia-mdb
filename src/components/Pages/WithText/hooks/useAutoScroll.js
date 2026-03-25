@@ -1,23 +1,33 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-// Convert wpm to px/sec: calibrated so 120 wpm ≈ 1.4*4 px/sec
-const WPM_TO_PX      = 1.4 / 30;
 const SKIP_PX        = 60; // ~2 lines of text
 export const MIN_WPM = 30;
 export const MAX_WPM = 400;
 const WPM_STEP       = 30;
 const TIME_UPDATE_MS = 1000; // update remaining time every second
-
-const LS_KEY = 'auto-scroll-wpm';
+const LS_KEY         = 'auto-scroll-wpm';
 
 const loadWpm = () => {
   const saved = parseInt(localStorage.getItem(LS_KEY), 10);
   return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : 100;
 };
 
-const calcMinsLeft = wpm => {
-  const remainingPx = Math.max(0, document.body.scrollHeight - window.innerHeight - window.scrollY);
-  return remainingPx / (wpm * WPM_TO_PX) / 60;
+// Calculate px per word from the actual rendered content.
+// This makes speed font-size-independent: bigger font = taller page = faster px/sec,
+// but the same words per minute.
+const calcPxPerWord = () => {
+  const scrollableH = Math.max(1, document.body.scrollHeight - window.innerHeight);
+  const el          = document.querySelector('.font_settings.text__content');
+  if (!el) return null;
+  const wordCount = el.innerText.trim().split(/\s+/).filter(Boolean).length;
+  return wordCount > 0 ? scrollableH / wordCount : null;
+};
+
+const calcMinsLeft = (wpm, pxPerWord) => {
+  if (!pxPerWord) return null;
+  const remainingPx    = Math.max(0, document.body.scrollHeight - window.innerHeight - window.scrollY);
+  const remainingWords = remainingPx / pxPerWord;
+  return remainingWords / wpm;
 };
 
 export const useAutoScroll = () => {
@@ -29,19 +39,31 @@ export const useAutoScroll = () => {
   const lastTimeRef    = useRef(null);
   const wpmRef         = useRef(loadWpm());
   const posRef         = useRef(0);
+  const pxPerWordRef   = useRef(null);
   const lastTimeUpdate = useRef(0);
+  const lastPxUpdate   = useRef(0);
   const tickRef        = useRef(null);
 
   tickRef.current = timestamp => {
+    // Recalculate px/word every 3 seconds to handle font size changes mid-scroll
+    if (timestamp - lastPxUpdate.current > 3000) {
+      const px = calcPxPerWord();
+      if (px) pxPerWordRef.current = px;
+      lastPxUpdate.current = timestamp;
+    }
+
     if (lastTimeRef.current !== null) {
-      const dt        = (timestamp - lastTimeRef.current) / 1000;
-      posRef.current += wpmRef.current * WPM_TO_PX * dt;
+      const dt          = (timestamp - lastTimeRef.current) / 1000;
+      const pxPerSec    = pxPerWordRef.current
+        ? wpmRef.current * pxPerWordRef.current / 60
+        : wpmRef.current * (1.4 / 30); // fallback if content not measured yet
+      posRef.current   += pxPerSec * dt;
       window.scrollTo(0, posRef.current);
 
       // Update remaining time every second
       if (timestamp - lastTimeUpdate.current >= TIME_UPDATE_MS) {
         lastTimeUpdate.current = timestamp;
-        setMinsLeft(calcMinsLeft(wpmRef.current));
+        setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
       }
 
       // Auto-pause when reaching the bottom
@@ -59,10 +81,12 @@ export const useAutoScroll = () => {
   };
 
   const start = useCallback(() => {
-    posRef.current      = window.scrollY;
-    lastTimeRef.current = null;
+    pxPerWordRef.current   = calcPxPerWord();
+    lastPxUpdate.current   = 0;
+    posRef.current         = window.scrollY;
+    lastTimeRef.current    = null;
     lastTimeUpdate.current = 0;
-    setMinsLeft(calcMinsLeft(wpmRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
     setIsScrolling(true);
     rafRef.current = requestAnimationFrame(tickRef.current);
   }, []);
@@ -78,7 +102,9 @@ export const useAutoScroll = () => {
     wpmRef.current = clamped;
     localStorage.setItem(LS_KEY, String(clamped));
     setWpmState(clamped);
-    setMinsLeft(calcMinsLeft(clamped));
+    const px = calcPxPerWord();
+    if (px) pxPerWordRef.current = px;
+    setMinsLeft(calcMinsLeft(clamped, pxPerWordRef.current));
   }, []);
 
   const speedUp   = useCallback(() => setWpm(wpmRef.current + WPM_STEP), [setWpm]);
@@ -87,17 +113,20 @@ export const useAutoScroll = () => {
   const skipForward  = useCallback(() => {
     posRef.current = window.scrollY + SKIP_PX;
     window.scrollTo(0, posRef.current);
-    setMinsLeft(calcMinsLeft(wpmRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
   }, []);
 
   const skipBackward = useCallback(() => {
     posRef.current = Math.max(0, window.scrollY - SKIP_PX);
     window.scrollTo(0, posRef.current);
-    setMinsLeft(calcMinsLeft(wpmRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
   }, []);
 
-  // Compute initial estimate when panel opens (caller should trigger via setWpm or start)
-  const calcNow = useCallback(() => setMinsLeft(calcMinsLeft(wpmRef.current)), []);
+  const calcNow = useCallback(() => {
+    const px = calcPxPerWord();
+    if (px) pxPerWordRef.current = px;
+    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+  }, []);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
