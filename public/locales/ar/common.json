@@ -883,7 +883,8 @@
         "auto-scroll-skip-fwd": "تخطي للأمام (→)",
         "auto-scroll-slower": "أبطأ (↓)",
         "auto-scroll-faster": "أسرع (↑)",
-        "auto-scroll-close": "إغلاق"
+        "auto-scroll-close": "إغلاق",
+        "auto-scroll-time": "{{mins}} دقيقة للانتهاء"
       },
       "mobile": {
         "lessons": "Lessons",

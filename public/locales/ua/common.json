@@ -972,7 +972,8 @@
         "auto-scroll-skip-fwd": "Вперед (→)",
         "auto-scroll-slower": "Повільніше (↓)",
         "auto-scroll-faster": "Швидше (↑)",
-        "auto-scroll-close": "Закрити"
+        "auto-scroll-close": "Закрити",
+        "auto-scroll-time": "{{mins}} хв. до кінця"
       },
       "mobile": {
         "lessons": "Lessons",

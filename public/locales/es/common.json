@@ -884,7 +884,8 @@
         "auto-scroll-skip-fwd": "Avanzar (→)",
         "auto-scroll-slower": "Más lento (↓)",
         "auto-scroll-faster": "Más rápido (↑)",
-        "auto-scroll-close": "Cerrar"
+        "auto-scroll-close": "Cerrar",
+        "auto-scroll-time": "{{mins}} min para terminar"
       },
       "mobile": {
         "lessons": "Lecciones",

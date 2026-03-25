@@ -26,7 +26,7 @@ const Tip = ({ textKey, children }) => {
 const AutoScrollBtn = () => {
   const { t }                                                                        = useTranslation();
   const [isOpen, setIsOpen]                                                          = useState(false);
-  const { isScrolling, wpm, setWpm, speedUp, speedDown, start, pause,
+  const { isScrolling, wpm, minsLeft, calcNow, setWpm, speedUp, speedDown, start, pause,
     skipForward, skipBackward }                                                       = useAutoScroll();
   const dir                                                                          = useSelector(settingsGetUIDirSelector);
   const isRTL                                                                        = dir === 'rtl';
@@ -79,7 +79,7 @@ const AutoScrollBtn = () => {
         textKey="auto-scroll"
         active={isOpen || isScrolling}
         icon={<span className="material-symbols-outlined auto-scroll-icon">slow_motion_video</span>}
-        onClick={() => setIsOpen(true)}
+        onClick={() => { setIsOpen(true); calcNow(); }}
         disabled={false}
       />
 
@@ -110,6 +110,12 @@ const AutoScrollBtn = () => {
               </Button>
             </Tip>
           </div>
+
+          {minsLeft !== null && (
+            <div className="auto-scroll-time-left">
+              {t('page-with-text.buttons.web.auto-scroll-time', { mins: Math.ceil(minsLeft) })}
+            </div>
+          )}
 
           <div className="auto-scroll-speed-section">
             <div className="auto-scroll-speed-label">{t('page-with-text.buttons.web.auto-scroll-speed')}</div>

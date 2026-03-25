@@ -885,7 +885,8 @@
         "auto-scroll-skip-fwd": "İleri (→)",
         "auto-scroll-slower": "Yavaşlat (↓)",
         "auto-scroll-faster": "Hızlandır (↑)",
-        "auto-scroll-close": "Kapat"
+        "auto-scroll-close": "Kapat",
+        "auto-scroll-time": "{{mins}} dk kaldı"
       },
       "mobile": {
         "lessons": "Lessons",

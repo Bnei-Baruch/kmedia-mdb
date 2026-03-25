@@ -994,7 +994,8 @@
         "auto-scroll-skip-fwd": "Вперёд (→)",
         "auto-scroll-slower": "Медленнее (↓)",
         "auto-scroll-faster": "Быстрее (↑)",
-        "auto-scroll-close": "Закрыть"
+        "auto-scroll-close": "Закрыть",
+        "auto-scroll-time": "{{mins}} мин. до конца"
       },
       "mobile": {
         "lessons": "Уроки",

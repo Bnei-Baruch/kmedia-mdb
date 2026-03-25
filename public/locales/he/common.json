@@ -978,7 +978,8 @@
         "auto-scroll-skip-fwd": "דלג קדימה (→)",
         "auto-scroll-slower": "האט (↓)",
         "auto-scroll-faster": "האץ (↑)",
-        "auto-scroll-close": "סגור"
+        "auto-scroll-close": "סגור",
+        "auto-scroll-time": "{{mins}} דק' לסיום"
       },
       "mobile": {
         "lessons": "שיעורים",
