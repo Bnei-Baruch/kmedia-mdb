@@ -23,67 +23,6 @@
 // }
 // }
 
-.search-omnibox {
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto;
-
-  input {
-    border: 1px solid #7dcff5 !important;
-    border-radius: 20px !important;
-  }
-
-  // main omnibox size
-  .input {
-    width: 100%;
-  }
-
-  > .results {
-
-    &.visible {
-      /* Limit suggest box height and allow scrolling if more then ~10. */
-      max-height: 500px;
-      overflow-y: scroll;
-    }
-
-    // this falls sub-pixel apart from the category name table-cell,
-    // it doesn't look good. so we cancel it
-    > .category {
-      > .name {
-        border-bottom: none !important;
-      }
-
-      .result {
-        background-color: colors-helpers.$white;
-
-        //border-bottom: none !important;
-        &:last-child {
-          border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
-          margin-bottom: 1px;
-        }
-
-        &:hover {
-          //background-color: rgba($blue, .075) !important;
-          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.125), rgba(colors-helpers.$blue, 0)) !important;
-        }
-      }
-
-      &:last-child {
-        .result:last-child {
-          border-bottom: none !important;
-          margin-bottom: 1px;
-        }
-      }
-    }
-  }
-}
-
-.search-result-rtl {
-  .title {
-    direction: rtl;
-    display: inline-block;
-  }
-}
 
 /* Make hightlights in search also bold (not only italic).*/
 .media_item em {
@@ -164,33 +103,6 @@
     white-space: nowrap;
   }
 
-  .dateButton,
-  .dateButton:hover,
-  .dateButton:active,
-  .dateButton:focus {
-    color: white;
-    background-color: transparent;
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: normal;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .icon {
-      opacity: 1 !important;
-    }
-
-    @include responsive-helpers.mobile {
-      & .icon {
-        font-size: 1rem;
-        line-height: 0.8rem
-      }
-    }
-  }
 }
 
 // filters redesign
@@ -658,18 +570,6 @@
 // native day picker (date filter && Simple mode for mobile)
 .to-from-label {
   min-width: 70px;
-}
-
-.hide-native-date-input {
-  opacity: 0;
-  position: fixed;
-  top: 40px;
-  height: 0;
-  font-size: 16px;
-}
-
-.DayPicker-Day {
-  outline: none !important;
 }
 
 /* ************* Styles for simple mode ************* */
@@ -1299,64 +1199,6 @@
   background: inherit !important;
 }
 
-.searchButton {
-  border-radius: 0 .28571429rem .28571429rem 0 !important;
-  margin-right: 45px !important;
-}
-
-.dateButton {
-  border-radius: .28571429rem !important;
-}
-
-@media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
-  .search-omnibox {
-    .searchButton {
-      margin-right: 5px !important;
-      padding-left: 15px !important;
-      padding-right: 0 !important;
-    }
-  }
-
-  .dateButton {
-    padding-left: 8px !important;
-    padding-right: 0 !important;
-
-    &.dateButton_with_label {
-      padding-right: 4px !important;
-      margin: 0;
-    }
-  }
-
-}
-
-.rtl {
-  .search-omnibox {
-    .searchButton {
-      border-radius: .28571429rem 0 0 .28571429rem !important;
-      margin-right: 0 !important;
-      margin-left: 45px !important;
-      padding-right: 15px !important;
-    }
-  }
-
-  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
-    .search-omnibox {
-      .searchButton {
-        margin-right: 0px !important;
-        margin-left: 5px !important;
-      }
-    }
-
-    .dateButton {
-      padding-left: 5px !important;
-      padding-right: 8px !important;
-
-      &.dateButton_with_label {
-        left: 4px !important;
-      }
-    }
-  }
-}
 
 
 .share-publication {

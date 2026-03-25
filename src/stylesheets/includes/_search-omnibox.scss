@@ -1,0 +1,120 @@
+@use 'colors-helpers';
+@use 'responsive-helpers';
+
+.search-omnibox {
+  width: 100%;
+  margin: 0 auto;
+
+  input {
+    border: 1px solid #7dcff5 !important;
+    border-radius: 20px !important;
+  }
+
+  &.homepage input {
+    border-radius: 20px 0 0 20px !important;
+  }
+
+  .omnibox-inline-search {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 4px 8px;
+    font-size: 1.1em;
+    line-height: 1;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  // main omnibox size
+  .input {
+    width: 100%;
+  }
+
+  > .results {
+
+    &.visible {
+      /* Limit suggest box height and allow scrolling if more then ~10. */
+      max-height: 500px;
+      overflow-y: scroll;
+    }
+
+    // this falls sub-pixel apart from the category name table-cell,
+    // it doesn't look good. so we cancel it
+    > .category {
+      > .name {
+        border-bottom: none !important;
+      }
+
+      .result {
+        background-color: colors-helpers.$white;
+
+        //border-bottom: none !important;
+        &:last-child {
+          border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
+          margin-bottom: 1px;
+        }
+
+        &:hover {
+          //background-color: rgba($blue, .075) !important;
+          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.125), rgba(colors-helpers.$blue, 0)) !important;
+        }
+      }
+
+      &:last-child {
+        .result:last-child {
+          border-bottom: none !important;
+          margin-bottom: 1px;
+        }
+      }
+    }
+  }
+}
+
+.search-result-rtl {
+  .title {
+    direction: rtl;
+    display: inline-block;
+  }
+}
+
+.searchButton {
+  border-radius: 0 .28571429rem .28571429rem 0 !important;
+  margin-right: 45px !important;
+}
+
+@media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+  .search-omnibox {
+    .searchButton {
+      margin-right: 5px !important;
+      padding-left: 15px !important;
+      padding-right: 0 !important;
+    }
+  }
+}
+
+.rtl {
+  .search-omnibox {
+    .searchButton {
+      border-radius: .28571429rem 0 0 .28571429rem !important;
+      margin-right: 0 !important;
+      margin-left: 45px !important;
+      padding-right: 15px !important;
+    }
+  }
+
+  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+    .search-omnibox {
+      .searchButton {
+        margin-right: 0px !important;
+        margin-left: 5px !important;
+      }
+    }
+  }
+}

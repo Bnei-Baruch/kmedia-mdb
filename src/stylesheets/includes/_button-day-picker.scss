@@ -1,0 +1,72 @@
+@use 'responsive-helpers';
+
+.dateButton {
+  border-radius: .28571429rem !important;
+}
+
+.hide-native-date-input {
+  opacity: 0;
+  position: fixed;
+  top: 40px;
+  height: 0;
+  font-size: 16px;
+}
+
+.DayPicker-Day {
+  outline: none !important;
+}
+
+.avbox__playlist-header {
+  .dateButton,
+  .dateButton:hover,
+  .dateButton:active,
+  .dateButton:focus {
+    color: white;
+    background-color: transparent;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: normal;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .icon {
+      opacity: 1 !important;
+    }
+
+    @include responsive-helpers.mobile {
+      & .icon {
+        font-size: 1rem;
+        line-height: 0.8rem
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+  .dateButton {
+    padding-left: 8px !important;
+    padding-right: 0 !important;
+
+    &.dateButton_with_label {
+      padding-right: 4px !important;
+      margin: 0;
+    }
+  }
+}
+
+.rtl {
+  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+    .dateButton {
+      padding-left: 5px !important;
+      padding-right: 8px !important;
+
+      &.dateButton_with_label {
+        left: 4px !important;
+      }
+    }
+  }
+}

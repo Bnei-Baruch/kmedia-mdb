@@ -1,16 +1,17 @@
 import clsx from 'clsx';
 import React, { useContext, useRef, useState } from 'react';
 
+import { faBars, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation, useMatch } from 'react-router-dom';
-import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getEmbedFromQuery } from '../../helpers/player';
 import Logo from '../../images/icons/Logo';
 import { textPageGetIsFullscreenSelector } from '../../redux/selectors';
 import KmediaRouters from '../../route/KmediaRouters';
 import HandleLanguages from '../HandleLanguages/HandleLanguages';
+import Icon from '../Icon';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
 import DonationPopup from '../Sections/Home/DonationPopup';
@@ -54,70 +55,67 @@ const Layout = ({ playerContainer }) => {
   }
 
   const toggleSidebar = () => setSidebarActive(!sidebarActive);
-  const sideBarIcon   = sidebarActive ? <Icon size="large" name="x" /> : <Icon name="sidebar" />;
-
+  const sideBarIcon   = sidebarActive ? <Icon icon={faXmark} className="large" />: <Icon icon={faBars} />;
   return (
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
       <GAPageView location={location} />
       <div className="headroom-z-index-802">
         <HeadroomWraper>
           <div className="layout__header">
-            <Menu inverted borderless size="huge" color="blue">
+            <div className="ui blue inverted borderless huge menu flex items-center w-full text-white text-lg">
               <div ref={toggleSidebarBtnRef}>
-                <Menu.Item
-                  icon
-                  as="a"
-                  className="layout__sidebar-toggle"
+                <a
+                  className="layout__sidebar-toggle flex items-center justify-center p-4 cursor-pointer"
                   onClick={toggleSidebar}
                 >
                   {sideBarIcon}
-                </Menu.Item>
+                </a>
               </div>
-              <Menu.Item className="logo" header as={Link} to="/">
-                <Logo width="120px" height="120px" />
-                <div className="logo__titles">
+              <Link className="logo flex items-center p-4 text-white hover:text-white" to="/">
+                <Logo width="2.5em" height="120" />
+                <div className="logo__titles ml-4">
                   {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
                     <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
                   )}
-                  <Header inverted as="h1" content={t('nav.top.header')} />
+                  <h1 className="text-white m-0 text-2xl font-normal">{t('nav.top.header')}</h1>
                 </div>
-              </Menu.Item>
-              <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
+              </Link>
+              <div className={isMobileDevice ? 'layout__search mobile-hidden p-4 flex-1' : 'layout__search layout__search_max_width p-4 flex-1'}>
                 {isNotHome && <OmniBox />}
-              </Menu.Item>
-              <Menu.Menu position="right" className="layout__header-buttons">
-                <Menu.Item className="no-margin">
+              </div>
+              <div className="layout__header-buttons flex items-center ml-auto">
+                <div className="no-margin p-4">
                   <HandleLanguages />
-                </Menu.Item>
+                </div>
                 {
                   isNotHome && isMobileDevice &&
-                  <Ref innerRef={toggleSearchBtnRef}>
-                    <Menu.Item as="a" position="right">
-                      <Icon name="search" className="no-margin" onClick={openHeaderSearch} />
-                    </Menu.Item>
-                  </Ref>
+                  <div ref={toggleSearchBtnRef}>
+                    <a className="flex items-center justify-center p-4 cursor-pointer ml-auto">
+                      <Icon icon={faSearch} className="no-margin" onClick={openHeaderSearch} />
+                    </a>
+                  </div>
                 }
                 {
                   !isMobileDevice && (
-                    <Menu.Item position="right">
+                    <div className="flex items-center p-4 ml-auto">
                       <DonateNow />
                       <VirtualHomeButton />
-                    </Menu.Item>
+                    </div>
                   )
                 }
-                <Menu.Item position="right">
+                <div className="flex items-center p-4 ml-auto">
                   <Login />
-                </Menu.Item>
+                </div>
                 <TopMost />
-              </Menu.Menu>
-            </Menu>
+              </div>
+            </div>
           </div>
           {
             isShowSearch && (
               <div ref={headerSearchRef}>
-                <Segment color="blue" inverted className="header_search">
+                <div className="header_search ui blue inverted segment text-white p-4">
                   <OmniBox />
-                </Segment>
+                </div>
               </div>
             )
           }
@@ -127,27 +125,25 @@ const Layout = ({ playerContainer }) => {
         ref={sidebarRef}
         className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
       >
-        <Menu inverted size="huge" color="blue">
+        <div className="ui blue inverted huge menu flex flex-col text-white text-lg">
           <div ref={closeSidebarBtnRef}>
-            <Menu.Item
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
+            <a
+              className="layout__sidebar-toggle flex items-center p-4 cursor-pointer"
               onClick={closeSidebar}
             >
               {sideBarIcon}
-            </Menu.Item>
+            </a>
           </div>
-          <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={closeSidebar}>
-            <Logo width="120px" height="120px" />
-            <div className="logo__titles">
+          <Link className="logo mobile-hidden flex items-center p-4 text-white hover:text-white" to="/" onClick={closeSidebar}>
+            <Logo width="2.5em" height="2.5em" />
+            <div className="logo__titles ml-4">
               {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
                 <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
               )}
-              <Header inverted as="h1" content={t('nav.top.header')} />
+              <h1 className="text-white m-0 text-2xl font-normal">{t('nav.top.header')}</h1>
             </div>
-          </Menu.Item>
-        </Menu>
+          </Link>
+        </div>
         <div className="layout__sidebar-menu">
           <MenuItems simple onItemClick={closeSidebar} />
         </div>
