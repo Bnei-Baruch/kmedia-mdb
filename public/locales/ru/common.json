@@ -958,6 +958,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} мин. чтения",
     "buttons": {
       "web": {
         "lessons": "Ко всем урокам по статье",

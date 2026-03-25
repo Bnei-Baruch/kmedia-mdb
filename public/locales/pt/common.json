@@ -852,6 +852,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} min de leitura",
     "buttons": {
       "web": {
         "lessons": "Para todas as lições do artigo",

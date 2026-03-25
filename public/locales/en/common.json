@@ -855,6 +855,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} min read",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",

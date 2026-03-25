@@ -860,6 +860,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} min čtení",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",

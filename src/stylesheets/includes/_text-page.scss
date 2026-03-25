@@ -807,6 +807,12 @@
   min-width: 220px;
 }
 
+.reading-time-estimate {
+  color: #888;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
 .auto-scroll-icon {
   color: #4caf50 !important;
 }
@@ -855,8 +861,9 @@
 }
 
 .auto-scroll-time-left {
-  font-size: 12px;
-  color: #aaa;
+  font-size: 15px;
+  color: #4caf50;
+  font-weight: 700;
   text-align: center;
   letter-spacing: 0.5px;
   direction: rtl;
@@ -871,7 +878,7 @@
 }
 
 .auto-scroll-speed-label {
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 1.5px;
   color: #aaa;
   font-weight: 600;
@@ -900,9 +907,9 @@
 }
 
 .auto-scroll-speed-value {
-  font-size: 1.6em;
+  font-size: 2em;
   font-weight: 700;
-  width: 64px;
+  width: 72px;
   text-align: center;
   color: #fff;
   background: transparent;

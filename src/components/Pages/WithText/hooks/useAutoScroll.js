@@ -8,6 +8,13 @@ export const MAX_WPM = 400;
 const WPM_STEP       = 30;
 const TIME_UPDATE_MS = 1000; // update remaining time every second
 
+const LS_KEY = 'auto-scroll-wpm';
+
+const loadWpm = () => {
+  const saved = parseInt(localStorage.getItem(LS_KEY), 10);
+  return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : 100;
+};
+
 const calcMinsLeft = wpm => {
   const remainingPx = Math.max(0, document.body.scrollHeight - window.innerHeight - window.scrollY);
   return remainingPx / (wpm * WPM_TO_PX) / 60;
@@ -15,12 +22,12 @@ const calcMinsLeft = wpm => {
 
 export const useAutoScroll = () => {
   const [isScrolling, setIsScrolling] = useState(false);
-  const [wpm, setWpmState]            = useState(120); // default: step 4
+  const [wpm, setWpmState]            = useState(loadWpm);
   const [minsLeft, setMinsLeft]       = useState(null);
 
   const rafRef         = useRef(null);
   const lastTimeRef    = useRef(null);
-  const wpmRef         = useRef(120);
+  const wpmRef         = useRef(loadWpm());
   const posRef         = useRef(0);
   const lastTimeUpdate = useRef(0);
   const tickRef        = useRef(null);
@@ -69,6 +76,7 @@ export const useAutoScroll = () => {
   const setWpm = useCallback(value => {
     const clamped  = Math.min(MAX_WPM, Math.max(MIN_WPM, Math.round(value)));
     wpmRef.current = clamped;
+    localStorage.setItem(LS_KEY, String(clamped));
     setWpmState(clamped);
     setMinsLeft(calcMinsLeft(clamped));
   }, []);

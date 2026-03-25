@@ -937,6 +937,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} хв. читання",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",

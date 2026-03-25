@@ -850,6 +850,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} dk okuma",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",

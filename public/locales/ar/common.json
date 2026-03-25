@@ -847,6 +847,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} دقيقة قراءة",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
