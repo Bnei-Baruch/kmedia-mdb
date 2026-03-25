@@ -17,6 +17,7 @@ import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import AutoScrollBtn from '../../Pages/WithText/Buttons/AutoScrollBtn';
 
 const SourceToolbarWeb = () => (
   <div className="text_toolbar">
@@ -51,6 +52,7 @@ const SourceToolbarWeb = () => (
       </div>
       <div className="divider computer-only"/>
       <FullscreenTextBtn/>
+      <AutoScrollBtn/>
       <Dropdown
         item
         icon={null}

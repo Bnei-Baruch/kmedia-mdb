@@ -875,7 +875,16 @@
         "more-buttons": "Más",
         "toc": "Tabla de Contenido",
         "copy-link": "Copiar enlace",
-        "article-toc": "Todos los artículos"
+        "article-toc": "Todos los artículos",
+        "auto-scroll": "Desplazamiento automático",
+        "auto-scroll-speed": "Velocidad de desplazamiento",
+        "auto-scroll-play": "Reproducir (Space)",
+        "auto-scroll-pause": "Pausar (Space)",
+        "auto-scroll-skip-back": "Retroceder (←)",
+        "auto-scroll-skip-fwd": "Avanzar (→)",
+        "auto-scroll-slower": "Más lento (↓)",
+        "auto-scroll-faster": "Más rápido (↑)",
+        "auto-scroll-close": "Cerrar"
       },
       "mobile": {
         "lessons": "Lecciones",
@@ -887,7 +896,8 @@
         "download": "Descargar",
         "more-buttons": "Más",
         "toc": "Contenido",
-        "copy-link": "Enlace"
+        "copy-link": "Enlace",
+        "auto-scroll": "Auto-scroll"
       }
     }
   }

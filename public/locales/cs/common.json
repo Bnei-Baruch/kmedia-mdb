@@ -887,7 +887,16 @@
         "more-buttons": "More",
         "toc": "Obsah",
         "copy-link": "Kopírovat odkaz",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Automatické posouvání",
+        "auto-scroll-speed": "Rychlost posouvání",
+        "auto-scroll-play": "Přehrát (Space)",
+        "auto-scroll-pause": "Pauza (Space)",
+        "auto-scroll-skip-back": "Zpět (←)",
+        "auto-scroll-skip-fwd": "Vpřed (→)",
+        "auto-scroll-slower": "Pomaleji (↓)",
+        "auto-scroll-faster": "Rychleji (↑)",
+        "auto-scroll-close": "Zavřít"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -899,7 +908,8 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Obsah",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "auto-scroll": "Auto-scroll"
       }
     }
   }

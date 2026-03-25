@@ -985,7 +985,16 @@
         "more-buttons": "Ещё",
         "toc": "Содержание",
         "copy-link": "Копировать ссылку",
-        "article-toc": "Все статьи"
+        "article-toc": "Все статьи",
+        "auto-scroll": "Автопрокрутка",
+        "auto-scroll-speed": "Скорость прокрутки",
+        "auto-scroll-play": "Воспроизвести (Space)",
+        "auto-scroll-pause": "Пауза (Space)",
+        "auto-scroll-skip-back": "Назад (←)",
+        "auto-scroll-skip-fwd": "Вперёд (→)",
+        "auto-scroll-slower": "Медленнее (↓)",
+        "auto-scroll-faster": "Быстрее (↑)",
+        "auto-scroll-close": "Закрыть"
       },
       "mobile": {
         "lessons": "Уроки",
@@ -997,7 +1006,8 @@
         "download": "Скачать",
         "more-buttons": "Ещё",
         "toc": "Контент",
-        "copy-link": "Ссылка"
+        "copy-link": "Ссылка",
+        "auto-scroll": "Автопрокрутка"
       }
     }
   }

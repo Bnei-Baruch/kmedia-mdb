@@ -11,6 +11,7 @@ import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import AutoScrollBtn from '../../Pages/WithText/Buttons/AutoScrollBtn';
 
 const SourceToolbarMobile = () => (
   <div className="text_toolbar">
@@ -19,6 +20,7 @@ const SourceToolbarMobile = () => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
+      <AutoScrollBtn />
       <Dropdown
         item
         icon={null}
