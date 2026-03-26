@@ -9,12 +9,9 @@ const LS_KEY         = 'auto-scroll-wpm';
 
 const loadWpm = () => {
   const saved = parseInt(localStorage.getItem(LS_KEY), 10);
-  return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : 100;
+  return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : 77;
 };
 
-// Calculate px per word from the actual rendered content.
-// This makes speed font-size-independent: bigger font = taller page = faster px/sec,
-// but the same words per minute.
 const calcPxPerWord = () => {
   const scrollableH = Math.max(1, document.body.scrollHeight - window.innerHeight);
   const el          = document.querySelector('.font_settings.text__content');
@@ -34,6 +31,7 @@ export const useAutoScroll = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [wpm, setWpmState]            = useState(loadWpm);
   const [minsLeft, setMinsLeft]       = useState(null);
+  const [finished, setFinished]       = useState(false);
 
   const rafRef         = useRef(null);
   const lastTimeRef    = useRef(null);
@@ -45,7 +43,6 @@ export const useAutoScroll = () => {
   const tickRef        = useRef(null);
 
   tickRef.current = timestamp => {
-    // Recalculate px/word every 3 seconds to handle font size changes mid-scroll
     if (timestamp - lastPxUpdate.current > 3000) {
       const px = calcPxPerWord();
       if (px) pxPerWordRef.current = px;
@@ -56,22 +53,21 @@ export const useAutoScroll = () => {
       const dt          = (timestamp - lastTimeRef.current) / 1000;
       const pxPerSec    = pxPerWordRef.current
         ? wpmRef.current * pxPerWordRef.current / 60
-        : wpmRef.current * (1.4 / 30); // fallback if content not measured yet
+        : wpmRef.current * (1.4 / 30);
       posRef.current   += pxPerSec * dt;
       window.scrollTo(0, posRef.current);
 
-      // Update remaining time every second
       if (timestamp - lastTimeUpdate.current >= TIME_UPDATE_MS) {
         lastTimeUpdate.current = timestamp;
         setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
       }
 
-      // Auto-pause when reaching the bottom
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 2) {
         cancelAnimationFrame(rafRef.current);
         lastTimeRef.current = null;
         setIsScrolling(false);
         setMinsLeft(0);
+        setFinished(true);
         return;
       }
     }
@@ -86,6 +82,7 @@ export const useAutoScroll = () => {
     posRef.current         = window.scrollY;
     lastTimeRef.current    = null;
     lastTimeUpdate.current = 0;
+    setFinished(false);
     setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
     setIsScrolling(true);
     rafRef.current = requestAnimationFrame(tickRef.current);
@@ -130,5 +127,5 @@ export const useAutoScroll = () => {
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
-  return { isScrolling, wpm, minsLeft, calcNow, setWpm, speedUp, speedDown, start, pause, skipForward, skipBackward };
+  return { isScrolling, wpm, minsLeft, finished, calcNow, setWpm, speedUp, speedDown, start, pause, skipForward, skipBackward };
 };

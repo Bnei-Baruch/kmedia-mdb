@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { Button, Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
@@ -6,11 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { useAutoScroll, MIN_WPM, MAX_WPM } from '../hooks/useAutoScroll';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 const TIP = 'top center';
 
-const Tip = ({ textKey, children }) => {
+const Tip = ({ textKey, children, isMobile }) => {
   const { t } = useTranslation();
+  if (isMobile) return children;
   return (
     <Popup
       content={t(`page-with-text.buttons.web.${textKey}`)}
@@ -26,16 +28,21 @@ const Tip = ({ textKey, children }) => {
 const AutoScrollBtn = () => {
   const { t }                                                                        = useTranslation();
   const [isOpen, setIsOpen]                                                          = useState(false);
-  const { isScrolling, wpm, minsLeft, calcNow, setWpm, speedUp, speedDown, start, pause,
+  const { isScrolling, wpm, minsLeft, finished, calcNow, setWpm, speedUp, speedDown, start, pause,
     skipForward, skipBackward }                                                       = useAutoScroll();
   const dir                                                                          = useSelector(settingsGetUIDirSelector);
   const isRTL                                                                        = dir === 'rtl';
+  const { isMobileDevice }                                                           = useContext(DeviceInfoContext);
 
   const [wpmInput, setWpmInput] = useState(String(wpm));
 
   useEffect(() => {
     setWpmInput(String(wpm));
   }, [wpm]);
+
+  useEffect(() => {
+    if (finished) setIsOpen(false);
+  }, [finished]);
 
   const handleClose = () => {
     if (isScrolling) pause();
@@ -85,26 +92,26 @@ const AutoScrollBtn = () => {
 
       {isOpen && createPortal(
         <div className={`auto-scroll-panel${isRTL ? ' auto-scroll-panel--rtl' : ''}`}>
-          <Tip textKey="auto-scroll-close">
+          <Tip isMobile={isMobileDevice} textKey="auto-scroll-close">
             <button className="auto-scroll-close" onClick={handleClose}>
               <span className="material-symbols-outlined">close</span>
             </button>
           </Tip>
 
           <div className="auto-scroll-player">
-            <Tip textKey="auto-scroll-skip-back">
+            <Tip isMobile={isMobileDevice} textKey="auto-scroll-skip-back">
               <Button icon className="auto-scroll-skip" onClick={skipBackward}>
                 <span className="material-symbols-outlined">skip_previous</span>
               </Button>
             </Tip>
-            <Tip textKey={isScrolling ? 'auto-scroll-pause' : 'auto-scroll-play'}>
+            <Tip isMobile={isMobileDevice} textKey={isScrolling ? 'auto-scroll-pause' : 'auto-scroll-play'}>
               <Button icon circular className="auto-scroll-play-btn" onClick={() => isScrolling ? pause() : start()}>
                 <span className="material-symbols-outlined">
                   {isScrolling ? 'pause' : 'play_arrow'}
                 </span>
               </Button>
             </Tip>
-            <Tip textKey="auto-scroll-skip-fwd">
+            <Tip isMobile={isMobileDevice} textKey="auto-scroll-skip-fwd">
               <Button icon className="auto-scroll-skip" onClick={skipForward}>
                 <span className="material-symbols-outlined">skip_next</span>
               </Button>
@@ -120,7 +127,7 @@ const AutoScrollBtn = () => {
           <div className="auto-scroll-speed-section">
             <div className="auto-scroll-speed-label">{t('page-with-text.buttons.web.auto-scroll-speed')}</div>
             <div className="auto-scroll-speed-controls">
-              <Tip textKey="auto-scroll-slower">
+              <Tip isMobile={isMobileDevice} textKey="auto-scroll-slower">
                 <Button icon circular onClick={speedDown} disabled={wpm <= MIN_WPM}>
                   <span className="material-symbols-outlined">remove</span>
                 </Button>
@@ -135,7 +142,7 @@ const AutoScrollBtn = () => {
                 onBlur={e => commitWpm(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && commitWpm(e.target.value)}
               />
-              <Tip textKey="auto-scroll-faster">
+              <Tip isMobile={isMobileDevice} textKey="auto-scroll-faster">
                 <Button icon circular onClick={speedUp} disabled={wpm >= MAX_WPM}>
                   <span className="material-symbols-outlined">add</span>
                 </Button>
