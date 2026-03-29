@@ -19,11 +19,28 @@ const ReadingTimeEstimate = () => {
 
   useEffect(() => {
     if (!file) return undefined;
-    // Wait for content to render into the DOM
-    const timer = setTimeout(() => {
+    setMins(null);
+    let attempts  = 0;
+    let lastCount = 0;
+    let timer;
+
+    const check = () => {
       const words = countWords();
-      if (words > 0) setMins(Math.ceil(words / WPM));
-    }, 300);
+      if (words > 0 && words === lastCount) {
+        // count stable — content fully rendered
+        setMins(Math.ceil(words / WPM));
+        return;
+      }
+      lastCount = words;
+      attempts += 1;
+      if (attempts < 20) {
+        timer = setTimeout(check, 300);
+      } else if (words > 0) {
+        setMins(Math.ceil(words / WPM));
+      }
+    };
+
+    timer = setTimeout(check, 300);
     return () => clearTimeout(timer);
   }, [file]);
 
