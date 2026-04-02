@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { textPageGetFileSelector } from '../../../redux/selectors';
-
-const WPM = 270 / 3.5; // ≈ 77 words per minute
+import { DEFAULT_WPM } from './hooks/useAutoScroll';
 
 const countWords = () => {
   const el = document.querySelector('.font_settings.text__content');
@@ -28,7 +27,7 @@ const ReadingTimeEstimate = () => {
       const words = countWords();
       if (words > 0 && words === lastCount) {
         // count stable — content fully rendered
-        setMins(Math.ceil(words / WPM));
+        setMins(Math.ceil(words / DEFAULT_WPM));
         return;
       }
       lastCount = words;
@@ -36,7 +35,7 @@ const ReadingTimeEstimate = () => {
       if (attempts < 20) {
         timer = setTimeout(check, 300);
       } else if (words > 0) {
-        setMins(Math.ceil(words / WPM));
+        setMins(Math.ceil(words / DEFAULT_WPM));
       }
     };
 

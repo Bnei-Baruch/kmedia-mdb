@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 const SKIP_PX        = 60; // ~2 lines of text
-export const MIN_WPM = 30;
-export const MAX_WPM = 400;
+export const MIN_WPM     = 30;
+export const MAX_WPM     = 400;
+export const DEFAULT_WPM = 77;
 const WPM_STEP       = 30;
 const TIME_UPDATE_MS = 1000; // update remaining time every second
 const LS_KEY         = 'auto-scroll-wpm';
 
 const loadWpm = () => {
   const saved = parseInt(localStorage.getItem(LS_KEY), 10);
-  return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : 77;
+  return saved && saved >= MIN_WPM && saved <= MAX_WPM ? saved : DEFAULT_WPM;
 };
 
 const calcPxPerWord = () => {
@@ -20,10 +21,14 @@ const calcPxPerWord = () => {
   return wordCount > 0 ? scrollableH / wordCount : null;
 };
 
-const calcMinsLeft = (wpm, pxPerWord) => {
-  if (!pxPerWord) return null;
-  const remainingPx    = Math.max(0, document.body.scrollHeight - window.innerHeight - window.scrollY);
-  const remainingWords = remainingPx / pxPerWord;
+const calcMinsLeft = (wpm) => {
+  const el = document.querySelector('.font_settings.text__content');
+  if (!el) return null;
+  const wordCount = el.innerText.trim().split(/\s+/).filter(Boolean).length;
+  if (!wordCount) return null;
+  const scrollableH      = Math.max(1, document.body.scrollHeight - window.innerHeight);
+  const progress         = Math.min(1, window.scrollY / scrollableH);
+  const remainingWords   = wordCount * (1 - progress);
   return remainingWords / wpm;
 };
 
@@ -51,6 +56,7 @@ export const useAutoScroll = () => {
 
     if (lastTimeRef.current !== null) {
       const dt          = (timestamp - lastTimeRef.current) / 1000;
+      posRef.current    = window.scrollY; // sync with actual position to allow manual scrolling
       const pxPerSec    = pxPerWordRef.current
         ? wpmRef.current * pxPerWordRef.current / 60
         : wpmRef.current * (1.4 / 30);
@@ -59,7 +65,7 @@ export const useAutoScroll = () => {
 
       if (timestamp - lastTimeUpdate.current >= TIME_UPDATE_MS) {
         lastTimeUpdate.current = timestamp;
-        setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+        setMinsLeft(calcMinsLeft(wpmRef.current));
       }
 
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 2) {
@@ -83,7 +89,7 @@ export const useAutoScroll = () => {
     lastTimeRef.current    = null;
     lastTimeUpdate.current = 0;
     setFinished(false);
-    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current));
     setIsScrolling(true);
     rafRef.current = requestAnimationFrame(tickRef.current);
   }, []);
@@ -101,7 +107,7 @@ export const useAutoScroll = () => {
     setWpmState(clamped);
     const px = calcPxPerWord();
     if (px) pxPerWordRef.current = px;
-    setMinsLeft(calcMinsLeft(clamped, pxPerWordRef.current));
+    setMinsLeft(calcMinsLeft(clamped));
   }, []);
 
   const speedUp   = useCallback(() => setWpm(wpmRef.current + WPM_STEP), [setWpm]);
@@ -110,19 +116,19 @@ export const useAutoScroll = () => {
   const skipForward  = useCallback(() => {
     posRef.current = window.scrollY + SKIP_PX;
     window.scrollTo(0, posRef.current);
-    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current));
   }, []);
 
   const skipBackward = useCallback(() => {
     posRef.current = Math.max(0, window.scrollY - SKIP_PX);
     window.scrollTo(0, posRef.current);
-    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current));
   }, []);
 
   const calcNow = useCallback(() => {
     const px = calcPxPerWord();
     if (px) pxPerWordRef.current = px;
-    setMinsLeft(calcMinsLeft(wpmRef.current, pxPerWordRef.current));
+    setMinsLeft(calcMinsLeft(wpmRef.current));
   }, []);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
