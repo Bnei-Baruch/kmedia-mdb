@@ -56,7 +56,8 @@ export const useAutoScroll = () => {
 
     if (lastTimeRef.current !== null) {
       const dt          = (timestamp - lastTimeRef.current) / 1000;
-      posRef.current    = window.scrollY; // sync with actual position to allow manual scrolling
+      // Sync with manual scroll: if user scrolled more than 2px from our tracked position
+      if (Math.abs(window.scrollY - posRef.current) > 2) posRef.current = window.scrollY;
       const pxPerSec    = pxPerWordRef.current
         ? wpmRef.current * pxPerWordRef.current / 60
         : wpmRef.current * (1.4 / 30);
