@@ -958,6 +958,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} мин. чтения",
     "buttons": {
       "web": {
         "lessons": "Ко всем урокам по статье",
@@ -985,7 +986,17 @@
         "more-buttons": "Ещё",
         "toc": "Содержание",
         "copy-link": "Копировать ссылку",
-        "article-toc": "Все статьи"
+        "article-toc": "Все статьи",
+        "auto-scroll": "Автопрокрутка",
+        "auto-scroll-speed": "Скорость прокрутки",
+        "auto-scroll-play": "Воспроизвести (Space)",
+        "auto-scroll-pause": "Пауза (Space)",
+        "auto-scroll-skip-back": "Назад (←)",
+        "auto-scroll-skip-fwd": "Вперёд (→)",
+        "auto-scroll-slower": "Медленнее (↓)",
+        "auto-scroll-faster": "Быстрее (↑)",
+        "auto-scroll-close": "Закрыть",
+        "auto-scroll-time": "{{mins}} мин. до конца"
       },
       "mobile": {
         "lessons": "Уроки",
@@ -997,7 +1008,8 @@
         "download": "Скачать",
         "more-buttons": "Ещё",
         "toc": "Контент",
-        "copy-link": "Ссылка"
+        "copy-link": "Ссылка",
+        "auto-scroll": "Автопрокрутка"
       }
     }
   }

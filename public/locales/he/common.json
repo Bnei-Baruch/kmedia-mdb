@@ -942,6 +942,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} דק' קריאה",
     "buttons": {
       "web": {
         "lessons": "לכל השיעורים על המאמר",
@@ -969,7 +970,17 @@
         "more-buttons": "עוד",
         "toc": "תוכן עניינים",
         "copy-link": "העתק קישור",
-        "article-toc": "כל המאמרים"
+        "article-toc": "כל המאמרים",
+        "auto-scroll": "גלילה אוטומטית",
+        "auto-scroll-speed": "מהירות גלילה",
+        "auto-scroll-play": "הפעל (Space)",
+        "auto-scroll-pause": "השהה (Space)",
+        "auto-scroll-skip-back": "דלג אחורה (←)",
+        "auto-scroll-skip-fwd": "דלג קדימה (→)",
+        "auto-scroll-slower": "האט (↓)",
+        "auto-scroll-faster": "האץ (↑)",
+        "auto-scroll-close": "סגור",
+        "auto-scroll-time": "{{mins}} דק' לסיום"
       },
       "mobile": {
         "lessons": "שיעורים",
@@ -981,7 +992,8 @@
         "download": "הורדה",
         "more-buttons": "עוד",
         "toc": "תוכן",
-        "copy-link": "קישור"
+        "copy-link": "קישור",
+        "auto-scroll": "גלילה אוטו'"
       }
     }
   }
