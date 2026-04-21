@@ -49,6 +49,50 @@
   }
 }
 
+.agentic-search {
+  &__status-message.ui.icon.message > .icon.agentic-search__status-icon {
+    animation: agentic-search-rotate 1.2s linear infinite;
+    display: inline-block;
+  }
+
+  &__results {
+    margin-top: 1em;
+
+    > .media_item {
+      align-items: flex-start;
+      padding: 1em 0;
+    }
+
+    .media_item__logo {
+      flex: 0 0 144px;
+      max-width: 144px;
+    }
+
+    .media_item__content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
+  &__result-content {
+    line-height: 1.45;
+  }
+
+  &__result-line + &__result-line {
+    margin-top: .25em;
+  }
+}
+
+@keyframes agentic-search-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .media_item {
   .bg_transparent {
     background: transparent;

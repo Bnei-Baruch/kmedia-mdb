@@ -3,13 +3,22 @@ import PropTypes from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Button, Container, Divider, Header, Input, Label, List, Message } from 'semantic-ui-react';
+import { Button, Container, Divider, Header, Icon, Input, Label, Message } from 'semantic-ui-react';
 
 import {
+  CT_BLOG_POST,
+  CT_ARTICLE,
+  CT_SOURCE,
+  CT_TAG,
+  CT_VIDEO_PROGRAM,
+  IsCollectionContentType,
+  IsUnitContentType,
   SEARCH_GRAMMAR_HIT_TYPES,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
   SEARCH_INTENT_HIT_TYPES,
+  SCT_TWEET,
+  iconByContentTypeMap,
   BLOGS
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
@@ -28,6 +37,7 @@ import {
   SearchResultCollection,
   SearchResultIntent,
   SearchResultLandingPage,
+  SearchResultOneItem,
   SearchResultPost,
   SearchResultSeries,
   SearchResultSource,
@@ -38,6 +48,9 @@ import Filters from './Filters';
 import FilterLabels from '../FiltersAside/FilterLabels';
 import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
+import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
+import UnitLogo from '../shared/Logo/UnitLogo';
+import { SectionLogo } from '../../helpers/images';
 import {
   sourcesAreLoadedSelector,
   tagsAreLoadedSelector,
@@ -220,51 +233,168 @@ const SearchResults = ({ t }) => {
 
     return (
       <Container className="padded">
-        <Message
-          info
-          icon="sync alternate"
-          header={t('search.agentic.statusTitle')}
-          content={[
-            getAgenticStatusText(reasoningStatus),
-            reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
-          ].filter(Boolean).join(' | ')}
-        />
+        <Message info icon className="agentic-search__status-message">
+          <Icon name="sync alternate" className="agentic-search__status-icon" />
+          <Message.Content>
+            <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
+            <p>
+              {[
+                getAgenticStatusText(reasoningStatus),
+                reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
+              ].filter(Boolean).join(' | ')}
+            </p>
+          </Message.Content>
+        </Message>
       </Container>
     );
   };
 
-  const renderAgenticHit = (result, rank) => {
-    const contentType = result.content_type || (result.result_type === 'sources' ? 'SOURCE' : '');
-    const to          = canonicalLink({ id: result.mdb_uid, content_type: contentType });
-    const highlights  = Array.isArray(result.highlights) ? result.highlights : [];
+  const getAgenticResultMeta = result => {
+    const resultType = result.result_type || '';
+
+    switch (resultType) {
+      case 'sources':
+      case 'source':
+        return { contentType: result.content_type || CT_SOURCE, linkContentType: CT_SOURCE };
+      case 'tags':
+      case 'tag':
+      case 'topics':
+      case 'topic':
+        return { contentType: result.content_type || CT_TAG, linkContentType: CT_TAG };
+      case 'posts':
+      case 'post':
+      case 'blog_posts':
+      case 'blog_post':
+        return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+      case 'tweets':
+      case 'tweet':
+      case 'tweets_many':
+      case 'twitter':
+        return { contentType: result.content_type || SCT_TWEET, linkContentType: SCT_TWEET };
+      default:
+        if (result.content_type === 'POST') {
+          return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+        }
+
+        if (result.content_type === CT_BLOG_POST) {
+          return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+        }
+
+        if (result.content_type === CT_TAG) {
+          return { contentType: CT_TAG, linkContentType: CT_TAG };
+        }
+
+        if (result.content_type === SCT_TWEET) {
+          return { contentType: SCT_TWEET, linkContentType: SCT_TWEET };
+        }
+
+        return {
+          contentType    : result.content_type || '',
+          linkContentType: result.content_type || ''
+        };
+    }
+  };
+
+  const getAgenticLink = (result, linkContentType) => {
+    const currentLink = { pathname: location.pathname, search: location.search, hash: location.hash };
+
+    if (!result.mdb_uid) {
+      return currentLink;
+    }
+
+    if (linkContentType === SCT_TWEET) {
+      return { pathname: '/publications/twitter', search: '' };
+    }
+
+    if (
+      linkContentType === 'POST' ||
+      linkContentType === CT_SOURCE ||
+      linkContentType === CT_TAG ||
+      IsUnitContentType(linkContentType) ||
+      IsCollectionContentType(linkContentType)
+    ) {
+      return canonicalLink({ id: result.mdb_uid, content_type: linkContentType });
+    }
+
+    return currentLink;
+  };
+
+  const renderAgenticIcon = (type, label, to) => {
+    const icon = type === CT_TAG ? 'topics' : type === SCT_TWEET ? 'publications' : iconByContentTypeMap.get(type) || 'help';
+    const content = (
+      <div className="icon">
+        <SectionLogo name={icon} width="70" height="70" />
+        <span>{label}</span>
+      </div>
+    );
+
+    return to ? <Link to={to}>{content}</Link> : content;
+  };
+
+  const renderAgenticLogo = (result, contentType, contentTypeLabel, to) => {
+    if (contentType === CT_BLOG_POST) {
+      return renderAgenticIcon(contentType, contentTypeLabel, to);
+    }
+
+    if (IsUnitContentType(contentType) && contentType !== CT_ARTICLE) {
+      if (result.duration) {
+        return <UnitLogoWithDuration unit={{ ...result, id: result.mdb_uid }} width={144} />;
+      }
+
+      return <div style={{ minWidth: 144 }}><UnitLogo unitId={result.mdb_uid} width={144} /></div>;
+    }
+
+    if (IsCollectionContentType(contentType) && contentType === CT_VIDEO_PROGRAM) {
+      return <div style={{ minWidth: 144 }}><UnitLogo collectionId={result.mdb_uid} width={144} /></div>;
+    }
+
+    const iconType = contentType === CT_SOURCE ? 'sources' : contentType;
+    return renderAgenticIcon(iconType, contentTypeLabel, to);
+  };
+
+  const renderAgenticContent = (result, highlights) => {
+    if (!result.description && !result.reason && highlights.length === 0) {
+      return null;
+    }
 
     return (
-      <List.Item key={`${result.mdb_uid}_${rank}`} className="media_item">
-        <List.Content>
-          <Header as="h3">
-            <Link to={to}>{result.title || result.mdb_uid}</Link>
-          </Header>
-          <div className="description">
-            {[contentType && t(`constants.content-types.${contentType}`), result.date].filter(Boolean).join(' | ')}
+      <div className="agentic-search__result-content">
+        {result.description && <div className="agentic-search__result-line">{result.description}</div>}
+        {result.reason && (
+          <div className="agentic-search__result-line">
+            <strong>{t('search.agentic.reason')}</strong>
+            {`: ${result.reason}`}
           </div>
-          {result.description && <Container>{result.description}</Container>}
-          {result.reason && (
-            <Container>
-              <strong>{t('search.agentic.reason')}</strong>
-              {`: ${result.reason}`}
-            </Container>
-          )}
-          {highlights.length > 0 && (
-            <Container>
-              <strong>{t('search.agentic.highlights')}</strong>
-              <List bulleted>
-                {highlights.map((highlight, i) => <List.Item key={i}>{highlight}</List.Item>)}
-              </List>
-            </Container>
-          )}
-        </List.Content>
-      </List.Item>
+        )}
+        {highlights.length > 0 && (
+          <div className="agentic-search__result-line">
+            <strong>{t('search.agentic.highlights')}</strong>
+            {`: ${highlights.slice(0, 3).join(' | ')}`}
+          </div>
+        )}
+      </div>
     );
+  };
+
+  const renderAgenticHit = (result, rank) => {
+    const { contentType, linkContentType } = getAgenticResultMeta(result);
+    const to          = getAgenticLink(result, linkContentType);
+    const contentTypeLabel = contentType
+      ? t(`constants.content-types.${contentType}`, { defaultValue: contentType })
+      : '';
+    const highlights       = Array.isArray(result.highlights) ? result.highlights : [];
+
+    return <SearchResultOneItem
+      key={`${result.mdb_uid}_${rank}`}
+      id={`${result.mdb_uid}_${rank}`}
+      title={result.title || result.mdb_uid}
+      link={to}
+      logo={renderAgenticLogo(result, contentType, contentTypeLabel, to)}
+      content={renderAgenticContent(result, highlights)}
+      collectionTitle={contentTypeLabel}
+      date={result.date}
+      click={() => null}
+    />;
   };
 
   const handleReasoningFollowup = () => {
@@ -343,7 +473,7 @@ const SearchResults = ({ t }) => {
             />
           )}
           {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
-          {results.length > 0 && <List divided relaxed>{results.map(renderAgenticHit)}</List>}
+          {results.length > 0 && <div className="agentic-search__results">{results.map(renderAgenticHit)}</div>}
           {renderAgenticFollowup()}
         </Container>
       </>
