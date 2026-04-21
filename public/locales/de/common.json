@@ -287,6 +287,47 @@
       "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
       "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
     },
+    "types": {
+      "regular": "Normale Suche",
+      "agentic": "Agenten-Suche",
+      "beta": "Beta",
+      "agenticBeta": "Die Agenten-Suche befindet sich in der Beta-Version."
+    },
+    "agentic": {
+      "warningTitle": "AI-generierte Ergebnisse",
+      "warning": "Einige Informationen in diesen Ergebnissen wurden von AI generiert und können Fehler oder ungenaue Beschreibungen enthalten.",
+      "summary": "AI-Zusammenfassung",
+      "reason": "Warum dieses Ergebnis",
+      "highlights": "Hervorhebungen",
+      "no-results": "Die Agenten-Suche hat keine Ergebnisse für \"{{query}}\" gefunden.",
+      "followupTitle": "Diese Ergebnisse verfeinern",
+      "followupPlaceholder": "Stelle eine Folgefrage...",
+      "followupButton": "Verfeinern",
+      "followupsRemaining": "{{count}} Folgefragen verbleibend",
+      "followupsExhausted": "Für diese Sitzung sind keine Folgefragen mehr verfügbar. Starte eine neue Agenten-Suche, um fortzufahren.",
+      "statusTitle": "Die Agenten-Suche arbeitet",
+      "statusIteration": "Schritt {{iteration}}",
+      "status": {
+        "pending": "Agenten-Suche wird vorbereitet...",
+        "planning": "Anfrage wird analysiert und Suchstrategie vorbereitet...",
+        "thinking": "Denkt nach...",
+        "verifying": "Ergebnisse werden überprüft...",
+        "done": "Fertig.",
+        "error": "Die Agenten-Suche ist fehlgeschlagen.",
+        "working": "Arbeitet...",
+        "tools": {
+          "usingTool": "Werkzeug wird verwendet...",
+          "elasticsearch_search": "Archiv wird durchsucht...",
+          "query_source_ai": "Quellentext wird geprüft...",
+          "query_transcript_ai": "Transkript wird geprüft...",
+          "get_available_books": "Bücher werden gesucht...",
+          "get_sources_by_author": "Quellen nach Autor werden gesucht...",
+          "get_sources_by_source": "Quellenstruktur wird gesucht...",
+          "get_collections": "Sammlungen werden gesucht...",
+          "get_content_units_by_collection": "Sammlungselemente werden gesucht..."
+        }
+      }
+    },
     "results": {
       "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",
       "no-results": "Ihre Abfrage <1><0>{{query}}</0></1> wurde nicht gefunden."

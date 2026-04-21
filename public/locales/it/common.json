@@ -288,6 +288,47 @@
       "newertoolder": "Newer to older",
       "oldertonewer": "Older to newer"
     },
+    "types": {
+      "regular": "Ricerca normale",
+      "agentic": "Ricerca agentica",
+      "beta": "Beta",
+      "agenticBeta": "La ricerca agentica è in beta."
+    },
+    "agentic": {
+      "warningTitle": "Risultati generati da AI",
+      "warning": "Alcune informazioni in questi risultati sono generate da AI e possono contenere errori o descrizioni inaccurate.",
+      "summary": "Sintesi AI",
+      "reason": "Perché questo risultato",
+      "highlights": "Evidenziazioni",
+      "no-results": "La ricerca agentica non ha trovato risultati per \"{{query}}\".",
+      "followupTitle": "Affina questi risultati",
+      "followupPlaceholder": "Fai una domanda di follow-up...",
+      "followupButton": "Affina",
+      "followupsRemaining": "{{count}} follow-up rimanenti",
+      "followupsExhausted": "Non restano follow-up per questa sessione. Avvia una nuova ricerca agentica per continuare.",
+      "statusTitle": "La ricerca agentica è in corso",
+      "statusIteration": "Passaggio {{iteration}}",
+      "status": {
+        "pending": "Preparazione della ricerca agentica...",
+        "planning": "Analisi della query e preparazione della strategia di ricerca...",
+        "thinking": "Elaborazione...",
+        "verifying": "Verifica dei risultati...",
+        "done": "Completato.",
+        "error": "La ricerca agentica non è riuscita.",
+        "working": "In corso...",
+        "tools": {
+          "usingTool": "Uso dello strumento...",
+          "elasticsearch_search": "Ricerca nell'archivio...",
+          "query_source_ai": "Controllo del testo sorgente...",
+          "query_transcript_ai": "Controllo della trascrizione...",
+          "get_available_books": "Ricerca dei libri...",
+          "get_sources_by_author": "Ricerca delle fonti per autore...",
+          "get_sources_by_source": "Ricerca della struttura della fonte...",
+          "get_collections": "Ricerca delle collezioni...",
+          "get_content_units_by_collection": "Ricerca degli elementi della collezione..."
+        }
+      }
+    },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."

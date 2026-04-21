@@ -292,6 +292,47 @@
       "newertoolder": "Newer to older",
       "oldertonewer": "Older to newer"
     },
+    "types": {
+      "regular": "Regular Search",
+      "agentic": "Agentic Search",
+      "beta": "Beta",
+      "agenticBeta": "Agentic Search is in beta."
+    },
+    "agentic": {
+      "warningTitle": "AI-generated results",
+      "warning": "Some information in these results is AI generated and may contain mistakes or inaccurate descriptions.",
+      "summary": "AI summary",
+      "reason": "Why this result",
+      "highlights": "Highlights",
+      "no-results": "Agentic Search found no results for \"{{query}}\".",
+      "followupTitle": "Refine these results",
+      "followupPlaceholder": "Ask a follow-up...",
+      "followupButton": "Refine",
+      "followupsRemaining": "{{count}} follow-ups remaining",
+      "followupsExhausted": "No follow-ups remain for this session. Start a new Agentic Search to continue.",
+      "statusTitle": "Agentic Search is working",
+      "statusIteration": "Step {{iteration}}",
+      "status": {
+        "pending": "Preparing Agentic Search...",
+        "planning": "Analyzing query and preparing search strategy...",
+        "thinking": "Thinking...",
+        "verifying": "Verifying results...",
+        "done": "Done.",
+        "error": "Agentic Search failed.",
+        "working": "Working...",
+        "tools": {
+          "usingTool": "Using tool...",
+          "elasticsearch_search": "Searching archive...",
+          "query_source_ai": "Checking source text...",
+          "query_transcript_ai": "Checking transcript...",
+          "get_available_books": "Looking up books...",
+          "get_sources_by_author": "Looking up author sources...",
+          "get_sources_by_source": "Looking up source structure...",
+          "get_collections": "Looking up collections...",
+          "get_content_units_by_collection": "Looking up collection items..."
+        }
+      }
+    },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."

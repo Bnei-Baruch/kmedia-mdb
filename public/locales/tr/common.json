@@ -290,6 +290,47 @@
       "newertoolder": "yeniden eskiye",
       "oldertonewer": "eskiden yeniye"
     },
+    "types": {
+      "regular": "Normal arama",
+      "agentic": "Ajanlı arama",
+      "beta": "Beta",
+      "agenticBeta": "Ajanlı arama beta aşamasındadır."
+    },
+    "agentic": {
+      "warningTitle": "AI tarafından oluşturulan sonuçlar",
+      "warning": "Bu sonuçlardaki bazı bilgiler AI tarafından oluşturulmuştur ve hatalar veya doğru olmayan açıklamalar içerebilir.",
+      "summary": "AI özeti",
+      "reason": "Bu sonucun nedeni",
+      "highlights": "Öne çıkanlar",
+      "no-results": "Ajanlı arama \"{{query}}\" için sonuç bulamadı.",
+      "followupTitle": "Bu sonuçları iyileştir",
+      "followupPlaceholder": "Bir takip sorusu sorun...",
+      "followupButton": "İyileştir",
+      "followupsRemaining": "{{count}} takip hakkı kaldı",
+      "followupsExhausted": "Bu oturum için takip hakkı kalmadı. Devam etmek için yeni bir ajanlı arama başlatın.",
+      "statusTitle": "Ajanlı arama çalışıyor",
+      "statusIteration": "Adım {{iteration}}",
+      "status": {
+        "pending": "Ajanlı arama hazırlanıyor...",
+        "planning": "Sorgu analiz ediliyor ve arama stratejisi hazırlanıyor...",
+        "thinking": "Düşünüyor...",
+        "verifying": "Sonuçlar doğrulanıyor...",
+        "done": "Tamamlandı.",
+        "error": "Ajanlı arama başarısız oldu.",
+        "working": "Çalışıyor...",
+        "tools": {
+          "usingTool": "Araç kullanılıyor...",
+          "elasticsearch_search": "Arşiv aranıyor...",
+          "query_source_ai": "Kaynak metin kontrol ediliyor...",
+          "query_transcript_ai": "Transkript kontrol ediliyor...",
+          "get_available_books": "Kitaplar aranıyor...",
+          "get_sources_by_author": "Yazara göre kaynaklar aranıyor...",
+          "get_sources_by_source": "Kaynak yapısı aranıyor...",
+          "get_collections": "Koleksiyonlar aranıyor...",
+          "get_content_units_by_collection": "Koleksiyon öğeleri aranıyor..."
+        }
+      }
+    },
     "results": {
       "empty-query": "Hiç bir sıralama koşulu verilmedi. Sıralamak için lütfen yukarıdaki kutudan seçin.",
       "no-results": "<1><0>{{query}}</0></1> aramanız hiç bir sonuç vermedi."

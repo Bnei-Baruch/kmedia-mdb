@@ -289,6 +289,47 @@
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
     },
+    "types": {
+      "regular": "Búsqueda normal",
+      "agentic": "Búsqueda con agente",
+      "beta": "Beta",
+      "agenticBeta": "La búsqueda con agente está en beta."
+    },
+    "agentic": {
+      "warningTitle": "Resultados generados por AI",
+      "warning": "Parte de la información en estos resultados fue generada por AI y puede contener errores o descripciones inexactas.",
+      "summary": "Resumen de AI",
+      "reason": "Por qué este resultado",
+      "highlights": "Fragmentos destacados",
+      "no-results": "La búsqueda con agente no encontró resultados para \"{{query}}\".",
+      "followupTitle": "Refinar estos resultados",
+      "followupPlaceholder": "Haz una pregunta de seguimiento...",
+      "followupButton": "Refinar",
+      "followupsRemaining": "{{count}} seguimientos restantes",
+      "followupsExhausted": "No quedan seguimientos para esta sesión. Inicia una nueva búsqueda con agente para continuar.",
+      "statusTitle": "La búsqueda con agente está trabajando",
+      "statusIteration": "Paso {{iteration}}",
+      "status": {
+        "pending": "Preparando la búsqueda con agente...",
+        "planning": "Analizando la consulta y preparando la estrategia de búsqueda...",
+        "thinking": "Pensando...",
+        "verifying": "Verificando resultados...",
+        "done": "Terminado.",
+        "error": "La búsqueda con agente falló.",
+        "working": "Trabajando...",
+        "tools": {
+          "usingTool": "Usando herramienta...",
+          "elasticsearch_search": "Buscando en el archivo...",
+          "query_source_ai": "Revisando texto fuente...",
+          "query_transcript_ai": "Revisando transcripción...",
+          "get_available_books": "Buscando libros...",
+          "get_sources_by_author": "Buscando fuentes por autor...",
+          "get_sources_by_source": "Buscando estructura de fuente...",
+          "get_collections": "Buscando colecciones...",
+          "get_content_units_by_collection": "Buscando elementos de la colección..."
+        }
+      }
+    },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
       "no-results": "No se encontraron resultados para <1><0>{{query}}</0></1>."

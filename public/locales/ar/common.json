@@ -291,6 +291,47 @@
       "newertoolder": "الأحدث إلى الأقدم",
       "oldertonewer": "الأقدم إلى الأحدث"
     },
+    "types": {
+      "regular": "بحث عادي",
+      "agentic": "بحث وكيل ذكي",
+      "beta": "تجريبي",
+      "agenticBeta": "بحث الوكيل الذكي في مرحلة تجريبية."
+    },
+    "agentic": {
+      "warningTitle": "نتائج مولدة بواسطة AI",
+      "warning": "بعض المعلومات في هذه النتائج مولدة بواسطة AI وقد تحتوي على أخطاء أو أوصاف غير دقيقة.",
+      "summary": "ملخص AI",
+      "reason": "سبب هذه النتيجة",
+      "highlights": "مقاطع بارزة",
+      "no-results": "لم يجد بحث الوكيل الذكي نتائج لـ \"{{query}}\".",
+      "followupTitle": "تنقيح هذه النتائج",
+      "followupPlaceholder": "اطرح سؤال متابعة...",
+      "followupButton": "تنقيح",
+      "followupsRemaining": "تبقى {{count}} من أسئلة المتابعة",
+      "followupsExhausted": "لم تتبق أسئلة متابعة لهذه الجلسة. ابدأ بحث وكيل ذكي جديد للمتابعة.",
+      "statusTitle": "بحث الوكيل الذكي يعمل",
+      "statusIteration": "الخطوة {{iteration}}",
+      "status": {
+        "pending": "جار تحضير بحث الوكيل الذكي...",
+        "planning": "جار تحليل الاستعلام وتحضير استراتيجية البحث...",
+        "thinking": "جار التفكير...",
+        "verifying": "جار التحقق من النتائج...",
+        "done": "تم.",
+        "error": "فشل بحث الوكيل الذكي.",
+        "working": "جار العمل...",
+        "tools": {
+          "usingTool": "جار استخدام أداة...",
+          "elasticsearch_search": "جار البحث في الأرشيف...",
+          "query_source_ai": "جار فحص نص المصدر...",
+          "query_transcript_ai": "جار فحص النص المفرغ...",
+          "get_available_books": "جار البحث عن الكتب...",
+          "get_sources_by_author": "جار البحث عن المصادر حسب المؤلف...",
+          "get_sources_by_source": "جار البحث عن بنية المصدر...",
+          "get_collections": "جار البحث عن المجموعات...",
+          "get_content_units_by_collection": "جار البحث عن عناصر المجموعة..."
+        }
+      }
+    },
     "results": {
       "empty-query": "لم يتم تقديم مصطلح البحث. الرجاء استخدام المربع أعلاه للبحث.",
       "no-results": "بحثك عن <1><0>{{query}}</0></1> لم يعثر على أية نتائج."

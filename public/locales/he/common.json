@@ -291,6 +291,47 @@
       "newertoolder": "חדש לישן",
       "oldertonewer": "ישן לחדש"
     },
+    "types": {
+      "regular": "חיפוש רגיל",
+      "agentic": "חיפוש סוכני",
+      "beta": "בטא",
+      "agenticBeta": "חיפוש סוכני נמצא בגרסת בטא."
+    },
+    "agentic": {
+      "warningTitle": "תוצאות שנוצרו על ידי AI",
+      "warning": "חלק מהמידע בתוצאות אלה נוצר על ידי AI ועלול להכיל טעויות או תיאורים לא מדויקים.",
+      "summary": "סיכום AI",
+      "reason": "למה התוצאה הזו",
+      "highlights": "קטעים מודגשים",
+      "no-results": "החיפוש הסוכני לא מצא תוצאות עבור \"{{query}}\".",
+      "followupTitle": "שיפור התוצאות",
+      "followupPlaceholder": "שאלו שאלת המשך...",
+      "followupButton": "שפר",
+      "followupsRemaining": "נותרו {{count}} שאלות המשך",
+      "followupsExhausted": "לא נותרו שאלות המשך בסשן הזה. התחילו חיפוש סוכני חדש כדי להמשיך.",
+      "statusTitle": "החיפוש הסוכני עובד",
+      "statusIteration": "שלב {{iteration}}",
+      "status": {
+        "pending": "מכין חיפוש סוכני...",
+        "planning": "מנתח את השאלה ומכין אסטרטגיית חיפוש...",
+        "thinking": "חושב...",
+        "verifying": "מאמת תוצאות...",
+        "done": "הסתיים.",
+        "error": "החיפוש הסוכני נכשל.",
+        "working": "עובד...",
+        "tools": {
+          "usingTool": "משתמש בכלי...",
+          "elasticsearch_search": "מחפש בארכיון...",
+          "query_source_ai": "בודק טקסט מקור...",
+          "query_transcript_ai": "בודק תמליל...",
+          "get_available_books": "מחפש ספרים...",
+          "get_sources_by_author": "מחפש מקורות לפי מחבר...",
+          "get_sources_by_source": "מחפש מבנה מקור...",
+          "get_collections": "מחפש אוספים...",
+          "get_content_units_by_collection": "מחפש פריטים באוסף..."
+        }
+      }
+    },
     "results": {
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."

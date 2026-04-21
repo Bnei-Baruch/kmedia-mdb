@@ -217,6 +217,22 @@ class Api {
     })}`)
   );
 
+  static reasoningSearchStart = () => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/start'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({})
+  });
+
+  static reasoningSearch = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearchStatus = sessionId => Requests.get(`search/reasoning/status?${Requests.makeParams({ session_id: sessionId })}`);
+
   static getAsset = path => Requests.getAsset(path);
 
   static getUnzipUIDs = ({ path, ids }) => {

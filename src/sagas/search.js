@@ -1,9 +1,9 @@
-import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, call, cancel, fork, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
-import { actions, selectors, types } from '../redux/modules/search';
+import { actions, SEARCH_TYPES, selectors, types } from '../redux/modules/search';
 import { types as settingsTypes } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
@@ -21,6 +21,8 @@ import {
   searchGetPrevFilterParamsSelector,
   searchGetPrevQuerySelector,
   searchGetQuerySelector,
+  searchGetReasoningResultSelector,
+  searchGetSearchTypeSelector,
   searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
   settingsGetUILangSelector
@@ -28,6 +30,36 @@ import {
 
 // TODO: Use debounce after redux-saga updated.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const statusPollIntervalMs = 2500;
+
+const isDebEnabled = deb => deb === true || deb === 'true';
+
+function* pollReasoningStatus(sessionId, skipInitialCompleted = false) {
+  let sawActiveStatus = false;
+
+  while (true) {
+    try {
+      const { data } = yield call(Api.reasoningSearchStatus, sessionId);
+      if (data) {
+        const isCompleted = data.done || data.state === 'completed';
+        if (skipInitialCompleted && isCompleted && !sawActiveStatus) {
+          yield call(delay, statusPollIntervalMs);
+          continue;
+        }
+
+        sawActiveStatus = !isCompleted;
+        yield put(actions.reasoningStatusUpdate(data));
+        if (isCompleted || data.state === 'failed') {
+          return;
+        }
+      }
+    } catch (err) {
+      // Status polling should not fail the final reasoning request.
+    }
+
+    yield call(delay, statusPollIntervalMs);
+  }
+}
 
 function* autocomplete(action) {
   try {
@@ -74,6 +106,61 @@ function getIdsForFetch(hits, types) {
 export function* search(action) {
   try {
     const query     = yield select(searchGetQuerySelector);
+    const searchType = yield select(searchGetSearchTypeSelector);
+    const deb        = yield select(searchGetDebSelector);
+    const uiLang     = yield select(settingsGetUILangSelector);
+    const isFollowup = action && action.type === types['search/reasoningFollowup'];
+
+    // Redirect from home page.
+    if (action && action.type === types['search/search'] && !action.payload) {
+      yield put(push({ pathname: 'search' }));
+      yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
+    }
+
+    if (searchType === SEARCH_TYPES.AGENTIC) {
+      const previousReasoningResult = yield select(searchGetReasoningResultSelector);
+      const sessionIdFromPrevious   = previousReasoningResult?.session_id;
+      const q                       = isFollowup ? action.payload?.query?.trim() : query?.trim();
+      if (!q) {
+        yield put(actions.searchFailure(null));
+        return;
+      }
+
+      if (isFollowup && (!sessionIdFromPrevious || previousReasoningResult.followups_remaining <= 0)) {
+        return;
+      }
+
+      let sessionId = sessionIdFromPrevious;
+      yield put(actions.reasoningSearchStart({ keepResult: isFollowup, sessionId }));
+      if (!isFollowup) {
+        const { data: startData } = yield call(Api.reasoningSearchStart);
+        sessionId                 = startData.session_id;
+        yield put(actions.reasoningStatusUpdate({
+          session_id: sessionId,
+          state     : 'pending',
+          phase     : 'pending',
+          done      : false
+        }));
+      }
+
+      const statusTask = yield fork(pollReasoningStatus, sessionId, isFollowup);
+      let data;
+      try {
+        const { data: responseData } = yield call(Api.reasoningSearch, {
+          session_id : sessionId,
+          q,
+          ui_language: uiLang,
+          deb        : isDebEnabled(deb)
+        });
+        data = responseData;
+      } finally {
+        yield cancel(statusTask);
+      }
+
+      yield put(actions.reasoningSearchSuccess({ searchResults: data, query: isFollowup ? previousReasoningResult.query : query }));
+      return;
+    }
+
     const prevQuery = yield select(searchGetPrevQuerySelector);
     let pageNo      = yield select(searchGetPageNoSelector);
 
@@ -106,16 +193,8 @@ export function* search(action) {
       }
     }
 
-    const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const sortBy           = yield select(searchGetSortBySelector);
-    const deb              = yield select(searchGetDebSelector);
-
-    // Redirect from home page.
-    if (action && action.type === types['search/search'] && !action.payload) {
-      yield put(push({ pathname: 'search' }));
-      yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
-    }
 
     const q = query?.trim() ? `${query.trim()}${filterParams}` : filterParams;
     if (!q) {
@@ -129,7 +208,7 @@ export function* search(action) {
       sortBy,
       ui_language: uiLang,
       content_languages: contentLanguages,
-      deb,
+      deb: isDebEnabled(deb),
       pageNo,
       pageSize: 20
     };
@@ -222,15 +301,15 @@ export function* search(action) {
 
 // Propagate URL search params to redux.
 export function* hydrateUrl() {
-  const urlQuery                       = yield* getQuery();
-  const { q, page = '1', deb = false } = urlQuery;
+  const urlQuery                                            = yield* getQuery();
+  const { q, page = '1', deb = false, search_type: type } = urlQuery;
 
-  const reduxQuery  = yield select(searchGetQuerySelector);
-  const reduxPageNo = yield select(searchGetPageNoSelector);
-  const reduxDeb    = yield select(searchGetDebSelector);
-  if (deb !== reduxDeb) {
-    yield put(actions.setDeb(deb));
-  }
+  const reduxQuery      = yield select(searchGetQuerySelector);
+  const reduxPageNo     = yield select(searchGetPageNoSelector);
+  const reduxDeb        = yield select(searchGetDebSelector);
+  const reduxSearchType = yield select(searchGetSearchTypeSelector);
+  const searchType      = type === SEARCH_TYPES.AGENTIC ? SEARCH_TYPES.AGENTIC : SEARCH_TYPES.REGULAR;
+  const isDeb           = isDebEnabled(deb);
 
   if (q) {
     if (q !== reduxQuery) {
@@ -245,6 +324,14 @@ export function* hydrateUrl() {
     if (reduxPageNo !== pageNo) {
       yield put(actions.setPage(pageNo));
     }
+  }
+
+  if (isDeb !== reduxDeb) {
+    yield put(actions.setDeb(isDeb));
+  }
+
+  if (searchType !== reduxSearchType) {
+    yield put(actions.setSearchType(searchType));
   }
 }
 
@@ -269,6 +356,11 @@ function* updateSortByInQuery(action) {
   yield* urlUpdateQuery(query => Object.assign(query, { sort_by: sortBy }));
 }
 
+function* updateSearchTypeInQuery(action) {
+  const searchType = action.payload === SEARCH_TYPES.AGENTIC ? SEARCH_TYPES.AGENTIC : null;
+  yield* urlUpdateQuery(query => Object.assign(query, { search_type: searchType, page: null }));
+}
+
 function* watchQueryUpdate() {
   yield takeEvery(types['search/updateQuery'], updateUrl);
   yield takeLatest(types['search/updateQuery'], autocomplete);
@@ -282,6 +374,8 @@ function* watchSearch() {
     filterTypes['filters/setFilterValueMulti'],
     settingsTypes['settings/setContentLanguages'],
     types['search/search'],
+    types['search/reasoningFollowup'],
+    types['search/setSearchType'],
     types['search/setDeb'],
     types['search/setPage'],
     types['search/setSortBy']
@@ -296,6 +390,10 @@ function* watchSetSortBy() {
   yield takeLatest(types['search/setSortBy'], updateSortByInQuery);
 }
 
+function* watchSetSearchType() {
+  yield takeLatest(types['search/setSearchType'], updateSearchTypeInQuery);
+}
+
 function* watchHydrateUrl() {
   yield takeLatest(types['search/hydrateUrl'], hydrateUrl);
 }
@@ -305,5 +403,6 @@ export const sagas = [
   watchQueryUpdate,
   watchSearch,
   watchSetPage,
+  watchSetSearchType,
   watchSetSortBy
 ];
