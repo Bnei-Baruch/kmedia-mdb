@@ -352,24 +352,59 @@ const SearchResults = ({ t }) => {
     return renderAgenticIcon(iconType, contentTypeLabel, to);
   };
 
+  const renderAgenticHighlight = highlight => {
+    const nodes = [];
+    const regex = /<em\b[^>]*>([\s\S]*?)<\/em>/gi;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(highlight)) !== null) {
+      const [, emphasizedText] = match;
+      const { index } = match;
+      const { lastIndex: nextLastIndex } = regex;
+
+      if (index > lastIndex) {
+        nodes.push(highlight.slice(lastIndex, index));
+      }
+
+      nodes.push(<span key={nodes.length} className="agentic-search__highlight-emphasis">{emphasizedText}</span>);
+      lastIndex = nextLastIndex;
+    }
+
+    if (lastIndex < highlight.length) {
+      nodes.push(highlight.slice(lastIndex));
+    }
+
+    return nodes;
+  };
+
   const renderAgenticContent = (result, highlights) => {
     if (!result.description && !result.reason && highlights.length === 0) {
       return null;
     }
 
+    const hasHighlights = highlights.length > 0;
+
     return (
       <div className="agentic-search__result-content">
-        {result.description && <div className="agentic-search__result-line">{result.description}</div>}
-        {result.reason && (
+        {hasHighlights && (
           <div className="agentic-search__result-line">
-            <strong>{t('search.agentic.reason')}</strong>
-            {`: ${result.reason}`}
+            <span className="agentic-search__result-label">{t('search.agentic.highlights')}:</span>
+            {' '}
+            {highlights.slice(0, 3).map((highlight, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && ' | '}
+                {renderAgenticHighlight(highlight)}
+              </React.Fragment>
+            ))}
           </div>
         )}
-        {highlights.length > 0 && (
+        {!hasHighlights && result.description && <div className="agentic-search__result-line">{result.description}</div>}
+        {result.reason && (
           <div className="agentic-search__result-line">
-            <strong>{t('search.agentic.highlights')}</strong>
-            {`: ${highlights.slice(0, 3).join(' | ')}`}
+            <span className="agentic-search__result-label">{t('search.agentic.reason')}:</span>
+            {' '}
+            {result.reason}
           </div>
         )}
       </div>
@@ -382,7 +417,9 @@ const SearchResults = ({ t }) => {
     const contentTypeLabel = contentType
       ? t(`constants.content-types.${contentType}`, { defaultValue: contentType })
       : '';
-    const highlights       = Array.isArray(result.highlights) ? result.highlights : [];
+    const highlights       = Array.isArray(result.highlights)
+      ? result.highlights.map(highlight => `${highlight}`.trim()).filter(Boolean)
+      : [];
 
     return <SearchResultOneItem
       key={`${result.mdb_uid}_${rank}`}

@@ -71,6 +71,12 @@
     .media_item__content {
       flex: 1 1 auto;
       min-width: 0;
+
+      > .ui.container.line_clamp_2_lines {
+        display: block !important;
+        -webkit-line-clamp: unset;
+        overflow: visible;
+      }
     }
   }
 
@@ -80,6 +86,19 @@
 
   &__result-line + &__result-line {
     margin-top: .25em;
+  }
+
+  &__result-label {
+    color: #666;
+    font-weight: 635;
+  }
+
+  &__highlight-emphasis {
+    background: rgba(65, 131, 196, .14);
+    border-radius: 2px;
+    color: #1f5f86;
+    font-weight: 700;
+    padding: 0 .08em;
   }
 }
 
