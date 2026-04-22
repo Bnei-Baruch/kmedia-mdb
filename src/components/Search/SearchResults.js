@@ -234,7 +234,10 @@ const SearchResults = ({ t }) => {
     return (
       <Container className="padded">
         <Message info icon className="agentic-search__status-message">
-          <Icon name="sync alternate" className="agentic-search__status-icon" />
+          <div className="agentic-search__status-visual" aria-hidden="true">
+            <Icon name="book" className="agentic-search__status-book" />
+            <Icon name="search" className="agentic-search__status-search" />
+          </div>
           <Message.Content>
             <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
             <p>
