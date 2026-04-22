@@ -299,8 +299,8 @@
       "agenticBeta": "Agentní vyhledávání je v beta verzi."
     },
     "agentic": {
-      "warningTitle": "Výsledky generované AI",
-      "warning": "Některé informace v těchto výsledcích jsou generované AI a mohou obsahovat chyby nebo nepřesné popisy.",
+      "warningTitle": "Popisy a štítky generované AI",
+      "warning": "Popisy a štítky na této stránce vyhledávání mohou být generované AI a mohou obsahovat chyby nebo nepřesnosti.",
       "summary": "Shrnutí AI",
       "reason": "Proč tento výsledek",
       "highlights": "Zvýraznění",

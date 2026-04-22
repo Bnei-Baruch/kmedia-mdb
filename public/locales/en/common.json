@@ -300,8 +300,8 @@
       "agenticBeta": "Agentic Search is in beta."
     },
     "agentic": {
-      "warningTitle": "AI-generated results",
-      "warning": "Some information in these results is AI generated and may contain mistakes or inaccurate descriptions.",
+      "warningTitle": "AI-generated descriptions and labels",
+      "warning": "Descriptions and labels on this search page may be AI-generated and may contain mistakes or inaccuracies.",
       "summary": "AI summary",
       "reason": "Why this result",
       "highlights": "Highlights",

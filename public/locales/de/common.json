@@ -296,8 +296,8 @@
       "agenticBeta": "Die Agenten-Suche befindet sich in der Beta-Version."
     },
     "agentic": {
-      "warningTitle": "AI-generierte Ergebnisse",
-      "warning": "Einige Informationen in diesen Ergebnissen wurden von AI generiert und können Fehler oder ungenaue Beschreibungen enthalten.",
+      "warningTitle": "AI-generierte Beschreibungen und Labels",
+      "warning": "Beschreibungen und Labels auf dieser Suchseite können von AI generiert sein und Fehler oder Ungenauigkeiten enthalten.",
       "summary": "AI-Zusammenfassung",
       "reason": "Warum dieses Ergebnis",
       "highlights": "Hervorhebungen",

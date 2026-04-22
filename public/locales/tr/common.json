@@ -299,8 +299,8 @@
       "agenticBeta": "Ajanlı arama beta aşamasındadır."
     },
     "agentic": {
-      "warningTitle": "AI tarafından oluşturulan sonuçlar",
-      "warning": "Bu sonuçlardaki bazı bilgiler AI tarafından oluşturulmuştur ve hatalar veya doğru olmayan açıklamalar içerebilir.",
+      "warningTitle": "AI tarafından oluşturulan açıklamalar ve etiketler",
+      "warning": "Bu arama sayfasındaki açıklamalar ve etiketler AI tarafından oluşturulmuş olabilir ve hata veya yanlışlık içerebilir.",
       "summary": "AI özeti",
       "reason": "Bu sonucun nedeni",
       "highlights": "Öne çıkanlar",
