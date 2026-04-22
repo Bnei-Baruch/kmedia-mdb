@@ -496,12 +496,12 @@ const SearchResults = ({ t }) => {
       <>
         {renderAgenticStatus()}
         <Container className="padded">
-          <Message
-            warning
-            icon="warning sign"
-            header={t('search.agentic.warningTitle')}
-            content={t('search.agentic.warning')}
-          />
+          <div className="agentic-search__ai-note">
+            <Icon name="info circle" />
+            <span className="agentic-search__ai-note-title">{t('search.agentic.warningTitle')}:</span>
+            {' '}
+            {t('search.agentic.warning')}
+          </div>
           {reasoningResult?.summary && (
             <Message
               info

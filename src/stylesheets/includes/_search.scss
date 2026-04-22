@@ -50,6 +50,27 @@
 }
 
 .agentic-search {
+  &__ai-note {
+    background: #f8fbfd;
+    border: 1px solid #d9e7ef;
+    border-radius: 4px;
+    color: #557383;
+    font-size: .95em;
+    line-height: 1.35;
+    margin: 0 0 1em;
+    padding: .55em .75em;
+
+    > .icon {
+      color: #6c9ab3;
+      margin: 0 .35em;
+    }
+  }
+
+  &__ai-note-title {
+    color: #436879;
+    font-weight: 500;
+  }
+
   &__status-message.ui.icon.message > .icon.agentic-search__status-icon {
     animation: agentic-search-rotate 1.2s linear infinite;
     display: inline-block;
