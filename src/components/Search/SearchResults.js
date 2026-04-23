@@ -447,6 +447,8 @@ const SearchResults = ({ t }) => {
     const contentTypeLabel = contentType
       ? t(`constants.content-types.${contentType}`, { defaultValue: contentType })
       : '';
+    const programName      = result.program_name ? `${result.program_name}`.trim() : '';
+    const collectionTitle  = [contentTypeLabel, programName].filter(Boolean).join(' | ');
     const highlights       = Array.isArray(result.highlights)
       ? result.highlights.map(highlight => `${highlight}`.trim()).filter(Boolean)
       : [];
@@ -458,7 +460,7 @@ const SearchResults = ({ t }) => {
       link={to}
       logo={renderAgenticLogo(result, contentType, contentTypeLabel, to)}
       content={renderAgenticContent(result, highlights)}
-      collectionTitle={contentTypeLabel}
+      collectionTitle={collectionTitle}
       date={result.date}
       click={() => null}
     />;
