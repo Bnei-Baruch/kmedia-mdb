@@ -140,7 +140,10 @@ const SearchResults = ({ t }) => {
 
   const location = useLocation();
   const dispatch = useDispatch();
+  const agenticStatusRef = React.useRef(null);
   const [followupQuery, setFollowupQuery] = React.useState('');
+  const [followupStatusQuery, setFollowupStatusQuery] = React.useState('');
+  const [scrollToAgenticStatus, setScrollToAgenticStatus] = React.useState(false);
 
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
@@ -148,6 +151,21 @@ const SearchResults = ({ t }) => {
   const filters          = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
   const areTagsLoaded    = useSelector(tagsAreLoadedSelector);
+
+  React.useEffect(() => {
+    if (!reasoningResult) {
+      setFollowupStatusQuery('');
+    }
+  }, [reasoningResult]);
+
+  React.useEffect(() => {
+    if (!scrollToAgenticStatus || !wip || !agenticStatusRef.current) {
+      return;
+    }
+
+    agenticStatusRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setScrollToAgenticStatus(false);
+  }, [scrollToAgenticStatus, wip]);
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
@@ -232,23 +250,32 @@ const SearchResults = ({ t }) => {
     }
 
     return (
-      <Container className="padded">
-        <Message info icon className="agentic-search__status-message">
-          <div className="agentic-search__status-visual" aria-hidden="true">
-            <Icon name="book" className="agentic-search__status-book" />
-            <Icon name="search" className="agentic-search__status-search" />
-          </div>
-          <Message.Content>
-            <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
-            <p>
-              {[
-                getAgenticStatusText(reasoningStatus),
-                reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
-              ].filter(Boolean).join(' | ')}
-            </p>
-          </Message.Content>
-        </Message>
-      </Container>
+      <div ref={agenticStatusRef} className="agentic-search__status-anchor">
+        <Container className="padded">
+          <Message info icon className="agentic-search__status-message">
+            <div className="agentic-search__status-visual" aria-hidden="true">
+              <Icon name="book" className="agentic-search__status-book" />
+              <Icon name="search" className="agentic-search__status-search" />
+            </div>
+            <Message.Content>
+              <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
+              <p>
+                {[
+                  getAgenticStatusText(reasoningStatus),
+                  reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
+                ].filter(Boolean).join(' | ')}
+              </p>
+              {followupStatusQuery && (
+                <p className="agentic-search__status-query">
+                  <span className="agentic-search__status-query-label">{t('search.agentic.followupTitle')}:</span>
+                  {' '}
+                  {followupStatusQuery}
+                </p>
+              )}
+            </Message.Content>
+          </Message>
+        </Container>
+      </div>
     );
   };
 
@@ -444,6 +471,8 @@ const SearchResults = ({ t }) => {
     }
 
     dispatch(actions.reasoningFollowup({ query }));
+    setFollowupStatusQuery(query);
+    setScrollToAgenticStatus(true);
     setFollowupQuery('');
   };
 

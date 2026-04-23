@@ -75,6 +75,10 @@
     align-items: center;
   }
 
+  &__status-anchor {
+    scroll-margin-top: 5em;
+  }
+
   &__status-visual {
     flex: 0 0 3.5em;
     height: 3em;
@@ -101,6 +105,16 @@
     margin: 0;
     position: absolute;
     top: .2em;
+  }
+
+  &__status-query {
+    color: #4f6775;
+    margin-top: .35em !important;
+  }
+
+  &__status-query-label {
+    color: #3f5f70;
+    font-weight: 500;
   }
 
   &__results {
