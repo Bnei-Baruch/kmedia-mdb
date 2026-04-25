@@ -217,11 +217,11 @@ class Api {
     })}`)
   );
 
-  static reasoningSearchStart = () => axios({
+  static reasoningSearchStart = request => axios({
     method : 'post',
     url    : backendUrl('search/reasoning/start'),
     headers: { 'Content-Type': 'application/json' },
-    data   : JSON.stringify({})
+    data   : JSON.stringify(request)
   });
 
   static reasoningSearch = request => axios({
@@ -232,6 +232,8 @@ class Api {
   });
 
   static reasoningSearchStatus = sessionId => Requests.get(`search/reasoning/status?${Requests.makeParams({ session_id: sessionId })}`);
+
+  static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({ session_id: sessionId })}`);
 
   static getAsset = path => Requests.getAsset(path);
 

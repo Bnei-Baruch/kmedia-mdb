@@ -1,4 +1,4 @@
-import { all, call, cancel, fork, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
@@ -34,23 +34,32 @@ const statusPollIntervalMs = 2500;
 
 const isDebEnabled = deb => deb === true || deb === 'true';
 
-function* pollReasoningStatus(sessionId, skipInitialCompleted = false) {
-  let sawActiveStatus = false;
+const reasoningStatusCompleted = status => !!status && (status.done || status.state === 'completed');
+const reasoningStatusFailed = status => !!status && (status.state === 'failed' || status.phase === 'error');
 
+const buildReasoningError = (message, response = null) => {
+  const error = new Error(message || 'Reasoning search failed');
+
+  error.response = response || {
+    status    : 500,
+    statusText: 'Reasoning search failed',
+    data      : {
+      error: message || 'Reasoning search failed'
+    }
+  };
+
+  return error;
+};
+
+function* pollReasoningStatus(sessionId) {
   while (true) {
     try {
-      const { data } = yield call(Api.reasoningSearchStatus, sessionId);
+      const response = yield call(Api.reasoningSearchStatus, sessionId);
+      const data     = response?.data;
       if (data) {
-        const isCompleted = data.done || data.state === 'completed';
-        if (skipInitialCompleted && isCompleted && !sawActiveStatus) {
-          yield call(delay, statusPollIntervalMs);
-          continue;
-        }
-
-        sawActiveStatus = !isCompleted;
         yield put(actions.reasoningStatusUpdate(data));
-        if (isCompleted || data.state === 'failed') {
-          return;
+        if (reasoningStatusCompleted(data) || reasoningStatusFailed(data)) {
+          return data;
         }
       }
     } catch (err) {
@@ -121,6 +130,12 @@ export function* search(action) {
       const previousReasoningResult = yield select(searchGetReasoningResultSelector);
       const sessionIdFromPrevious   = previousReasoningResult?.session_id;
       const q                       = isFollowup ? action.payload?.query?.trim() : query?.trim();
+      const request                 = {
+        q,
+        session_id : isFollowup ? sessionIdFromPrevious : undefined,
+        ui_language: uiLang,
+        deb        : isDebEnabled(deb)
+      };
       if (!q) {
         yield put(actions.searchFailure(null));
         return;
@@ -130,34 +145,38 @@ export function* search(action) {
         return;
       }
 
-      let sessionId = sessionIdFromPrevious;
-      yield put(actions.reasoningSearchStart({ keepResult: isFollowup, sessionId }));
-      if (!isFollowup) {
-        const { data: startData } = yield call(Api.reasoningSearchStart);
-        sessionId                 = startData.session_id;
-        yield put(actions.reasoningStatusUpdate({
-          session_id: sessionId,
-          state     : 'pending',
-          phase     : 'pending',
-          done      : false
-        }));
+      yield put(actions.reasoningSearchStart({ keepResult: isFollowup, sessionId: sessionIdFromPrevious }));
+
+      const { data: startData } = yield call(Api.reasoningSearchStart, request);
+      const sessionId           = startData?.session_id || sessionIdFromPrevious;
+      if (!sessionId) {
+        throw buildReasoningError('Reasoning search did not return a session ID');
       }
 
-      const statusTask = yield fork(pollReasoningStatus, sessionId, isFollowup);
-      let data;
-      try {
-        const { data: responseData } = yield call(Api.reasoningSearch, {
-          session_id : sessionId,
-          q,
-          ui_language: uiLang,
-          deb        : isDebEnabled(deb)
-        });
-        data = responseData;
-      } finally {
-        yield cancel(statusTask);
+      yield put(actions.reasoningStatusUpdate({
+        session_id: sessionId,
+        state     : 'pending',
+        phase     : 'pending',
+        done      : false
+      }));
+
+      const finalStatus = yield call(pollReasoningStatus, sessionId);
+      if (reasoningStatusFailed(finalStatus)) {
+        throw buildReasoningError(finalStatus?.message || 'Reasoning search failed');
       }
 
-      yield put(actions.reasoningSearchSuccess({ searchResults: data, query: isFollowup ? previousReasoningResult.query : query }));
+      const resultResponse = yield call(Api.reasoningSearchResult, sessionId);
+      if (!resultResponse?.data || resultResponse?.status >= 400) {
+        throw buildReasoningError(
+          resultResponse?.data?.error || 'Failed to fetch reasoning search result',
+          resultResponse
+        );
+      }
+
+      yield put(actions.reasoningSearchSuccess({
+        searchResults: resultResponse.data,
+        query        : isFollowup ? previousReasoningResult.query : query
+      }));
       return;
     }
 
