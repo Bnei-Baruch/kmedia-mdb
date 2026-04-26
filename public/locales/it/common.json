@@ -317,6 +317,7 @@
         "verifying": "Verifica dei risultati...",
         "done": "Completato.",
         "error": "La ricerca agentica non è riuscita.",
+        "canceled": "Ricerca interrotta.",
         "working": "In corso...",
         "tools": {
           "usingTool": "Uso dello strumento...",

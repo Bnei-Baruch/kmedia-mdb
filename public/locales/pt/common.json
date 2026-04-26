@@ -317,6 +317,7 @@
         "verifying": "Verificando resultados...",
         "done": "Concluído.",
         "error": "A busca com agente falhou.",
+        "canceled": "Busca interrompida.",
         "working": "Trabalhando...",
         "tools": {
           "usingTool": "Usando ferramenta...",

@@ -319,6 +319,7 @@
         "verifying": "Sonuçlar doğrulanıyor...",
         "done": "Tamamlandı.",
         "error": "Ajanlı arama başarısız oldu.",
+        "canceled": "Arama durduruldu.",
         "working": "Çalışıyor...",
         "tools": {
           "usingTool": "Araç kullanılıyor...",

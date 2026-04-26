@@ -318,6 +318,7 @@
         "verifying": "Verificando resultados...",
         "done": "Terminado.",
         "error": "La búsqueda con agente falló.",
+        "canceled": "Búsqueda detenida.",
         "working": "Trabajando...",
         "tools": {
           "usingTool": "Usando herramienta...",

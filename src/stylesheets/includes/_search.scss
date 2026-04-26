@@ -116,6 +116,32 @@
     top: .45em;
   }
 
+  &__status-canceled-icon.icon {
+    color: #557383;
+    font-size: 2em;
+    left: .75em;
+    margin: 0;
+    position: absolute;
+    top: .45em;
+  }
+
+  &__status-heading {
+    align-items: center;
+    display: flex;
+    gap: .75em;
+    justify-content: space-between;
+
+    .ui.header,
+    .header {
+      margin: 0;
+    }
+
+    .ui.button {
+      margin: 0;
+      white-space: nowrap;
+    }
+  }
+
   &__status-query {
     color: #4f6775;
     margin-top: .35em !important;

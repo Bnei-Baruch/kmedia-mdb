@@ -223,6 +223,10 @@ const SearchResults = ({ t }) => {
       return t('search.agentic.status.pending');
     }
 
+    if (status.state === 'canceled' || status.phase === 'canceled') {
+      return t('search.agentic.status.canceled');
+    }
+
     if (status.phase === 'running_tool') {
       return t(`search.agentic.status.tools.${status.tool_name}`, {
         defaultValue: t('search.agentic.status.tools.usingTool')
@@ -246,9 +250,11 @@ const SearchResults = ({ t }) => {
 
   const renderAgenticStatus = () => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
+    const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
+    const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
     const statusMessage  = hasErrorStatus && reasoningStatus?.message;
 
-    if (!isAgenticSearch || (!wip && !hasErrorStatus)) {
+    if (!isAgenticSearch || (!wip && !hasErrorStatus && !hasCanceledStatus)) {
       return null;
     }
 
@@ -259,6 +265,8 @@ const SearchResults = ({ t }) => {
             <div className="agentic-search__status-visual" aria-hidden="true">
               {hasErrorStatus ? (
                 <Icon name="warning sign" className="agentic-search__status-error-icon" />
+              ) : hasCanceledStatus ? (
+                <Icon name="stop circle outline" className="agentic-search__status-canceled-icon" />
               ) : (
                 <>
                   <Icon name="book" className="agentic-search__status-book" />
@@ -267,13 +275,29 @@ const SearchResults = ({ t }) => {
               )}
             </div>
             <Message.Content>
-              <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
-              <p>
-                {[
-                  getAgenticStatusText(reasoningStatus),
-                  reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
-                ].filter(Boolean).join(' | ')}
-              </p>
+              <div className="agentic-search__status-heading">
+                <Message.Header>
+                  {hasCanceledStatus ? getAgenticStatusText(reasoningStatus) : t('search.agentic.statusTitle')}
+                </Message.Header>
+                {canCancel && (
+                  <Button
+                    basic
+                    compact
+                    size="mini"
+                    icon="stop circle outline"
+                    content={t('buttons.cancel')}
+                    onClick={() => dispatch(actions.reasoningCancel())}
+                  />
+                )}
+              </div>
+              {!hasCanceledStatus && (
+                <p>
+                  {[
+                    getAgenticStatusText(reasoningStatus),
+                    reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
+                  ].filter(Boolean).join(' | ')}
+                </p>
+              )}
               {statusMessage && (
                 <p className="agentic-search__status-error">{statusMessage}</p>
               )}

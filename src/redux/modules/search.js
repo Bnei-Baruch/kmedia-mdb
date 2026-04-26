@@ -56,6 +56,16 @@ const searchSlice = createSlice({
       };
     },
     reasoningFollowup: () => void ({}),
+    reasoningCancel: state => {
+      state.wip             = false;
+      state.error           = null;
+      state.reasoningStatus = {
+        session_id: state.reasoningStatus?.session_id,
+        state     : 'canceled',
+        phase     : 'canceled',
+        done      : true
+      };
+    },
     searchSuccess: (state, { payload }) => {
       state.wip              = false;
       state.error            = null;
@@ -79,6 +89,9 @@ const searchSlice = createSlice({
     },
     reasoningStatusUpdate: (state, { payload }) => {
       state.reasoningStatus = payload;
+      if (payload?.state === 'canceled' || payload?.phase === 'canceled') {
+        state.wip = false;
+      }
     },
     searchFailure: (state, { payload }) => {
       state.wip   = false;

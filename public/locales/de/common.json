@@ -316,6 +316,7 @@
         "verifying": "Ergebnisse werden überprüft...",
         "done": "Fertig.",
         "error": "Die Agenten-Suche ist fehlgeschlagen.",
+        "canceled": "Suche gestoppt.",
         "working": "Arbeitet...",
         "tools": {
           "usingTool": "Werkzeug wird verwendet...",

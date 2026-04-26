@@ -235,6 +235,13 @@ class Api {
 
   static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({ session_id: sessionId })}`);
 
+  static reasoningSearchCancel = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cancel'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
+
   static getAsset = path => Requests.getAsset(path);
 
   static getUnzipUIDs = ({ path, ids }) => {

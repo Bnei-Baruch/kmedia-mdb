@@ -319,6 +319,7 @@
         "verifying": "Ověřování výsledků...",
         "done": "Hotovo.",
         "error": "Agentní vyhledávání selhalo.",
+        "canceled": "Vyhledávání bylo zastaveno.",
         "working": "Pracuji...",
         "tools": {
           "usingTool": "Používá se nástroj...",

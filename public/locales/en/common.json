@@ -320,6 +320,7 @@
         "verifying": "Verifying results...",
         "done": "Done.",
         "error": "Agentic Search failed.",
+        "canceled": "Search stopped.",
         "working": "Working...",
         "tools": {
           "usingTool": "Using tool...",
