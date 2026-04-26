@@ -33,9 +33,19 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const statusPollIntervalMs = 2500;
 
 const isDebEnabled = deb => deb === true || deb === 'true';
+const connectionRefusedMessage = 'Connection refused. No response from server';
 
 const reasoningStatusCompleted = status => !!status && (status.done || status.state === 'completed');
 const reasoningStatusFailed = status => !!status && (status.state === 'failed' || status.phase === 'error');
+const isConnectionRefused = err => err?.code === 'ERR_CONNECTION_REFUSED' || err?.message?.includes('ERR_CONNECTION_REFUSED');
+
+const reasoningErrorMessage = err => {
+  if (isConnectionRefused(err)) {
+    return connectionRefusedMessage;
+  }
+
+  return err?.response?.data?.error || err?.message || 'Reasoning search failed';
+};
 
 const buildReasoningError = (message, response = null) => {
   const error = new Error(message || 'Reasoning search failed');
@@ -55,6 +65,30 @@ function* pollReasoningStatus(sessionId) {
   while (true) {
     try {
       const response = yield call(Api.reasoningSearchStatus, sessionId);
+      if (!response) {
+        const status = {
+          session_id: sessionId,
+          state     : 'failed',
+          phase     : 'error',
+          done      : true,
+          message   : connectionRefusedMessage
+        };
+        yield put(actions.reasoningStatusUpdate(status));
+        return status;
+      }
+
+      if (response.status >= 400) {
+        const status = {
+          session_id: sessionId,
+          state     : 'failed',
+          phase     : 'error',
+          done      : true,
+          message   : response.data?.error || response.statusText || 'Reasoning search failed'
+        };
+        yield put(actions.reasoningStatusUpdate(status));
+        return status;
+      }
+
       const data     = response?.data;
       if (data) {
         yield put(actions.reasoningStatusUpdate(data));
@@ -63,7 +97,17 @@ function* pollReasoningStatus(sessionId) {
         }
       }
     } catch (err) {
-      // Status polling should not fail the final reasoning request.
+      if (isConnectionRefused(err)) {
+        const status = {
+          session_id: sessionId,
+          state     : 'failed',
+          phase     : 'error',
+          done      : true,
+          message   : connectionRefusedMessage
+        };
+        yield put(actions.reasoningStatusUpdate(status));
+        return status;
+      }
     }
 
     yield call(delay, statusPollIntervalMs);
@@ -314,6 +358,16 @@ export function* search(action) {
 
     yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
   } catch (err) {
+    const failedSearchType = yield select(searchGetSearchTypeSelector);
+    if (failedSearchType === SEARCH_TYPES.AGENTIC) {
+      yield put(actions.reasoningStatusUpdate({
+        state  : 'failed',
+        phase  : 'error',
+        done   : true,
+        message: reasoningErrorMessage(err)
+      }));
+    }
+
     yield put(actions.searchFailure(err));
   }
 }

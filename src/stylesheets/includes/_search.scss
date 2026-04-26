@@ -107,8 +107,22 @@
     top: .2em;
   }
 
+  &__status-error-icon.icon {
+    color: #9f3a38;
+    font-size: 2em;
+    left: .75em;
+    margin: 0;
+    position: absolute;
+    top: .45em;
+  }
+
   &__status-query {
     color: #4f6775;
+    margin-top: .35em !important;
+  }
+
+  &__status-error {
+    color: #9f3a38;
     margin-top: .35em !important;
   }
 

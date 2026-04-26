@@ -77,6 +77,10 @@ export const randomizeArray = items => {
  * @returns {String}
  */
 export const formatError = error => {
+  if (error.code === 'ERR_CONNECTION_REFUSED' || error.message?.includes('ERR_CONNECTION_REFUSED')) {
+    return 'Connection refused. No response from server';
+  }
+
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx

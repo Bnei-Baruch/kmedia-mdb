@@ -245,17 +245,26 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticStatus = () => {
-    if (!isAgenticSearch || !wip) {
+    const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
+    const statusMessage  = hasErrorStatus && reasoningStatus?.message;
+
+    if (!isAgenticSearch || (!wip && !hasErrorStatus)) {
       return null;
     }
 
     return (
       <div ref={agenticStatusRef} className="agentic-search__status-anchor">
         <Container className="padded">
-          <Message info icon className="agentic-search__status-message">
+          <Message error={hasErrorStatus} info={!hasErrorStatus} icon className="agentic-search__status-message">
             <div className="agentic-search__status-visual" aria-hidden="true">
-              <Icon name="book" className="agentic-search__status-book" />
-              <Icon name="search" className="agentic-search__status-search" />
+              {hasErrorStatus ? (
+                <Icon name="warning sign" className="agentic-search__status-error-icon" />
+              ) : (
+                <>
+                  <Icon name="book" className="agentic-search__status-book" />
+                  <Icon name="search" className="agentic-search__status-search" />
+                </>
+              )}
             </div>
             <Message.Content>
               <Message.Header>{t('search.agentic.statusTitle')}</Message.Header>
@@ -265,6 +274,9 @@ const SearchResults = ({ t }) => {
                   reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
                 ].filter(Boolean).join(' | ')}
               </p>
+              {statusMessage && (
+                <p className="agentic-search__status-error">{statusMessage}</p>
+              )}
               {followupStatusQuery && (
                 <p className="agentic-search__status-query">
                   <span className="agentic-search__status-query-label">{t('search.agentic.followupTitle')}:</span>

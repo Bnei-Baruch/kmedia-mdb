@@ -80,12 +80,9 @@ const searchSlice = createSlice({
     reasoningStatusUpdate: (state, { payload }) => {
       state.reasoningStatus = payload;
     },
-    searchFailure: {
-      prepare: ({ payload }) => ({ error: payload }),
-      reducer: (state, payload) => {
-        state.wip   = false;
-        state.error = payload?.error;
-      }
+    searchFailure: (state, { payload }) => {
+      state.wip   = false;
+      state.error = payload;
     },
     hydrateUrl: () => ({}),
     setPage: (state, { payload }) => void (state.pageNo = payload),
