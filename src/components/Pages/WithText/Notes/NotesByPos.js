@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Button, Label } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 
@@ -37,16 +36,15 @@ const NotesByPos = ({ pos, ids }) => {
 
   return (
     <div className="note_mark" style={{ top: `${pos}px` }} ref={ref}>
-      <Button
-        basic
+      <button
         className="clear_button position_relative"
         onClick={handleToggle}
       >
         <span className="material-symbols-outlined">mode_comment</span>
-        <Label floating circular>
+        <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
           {ids.length}
-        </Label>
-      </Button>
+        </span>
+      </button>
       {
         open && (
           <div className={clsx('note_list', { 'note_list_out': isOut })}>

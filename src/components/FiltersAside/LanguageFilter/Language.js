@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react';
 import { FN_LANGUAGES, POPULAR_LANGUAGES, ALL_LANGUAGES } from '../../../helpers/consts';
 import FilterHeader from '../FilterHeader';
 import LanguageItem from './LanguageItem';
@@ -39,14 +38,15 @@ const Language = ({ namespace, t }) => {
 
           {
             items.length > POPULAR_LANGUAGES.length &&
-            <Button
-              basic
-              icon={showAll ? 'minus' : 'plus'}
-              color="blue"
-              className="clear_button"
-              content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            <button
+              className="clear_button text-blue-500 flex items-center gap-1"
               onClick={toggleShowAll}
-            />
+            >
+              <span className="material-symbols-outlined">
+                {showAll ? 'remove' : 'add'}
+              </span>
+              {t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            </button>
           }
         </>
       }

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu } from 'semantic-ui-react';
 
 import { LOCALSTORAGE_KEY_ADDITIONS_MODS, TEXT_PAGE_ADDITIONS_MODS } from '../../../../../helpers/consts';
 import { actions } from '../../../../../redux/modules/textPage';
@@ -30,23 +29,23 @@ const AdditionsModeItems = () => {
   const handleSet = m => dispatch(actions.setAdditionsMode(m));
 
   return (
-    <Menu vertical fluid className="additions_mode_popup">
+    <nav className="additions_mode_popup flex flex-col">
       {
         Object
           .entries(TEXT_PAGE_ADDITIONS_MODS)
           .map(([key, val]) => (
-            <Menu.Item
+            <button
               onClick={() => handleSet(val)}
-              active={mode === val}
+              className={`flex items-center justify-between px-4 py-2 text-left ${mode === val ? 'bg-blue-50 font-semibold' : ''}`}
               key={key}
             >
               {t(`page-with-text.buttons.web.additions.${key}`)}
               <span className="material-symbols-outlined">{iconsByMode[val]}</span>
-            </Menu.Item>
+            </button>
           )
           )
       }
-    </Menu>
+    </nav>
   );
 };
 

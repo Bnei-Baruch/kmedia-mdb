@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Header, Icon } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
@@ -71,7 +70,7 @@ const LessonDatePickerContainer = () => {
   }
 
   return (
-    <Header.Subheader
+    <div
       className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}
     >
       {
@@ -81,7 +80,7 @@ const LessonDatePickerContainer = () => {
             className="avbox__playlist-prev-button"
             title={t('buttons.previous-lesson')}
           >
-            <Icon size="large" name={`triangle ${isLtr ? 'left' : 'right'}`}/>
+            <span className="material-symbols-outlined text-2xl">{isLtr ? 'arrow_left' : 'arrow_right'}</span>
           </Link>
         )
       }
@@ -89,7 +88,7 @@ const LessonDatePickerContainer = () => {
       {
         !nextTo ? (
           <span className="avbox__playlist-next-button">
-            <Icon disabled size="large" name={`triangle ${isLtr ? 'right' : 'left'}`}/>
+            <span className="material-symbols-outlined text-2xl opacity-50">{isLtr ? 'arrow_right' : 'arrow_left'}</span>
           </span>
         ) : (
           <Link
@@ -97,12 +96,12 @@ const LessonDatePickerContainer = () => {
             className="avbox__playlist-next-button"
             title={t('buttons.next-lesson')}
           >
-            <Icon size="large" name={`triangle ${isLtr ? 'right' : 'left'}`}/>
+            <span className="material-symbols-outlined text-2xl">{isLtr ? 'arrow_right' : 'arrow_left'}</span>
           </Link>
 
         )
       }
-    </Header.Subheader>
+    </div>
   );
 };
 

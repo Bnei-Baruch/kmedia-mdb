@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Button, Icon } from 'semantic-ui-react';
 import {
   EmailIcon,
   EmailShareButton,
@@ -34,9 +33,11 @@ const RenderShare = ({ collection, callback, t }) => {
 
   return (
     <div className="social-buttons">
-      <Icon.Group>
-        <Icon name="close" onClick={() => callback()} corner="top right" inverted link circular fitted />
-      </Icon.Group>
+      <div className="inline-block relative">
+        <button onClick={() => callback()} className="absolute top-0 right-0 text-white bg-gray-600 rounded-full w-5 h-5 flex items-center justify-center hover:bg-gray-800">
+          <span className="material-symbols-outlined small">close</span>
+        </button>
+      </div>
       <FacebookShareButton url={url} quote={title} onShareWindowClose={callback}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>
@@ -67,17 +68,12 @@ const ShareForm = ({ collection, t }) => {
 
   return (
     <>
-      <Button
-        size="mini"
-        color="facebook"
-        compact
+      <button
+        className="inline-flex items-center px-2 py-1 text-xs font-bold text-white bg-blue-600 rounded hover:bg-blue-700"
         onClick={() => setShare(!share)}
       >
-        <Icon
-          name="share alternate"
-          fitted
-        />
-      </Button>
+        <span className="material-symbols-outlined small">share</span>
+      </button>
       {
         share && <RenderShare collection={collection} callback={() => setShare(false)} t={t} />
       }

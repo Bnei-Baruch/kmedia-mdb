@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 
 import { FN_PERSON } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/filters';
@@ -14,9 +13,9 @@ const PersonItem = ({ namespace, id }) => {
   const person = useSelector(mdbGetPersonByIdSelector)(id);
 
   const dispatch     = useDispatch();
-  const handleSelect = (e, { checked }) => {
+  const handleSelect = e => {
     const val = [...selected].filter(x => x !== id);
-    if (checked) {
+    if (e.target.checked) {
       val.push(id);
     }
 
@@ -24,17 +23,20 @@ const PersonItem = ({ namespace, id }) => {
   };
 
   return (
-    <List.Item key={`${FN_PERSON}_${id}`} disabled={stat === 0} className="filters-aside-ct">
-      <List.Content className="stat" floated="right">
+    <div key={`${FN_PERSON}_${id}`} className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+      <span className="stat float-right">
         {`(${stat})`}
-      </List.Content>
-      <Checkbox
-        label={person?.name}
-        checked={selected.includes(id)}
-        onChange={handleSelect}
-        disabled={stat === 0}
-      />
-    </List.Item>
+      </span>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={handleSelect}
+          disabled={stat === 0}
+        />
+        {person?.name}
+      </label>
+    </div>
   );
 };
 

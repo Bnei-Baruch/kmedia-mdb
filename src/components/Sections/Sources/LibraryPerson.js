@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
@@ -11,7 +10,6 @@ import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';
 import { settingsGetContentLanguagesSelector, assetsGetPersonSelector } from '../../../redux/selectors';
 
-// Convert WP images to full URL+imaginary
 const convertImages = content => {
   const regex = /<img[^>]*src="([^"]*)"/g;
   let arr;
@@ -54,19 +52,15 @@ const LibraryPerson = ({ t }) => {
   }
 
   if (!data) {
-    return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
+    return <div className="p-4">{t('materials.sources.no-source-available')}</div>;
   }
 
   return (
-    <Container className="padded">
-      <Grid>
-        <Grid.Row>
-          <Grid.Column>
-            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(data.content) }}/>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Container>
+    <div className=" px-4 ">
+      <div>
+        <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(data.content) }}/>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import Link from '../../Language/MultiLanguageLink';
@@ -32,7 +31,7 @@ export const PrevBtn = () => {
           className="controls__prev"
           to={to}
         >
-          <Icon fitted size="big" name="backward"/>
+          <span className="material-symbols-outlined text-2xl">fast_rewind</span>
         </Link>
       }/>
   );
@@ -60,10 +59,9 @@ export const NextBtn = () => {
           className="controls__next"
           to={to}
         >
-          <Icon fitted size="big" name="forward"/>
+          <span className="material-symbols-outlined text-2xl">fast_forward</span>
         </Link>
       }
     />
   );
 };
-

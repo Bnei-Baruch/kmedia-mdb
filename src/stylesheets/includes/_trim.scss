@@ -54,28 +54,6 @@
     padding: 0 !important;
   }
 
-  .ui.basic.icon.button {
-    box-shadow: none !important;
-
-    &:first-child {
-      margin: 0 8px;
-    }
-
-    &:hover, &:active, &:focus {
-      box-shadow: none !important;
-    }
-
-    &:hover {
-      opacity: 0.8;
-    }
-
-    & > .icon {
-      font-size: 1.4em;
-      line-height: 1.2em;
-      align-self: center;
-    }
-  }
-
   .splash {
     display: inline-block;
     margin: 0 8px;

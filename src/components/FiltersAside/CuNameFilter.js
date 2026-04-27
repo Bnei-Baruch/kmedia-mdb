@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Input } from 'semantic-ui-react';
 import { FN_FREE_TEXT } from '../../helpers/consts';
 import { actions } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';
@@ -28,7 +27,8 @@ const CuName = ({ namespace }) => {
     setTemporaryName(name);
   }, [name]);
 
-  const handleChangeName = (e, { value }) => {
+  const handleChangeName = e => {
+    const { value } = e.target;
     setTemporaryName(value);
     !value && dispatch(actions.setFilterValue(namespace, FN_FREE_TEXT, null));
   };
@@ -38,12 +38,11 @@ const CuName = ({ namespace }) => {
       filterName={FN_FREE_TEXT}
       children={
         <>
-          <Input
+          <input
             onChange={handleChangeName}
             className="search-input"
-          >
-            <input value={temporaryName}/>
-          </Input>
+            value={temporaryName}
+          />
         </>
       }
     />

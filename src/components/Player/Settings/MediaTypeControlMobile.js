@@ -1,5 +1,4 @@
 import React from 'react';
-import { Checkbox } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
@@ -12,16 +11,20 @@ const MediaTypeControlMobile = ({ t }) => {
 
   const dispatch = useDispatch();
 
-  const handleChange = (e, { checked }) => dispatch(playlistActions.setMediaType(checked ? MT_AUDIO : MT_VIDEO));
+  const handleChange = e => dispatch(playlistActions.setMediaType(e.target.checked ? MT_AUDIO : MT_VIDEO));
 
   return (
     <div className="controls__audio">
-      <Checkbox
-        checked={type === MT_AUDIO}
-        onChange={handleChange}
-        label={t(`player.settings.audio-only-${type === MT_AUDIO ? 'on' : 'off'}`)}
-        toggle
-      />
+      <label className="inline-flex items-center cursor-pointer gap-2">
+        <input
+          type="checkbox"
+          checked={type === MT_AUDIO}
+          onChange={handleChange}
+          className="sr-only peer"
+        />
+        <div className="relative w-9 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-500 transition-colors after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-4"></div>
+        <span className="small">{t(`player.settings.audio-only-${type === MT_AUDIO ? 'on' : 'off'}`)}</span>
+      </label>
     </div>
   );
 };

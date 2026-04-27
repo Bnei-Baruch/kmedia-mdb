@@ -1,7 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
@@ -16,12 +15,12 @@ const UnitItem = ({ id, t }) => {
   const collections = Object.values(cu.collections);
 
   return (
-    <List.Item key={id} className="media_item">
+    <div key={id} className="media_item">
       <Link to={link}>
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <Header content={cu.name} as={Link} to={link}/>
+        <h5 className="font-bold"><Link to={link}>{cu.name}</Link></h5>
         {
           !isEmpty(collections) && (
             <div className="additional_links">
@@ -39,7 +38,7 @@ const UnitItem = ({ id, t }) => {
           {t('values.date', { date: cu.film_date })}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

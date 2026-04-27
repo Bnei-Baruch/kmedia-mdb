@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
 import { myNotesGetStatusSelector } from '../../../../../redux/selectors';
@@ -29,15 +28,12 @@ const NoteInModalBtn = () => {
   };
 
   return (
-    <Button
-      basic
-      active={active}
-      className="clear_button"
+    <button
+      className={`clear_button ${active ? 'active' : ''}`}
       onClick={handle}
-      icon={
-        <span className="material-symbols-outlined">open_in_full</span>
-      }
-    />
+    >
+      <span className="material-symbols-outlined">open_in_full</span>
+    </button>
   );
 };
 

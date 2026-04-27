@@ -1,25 +1,24 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from 'semantic-ui-react';
+import React from 'react';
 import * as shapes from '../../shapes';
 
-const Section = ({ title, children, className, computer= 12, tablet= 14, mobile= 16 }) =>
+const Section = ({ title, children, className }) =>
   <div className={className}>
-    <Grid centered padded="vertically" className="homepage__section__iconsrow">
-      <Grid.Row className="iconsTitleRow">
+    <div className="homepage__section__iconsrow flex flex-col items-center">
+      <div className="iconsTitleRow flex justify-center w-full">
         <div className="iconsTitle">{title}</div>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column computer={computer} tablet={tablet} mobile={mobile}>
-          {children}
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </div>
+      </div>
+      <div className="w-full py-4">
+        {children}
+      </div>
+    </div>
+  </div>;
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
   children: shapes.Children.isRequired,
+  className: PropTypes.string,
+  computer: PropTypes.number,
 };
 
 export default Section;

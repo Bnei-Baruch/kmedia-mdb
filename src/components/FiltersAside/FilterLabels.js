@@ -1,7 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Icon, Label } from 'semantic-ui-react';
 
 import dateFilter from '../../filters/definitions/dateFilter';
 import {
@@ -71,28 +70,29 @@ const FilterLabels = ({ namespace, t }) => {
   };
 
   const renderItem = (name, val, key) => (
-    <Label
-      basic
-      circular
-      size="tiny"
+    <span
+      className="inline-flex items-center rounded-full border px-1 text-xs label font-bold"
       key={key}
     >
-      {
-        titleByFilterType(name, val)
-      }
-      <Icon name="times circle outline" size="large" inverted circular onClick={() => onRemove(name, val)}/>
-    </Label>
+      {titleByFilterType(name, val)}
+      <span
+        className="material-symbols-outlined large cursor-pointer ml-1 text-gray-500 text-xs"
+        onClick={() => onRemove(name, val)}
+      >
+        cancel
+      </span>
+    </span>
   );
 
   return (
-    <Container className="filter_aside_labels">
+    <div className=" px-4 py-2 filter_aside_labels">
       <span>{t('filters.filters')}:</span>
       {
         list.filter(f => f.values?.length > 0).flatMap((f, j) =>
           f.values.map((v, i) => renderItem(f.name, v, `${j}_${i}`))
         )
       }
-    </Container>
+    </div>
   );
 };
 

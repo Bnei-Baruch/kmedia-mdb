@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { List } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { textPageGetTocIsActiveSelector, textPageGetSubjectSelector } from '../../../../../redux/selectors';
@@ -23,10 +22,10 @@ const PageWithPlayerTOC = ({ cus, onClick, textKey }) => {
   return (
     <div className={clsx('toc no_print', { 'toc_active': tocIsActive })}>
       <TOCControl textKey={textKey}/>
-      <List>
+      <ul className="list-none p-0">
         {
           cus.map(cu => (
-            <List.Item
+            <li
               key={cu.id}
               onClick={() => handleClick(cu.id)}
               className="player_page_source_toc_item toc_single_level accordion"
@@ -34,11 +33,11 @@ const PageWithPlayerTOC = ({ cus, onClick, textKey }) => {
               <div className={clsx('title', { 'active': cu.id === id })}>
                 {cu.name}
               </div>
-            </List.Item>
+            </li>
           )
           )
         }
-      </List>
+      </ul>
     </div>
   );
 };

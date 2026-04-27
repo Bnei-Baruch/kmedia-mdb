@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Container, Header, Popup, Ref } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -36,8 +36,6 @@ const ListTemplate = (
 ) => {
   const itemRef = useRef(null);
 
-  const handleItemRef = r => itemRef.current = r;
-
   const dir                = useSelector(settingsGetUIDirSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -67,63 +65,70 @@ const ListTemplate = (
       </div>
     ) : null;
 
+  const Tag = size === 'big' || isMobileDevice ? 'h5' : 'h3';
+
   const renderCUInfo = () => {
     const _name   = name || unit?.name || source?.name || tag?.label;
     const content = (
-      <Ref innerRef={cuInfoRef}>
-        <Header
-          as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
-          className="cu_item_name"
-          content={_name}/>
-      </Ref>
+      <Tag
+        ref={cuInfoRef}
+        className="cu_item_name"
+      >
+        {_name}
+      </Tag>
     );
 
     if (!isNeedTooltip)
       return content;
 
-    return <Popup
-      content={_name}
-      dir={dir}
-      trigger={content}
-      position="top center"
-    />;
+    return (
+      <Popover className="cu_item_popover">
+        <PopoverButton as="div">
+          {content}
+        </PopoverButton>
+        <PopoverPanel
+          className="cu_item_popover_panel"
+          dir={dir}
+        >
+          {_name}
+        </PopoverPanel>
+      </Popover>
+    );
   };
 
   const width = isMobileDevice ? 165 : imageWidthBySize[size];
 
   return (
-    <Ref innerRef={handleItemRef}>
-      <Container
-        id={unit?.id}
-        as={Link}
-        to={link}
-        key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
-        className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
-      >
-        <div>
-          {label ? <div className="cu_item_label">{label}</div> : null}
-          <UnitProgress unit={unit} playTime={playTime}/>
-          <div className="cu_item_img" style={{ width }}>
-            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg}/> :
-              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg}/>}
-          </div>
+    <Link
+      ref={itemRef}
+      id={unit?.id}
+      to={link}
+      key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
+      className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
+    >
+      <div>
+        {label ? <div className="cu_item_label">{label}</div> : null}
+        <UnitProgress unit={unit} playTime={playTime} />
+        <div className="cu_item_img" style={{ width }}>
+          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg} /> :
+            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg} />}
         </div>
-        <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
-          {withCUInfo && renderCUInfo()}
-          {info}
-          <div className={`cu_info_description ${dir} text_ellipsis`}>
-            {description.map((d, i) => (<span key={i}>{d}</span>))}
-          </div>
+      </div>
+      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
+        {withCUInfo && renderCUInfo()}
+        {info}
+        <div className={`cu_info_description ${dir} text_ellipsis`}>
+          {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
-        {
-          children ? (
-            <div className="cu_item_actions">
-              {children}
-            </div>
-          ) : null
-        }
-      </Container>
-    </Ref>
+      </div>
+      {
+        children ? (
+          <div className="cu_item_actions">
+            {children}
+          </div>
+        ) : null
+      }
+    </Link>
   );
 };
 

@@ -1,4 +1,4 @@
-@use 'rtl/filters';
+@use "rtl/filters";
 @use "colors-helpers";
 @use "responsive-helpers";
 @use "variables";
@@ -19,7 +19,7 @@
   &__header {
     align-self: stretch;
     flex: 0 1 auto !important;
-    padding: .6em 1em !important;
+    padding: 0.6em 1em !important;
     white-space: nowrap;
   }
 }
@@ -31,8 +31,8 @@
 
   &::after {
     background: rgba(colors-helpers.$black, 0);
-    content: '';
-    transition: background .2s ease-out;
+    content: "";
+    transition: background 0.2s ease-out;
   }
 
   &--is-empty {
@@ -49,7 +49,7 @@
     }
 
     &::after {
-      background: rgba(colors-helpers.$black, .5);
+      background: rgba(colors-helpers.$black, 0.5);
       height: 100%;
       left: 0;
       position: fixed;
@@ -64,12 +64,12 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    padding: .6em 1em !important;
+    padding: 0.6em 1em !important;
     width: 100%;
   }
 
   &__title {
-    margin-bottom: .7em;
+    margin-bottom: 0.7em;
   }
 
   &__state {
@@ -104,7 +104,7 @@
   &__separator {
     flex: 0 0 auto;
     font-weight: 900;
-    padding: 0 .2em;
+    padding: 0 0.2em;
   }
 
   .label {
@@ -136,7 +136,7 @@
 
   @include responsive-helpers.small-mobile {
     bottom: 0 !important;
-    margin: .71428571em 0 !important;
+    margin: 0.71428571em 0 !important;
     position: fixed !important;
     top: variables.$main-menu-height !important;
   }
@@ -157,7 +157,7 @@
     }
 
     .autocomplete {
-      margin-top: .75em;
+      margin-top: 0.75em;
     }
   }
 
@@ -177,7 +177,6 @@
     border-radius: 0 !important;
     box-shadow: none !important;
   }
-
 
   &__body {
     @include responsive-helpers.small-mobile {
@@ -224,20 +223,17 @@
 
 //aside filters styles
 .filters-aside-wrapper {
-  padding: 0 0 0 1em !important;
+  padding: 0 1em;
+  background-color: colors-helpers.$offWhite;
 
-  .rtl & {
-    padding: 0 1em 0 0 !important;
-  }
-
-  & > .container {
-    background-color: colors-helpers.$offWhite;
+  @include responsive-helpers.tablet {
+    padding: 0 1em !important;
   }
 
   @include responsive-helpers.mobile {
-    padding: 0 !important;
+    padding: 0;
 
-    & > .container {
+    &>div {
       background: none;
       padding: 0 !important;
     }
@@ -246,32 +242,30 @@
 
 .filter_aside {
   border-bottom: 1px solid colors-helpers.$midWhite;
-  padding: 0 0 1em !important;
-  margin: 0 !important;
+  padding: 1rem 0;
 
   &:last-child {
     border-bottom: none;
   }
 
-  & > .title {
+  &>.title {
     color: colors-helpers.$blue;
     font-size: 1.3em;
     font-weight: bold;
     padding: 0.5em 0;
-
   }
 
-  &:first-child > .title {
+  &:first-child>.title {
     padding-top: 0;
   }
-  
+
   .date-filter-presets {
     display: flex;
   }
 
   .date-filter {
     min-width: auto;
-    margin: .5em 0;
+    margin: 0.5em 0;
     padding: 0;
 
     .item {
@@ -286,7 +280,6 @@
       }
 
       .content {
-
         width: fit-content;
 
         input {
@@ -300,62 +293,50 @@
       }
     }
   }
-
 }
 
-.ui.modal.filters_aside_tree_modal {
+.filters_aside_tree_modal {
   text-align: end;
   width: auto;
 
-  & > .header {
+  &>.header {
     display: flex;
     align-items: center;
 
     text-align: start;
     margin: 0;
     padding-top: 0;
-
-    .search-input.ui.input {
-      margin: 0 1em;
-    }
   }
 
-  & > .content {
+  &>.content {
     text-align: start;
     padding-bottom: 2.5em;
   }
 
-  & > .icon {
+  &>.icon {
     margin: 0.5em 0.5em 0;
     cursor: pointer;
   }
 
   .stat {
-    margin-right: .5em;
+    margin-right: 0.5em;
+    text-align: right;
+    flex: 1;
 
     .rtl & {
-      margin-left: .5em;
+      margin-left: 0.5em;
       margin-right: 0;
+      text-align: left;
     }
-  }
-
-  .ui.basic.table {
-    border: none;
   }
 }
 
 .tree_item_modal_content {
-  @extend .no-shadow !optional;
-
-  .ui.table tr & {
-    border-top: none;
-  }
-
   .item .list {
-    margin: 0 0 0 .5em;
+    margin: 0 0 0 0.5em;
 
     .rtl & {
-      margin: 0 .5em 0;
+      margin: 0 0.5em 0;
     }
 
     .item {
@@ -364,42 +345,40 @@
   }
 }
 
-.ui.cards > .card.single_item {
-  margin: 0 .5em;
-}
-
-.filters_aside_tree_modal, .filter_aside {
-  .search-input.ui.input {
+.filters_aside_tree_modal,
+.filter_aside {
+  .search-input {
     max-width: 180px;
     width: 100%;
     margin-bottom: 1em;
 
-    & > input {
-      padding: 2px 8px;
-      border: 1px solid colors-helpers.$blue !important;
-      border-radius: 8px !important;
-      font-size: 14px;
-    }
+    padding: 2px 8px;
+    border: 1px solid colors-helpers.$blue;
+    border-radius: 8px;
+    font-size: 14px;
   }
 
   .stat {
-    opacity: .4;
+    opacity: 0.4;
     padding-left: 1em;
     margin-left: auto;
+    text-align: right;
+    flex: 1;
 
     .rtl & {
       padding-left: 0;
       padding-right: 1em;
       margin-left: 0;
       margin-right: auto;
+      text-align: left;
     }
   }
 }
 
-
 .tree_item_content {
   display: flex;
-  max-width: 80vw;  // Required for mobile. Limits column width by viewport.
+  max-width: 80vw; // Required for mobile. Limits column width by viewport.
+  width: 100%;
 
   .tree_item_title {
     margin-left: 8px;
@@ -410,7 +389,7 @@
     }
   }
 
-  & > .icon {
+  &>.icon {
     margin: 0 auto 0 0;
     font-size: 1.2em;
     line-height: 1em;
@@ -423,33 +402,35 @@
 
 .filter_aside_labels {
   margin-bottom: 1em;
+  gap: 0.5em;
+  display: flex;
 
-  .ui.circular.label {
-    margin: .5em .5em;
-    padding: 2px 2px 0 .5em !important;
+  .label {
     cursor: pointer;
+    border: 1px solid colors-helpers.$grey;
 
     .rtl & {
-      padding-right: .5em !important;
-      padding-left: 2px !important;
+      padding-right: 0.5em;
+      padding-left: 2px;
     }
 
     .icon {
-      padding: 0 !important;
-      opacity: .4;
-      margin: 0 0 0 .5em;
-      height: auto !important;
-      width: auto !important;
+      padding: 0;
+      opacity: 0.4;
+      margin: 0 0 0 0.5em;
+      height: auto;
+      width: auto;
 
       .rtl & {
         margin-left: 0;
-        margin-right: .5em;
+        margin-right: 0.5em;
       }
     }
   }
 }
 
-.filter_aside_labels, .pagination-results {
+.filter_aside_labels,
+.pagination-results {
   @include responsive-helpers.mobile {
     padding: 0 1em;
   }
@@ -458,8 +439,8 @@
 .filters-aside-ct {
   font-weight: bold;
 
+
   .filters-aside-ct {
     font-weight: normal;
   }
 }
-

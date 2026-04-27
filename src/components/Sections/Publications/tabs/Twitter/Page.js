@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Container, Divider, Feed } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
 import Pagination from '../../../../Pagination/Pagination';
@@ -19,11 +18,11 @@ const renderTwitters = (tweets, limitLength) => {
   const length = limitLength || tweets.length;
 
   return (
-    <Feed className="publications-twitter">
+    <div className="publications-twitter">
       {
         tweets.slice(0, length).map(item => <TwitterFeed twitter={item} key={item.twitter_id} />)
       }
-    </Feed>
+    </div>
   );
 };
 
@@ -43,29 +42,27 @@ const TwitterPage = ({
 }) => {
   const content = WipErr({ wip, err, t }) || (
     <div>
-      <Container className="padded">
+      <div className=" px-4 ">
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         {
           items.length > 0
             ? renderTwitters(items, limitLength)
             : null
         }
-      </Container>
-      <Divider fitted />
-      <Container className="padded pagination-wrapper" textAlign="center">
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={onPageChange}
-        />
-      </Container>
+      </div>
+      <hr className="m-0" />
+      <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={onPageChange}
+      />
     </div>
   );
 
   return (
     <div>
-      <Divider fitted />
+      <hr className="m-0" />
       <Filters
         namespace={namespace}
         filters={filters}

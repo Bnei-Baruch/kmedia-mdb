@@ -1,5 +1,4 @@
 import React from 'react';
-import { List } from 'semantic-ui-react';
 
 import { NO_NAME } from './consts';
 import { CollectionsBreakdown } from './mdb';
@@ -40,9 +39,9 @@ export const renderUnitFilmDate = (unit, t) => {
 };
 
 export const renderUnitNameAsListItem = (unit, ccu) =>
-  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit, null, ccu)}>
+  unit && <li key={unit.id}><Link to={canonicalLink(unit, null, ccu)}>
     {unit.name || NO_NAME}
-  </List.Item>
+  </Link></li>
 
 export const renderUnitNameLink = (unit, className='index__title', ccu) =>
   unit && <Link className={className} to={canonicalLink(unit, null, ccu)}>
@@ -74,12 +73,12 @@ export const renderRelatedItems = (relatedItems, header, className='index__colle
   relatedItems.length === 0
     ? null
     : (
-      <List horizontal divided link className={className} size="tiny">
-        <List.Item>
-          <List.Header>
+      <ul className={`flex flex-wrap divide-x ${className} text-xs`}>
+        <li>
+          <span className="font-bold">
             {header}
-          </List.Header>
-        </List.Item>
+          </span>
+        </li>
         {relatedItems}
-      </List>
+      </ul>
     )

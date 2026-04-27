@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions } from '../../../redux/modules/player';
@@ -74,7 +73,7 @@ export const FullscreenBtn = ({ fullscreenRef }) => {
       position="top right"
       trigger={
         <div className="controls__fullscreen" onClick={handleClick}>
-          <Icon fitted name={isFullScreen ? 'compress' : 'expand'}/>
+          <span className="material-symbols-outlined text-base">{isFullScreen ? 'fullscreen_exit' : 'fullscreen'}</span>
         </div>
       }/>
   );
@@ -102,7 +101,7 @@ export const ShareBtn = () => {
           className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
           onClick={handleOpen}
         >
-          <Icon fitted name="share alternate"/>
+          <span className="material-symbols-outlined text-base">share</span>
         </div>
       }
     />
@@ -128,10 +127,9 @@ export const SettingsBtn = () => {
           className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
           onClick={handleOpen}
         >
-          <Icon fitted name="setting"/>
+          <span className="material-symbols-outlined text-base">settings</span>
         </div>
       }
     />
   );
 };
-

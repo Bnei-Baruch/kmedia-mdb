@@ -4,7 +4,6 @@ import ContentItemContainer from '../../../shared/ContentItem/ContentItemContain
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { Header, Button, Container } from 'semantic-ui-react';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import {
@@ -44,23 +43,22 @@ const PlaylistItems               = () => {
     <div id="avbox_playlist" className="avbox__playlist-view" onScroll={handleScroll}>
       {
         !isMobileDevice && (
-          <Header
-            as="h3"
-            className="avbox__playlist-header h3"
-            content={title || t(`playlist.title-by-type.${content_type}`)}
-          />
+          <h3 className="avbox__playlist-header h3">
+            {title || t(`playlist.title-by-type.${content_type}`)}
+          </h3>
         )
       }
 
       {
         from > 0 && (
-          <Container fluid>
-            <Button
-              icon={'arrow up'}
+          <div className="w-full">
+            <button
+              className="w-full flex items-center justify-center"
               onClick={() => handleLoadMore(-1)}
-              fluid
-            />
-          </Container>
+            >
+              <span className="material-symbols-outlined">arrow_upward</span>
+            </button>
+          </div>
         )
       }
       {
@@ -84,13 +82,14 @@ const PlaylistItems               = () => {
       }
       {
         to < items.length - 1 && (
-          <Container fluid>
-            <Button
-              icon={'arrow down'}
+          <div className="w-full">
+            <button
+              className="w-full flex items-center justify-center"
               onClick={() => handleLoadMore(1)}
-              fluid
-            />
-          </Container>
+            >
+              <span className="material-symbols-outlined">arrow_downward</span>
+            </button>
+          </div>
         )
       }
     </div>

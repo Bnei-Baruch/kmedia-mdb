@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { noop, getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import scrollIntoView from 'scroll-into-view';
-import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -32,14 +31,18 @@ class HierarchicalFilter extends Component {
     term  : '',
   };
 
-  handleTermChange = debounce((e, data) => {
-    this.setState({ term: data.value });
+  handleTermChangeDebounced = debounce(val => {
+    this.setState({ term: val });
   }, 200);
+
+  handleTermChange = e => {
+    this.handleTermChangeDebounced(e.target.value);
+  };
 
   componentDidMount() {
     if (this.activeRef) {
       scrollIntoView(this.activeRef, {
-        time       : 150, // half a second
+        time       : 150,
         validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
       });
     }
@@ -84,13 +87,11 @@ class HierarchicalFilter extends Component {
     const depth       = data['data-level'] - 2;
     const isCallApply = data['is-last-leaf'] === 'true';
 
-    // clear selection if root was clicked
     if (depth < 0) {
       this.setState({ sValue: [] });
       return;
     }
 
-    // in term mode we trace path
     if (this.state.term) {
       const path   = this.tracepath(this.props.tree[0], data.name);
       const sValue = path.slice(1);
@@ -103,8 +104,6 @@ class HierarchicalFilter extends Component {
       return;
     }
 
-    // in normal selection mode we insert
-    // the new value at it's relevant, depth based, index
     const { sValue }   = this.state;
     const oldSelection = sValue || [];
     const newSelection = [...oldSelection];
@@ -124,6 +123,7 @@ class HierarchicalFilter extends Component {
     const selected               = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
     const active                 = value === selected;
     const ref                    = active ? this.handleActiveRef : null;
+    const isLastLeaf             = (!node.children || node.children.length === 0).toString();
 
     let content = text;
     if (reg && reg.test(text)) {
@@ -136,15 +136,11 @@ class HierarchicalFilter extends Component {
     }
 
     return (
-      <Menu.Item
+      <div
         key={value}
-        name={value}
         ref={ref}
-        active={active}
-        data-level={level}
-        is-last-leaf={(!node.children || node.children.length === 0).toString()}
-        className={`l${level}`}
-        onClick={this.handleClick}
+        className={`l${level} px-3 py-2 cursor-pointer hover:bg-gray-100 ${active ? 'bg-blue-50 font-semibold' : ''}`}
+        onClick={e => this.handleClick(e, { name: value, 'data-level': level, 'is-last-leaf': isLastLeaf })}
       >
         {content}
         {
@@ -158,7 +154,7 @@ class HierarchicalFilter extends Component {
             )
             : null
         }
-      </Menu.Item>
+      </div>
     );
   };
 
@@ -177,7 +173,6 @@ class HierarchicalFilter extends Component {
       .map(x => this.filterNode(x, reg, selected))
       .filter(x => !!x);
 
-    // if this node is selected we keep all it's original children
     if (selected === node.value && isEmpty(children)) {
       children = [...(node.children || [])];
     }
@@ -198,12 +193,10 @@ class HierarchicalFilter extends Component {
     const { sValue, term } = this.state;
     const selection        = sValue || [];
 
-    // start with root node
     const root  = tree[0];
     const nodes = [root];
     const items = [this.nodeToItem(root, 1)];
 
-    // if we have a search term we use it and stop
     if (term) {
       const reg          = getEscapedRegExp(term);
       const selected     = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
@@ -212,17 +205,12 @@ class HierarchicalFilter extends Component {
       return filteredRoot ? this.nodeToItemRec(filteredRoot, 1, reg) : items;
     }
 
-    // no search term, we just show by selection
-
-    // add in selection path
     selection.forEach((x, i) => {
       const node = nodes[nodes.length - 1].children.find(y => y.value === x);
       nodes.push(node);
       items.push(this.nodeToItem(node, 2 + i));
     });
 
-    // Add children of last node in selection (if any)
-    // or replace it with its siblings (including himself)
     let lastNode = nodes[nodes.length - 1];
     if (Array.isArray(lastNode.children) && lastNode.children.length > 0) {
       lastNode.children.forEach(x => items.push(this.nodeToItem(x, 2 + selection.length)));
@@ -239,40 +227,39 @@ class HierarchicalFilter extends Component {
     const { name, t } = this.props;
 
     return (
-      <Segment.Group className="filter-popup__wrapper">
-        <Segment basic secondary className="filter-popup__header">
+      <div className="filter-popup__wrapper border rounded">
+        <div className="filter-popup__header bg-gray-100 p-3">
           <div className="title">
-            <Button
-              basic
-              compact
-              size="tiny"
-              content={t('buttons.cancel')}
+            <button
+              className="px-2 py-1 text-xs border border-gray-300 rounded bg-white hover:bg-gray-50"
               onClick={this.onCancel}
-            />
-            <Header size="small" textAlign="center" content={t(`filters.${name}.label`)}/>
-            <Button
-              primary
-              compact
-              size="tiny"
-              content={t('buttons.apply')}
+            >
+              {t('buttons.cancel')}
+            </button>
+            <h4 className="small font-semibold text-center flex-1">{t(`filters.${name}.label`)}</h4>
+            <button
+              className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={this.apply}
+            >
+              {t('buttons.apply')}
+            </button>
+          </div>
+          <div className="relative autocomplete">
+            <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 large">search</span>
+            <input
+              type="text"
+              className="w-full pl-8 pr-3 py-1.5 small border border-gray-300 rounded"
+              placeholder={`${t('buttons.search')}...`}
+              onChange={this.handleTermChange}
             />
           </div>
-          <Input
-            fluid
-            className="autocomplete"
-            size="small"
-            icon="search"
-            placeholder={`${t('buttons.search')}...`}
-            onChange={this.handleTermChange}
-          />
-        </Segment>
-        <Segment basic className="filter-popup__body">
-          <Menu vertical fluid size="small" className="hierarchy">
+        </div>
+        <div className="filter-popup__body p-3">
+          <nav className="flex flex-col w-full small hierarchy">
             {this.getFlatList()}
-          </Menu>
-        </Segment>
-      </Segment.Group>
+          </nav>
+        </div>
+      </div>
     );
   }
 }

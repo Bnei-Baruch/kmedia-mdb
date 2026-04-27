@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import * as shapes from '../../../shapes';
@@ -16,7 +15,7 @@ import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const iconByNamespace = {
-  [MY_NAMESPACE_REACTIONS]    : 'heart outline',
+  [MY_NAMESPACE_REACTIONS]    : 'favorite_border',
   [MY_NAMESPACE_HISTORY]      : 'history',
   [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon"/>,
   [MY_NAMESPACE_PLAYLISTS]    : <PlaylistPlayIcon className="playlist_icon"/>
@@ -26,9 +25,9 @@ const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
 
   const seeAll = withSeeAll ? (
-    <Grid.Column textAlign={'right'}>
+    <div className="text-right">
       <Link to={`/personal/${namespace}`}>{t('search.showAll')}</Link>
-    </Grid.Column>
+    </div>
   ) : null;
 
   let marginClass = null;
@@ -37,31 +36,29 @@ const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
     icon        = iconByNamespace[namespace];
     marginClass = uiDir === 'rtl' ? ' margin-right-8' : ' margin-left-8';
   } else {
-    icon = <Icon name={iconByNamespace[namespace]}/>;
+    icon = <span className="material-symbols-outlined">{iconByNamespace[namespace]}</span>;
   }
 
   return (
     <div className="homepage__thumbnails avbox no-background">
-      <Container fluid className="padded">
-        <Header as={'h2'} className="my_header">
-          <Header.Content className="display-iblock">
+      <div className="w-full ">
+        <h2 className="my_header">
+          <span className="display-iblock">
             {icon}
             <span className={`display-iblock${marginClass}`}>{t(`personal.${namespace}`)}</span>
-          </Header.Content>
-          <Header.Subheader className="display-iblock">{seeAll}</Header.Subheader>
-        </Header>
+          </span>
+          <span className="display-iblock small text-gray-500">{seeAll}</span>
+        </h2>
         {
           children.length === 0 ?
             (
-              <Header
-                textAlign="center"
-                size="large"
-                content={t(`personal.no_${namespace}`)}
-              />
+              <h3 className="text-center large">
+                {t(`personal.no_${namespace}`)}
+              </h3>
             )
             : children
         }
-      </Container>
+      </div>
     </div>
   );
 };

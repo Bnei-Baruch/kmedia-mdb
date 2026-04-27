@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import UnitLogo from '../Logo/UnitLogo';
@@ -32,29 +31,29 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const description = [fromToLocalized(c.start_date, c.end_date)];
   const cuId        = c.cuIDs[0];
 
+  const Tag = size === 'big' || isMobileDevice ? 'h5' : 'h3';
+
   return (
-    <Container
-      as={Link}
+    <Link
       to={canonicalLink(c)}
       key={cID}
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size })}
     >
       <div>
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo collectionId={cID} width={width} fallbackImg={cuId && assetUrl(`api/thumbnail/${cuId}`)}/>
+          <UnitLogo collectionId={cID} width={width} fallbackImg={cuId && assetUrl(`api/thumbnail/${cuId}`)} />
         </div>
       </div>
       <div className="cu_item_info">
-
-        <Header as={size === 'big' || isMobileDevice ? 'h5' : 'h3'} className="cu_item_name">
-          <Header.Content content={c.name}/>
-          <Header.Subheader content={t(`constants.content-types.${c.content_type}`)}/>
-        </Header>
-        <div className={`cu_info_description text_ellipsis`}>
+        <Tag className="cu_item_name">
+          <span>{c.name}</span>
+          <div className="cu_item_subtext">{t(`constants.content-types.${c.content_type}`)}</div>
+        </Tag>
+        <div className="cu_info_description text_ellipsis">
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
-    </Container>
+    </Link>
   );
 };
 

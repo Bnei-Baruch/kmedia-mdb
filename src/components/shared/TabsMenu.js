@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, Link } from 'react-router-dom';
-import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
 
@@ -40,26 +39,21 @@ const TabsMenu = ({ items = [], active = '' }) => {
 
   return (
     <div className="unit-materials">
-      <Ref innerRef={scrollRef}>
-        <Menu tabular secondary pointing color="blue" className="no_print">
-          {
-            items.map(item => {
-              const { name, label } = item;
-              return (
-                <Menu.Item
-                  key={name}
-                  as={Link}
-                  to={`?activeTab=${name}`}
-                  name={name}
-                  className={`tab-${name}`}
-                  active={internalActive === name}
-                  onClick={handleActiveChange}
-                >{label}</Menu.Item>
-              );
-            })
-          }
-        </Menu>
-      </Ref>
+      <nav ref={scrollRef} className="flex border-b border-gray-200 no_print">
+        {
+          items.map(item => {
+            const { name, label } = item;
+            return (
+              <Link
+                key={name}
+                to={`?activeTab=${name}`}
+                className={`tab-${name} px-4 py-2 small font-medium border-b-2 ${internalActive === name ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                onClick={e => handleActiveChange(e, { name })}
+              >{label}</Link>
+            );
+          })
+        }
+      </nav>
       {activeItem ? activeItem.component : null}
     </div>
   );

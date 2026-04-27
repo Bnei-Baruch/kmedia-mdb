@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Icon } from 'semantic-ui-react';
 
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
 import { playerGetKeyboardCoefSelector } from '../../../redux/selectors';
@@ -28,7 +27,7 @@ export const SeekBackwardBtn = withTranslation()(({ t }) => {
       closeOnTriggerClick={false}
       trigger={
         <div className="controls__rewind" onClick={handleSeekBackward}>
-          <Icon fitted size="big" name="undo"/>
+          <span className="material-symbols-outlined text-2xl">undo</span>
         </div>
       }
     />
@@ -49,7 +48,7 @@ export const SeekForwardBtn = withTranslation()(({ t }) => {
       closeOnTriggerClick={false}
       trigger={
         <div className="controls__forward" onClick={handleSeekForward}>
-          <Icon fitted size="big" name="redo"/>
+          <span className="material-symbols-outlined text-2xl">redo</span>
         </div>
       }
     />

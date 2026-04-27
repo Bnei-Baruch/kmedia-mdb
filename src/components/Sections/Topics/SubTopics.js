@@ -5,7 +5,6 @@ import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';
 import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemModal';
 import { useTranslation } from 'react-i18next';
 import FilterHeader from '../../FiltersAside/FilterHeader';
-import { Button, Input } from 'semantic-ui-react';
 import RenderAsList from '../../FiltersAside/TopicsFilter/RenderAsList';
 import {
   filtersAsideGetTreeSelector,
@@ -53,7 +52,7 @@ const SubTopics = ({ namespace, rootID }) => {
 
   const toggleOpen = () => setOpen(!open);
 
-  const handleSetQuery = (e, data) => setQuery(data.value);
+  const handleSetQuery = e => setQuery(e.target.value);
 
   const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
 
@@ -78,14 +77,13 @@ const SubTopics = ({ namespace, rootID }) => {
       {
         children.length > MAX_SHOWED_ITEMS && (
           <>
-            <Button
-              basic
-              icon="plus"
-              color="blue"
-              className="clear_button"
-              content={t('topics.show-more')}
+            <button
+              className="clear_button border border-blue-500 text-blue-500 rounded px-3 py-1.5 bg-white hover:bg-blue-50 inline-flex items-center gap-1"
               onClick={toggleOpen}
-            />
+            >
+              <span className="material-symbols-outlined small">add</span>
+              {t('topics.show-more')}
+            </button>
             <TagSourceItemModal
               parent={root}
               open={open}
@@ -105,8 +103,8 @@ const SubTopics = ({ namespace, rootID }) => {
 
   return (
     <FilterHeader filterName={FN_TOPICS_MULTI}>
-      <Input
-        className="search-input"
+      <input
+        className="search-input w-full border border-gray-300 rounded px-3 py-1.5"
         placeholder={t('sources-library.filter')}
         onChange={handleSetQuery}
         defaultValue={query}

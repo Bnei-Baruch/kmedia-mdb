@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions } from '../../../../redux/modules/my';
@@ -62,33 +61,33 @@ const Page      = ({ location, t }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
 
-  const computerWidth = isMobileDevice ? 16 : 10;
+  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
 
   return (
-    <Grid padded={!isMobileDevice} className="avbox no-background">
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-          <Container className="padded">
+    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobileDevice })}>
+      <div className="flex flex-wrap w-full">
+        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
+          <div className=" px-4 ">
             <div className="summary-container align_items_center">
-              <Header as={'h2'} className="my_header">
-                <Icon name="heart outline" className="display-iblock"/>
+              <h2 className="my_header">
+                <span className="material-symbols-outlined display-iblock">favorite_border</span>
                 {t('personal.reactions')}
-                <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
+                <span className="display-iblock margin-right-8 margin-left-8 small text-gray-500">
                   {`${total} ${t('personal.videosOnList')}`}
-                </Header.Subheader>
-              </Header>
+                </span>
+              </h2>
               <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_REACTIONS}`}>
-                <Button basic className="clear_button">
-                  <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big"/>
+                <button className="clear_button inline-flex items-center border-none bg-transparent">
+                  <span className="material-symbols-outlined text-3xl margin-left-8 margin-right-8">play_circle</span>
                   {t('personal.playAll')}
-                </Button>
+                </button>
               </Link>
             </div>
-          </Container>
+          </div>
           <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
           {
             items?.length > 0 ? (
-              <Container className="padded">
+              <div className=" px-4 ">
                 {items.map((x, i) =>
                   (
                     <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
@@ -96,23 +95,21 @@ const Page      = ({ location, t }) => {
                     </ContentItemContainer>
                   )
                 )}
-              </Container>
+              </div>
             ) : null
           }
-          <Container className="padded pagination-wrapper" textAlign="center">
             <Pagination
               pageNo={pageNo}
               pageSize={PAGE_SIZE}
               total={total}
               onChange={setPage}
             />
-          </Container>
-        </Grid.Column>
+        </div>
         {
-          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6}/>
+          !isMobileDevice && <div className="w-full md:w-[37.5%]"/>
         }
-      </Grid.Row>
-    </Grid>
+      </div>
+    </div>
   );
 };
 

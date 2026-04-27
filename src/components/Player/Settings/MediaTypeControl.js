@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
@@ -15,27 +14,25 @@ const MediaTypeControl = ({ t }) => {
 
   const hasVideo = isHLS || mtByLang[language]?.length > 1;
 
-  const handleSetMediaType = (e, { name }) => dispatch(playlistActions.setMediaType(name));
+  const handleSetMediaType = name => dispatch(playlistActions.setMediaType(name));
 
   return (
     <div className="settings__row">
-      <Header size="tiny">{t('player.settings.playback')}</Header>
-      <Button.Group size="mini" inverted>
+      <h5 className="small font-semibold">{t('player.settings.playback')}</h5>
+      <div className="inline-flex">
         {
           [MT_VIDEO, MT_AUDIO].map(mt => (
-            <Button
-
-              inverted
-              onClick={handleSetMediaType}
-              name={mt}
+            <button
+              onClick={() => handleSetMediaType(mt)}
               key={mt}
-              content={t(`player.settings.${mt}`)}
-              active={type === mt}
+              className={`px-2 py-1 text-xs border border-white/30 ${type === mt ? 'bg-white text-black' : 'bg-transparent text-white'}`}
               disabled={mt === MT_VIDEO && !hasVideo}
-            />
+            >
+              {t(`player.settings.${mt}`)}
+            </button>
           ))
         }
-      </Button.Group>
+      </div>
     </div>
   );
 };

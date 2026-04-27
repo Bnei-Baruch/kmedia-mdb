@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
@@ -14,10 +13,10 @@ const Homepage = () => {
   return (
     <div>
       <SectionHeader section="sources-library"/>
-      <Divider fitted/>
-      <Container className="padded">
-        <Table basic="very" className="index-list sources__authors">
-          <Table.Body>
+      <hr className="m-0"/>
+      <div className=" px-4 ">
+        <table className="w-full border-collapse index-list sources__authors">
+          <tbody>
             {
               roots.map(r => {
                 const author = getSourceById(r);
@@ -31,9 +30,9 @@ const Homepage = () => {
                   />;
               })
             }
-          </Table.Body>
-        </Table>
-      </Container>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

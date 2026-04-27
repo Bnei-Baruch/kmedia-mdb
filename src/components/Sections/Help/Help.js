@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Container, Divider, Grid } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../../helpers/consts';
 import { assetUrl } from '../../../helpers/Api';
@@ -115,7 +114,6 @@ const HelpPage = () => {
     case LANG_HEBREW:
       uiLang = LANG_HEBREW;
       break;
-    // case LANG_UKRAINIAN:
     case LANG_RUSSIAN:
       uiLang = LANG_RUSSIAN;
       break;
@@ -128,47 +126,45 @@ const HelpPage = () => {
   let txts = texts;
   if (uiLang !== LANG_HEBREW) {
     c = [...clips];
-    c.splice(4, 1); // remove 4-2 in other langs
+    c.splice(4, 1);
     txts = [...texts];
-    txts.splice(4, 1); // remove 4-2 in other langs
+    txts.splice(4, 1);
   }
 
   return (
     <div>
       <SectionHeader section="help"/>
-      <Divider hidden/>
-      <Container>
-        <Grid stackable columns={3}>
+      <hr className="invisible my-4" />
+      <div className=" px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {
             c.map((x, i) => (
-              <Grid.Column key={x}>
-                <Card fluid>
-                  <Card.Content>
-                    <Card.Header>{txts[i].title[uiLang]}</Card.Header>
-                  </Card.Content>
-                  <Card.Content>
-                    <div>
-                      <video
-                        controls
-                        playsInline
-                        preload="metadata"
-                        type="video/mp4"
-                        src={assetUrl(`help/${uiLang}/clip${x}.mp4`)}
-                        poster={assetUrl(`help/${uiLang}/clip${x}.jpg`)}
-                        style={{ width: '100%', height: 'auto' }}
-                      />
-                    </div>
-                  </Card.Content>
-                  <Card.Content>
-                    {txts[i].description[uiLang]}
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
+              <div key={x} className="rounded shadow border overflow-hidden">
+                <div className="p-4">
+                  <div className="font-bold large">{txts[i].title[uiLang]}</div>
+                </div>
+                <div className="p-4 border-t">
+                  <div>
+                    <video
+                      controls
+                      playsInline
+                      preload="metadata"
+                      type="video/mp4"
+                      src={assetUrl(`help/${uiLang}/clip${x}.mp4`)}
+                      poster={assetUrl(`help/${uiLang}/clip${x}.jpg`)}
+                      style={{ width: '100%', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div className="p-4 border-t">
+                  {txts[i].description[uiLang]}
+                </div>
+              </div>
             ))
           }
-        </Grid>
-      </Container>
-      <Divider hidden/>
+        </div>
+      </div>
+      <hr className="invisible my-4" />
     </div>
   );
 };

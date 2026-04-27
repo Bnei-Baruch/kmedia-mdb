@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
 
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
@@ -32,12 +31,12 @@ const UnitItem = ({ id, t }) => {
   );
 
   return (
-    <List.Item className="media_item">
+    <div className="media_item">
       <Link to={link}>
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name}/>
+        <TooltipIfNeed text={cu.name} Component="h5" className="font-bold" as={Link} to={link} content={cu.name}/>
         {
           !isEmpty(additionCCUs) && (
             <div className="additional_links">
@@ -49,7 +48,7 @@ const UnitItem = ({ id, t }) => {
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

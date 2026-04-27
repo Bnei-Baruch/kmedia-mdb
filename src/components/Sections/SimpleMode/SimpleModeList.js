@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Image, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import WipErr from '../../shared/WipErr/WipErr';
@@ -53,21 +52,21 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
         lessons.length > 0 &&
         <div>
           <h2>
-            <Image className="simple-mode-type-icon">
+            <div className="simple-mode-type-icon inline-block">
               <SectionLogo name="lessons"/>
-            </Image>
+            </div>
             {t('simple-mode.today-lessons')}
           </h2>
-          <List size="large">
+          <ul className="large">
             {lessons.map(x => renderUnit(x, filesLanguages, t))}
-          </List>
+          </ul>
         </div>
       }
       {
         others.length > 0 &&
-        <List size="large">
+        <ul className="large">
           {renderUnit(others, filesLanguages, t)}
-        </List>
+        </ul>
       }
     </div>
   );

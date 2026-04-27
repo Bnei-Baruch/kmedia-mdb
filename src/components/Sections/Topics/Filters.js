@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Header } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../../redux/modules/filtersAside';
@@ -42,15 +41,15 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <Container className="padded">
+    <div className=" px-4 ">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <Header as="h3" content={t('filters.aside-filter.filters-title')}/>
+      <h3>{t('filters.aside-filter.filters-title')}</h3>
       <SubTopics namespace={namespace} rootID={baseParams.tag}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
       <ContentType namespace={namespace}/>
       <Language namespace={namespace}/>
       <DateFilter namespace={namespace}/>
-    </Container>
+    </div>
   );
 };
 

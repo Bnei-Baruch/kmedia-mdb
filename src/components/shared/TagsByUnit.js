@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import Link from '../Language/MultiLanguageLink';
 import { isEmpty } from '../../helpers/utils';
 import { useSelector } from 'react-redux';
@@ -50,34 +49,32 @@ const TagsByUnit = ({ id }) => {
       <div className="unit-tags-title">{t('messages.unit-tags')}:</div>
       {
         showArrow > 0 && (
-          <Button
-            basic
-            color="blue"
+          <button
             className="clear_button"
             onClick={scrollLeft}
-            icon={<span className="material-symbols-outlined">chevron_right</span>}
-          />
+          >
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
         )
       }
       <div className="unit-tags-bar_tags" onScroll={handleScroll} ref={ref}>
         {
           names
             .map((tag, index) =>
-              <Button key={`${tag.id}${index}`} className="unit-tag-item">
+              <button key={`${tag.id}${index}`} className="unit-tag-item">
                 <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-              </Button>
+              </button>
             )
         }
       </div>
       {
         showArrow > 0 && (
-          <Button
-            basic
-            color="blue"
+          <button
             className="clear_button"
             onClick={scrollRight}
-            icon={<span className="material-symbols-outlined">chevron_left</span>}
-          />
+          >
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
         )
       }
     </div>

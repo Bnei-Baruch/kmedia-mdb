@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { Container, Grid, Divider } from 'semantic-ui-react';
 
 import Materials from '../widgets/UnitMaterials/Materials';
 import Info from '../widgets/Info/Info';
@@ -20,33 +19,29 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 
-  const computerWidth = !isMobileDevice ? 10 : 16;
   return (
-    <Grid className="avbox">
-      <Grid.Column
-        mobile={16}
-        tablet={computerWidth}
-        computer={computerWidth}
-        className={clsx({ 'is-fitted': isMobileDevice })}>
+    <div className="flex flex-wrap avbox">
+      <div
+        className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
           <PlaylistHeader/>
         </div>
         {playerContainer}
-        <Container id="unit_container">
+        <div className=" px-4" id="unit_container">
           <Info/>
           <Materials/>
-        </Container>
-      </Grid.Column>
+        </div>
+      </div>
       {
         !isMobileDevice && (
-          <Grid.Column width={6}>
+          <div className="w-[37.5%]">
             <PlaylistItems/>
-            <Divider hidden/>
+            <div className="my-4" />
             <Recommended cuId={cuId} filterOutUnits={[]}/>
-          </Grid.Column>
+          </div>
         )
       }
-    </Grid>
+    </div>
   );
 };
 

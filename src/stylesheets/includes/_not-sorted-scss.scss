@@ -84,11 +84,6 @@
   width: 5px;
 }
 
-/* limit the height of the media player languages dropdown in order to not get out of the screen */
-.mediaplayer__languages .ui.floating.dropdown > .menu {
-  max-height: 220px;
-}
-
 .avbox__playlist-header {
   display: flex;
   justify-content: space-between;
@@ -130,10 +125,6 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 
-    &.segment {
-      padding: 0;
-    }
-
     .highlight {
       background-color: rgba(colors-helpers.$yellow, 0.2);
     }
@@ -154,12 +145,6 @@
       img {
         margin-bottom: .2em;
         width: 50px !important;
-      }
-
-      .row .center.aligned.column {
-        display: flex !important;
-        justify-content: center;
-        align-items: stretch;
       }
 
       .header {
@@ -235,44 +220,6 @@
           padding-right: 6rem;
         }
       }
-    }
-  }
-}
-
-.field.slice-button-mobile input {
-  font-size: 16px !important;
-}
-
-.ui.column.grid > [class*="eight wide"].column,
-.ui.grid > .column.row > [class*="eight wide"].column,
-.ui.grid > .row > [class*="eight wide"].column,
-.ui.grid > [class*="eight wide"].column {
-  width: 70% !important;
-
-  @include responsive-helpers.mobile {
-    width: 100% !important;
-  }
-}
-
-.collection-header {
-
-  .ui.column.grid > [class*="four wide"].column,
-  .ui.grid > .column.row > [class*="four wide"].column,
-  .ui.grid > .row > [class*="four wide"].column,
-  .ui.grid > [class*="four wide"].column {
-    width: 20% !important;
-
-    @include responsive-helpers.mobile {
-      width: 30% !important;
-    }
-  }
-
-  .ui.column.grid > [class*="eight wide"].column,
-  .ui.grid > .column.row > [class*="eight wide"].column,
-  .ui.grid > .row > [class*="eight wide"].column,
-  .ui.grid > [class*="eight wide"].column {
-    @include responsive-helpers.mobile {
-      width: 70% !important;
     }
   }
 }
@@ -979,9 +926,9 @@
   background-color: #F4F9FB;
 
   .twitter-avatar {
-    border-radius: 50% !important;
-    width: 45px !important;
-    height: auto !important;
+    border-radius: 50%;
+    width: 45px;
+    height: auto;
   }
 
   .tweet-title-wrapper {
@@ -994,21 +941,17 @@
     }
   }
 
-  .ui.feed {
-    margin-bottom: 0 !important;
-  }
-
   .tweet-friendly-date {
     text-align: right;
     color: rgba(118, 118, 118, 0.75);
     margin-top: 5px;
   }
 
-  .divider {
-    margin-bottom: 25px !important;
+  hr {
+    margin-bottom: 25px;
 
     &:last-of-type {
-      margin-bottom: 0 !important;
+      margin-bottom: 0;
     }
   }
 }
@@ -1081,10 +1024,6 @@
   margin-right: 0.4em;
 }
 
-.language-first-item .dropdown.icon {
-  font-size: 1.5em !important;
-}
-
 .language-url {
   color: red;
   max-width: 16em;
@@ -1105,12 +1044,6 @@
 .content-languages-title {
   text-align: center;
   margin-top: 0.5em;
-}
-
-.ui.selection.dropdown .menu > .item.language-selection-divider {
-  background-color: black !important;
-  height: 2px !important;
-  padding: 0 !important;
 }
 
 .language-subtext {
@@ -1144,13 +1077,6 @@
   }
 }
 
-/* ************* Style for Semantic Ui Popup  ************* */
-.change-popup-direction .content {
-  direction: rtl;
-}
-
-/* ************* End of Style for Semantic Ui Popup  ************* */
-
 .buttonLink {
   font-weight: bold;
   color: whitesmoke;
@@ -1162,36 +1088,6 @@
   .DayPicker-NavButton {
     top: 0;
     float: right;
-  }
-}
-
-.ui.flowing.popup {
-  z-index: 1899;
-}
-
-.ui.accordion.menu .item .title > .dropdown.icon {
-  -webkit-transform: rotate(0);
-  transform: rotate(0);
-}
-
-.ui.menu .item > svg:not(.ui) {
-  display: inline-block;
-  vertical-align: middle;
-  margin: -.3em 0;
-  width: 2.5em;
-}
-
-.ui.top.left.popup {
-  &.filter-popup {
-    top: 0 !important;
-    overflow: auto !important;
-  }
-}
-
-.ui.top.right.popup {
-  &.filter-popup {
-    top: 0 !important;
-    overflow: auto !important;
   }
 }
 
@@ -1298,7 +1194,7 @@
 }
 
 
-.homepage__thumbnails .my_header.ui.header {
+.homepage__thumbnails .my_header {
   margin-right: 1.5em;
   margin-left: 1.5em;
   display: flex;
@@ -1308,29 +1204,6 @@
   @include responsive-helpers.mobile {
     margin-right: 0;
     margin-left: 0;
-  }
-}
-
-.my_header.ui.header {
-  margin: 0 0 4px;
-  font-weight: normal;
-  vertical-align: bottom;
-
-  &.my_playlist_header {
-    margin-bottom: 14px;
-  }
-
-  svg {
-    height: 1.5em;
-    width: 1.5em;
-    margin: 0 0 -.3em;
-
-  }
-
-  .icon {
-    font-size: 1em;
-    vertical-align: top;
-    text-align: start;
   }
 }
 
@@ -1378,27 +1251,6 @@
 }
 
 
-.my_playlist_header.ui.header {
-  @include responsive-helpers.mobile {
-    display: block;
-
-    svg {
-      vertical-align: bottom;
-    }
-
-    .content {
-      vertical-align: bottom;
-      margin: 0 8px;
-    }
-
-    .sub.header {
-      display: inline-block;
-      vertical-align: baseline;
-      font-size: 13px;
-    }
-  }
-}
-
 .need_to_login {
   height: 60VH;
   display: flex;
@@ -1437,40 +1289,6 @@
   color: colors-helpers.$black !important;
 }
 
-.latestUpdatesCardGroup {
-  padding-top: 0 !important;
-  position: relative;
-
-  .card.cu_item {
-
-
-    .cu_item_img {
-      min-height: 124px;
-    }
-  }
-
-  .scroll_intents {
-    position: absolute;
-    top: 0;
-    width: 40px;
-    height: calc(100% - 22px);
-    margin-top: 12px;
-    z-index: 10;
-
-    .icon {
-      transform: scale(2, 3.5);
-      color: #0000008A;
-    }
-  }
-
-  .ui.basic.button {
-    background-color: #fff !important;
-  }
-}
-
-.latestUpdatesCardGroupMobile {
-  margin-top: 0 !important;
-}
 
 .language-mobile-select {
   border: 1px solid rgba(34, 36, 38, .15);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { noop } from '../../../helpers/utils';
-import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
 
@@ -18,51 +17,46 @@ const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
   const apply = () => onApply(sValue);
 
   const gridColumn = (x, sValue, t) => (
-    <Grid.Column key={x} textAlign="center">
-      <Header
-        size="small"
-        className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
+    <div key={x} className="text-center">
+      <div
+        className={`small font-semibold cursor-pointer ${(sValue && sValue.endsWith(x)) ? 'active' : ''}`}
         onClick={() => onSelectionChange(x)}
       >
         <SectionLogo name={x}/>
         <br/>
         {t(`nav.sidebar.${x}`)}
-      </Header>
-    </Grid.Column>
+      </div>
+    </div>
   );
 
   return (
-    <Segment.Group className="filter-popup__wrapper">
-      <Segment basic secondary className="filter-popup__header">
+    <div className="filter-popup__wrapper border rounded">
+      <div className="filter-popup__header bg-gray-100 p-3">
         <div className="title">
-          <Button
-            basic
-            compact
-            size="tiny"
-            content={t('buttons.cancel')}
+          <button
+            className="px-2 py-1 text-xs border border-gray-300 rounded bg-white hover:bg-gray-50"
             onClick={onCancel}
-          />
-          <Header size="small" textAlign="center" content={t('filters.sections-filter.label')}/>
-          <Button
-            primary
-            compact
-            size="small"
-            content={t('buttons.apply')}
+          >
+            {t('buttons.cancel')}
+          </button>
+          <h4 className="small font-semibold text-center flex-1">{t('filters.sections-filter.label')}</h4>
+          <button
+            className="px-2 py-1 small bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
             disabled={!sValue}
             onClick={apply}
-          />
+          >
+            {t('buttons.apply')}
+          </button>
         </div>
-      </Segment>
-      <Segment basic className="filter-popup__body sections-filter">
-        <Grid padded stackable columns={5}>
-          <Grid.Row>
-            {
-              ['lessons', 'programs', 'sources', 'events', 'publications'].map(x => gridColumn(x, sValue, t))
-            }
-          </Grid.Row>
-        </Grid>
-      </Segment>
-    </Segment.Group>
+      </div>
+      <div className="filter-popup__body sections-filter p-3">
+        <div className="grid grid-cols-5 gap-4 p-4">
+          {
+            ['lessons', 'programs', 'sources', 'events', 'publications'].map(x => gridColumn(x, sValue, t))
+          }
+        </div>
+      </div>
+    </div>
   );
 };
 

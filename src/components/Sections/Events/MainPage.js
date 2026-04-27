@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Container, Divider } from 'semantic-ui-react';
 
 import {
   CT_FRIENDS_GATHERING,
@@ -38,16 +37,16 @@ const BASE_PARAMS = { content_type: EVENT_PAGE_CTS };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_EVENTS)) || {};
-  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
-  const pageSize                   = useSelector(settingsGetPageSizeSelector);
-  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_EVENTS), isEqual);
-  const prevSel                    = usePrevious(selected);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize = useSelector(settingsGetPageSizeSelector);
+  const selected = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_EVENTS), isEqual);
+  const prevSel = usePrevious(selected);
 
   const location = useLocation();
-  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const pageNo = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_EVENTS, pageNo)), [dispatch]);
+  const setPage = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_EVENTS, pageNo)), [dispatch]);
 
   useEffect(() => {
     dispatch(prepareActions.fetchCollections(PAGE_NS_EVENTS, { content_type: CT_HOLIDAY }));
@@ -64,7 +63,7 @@ const MainPage = ({ t }) => {
 
   const wipErr = WipErr({ wip, err, t });
   return (<>
-    <SectionHeader section="events"/>
+    <SectionHeader section="events" />
     <SectionFiltersWithMobile
       namespace={PAGE_NS_EVENTS}
       filters={
@@ -74,33 +73,31 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
-      <FilterLabels namespace={PAGE_NS_EVENTS}/>
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_EVENTS} />
       {
         wipErr || items?.map(
           ({ id, content_type }, i) => {
             switch (true) {
               case EVENT_TYPES.includes(content_type):
-                return <CollectionItem id={id} key={i}/>;
+                return <CollectionItem id={id} key={i} />;
               case [CT_MEAL, CT_FRIENDS_GATHERING, CT_EVENT_PART].includes(content_type):
-                return <UnitItem id={id} key={i}/>;
+                return <UnitItem id={id} key={i} />;
               default:
                 return null;
             }
           }
         )
       }
-      <Divider fitted/>
-      <Container className="padded pagination-wrapper" textAlign="center">
-        {
-          total > 0 && <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            onChange={setPage}
-          />
-        }
-      </Container>
+      <hr className="m-0 border-t" />
+      {
+        total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={setPage}
+        />
+      }
     </SectionFiltersWithMobile>
   </>);
 };

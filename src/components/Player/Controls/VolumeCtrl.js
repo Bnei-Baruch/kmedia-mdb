@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
@@ -16,7 +15,6 @@ const VolumeCtrl = ({ t }) => {
   const [right, setRight] = useState();
 
   const isMuted = useSelector(playerIsMutedSelector);
-  //recount position on resize
   const width   = useSelector(playerGetPlayerWidthSelector, shallowEqual);
   const volume  = useSubscribeVolume();
 
@@ -31,7 +29,6 @@ const VolumeCtrl = ({ t }) => {
   const onChangePosition = useCallback(e => {
     e.preventDefault();
 
-    // Resolve clientX from mouse or touch event.
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const v       = Math.round(100 * Math.min(Math.max(0, clientX - left), delta) / delta);
@@ -46,7 +43,7 @@ const VolumeCtrl = ({ t }) => {
         content={t('player.controls.mute')}
         trigger={
           <div className="controls__volume-icon" onClick={handleMute}>
-            <Icon fitted name={`volume ${icon}`}/>
+            <span className="material-symbols-outlined text-base">{`volume_${icon}`}</span>
           </div>
         }
       />

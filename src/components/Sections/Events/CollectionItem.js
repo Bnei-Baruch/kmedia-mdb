@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
 
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
@@ -27,13 +26,15 @@ const CollectionItem = ({ id }) => {
   };
 
   return (
-    <List.Item as={Link} to={canonicalLink(c)} key={id} className="media_item">
-      <UnitLogoWithDuration unit={cus[0]} />
+    <div className="media_item">
+      <Link to={canonicalLink(c)}>
+        <UnitLogoWithDuration unit={cus[0]} />
+      </Link>
       <div className="media_item__content">
-        <Header content={name} />
+        <h5 className="font-bold">{name}</h5>
         <div className="description">{getDate()}</div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 
 import AddCommentBtn from '../../Pages/WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -41,22 +41,19 @@ const LikutToolbarWeb = () => (
       <div className="divider computer-only" />
       <LessonsByLikutBtn />
       <FullscreenTextBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        pointing="top right"
-        className="text_toolbar__dropdown"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
+      <Popover className="relative text_toolbar__dropdown">
+        <Popover.Button as="div">
+          <MoreOptionsBtn />
+        </Popover.Button>
+        <Popover.Panel className="absolute right-0 z-10 bg-white shadow-lg rounded border">
+          <div className="px-4 py-2 hover:bg-gray-100">
             <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-4 py-2 hover:bg-gray-100">
             <AdditionsModeBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+          </div>
+        </Popover.Panel>
+      </Popover>
     </div>
   </div>
 );

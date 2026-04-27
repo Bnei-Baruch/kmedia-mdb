@@ -115,12 +115,11 @@
   }
 
   &.is-mobile {
-    //overflow: hidden;
     .text__content {
       padding: 1.5em 0;
     }
 
-    .text__scroll-top.ui.icon.button {
+    .text__scroll-top {
       padding: 7px 8px;
       bottom: 88px;
     }
@@ -194,7 +193,7 @@
     font-family: Georgia, 'Times New Roman ', Times, serif;
   }
 
-  .text__scroll-top.ui.icon.button {
+  .text__scroll-top {
     position: absolute;
     bottom: 18px;
     padding: 11.5px 12.5px;
@@ -283,9 +282,9 @@
       border-top: 1px solid rgba(34, 36, 38, .1) !important;
     }
 
-    &.ui.item .item {
-      padding-left: 1em !important;
-      padding-right: 1em !important;
+    .item {
+      padding-left: 1em;
+      padding-right: 1em;
       text-transform: capitalize;
     }
   }
@@ -478,10 +477,10 @@
     }
   }
 
-  &__dropdown.ui.dropdown {
-    display: none !important;
+  &__dropdown {
+    display: none;
     @include responsive-helpers.tablet-mobile {
-      display: block !important;
+      display: block;
     }
 
     & > .menu {
@@ -651,8 +650,7 @@
     border: none;
     border-radius: 0;
 
-
-    .ui.input {
+    .input {
       background: colors-helpers.$white;
     }
   }
@@ -660,7 +658,7 @@
   .is-mobile.is-dark & {
     background: #323233;
 
-    .ui.input {
+    .input {
       background: #606060;
     }
 
@@ -669,7 +667,7 @@
     }
   }
 
-  & > .ui.button, & > .ui.input {
+  & > .button, & > .input {
     margin: 0 8px;
   }
 
@@ -679,13 +677,12 @@
     white-space: nowrap;
   }
 
-  .ui.input {
+  .input {
     flex-grow: 3;
     background: colors-helpers.$white;
     border-radius: 4px;
     @include theme_color;
     @include theme_bg;
-
 
     & > input {
       &, &:active, &:focus {
@@ -695,7 +692,6 @@
       }
     }
   }
-
 
   & > .button {
     font-size: 18px;
@@ -775,13 +771,13 @@
   }
 }
 
-.ui.dropdown.text__language_popup .menu {
+.text__language_popup .menu {
   max-height: 60VH;
   overflow: auto;
   margin: 14px 0;
 
   & > .item {
-    padding: 1.5em 1em !important;
+    padding: 1.5em 1em;
     border-bottom: 1px solid colors-helpers.$light-stroke;
     font-size: 16px;
 
@@ -839,7 +835,7 @@
   }
 }
 
-.pdf_input_wrapper.ui.input {
+.pdf_input_wrapper {
   &, .pdf_pagination & {
     display: flex;
     flex-wrap: nowrap;
@@ -898,7 +894,7 @@
   stroke: none !important;
 }
 
-.additions_mode_popup.ui.menu {
+.additions_mode_popup {
   padding: 0 1em;
 
   .item {

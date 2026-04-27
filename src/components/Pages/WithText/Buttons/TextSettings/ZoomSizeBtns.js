@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon, Menu } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/textPage';
 import { stopBubbling } from '../../../../../helpers/utils';
@@ -18,14 +17,14 @@ const ZoomSizeBtns = () => {
 
   return (
     <>
-      <Menu.Item onClick={handleSetPlus}>
-        <Icon name="font" size="large" />
-        <Icon name="plus" size="small" />
-      </Menu.Item>
-      <Menu.Item onClick={handleSetMinus}>
-        <Icon name="font" size="large" />
-        <Icon name="minus" size="small" />
-      </Menu.Item>
+      <button onClick={handleSetPlus} className="flex-1 px-4 py-2 flex items-center justify-center gap-1">
+        <span className="material-symbols-outlined large">text_format</span>
+        <span className="material-symbols-outlined small">add</span>
+      </button>
+      <button onClick={handleSetMinus} className="flex-1 px-4 py-2 flex items-center justify-center gap-1">
+        <span className="material-symbols-outlined large">text_format</span>
+        <span className="material-symbols-outlined small">remove</span>
+      </button>
     </>
   );
 };

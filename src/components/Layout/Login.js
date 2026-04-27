@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
-import { Button, Divider, List, Popup } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Link from '../Language/MultiLanguageLink';
 import { login, logout, KC_API_WITH_REALM } from '../../pkg/ksAdapter/adapter';
@@ -11,82 +11,55 @@ import useIsLoggedIn from '../shared/useIsLoggedIn';
 import { settingsGetUIDirSelector, settingsGetUILangSelector, authGetUserSelector } from '../../redux/selectors';
 
 const Login = ({ t }) => {
-  const [isActive, setIsActive] = useState(false);
-  const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const uiLang                  = useSelector(settingsGetUILangSelector);
-  const uiDir                   = useSelector(settingsGetUIDirSelector);
-  const popupStyle              = { uiDir };
-  const user                    = useSelector(authGetUserSelector);
-  const nameLetter              = !!user && !!user.name ? user.name[0].toUpperCase() : '';
-  const loggedIn                = useIsLoggedIn();
-
-  const handlePopupOpen  = () => setIsActive(true);
-  const handlePopupClose = () => setIsActive(false);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const uiLang             = useSelector(settingsGetUILangSelector);
+  const uiDir              = useSelector(settingsGetUIDirSelector);
+  const user               = useSelector(authGetUserSelector);
+  const nameLetter         = !!user && !!user.name ? user.name[0].toUpperCase() : '';
+  const loggedIn           = useIsLoggedIn();
 
   const renderAccount = () => (
-    <Popup
-      id="handleLoginPopup"
-      key="handleLogin"
-      flowing
-      position="bottom right"
-      size="large"
-      className="auth-popup"
-      trigger={
-        <Button
-          circular
-          compact
-          className={'auth-button'}
-          content={nameLetter}
-          onClick={handlePopupClose}
-        />
-      }
-      open={isActive}
-      onOpen={handlePopupOpen}
-      onClose={handlePopupClose}
-      on="click"
-      style={popupStyle}
-      hideOnScroll
-    >
-      <Popup.Header content={user?.name}/>
-      <Divider/>
-      <Popup.Content>
-        <List>
-          <List.Item
-            key="personal"
-            as={Link}
-            to={'/personal'}
-            content={t('nav.sidebar.personal')}
-          />
-          <List.Item
-            key="account"
-            as="a"
-            href={`${KC_API_WITH_REALM}/account/?kc_locale=${uiLang}`}
-            content={t('personal.account')}
-          />
-          <List.Item
-            key="logout"
-            as="a"
-            onClick={logout}
-            content={t('personal.logout')}
-          />
-        </List>
-      </Popup.Content>
-    </Popup>
+    <Popover className="relative">
+      <PopoverButton as="div" className="auth-button">
+        {nameLetter}
+      </PopoverButton>
+      <PopoverPanel
+        anchor="bottom end"
+        className="auth-popup z-50 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 p-3"
+        style={{ direction: uiDir }}
+      >
+        <div className="font-semibold small mb-2">{user?.name}</div>
+        <hr className="border-gray-200 mb-2" />
+        <ul className="space-y-1.5 small">
+          <li>
+            <Link to="/personal" className="block hover:text-semantic-blue">
+              {t('nav.sidebar.personal')}
+            </Link>
+          </li>
+          <li>
+            <a href={`${KC_API_WITH_REALM}/account/?kc_locale=${uiLang}`} className="block hover:text-semantic-blue">
+              {t('personal.account')}
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={logout} className="block hover:text-semantic-blue">
+              {t('personal.logout')}
+            </a>
+          </li>
+        </ul>
+      </PopoverPanel>
+    </Popover>
   );
 
   const renderLogin = () => (
-    <Button
-      compact
-      basic
-      icon={'user circle outline'}
-      content={isMobileDevice ? null : t('personal.login')}
-      className={isMobileDevice ? 'auth-button' : 'donate-button'}
-      circular={isMobileDevice}
-      color={'blue'}
-      as="a"
-      target="_blank"
+    <a
+      href="#"
       onClick={login}
-    />
+      className={`inline-flex items-center gap-1.5 border border-semantic-blue text-semantic-blue rounded hover:bg-semantic-blue hover:text-white transition-colors ${isMobileDevice ? 'auth-button w-8 h-8 justify-center rounded-full p-0' : 'donate-button px-3 py-1.5 small'}`}
+    >
+      <span className="material-symbols-outlined text-base">account_circle</span>
+      {isMobileDevice ? null : t('personal.login')}
+    </a>
   );
 
   return loggedIn ? renderAccount() : renderLogin();

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, MenuItem } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -27,13 +26,13 @@ const TagVideoLabelBtn = ({ label, onClose }) => {
       open={open}
       onClose={handleClose}
       trigger={
-        <MenuItem onClick={handleOpen}>
-          <Button
-            size="small"
-            color="green"
-            content={t('personal.label.tagging')}
-          />
-        </MenuItem>
+        <div onClick={handleOpen}>
+          <button
+            className="px-3 py-1.5 bg-green-600 text-white rounded small"
+          >
+            {t('personal.label.tagging')}
+          </button>
+        </div>
       }
     />
   );

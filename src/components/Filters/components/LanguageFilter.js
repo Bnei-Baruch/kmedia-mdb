@@ -2,50 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
-import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
 
 const LanguageFilter = ({ value = null, namespace, onCancel = noop, onApply = noop }) => {
   const { t } = useTranslation();
-
-  const onLanguageChange = (event, data) => onApply(data.name);
 
   const displayedLanguages = namespace === 'publications-audio-blog'
     ? AUDIO_BLOG_LANGUAGES
     : ALL_LANGUAGES.filter(l => !POPULAR_LANGUAGES.includes(l));
 
   return (
-    <Segment.Group>
-      <Segment secondary className="filter-popup__header">
+    <div className="border rounded">
+      <div className="filter-popup__header bg-gray-100 p-3">
         <div className="title">
-          <Button
-            basic
-            compact
-            icon="remove"
+          <button
+            className="px-2 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50"
             onClick={onCancel}
-          />
-          <Header size="small" textAlign="center" content={t('filters.language-filter.label')}/>
+          >
+            <span className="material-symbols-outlined small">close</span>
+          </button>
+          <h4 className="small font-semibold text-center flex-1">{t('filters.language-filter.label')}</h4>
         </div>
-      </Segment>
-      <Segment className="filter-popup__body language-filter">
-        <Accordion as={Menu} vertical fluid size="small">
+      </div>
+      <div className="filter-popup__body language-filter p-3">
+        <nav className="flex flex-col w-full small">
           {
             displayedLanguages.map(x => (
-              (
-                <Menu.Item
-                  key={x}
-                  name={x}
-                  active={value === x}
-                  onClick={onLanguageChange}
-                >
-                  {LANGUAGES[x].name}
-                </Menu.Item>
-              )
+              <div
+                key={x}
+                className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${value === x ? 'bg-blue-50 font-semibold' : ''}`}
+                onClick={() => onApply(x)}
+              >
+                {LANGUAGES[x].name}
+              </div>
             ))
           }
-        </Accordion>
-      </Segment>
-    </Segment.Group>
+        </nav>
+      </div>
+    </div>
   );
 };
 

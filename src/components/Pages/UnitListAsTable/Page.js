@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Container, Divider, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
@@ -94,8 +93,8 @@ const UnitListPage = props => {
     {
       namespace,
       items = [],
-      wip   = false,
-      err   = null,
+      wip = false,
+      err = null,
       pageNo,
       total,
       pageSize,
@@ -108,26 +107,24 @@ const UnitListPage = props => {
 
   const content = WipErr({ wip, err, t }) || (
     <div>
-      <Container className="padded">
+      <div className="px-4 ">
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         {
           items.length > 0 &&
-            <Table unstackable basic="very" className="index" sortable>
-              <Table.Body>
-                {items.map(x => renderUnit(x, t, namespace))}
-              </Table.Body>
-            </Table>
+          <table className="w-full index" >
+            <tbody>
+              {items.map(x => renderUnit(x, t, namespace))}
+            </tbody>
+          </table>
         }
-      </Container>
-      <Divider fitted />
-      <Container className="padded pagination-wrapper" textAlign="center">
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={onPageChange}
-        />
-      </Container>
+      </div>
+      <hr className="m-0 border-t" />
+      <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={onPageChange}
+      />
     </div>
   );
 
@@ -135,15 +132,15 @@ const UnitListPage = props => {
 
   return (
     <div className="unit-list">
-      <Divider fitted />
+      <hr className="m-0 border-t" />
       {
         nsFilters.length > 0 &&
-          <Filters
-            namespace={namespace}
-            filters={nsFilters}
-            onChange={onFiltersChanged}
-            onHydrated={onFiltersHydrated}
-          />
+        <Filters
+          namespace={namespace}
+          filters={nsFilters}
+          onChange={onFiltersChanged}
+          onHydrated={onFiltersHydrated}
+        />
       }
       {content}
     </div>

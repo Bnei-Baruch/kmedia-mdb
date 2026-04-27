@@ -109,70 +109,6 @@ video {
       font-size: 11px;
     }
 
-    &__audio {
-      padding: 0 12px;
-
-      .ui.toggle.checkbox input {
-        height: auto;
-        min-height: auto;
-        width: 36px;
-
-        &:checked {
-          & ~ label {
-            &:before {
-              background: rgba(255, 255, 255, 1) !important;
-            }
-
-            &:after {
-              background: #000;
-              left: 24px;
-
-              .rtl & {
-                right: 24px;
-                left: auto;
-
-              }
-            }
-          }
-        }
-
-        & ~ label {
-          height: auto;
-          min-height: auto;
-          color: #fff !important;
-          line-height: 16px;
-          font-size: 11px;
-          padding: 0 0 0 44px;
-
-          .rtl & {
-            padding: 0 44px 0 0;
-          }
-
-          &:before {
-            width: 36px;
-            height: 16px;
-            border: 2px solid #fff;
-            background: rgba(255, 255, 255, 0) !important;
-            transition: background .3s ease, left .3s ease;
-          }
-
-          &:after {
-            width: 8px;
-            height: 8px;
-            top: 4px;
-            left: 4px;
-            background: #fff;
-            box-shadow: none;
-
-            .rtl & {
-              right: 4px;
-              left: auto;
-            }
-          }
-        }
-      }
-    }
-
     &__progress {
       position: absolute;
       bottom: -2px;
@@ -697,48 +633,6 @@ video {
       }
     }
 
-    &__language {
-      .ui.dropdown {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-
-        background: #fff;
-        color: rgba(0, 0, 0, 0.8);
-        min-width: 9em;
-        white-space: nowrap;
-        font-size: .785rem;
-
-        &:focus {
-          border: white solid 1px;
-        }
-
-        &.active {
-          border: white solid 1px;
-        }
-
-        div.menu {
-          border: white solid 1px;
-
-          .item {
-            background: rgba(27, 28, 29, 0.9);
-            color: #fff;
-            font-size: .785rem;
-          }
-        }
-
-        div.menu .item.language-selection-divider {
-          background-color: #fff !important;
-        }
-
-        i {
-          top: 50%;
-          margin: unset;
-        }
-
-      }
-    }
-
     &__volume {
       display: flex;
 
@@ -1159,47 +1053,6 @@ video {
     left: 50%;
     transform: translate(-50%, -50%);
   }
-}
-
-/* Twitter */
-
-.ui.whatsapp.button {
-  background-color: $whatsappColor;
-  color: #FFFFFF;
-}
-
-.ui.whatsapp.button:hover {
-  //background-color: $whatsappHoverColor;
-}
-
-.ui.whatsapp.button:active {
-  background-color: $whatsappDownColor;
-}
-
-.ui.telegram.button {
-  background-color: $telegramColor;
-  color: #FFFFFF;
-}
-
-.ui.telegram.button:hover {
-  //background-color: $telegramHoverColor;
-}
-
-.ui.telegram.button:active {
-  background-color: $telegramDownColor;
-}
-
-.ui.odnoklassniki.button {
-  background-color: $odnoklassnikiColor;
-  color: #FFFFFF;
-}
-
-.ui.odnoklassniki.button:hover {
-  //background-color: $odnoklassnikiHoverColor;
-}
-
-.ui.odnoklassniki.button:active {
-  background-color: $odnoklassnikiDownColor;
 }
 
 .custom_share_button {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { MT_AUDIO } from '../../helpers/consts';
-import { Icon } from 'semantic-ui-react';
 import { playerGetFileSelector } from '../../redux/selectors';
 
 const AudioBg = () => {
@@ -9,7 +8,7 @@ const AudioBg = () => {
   if (type !== MT_AUDIO) return null;
   return (
     <div className="audio-backdrop">
-      <Icon size="huge" name="volume up" />
+      <span className="material-symbols-outlined text-5xl">volume_up</span>
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Confirm, Dropdown, Modal } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
@@ -18,6 +18,7 @@ const Actions = ({ bookmark, t }) => {
   const [confirm, setConfirm]   = useState();
 
   const dispatch = useDispatch();
+  const menuRef  = useRef(null);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
 
@@ -38,7 +39,7 @@ const Actions = ({ bookmark, t }) => {
   };
 
   const handleCloseEdit = (e, el, isUpdated) => {
-    stopBubbling(e);
+    if (e?.stopPropagation) stopBubbling(e);
     setOpenEdit(false);
     handleClose();
     isUpdated && setAlertMsg(t('personal.bookmark.bookmarkUpdated'));
@@ -53,52 +54,79 @@ const Actions = ({ bookmark, t }) => {
     setConfirm(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        handleClose();
+      }
+    };
+
+    if (open) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
+
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
-      <Confirm
-        size="tiny"
-        open={confirm}
-        onCancel={handleConfirmCancel}
-        onConfirm={handleConfirmSuccess}
-        cancelButton={t('buttons.cancel')}
-        confirmButton={t('buttons.apply')}
-        content={t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}
-        dir={uiDir}
-      />
-      <Dropdown
-        icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-      >
-        <Dropdown.Menu
-          direction="left">
-          <Modal
-            trigger={
-              <Dropdown.Item
-                content={t('personal.bookmark.editBookmark')}
-                onClick={handleOpenEdit}
-                icon="pencil"
-              />
-            }
-            open={openEdit}
-            onClose={handleCloseEdit}
-            size="tiny"
-            dir={uiDir}
-            className="bookmark_modal"
-          >
-            <Modal.Header content={t('personal.bookmark.editBookmark')}/>
+      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
+            <p>{t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}</p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                className="rounded border border-gray-300 px-4 py-2 small"
+                onClick={handleConfirmCancel}
+              >
+                {t('buttons.cancel')}
+              </button>
+              <button
+                className="rounded bg-blue-500 px-4 py-2 small text-white"
+                onClick={handleConfirmSuccess}
+              >
+                {t('buttons.apply')}
+              </button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+      <div className="relative inline-block" ref={menuRef}>
+        <button
+          className="p-1"
+          onClick={open ? handleClose : handleOpen}
+        >
+          <span className="material-symbols-outlined text-2xl text-gray-400 margin-top-8">more_vert</span>
+        </button>
+        {open && (
+          <div className="absolute right-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
+            <button
+              className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
+              onClick={handleOpenEdit}
+            >
+              <span className="material-symbols-outlined text-base">edit</span>
+              {t('personal.bookmark.editBookmark')}
+            </button>
+            <button
+              className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
+              onClick={removeItem}
+            >
+              <span className="material-symbols-outlined text-base">cancel</span>
+              {t('personal.bookmark.removeBookmark')}
+            </button>
+          </div>
+        )}
+      </div>
+      <Dialog open={!!openEdit} onClose={() => handleCloseEdit()} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="mx-auto max-w-sm rounded bg-white bookmark_modal" dir={uiDir}>
+            <h3 className="border-b p-4 large font-semibold">
+              {t('personal.bookmark.editBookmark')}
+            </h3>
             <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id}/>
-          </Modal>
-          <Dropdown.Item
-            fitted="vertically"
-            icon="remove circle"
-            onClick={removeItem}
-            content={t('personal.bookmark.removeBookmark')}
-          />
-        </Dropdown.Menu>
-      </Dropdown>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </>
   );
 };

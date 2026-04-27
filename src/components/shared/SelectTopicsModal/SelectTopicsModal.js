@@ -7,7 +7,7 @@ import {
   tagsGetTagByIdSelector
 } from '../../../redux/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import { Header, Grid, Modal, Container, Input, Label, Button } from 'semantic-ui-react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getTree } from '../../../helpers/topicTree';
 import { actions } from '../../../redux/modules/mdb';
@@ -57,29 +57,23 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   };
 
   const renderColumn = col => (
-    <Grid.Column key={col.value}>
-      <Header
-        as="h2"
-        content={col.text}
-        className="topic_row_title topics__title"
-      />
-      <Container className="padded">
+    <div key={col.value}>
+      <h2 className="topic_row_title topics__title">{col.text}</h2>
+      <div className=" px-4 ">
         {
           col.children?.filter(ch => ch.matched).map(ch => (
-            <Grid.Column key={ch.value} className="topics_card">
-              <Header as="h3" className="topics_title">
-                {ch.text}
-              </Header>
+            <div key={ch.value} className="topics_card">
+              <h3 className="topics_title">{ch.text}</h3>
               <TopicBranch
                 leafs={ch.children}
                 selected={selected}
                 setSelected={handleSetSelected}
               />
-            </Grid.Column>
+            </div>
           ))
         }
-      </Container>
-    </Grid.Column>
+      </div>
+    </div>
   );
 
   const handleFilterChange = (e, data) => setMatch(data.value);
@@ -103,75 +97,77 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir}/>
-      <Modal
-        open={open}
-        onClose={onClose}
-        className="select_topic_modal"
-        size="large"
-        trigger={trigger}
-        dir={dir}
-      >
-        <Modal.Header content={t('personal.label.header')} className="no-border"/>
-        {
-          needToLogin ?
-            (
-              <Modal.Content>{needToLogin}</Modal.Content>
-            ) : (
-              <>
-                <Modal.Content style={{ paddingTop: 0 }}>
-                  <Input
-                    defaultValue={name}
-                    onChange={handleSetName}
-                    fluid
-                    className="label_name"
-                    error={selected.length > 0 && !name}
-                  >
-                    <Label
-                      content={t('personal.label.name')}
-                      basic
-                      className="no-border"
-                    />
-                    <input autoFocus/>
-                  </Input>
-                </Modal.Content>
-                <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
-                  <Input
-                    className="search-omnibox"
-                    placeholder={t('personal.label.search')}
-                    onChange={handleFilterChange}
-                  />
-                </Modal.Content>
-                <Modal.Content scrolling className="label_topic_grid">
-                  {
-                    tree?.children && (
-                      <Grid columns={isMobileDevice ? 1 : tree.children.length}>
-                        <Grid.Row>
-                          {
-                            tree.children.map(renderColumn)
-                          }
-                        </Grid.Row>
-                      </Grid>
-                    )
-                  }
-                </Modal.Content>
-              </>
-            )
-        }
-        <Modal.Actions>
-          <Button
-            onClick={handleCancel}
-            content={t('buttons.cancel')}
-          />
-          <Button
-            onClick={handleSave}
-            content={t('personal.label.tagging')}
-            color="green"
-            disabled={!selected.length || !name}
-          />
-        </Modal.Actions>
-      </Modal>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
+      {trigger}
+      <Dialog open={!!open} onClose={onClose} className="relative z-50 select_topic_modal" dir={dir}>
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <div className="px-6 py-4 border-b font-bold large no-border">
+              {t('personal.label.header')}
+            </div>
+            {
+              needToLogin ?
+                (
+                  <div className="p-6">{needToLogin}</div>
+                ) : (
+                  <>
+                    <div className="px-6 py-4 pt-0">
+                      <div className={`label_name flex w-full items-center ${selected.length > 0 && !name ? 'border-red-500' : ''}`}>
+                        <span className="inline-flex items-center px-3 py-2 small no-border">
+                          {t('personal.label.name')}
+                        </span>
+                        <input
+                          defaultValue={name}
+                          onChange={e => handleSetName(e, { value: e.target.value })}
+                          className="flex-1 border border-gray-300 rounded px-3 py-2"
+                          autoFocus
+                        />
+                      </div>
+                    </div>
+                    <div className="px-6 pb-0 pt-0">
+                      <h4 className="font-normal">{t('personal.label.infoAddTag')}</h4>
+                      <input
+                        className="search-omnibox border border-gray-300 rounded px-3 py-2 w-full"
+                        placeholder={t('personal.label.search')}
+                        onChange={e => handleFilterChange(e, { value: e.target.value })}
+                      />
+                    </div>
+                    <div className="label_topic_grid px-6 py-4 overflow-y-auto flex-1">
+                      {
+                        tree?.children && (
+                          <div
+                            className="grid gap-4"
+                            style={{ gridTemplateColumns: `repeat(${isMobileDevice ? 1 : tree.children.length}, 1fr)` }}
+                          >
+                            {
+                              tree.children.map(renderColumn)
+                            }
+                          </div>
+                        )
+                      }
+                    </div>
+                  </>
+                )
+            }
+            <div className="flex justify-end gap-2 p-4 border-t">
+              <button
+                className="border border-gray-300 rounded px-4 py-2 hover:bg-gray-100"
+                onClick={handleCancel}
+              >
+                {t('buttons.cancel')}
+              </button>
+              <button
+                className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 disabled:opacity-50"
+                onClick={handleSave}
+                disabled={!selected.length || !name}
+              >
+                {t('personal.label.tagging')}
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 };

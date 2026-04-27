@@ -1,6 +1,6 @@
 import React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Popup, } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import { useTranslation } from 'react-i18next';
@@ -29,17 +29,21 @@ const CopyWithPopupBtn = ({ text, children }) => {
   };
 
   return (
-    <Popup
-      open={open}
-      content={t('messages.link-copied-to-clipboard')}
-      position={`bottom left`}
-      trigger={
-        (
-          <CopyToClipboard text={text} onCopy={handleCopied}>
-            {children}
-          </CopyToClipboard>)
-      }
-    />
+    <Popover className="relative inline-block">
+      <PopoverButton as="div">
+        <CopyToClipboard text={text} onCopy={handleCopied}>
+          {children}
+        </CopyToClipboard>
+      </PopoverButton>
+      {open && (
+        <PopoverPanel
+          static
+          className="absolute z-50 top-full mt-1 left-0 rounded bg-white shadow-lg border border-gray-200 px-3 py-2 small whitespace-nowrap"
+        >
+          {t('messages.link-copied-to-clipboard')}
+        </PopoverPanel>
+      )}
+    </Popover>
   );
 };
 

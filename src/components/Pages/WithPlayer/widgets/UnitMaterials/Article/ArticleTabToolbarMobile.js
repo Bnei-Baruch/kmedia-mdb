@@ -1,5 +1,4 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
 
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
@@ -19,25 +18,22 @@ const ArticleTabToolbarMobile = ({ hasToc }) => (
       <TextSettings/>
       <SearchOnPageBtn/>
       <AddBookmarkBtn/>
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn/>}
-        className="text_toolbar__dropdown"
-        direction="left"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
+      <details className="text_toolbar__dropdown relative inline-block">
+        <summary className="list-none cursor-pointer">
+          <MoreOptionsBtn/>
+        </summary>
+        <div className="absolute right-0 z-50 mt-1 bg-white rounded shadow-lg py-1">
+          <div className="px-2 py-1">
             <DownloadTextBtn/>
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-2 py-1">
             <ShareTextModalBtn/>
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-2 py-1">
             <CopyLinkBtn/>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 );

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Container, Grid, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -17,29 +16,26 @@ const Page = ({ t }) => {
   if (needToLogin) return needToLogin;
 
   return (
-    <Container fluid className={clsx('padded bookmark_page', {
-      'padded': !isMobileDevice,
+    <div className={clsx('w-full bookmark_page', {
+      '': !isMobileDevice,
       'no-padding': isMobileDevice
     })}
     >
-      {isMobileDevice && <BookmarkHeaderMobile />}
-      <Grid className={clsx({ 'no-margin': isMobileDevice })}>
-        {!isMobileDevice && <BookmarkHeader />}
-        <Grid.Row>
-          {!isMobileDevice && <FolderList />}
-          <Grid.Column
-            mobile={16}
-            tablet={12}
-            computer={12}
-            className={clsx({ 'no-margin, no-padding': isMobileDevice })}
+      {isMobileDevice && <BookmarkHeaderMobile/>}
+      <div className={clsx('flex flex-wrap', { 'no-margin': isMobileDevice })}>
+        {!isMobileDevice && <BookmarkHeader/>}
+        <div className="flex flex-wrap w-full">
+          {!isMobileDevice && <FolderList/>}
+          <div
+            className={clsx('w-full md:w-3/4', { 'no-margin no-padding': isMobileDevice })}
           >
-            <Segment basic={isMobileDevice}>
-              <BookmarkList />
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Container>
+            <div className={clsx({ 'border rounded p-4 shadow-sm': !isMobileDevice })}>
+              <BookmarkList/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

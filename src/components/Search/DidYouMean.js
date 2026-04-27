@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Container } from 'semantic-ui-react';
 
 const DidYouMean = ({ typo_suggest, t }) => {
   if (!typo_suggest) {
@@ -12,10 +11,10 @@ const DidYouMean = ({ typo_suggest, t }) => {
   const didYouMeanStr = t('search.didYouMean');
 
   return (
-    <Container className="search__didyoumean">
+    <div className=" px-4 search__didyoumean">
       {didYouMeanStr}
       <a href={to} className="search__link">{typo_suggest}</a>
-    </Container>
+    </div>
   );
 };
 

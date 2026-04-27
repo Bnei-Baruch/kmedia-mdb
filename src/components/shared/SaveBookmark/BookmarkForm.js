@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  Checkbox,
-  Container,
-  Header,
-  Icon,
-  Input,
-  List,
-  Modal,
-  ModalActions,
-  ModalContent,
-  Segment
-} from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
@@ -60,7 +47,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) {
-    return (<Modal.Content>{needToLogin}</Modal.Content>);
+    return (<div className="p-6">{needToLogin}</div>);
   }
 
   const changeName = (e, { value }) => setName(value);
@@ -114,51 +101,53 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
   const handleSearchChange = (e, { value }) => setQuery(value.toLowerCase());
 
   const renderFolder = f => (
-    <List.Item key={f.id}>
-      <Checkbox
-        checked={selected?.includes(f.id)}
-        onChange={(e, { checked }) => handleChange(checked, f.id)}
-        label={f.name}
-      />
-    </List.Item>
+    <li key={f.id}>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={selected?.includes(f.id)}
+          onChange={e => handleChange(e.target.checked, f.id)}
+        />
+        {f.name}
+      </label>
+    </li>
   );
 
   return (
     <React.Fragment>
-      <ModalContent className="padded no-padding-top">
+      <div className=" no-padding-top p-6 pt-0">
         <div>
-          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal" />
-          <Input
-            onChange={changeName}
+          <h4 className="display-iblock font-normal inline-block">{t('personal.bookmark.name')}</h4>
+          <input
+            onChange={e => changeName(e, { value: e.target.value })}
             defaultValue={name}
-            error={!name && !isEdit}
-            onFocus={e => setIsEdit(true)}
-            onBlur={e => setIsEdit(false)}
-            className="bookmark_name"
+            className={`bookmark_name border rounded px-3 py-2 ${!name && !isEdit ? 'border-red-500' : 'border-gray-300'}`}
+            onFocus={() => setIsEdit(true)}
+            onBlur={() => setIsEdit(false)}
             autoFocus
           />
         </div>
-        <Header as="h4" content={t('personal.bookmark.folders')} className="font-normal" />
-        <Segment>
-          <Input
-            icon
-            iconPosition="left"
-            placeholder={t('personal.bookmark.searchFolders')}
-            onChange={handleSearchChange}
-            className="bookmark_search"
-          >
-            <input />
-            <Icon name="search" />
-          </Input>
-          <Container className="folders_list">
+        <h4 className="font-normal">{t('personal.bookmark.folders')}</h4>
+        <div className="border border-gray-200 rounded p-4">
+          <div className="bookmark_search relative">
+            <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+              search
+            </span>
+            <input
+              placeholder={t('personal.bookmark.searchFolders')}
+              onChange={e => handleSearchChange(e, { value: e.target.value })}
+              className="pl-8 border border-gray-300 rounded px-3 py-2 w-full"
+            />
+          </div>
+          <div className=" px-4 folders_list">
             {
               items.map(renderFolder)
             }
             {
               editFolder && (
                 <>
-                  <Input
-                    focus
+                  <input
+                    className="border border-gray-300 rounded px-3 py-2"
                     onBlur={handleSaveFolder}
                     onKeyDown={handleKeyDown}
                     autoFocus
@@ -167,44 +156,44 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
                       e.target.select();
                     }}
                   />
-                  <Button
-                    icon="check"
-                    basic
-                    compact
-                    className="no-shadow no-border"
+                  <button
+                    className="no-shadow no-border border-none px-2 py-1"
                     onClick={handleSaveFolder}
-                  />
+                  >
+                    <span className="material-symbols-outlined">check</span>
+                  </button>
                 </>
               )
             }
-          </Container>
-        </Segment>
-      </ModalContent>
+          </div>
+        </div>
+      </div>
       {!editFolder &&
-        <ModalActions>
-          <Button
-            primary
-            basic
-            content={t('personal.bookmark.newFolder')}
+        <div className="flex justify-between p-4 border-t">
+          <button
+            className="border border-blue-500 text-blue-500 rounded px-4 py-2 hover:bg-blue-50"
             onClick={handleNewFolder}
-            floated="left"
             disabled={editFolder}
-          />
-          <Button
-            content={t('buttons.cancel')}
-            onClick={onClose}
-            color="grey"
-            disabled={editFolder}
-            className="margin-left-8 margin-right-8"
-          />
-          <Button
-            primary
-            content={t('buttons.save')}
-            onClick={handleSave}
-            floated="right"
-            disabled={!name || editFolder}
-          />
-        </ModalActions>
+          >
+            {t('personal.bookmark.newFolder')}
+          </button>
+          <div className="flex gap-2">
+            <button
+              className="bg-gray-500 text-white rounded px-4 py-2 hover:bg-gray-600 margin-left-8 margin-right-8"
+              onClick={onClose}
+              disabled={editFolder}
+            >
+              {t('buttons.cancel')}
+            </button>
+            <button
+              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
+              onClick={handleSave}
+              disabled={!name || editFolder}
+            >
+              {t('buttons.save')}
+            </button>
+          </div>
+        </div>
       }
     </React.Fragment>
   );

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { Icon } from 'semantic-ui-react';
 
 import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
@@ -18,7 +17,7 @@ const CloseBtn = ({ className, t }) => {
 
   return (
     <div className={className} onClick={handleClose}>
-      <Icon fitted name="close" />
+      <span className="material-symbols-outlined text-base">close</span>
     </div>
   );
 };

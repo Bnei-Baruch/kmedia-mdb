@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 
 class ScoreDebug extends Component {
   static propTypes = {
@@ -41,22 +41,26 @@ class ScoreDebug extends Component {
           ? <span style={{ paddingLeft: '17px' }} />
           : (!open[key].open
             ? (
-              <Icon
-                name="plus"
+              <span
+                className="material-symbols-outlined cursor-pointer text-base"
                 onClick={() => {
                   open[key].open = true;
                   this.updateOpen();
                 }}
-              />
+              >
+                add
+              </span>
             )
             : (
-              <Icon
-                name="minus"
+              <span
+                className="material-symbols-outlined cursor-pointer text-base"
                 onClick={() => {
                   open[key].open = false;
                   this.updateOpen();
                 }}
-              />
+              >
+                remove
+              </span>
             ))
         }
         <span>
@@ -85,16 +89,27 @@ class ScoreDebug extends Component {
 
     return (
       <div className="score_debug">
-        <Button color="red" icon="flask" content={score} onClick={() => this.setState({ open: true })} />
+        <button
+          className="inline-flex items-center gap-1 bg-red-500 text-white px-3 py-1 rounded"
+          onClick={() => this.setState({ open: true })}
+        >
+          <span className="material-symbols-outlined text-base">science</span>
+          {score}
+        </button>
         {explanation ? null : (
-          <span data-tooltip="Explanations are null."><Icon name="warning sign" color="yellow" size="big" /></span>
+          <span data-tooltip="Explanations are null.">
+            <span className="material-symbols-outlined text-yellow-500 text-3xl">warning</span>
+          </span>
         )}
-        <Modal dimmer="inverted" open={open} onClose={() => this.setState({ open: false })}>
-          <Modal.Content style={{ textAlign: 'left' }}>
-            <h2>{name}</h2>
-            {this.reduceExplanation(explanation, treeOpen, 0)}
-          </Modal.Content>
-        </Modal>
+        <Dialog open={open} onClose={() => this.setState({ open: false })} className="relative z-50">
+          <div className="fixed inset-0 bg-white/75" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto shadow-xl text-left">
+              <h2>{name}</h2>
+              {this.reduceExplanation(explanation, treeOpen, 0)}
+            </DialogPanel>
+          </div>
+        </Dialog>
       </div>
     );
   }

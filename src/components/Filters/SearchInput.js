@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, Input } from 'semantic-ui-react';
 
 const SearchInput = ({ onSearch, onClear, defVal = '' }) => {
   const { t }             = useTranslation();
   const [value, setValue] = useState(defVal);
 
-  const change = (e, data) => {
+  const change = e => {
+    const data = { value: e.target.value };
     onSearch(e, data);
     setValue(data.value);
   };
@@ -23,17 +23,21 @@ const SearchInput = ({ onSearch, onClear, defVal = '' }) => {
   };
 
   return (
-    <Input
-      size="small"
-      icon
-      className="search-omnibox"
-      placeholder={t('sources-library.filter')}
-      onChange={change}
-      onKeyDown={keyDown}
-    >
-      <input value={value} />
-      <Icon name={value ? 'delete' : 'search'} link onClick={clear} />
-    </Input>
+    <div className="search-omnibox relative inline-flex items-center">
+      <input
+        className="border border-gray-300 rounded px-3 py-1 small pr-8"
+        placeholder={t('sources-library.filter')}
+        value={value}
+        onChange={change}
+        onKeyDown={keyDown}
+      />
+      <span
+        className="material-symbols-outlined absolute right-2 cursor-pointer text-gray-500 large"
+        onClick={clear}
+      >
+        {value ? 'delete' : 'search'}
+      </span>
+    </div>
   );
 };
 

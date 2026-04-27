@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import clsx from 'clsx';
 
-import { Grid, Container, Divider } from 'semantic-ui-react';
 import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
@@ -23,43 +22,38 @@ const PlaylistPage = ({ playerContainer }) => {
   if (embed && type === EMBED_TYPE_PLAYER) return playerContainer;
   if (type === EMBED_TYPE_PLAYLIST) {
     return (
-      <Container className="avbox">
+      <div className=" px-4 avbox">
         <div id="avbox_playlist">
           <PlaylistHeader />
         </div>
         {isReady && playerContainer}
-      </Container>
+      </div>
     );
   }
 
-  const computerWidth = !isMobileDevice ? 10 : 16;
-
   return (
-    <Grid padded={!isMobileDevice} className="avbox">
-      <Grid.Column
-        mobile={16}
-        tablet={computerWidth}
-        computer={computerWidth}
-        className={clsx({ 'is-fitted': isMobileDevice })}>
+    <div className={clsx('flex flex-wrap avbox', { 'p-4': !isMobileDevice })}>
+      <div
+        className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
           <PlaylistHeader/>
         </div>
         {isReady && playerContainer}
-        <Container id="unit_container">
+        <div className=" px-4" id="unit_container">
           <Info/>
           <Materials/>
-        </Container>
-      </Grid.Column>
+        </div>
+      </div>
       {
         !isMobileDevice && (
-          <Grid.Column width={6}>
+          <div className="w-[37.5%]">
             {isReady && <PlaylistItems/>}
-            <Divider hidden/>
+            <div className="my-4" />
             {isReady && <Recommended cuId={cuId} filterOutUnits={[]}/>}
-          </Grid.Column>
+          </div>
         )
       }
-    </Grid>
+    </div>
   );
 };
 

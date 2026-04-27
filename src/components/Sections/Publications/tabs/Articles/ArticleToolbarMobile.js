@@ -1,5 +1,4 @@
-import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import LanguageTextBtn from '../../../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../Pages/WithText/Buttons/TextSettings/TextSettings';
@@ -10,34 +9,41 @@ import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const ArticleToolbarMobile = () => (
-  <div className="text_toolbar">
-    <div className="text_toolbar__buttons">
-      <LanguageTextBtn />
-      <TextSettings />
-      <SearchOnPageBtn />
-      <AddBookmarkBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        className="text_toolbar__dropdown"
-        direction="left"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
-            <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <ShareTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <CopyLinkBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+const ArticleToolbarMobile = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handler = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div className="text_toolbar">
+      <div className="text_toolbar__buttons">
+        <LanguageTextBtn />
+        <TextSettings />
+        <SearchOnPageBtn />
+        <AddBookmarkBtn />
+        <div className="text_toolbar__dropdown relative" ref={menuRef}>
+          <div onClick={() => setMenuOpen(v => !v)}>
+            <MoreOptionsBtn />
+          </div>
+          {menuOpen && (
+            <div className="absolute right-0 z-10 mt-1 min-w-max bg-white rounded shadow-lg border">
+              <div className="p-2"><DownloadTextBtn /></div>
+              <div className="p-2"><ShareTextBtn /></div>
+              <div className="p-2"><CopyLinkBtn /></div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ArticleToolbarMobile;

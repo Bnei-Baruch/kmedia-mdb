@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../redux/modules/playlist';
 import { useTranslation } from 'react-i18next';
@@ -18,20 +17,20 @@ const SubsControl = () => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">{t('player.settings.subtitles')}</Header>
-      <Button.Group size="mini" inverted>
+      <h5 className="small font-semibold">{t('player.settings.subtitles')}</h5>
+      <div className="inline-flex">
         {
           ['off', ...subtitles.map(x => x.language)].map(l => (
-            <Button
-              inverted
-              content={l}
+            <button
+              className={`px-2 py-1 text-xs border border-white/30 ${l === subsLanguage ? 'bg-white text-black' : 'bg-transparent text-white'}`}
               onClick={() => handleSetSubtitlesLang(l)}
-              active={l === subsLanguage}
               key={l}
-            />
+            >
+              {l}
+            </button>
           ))
         }
-      </Button.Group>
+      </div>
     </div>
   );
 };

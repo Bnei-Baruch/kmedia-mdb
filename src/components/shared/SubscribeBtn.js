@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Modal } from 'semantic-ui-react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 
 import { CT_SUBSCRIBE_BY_COLLECTION, CT_SUBSCRIBE_BY_TYPE, MY_NAMESPACE_SUBSCRIPTIONS } from '../../helpers/consts';
 import * as shapes from '../shapes';
@@ -83,36 +83,51 @@ const SubscribeBtn = ({ t, collection }) => {
 
   return (
     <>
-      <Modal
-        closeIcon
-        open={isNeedLogin}
-        onClose={() => setIsNeedLogin(false)}
-        onOpen={() => setIsNeedLogin(true)}
-      >
-        <Modal.Content>
-          <NeedToLogin/>
-        </Modal.Content>
-      </Modal>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler}/>
-      <Confirm
-        size="tiny"
-        open={confirm}
-        onCancel={handleConfirmCancel}
-        onConfirm={handleConfirmSuccess}
-        cancelButton={t('buttons.cancel')}
-        confirmButton={t('buttons.apply')}
-        content={t('personal.confirmUnsubscribe', { name: title })}
-        dir={dir}
-      />
-      <Button
-        basic
-        color={!sub ? 'blue' : 'grey'}
+      <Dialog open={!!isNeedLogin} onClose={() => setIsNeedLogin(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="relative bg-white rounded-lg p-6 max-w-lg w-full shadow-xl">
+            <button
+              onClick={() => setIsNeedLogin(false)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              aria-label="Close"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <NeedToLogin />
+          </DialogPanel>
+        </div>
+      </Dialog>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
+      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="bg-white rounded-lg p-6 max-w-sm w-full shadow-xl" dir={dir}>
+            <p className="mb-4">{t('personal.confirmUnsubscribe', { name: title })}</p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                onClick={handleConfirmCancel}
+              >
+                {t('buttons.cancel')}
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={handleConfirmSuccess}
+              >
+                {t('buttons.apply')}
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+      <button
+        className={`uppercase border rounded px-3 py-1 ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
         onClick={() => subsUnsubs(sub)}
-        content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
-        className="uppercase"
-        compact
         style={{ fontSize: '0.9em' }}
-      />
+      >
+        {t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
+      </button>
     </>
   );
 };

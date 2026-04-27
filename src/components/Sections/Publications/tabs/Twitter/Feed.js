@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Divider, Feed, Image } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
@@ -131,12 +130,12 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
 
   return (
     <Fragment>
-      <Feed.Event key={tID} className="tweet">
-        <Feed.Content>
-          <Feed.Summary className="tweet-title-wrapper">
+      <div key={tID} className="tweet py-2">
+        <div>
+          <div className="tweet-title-wrapper flex items-center gap-2">
             {
               snippetVersion
-                ? <Image className="twitter-avatar" src={twitterAvatar} />
+                ? <img className="twitter-avatar w-8 h-8 rounded-full" src={twitterAvatar} alt="" />
                 : null
             }
             <a href={url} target="_blank" rel="noopener noreferrer" className="tweet-title">
@@ -149,7 +148,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
             {
               !snippetVersion
                 ? (
-                  <Feed.Date>
+                  <span className="small text-gray-500 ml-auto">
                     <a
                       href={`https://twitter.com/${username}/status/${tID}`}
                       title={mts.format('lll')}
@@ -158,24 +157,24 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
                     >
                       {mts.format('lll')}
                     </a>
-                  </Feed.Date>
+                  </span>
                 )
                 : null
             }
-          </Feed.Summary>
-          <Feed.Extra text style={{ textAlign: position, direction: isRtl ? 'rtl' : 'ltr' }}>
+          </div>
+          <div className="mt-1" style={{ textAlign: position, direction: isRtl ? 'rtl' : 'ltr' }}>
             <div dangerouslySetInnerHTML={{ __html: prepare(raw, highlight) }} />
             {
               snippetVersion
                 ? <div className="tweet-friendly-date">{mts.fromNow()}</div>
                 : null
             }
-          </Feed.Extra>
-        </Feed.Content>
-      </Feed.Event>
+          </div>
+        </div>
+      </div>
       {
         snippetVersion && withDivider
-          ? <Divider fitted />
+          ? <hr className="border-0 border-t border-gray-200 my-0" />
           : null
       }
     </Fragment>

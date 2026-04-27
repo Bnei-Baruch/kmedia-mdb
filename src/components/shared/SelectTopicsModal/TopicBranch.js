@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Container, List } from 'semantic-ui-react';
 
 const ITEMS_NUMBER = 5;
 
@@ -31,41 +30,46 @@ const TopicBranch = ({ leafs, selected, setSelected }) => {
     const { text, value, children: leafs } = node;
 
     return (
-      <List.Item key={value}>
-        <Checkbox
-          checked={selected?.includes(value)}
-          onChange={(e, { checked }) => handleChange(checked, value)}
-          label={text}
-        />
+      <li key={value}>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={selected?.includes(value)}
+            onChange={e => handleChange(e.target.checked, value)}
+          />
+          {text}
+        </label>
         <TopicBranch
           setSelected={setSelected}
           selected={selected}
           leafs={leafs}
         />
-      </List.Item>
+      </li>
     );
   };
 
   return (
     <>
-      <Container className="padded no-padding-top no-padding-bottom">
-        <List className="topics__list">
+      <div className=" px-4  no-padding-top no-padding-bottom">
+        <ul className="topics__list list-none">
           {
             (showAll ? children : children.slice(0, ITEMS_NUMBER)).map(renderNode)
           }
-        </List>
+        </ul>
         {
           children.length >= ITEMS_NUMBER && (
-            <Button
-              basic
-              icon={{ name: showAll ? 'minus' : 'plus', color: 'blue' }}
-              className="topics_button clear_button"
-              content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            <button
+              className="topics_button clear_button border border-gray-300 rounded px-3 py-1 small inline-flex items-center gap-1"
               onClick={handleShowAll}
-            />
+            >
+              <span className="material-symbols-outlined text-blue-500 small">
+                {showAll ? 'remove' : 'add'}
+              </span>
+              {t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            </button>
           )
         }
-      </Container>
+      </div>
     </>
   );
 };

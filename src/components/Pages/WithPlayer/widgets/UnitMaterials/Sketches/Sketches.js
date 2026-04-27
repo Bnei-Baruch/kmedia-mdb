@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container } from 'semantic-ui-react';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
@@ -48,7 +47,6 @@ const Sketches = ({ unit }) => {
 
   const handleLanguageChanged = l => setLanguage(l);
 
-  // prepare the image array for the gallery and sort it
   const items = (
     zipId ?
       data?.full.filter(x => !x.path?.toUpperCase().includes('MACOSX')) || []
@@ -59,14 +57,14 @@ const Sketches = ({ unit }) => {
     <>
       {
         languages.length > 1 && (
-          <Container fluid textAlign="right" className="padded">
+          <div className="w-full text-right ">
             <MenuLanguageSelector
               languages={languages}
               selected={language}
               onLanguageChange={handleLanguageChanged}
               multiSelect={false}
             />
-          </Container>
+          </div>
         )
       }
       {

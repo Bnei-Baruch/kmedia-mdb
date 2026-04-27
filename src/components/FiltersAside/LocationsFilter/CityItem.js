@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
 
 import { actions } from '../../../redux/modules/filters';
@@ -32,19 +31,20 @@ const CityItem = ({ namespace, id, country, t }) => {
   };
 
   return (
-    <List.Item key={getTitle(id, t)} disabled={stat === 0}>
-      <List.Content className="tree_item_content">
-        <Checkbox
+    <li key={getTitle(id, t)} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <div className="tree_item_content">
+        <input
+          type="checkbox"
           checked={!!selected.find(x => x === id || x === country)}
-          onChange={handleSelect}
+          onChange={e => handleSelect(e, { checked: e.target.checked })}
           disabled={stat === 0}
         />
         <span className="tree_item_title">
           {getTitle(id, t)}
         </span>
         <span className="stat">{`(${stat})`}</span>
-      </List.Content>
-    </List.Item>
+      </div>
+    </li>
   );
 };
 

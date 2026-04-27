@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +27,7 @@ const SearchOnPageBar = () => {
     setIndex(-1);
   };
 
-  const handleChange = debounce((e, { value }) => {
+  const debouncedSearch = debounce(value => {
     clearing();
     value = value.trim();
     setVal(value);
@@ -36,6 +35,8 @@ const SearchOnPageBar = () => {
     if (value.length > 0)
       search(value);
   }, 500);
+
+  const handleChange = e => debouncedSearch(e.target.value);
 
   const search = (value = val) => {
     const str = value.trim();
@@ -101,41 +102,41 @@ const SearchOnPageBar = () => {
   const noResults = isEmpty(refResults.current);
   return (
     <div className="text__search_on_page">
-      <Button
-        basic
+      <button
         className="clear_button text__search_on_page_close"
-        icon={null}
         onClick={handleClose}
-        content={t('filters.date-filter.end')}
-      />
-      <Input
-        ref={refInput}
-        placeholder={`${t('buttons.search')}...`}
-        onChange={handleChange}
-        autoFocus={true}
-        onKeyDown={handleKeyDown}
       >
-        <input size={1} />
+        {t('filters.date-filter.end')}
+      </button>
+      <div className="relative">
+        <input
+          ref={refInput}
+          placeholder={`${t('buttons.search')}...`}
+          onChange={handleChange}
+          autoFocus={true}
+          onKeyDown={handleKeyDown}
+          size={1}
+        />
         <div className="text__search_on_page_counter" dir="ltr">
           {
             (!noResults && index >= 0) && (`${index + 1} / ${refResults.current.length}`)
           }
         </div>
-      </Input>
-      <Button
-        basic
+      </div>
+      <button
         className="clear_button"
         disabled={noResults}
-        icon={<span className="material-symbols-outlined">keyboard_arrow_up</span>}
         onClick={handlePrev}
-      />
-      <Button
-        basic
+      >
+        <span className="material-symbols-outlined">keyboard_arrow_up</span>
+      </button>
+      <button
         className="clear_button"
         disabled={noResults}
-        icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
-      />
+      >
+        <span className="material-symbols-outlined">keyboard_arrow_down</span>
+      </button>
     </div>
   );
 };

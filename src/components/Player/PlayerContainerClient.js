@@ -1,7 +1,6 @@
 import React, { useRef, useContext, useEffect, createContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
-import { Ref } from 'semantic-ui-react';
 
 import { actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES, MT_AUDIO } from '../../helpers/consts';
@@ -113,7 +112,7 @@ const PlayerContainer      = () => {
   ];
 
   const content = (
-    <div className="player" dir="ltr">
+    <div className="player" dir="ltr" ref={fullscreenRef}>
       <AppendChronicle/>
       <UpdateLocation/>
       <div className={clsx(...classes)}>
@@ -134,9 +133,7 @@ const PlayerContainer      = () => {
   return (
     <PlayerContext.Provider value={{ showControls, hideControls }}>
       <div onTouchEnd={handleTouchEnd}>
-        <Ref innerRef={fullscreenRef}>
-          {content}
-        </Ref>
+        {content}
       </div>
     </PlayerContext.Provider>
   );

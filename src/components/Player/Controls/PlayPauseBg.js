@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { MT_AUDIO, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { getPosition, pause, play } from '../../../pkg/jwpAdapter/adapter';
@@ -38,7 +37,7 @@ const PlayPauseBg = () => {
             content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
             trigger={
               <div className="controls__pause">
-                <Icon fitted size="big" name={isPlay ? 'pause' : 'play'}/>
+                <span className="material-symbols-outlined text-2xl">{isPlay ? 'pause' : 'play_arrow'}</span>
               </div>
             }
           />

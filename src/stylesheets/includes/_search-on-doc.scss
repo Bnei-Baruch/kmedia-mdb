@@ -129,8 +129,8 @@
       }
     }
 
-    .ui.menu {
-      background: transparent !important;
+    .menu {
+      background: transparent;
       width: max-content;
       padding: 1em;
 
@@ -156,7 +156,6 @@
           .icon {
             font-size: 1.7em;
             line-height: 1em;
-
           }
         }
       }

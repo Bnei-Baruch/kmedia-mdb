@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { Button, Divider, Header } from 'semantic-ui-react';
 
 import { login } from '../../../pkg/ksAdapter/adapter';
 import { settingsGetUIDirSelector, authGetUserSelector } from '../../../redux/selectors';
@@ -13,20 +12,18 @@ const ShowNeedToLogin = withTranslation()(
     return (
       <div className="need_to_login">
         <div dir={uiDir}>
-          <Header as="h1" content={t('nav.sidebar.personal')} className="weight-normal"/>
-          <Header as="h2" content={t('personal.needToLogin')} className="weight-normal"/>
-          <Divider hidden/>
-          <Button
-            compact
-            basic
-            size="big"
-            icon={'user circle outline'}
-            content={t('personal.login')}
-            color={'blue'}
-            as="a"
+          <h1 className="weight-normal">{t('nav.sidebar.personal')}</h1>
+          <h2 className="weight-normal">{t('personal.needToLogin')}</h2>
+          <hr className="invisible my-4"/>
+          <a
+            className="inline-flex items-center gap-2 rounded border border-blue-500 px-4 py-2 large text-blue-500"
             target="_blank"
             onClick={login}
-          />
+            rel="noreferrer"
+          >
+            <span className="material-symbols-outlined">account_circle</span>
+            {t('personal.login')}
+          </a>
         </div>
       </div>
     );

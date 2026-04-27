@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
@@ -21,23 +20,40 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
   if (isMobileDevice) {
     const triggerProps = {
       className: 'clear_button',
-      icon     : <span className="material-symbols-outlined">view_list</span>,
       onClick  : handleTocIsActive,
-      active   : tocIsActive,
       content  : withText ? '' : <span className="title">{t(`page-with-text.buttons.web.${textKey}`)}</span>,
     };
 
-    return (withText ? <ToolbarBtnTooltip textKey={textKey} {...triggerProps} /> : <Button {...triggerProps} basic/>);
+    const iconEl = <span className="material-symbols-outlined">view_list</span>;
+
+    if (withText) {
+      return (
+        <ToolbarBtnTooltip textKey={textKey} {...triggerProps}>
+          {iconEl}
+          {triggerProps.content}
+        </ToolbarBtnTooltip>
+      );
+    }
+
+    return (
+      <button
+        {...triggerProps}
+        className={clsx('clear_button border border-gray-300 rounded bg-white hover:bg-gray-50 p-1', { 'bg-gray-100': tocIsActive })}
+      >
+        {iconEl}
+        {triggerProps.content}
+      </button>
+    );
   }
 
   return (
-    <Button
-      basic
-      className={clsx('toc_trigger clear_button', { 'flex_basis_150': !isMobileDevice })}
-      icon={<span className="material-symbols-outlined">view_list</span>}
+    <button
+      className={clsx('toc_trigger clear_button border border-gray-300 rounded bg-white hover:bg-gray-50 p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobileDevice })}
       onClick={handleTocIsActive}
-      content={<span>{t(`page-with-text.buttons.web.${textKey}`)}</span>}
-    />
+    >
+      <span className="material-symbols-outlined">view_list</span>
+      <span>{t(`page-with-text.buttons.web.${textKey}`)}</span>
+    </button>
   );
 };
 

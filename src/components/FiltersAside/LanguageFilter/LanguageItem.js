@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 
-import { actions } from '../../../redux/modules/filters';
 import { FN_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { actions } from '../../../redux/modules/filters';
 import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const LanguageItem = ({ namespace, id }) => {
@@ -11,9 +10,9 @@ const LanguageItem = ({ namespace, id }) => {
 
   const dispatch = useDispatch();
 
-  const handleSelect = (e, { checked }) => {
+  const handleSelect = e => {
     const val = [...selected].filter(x => x !== id);
-    if (checked) {
+    if (e.target.checked) {
       val.push(id);
     }
 
@@ -21,17 +20,20 @@ const LanguageItem = ({ namespace, id }) => {
   };
 
   return (
-    <List.Item disabled={stat === 0}>
-      <List.Content className="stat" floated="right">
+    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <span className="stat float-right">
         {`(${stat})`}
-      </List.Content>
-      <Checkbox
-        label={LANGUAGES[id]?.name}
-        checked={selected.includes(id)}
-        onChange={handleSelect}
-        disabled={stat === 0}
-      />
-    </List.Item>
+      </span>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={handleSelect}
+          disabled={stat === 0}
+        />
+        {LANGUAGES[id]?.name}
+      </label>
+    </div>
   );
 };
 

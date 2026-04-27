@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_PROGRAMS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
@@ -70,15 +69,13 @@ const ProgramPage = ({ t }) => {
       {
         wipErr || items?.map(id => <ItemOfList id={id} ccu={collection} key={id}/>)
       }
-      <Divider fitted/>
-      <Container className="padded pagination-wrapper" textAlign="center">
+      <hr className="m-0 border-t"/>
         {total > 0 && <Pagination
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
           onChange={setPage}
         />}
-      </Container>
     </SectionFiltersWithMobile>
   </>);
 };

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Header, Image, List, Table } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 
 import * as shapes from '../../shapes';
@@ -37,39 +36,39 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
   const handleClick = () => dispatch(actions.setTocIsActive(true));
 
   return (
-    <Table.Row verticalAlign="top" className={clsx({ author: true, 'author--image': !!portrait })}>
-      <Table.Cell collapsing width={2}>
-        {portrait ? <Image src={portrait} alt={fullName} /> : null}
-      </Table.Cell>
-      <Table.Cell>
+    <tr className={clsx('align-top', { author: true, 'author--image': !!portrait })}>
+      <td className="w-px pr-4">
+        {portrait ? <img src={portrait} alt={fullName} /> : null}
+      </td>
+      <td>
         <div>
           <div className="sources__list">
-            <Header size="small">
+            <h4>
               {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
-            </Header>
+            </h4>
             <div>
-              <List bulleted>
+              <ul className="list-disc pl-5">
                 {
                   volumes
                     ? volumes.map(x => {
                       const { id: _id, name, description } = getSourceById(x);
                       return (
-                        <List.Item key={_id} onClick={handleClick}>
+                        <li key={_id} onClick={handleClick}>
                           <NavLink to={`/sources/${_id}`}>
                             {name}
                             {description ? ` - ${description}` : ''}
                           </NavLink>
-                        </List.Item>
+                        </li>
                       );
                     }
                     ) : null
                 }
-              </List>
+              </ul>
             </div>
           </div>
         </div>
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 };
 

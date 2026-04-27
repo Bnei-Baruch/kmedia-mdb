@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Input, Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 import { goOtherTassPart } from './helper';
@@ -72,28 +71,27 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
   const isLtr = uiDir === 'ltr';
   return (
     <div className="pdf_pagination">
-      <Button onClick={prevPage} disabled={pageNumber < 2 || !numPages}>
+      <button onClick={prevPage} disabled={pageNumber < 2 || !numPages}>
         <span className="material-symbols-outlined">{`chevron_${isLtr ? 'left' : 'right'}`}</span>
         <span>{t('simple-mode.prev')}</span>
-      </Button>
-      <Input
-        value={inputValue}
-        onChange={handleChange}
-        onKeyDown={onKeyDown}
-        className="input_wrapper"
-        placeholder={`${pageNumber}/${lastPage}`}
-      >
-        <input />
-        <span onClick={handleSubmit} className="material-symbols-outlined">search</span>
-      </Input>
+      </button>
+      <div className="input_wrapper">
+        <input
+          value={inputValue}
+          onChange={handleChange}
+          onKeyDown={onKeyDown}
+          placeholder={`${pageNumber}/${lastPage}`}
+        />
+        <span onClick={handleSubmit} className="material-symbols-outlined cursor-pointer">search</span>
+      </div>
 
-      <Button
+      <button
         onClick={nextPage}
         disabled={pageNumber >= lastPage || !numPages}
       >
         <span>{t('simple-mode.next')}</span>
         <span className="material-symbols-outlined">{`chevron_${isLtr ? 'right' : 'left'}`}</span>
-      </Button>
+      </button>
     </div>
   );
 };

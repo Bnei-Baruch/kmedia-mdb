@@ -1,16 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
 
 import { actions } from '../../../redux/modules/filters';
-import CitiesModal from './CitiesModal';
 import {
   filtersAsideCitiesByCountrySelector,
   filtersAsideGetStatsSelector,
   filtersGetFilterByNameSelector,
   settingsGetLeftRightByDirSelector
 } from '../../../redux/selectors';
+import CitiesModal from './CitiesModal';
 
 const CountryItem = ({ namespace, loc }) => {
 
@@ -24,8 +23,17 @@ const CountryItem = ({ namespace, loc }) => {
   const getStat         = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_LOCATIONS));
   const stat            = getStat(id);
 
-  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
-  const dispatch  = useDispatch();
+  const leftRight   = useSelector(settingsGetLeftRightByDirSelector);
+  const dispatch    = useDispatch();
+  const checkboxRef = useRef(null);
+
+  const isIndeterminate = !selected.includes(id) && selected.some(x => cities.includes(x));
+
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = isIndeterminate;
+    }
+  }, [isIndeterminate]);
 
   const handleSelect = (e, { checked }) => {
     const val = [...selected].filter(x => x !== id && !cities.includes(x));
@@ -40,29 +48,28 @@ const CountryItem = ({ namespace, loc }) => {
 
   return (
     <>
-      <List.Item key={id} disabled={stat === 0}>
-        <List.Content className="tree_item_content">
-          <Checkbox
+      <div key={id} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+        <div className="tree_item_content">
+          <input
+            ref={checkboxRef}
+            type="checkbox"
             checked={selected.includes(id)}
-            onChange={handleSelect}
+            onChange={e => handleSelect(e, { checked: e.target.checked })}
             disabled={stat === 0}
-            indeterminate={!selected.includes(id) && selected.some(x => cities.includes(x))}
           />
           <span className="tree_item_title">
             {desc}
           </span>
-          <Button
-            basic
-            color="blue"
-            className="clear_button no-shadow"
-            icon={`caret ${leftRight}`}
+          <button
+            className="clear_button no-shadow text-blue-600"
             onClick={toggleOpen}
-            size="medium"
             disabled={stat === 0}
-          />
+          >
+            <span className="material-symbols-outlined">{`chevron_${leftRight}`}</span>
+          </button>
           <span className="stat">{`(${stat})`}</span>
-        </List.Content>
-      </List.Item>
+        </div>
+      </div>
       <CitiesModal namespace={namespace} open={open} country={id} onClose={() => setOpen(false)} />
     </>
   );

@@ -6,7 +6,6 @@ import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
@@ -44,8 +43,7 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
     ? (
       <div>
         <div className="ui input">
-          <Input
-            icon="dropdown"
+          <input
             type="text"
             readOnly
             value={data.selectedInLocaleFormat}
@@ -132,7 +130,7 @@ const SimpleModePage = (
 
   const renderDatePicker = () =>
     isClient &&
-    <Card>
+    <div className="rounded shadow border overflow-hidden">
       <DayPicker
         locale={uiLang}
         modifiers={data.DayPickerModifiers}
@@ -144,16 +142,16 @@ const SimpleModePage = (
         captionElement={() => null}
         navbarElement={props => getNavBarElement(props, uiLang, onDayClick)}
       />
-      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')}/>
-    </Card>;
+      <button className="inline-button" onClick={() => onDayClick(new Date())}>{t('simple-mode.today-button')}</button>
+    </div>;
 
   return (
     <div>
       <SectionHeader section="simple-mode"/>
-      <Divider fitted/>
-      <Grid padded container>
-        <Grid.Row className="no-padding-top">
-          <Grid.Column mobile={16} computer={12} tablet={16}>
+      <hr className="m-0" />
+      <div className=" px-4 py-4">
+        <div className="flex flex-wrap">
+          <div className="w-full lg:w-3/4">
             <div className="summary-container">
               <div className="controller">
                 <h4>{t('simple-mode.date')}</h4>
@@ -181,8 +179,8 @@ const SimpleModePage = (
               </div>
             </div>
             <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate}/>
-          </Grid.Column>
-          <Grid.Column only="tablet computer" tablet={16} computer={4}>
+          </div>
+          <div className="hidden md:block w-full lg:w-1/4">
             <div className="stick-calendar">
               <div className="summary-container adjust-height">
                 <div className="controller">
@@ -191,9 +189,9 @@ const SimpleModePage = (
               </div>
               {renderDatePicker()}
             </div>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

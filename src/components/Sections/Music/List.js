@@ -1,34 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-// import { fromToLocalized } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 const renderCollection = collection => {
   const { id, name } = collection;
-  // const localDate = start_date && end_date
-  //   ? fromToLocalized(start_date, end_date)
-  //   : undefined;
 
   return (
-    <Table.Row className="no-thumbnail" verticalAlign="top" key={id}>
-      {/* {
-        localDate &&
-      <Table.Cell collapsing singleLine>
-        <span className="index__date">{localDate}</span>
-      </Table.Cell>
-      } */}
-      <Table.Cell>
+    <tr className="no-thumbnail align-top" key={id}>
+      <td>
         <Link className="index__title" to={canonicalLink(collection)}>
           {name || NO_NAME}
         </Link>
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 };
 
@@ -38,11 +27,11 @@ const MusicList = ({ items = [] }) => {
   }
 
   return (
-    <Table unstackable basic="very" className="index">
-      <Table.Body>
+    <table className="w-full index">
+      <tbody>
         {items.map(renderCollection)}
-      </Table.Body>
-    </Table>
+      </tbody>
+    </table>
   );
 };
 

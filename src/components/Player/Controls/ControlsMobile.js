@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { ShareBtn, SettingsBtn, FullscreenBtn } from './ControlBtns';
@@ -35,12 +34,12 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
               <div className="flex-spacer"></div>
               {
                 isMuted && (
-                  <Button
+                  <button
                     onClick={() => setMute(false)}
-                    className="unmute-btn"
-                    size="tiny"
-                    content={t('player.buttons.tap-to-unmute')}
-                  />
+                    className="unmute-btn px-2 py-1 text-xs"
+                  >
+                    {t('player.buttons.tap-to-unmute')}
+                  </button>
                 )
               }
               <SettingsBtn/>

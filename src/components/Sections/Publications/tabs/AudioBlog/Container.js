@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
 
 import { CT_BLOG_POST } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
@@ -9,15 +8,15 @@ const renderUnit = (unit, t) => {
   if (!unit) return null;
 
   return (
-    <Table.Row key={unit.id} verticalAlign="top" className="no-thumbnail">
-      <Table.Cell collapsing singleLine>
+    <tr key={unit.id} className="align-top no-thumbnail">
+      <td className="whitespace-nowrap w-px">
         {renderUnitHelper.renderUnitFilmDate(unit, t)}
-      </Table.Cell>
-      <Table.Cell>
+      </td>
+      <td>
         {renderUnitHelper.renderUnitNameLink(unit)}
         {renderUnitHelper.renderUnitDescription(unit)}
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 };
 

@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Card, Container } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
 import {
@@ -83,9 +82,9 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   }
 
   if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
-    children = items?.length > 0 ? <Container className="padded" children={children}/> : null;
+    children = items?.length > 0 ? <div className=" px-4 ">{children}</div> : null;
   } else {
-    children = <Card.Group doubling itemsPerRow={4} stackable className="cu_items">{children}</Card.Group>;
+    children = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 cu_items">{children}</div>;
   }
 
   return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll}/>;

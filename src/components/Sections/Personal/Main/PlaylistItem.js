@@ -1,13 +1,12 @@
 import React from 'react';
-import { Card, Container, Header, Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { getMyItemKey } from '../../../../helpers/my';
-import clsx from 'clsx';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
@@ -17,43 +16,41 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
   const { key } = getMyItemKey(MY_NAMESPACE_PLAYLISTS, item);
 
   const renderAsCard = () => (
-    <Card as={Link} to={link} raised>
+    <Link to={link} className="block rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <div className="my_playlist_item">
         <div className={`over_layer ${uiDir}`}>
-          <Header as={'h2'}>{item.total_items}</Header>
+          <h2>{item.total_items}</h2>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF"/>
         </div>
         <UnitLogo unitId={item.poster_unit_uid || 'null'} width={700}/>
       </div>
-      <Card.Content>
-        <Header size="medium" className="no-margin-top" content={item.name}/>
-      </Card.Content>
-    </Card>
+      <div className="p-4">
+        <h4 className="no-margin-top font-medium">{item.name}</h4>
+      </div>
+    </Link>
   );
 
   const renderAsList = () => (
-    <Container
-      as={Link}
+    <Link
       to={link}
       key={key}
-      className={clsx('cu_item cu_item_list no-thumbnail')}
+      className={clsx('block cu_item cu_item_list no-thumbnail')}
     >
       <div className="my_playlist_item">
         <div className="over_layer">
-          <Header as={'h3'}>{item.total_items || 0}</Header>
-          <Icon name="list" size="large"/>
+          <h3>{item.total_items || 0}</h3>
+          <span className="material-symbols-outlined text-2xl">list</span>
         </div>
         <UnitLogo unitId={item.poster_unit_uid || 'null'} width={165}/>
       </div>
       <div className={`cu_item_info ${uiDir}`}>
-
-        <Header as="h4" className="weight-normal no-margin-top">
+        <h4 className="weight-normal no-margin-top">
           {item.name}
-          <Header.Subheader>{`${item.total_items || 0} ${t('personal.videosOnList')}`}</Header.Subheader>
-        </Header>
+          <span className="block small text-gray-500">{`${item.total_items || 0} ${t('personal.videosOnList')}`}</span>
+        </h4>
       </div>
-    </Container>
-
+    </Link>
   );
+
   return asList ? renderAsList() : renderAsCard();
 };

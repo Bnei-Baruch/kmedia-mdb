@@ -2,7 +2,6 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
-import { Container, Divider, CardGroup } from 'semantic-ui-react';
 
 import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { usePrevious, isEmpty } from '../../../helpers/utils';
@@ -88,21 +87,19 @@ const MainPage = () => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_SKETCHES} />
-      <CardGroup itemsPerRow={4} doubling stackable>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {
           cus?.map(({ id }) => <UnitItem id={id} key={id} />)
         }
-      </CardGroup>
+      </div>
 
-      <Divider fitted />
-      <Container className="padded pagination-wrapper" textAlign="center">
+      <hr className="m-0" />
         {total > 0 && <Pagination
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
           onChange={setPage}
         />}
-      </Container>
     </SectionFiltersWithMobile>
   </>);
 };

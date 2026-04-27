@@ -1,36 +1,21 @@
 @use "sass:math";
-
 @use "sass:color";
 @use 'rtl/homepage';
 @use "colors-helpers";
 @use "responsive-helpers";
+@use "latest-updates-card-list";
 
 .homepage {
   flex: 1 1 auto;
 
   &__featured {
-    padding-top: 4em !important;
+    padding-top: 4em;
   }
 
   &__section {
-    @include responsive-helpers.mobile {
-      margin-bottom: 1rem;
-      margin-top: 1rem;
-    }
-    margin-bottom: 0;
-    margin-top: 0;
-
-    .ui.horizontal.divider {
-      &::before,
-      &::after {
-        background-image: linear-gradient(to right, color.adjust(colors-helpers.$blue, $lightness: 40%), color.adjust(colors-helpers.$blue, $lightness: 40%));
-        background-size: 100% 1px;
-      }
-    }
 
     &__iconsrow {
       .iconsTitleRow {
-
         .iconsTitle {
           position: relative;
           top: 40px;
@@ -48,15 +33,10 @@
       }
     }
 
-
     &__latestUpdates {
       background: rgba(44, 144, 220, 0.05);
       border-top: 2px solid #DBECF9;
-      padding: 0 55px;
-
-      @include responsive-helpers.mobile {
-        padding: 1em;
-      }
+      padding: 1.5em 55px;
 
       .cardsTitle {
         width: 100%;
@@ -66,8 +46,7 @@
         color: #134D78;
         margin-bottom: 0.5em;
         @include responsive-helpers.mobile {
-          font-size: 1.5em;
-          padding: 2em 0 0 0em;
+          padding: 2em 0 0 0;
           margin-bottom: 0;
         }
       }
@@ -76,10 +55,6 @@
 
   .latestUpdateSection {
     padding-top: 1em;
-
-    .row {
-      padding-top: 0 !important;
-    }
   }
 
   .home-social-section {
@@ -94,27 +69,17 @@
       padding-bottom: 2rem;
       padding-top: 1rem;
     }
-    // Use solid brand color, matching the top header
-    background: #1A4378 !important;
-    background-image: none !important;
-    background-attachment: scroll;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #1A4378;
     margin-top: 0;
     padding-bottom: 4rem;
-    padding-top: 2rem;
   }
 
   &__title {
-    @include responsive-helpers.mobile {
-      display: none;
-    }
-    margin-bottom: .4em !important;
+    margin-bottom: .4em;
   }
 
   &__website-sections {
-    .header {
+    a {
       color: color.adjust(colors-helpers.$blue, $lightness: -20%);
       transition: color .2s ease-out;
 
@@ -127,7 +92,8 @@
   &__iconsrow {
     background: #F3F4F5;
     border-top: 2px solid #DBECF9;
-    padding-top: 1.5em !important;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
 
     .iconsTitleRow {
       background: #FFF;
@@ -149,30 +115,23 @@
     }
 
     .activeSectionsIcons {
-      padding-top: 1.5em !important;
+      padding-top: 1.5em;
     }
 
     img {
       margin-bottom: .2em;
       transition: transform .2s ease-out;
-      width: 50px !important;
+      width: 50px;
     }
 
-    .row .center.aligned.column {
-      align-items: stretch;
-      display: flex !important;
-      justify-content: center;
-
-      &.topIcon {
-
-        padding-bottom: 3em;
-      }
+    .topIcon {
+      padding-bottom: 3em;
     }
 
     a {
       border-radius: 4px;
       flex: 1 1 auto;
-      padding: 4px 4px 8px !important;
+      padding: 4px 4px 8px;
 
       &:hover {
         img {
@@ -180,22 +139,12 @@
         }
       }
     }
-
   }
 
   &__iconsrow.socialBackground {
     background: #F4F9FB;
     margin-left: 0;
     margin-right: 0;
-  }
-
-  &-posters {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-
-    .column {
-      padding: 0 !important;
-    }
   }
 }
 
@@ -251,47 +200,29 @@
   &__header {
     bottom: .5em;
     left: .5em;
-    margin: 0 !important;
+    margin: 0;
     position: absolute;
     right: .5em;
     text-shadow: 0 1px colors-helpers.$black, 0 2px colors-helpers.$black;
     transition: transform .5s;
     z-index: 2;
+    font-size: 1.5em;
 
     .content,
     .sub {
-      color: colors-helpers.$white !important;
+      color: colors-helpers.$white;
       font-weight: 400;
     }
 
     .sub {
       text-transform: uppercase;
-    }
-
-    .homepage-posters & {
-      bottom: 1em;
-      left: 1em;
-      right: 1em;
+      font-size: 0.75em;
     }
   }
 
   &__image {
-    position: absolute !important;
+    position: absolute;
     top: 0;
     z-index: 0;
   }
-
-  .homepage-posters & {
-    padding-top: math.percentage(math.div(1.6, 1));
-
-    &__image {
-      background-position: center center;
-      background-size: cover;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-    }
-  }
 }
-

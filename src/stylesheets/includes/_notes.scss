@@ -70,21 +70,6 @@
   }
 }
 
-.ui.popup.label_mark_popup {
-  opacity: 0.95;
-
-  .link_to_cu {
-    padding: 2px 3px !important;
-    font-size: smaller;
-    background: colors-helpers.$midGrey !important;
-    color: white !important;
-
-    &:hover {
-      background-color: colors-helpers.$sepia-bg;
-    }
-  }
-}
-
 .note_list {
   width: 370px;
   //box-shadow: 0 4px 20px 0 lighten($black, 10%);

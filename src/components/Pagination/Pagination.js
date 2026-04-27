@@ -23,7 +23,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Menu } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 
@@ -32,10 +31,10 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { settingsGetUILangSelector } from '../../redux/selectors';
 
 const TITLES = {
-  first: <Icon name="angle double left"/>,
-  prev : <Icon name="angle left"/>,
-  next : <Icon name="angle right"/>,
-  last : <Icon name="angle double right"/>
+  first: <span className="material-symbols-outlined">keyboard_double_arrow_left</span>,
+  prev : <span className="material-symbols-outlined">chevron_left</span>,
+  next : <span className="material-symbols-outlined">chevron_right</span>,
+  last : <span className="material-symbols-outlined">keyboard_double_arrow_right</span>
 };
 
 const getTitle = titles => key => titles[key] || TITLES[key];
@@ -59,20 +58,27 @@ const visibleRange = (current, total, windowSize) => {
 };
 
 const renderPage = (content, value, key, disabled, onChange, active = false, exClass = []) => {
-  const classes = clsx(exClass);
+  const classes = clsx(exClass, {
+    'opacity-50 pointer-events-none': disabled,
+    'font-bold bg-blue-100': active
+  });
 
   if (disabled) {
-    return <Menu.Item disabled className={classes}>{content}</Menu.Item>;
+    return (
+      <div key={key} className={clsx('pagination-menu-item disabled', classes)}>
+        {content}
+      </div>
+    );
   }
 
   return (
-    <Menu.Item
+    <div
       key={key}
-      active={active}
-      content={content}
-      className={classes}
+      className={clsx('pagination-menu-item', classes, { active })}
       onClick={() => onChange(value)}
-    />
+    >
+      {content}
+    </div>
   );
 };
 
@@ -91,7 +97,7 @@ const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = 
   const nextDisabled = current === totalBlocks;
 
   return (
-    <Menu icon compact className="pagination-menu" color="blue" size="tiny">
+    <nav className="pagination-menu flex items-center justify-center py-4">
       {renderPage(title(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled, onChange)}
       {renderPage(title(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled, onChange, false, ['prev-page'])}
 
@@ -103,7 +109,7 @@ const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = 
 
       {renderPage(title(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled, onChange, false, ['next-page'])}
       {renderPage(title(isRTL ? 'first' : 'last'), totalBlocks, 'last', nextDisabled, onChange)}
-    </Menu>
+    </nav>
   );
 };
 

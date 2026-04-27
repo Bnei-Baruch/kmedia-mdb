@@ -1,6 +1,5 @@
 import React, { useReducer } from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import SaveAsLabel from './SaveAsLabel';
 import NeedToLoginModal from './NeedToLoginModal';
@@ -40,12 +39,12 @@ const SavePlaylistItemBtn = ({ label }) => {
   return (
     <>
       {modal}
-      <Button
-        primary
-        content={t('buttons.save')}
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded uppercase"
         onClick={handleOpen}
-        className="uppercase"
-      />
+      >
+        {t('buttons.save')}
+      </button>
     </>
   );
 };

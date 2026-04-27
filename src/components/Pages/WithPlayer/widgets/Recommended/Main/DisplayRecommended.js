@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Container, Header, List, Popup } from 'semantic-ui-react';
 
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
@@ -66,11 +65,11 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
           <div className="recommend-label" key={unit.id}>
             <div>
               <small className="text">
-                <Popup
-                  content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
-                  trigger={
-                    <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
-                />
+                <span
+                  title={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
+                >
+                  {`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}
+                </span>
               </small>
             </div>
           </div>
@@ -155,22 +154,21 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
   };
 
   return (
-    <Container>
+    <div className=" px-4">
       <div className="avbox__playlist-view">
-        <List selection>
+        <ul className="list-none p-0">
           {
             unitsToDisplay?.map((unit, index) => (
-              <List.Item
+              <li
                 key={unit.id}
-                name={`${index}`}
-                active={index === selected}
+                className={`cursor-pointer ${index === selected ? 'bg-blue-50' : ''}`}
                 onClick={() => chronicles.recommendSelected(unit.id)}
               >
                 {content(unit)}
-              </List.Item>
+              </li>
             ))
           }
-        </List>
+        </ul>
       </div>
       {
         viewLimit && !!units && viewLimit < units.length ? (
@@ -183,7 +181,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
           </Link>
         ) : <div className="recommend-more-placeholder"/>
       }
-    </Container>
+    </div>
   );
 };
 
@@ -216,7 +214,7 @@ const DisplayRecommended = (
   };
   return (
     <div className="avbox__playlist-wrapper">
-      {displayTitle && <Header as="h3" content={title}/>}
+      {displayTitle && <h3>{title}</h3>}
       {<RecommendedPlaylist {...props} />}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Message, Popup, Modal, } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import ShareBar from '../../../Share/ShareBar';
@@ -43,7 +43,7 @@ const ShareTextModalBtn = () => {
     }
   };
 
-  const handleOpen        = () => {
+  const handleOpen = () => {
     const _url = new URL(url);
     for (const key in properties) {
       _url.searchParams.set(key, properties[key]);
@@ -55,47 +55,44 @@ const ShareTextModalBtn = () => {
 
   const buttonSize = isMobileDevice ? 'tiny' : 'small';
   return (
-    <Modal // share bar popup
-      className="share-bar"
-      on="click"
-      flowing
-      hideOnScroll
-      trigger={
-        <ToolbarBtnTooltip
-          textKey="share"
-          onClick={handleOpen}
-          icon={<span className="material-symbols-outlined">share</span>}
-        />
-      }
-      open={isPopupOpen}
-      onClose={() => setIsPopupOpen(false)}
-      onOpen={handleOpen}
-    >
-      <Modal.Content>
-        <ShareBar
-          url={urlWithParams}
-          buttonSize={buttonSize}
-          messageTitle={t('sources-library.share-title')}
-        />
-        <Message
-          content={urlWithParams}
-          size="mini"
-          className="share-bar__message text_ellipsis"
-        />
-        <Popup // link was copied message popup
-          open={isCopyOpen}
-          content={t('messages.link-copied-to-clipboard')}
-          position={`bottom left`}
-          trigger={
-            (
+    <>
+      <ToolbarBtnTooltip
+        textKey="share"
+        onClick={handleOpen}
+        icon={<span className="material-symbols-outlined">share</span>}
+      />
+      <Dialog
+        open={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        className="share-bar relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center">
+          <Dialog.Panel className="mx-auto max-w-md rounded bg-white p-6">
+            <ShareBar
+              url={urlWithParams}
+              buttonSize={buttonSize}
+              messageTitle={t('sources-library.share-title')}
+            />
+            <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2">
+              {urlWithParams}
+            </div>
+            <div className="relative inline-block mt-2">
               <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
-                <Button compact size="small" content={t('buttons.copy')} />
+                <button className="px-3 py-1 small rounded border border-gray-300 hover:bg-gray-50">
+                  {t('buttons.copy')}
+                </button>
               </CopyToClipboard>
-            )
-          }
-        />
-      </Modal.Content>
-    </Modal>
+              {isCopyOpen && (
+                <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-800 px-3 py-1 small text-white whitespace-nowrap">
+                  {t('messages.link-copied-to-clipboard')}
+                </div>
+              )}
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    </>
   );
 };
 

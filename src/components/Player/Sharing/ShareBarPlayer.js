@@ -11,10 +11,15 @@ import {
 
 import CutAndDownload from '../../Share/TrimBtn';
 import EmbeddedShareButton from '../../Share/EmbeddedShareButton';
-import { Button } from 'semantic-ui-react';
 import useShareUrl from '../hooks/useShareUrl';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+
+const SocialBtn = ({ className, children }) => (
+  <span className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-white cursor-pointer hover:opacity-80 small font-bold ${className}`}>
+    {children}
+  </span>
+);
 
 const ShareBarPlayer = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -27,7 +32,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Facebook"
         trigger={
           <FacebookShareButton url={url} quote={title}>
-            <Button as="span" circular color="facebook" icon="facebook" />
+            <SocialBtn className="bg-[#1877f2]">f</SocialBtn>
           </FacebookShareButton>
         }
       />
@@ -35,7 +40,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Twitter"
         trigger={
           <TwitterShareButton url={url} title={title}>
-            <Button as="span" circular color="twitter" icon="twitter" />
+            <SocialBtn className="bg-[#1da1f2]">𝕏</SocialBtn>
           </TwitterShareButton>
         }
       />
@@ -43,7 +48,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Whatsapp"
         trigger={
           <WhatsappShareButton url={url} title={title} separator=": ">
-            <Button as="span" circular className="whatsapp" icon="whatsapp" />
+            <SocialBtn className="whatsapp bg-[#25d366]">w</SocialBtn>
           </WhatsappShareButton>
         }
       />
@@ -51,7 +56,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Telegram"
         trigger={
           <TelegramShareButton url={url} title={title}>
-            <Button as="span" circular icon="telegram" className="telegram" />
+            <SocialBtn className="telegram bg-[#0088cc]">t</SocialBtn>
           </TelegramShareButton>
         }
       />
@@ -59,7 +64,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Odnoklassniki"
         trigger={
           <OKShareButton url={url} title={title}>
-            <Button as="span" circular icon="odnoklassniki" className="odnoklassniki" />
+            <SocialBtn className="odnoklassniki bg-[#ee8208]">ok</SocialBtn>
           </OKShareButton>
         }
       />
@@ -67,7 +72,9 @@ const ShareBarPlayer = ({ t }) => {
         content="Email"
         trigger={
           <EmailShareButton url={url} subject={title} body={url}>
-            <Button as="span" circular icon="mail" />
+            <SocialBtn className="bg-gray-600">
+              <span className="material-symbols-outlined text-base">email</span>
+            </SocialBtn>
           </EmailShareButton>
         }
       />

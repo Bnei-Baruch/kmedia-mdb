@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { actions as playerActions } from '../../../../../redux/modules/player';
@@ -62,81 +62,81 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
     setModalMode(ADD_PLAYLIST_ITEM_MODES.label);
   };
 
-  const handleNameChange = (e, { value }) => setName(value);
+  const handleNameChange = e => setName(e.target.value);
 
   const renderPlaylist = p => (
-    <List.Item key={p.id}>
-      <List.Content floated="left">
-        <Checkbox
-          checked={selected.some(x => x.id === p.id)}
-          onChange={(e, { checked }) => handleChange(checked, p)}
-        />
-      </List.Content>
-      <List.Content>
-        {p.name}
-      </List.Content>
-    </List.Item>
+    <li key={p.id} className="flex items-center gap-2 py-1">
+      <input
+        type="checkbox"
+        checked={selected.some(x => x.id === p.id)}
+        onChange={e => handleChange(e.target.checked, p)}
+      />
+      <span>{p.name}</span>
+    </li>
   );
 
   return (
     <>
-      <Modal
-        closeIcon
+      <Dialog
         open={true}
         onClose={handleCancel}
-        size={'tiny'}
-        dir={uiDir}
+        className="relative z-50"
       >
-        <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
-        <Modal.Content>
-          <Input
-            fluid
-            className="autocomplete"
-            size="small"
-            placeholder={t('buttons.name')}
-            onChange={handleNameChange}
-          >
-            <input value={name}/>
-          </Input>
-          <List>
-            {playlists.map(renderPlaylist)}
-            {(playlists.length === 0) && t(`personal.no_${MY_NAMESPACE_PLAYLISTS}`)}
-            <Divider hidden/>
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
+          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-sm w-full relative">
+            <button
+              className="absolute top-2 right-2"
+              onClick={handleCancel}
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="p-4 border-b font-bold">{t('personal.addToPlaylist')}</div>
+            <div className="p-4">
+              <input
+                className="w-full border rounded px-2 py-1 small autocomplete"
+                placeholder={t('buttons.name')}
+                onChange={handleNameChange}
+                value={name}
+              />
+              <ul className="list-none p-0 mt-2">
+                {playlists.map(renderPlaylist)}
+                {(playlists.length === 0) && t(`personal.no_${MY_NAMESPACE_PLAYLISTS}`)}
+                <div className="my-4" />
+                {
+                  (isNew || playlists.length === 0) ? (
+                    <AddPlaylistForm close={toggleNewPlaylist}/>
+                  ) : (
+                    <li key="add_playlist" className="flex items-center gap-2 py-1 cursor-pointer" onClick={toggleNewPlaylist}>
+                      <span className="material-symbols-outlined">add</span>
+                      <span>{t('personal.newPlaylist')}</span>
+                    </li>
+                  )
+                }
+              </ul>
+            </div>
             {
-              (isNew || playlists.length === 0) ? (
-                <AddPlaylistForm close={toggleNewPlaylist}/>
-              ) : (
-                <List.Item key="add_playlist" onClick={toggleNewPlaylist}>
-                  <List.Content floated="left">
-                    <Icon name="plus"/>
-                  </List.Content>
-                  <List.Content>
-                    {t('personal.newPlaylist')}
-                  </List.Content>
-                </List.Item>
+              !isNew && (
+                <div className="flex justify-end gap-2 p-4 border-t">
+                  <button
+                    className="px-4 py-2 bg-blue-600 text-white rounded uppercase"
+                    onClick={handleSave}
+                    disabled={!selected.length}
+                  >
+                    {t('buttons.save')}
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                    onClick={handleCancel}
+                  >
+                    {t('buttons.cancel')}
+                  </button>
+                </div>
               )
             }
-          </List>
-        </Modal.Content>
-        {
-          !isNew && (
-            <Modal.Actions>
-              <Button
-                primary
-                content={t('buttons.save')}
-                onClick={handleSave}
-                className="uppercase"
-                disabled={!selected.length}
-              />
-              <Button
-                primary
-                content={t('buttons.cancel')}
-                onClick={handleCancel}
-              />
-            </Modal.Actions>
-          )
-        }
-      </Modal>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </>
   );
 };

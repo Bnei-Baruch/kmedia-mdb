@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { getDirectionProperty } from '../../helpers/i18n-utils';
@@ -111,71 +110,60 @@ class Filters extends Component {
       const cn  = clsx('filter-popup', { mobile: isMobileDevice });
 
       return (
-        <Popup
-          className="filter-popup"
-          basic
-          flowing
-          key={name}
-          popper={{ id: 'filter-popup', className: cn }}
-          trigger={(
-            <Menu.Item
-              style={{ flexShrink: len }}
-              className={clsx(`filter filter--${name}`,
-                { 'filter--is-empty': !value },
-                { 'filter--is-active': isActive })}
-              name={name}
-            >
-              <div className="filter__wrapper">
-                <small className="blue text filter__title">
-                  {t(`filters.${name}.label`)}
-                </small>
-                <span className="filter__state">
-                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }}/>
-                  {
-                    isActive
-                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically"/>
-                      : <Icon className="filter__fold-icon" name="dropdown"/>
-                  }
-                </span>
-              </div>
-              {
-                value
-                  ? (
-                    <div className="filter__clear">
-                      <Label
-                        basic
-                        circular
-                        size="tiny"
-                        onClick={e => this.handleResetFilter(e, name)}
-                      >
-                        <Icon name="times"/>
-                      </Label>
-                    </div>
-                  )
-                  : null
-              }
-            </Menu.Item>
-          )}
-          on="click"
-          position={`bottom ${getDirectionProperty(uiDir)}`}
-          open={isActive}
-          onClose={this.handlePopupClose}
-          onOpen={() => this.handlePopupOpen(name)}
-          style={popupStyle}
-          closeOnDocumentClick={false}
-          content={
-            <div className={`filter-popup__content ${uiDir}`}>
-              <FilterComponent
-                namespace={namespace}
-                value={value}
-                onCancel={this.handlePopupClose}
-                onApply={x => this.handleApply(name, x)}
-                language={uiLang}
-              />
+        <div className="relative" key={name}>
+          <div
+            style={{ flexShrink: len }}
+            className={clsx(`filter filter--${name}`,
+              { 'filter--is-empty': !value },
+              { 'filter--is-active': isActive })}
+            onClick={() => isActive ? this.handlePopupClose() : this.handlePopupOpen(name)}
+          >
+            <div className="filter__wrapper">
+              <small className="blue text filter__title">
+                {t(`filters.${name}.label`)}
+              </small>
+              <span className="filter__state">
+                <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }}/>
+                {
+                  isActive
+                    ? <span className="material-symbols-outlined filter__fold-icon rotate-180">arrow_drop_down</span>
+                    : <span className="material-symbols-outlined filter__fold-icon">arrow_drop_down</span>
+                }
+              </span>
             </div>
-          }
-        >
-        </Popup>
+            {
+              value
+                ? (
+                  <div className="filter__clear">
+                    <span
+                      className="inline-flex items-center justify-center rounded-full border border-gray-300 w-5 h-5 text-xs cursor-pointer"
+                      onClick={e => this.handleResetFilter(e, name)}
+                    >
+                      <span className="material-symbols-outlined text-xs">close</span>
+                    </span>
+                  </div>
+                )
+                : null
+            }
+          </div>
+          {isActive && (
+            <div
+              id="filter-popup"
+              className={cn}
+              style={popupStyle}
+            >
+              <div className={`filter-popup__content ${uiDir}`}>
+                <FilterComponent
+                  namespace={namespace}
+                  value={value}
+                  onCancel={this.handlePopupClose}
+                  onApply={x => this.handleApply(name, x)}
+                  language={uiLang}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       );
     });
   };
@@ -186,33 +174,31 @@ class Filters extends Component {
     return (
       <div className="filters">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated}/>
-        <Container className="padded">
-          <Menu className="filters__menu" stackable>
-            <Menu.Item
-              header
-              className="filters__header"
-              content={t('filters.by')}
-            />
+        <div className="mx-auto px-4 ">
+          <nav className="filters__menu flex flex-wrap items-center">
+            <div className="filters__header font-bold">
+              {t('filters.by')}
+            </div>
             <ReactReduxContext.Consumer>
               {({ store }) => (this.renderFilters(store))}
             </ReactReduxContext.Consumer>
             {
               onSearch &&
-              <Menu.Item>
+              <div>
                 <SearchInput onSearch={onSearch} onClear={onClear}/>
-              </Menu.Item>
+              </div>
             }
             {
               !isEmpty(letters) &&
-              <Menu.Item className="alphabetFilter">
+              <div className="alphabetFilter">
                 <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
-              </Menu.Item>
+              </div>
             }
             {
-              rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
+              rightItems && <div className="ml-auto flex">{rightItems}</div>
             }
-          </Menu>
-        </Container>
+          </nav>
+        </div>
       </div>
     );
   }

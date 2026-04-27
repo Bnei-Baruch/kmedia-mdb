@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Segment, Divider } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +46,7 @@ const Summary = ({ id }) => {
     : (data ? '' : t('materials.summary.no-summary'));
 
   return (
-    <Segment basic>
+    <div className="p-4">
       {description}
       {summaryLanguages.length <= 1 ? null :
         <MenuLanguageSelector
@@ -60,13 +59,13 @@ const Summary = ({ id }) => {
       {
         data ? (
           <>
-            {!!description && <Divider />}
+            {!!description && <hr />}
             <div dangerouslySetInnerHTML={{ __html: data }}></div>
           </>
         ) : null
 
       }
-    </Segment>
+    </div>
   );
 };
 

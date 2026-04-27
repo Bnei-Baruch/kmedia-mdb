@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 const getYears = () => {
@@ -19,12 +18,12 @@ const YearMonthForm = ({ date, onChange, localeUtils, uiLang, className }) => {
   const month = date.getMonth();
   const year = date.getFullYear();
 
-  const handleMonthChange = (e, data) => {
-    onChange(new Date(year, data.value));
+  const handleMonthChange = e => {
+    onChange(new Date(year, Number(e.target.value)));
   };
 
-  const handleYearChange = (e, data) => {
-    onChange(new Date(data.value, month));
+  const handleYearChange = e => {
+    onChange(new Date(Number(e.target.value), month));
   };
 
   const months = localeUtils.getMonths(uiLang);
@@ -32,23 +31,25 @@ const YearMonthForm = ({ date, onChange, localeUtils, uiLang, className }) => {
 
   return (
     <span className={className}>
-      <Dropdown
-        compact
-        inline
-        scrolling
-        options={months.map((mon, i) => ({ text: mon, value: i }))}
+      <select
+        className="inline-block small border-none bg-transparent cursor-pointer"
         value={month}
         onChange={handleMonthChange}
-      />
+      >
+        {months.map((mon, i) => (
+          <option key={i} value={i}>{mon}</option>
+        ))}
+      </select>
         &nbsp;&nbsp;
-      <Dropdown
-        compact
-        inline
-        scrolling
-        options={years}
+      <select
+        className="inline-block small border-none bg-transparent cursor-pointer"
         value={year}
         onChange={handleYearChange}
-      />
+      >
+        {years.map(y => (
+          <option key={y.value} value={y.value}>{y.text}</option>
+        ))}
+      </select>
     </span>
   );
 }

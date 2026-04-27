@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Table } from 'semantic-ui-react';
 
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import * as shapes from '../../../../shapes';
@@ -12,31 +11,31 @@ const renderUnit = (unit, t) => {
   } = renderUnitHelper.commonRenderUnitForClips(unit, t);
 
   return (
-    <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine>
+    <tr key={unit.id} className="align-top">
+      <td className="whitespace-nowrap">
         { renderUnitHelper.renderUnitCollectionLogo(unit, 'clips', clips.length > 0 ? clips[0].id : null)}
-      </Table.Cell>
-      <Table.Cell>
+      </td>
+      <td>
         { renderUnitHelper.renderUnitFilmDate(unit, t) }
         { renderUnitHelper.renderUnitNameLink(unit) }
         { renderUnitHelper.renderUnitDescription(unit) }
         {
           relatedItems &&
-          <List horizontal divided link className="index__collections" size="tiny">
+          <ul className="index__collections list-none flex gap-2 divide-x text-xs p-0">
             {relatedItems}
-          </List>
+          </ul>
         }
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 };
 
 const DerivedUnits = ({ selectedUnits, t }) =>
-  <Table unstackable basic="very" className="index" sortable>
-    <Table.Body>
+  <table className="index w-full">
+    <tbody>
       {selectedUnits.map(u => renderUnit(u, t))}
-    </Table.Body>
-  </Table>;
+    </tbody>
+  </table>;
 
 DerivedUnits.propTypes = {
   selectedUnits: PropTypes.arrayOf(shapes.ContentUnit).isRequired,

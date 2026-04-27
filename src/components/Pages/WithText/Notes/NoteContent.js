@@ -1,5 +1,4 @@
 import React from 'react';
-import { TextArea } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
@@ -16,8 +15,8 @@ const NoteContent = () => {
 
   const dir = getLanguageDirection(note.language);
 
-  const handleChange = (e, { value }) => {
-    dispatch(actions.setSelected({ ...note, content: value }));
+  const handleChange = e => {
+    dispatch(actions.setSelected({ ...note, content: e.target.value }));
   };
 
   const isEdit = status === NOTE_STATUS.edit || status === NOTE_STATUS.editModal;
@@ -27,7 +26,7 @@ const NoteContent = () => {
         !isEdit ? note.content :
           (
             <>
-              <TextArea value={note.content} onChange={handleChange} />
+              <textarea value={note.content} onChange={handleChange} className="w-full resize-y border rounded p-2" />
               <div className="note_edit_btns">
                 <NoteCancelBtn />
                 <NoteSaveBtn />

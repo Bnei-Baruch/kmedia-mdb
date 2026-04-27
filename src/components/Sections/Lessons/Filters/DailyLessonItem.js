@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
 import { canonicalLink, getCuByCcuSkipPreparation } from '../../../../helpers/links';
 
 import Link from '../../../Language/MultiLanguageLink';
@@ -22,23 +21,23 @@ const DailyLessonItem = ({ id }) => {
     .reduce((acc, cu) => acc += cu.duration, 0);
 
   return (
-    <List.Item key={id} className="media_item daily_lesson">
+    <div key={id} className="media_item daily_lesson">
       <Link to={link} style={{ minWidth: '140px' }}>
         <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration}/>
       </Link>
       <div className="media_item__content">
-        <Header as={Link} to={canonicalLink(ccu)}>
+        <h5 className="font-bold"><Link to={canonicalLink(ccu)}>
           {t('constants.content-types.DAILY_LESSON')}
           <small>
             <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
             {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
           </small>
-        </Header>
+        </Link></h5>
         <div className="additional_links">
           {content_units.map(cu => <Link to={canonicalLink(cu, null, ccu)} as="span" key={cu.id}>{cu.name}</Link>)}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

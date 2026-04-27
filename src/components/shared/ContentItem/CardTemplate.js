@@ -1,29 +1,31 @@
-import React from 'react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import PropTypes from 'prop-types';
-import { Container, Card, Header, Popup, Divider } from 'semantic-ui-react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
-import * as shapes from '../../shapes';
 import { NO_NAME } from '../../../helpers/consts';
 import { formatDuration } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
 
-import UnitLogo from '../Logo/UnitLogo';
-import Link from '../../Language/MultiLanguageLink';
-import { UnitProgress } from './UnitProgress';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
+import Link from '../../Language/MultiLanguageLink';
+import UnitLogo from '../Logo/UnitLogo';
+import { UnitProgress } from './UnitProgress';
 
 const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = useSelector(settingsGetUIDirSelector);
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
-      <Divider style={{ width: '1em' }}/>
-      <UnitLogo collectionId={ccu.id} circular height={80} width={80}/>
-      <Popup
-        basic
-        content={ccu.name}
-        trigger={<Header size="medium" content={ccu.name || NO_NAME} textAlign="left"/>}
-      />
+      <UnitLogo collectionId={ccu.id} circular height={80} width={80} />
+      <Popover className="cu_item_popover">
+        <PopoverButton as="div">
+          <h4>{ccu.name || NO_NAME}</h4>
+        </PopoverButton>
+        <PopoverPanel className="cu_item_popover_panel">
+          {ccu.name}
+        </PopoverPanel>
+      </Popover>
     </div>
   ) : null;
 
@@ -36,23 +38,23 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
   };
 
   return (
-    <Card raised className="cu_item" as={Link} to={link}>
+    <Link to={link} className="cu_item cu_item_card">
       <div className="cu_item_img">
-        <UnitLogo unitId={unit.id} width={700}/>
-        <Container className="cu_item_img_info" textAlign="right">
+        <UnitLogo unitId={unit.id} width={700} />
+        <div className="cu_item_img_info">
           {unit.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
           {coInfo}
-          <UnitProgress unit={unit} playTime={playTime}/>
-        </Container>
+          <UnitProgress unit={unit} playTime={playTime} />
+        </div>
       </div>
-      <Card.Content>
-        <Card.Description content={trimText(unit.name)}/>
-      </Card.Content>
-      <Card.Meta className={`cu_info_description ${dir}`}>
+      <div className="cu_item_body">
+        <div>{trimText(unit.name)}</div>
+      </div>
+      <div className={`cu_info_description ${dir}`}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
-      </Card.Meta>
-      {children ? <Card.Content extra textAlign="right">{children}</Card.Content> : null}
-    </Card>
+      </div>
+      {children ? <div className="cu_item_footer">{children}</div> : null}
+    </Link>
   );
 };
 

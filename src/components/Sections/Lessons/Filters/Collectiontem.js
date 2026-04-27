@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
 
 import { CT_LESSONS_SERIES, MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { fromToLocalized } from '../../../../helpers/date';
@@ -37,18 +36,18 @@ const CollectionItem = ({ id }) => {
   const displayDuration = content_type !== CT_LESSONS_SERIES;
 
   return (
-    <List.Item key={id} className="media_item">
+    <div key={id} className="media_item">
       <Link to={link} style={{ minWidth: '140px' }}>
         <UnitLogoWithDuration unit={logoUnit} displayDuration={displayDuration}/>
       </Link>
       <div className="media_item__content">
-        <Header as={Link} to={canonicalLink(c)} content={name}/>
+        <h5 className="font-bold" as={Link} to={canonicalLink(c)}><Link to={canonicalLink(c)}>{name}</Link></h5>
         <div>{t(`constants.content-types.${content_type}`)}</div>
         <div className={clsx('description', { 'is_single': description.length <= 1 })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

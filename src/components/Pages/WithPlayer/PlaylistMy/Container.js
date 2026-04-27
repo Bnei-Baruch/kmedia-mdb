@@ -1,5 +1,4 @@
 import React from 'react';
-import { Header } from 'semantic-ui-react';
 
 import Page from './Page';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +8,7 @@ const PlaylistMyContainer = ({ playerContainer }) => {
   const { t }   = useTranslation();
   const isEmpty = useBuildMyPlaylist();
   if (isEmpty)
-    return <Header size="large" content={t('personal.playlistNoResult')} />;
+    return <h2 className="text-xl font-bold">{t('personal.playlistNoResult')}</h2>;
 
   return <Page playerContainer={playerContainer} />;
 };

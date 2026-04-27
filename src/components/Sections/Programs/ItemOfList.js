@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Container, Header, List } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
 import { canonicalCollection } from '../../../helpers/utils';
@@ -28,17 +27,17 @@ const ItemOfList = ({ id }) => {
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   return (
-    <List.Item key={id} className="media_item">
+    <div key={id} className="media_item">
       <Link to={to} style={{ minWidth: '140px' }}>
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={to} content={cu.name}/>
+        <TooltipIfNeed text={cu.name} Component="h5" className="font-bold" as={Link} to={to} content={cu.name}/>
         {
           cu.description && (
             <TooltipIfNeed
               text={cu.description}
-              Component={Container}
+              Component="div"
               content={cu.description}
             />
           )
@@ -52,7 +51,7 @@ const ItemOfList = ({ id }) => {
           </span>)}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 

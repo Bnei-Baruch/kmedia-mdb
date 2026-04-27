@@ -1,5 +1,4 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/textPage';
 import { textPageGetSettings } from '../../../../../redux/selectors';
@@ -19,13 +18,13 @@ const ThemeBtn = () => {
     <>
       {
         btns.map(d => (
-          <Menu.Item
+          <button
             key={d}
             onClick={() => handleSetTheme(d)}
-            className={`text__theme-btn_${d}`}
-            active={d === theme}
-            content={d}
-          />
+            className={`text__theme-btn_${d} flex-1 px-4 py-2 text-center ${d === theme ? 'bg-blue-50 font-semibold' : ''}`}
+          >
+            {d}
+          </button>
         ))
       }
     </>

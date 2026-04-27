@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Header, Segment } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { settingsGetUILangSelector } from '../../../redux/selectors';
@@ -11,10 +10,10 @@ const ProjectStatus = () => {
   switch (uiLang) {
     case LANG_HEBREW:
       return (
-        <Segment>
-          <Header as="h1" content="מה חדש?" textAlign="center"/>
+        <div className="border rounded p-6">
+          <h1 className="text-center">מה חדש?</h1>
 
-          <Header as="h3" content="על מה עבדנו לאחרונה:"/>
+          <h3>על מה עבדנו לאחרונה:</h3>
           <ul>
             <li>HD - סופסוף אפשר לראות את השיעורים והתכניות שלנו באיכות HD</li>
             <li>ספריה - אפשרות לחפש בתוכן עניינים לפי שם מאמר</li>
@@ -25,7 +24,7 @@ const ProjectStatus = () => {
             <li>שפות נוספות לממשק - ספרדית, טורקית ואוקראינית</li>
           </ul>
 
-          <Header as="h3" content="עוד רגע מוכן:"/>
+          <h3>עוד רגע מוכן:</h3>
           <ul>
             <li>התאמה לרשתות חברתיות - תוכלו לשתף בפייסבוק ובשאר הרשתות בצורה קלה ונוחה</li>
             <li>גרסא 2 של הספריה - הוספת פיצרים חדשים הדרושים לקריאה נוחה של טקסט, שיפור במובייל, הוספת טקסטים באנגלית ובשפות נוספות, תיקונים של באגים</li>
@@ -35,15 +34,15 @@ const ProjectStatus = () => {
             <li>גרסא 2 של החיפוש - חיפוש טוב יותר ונוח יותר למשתמש</li>
             <li>החלפת האתר הישן - הארכיון החדש יכנס לתפקוד מלא ויחליף את האתר הישן עד כנס ניו ג׳רזי</li>
           </ul>
-        </Segment>
+        </div>
       );
     case LANG_RUSSIAN:
     case LANG_UKRAINIAN:
       return (
-        <Segment>
-          <Header as="h1" content="Что нового?" textAlign="center"/>
+        <div className="border rounded p-6">
+          <h1 className="text-center">Что нового?</h1>
 
-          <Header as="h3" content="Над чем мы работали в последнее время:"/>
+          <h3>Над чем мы работали в последнее время:</h3>
           <ul>
             <li>HD – наконец можно увидеть наши уроки и программы в качестве HD.</li>
             <li>Библиотека – появилась возможность поиска по названию статьи.</li>
@@ -57,7 +56,7 @@ const ProjectStatus = () => {
             <li>Дополнительные языки интерфейса – испанский, турецкий и украинский.</li>
           </ul>
 
-          <Header as="h3" content="В скором времени будет готово:"/>
+          <h3>В скором времени будет готово:</h3>
           <ul>
             <li>Интеграция с социальными сетями – вы сможете делиться материалом в Фейсбуке и в других соцсетях простым и удобным способом.</li>
             <li>Вторая версия библиотеки – добавлены новые инструменты, необходимые для легкого чтения текста, совместимость с мобильным устройством, добавление текстов на английском и других
@@ -70,15 +69,15 @@ const ProjectStatus = () => {
             <li>Вторая версия поиска – улучшенный и удобный поиск для пользователя.</li>
             <li>Замена старого сайта – новый архив будет полностью функциональным и заменит старый сайт до конгресса в Нью-Джерси.</li>
           </ul>
-        </Segment>
+        </div>
       );
 
     default:
       return (
-        <Segment>
-          <Header as="h1" content="What's new?" textAlign="center"/>
+        <div className="border rounded p-6">
+          <h1 className="text-center">What's new?</h1>
 
-          <Header as="h3" content="What we've been working on lately:"/>
+          <h3>What we've been working on lately:</h3>
           <ul>
             <li>HD - Finally, you can see our lessons and programs in HD</li>
             <li>Library - Option to search by article name in the table of contents</li>
@@ -91,7 +90,7 @@ const ProjectStatus = () => {
             <li>Additional languages for the interface - Spanish, Turkish and Ukrainian</li>
           </ul>
 
-          <Header as="h3" content="Ready soon:"/>
+          <h3>Ready soon:</h3>
           <ul>
             <li>Fit to social networks - You can share Facebook and other networks easily</li>
             <li>Version 2 of the library - adding new tools needed for easy text reading, mobile enhancement, adding English and other languages texts, bug fixes</li>
@@ -101,7 +100,7 @@ const ProjectStatus = () => {
             <li>Version 2 of the search - a better and more convenient search</li>
             <li>Replacing the old site - the new archive will be fully functional and will replace the old site until the New Jersey conference</li>
           </ul>
-        </Segment>
+        </div>
       );
   }
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
 import { cmsUrl, Requests } from '../../../helpers/Api';
@@ -11,14 +10,14 @@ const renderHeader = (header, subHeader) => {
   }
 
   return (
-    <Header as="h2" className="thumbnail__header">
-      <Header.Content>
-        <Header.Subheader>
+    <h2 className="thumbnail__header">
+      <div className="content">
+        <div className="sub">
           {subHeader}
-        </Header.Subheader>
+        </div>
         {header}
-      </Header.Content>
-    </Header>
+      </div>
+    </h2>
   );
 };
 
@@ -53,7 +52,7 @@ const Promoted = ({ banner }) => {
   return (
     <div className="thumbnail">
       <Lnk to={link}>
-        <Image fluid src={src} className="thumbnail__image" />
+        <img src={src} className="thumbnail__image w-full h-auto" alt="" />
         {renderHeader(header, subHeader)}
       </Lnk>
     </div>

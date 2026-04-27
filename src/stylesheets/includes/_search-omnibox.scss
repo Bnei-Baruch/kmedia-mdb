@@ -6,12 +6,12 @@
   margin: 0 auto;
 
   input {
-    border: 1px solid #7dcff5 !important;
-    border-radius: 20px !important;
+    border: 1px solid #7dcff5;
+    border-radius: 20px;
   }
 
   &.homepage input {
-    border-radius: 20px 0 0 20px !important;
+    border-radius: 20px 0 0 20px;
   }
 
   .omnibox-inline-search {
@@ -85,16 +85,16 @@
 }
 
 .searchButton {
-  border-radius: 0 .28571429rem .28571429rem 0 !important;
-  margin-right: 45px !important;
+  border-radius: 0 0.25rem 0.25rem 0;
+  border-left: none;
 }
 
 @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
   .search-omnibox {
     .searchButton {
-      margin-right: 5px !important;
-      padding-left: 15px !important;
-      padding-right: 0 !important;
+      margin-right: 5px;
+      padding-left: 15px;
+      padding-right: 0;
     }
   }
 }
@@ -102,18 +102,18 @@
 .rtl {
   .search-omnibox {
     .searchButton {
-      border-radius: .28571429rem 0 0 .28571429rem !important;
-      margin-right: 0 !important;
-      margin-left: 45px !important;
-      padding-right: 15px !important;
+      border-radius: 0 0.25rem 0.25rem 0;
+      margin-right: 0;
+      margin-left: 45px;
+      padding-right: 15px;
     }
   }
 
   @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
     .search-omnibox {
       .searchButton {
-        margin-right: 0px !important;
-        margin-left: 5px !important;
+        margin-right: 0px;
+        margin-left: 5px;
       }
     }
   }

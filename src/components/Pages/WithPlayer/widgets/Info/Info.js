@@ -1,7 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Header, List } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -12,17 +11,17 @@ import {
   CT_SPECIAL_LESSON
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
-import { cuPartNameByCCUType, intersperse, canonicalCollection } from '../../../../../helpers/utils';
-import Link from '../../../../Language/MultiLanguageLink';
-import PersonalInfo from './PersonalInfo';
-import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import TagsByUnit from '../../../../shared/TagsByUnit';
+import { canonicalCollection, cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
 import {
   mdbGetDenormCollectionSelector,
   mdbGetDenormContentUnitSelector,
   playlistGetInfoSelector,
   recommendedGetViewsSelector
 } from '../../../../../redux/selectors';
+import Link from '../../../../Language/MultiLanguageLink';
+import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import TagsByUnit from '../../../../shared/TagsByUnit';
+import PersonalInfo from './PersonalInfo';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -33,14 +32,13 @@ export const makeTagLinks = (tags = [], getTagById) =>
       }
 
       return <Link key={id} to={`/topics/${id}`}>
-        <Button basic size="tiny" className="link_to_cu">
+        <button className="border rounded px-2 py-0.5 small link_to_cu">
           {label}
-        </Button>
+        </button>
       </Link>;
     }), ''));
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
-  // filter out the current collection
   const colValues = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
 
   const noSSeries = Array.from(intersperse(
@@ -98,17 +96,17 @@ const Info = ({ t }) => {
           !isMultiLessons && noSSeries.length > 0 && (
             <>
               <div className="unit-info__title">
-                <UnitLogo collectionId={ccu.id} circular fallbackImg="none"/>
-                <List.Item className="unit-info__collections" key="collections">
+                <UnitLogo collectionId={ccu.id} className="circular" fallbackImg="none"/>
+                <div className="unit-info__collections" key="collections">
                   {noSSeries}
-                </List.Item>
+                </div>
               </div>
             </>
           )
         }
-        <Header as="h2" className="unit-info__header">
+        <h2 className="unit-info__header">
           <div className="unit-info__name">{name}</div>
-        </Header>
+        </h2>
 
         <div className="text grey unit-info__film-date">
           {episodeInfo}
@@ -122,29 +120,29 @@ const Info = ({ t }) => {
           }
         </div>
 
-        <List>
+        <ul className="list-none p-0">
           <TagsByUnit id={id}/>
           {
             sSeries.length > 0 && (
-              <List.Item key="co-links-series" className="margin-top-8">
+              <li key="co-links-series" className="margin-top-8">
                 <strong>
                   {`${t('pages.unit.info.study-series')}: `}
                 </strong>
                 {sSeries}
-              </List.Item>
+              </li>
             )
           }
           {
             isMultiLessons && noSSeries.length > 0 && (
-              <List.Item key="co-links" className="margin-top-8">
+              <li key="co-links" className="margin-top-8">
                 <strong>
                   {`${t('pages.unit.info.collections')}: `}
                 </strong>
                 {noSSeries}
-              </List.Item>
+              </li>
             )
           }
-        </List>
+        </ul>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
@@ -32,17 +31,17 @@ export const PAGE_SIZE = 20;
 const Page = ({ location, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const pageNo           = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
-  const total            = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_HISTORY));
+  const pageNo = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
+  const total = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_HISTORY));
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
-  const items            = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY));
-  const wip              = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_HISTORY));
-  const err              = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_HISTORY));
-  const deleted          = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_HISTORY));
-  const user             = useSelector(authGetUserSelector);
+  const items = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY));
+  const wip = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_HISTORY));
+  const err = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_HISTORY));
+  const deleted = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_HISTORY));
+  const user = useSelector(authGetUserSelector);
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo)), [dispatch]);
+  const setPage = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo)), [dispatch]);
 
   const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_HISTORY, false));
 
@@ -63,20 +62,20 @@ const Page = ({ location, t }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
 
-  const computerWidth = isMobileDevice ? 16 : 10;
+  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
 
   const renderItem = (x, i) => {
-    let newDay   = null;
-    const mp     = i !== 0 && moment(items[i - 1].timestamp);
-    const mx     = moment(x.timestamp);
+    let newDay = null;
+    const mp = i !== 0 && moment(items[i - 1].timestamp);
+    const mx = moment(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (<Header as="h3" content={t('values.date', { date: x.timestamp })}/>);
+      newDay = (<h3>{t('values.date', { date: x.timestamp })}</h3>);
     }
 
     const item = (
       <ContentItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
-        <Actions history={x}/>
+        <Actions history={x} />
       </ContentItemContainer>
     );
     return (
@@ -88,39 +87,37 @@ const Page = ({ location, t }) => {
   };
 
   return (
-    <Grid padded={!isMobileDevice} className="avbox no-background">
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-          <Container className="padded">
+    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobileDevice })}>
+      <div className="flex flex-wrap w-full">
+        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
+          <div className=" px-4 ">
             <div className="summary-container align_items_center">
-              <Header as={'h2'} className="my_header">
-                <Icon name="history" className="display-iblock"/>
+              <h2 className="my_header">
+                <span className="material-symbols-outlined display-iblock">history</span>
                 {t('personal.history')}
-              </Header>
+              </h2>
             </div>
-          </Container>
-          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
+          </div>
+          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
           {
             items?.length > 0 ? (
-              <Container className="padded">
+              <div className=" px-4 ">
                 {items.map(renderItem)}
-              </Container>
+              </div>
             ) : null
           }
-          <Container className="padded pagination-wrapper" textAlign="center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={PAGE_SIZE}
-              total={total}
-              onChange={setPage}
-            />
-          </Container>
-        </Grid.Column>
+          <Pagination
+            pageNo={pageNo}
+            pageSize={PAGE_SIZE}
+            total={total}
+            onChange={setPage}
+          />
+        </div>
         {
-          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6}/>
+          !isMobileDevice && <div className="w-full md:w-[37.5%]" />
         }
-      </Grid.Row>
-    </Grid>
+      </div>
+    </div>
   );
 };
 

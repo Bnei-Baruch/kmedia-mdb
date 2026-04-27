@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 import CollectionItem from '../CollectionFilter/CollectionItem';
 import {
@@ -41,7 +41,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
     dispatch(actions.collectionsByCt({ namespace, content_type: ct }));
   }, [dispatch, namespace]);
 
-  const handleSetQuery = (e, data) => setQuery(data.value);
+  const handleSetQuery = e => setQuery(e.target.value);
 
   const handleClose = () => {
     setQuery(null);
@@ -49,54 +49,64 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
   };
 
   const renderRow = (x, i) => (
-    <Table.Row key={i} verticalAlign="top">
+    <tr key={i} className="align-top">
       {collections.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
-    </Table.Row>
+    </tr>
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i}/>;
+    if (!item) return <td key={i}/>;
 
     return (
-      <Table.Cell className="tree_item_modal_content" key={item.id}>
+      <td className="tree_item_modal_content p-2" key={item.id}>
         <CollectionItem namespace={namespace} item={item}/>
-      </Table.Cell>
+      </td>
     );
   };
 
   const rows = buildRowArr(collections.length);
 
   return (
-    <Modal
+    <Dialog
       open={true}
-      dir={uiDir}
       onClose={handleClose}
-      className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-      closeIcon={<Icon name="times circle outline"/>}
-      size="fullscreen"
+      className={clsx('filters_aside_tree_modal relative z-50', { [uiDir]: true })}
     >
-      <Modal.Header className="no-border nowrap">
-        {t(`filters.content-types.${ct}`)}
-        <Input
-          className="search-input"
-          placeholder={t('sources-library.filter')}
-          onChange={handleSetQuery}
-          defaultValue={query}
-        />
-      </Modal.Header>
-      <Modal.Content scrolling>
-        <Table celled={false} basic>
-          <Table.Body>
-            {
-              rows.map(renderRow)
-            }
-          </Table.Body>
-        </Table>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={handleClose}/>
-      </Modal.Actions>
-    </Modal>
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center" dir={uiDir}>
+        <DialogPanel className="w-full max-h-[90vh] mx-4 bg-white rounded-lg flex flex-col shadow-xl">
+          <div className="no-border nowrap flex items-center justify-between gap-4 p-4 border-b">
+            <DialogTitle className="large font-semibold whitespace-nowrap">
+              {t(`filters.content-types.${ct}`)}
+            </DialogTitle>
+            <input
+              className="search-input border rounded px-3 py-1.5 flex-1"
+              placeholder={t('sources-library.filter')}
+              onChange={handleSetQuery}
+              defaultValue={query}
+            />
+            <button onClick={handleClose} className="shrink-0">
+              <span className="material-symbols-outlined">cancel</span>
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <table className="w-full">
+              <tbody>
+                {rows.map(renderRow)}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-end p-4 border-t">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              onClick={handleClose}
+            >
+              {t('buttons.close')}
+            </button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
   );
 };
 

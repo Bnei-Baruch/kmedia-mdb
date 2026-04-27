@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Modal, Confirm, Button } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { useTranslation } from 'react-i18next';
 import TagVideoLabelBtn from './TagVideoLabelBtn';
@@ -26,34 +26,54 @@ const SaveAsLabel = ({ label, setModalMode }) => {
 
   return (
     <>
-      <Confirm
-        size="tiny"
+      <Dialog
         open={true}
-        header={t('personal.addToPlaylistSuccessful', { name: '' })}
-        onCancel={handleClose}
-        onConfirm={handleClose}
-        confirmButton={{ content: t('personal.label.ending') }}
-        className="bookmark_confirm"
-        cancelButton={<TagVideoLabelBtn label={label} onClose={handleClose}/>}
-        content={t('personal.label.contentCreate')}
-        dir={uiDir}
-      />
-      <Modal
+        onClose={handleClose}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
+          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-sm w-full bookmark_confirm">
+            <div className="p-4 border-b font-bold">
+              {t('personal.addToPlaylistSuccessful', { name: '' })}
+            </div>
+            <div className="p-4">
+              {t('personal.label.contentCreate')}
+            </div>
+            <div className="flex justify-end gap-2 p-4 border-t">
+              <TagVideoLabelBtn label={label} onClose={handleClose}/>
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+                onClick={handleClose}
+              >
+                {t('personal.label.ending')}
+              </button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+      <Dialog
         open={confirm}
         onClose={handleClose}
-        size={!isMobileDevice ? 'tiny' : 'fullscreen'}
-        dir={uiDir}
-        className="bookmark_modal"
+        className="relative z-50"
       >
-        <Modal.Header content={t('personal.bookmark.saveBookmark')}/>
-
-        <Button
-          size="small"
-          content={t('buttons.save')}
-          color="blue"
-          onClick={handleClose}
-        />
-      </Modal>
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
+          <Dialog.Panel className={`bg-white rounded-lg shadow-xl ${!isMobileDevice ? 'max-w-sm' : 'max-w-full'} w-full bookmark_modal`}>
+            <div className="p-4 border-b font-bold">
+              {t('personal.bookmark.saveBookmark')}
+            </div>
+            <div className="p-4">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded small"
+                onClick={handleClose}
+              >
+                {t('buttons.save')}
+              </button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </>
   );
 };

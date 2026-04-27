@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Popup } from 'semantic-ui-react';
+import { Popover, PopoverPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
@@ -15,7 +15,6 @@ export const VolumeKnob = ({ onChangePosition }) => {
   const isReady     = isPlayerReady();
   const handleStart = e => {
     e.preventDefault();
-    // regard only left mouse button click (0). touch is undefined
     !e.button && setActivated(true);
   };
 
@@ -50,23 +49,21 @@ export const VolumeKnob = ({ onChangePosition }) => {
   }, [isReady, activated]);
 
   return (
-    <Popup
-      trigger={
-        <div
-          className="slider__thumb"
-          style={{ left: `${isMuted ? 0 : volume}%` }}
-          onMouseDown={handleStart}
-          onTouchStart={handleStart}
-        ></div>
-      }
-      inverted
-      size="mini"
-      position="top center"
-      open={activated}
+    <Popover
+      as="div"
+      className="slider__thumb"
+      style={{ left: `${isMuted ? 0 : volume}%` }}
+      onMouseDown={handleStart}
+      onTouchStart={handleStart}
     >
-      <Popup.Content>
-        <span>{`${volume} %`}</span>
-      </Popup.Content>
-    </Popup>
+      {activated && (
+        <PopoverPanel
+          static
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-900 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
+        >
+          <span>{`${volume} %`}</span>
+        </PopoverPanel>
+      )}
+    </Popover>
   );
 };

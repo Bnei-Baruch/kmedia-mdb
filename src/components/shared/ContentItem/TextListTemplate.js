@@ -4,7 +4,6 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
@@ -28,23 +27,23 @@ const TextListTemplate = ({ cuID, lID, t }) => {
 
   const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);
   return (
-    <List.Item
+    <div
       key={cuID}
       className="text_item"
     >
-      <Image verticalAlign="top">
-        <SectionLogo name={icon} height="60" width="60"/>
-      </Image>
-      <Container className="text_item__content">
-        <Header as={Link} to={to}>
-          <Header.Content content={title}/>
-          {subTitle && <Header.Subheader content={subTitle}/>}
-        </Header>
-        <Container className={clsx('description', { 'is_single': !(description?.length > 1) })}>
+      <div className="text_item__icon">
+        <SectionLogo name={icon} height="60" width="60" />
+      </div>
+      <div className="text_item__content">
+        <Link to={to} className="text_item__title">
+          <span>{title}</span>
+          {subTitle && <div className="text_item__subtitle">{subTitle}</div>}
+        </Link>
+        <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
-        </Container>
-      </Container>
-    </List.Item>
+        </div>
+      </div>
+    </div>
   );
 };
 

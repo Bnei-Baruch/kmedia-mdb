@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Container } from 'semantic-ui-react';
 
 const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
   let content;
@@ -20,7 +19,7 @@ const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
     );
   }
 
-  return <Container className="padded" content={content} />;
+  return <div className="px-4 py-2">{content}</div>;
 };
 
 ResultsPageHeader.propTypes = {

@@ -1,11 +1,11 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
+import clsx from 'clsx';
 import Navbar from 'react-day-picker/build/Navbar';
 import 'react-day-picker/lib/style.css';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
 import scrollIntoView from 'scroll-into-view';
-import { Input, Label, Popup } from 'semantic-ui-react';
 import { noop } from '../../../../helpers/utils';
 
 import { today } from '../../../../helpers/date';
@@ -126,13 +126,14 @@ class FastDayPicker extends Component {
     this.closePopup();
   };
 
-  handleDateInputChange = (event, data) => {
+  handleDateInputChange = event => {
     const { onDayChange } = this.props;
-    const day             = moment(data.value, this.localeDateFormatShort, true);
+    const val             = event.target.value;
+    const day             = moment(val, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
     } else {
-      this.setState({ stringValue: data.value });
+      this.setState({ stringValue: val });
     }
   };
 
@@ -152,12 +153,13 @@ class FastDayPicker extends Component {
       const selectedInLocaleFormat = moment(selected).format(this.localeDateFormat);
       return (
         <div>
-          <div className="ui labeled input">
-            <div className="ui label label to-from-label">
+          <div className="flex">
+            <span className="inline-flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
               {label}
-            </div>
+            </span>
             <input
               type="text"
+              className="border border-gray-300 rounded-r px-3 py-1 small"
               readOnly
               value={selectedInLocaleFormat}
               onClick={this.openNativeDatePicker}
@@ -178,43 +180,49 @@ class FastDayPicker extends Component {
     }
 
     return (
-      <Popup
-        basic
-        flowing
-        on="focus"
-        open={isOpen}
-        onOpen={this.openPopup}
-        onClose={this.closePopup}
-        trigger={
-          <Input
-            fluid
-            size="small"
-            icon="calendar alternate outline"
-            placeholder={`${formatDate(new Date(), 'l', locale)}`}
-            value={stringValue}
-            onChange={this.handleDateInputChange}
-            onKeyDown={this.handleKeyDown}
-            format="l"
-            // overlaycomponent={this.getOverlayComponent}
-            // showoverlay="true"
-            label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}
-          />}
-      >
-        <Popup.Content dir={getLanguageDirection(language)}>
-          <DayPicker
-            locale={locale}
-            localeUtils={MomentLocaleUtils}
-            disabledDays={{ after: new Date() }}
-            captionElement={() => null}
-            navbarElement={props => this.getNavBarElement(props, language)}
-            month={month}
-            toMonth={today().toDate()}
-            ref={this.handleDayPickerRef}
-            onDayChange={this.onPopupDayChange}
-            onDayClick={this.onPopupDayChange}
-          />
-        </Popup.Content>
-      </Popup>
+      <div className="relative">
+        <div className="flex w-full items-center">
+          {label && (
+            <span className="inline-flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
+              {label}
+            </span>
+          )}
+          <div className="relative flex-1">
+            <input
+              className={clsx('w-full border border-gray-300 px-3 py-1 small pr-8', label ? 'rounded-r' : 'rounded')}
+              placeholder={`${formatDate(new Date(), 'l', locale)}`}
+              value={stringValue}
+              onChange={this.handleDateInputChange}
+              onKeyDown={this.handleKeyDown}
+              onFocus={this.openPopup}
+            />
+            <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none large">
+              calendar_month
+            </span>
+          </div>
+        </div>
+        {isOpen && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={this.closePopup}/>
+            <div className="absolute z-50 mt-1 bg-white border border-gray-300 rounded shadow-lg p-2">
+              <div dir={getLanguageDirection(language)}>
+                <DayPicker
+                  locale={locale}
+                  localeUtils={MomentLocaleUtils}
+                  disabledDays={{ after: new Date() }}
+                  captionElement={() => null}
+                  navbarElement={props => this.getNavBarElement(props, language)}
+                  month={month}
+                  toMonth={today().toDate()}
+                  ref={this.handleDayPickerRef}
+                  onDayChange={this.onPopupDayChange}
+                  onDayClick={this.onPopupDayChange}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     );
   }
 }

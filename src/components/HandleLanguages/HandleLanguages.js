@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, Dropdown, List, Popup } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, LANG_UI_LANGUAGES } from '../../helpers/consts';
@@ -25,7 +25,8 @@ import LanguagesDropdown from './LanguagesDropdown';
 const HandleLanguages = () => {
   const { t } = useTranslation();
 
-  const [isActive, setIsActive] = useState(false);
+  const [uiLangOpen, setUiLangOpen] = useState(false);
+  const uiLangRef = useRef(null);
   const showAllContent = useSelector(settingsGetShowAllContentSelector);
 
   const urlLang = useSelector(settingsGetUrlLangSelector);
@@ -36,7 +37,21 @@ const HandleLanguages = () => {
   const popupStyle = { direction: uiDir };
   const dispatch = useDispatch();
 
-  console.log('HandleLanguages render', contentLanguages, urlLang, origUILang, uiDir, leftRight, showAllContent, isActive);
+  console.log('HandleLanguages render', contentLanguages, urlLang, origUILang, uiDir, leftRight, showAllContent);
+
+  useEffect(() => {
+    const handler = event => {
+      if (uiLangRef.current && !uiLangRef.current.contains(event.target)) {
+        setUiLangOpen(false);
+      }
+    };
+
+    if (uiLangOpen) {
+      document.addEventListener('mousedown', handler);
+    }
+
+    return () => document.removeEventListener('mousedown', handler);
+  }, [uiLangOpen]);
 
   const uiLanguageSelected = language => {
     updateHtmlLang(language);
@@ -52,22 +67,17 @@ const HandleLanguages = () => {
   };
 
   const setShowAllContent = () => dispatch(actions.setShowAllContent(!showAllContent));
-  const handlePopup = useCallback(() => setIsActive(!isActive), [isActive]);
+
+  const anchor = leftRight === 'right' ? 'bottom end' : 'bottom start';
 
   return (
-    <Popup
-      id="handleLanguagesPopup"
-      key="handleLangs"
-      flowing
-      position={`bottom ${leftRight}`}
-      trigger={<LanguagesBtn handlePopup={handlePopup} />}
-      open={isActive}
-      onOpen={handlePopup}
-      onClose={handlePopup}
-      on="click"
-      style={popupStyle}
-    >
-      <Popup.Content>
+    <Popover className="relative" id="handleLanguagesPopup">
+      <PopoverButton as={LanguagesBtn} />
+      <PopoverPanel
+        anchor={anchor}
+        className="z-50 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black/5 p-4 min-w-[280px]"
+        style={popupStyle}
+      >
         {urlLang && (
           <div className="language-url">
             {t('languages.url_language_prefix', { lang: LANGUAGES[urlLang].name })}
@@ -80,25 +90,37 @@ const HandleLanguages = () => {
             <h4 className={`margin-left-4 margin-right-4 ${urlLang ? 'disabled' : ''}`}>
               {t('languages.ui_language')}
             </h4>
-            <Dropdown disabled={!!urlLang} text={LANGUAGES[origUILang].name} item scrolling>
-              <Dropdown.Menu>
-                {LANG_UI_LANGUAGES.map(lang => (
-                  <Dropdown.Item
-                    key={lang}
-                    as={Link}
-                    language={`${lang}`}
-                    active={lang === origUILang}
-                    onClick={() => uiLanguageSelected(lang)}
-                  >
-                    {LANGUAGES[lang].name}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            <div className="relative inline-block" ref={uiLangRef}>
+              <button
+                disabled={!!urlLang}
+                className="flex items-center gap-1 px-2 py-1 disabled:opacity-50"
+                onClick={() => setUiLangOpen(!uiLangOpen)}
+              >
+                {LANGUAGES[origUILang].name}
+                <span className="material-symbols-outlined small">arrow_drop_down</span>
+              </button>
+              {uiLangOpen && (
+                <div className="absolute z-20 bg-white border rounded shadow-lg max-h-60 overflow-y-auto min-w-[150px]">
+                  {LANG_UI_LANGUAGES.map(lang => (
+                    <Link
+                      key={lang}
+                      language={`${lang}`}
+                      className={`block px-4 py-2 hover:bg-gray-100 cursor-pointer small ${lang === origUILang ? 'bg-blue-50 font-bold' : ''}`}
+                      onClick={() => {
+                        uiLanguageSelected(lang);
+                        setUiLangOpen(false);
+                      }}
+                    >
+                      {LANGUAGES[lang].name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         }
         <h4 className="content-languages-title">{t('languages.content_languages')}</h4>
-        <List celled>
+        <ul className="divide-y">
           {contentLanguages.map((language, idx) => (
             <LanguageItem
               key={language}
@@ -107,28 +129,30 @@ const HandleLanguages = () => {
               disabled={!!urlLang || contentLanguages.length === 1}
             />
           ))}
-          <List.Item key="last" className="language-not-celled">
+          <li key="last" className="language-not-celled list-none">
             <LanguagesDropdown
               disabled={!!urlLang}
               trigger={
-                <Button disabled={!!urlLang} basic color="grey" size="small">
+                <button disabled={!!urlLang} className="border border-gray-400 text-gray-600 rounded px-3 py-1 small disabled:opacity-50">
                   {t('languages.add_languages')}
-                </Button>
+                </button>
               }
               selected={lang => addLanguage(lang)}
             />
-          </List.Item>
-        </List>
-        <Checkbox
-          className="language-checkbox"
-          label={t('languages.show_all_content')}
-          disabled={!!urlLang}
-          checked={showAllContent}
-          onChange={setShowAllContent}
-        />
+          </li>
+        </ul>
+        <label className="language-checkbox flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            disabled={!!urlLang}
+            checked={showAllContent}
+            onChange={setShowAllContent}
+          />
+          {t('languages.show_all_content')}
+        </label>
         <div className="language-subtext">{t('languages.show_all_content_explanation')}</div>
-      </Popup.Content>
-    </Popup>
+      </PopoverPanel>
+    </Popover>
   );
 };
 

@@ -124,8 +124,8 @@ export const formatDuration = (duration, fmt) => {
   }
 
   if (fmt === 'hh:mm:ss' || hours > 0) {
-    const paddedHours = hours.toString().padStart(2, '0');
-    return `${paddedHours}:${minutes}:${seconds}`;
+    const Hours = hours.toString().padStart(2, '0');
+    return `${Hours}:${minutes}:${seconds}`;
   }
 
   return `${minutes}:${seconds}`;

@@ -1,25 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Popup } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const defProps = {
-  inverted: true,
-  size: 'mini',
-  position: 'top center',
-};
-
-const WebWrapTooltip = ({ trigger, ...propz }) => {
+const WebWrapTooltip = ({ trigger, content, ...propz }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const [show, setShow] = useState(false);
+
   if (isMobileDevice)
     return trigger;
 
-  const props = { ...defProps, ...propz };
   return (
-    <Popup
-      {...props}
-      trigger={trigger}
-    />
+    <Popover className="relative inline-block">
+      <PopoverButton
+        as="div"
+        className="cursor-default"
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+      >
+        {trigger}
+      </PopoverButton>
+      {show && (
+        <PopoverPanel
+          static
+          className="absolute z-50 bottom-full mb-1 left-1/2 -translate-x-1/2 rounded bg-gray-800 text-white shadow-lg px-2 py-1 text-xs whitespace-nowrap"
+        >
+          {content}
+        </PopoverPanel>
+      )}
+    </Popover>
   );
 };
 

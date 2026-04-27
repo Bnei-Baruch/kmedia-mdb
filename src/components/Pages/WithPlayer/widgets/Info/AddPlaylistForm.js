@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Input, List } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_EDIT } from '../../../../../helpers/consts';
@@ -27,34 +26,37 @@ const AddPlaylistForm = ({ close }) => {
     close();
   };
 
-  const handleNameChange = (e, { value }) => setName(value);
+  const handleNameChange = e => setName(e.target.value);
 
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
-      <List.Item key="playlist_form">
-        <List.Content floated="right">
-          <Button
-            color="green"
-            icon="check"
+      <li key="playlist_form" className="flex items-center gap-2 py-1">
+        <div className="flex gap-1 float-right">
+          <button
+            className="bg-green-600 text-white px-2 py-1 rounded"
             onClick={handleSaveNewPlaylist}
             disabled={!name}
-          />
-          <Button
-            icon="close"
+          >
+            <span className="material-symbols-outlined small">check</span>
+          </button>
+          <button
+            className="px-2 py-1 rounded border"
             onClick={close}
-          />
-        </List.Content>
-        <List.Content>
-          <Input
-            fluid
+          >
+            <span className="material-symbols-outlined small">close</span>
+          </button>
+        </div>
+        <div className="flex-1">
+          <input
+            className="w-full border rounded px-2 py-1"
             type="text"
             maxLength={30}
             onChange={handleNameChange}
             placeholder={t('personal.newPlaylistName')}
           />
-        </List.Content>
-      </List.Item>
+        </div>
+      </li>
     </>
   );
 };

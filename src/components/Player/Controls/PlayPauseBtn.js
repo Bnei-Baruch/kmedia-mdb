@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
@@ -19,7 +18,7 @@ const PlayPauseBtn = ({ t }) => {
       content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
       trigger={
         <div className="controls__play" onClick={handlePlayPause}>
-          <Icon fitted name={isPlay ? 'pause' : 'play'}/>
+          <span className="material-symbols-outlined text-base">{isPlay ? 'pause' : 'play_arrow'}</span>
         </div>
       }
     />

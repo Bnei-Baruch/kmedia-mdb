@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
@@ -25,38 +24,36 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
       <Helmets.Basic title={collection.name} description={collection.description} />
       <Helmets.Image unitOrUrl={assetUrl(`logos/collections/${collection.id}.jpg`)} />
 
-      <Container className="padded">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={3}>
-              <CollectionLogo collectionId={collection.id} />
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Header as="h1">
-                <Header.Content>
-                  <span className="collection-header__title">
-                    {collection.name}
-                  </span>
-                  <Header.Subheader className="section-header__subtitle">
-                    <p className="section-header__description">{collection.description}</p>
-                    <Button
-                      icon="rss"
-                      size="mini"
-                      color="orange"
-                      compact={true}
-                      href={getRSSLinkByTopic(collection.id, contentLanguages)} />
-                    <ShareForm collection={collection} />
-                    <div className="margin-top-8 display-iblock">
-                      <SubscribeBtn collection={collection} />
-                    </div>
-                  </Header.Subheader>
-                </Header.Content>
-              </Header>
+      <div className=" px-4 ">
+        <div className="flex">
+          <div className="w-2/12">
+            <CollectionLogo collectionId={collection.id} />
+          </div>
+          <div className="w-1/2">
+            <h1 className="text-2xl font-bold">
+              <div>
+                <span className="collection-header__title">
+                  {collection.name}
+                </span>
+                <div className="section-header__subtitle">
+                  <p className="section-header__description">{collection.description}</p>
+                  <a
+                    className="inline-flex items-center px-2 py-1 text-xs font-bold text-white bg-orange-500 rounded hover:bg-orange-600"
+                    href={getRSSLinkByTopic(collection.id, contentLanguages)}
+                  >
+                    <span className="material-symbols-outlined small">rss_feed</span>
+                  </a>
+                  <ShareForm collection={collection} />
+                  <div className="margin-top-8 display-iblock">
+                    <SubscribeBtn collection={collection} />
+                  </div>
+                </div>
+              </div>
+            </h1>
 
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

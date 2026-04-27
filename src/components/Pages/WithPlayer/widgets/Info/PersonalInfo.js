@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
@@ -66,29 +66,36 @@ const PersonalInfo = ({ collection }) => {
 
   return (
     <>
-      <Modal
-        closeIcon
-        open={isNeedLogin}
+      <Dialog
+        open={!!isNeedLogin}
         onClose={() => setIsNeedLogin(false)}
-        onOpen={() => setIsNeedLogin(true)}
+        className="relative z-50"
       >
-        <Modal.Content>
-          <NeedToLogin />
-        </Modal.Content>
-      </Modal>
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
+            <button
+              className="absolute top-2 right-2"
+              onClick={() => setIsNeedLogin(false)}
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <NeedToLogin />
+          </Dialog.Panel>
+        </div>
+      </Dialog>
       <div className="personal_info no_print">
         <div className="item">
           <TaggingBtn />
         </div>
         <div className="item">
-          <Button
-            basic
+          <button
             className="clear_button"
             onClick={() => toggleReaction(reaction)}
           >
-            <Icon name={`heart${!reaction ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
+            <span className="material-symbols-outlined margin-right-4 margin-left-4">{reaction ? 'favorite' : 'favorite_border'}</span>
             <span>{reactionsCount}</span>
-          </Button>
+          </button>
         </div>
         <div className="item">
           <ToPlaylistBtn />

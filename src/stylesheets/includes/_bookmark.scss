@@ -1,9 +1,9 @@
 @use "colors-helpers";
 @use "responsive-helpers";
 
-.bookmark_modal.ui.modal {
+.bookmark_modal {
   & > .header, & > .actions {
-    border: none !important;
+    border: none;
     background: none;
   }
 
@@ -13,10 +13,6 @@
 
   .header {
     margin: 0.5em 0;
-  }
-
-  .segment {
-    margin-top: 0;
   }
 
   .actions > .button {
@@ -37,18 +33,10 @@
 
 .bookmark_page {
   min-height: 60VH;
-
-  & > .ui.grid > .row > .column > .segment {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-  }
 }
 
 .folders {
   border-bottom: 1px solid colors-helpers.$midWhite;
-
-  &.ui.grid > .column {
-    padding: 0;
-  }
 
   .bookmark_search {
     width: 100%;
@@ -78,40 +66,6 @@
     font-size: 1.5em;
   }
 
-  .ui.grid > .row > .column.folder_actions {
-    display: none;
-
-    &:hover, .active > & {
-
-    }
-  }
-
-  & > .ui.grid > .row {
-    padding: 0.5em;
-    vertical-align: middle;
-    cursor: pointer;
-    min-height: 45px;
-
-    .column.folder_actions {
-      display: none;
-    }
-
-    &:hover > .column.folder_actions {
-      display: inline-block;
-    }
-
-    &.active {
-      background: rgba(66, 131, 202, 0.16);
-
-      .column.folder_actions {
-        display: inline-block;
-      }
-    }
-
-    .column {
-      padding: 0
-    }
-  }
 }
 
 .bookmark_search {
@@ -121,7 +75,7 @@
     width: 50%;
   }
 
-  &.ui.input > input {
+  & > input {
     border-width: 0 0 1px 0;
     border-radius: 0;
     border-color: colors-helpers.$grey;
@@ -129,8 +83,8 @@
   }
 }
 
-.ui.list > .bookmark_item.item {
-  padding: 1em 0 !important;
+.bookmark_item {
+  padding: 1em 0;
 
   &:last-child {
     border-bottom: none;
@@ -156,33 +110,34 @@
   }
 }
 
-.bookmark_search_mobile.ui.icon.input > input {
+.bookmark_search_mobile > input {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   border: none;
   background-color: colors-helpers.$midWhite;
 }
 
-.bookmark_confirm.ui.modal{
+.bookmark_confirm {
   text-align: center;
 
-
-  & > .header{
+  & > .header {
     font-weight: normal;
     color: colors-helpers.$midGrey;
     border: none;
   }
-  & > .content{
+
+  & > .content {
     border: none;
     font-weight: bold;
     white-space: pre-line;
   }
 
-  & > .actions{
+  & > .actions {
     text-align: center;
     border: none;
     background: none;
-    .button{
+
+    .button {
       font-weight: normal;
     }
   }

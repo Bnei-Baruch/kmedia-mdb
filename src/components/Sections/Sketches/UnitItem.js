@@ -1,7 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import MediaHelper from '../../../helpers/media';
 import { isEmpty } from '../../../helpers/utils';
@@ -56,29 +55,28 @@ const UnitItem = ({ id, t }) => {
     <>
       {
         imgs?.map(f => (
-          <Card key={f.id}>
+          <div key={f.id} className="rounded shadow border overflow-hidden">
             <ImageFileModal file={f}/>
-            <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name}/>
-            </Card.Content>
-            <Card.Meta className={`cu_info_description ${uiDir}`}>
+            <div className="p-4">
+              <Link to={to} className="font-semibold">{cu.name}</Link>
+            </div>
+            <div className={`cu_info_description ${uiDir} px-4 pb-4 small text-gray-500`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
-            </Card.Meta>
-          </Card>
+            </div>
+          </div>
         ))
       }
       {
         uniq?.map(path => (
-          <Card key={path}>
+          <div key={path} className="rounded shadow border overflow-hidden">
             <GalleryModal id={zip.id} path={path}/>
-            <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name}/>
-            </Card.Content>
-
-            <Card.Meta className={`cu_info_description ${uiDir}`}>
+            <div className="p-4">
+              <Link to={to} className="font-semibold">{cu.name}</Link>
+            </div>
+            <div className={`cu_info_description ${uiDir} px-4 pb-4 small text-gray-500`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
-            </Card.Meta>
-          </Card>
+            </div>
+          </div>
         ))
       }
     </>

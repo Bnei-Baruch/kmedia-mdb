@@ -1,26 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, List } from 'semantic-ui-react';
 
-import { actions } from '../../../redux/modules/filters';
-import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
-import TagSourceItemModal from './TagSourceItemModal';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FN_TOPICS_MULTI } from '../../../helpers/consts';
+import { actions } from '../../../redux/modules/filters';
 import {
+  filtersAsideGetMultipleStatsSelector,
   filtersAsideGetStatsSelector,
   filtersGetFilterByNameSelector,
-  filtersAsideGetMultipleStatsSelector,
+  settingsGetLeftRightByDirSelector,
   sourcesGetPathByIDSelector,
-  tagsGetPathByIDSelector,
   sourcesGetSourceByIdSelector,
-  tagsGetTagByIdSelector,
-  settingsGetLeftRightByDirSelector
+  tagsGetPathByIDSelector,
+  tagsGetTagByIdSelector
 } from '../../../redux/selectors';
+import TagSourceItemModal from './TagSourceItemModal';
 
 const TagSourceItem = props => {
   const { namespace, id, baseItems, filterName, deep, defaultSel = false } = props;
 
   const [open, setOpen] = useState(false);
+  const checkboxRef = useRef(null);
 
   const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, filterName));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
@@ -48,15 +48,21 @@ const TagSourceItem = props => {
   const pathIDs     = selected.length > 0 ? selected.map(id => getPath(id)).flat().map(x => x.id) : [];
   const isOnSelPath = !selected.includes(id) && pathIDs.includes(id);
 
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = isOnSelPath;
+    }
+  }, [isOnSelPath]);
+
   const dispatch = useDispatch();
 
-  const handleSelect = (e, { checked }) => {
+  const handleSelect = e => {
+    const { checked } = e.target;
     let val = [...selected].filter(x => x !== id);
     if (checked) {
       val = val.filter(x => !childrenIDs.includes(x));
       val.push(id);
     } else {
-      //find more top selected parent item
       const pId = pathIds.find(x => val.includes(x));
       if (pId) {
         val = val.filter(x => !pathIds.includes(x));
@@ -69,24 +75,26 @@ const TagSourceItem = props => {
 
   const toggleOpen = () => setOpen(!open);
 
+  const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
+
   const renderSubList = () => (
-    <List>
+    <div className="pr-1.5 pl-1.5">
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (<TagSourceItem {...props} id={x} deep={deep - 1} defaultSel={isSelected} key={x} />)
           )
       }
-
-    </List>
+    </div>
   );
 
   return (
-    <List.Item key={`${filterName}_${id}`} disabled={finalStat === 0}>
-      <List.Content className="tree_item_content">
-        <Checkbox
+    <div key={`${filterName}_${id}`} className={`pt-1/2 ${finalStat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className="flex items-center justify-between no-wrap gap-2">
+        <input
+          ref={checkboxRef}
+          type="checkbox"
           checked={isSelected}
           onChange={handleSelect}
-          indeterminate={isOnSelPath}
           disabled={finalStat === 0}
         />
         <span
@@ -95,19 +103,13 @@ const TagSourceItem = props => {
         </span>
         {
           (deep === 0) && (childrenIDs.length > 0) && (
-            <Button
-              basic
-              color="blue"
-              className="clear_button no-shadow"
-              icon={`caret ${leftRight}`}
-              onClick={toggleOpen}
-              size="medium"
-              disabled={finalStat === 0}
-            />
+            <span className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl" onClick={toggleOpen}>
+              {arrowIcon}
+            </span>
           )
         }
         <span className="stat">{`(${finalStat})`}</span>
-      </List.Content>
+      </div>
       {
         (deep !== 0) && (childrenIDs.length > 0) ? renderSubList() :
           <TagSourceItemModal
@@ -120,7 +122,7 @@ const TagSourceItem = props => {
             onClose={() => setOpen(false)}
           />
       }
-    </List.Item>
+    </div>
   );
 };
 

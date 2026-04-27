@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Header } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
@@ -26,20 +25,20 @@ const QualityControl = ({ t }) => {
   const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
   return (
     <div className="settings__row">
-      <Header size="tiny">{t('player.settings.quality')}</Header>
-      <Button.Group size="mini" inverted>
+      <h5 className="small font-semibold">{t('player.settings.quality')}</h5>
+      <div className="inline-flex">
         {
           qualities?.map((x, i) => (
-            <Button
-              inverted
-              content={VS_NAMES[x]}
+            <button
+              className={`px-2 py-1 text-xs border border-white/30 ${x === quality ? 'bg-white text-black' : 'bg-transparent text-white'}`}
               onClick={() => handleSetQuality(x)}
-              active={x === quality}
               key={`${x}_${i}`}
-            />
+            >
+              {VS_NAMES[x]}
+            </button>
           ))
         }
-      </Button.Group>
+      </div>
     </div>
   );
 };

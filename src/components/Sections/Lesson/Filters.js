@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/modules/filtersAside';
 import { isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { Container, Header } from 'semantic-ui-react';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
@@ -44,14 +43,14 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <Container className="padded">
+    <div className=" px-4 ">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <Header as="h3" content={t('filters.aside-filter.filters-title')}/>
+      <h3 className="large font-bold">{t('filters.aside-filter.filters-title')}</h3>
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
       <Language namespace={namespace}/>
       <DateFilter namespace={namespace}/>
-    </Container>
+    </div>
   );
 };
 

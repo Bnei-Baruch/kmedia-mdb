@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
@@ -30,15 +29,13 @@ const AboutPage = () => {
   }
 
   return (
-    <Container className="padded">
-      <Grid>
-        <Grid.Row>
-          <Grid.Column>
-            <div className="readble-width" dangerouslySetInnerHTML={{ __html: data.content }}/>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Container>
+    <div className=" px-4 ">
+      <div className="flex flex-wrap">
+        <div className="w-full">
+          <div className="readble-width" dangerouslySetInnerHTML={{ __html: data.content }}/>
+        </div>
+      </div>
+    </div>
   );
 };
 

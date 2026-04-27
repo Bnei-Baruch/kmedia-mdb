@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Grid, Icon, Input } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 import clsx from 'clsx';
 
 import { actions } from '../../../../../redux/modules/my';
@@ -32,9 +32,9 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
     setName(folder.name);
   };
 
-  const handleChangeName = (e, { value }) => {
+  const handleChangeName = e => {
     stopBubbling(e);
-    setName(value);
+    setName(e.target.value);
   };
 
   const handleKeyDown = e => {
@@ -44,7 +44,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
   };
 
   const handleUpdateFolder = e => {
-    stopBubbling(e);
+    if (e) stopBubbling(e);
     dispatch(actions.edit(MY_NAMESPACE_FOLDERS, { id, name }));
     setEdit(false);
   };
@@ -53,87 +53,85 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
 
   const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id, key }));
 
-  const rowProps = { key: id, className: 'flex_nowrap' };
-  if (isSelect)
-    rowProps.className += ' active';
-
   return (
-    <Grid.Row {...rowProps}>
-      <Grid.Column
-        mobile={isAll ? 16 : 11}
-        tablet={isAll ? 16 : 9}
-        computer={isAll ? 16 : 10}
+    <div className={clsx('flex flex_nowrap items-center', { 'active': isSelect })} key={id}>
+      <div
+        className={clsx(
+          'flex-1',
+          isAll ? 'w-full' : 'w-[68.75%] md:w-[56.25%] lg:w-[62.5%]',
+          { 'nowrap': edit }
+        )}
         onClick={handleSelectFolder}
-        className={clsx({ 'nowrap': edit })}
-        verticalAlign={'middle'}
       >
-        {!edit && <Icon name="folder outline"/>}
+        {!edit && <span className="material-symbols-outlined text-base align-middle">folder_open</span>}
         {
           !edit ? folder.name : (
-            <Input
-              autoSelect
+            <input
+              className="w-full rounded border border-gray-300 px-2 py-1"
               onChange={handleChangeName}
               onClick={stopBubbling}
               onKeyDown={handleKeyDown}
               onFocus={e => e.target.select()}
               defaultValue={folder.name}
-              fluid
             />
           )
         }
-      </Grid.Column>
+      </div>
       {
         isAll ? null : (
-          <Grid.Column
-            mobile={5}
-            tablet={7}
-            computer={6}
-            textAlign={'right'}
-            className={clsx({ 'folder_actions': !edit })}
-          >
+          <div className={clsx('text-right', { 'folder_actions': !edit })}>
             {
               edit ?
                 (
-                  <Button
-                    icon="check"
-                    basic
-                    compact
+                  <button
+                    className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
                     onClick={handleUpdateFolder}
-                    className="no-shadow"
-                  />
+                  >
+                    <span className="material-symbols-outlined text-base">check</span>
+                  </button>
                 ) :
                 (
-                  <Button
-                    icon="pencil"
-                    basic
-                    compact
-                    className="no-shadow"
+                  <button
+                    className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
                     onClick={handleEditFolder}
-                  />
+                  >
+                    <span className="material-symbols-outlined text-base">edit</span>
+                  </button>
                 )
             }
-            <Button
-              basic
-              compact
-              className="no-shadow"
-              icon="trash alternate outline"
+            <button
+              className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
               onClick={toggleConfirm}
-            />
+            >
+              <span className="material-symbols-outlined text-base">delete</span>
+            </button>
 
-            <Confirm
-              size="tiny"
-              open={confirm}
-              onCancel={toggleConfirm}
-              onConfirm={handleConfirmSuccess}
-              cancelButton={t('buttons.cancel')}
-              confirmButton={t('buttons.apply')}
-              content={t('personal.bookmark.confirmRemoveFolder', { name: folder.name })}
-              dir={uiDir}
-            />
-          </Grid.Column>
+            <Dialog open={!!confirm} onClose={toggleConfirm} className="relative z-50">
+              <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+              <div className="fixed inset-0 flex items-center justify-center p-4">
+                <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
+                  <p>{t('personal.bookmark.confirmRemoveFolder', { name: folder.name })}</p>
+                  <div className="mt-4 flex justify-end gap-2">
+                    <button
+                      className="rounded border border-gray-300 px-4 py-2 small"
+                      onClick={toggleConfirm}
+                    >
+                      {t('buttons.cancel')}
+                    </button>
+                    <button
+                      className="rounded bg-blue-500 px-4 py-2 small text-white"
+                      onClick={handleConfirmSuccess}
+                    >
+                      {t('buttons.apply')}
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
+          </div>
         )
       }
-    </Grid.Row>
+    </div>
   );
 };
 

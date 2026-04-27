@@ -5,7 +5,6 @@ import CopyShareUrl from './CopyShareUrl';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
-import { Button } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useTranslation } from 'react-i18next';
 import { playerGetOverModeSelector } from '../../../redux/selectors';
@@ -27,8 +26,12 @@ const Sharing = () => {
         <div className="sharing__reset" onClick={handleSetFull}>
           {
             isMobileDevice ?
-              <Button size="small" icon="undo"/>
-              : <Button size="small" content={t('player.share.reset-to-full')}/>
+              <button className="px-3 py-1.5 small border border-gray-300 rounded">
+                <span className="material-symbols-outlined text-base">undo</span>
+              </button>
+              : <button className="px-3 py-1.5 small border border-gray-300 rounded">
+                {t('player.share.reset-to-full')}
+              </button>
           }
         </div>
       }/>

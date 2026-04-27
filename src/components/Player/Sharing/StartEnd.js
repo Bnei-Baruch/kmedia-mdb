@@ -1,5 +1,4 @@
 import React from 'react';
-import { Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -37,39 +36,38 @@ const StartEnd = ({ action }) => {
   return (
     <div className="sharing__times">
       <div className="sharing__inputs">
-        <Input
-          size="mini"
-          actionPosition="left"
-          fluid
-          onClick={handleSetStart}
-          readOnly
-          type="text"
-          action={{
-            content: t('player.share.start-position'),
-            size   : 'small',
-            compact: true,
-            onClick: handleSetStart
-          }}
-          placeholder={t('player.share.click-to-set')}
-          value={formatTime(start)}
-          dir={uiDir}
-        />
-        <Input
-          size="mini"
-          actionPosition="left"
-          fluid
-          onClick={handleSetEnd}
-          readOnly
-          action={{
-            content: t('player.share.end-position'),
-            size   : 'small',
-            compact: true,
-            onClick: handleSetEnd
-          }}
-          placeholder={t('player.share.click-to-set')}
-          value={fTimeEnd}
-          dir={uiDir}
-        />
+        <div className="flex w-full" onClick={handleSetStart}>
+          <button
+            className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
+            onClick={handleSetStart}
+          >
+            {t('player.share.start-position')}
+          </button>
+          <input
+            className="flex-1 min-w-0 px-2 py-1 text-xs border border-l-0 border-gray-300 rounded-r"
+            readOnly
+            type="text"
+            placeholder={t('player.share.click-to-set')}
+            value={formatTime(start)}
+            dir={uiDir}
+          />
+        </div>
+        <div className="flex w-full" onClick={handleSetEnd}>
+          <button
+            className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
+            onClick={handleSetEnd}
+          >
+            {t('player.share.end-position')}
+          </button>
+          <input
+            className="flex-1 min-w-0 px-2 py-1 text-xs border border-l-0 border-gray-300 rounded-r"
+            readOnly
+            type="text"
+            placeholder={t('player.share.click-to-set')}
+            value={fTimeEnd}
+            dir={uiDir}
+          />
+        </div>
       </div>
       {action}
     </div>

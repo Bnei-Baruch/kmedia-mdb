@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
 
 import { actions } from '../../redux/modules/filtersAside';
 import { actions as searchActions } from '../../redux/modules/search';
@@ -29,20 +28,22 @@ const SortBy = ({ namespace, t }) => {
   };
 
   const renderSortBy = () => (
-    <Segment.Group className="filter-popup__wrapper">
+    <div className="filter-popup__wrapper border rounded">
       {SORTS.map(sort => (
-        <List.Item key={sort}>
-          <List.Content>
-            <Checkbox
-              label={t(`search.sorts.${sort}`)}
-              checked={sortBy === sort}
-              value={sort}
-              onChange={onSortByChange}
-            />
-          </List.Content>
-        </List.Item>
+        <li key={sort} className="list-none">
+          <div>
+            <label className="flex items-center gap-2 cursor-pointer px-2 py-1">
+              <input
+                type="checkbox"
+                checked={sortBy === sort}
+                onChange={() => onSortByChange(null, { value: sort })}
+              />
+              {t(`search.sorts.${sort}`)}
+            </label>
+          </div>
+        </li>
       ))}
-    </Segment.Group>
+    </div>
   );
 
   return (
@@ -70,9 +71,9 @@ const Filters = ({ namespace }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <Container className="padded">
+    <div className=" px-4 ">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <Header as="h3" content={t('filters.aside-filter.filters-title')}/>
+      <h3>{t('filters.aside-filter.filters-title')}</h3>
       <ContentType namespace={namespace}/>
       <PersonFilter namespace={namespace}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
@@ -81,7 +82,7 @@ const Filters = ({ namespace }) => {
       <OriginalLanguageFilter namespace={namespace}/>
       <DateFilter namespace={namespace}/>
       <SortBy namespace={namespace} t={t}/>
-    </Container>
+    </div>
   );
 };
 

@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import RenderAsList from './RenderAsList';
 import RenderAsTree from './RenderAsTree';
 import FilterHeader from '../FilterHeader';
-import { Input } from 'semantic-ui-react';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const TagSourceFilter = ({ namespace, filterName, t }) => {
@@ -13,15 +12,15 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
 
   if (!(baseItems?.length > 0)) return null;
 
-  const handleSetQuery = (e, data) => setQuery(data.value);
+  const handleSetQuery = e => setQuery(e.target.value);
 
   return (
     <FilterHeader
       filterName={filterName}
       children={
         <>
-          <Input
-            className="search-input"
+          <input
+            className="search-input w-full border border-gray-300 rounded px-3 py-2"
             placeholder={t('sources-library.filter')}
             onChange={handleSetQuery}
             defaultValue={query}

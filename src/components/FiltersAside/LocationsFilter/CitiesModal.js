@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Icon, Modal, Table } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
@@ -26,47 +26,61 @@ const CitiesModal = ({ country, namespace, open, onClose, t }) => {
   if (isEmpty(items)) return null;
 
   const renderRow = (x, i) => (
-    <Table.Row key={i} verticalAlign="top">
+    <tr key={i} className="align-top">
       {items.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
-    </Table.Row>
+    </tr>
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i}/>;
+    if (!item) return <td key={i}/>;
 
     return (
-      <Table.Cell className="tree_item_modal_content" key={i}>
+      <td className="tree_item_modal_content" key={i}>
         <CityItem namespace={namespace} id={item} country={country}/>
-      </Table.Cell>
+      </td>
     );
   };
 
   const rows = buildRowArr(items.length);
 
   return (
-    <Modal
+    <Dialog
       open={open}
-      className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-      dir={uiDir}
       onClose={onClose}
-      closeIcon={<Icon name="times circle outline"/>}
+      className="relative z-50"
     >
-      <Modal.Header className="no-border nowrap">
-        {getTitle(country, t)}
-      </Modal.Header>
-      <Modal.Content scrolling>
-        <Table collapsing celled={false} basic>
-          <Table.Body>
-            {
-              rows.map(renderRow)
-            }
-          </Table.Body>
-        </Table>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={onClose}/>
-      </Modal.Actions>
-    </Modal>
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <Dialog.Panel
+          className={clsx('filters_aside_tree_modal bg-white rounded shadow-lg max-w-3xl w-full', { [uiDir]: true })}
+          dir={uiDir}
+        >
+          <div className="no-border nowrap flex items-center justify-between p-4 border-b">
+            <span className="font-bold large">{getTitle(country, t)}</span>
+            <button onClick={onClose} className="p-1">
+              <span className="material-symbols-outlined">cancel</span>
+            </button>
+          </div>
+          <div className="overflow-y-auto p-4">
+            <table className="w-auto">
+              <tbody>
+                {
+                  rows.map(renderRow)
+                }
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-end p-4 border-t">
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={onClose}
+            >
+              {t('buttons.close')}
+            </button>
+          </div>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
   );
 };
 

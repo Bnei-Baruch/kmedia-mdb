@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -16,23 +15,23 @@ const RateControl = ({ t }) => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">{t('player.settings.playback-speed')}</Header>
-      <Button.Group size="mini" inverted>
+      <h5 className="small font-semibold">{t('player.settings.playback-speed')}</h5>
+      <div className="inline-flex">
         {
           PLAYER_SPEEDS.map(x => {
             const content = x !== 1 ? `${x}x` : t('player.settings.normal');
             return (
-              <Button
-                inverted
-                content={content}
+              <button
+                className={`px-2 py-1 text-xs border border-white/30 ${x === rate ? 'bg-white text-black' : 'bg-transparent text-white'}`}
                 onClick={() => setPlaybackRate(x)}
-                active={x === rate}
                 key={x}
-              />
+              >
+                {content}
+              </button>
             );
           })
         }
-      </Button.Group>
+      </div>
     </div>
   );
 };

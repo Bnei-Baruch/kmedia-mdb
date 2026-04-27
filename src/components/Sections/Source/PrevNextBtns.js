@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Icon } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -65,7 +64,7 @@ const PrevBtn = ({ id }) => {
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = uiDir === 'ltr' ? 'chevron left' : 'chevron right';
+  const icon          = uiDir === 'ltr' ? 'chevron_left' : 'chevron_right';
 
   const source = getSourceById(id);
 
@@ -73,20 +72,16 @@ const PrevBtn = ({ id }) => {
   const btnContentClassName = `btn-content prev ${arrowSide}`;
 
   return (
-    <Button
-      basic
-      icon
-      as={Link}
+    <Link
       to={`sources/${id}`}
-      size="medium"
       title={source.name}
-      className="prev-next-btn"
+      className="prev-next-btn inline-flex items-center border border-gray-300 rounded px-3 py-1.5 bg-white hover:bg-gray-50"
     >
       <div className={btnContentClassName}>
-        <Icon name={icon} className="prev-next-btn-icon"/>
+        <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
         {isMobileDevice ? ('') : (<span>{t('buttons.previous-article')}</span>)}
       </div>
-    </Button>
+    </Link>
   );
 };
 
@@ -96,27 +91,23 @@ const NextBtn = ({ id }) => {
 
   const uiDir         = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = uiDir !== 'ltr' ? 'chevron left' : 'chevron right';
+  const icon          = uiDir !== 'ltr' ? 'chevron_left' : 'chevron_right';
 
   const source              = getSourceById(id);
   const arrowSide           = uiDir === 'ltr' ? 'right' : 'left';
   const btnContentClassName = `btn-content next ${arrowSide}`;
 
   return (
-    <Button
-      basic
-      icon
-      as={Link}
+    <Link
       to={`sources/${id}`}
-      size="medium"
       title={source.name}
-      className="prev-next-btn"
+      className="prev-next-btn inline-flex items-center border border-gray-300 rounded px-3 py-1.5 bg-white hover:bg-gray-50"
     >
       <div className={btnContentClassName}>
         {isMobileDevice ? ('') : (<span>{t('buttons.next-article')}</span>)}
-        <Icon name={icon} className="prev-next-btn-icon"/>
+        <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
       </div>
-    </Button>
+    </Link>
   );
 };
 

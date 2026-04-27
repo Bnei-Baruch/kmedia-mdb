@@ -1,15 +1,15 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { assetUrl, Requests, cLogoUrl } from '../../../helpers/Api';
+import { Requests, assetUrl, cLogoUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 import { sourcesGetPathByIDSelector } from '../../../redux/selectors';
 
 import portraitBS from '../../../images/portrait_bs.png';
-import portraitRB from '../../../images/portrait_rb.png';
 import portraitML from '../../../images/portrait_ml.png';
+import portraitRB from '../../../images/portrait_rb.png';
 
 const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
@@ -60,7 +60,7 @@ const UnitLogo = props => {
       src={src}
       width={width}
       height={height}
-      className={`unit-logo ${className} ui image`}
+      className={`unit-logo ${className} image`}
       fallbackImage={[...fallbacks, fallback]}
       force16x9={force16x9}
     />

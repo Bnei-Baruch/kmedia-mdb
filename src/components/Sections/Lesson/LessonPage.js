@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
@@ -33,13 +32,13 @@ const LessonPage = ({ t }) => {
   const collection = useSelector(state => mdbGetDenormCollectionSelector(state, cid));
 
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, namespace)) || {};
-  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
-  const pageSize                   = useSelector(settingsGetPageSizeSelector);
-  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
-  const prevSel                    = usePrevious(selected);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize = useSelector(settingsGetPageSizeSelector);
+  const selected = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
+  const prevSel = usePrevious(selected);
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
+  const setPage = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
 
   const location = useLocation();
   const pageNo = useMemo(() => getPageFromLocation(location) || 1, [location]);
@@ -56,7 +55,7 @@ const LessonPage = ({ t }) => {
   const wipErr = WipErr({ wip, err, t });
 
   return (<>
-    <PageHeader collection={collection} namespace={namespace} title="lessons-collection"/>
+    <PageHeader collection={collection} namespace={namespace} title="lessons-collection" />
 
     <SectionFiltersWithMobile
       namespace={namespace}
@@ -68,20 +67,18 @@ const LessonPage = ({ t }) => {
       }
     >
 
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
-      <FilterLabels namespace={namespace}/>
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={namespace} />
       {
-        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i}/>)
+        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
       }
-      <Divider fitted/>
-      <Container className="padded pagination-wrapper" textAlign="center">
-        {total > 0 && <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={setPage}
-        />}
-      </Container>
+      <hr className="m-0 border-t" />
+      {total > 0 && <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={setPage}
+      />}
     </SectionFiltersWithMobile>
   </>);
 };

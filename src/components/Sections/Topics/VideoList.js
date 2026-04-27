@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, Header } from 'semantic-ui-react';
 
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import CollectionListTemplate from '../../shared/ContentItem/CollectionListTemplate';
@@ -15,8 +14,8 @@ const VideoList = () => {
   const title = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
 
   return (
-    <Container className="padded topics_media">
-      <Header content={title}/>
+    <div className=" px-4  topics_media">
+      <h3>{title}</h3>
       {
         items?.map((x, i) => {
           if (x.lID) {
@@ -28,7 +27,7 @@ const VideoList = () => {
           return <ContentItemContainer id={x.cuID} size="small" asList={true} key={i}/>;
         })
       }
-    </Container>
+    </div>
 
   );
 };

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import AddCommentBtn from '../../../../Pages/WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -16,56 +15,63 @@ import FullscreenTextBtn from '../../../../Pages/WithText/Buttons/FullscreenText
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const ArticleToolbarWeb = () => (
-  <div className="text_toolbar">
-    <div className="text_toolbar__buttons">
-      <TextSettings />
-      <LanguageTextBtn />
-      <div className="divider" />
-      <TagTextBtn />
-      <AddBookmarkBtn />
-      <AddCommentBtn />
-      <ShareTextBtn />
-      <CopyLinkBtn />
-      <div className="divider" />
-      <SearchOnPageBtn />
-      <div className="computer-only">
-        <PrintBtn />
-      </div>
-      <div className="computer-only">
-        <DownloadTextBtn />
-      </div>
-      <div className="computer-only">
-        <AdditionsModeBtn />
-      </div>
-      <div className="divider computer-only" />
+const ArticleToolbarWeb = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
-      <div className="computer-only">
-        <LinkToLessonsBtn />
+  useEffect(() => {
+    const handler = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div className="text_toolbar">
+      <div className="text_toolbar__buttons">
+        <TextSettings />
+        <LanguageTextBtn />
+        <div className="divider" />
+        <TagTextBtn />
+        <AddBookmarkBtn />
+        <AddCommentBtn />
+        <ShareTextBtn />
+        <CopyLinkBtn />
+        <div className="divider" />
+        <SearchOnPageBtn />
+        <div className="computer-only">
+          <PrintBtn />
+        </div>
+        <div className="computer-only">
+          <DownloadTextBtn />
+        </div>
+        <div className="computer-only">
+          <AdditionsModeBtn />
+        </div>
+        <div className="divider computer-only" />
+
+        <div className="computer-only">
+          <LinkToLessonsBtn />
+        </div>
+        <div className="divider computer-only" />
+        <FullscreenTextBtn />
+        <div className="text_toolbar__dropdown relative" ref={menuRef}>
+          <div onClick={() => setMenuOpen(v => !v)}>
+            <MoreOptionsBtn />
+          </div>
+          {menuOpen && (
+            <div className="absolute right-0 z-10 mt-1 min-w-max bg-white rounded shadow-lg border">
+              <div className="p-2"><DownloadTextBtn /></div>
+              <div className="p-2"><AdditionsModeBtn /></div>
+              <div className="p-2"><LinkToLessonsBtn /></div>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="divider computer-only" />
-      <FullscreenTextBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        pointing="top right"
-        className="text_toolbar__dropdown"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
-            <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <AdditionsModeBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <LinkToLessonsBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
     </div>
-  </div>
-);
+  );
+};
 
 export default ArticleToolbarWeb;

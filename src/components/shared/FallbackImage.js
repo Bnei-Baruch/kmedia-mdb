@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Image } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { useTranslation } from 'react-i18next';
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
 import { actions } from '../../redux/modules/fetchImage';
-import WipErr from './WipErr/WipErr';
-import { useTranslation } from 'react-i18next';
 import { fetchImageGetBySrcSelector } from '../../redux/selectors';
+import WipErr from './WipErr/WipErr';
+
+const getFloatClass = floated => {
+  if (floated === 'left') return 'float-left';
+  if (floated === 'right') return 'float-right';
+  return '';
+};
 
 const FallbackImage = props => {
   const
@@ -19,6 +24,7 @@ const FallbackImage = props => {
       height        = 'auto',
 
       floated,
+      force16x9,
       ...rest
     } = props;
 
@@ -48,17 +54,16 @@ const FallbackImage = props => {
   if (knownFallbackImages.includes(imageSource)) {
     return (
       <div className={`${className} ${floated && 'floated'} ${floated}`} style={{ maxWidth: width }}>
-        <SectionThumbnailFallback name={imageSource} width={width} height={height} {...rest} />
+        <SectionThumbnailFallback name={imageSource} width={width} height={height} force16x9={force16x9} {...rest} />
       </div>);
   }
 
-  if (width && rest.force16x9) {
+  if (width && force16x9) {
     return (
       <div style={{ width, height: width * 9 / 16, overflow: 'hidden' }}>
-        <Image
-          className={className}
+        <img
+          className={`${className || ''} ${getFloatClass(floated)}`}
           style={{ top: 'calc(-50%)', width: '100%' }}
-          floated={floated}
           src={imageSource}
           {...rest}
         />
@@ -67,9 +72,8 @@ const FallbackImage = props => {
   }
 
   return (
-    <Image
-      className={className}
-      floated={floated}
+    <img
+      className={`${className || ''} ${getFloatClass(floated)}`}
       src={imageSource}
       {...rest}
     />);

@@ -22,6 +22,7 @@
 @use 'includes/labels';
 @use 'includes/notes';
 @use 'includes/content-items';
+@use 'includes/menu-items';
 @use 'gallery/image-gallery-no-icon';
 @use 'includes/text-page';
 @use 'includes/print';
@@ -110,14 +111,14 @@
     }
   }
 
-  .ui.menu {
-    border: 0 !important;
+  .menu {
+    border: 0;
     border-radius: 0;
-    box-shadow: none !important;
+    box-shadow: none;
     display: block;
 
     .item {
-      border-radius: 0 !important;
+      border-radius: 0;
     }
   }
 }

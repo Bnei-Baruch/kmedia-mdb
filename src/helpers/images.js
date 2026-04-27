@@ -1,23 +1,23 @@
 import React from 'react';
 
 import DailyLessonsIcon from '../images/icons/Dailylessons';
-import ProgramsIcon from '../images/icons/Programs';
-import LecturesIcon from '../images/icons/Lectures';
-import SourcesIcon from '../images/icons/Sources';
-import EventsIcon from '../images/icons/Events';
-import PublicationsIcon from '../images/icons/Publications';
 import DownloadIcon from '../images/icons/Download';
+import EventsIcon from '../images/icons/Events';
 import InfoIcon from '../images/icons/Info';
-import SimpleModeIcon from '../images/icons/SimpleMode';
-import LikutimIcon from '../images/icons/Likutim';
-import TopicsIcon from '../images/icons/Topics';
 import LabelIcon from '../images/icons/LabelIcon';
+import LecturesIcon from '../images/icons/Lectures';
+import LikutimIcon from '../images/icons/Likutim';
+import ProgramsIcon from '../images/icons/Programs';
+import PublicationsIcon from '../images/icons/Publications';
+import SimpleModeIcon from '../images/icons/SimpleMode';
+import SourcesIcon from '../images/icons/Sources';
+import TopicsIcon from '../images/icons/Topics';
 
 import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
-import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
-import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
-import SourcesFallbackIcon from '../images/fallbacks/SourcesFallback';
 import EventsFallbackIcon from '../images/fallbacks/EventsFallback';
+import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
+import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
+import SourcesFallbackIcon from '../images/fallbacks/SourcesFallback';
 
 import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 import ImagePlaceholder from '../images/Image';

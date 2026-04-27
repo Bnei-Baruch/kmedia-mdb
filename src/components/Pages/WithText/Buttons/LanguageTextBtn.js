@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Dropdown } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getOptions } from '../../../../helpers/language';
@@ -22,24 +21,26 @@ const LanguageTextBtn = () => {
   const options = getOptions({ languages });
   const noLangs = isEmpty(options);
   return (
-    <Dropdown
-      className="text__language_popup"
-      icon={null}
-      disabled={noLangs}
-      trigger={
-        <ToolbarBtnTooltip
-          textKey="languages"
-          active={open}
-          icon={(<span className="material-symbols-outlined">Translate</span>)}
-          disabled={noLangs}
-        />
-      }
-      onClose={toggleOpen}
-      onOpen={toggleOpen}
-      value={language}
-      onChange={onChange}
-      options={options}
-    />
+    <div className="text__language_popup relative">
+      <ToolbarBtnTooltip
+        textKey="languages"
+        active={open}
+        icon={(<span className="material-symbols-outlined">Translate</span>)}
+        disabled={noLangs}
+      />
+      <select
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        disabled={noLangs}
+        value={language}
+        onChange={e => onChange(e, { value: e.target.value })}
+        onFocus={toggleOpen}
+        onBlur={toggleOpen}
+      >
+        {options.map(opt => (
+          <option key={opt.value} value={opt.value}>{opt.text}</option>
+        ))}
+      </select>
+    </div>
   );
 };
 

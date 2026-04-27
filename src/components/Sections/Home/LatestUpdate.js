@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card } from 'semantic-ui-react';
 import {
   CT_CLIP,
   CT_CONGRESS,
@@ -42,7 +41,6 @@ const LatestUpdate = ({ item, t, label }) => {
 
   let canonicalSection = getRandomLatestLesson();
 
-  // collections -- prepare random image
   switch (content_type) {
     case CT_VIDEO_PROGRAM_CHAPTER:
     case CT_CLIP:
@@ -75,17 +73,17 @@ const LatestUpdate = ({ item, t, label }) => {
   }
 
   return (
-    <Card raised className="cu_item" as={Link} to={to}>
+    <Link to={to} className="cu_item flex flex-col rounded-md shadow-md hover:shadow-lg transition-shadow bg-white overflow-hidden">
       <div className="cu_item_img">
         <UnitLogo unitId={id} width={250} fallbackImg={canonicalSection}/>
       </div>
-      <Card.Content>
-        <Card.Description content={title} className="bold-font"/>
-      </Card.Content>
-      <Card.Meta className={'cu_info_description'}>
+      <div className="p-3 flex-1">
+        <div className="font-bold">{title}</div>
+      </div>
+      <div className="cu_info_description px-3 pb-3 small text-gray-500">
         {subheader.map((d, i) => (<span key={i}>{d}</span>))}
-      </Card.Meta>
-    </Card>
+      </div>
+    </Link>
   );
 };
 

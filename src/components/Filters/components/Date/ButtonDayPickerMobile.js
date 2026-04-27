@@ -53,7 +53,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
       className={clsx('dateButton inline-flex items-center px-2 py-2 font-bold bg-gray-200 text-gray-700 rounded cursor-pointer hover:bg-gray-300', { 'dateButton_with_label': withLabel })}
       onClick={openNativeDatePicker}
     >
-      <Icon icon={faCalendarDays} className="text-lg" />
+      <Icon icon={faCalendarDays} className="large" />
       {withLabel && label}
       <input
         className="hide-native-date-input"
@@ -84,19 +84,19 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
           <DialogPanel className="bg-white rounded-lg shadow-xl p-4 w-full max-w-md" dir={uiDir}>
             <div className="flex items-center gap-2">
               <input
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded small"
                 readOnly
                 value={selectedInLocaleFormat}
                 onClick={openNativeDatePicker}
               />
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm whitespace-nowrap"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 small whitespace-nowrap"
                 onClick={applySelectedDate}
               >
                 {t('buttons.apply')}
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm whitespace-nowrap"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 small whitespace-nowrap"
                 onClick={() => setNativePopupOpen(false)}
               >
                 {t('buttons.cancel')}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Button, Popup, } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 import { SectionLogo } from '../../../helpers/images';
 import SelectTopicsModal from './SelectTopicsModal';
@@ -19,19 +19,19 @@ const LabelButton = ({ label, disabled }) => {
       open={open}
       onClose={handleClose}
       trigger={
-        <Popup
-          content={t('share-text.tag-button-alt')}
-          trigger={
-            <Button
-              compact
-              size="small"
-              icon={<SectionLogo name="topics" color="grey" />}
-              onClick={handleOpen}
-              disabled={disabled}
-              className="label_icon"
-            />
-          }
-        />
+        <Popover className="relative inline-block">
+          <PopoverButton
+            as="button"
+            className="label_icon px-2 py-1 small border rounded hover:bg-gray-100"
+            onClick={handleOpen}
+            disabled={disabled}
+          >
+            <SectionLogo name="topics" color="grey" />
+          </PopoverButton>
+          <PopoverPanel className="absolute z-10 bg-white border border-gray-200 rounded shadow-lg p-2 small">
+            {t('share-text.tag-button-alt')}
+          </PopoverPanel>
+        </Popover>
       }
     />
   );

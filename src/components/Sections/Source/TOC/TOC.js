@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Accordion } from 'semantic-ui-react';
 
 import { getEscapedRegExp, isEmpty, noop } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
@@ -104,15 +103,12 @@ const scrollToActive = activeId => {
 };
 
 const handleTitleClick = (e, data) => {
-  // don't stop propagation on leaf nodes
   const { id = '' } = data;
 
   if (id.startsWith('title')) {
     return;
   }
 
-  // stop propagation so tocIsActive in LibraryContainer won't call
-  // this breaks navigation in nested TOCs (TES, Zohar, etc...)
   e.stopPropagation();
 };
 
@@ -121,8 +117,6 @@ const filterSources = (path, match) => {
     return path;
   }
 
-  // We don't check validity of regular expression,
-  // so let's escape all special symbols
   const escapedMatch = getEscapedRegExp(match);
   const reg          = new RegExp(escapedMatch, 'i');
   return path.reduce((acc, el) => {
@@ -133,6 +127,54 @@ const filterSources = (path, match) => {
 
     return acc;
   }, []);
+};
+
+const SimpleAccordion = ({ panels = [], defaultActiveIndex, onTitleClick, className }) => {
+  const [activeIdx, setActiveIdx] = useState(defaultActiveIndex ?? -1);
+
+  const handleClick = (e, index, panel) => {
+    if (onTitleClick) onTitleClick(e, { id: panel?.key, index });
+    setActiveIdx(prev => prev === index ? -1 : index);
+  };
+
+  return (
+    <div className={clsx('accordion', className)}>
+      {panels.map((panel, index) => {
+        if (panel.as === 'span' || !panel.content) {
+          return <div key={panel.key || index}>{panel.title}</div>;
+        }
+
+        const isActive = activeIdx === index;
+        const titleEl = panel.title;
+        const contentEl = panel.content;
+
+        const isObj = titleEl && typeof titleEl === 'object' && !React.isValidElement(titleEl) && titleEl.content !== undefined;
+        const titleContent = isObj ? titleEl.content : titleEl;
+        const titleIcon = isObj ? titleEl.icon : null;
+
+        const bodyContent = contentEl && typeof contentEl === 'object' && !React.isValidElement(contentEl) && contentEl.content !== undefined
+          ? contentEl.content
+          : contentEl;
+
+        return (
+          <div key={panel.key || index}>
+            <div
+              className={clsx('title cursor-pointer', { active: isActive })}
+              onClick={e => handleClick(e, index, panel)}
+            >
+              {titleIcon}
+              <span>{titleContent}</span>
+            </div>
+            {isActive && (
+              <div className="content active">
+                {bodyContent}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 const TOC = () => {
@@ -179,17 +221,19 @@ const TOC = () => {
   );
 
   const leaf = (id, title) => {
-    const props = {
-      id: titleKey(id),
-      key: titleKey(id),
-      active: id === activeId,
-      onClick: e => selectSourceById(id, e),
-    };
-
     const realTitle = isEmpty(match)
       ? title
       : <span dangerouslySetInnerHTML={{ __html: title }} />;
-    return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
+    return (
+      <div
+        id={titleKey(id)}
+        key={titleKey(id)}
+        className={clsx('title cursor-pointer', { active: id === activeId })}
+        onClick={e => selectSourceById(id, e)}
+      >
+        {realTitle}
+      </div>
+    );
   };
 
   const getLeafTitle = (leafId, sourceId) => {
@@ -218,13 +262,9 @@ const TOC = () => {
 
   const icon   = uiDir === 'ltr' ? 'chevron_right' : 'chevron_left';
   const getToc = (sourceId, path, firstLevel = false) => {
-    // 1. Element that has children is CONTAINER
-    // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
-    // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
-
     const { name: title, children } = getSourceById(sourceId);
 
-    if (isEmpty(children)) { // Leaf
+    if (isEmpty(children)) {
       const item   = leaf(sourceId, title);
       const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
       return { toc: result };
@@ -271,7 +311,7 @@ const TOC = () => {
       },
       content: {
         content: (
-          <Accordion.Accordion
+          <SimpleAccordion
             className={className}
             panels={panels}
             defaultActiveIndex={activeIndex}
@@ -294,7 +334,7 @@ const TOC = () => {
     setActiveId(id);
   };
 
-  const path               = fullPath.slice(1); // Remove first element (i.e. kabbalist)
+  const path               = fullPath.slice(1);
   const { toc, className } = getToc(rootId, path, true);
 
   const tocScrollStyle = tocScrollHeight && isMobileDevice ? { 'height': tocScrollHeight } : {};
@@ -315,8 +355,7 @@ const TOC = () => {
       }
       <div className="toc_scroll" style={tocScrollStyle}>
         <div className="toc_scroll_align">
-          <Accordion
-            fluid
+          <SimpleAccordion
             panels={toc}
             className={className}
             defaultActiveIndex={activeIndex}
@@ -333,7 +372,3 @@ const TOC = () => {
 };
 
 export default TOC;
-// four wide computer sixteen wide mobile sixteen wide tablet column
-// four wide computer sixteen wide mobile sixteen wide tablet column widescreen-only large-screen-only computer-only
-// twelve wide computer sixteen wide mobile sixteen wide tablet column source__content-wrapper size0
-// twelve wide computer sixteen wide mobile sixteen wide tablet column source__content-wrapper size0

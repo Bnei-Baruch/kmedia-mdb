@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Popup } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 import clsx from 'clsx';
 
 import { actions } from '../../../../redux/modules/my';
@@ -53,7 +53,7 @@ const Page = ({ t }) => {
   if (!playlist) return null;
 
   const pathname      = `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
-  const computerWidth = isMobileDevice ? 16 : 10;
+  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
   const items         = [...playlist.items || []];
   items.sort((a, b) => b.position - a.position);
 
@@ -90,56 +90,56 @@ const Page = ({ t }) => {
         asList
       >
         <div className="my_playlist_actions" onClick={stopBubbling}>
-          <Button
-            basic
-            icon="long arrow alternate up"
-            className="no-shadow"
+          <button
+            className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
             disabled={i === 0}
             onClick={() => changeItemPosition(i, true)}
-          />
-          <Popup
-            basic
-            content={t('personal.removeFromPlaylist')}
-            trigger={
-              <Button
-                basic
-                icon="remove circle"
-                className="no-shadow"
-                onClick={() => removeItem(x.id)}
-              />
-            }>
-          </Popup>
-          <Button
-            basic
-            icon="long arrow alternate down"
-            className="no-shadow"
+          >
+            <span className="material-symbols-outlined text-base">arrow_upward</span>
+          </button>
+          <Popover className="relative inline-block">
+            <Popover.Button
+              className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
+              onClick={() => removeItem(x.id)}
+              title={t('personal.removeFromPlaylist')}
+            >
+              <span className="material-symbols-outlined text-base">cancel</span>
+            </Popover.Button>
+            <Popover.Panel className="absolute z-10 mt-1 rounded bg-white p-2 small shadow-lg whitespace-nowrap">
+              {t('personal.removeFromPlaylist')}
+            </Popover.Panel>
+          </Popover>
+          <button
+            className="no-shadow inline-flex items-center rounded border border-gray-300 px-2 py-1"
             disabled={i === items.length - 1}
             onClick={() => changeItemPosition(i, false)}
-          />
+          >
+            <span className="material-symbols-outlined text-base">arrow_downward</span>
+          </button>
         </div>
       </ContentItemContainer>
     );
   };
 
   return (
-    <Grid className="avbox no-background">
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
+    <div className="flex flex-wrap avbox no-background">
+      <div className="flex flex-wrap w-full">
+        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
           <PlaylistHeaderContainer playlist={playlist}/>
           <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
           {
             items?.length > 0 ? (
-              <Container className="padded">
+              <div className=" px-4 ">
                 {items.map(renderItem)}
-              </Container>
+              </div>
             ) : <FrownSplash text={t('messages.not-found')}/>
           }
-        </Grid.Column>
+        </div>
         {
-          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6}/>
+          !isMobileDevice && <div className="w-full md:w-[37.5%]"/>
         }
-      </Grid.Row>
-    </Grid>
+      </div>
+    </div>
   );
 };
 

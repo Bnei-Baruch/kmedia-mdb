@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withTranslation } from 'react-i18next';
-import { Button, Container, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Dialog } from '@headlessui/react';
 
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,
@@ -44,83 +44,66 @@ const BookmarkHeaderMobile = ({ t }) => {
   const leftRight = useSelector(settingsGetLeftRightByDirSelector);
 
   const trigger = (
-    <Container>
-      <Label
-        as="a"
-        size="big"
-        basic
-        className="no-border padding_r_l_0"
-        color="blue"
+    <div className=" px-4">
+      <span
+        className="inline-flex items-center cursor-pointer text-blue-500 large no-border padding_r_l_0"
         onClick={handleToggle}
       >
-        <Icon name="folder outline" color="grey" />
+        <span className="material-symbols-outlined text-gray-400">folder_open</span>
         {t('personal.bookmark.folders')}
-        <Icon
-          name={`caret ${leftRight}`}
-          className="margin-left-8 margin-right-8"
-        />
-      </Label>
+        <span className="material-symbols-outlined margin-left-8 margin-right-8">
+          {leftRight === 'right' ? 'chevron_right' : 'chevron_left'}
+        </span>
+      </span>
       {
         folder && (
-          <Label
-            size="big"
-            basic
-            icon
-            className="no-border"
-          >
+          <span className="inline-flex items-center large no-border">
             {folder.name}
-            <Button
-              basic
-              compact
-              className="no-padding no-shadow"
+            <button
+              className="no-padding no-shadow inline-flex items-center border-none bg-transparent"
               onClick={removeFolderFilter}
             >
-              <Icon
-                name="remove circle"
-                color="grey"
-                size="small"
-                className="margin-left-8 margin-right-8"
-              />
-            </Button>
-          </Label>
+              <span className="material-symbols-outlined small text-gray-400 margin-left-8 margin-right-8">cancel</span>
+            </button>
+          </span>
         )
       }
-    </Container>
+    </div>
   );
 
   return (
-    <Container className="padded">
-      <Header as={'h2'} className="my_header padding-top_1em">
-        <Icon name="bookmark outline" className="display-iblock" />
+    <div className=" px-4 ">
+      <h2 className="my_header padding-top_1em">
+        <span className="material-symbols-outlined display-iblock">bookmark</span>
         {t('personal.bookmark.title')}
-      </Header>
+      </h2>
 
-      <Modal
-        trigger={trigger}
-        onOpen={handleToggle}
-        onClose={handleToggle}
-        open={open}
-        dir={uiDir}
-        closeIcon
-      >
-        <Modal.Content>
-          <Grid className="no-padding">
-            <Grid.Row>
-              <FolderList close={handleToggle} />
-            </Grid.Row>
-          </Grid>
-        </Modal.Content>
-      </Modal>
-      <Input
-        icon="search"
-        placeholder={placeholder}
-        defaultValue={query}
-        onChange={(e, { value }) => handleSearch(value)}
-        className="bookmark_search_mobile"
-        iconPosition="left"
-        fluid
-      />
-    </Container>
+      {trigger}
+      <Dialog open={!!open} onClose={handleToggle} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="relative mx-auto w-full max-w-lg rounded bg-white p-6" dir={uiDir}>
+            <button className="absolute top-2 right-2" onClick={handleToggle}>
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="no-padding">
+              <div className="flex flex-wrap">
+                <FolderList close={handleToggle}/>
+              </div>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+      <div className="relative bookmark_search_mobile">
+        <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+        <input
+          className="w-full rounded border border-gray-300 py-2 pl-8 pr-3"
+          placeholder={placeholder}
+          defaultValue={query}
+          onChange={e => handleSearch(e.target.value)}
+        />
+      </div>
+    </div>
   );
 };
 

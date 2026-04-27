@@ -257,26 +257,11 @@
     width: auto !important;
   }
 
-  & > .ui.floating.label {
-    right: 100%;
-    left: auto;
-    margin: 0 -1.5em 0 !important;
-  }
 }
 
-
-.rtl .cut_and_download_btn, .embed-share-button {
-
-  & > .ui.floating.label {
-    left: 100%;
-    right: auto;
-  }
-}
-
-
-.ui.modal > .content.cut_and_download_modal {
+.cut_and_download_modal {
   text-align: center;
-  padding: 3em 1em !important;
+  padding: 3em 1em;
 
   & > .header {
     padding-bottom: 1em;

@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
-import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment } from 'semantic-ui-react';
 
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
@@ -58,6 +57,14 @@ import WipErr from '../shared/WipErr/WipErr';
 
 const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
+
+const SearchHeader = ({ as: Tag = 'h3', content, children, className = '', ...rest }) => (
+  <Tag className={`large font-bold ${className}`} {...rest}>{content || children}</Tag>
+);
+
+const SearchContainer = ({ content, children, ...rest }) => (
+  <div {...rest}>{content || children}</div>
+);
 
 const titleFromHighlight = (highlight, defVal) => {
   let prop = ['title', 'title_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
@@ -337,11 +344,11 @@ export const SearchResultOneItem = props => {
   !!views && views > 0 && description.push(t('pages.unit.info.views', { views }));
 
   return (
-    <List.Item key={id} className="media_item">
+    <div key={id} className="media_item list-none">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
-        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />
-        {content && (<TooltipIfNeed text={content} Component={Container} content={content} />)}
+        <TooltipIfNeed text={title} Component={SearchHeader} as={Link} to={link} onClick={() => click(link)} content={title} />
+        {content && (<TooltipIfNeed text={content} Component={SearchContainer} content={content} />)}
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {collectionLink && (<span className="opacity_1">
@@ -352,7 +359,7 @@ export const SearchResultOneItem = props => {
           </span>)}
         </div>
       </div>
-    </List.Item>
+    </div>
   );
 };
 
@@ -446,29 +453,27 @@ export const SearchResultManyItems = (
   const wipError = WipErr({ wip: wip || items.some(item => !item), err, t });
 
   return (
-    <List.Item className="media_item">
-      <List.Content>
-        <Container className={clsx('padded', { 'padding_r_l_0': !isMobileDevice })}>
-          <Header as="h2">
-            <Image size="small" verticalAlign="bottom">{logo}</Image>
+    <div className="media_item list-none">
+      <div>
+        <div className={clsx(' px-4 ', { 'padding_r_l_0': !isMobileDevice })}>
+          <h2 className="flex items-end gap-1">
+            <span className="inline-block align-bottom">{logo}</span>
             &nbsp;
             <span>{description}</span>
-          </Header>
-        </Container>
+          </h2>
+        </div>
         {wipError}
         {
-          !wipError && (<Grid columns="equal" stackable={true}>
-            <Grid.Row>
-              {items.map(item => <Grid.Column key={item.id}>{item}</Grid.Column>)}
-            </Grid.Row>
-          </Grid>)
+          !wipError && (<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {items.map(item => <div key={item.id}>{item}</div>)}
+          </div>)
         }
-        <Container textAlign={'right'} className="no-border padded" fluid>
-          <Icon name="tasks" size="small" style={{ display: 'inline' }} />
+        <div className="no-border  text-right w-full">
+          <span className="material-symbols-outlined text-base" style={{ display: 'inline' }}>task_alt</span>
           <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
-        </Container>
-      </List.Content>
-    </List.Item>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -486,20 +491,19 @@ const getLowestLevelSeries = (series, rootId) => {
 
 const renderSerie = (s, click, link, t) =>
   (
-    <Button
-      basic size="tiny" className="link_to_cu" key={s.id}
-      as={Link} to={link}
+    <Link
+      className="link_to_cu border rounded px-2 py-1 small"
+      key={s.id}
+      to={link}
       onClick={() => click(link)}
       style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
-      <Link key={s.id} to={link} onClick={() => click(link)}>
-        <span className="margin-right-8 margin-left-8">
-          <Icon name="tasks" size="small" style={{ display: 'inline-block' }} />
-          {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
-        </span>
-      </Link>
-    </Button>
+      <span className="margin-right-8 margin-left-8">
+        <span className="material-symbols-outlined text-base" style={{ display: 'inline-block' }}>task_alt</span>
+        {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
+      </span>
+    </Link>
   );
 
 export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
@@ -538,27 +542,25 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const mediaLanguage = getMediaLanguage(filters);
 
   return (
-    <List.Item className="media_item">
-      <List.Content>
+    <div className="media_item list-none">
+      <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Header as="div">
-            <Image size="small" verticalAlign="bottom">{logo}</Image>
+          <div className="large font-bold flex items-end gap-1">
+            <span className="inline-block align-bottom">{logo}</span>
             &nbsp;
             <span>{t(`constants.content-types.${CT_LESSONS_SERIES}`)}</span>
-          </Header>
+          </div>
         </div>
         {wipError}
         {!wipError && (
-          <Grid columns="equal">
-            <Grid.Row>
-              <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
-                {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
-              </div>
-            </Grid.Row>
-          </Grid>
+          <div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
+              {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
+            </div>
+          </div>
         )}
-      </List.Content>
-    </List.Item>
+      </div>
+    </div>
   );
 };
 
@@ -611,38 +613,40 @@ export const SearchResultTweets = ({ source }) => {
     onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
   const renderItem             = ({ twitter, highlight }) => (
-    <Card key={twitter.twitter_id} className="bg_hover_grey home-twitter" raised>
-      <Card.Content>
-        <Feed className="min-height-200">
+    <div key={twitter.twitter_id} className="bg_hover_grey home-twitter rounded-lg border shadow-md">
+      <div className="p-4">
+        <div className="min-height-200">
           <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
-        </Feed>
-      </Card.Content>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
   const renderScrollPagination = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
     const pages         = new Array(numberOfPages).fill('a');
     const content       = pages.map((p, i) => (
-      <Button onClick={() => onScrollChange(i)} key={i} icon className="bg_transparent">
-        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
-      </Button>
+      <button onClick={() => onScrollChange(i)} key={i} className="bg_transparent border-0 p-1 cursor-pointer">
+        <span className={`material-symbols-outlined text-blue-500 small`}>
+          {pageNo === i ? 'radio_button_checked' : 'radio_button_unchecked'}
+        </span>
+      </button>
     ));
 
-    return <Segment basic textAlign="center" className="no-padding">{content}</Segment>;
+    return <div className="no-padding text-center">{content}</div>;
   };
 
   const renderScrollRight = () => {
     const dir = uiDir === 'rtl' ? 'right' : 'left';
     return pageNo === 0 ? null : (
-      <Button
-        icon={`chevron ${dir}`}
-        circular
-        basic
-        size="large"
+      <button
         onClick={onScrollLeft}
-        className="scroll_tweets"
+        className="scroll_tweets rounded-full border large px-2 py-1"
         style={{ [dir]: '5px' }}
-      />
+      >
+        <span className="material-symbols-outlined">
+          {dir === 'left' ? 'chevron_left' : 'chevron_right'}
+        </span>
+      </button>
     );
   };
 
@@ -650,41 +654,40 @@ export const SearchResultTweets = ({ source }) => {
     const numberOfPages = Math.round(ids.length / pageSize);
 
     return (pageNo >= numberOfPages - 1) ? null : (
-      <Button
-        icon={`chevron ${leftRight}`}
-        circular
-        basic
-        size="large"
+      <button
         onClick={onScrollRight}
-        className="scroll_tweets"
+        className="scroll_tweets rounded-full border large px-2 py-1"
         style={{ [leftRight]: '5px' }}
-      />
+      >
+        <span className="material-symbols-outlined">
+          {leftRight === 'left' ? 'chevron_left' : 'chevron_right'}
+        </span>
+      </button>
     );
   };
 
   return (
-    <List.Item className="media_item">
-      <List.Content horizontal={!isMobileDevice} className="search__block" style={{ position: 'relative' }}>
+    <div className="media_item list-none">
+      <div className="search__block" style={{ position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Header as="h2" color="blue">{t('home.twitter-title')}</Header>
-          {/* eslint-disable-next-line react/no-unknown-property */}
-          <div textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
+          <h2 className="text-blue-600">{t('home.twitter-title')}</h2>
+          { }
+          <div className="no-padding no-border">
             <a href={`/${uiLang}/publications/twitter`}>{t('home.all-tweets')}</a>
           </div>
         </div>
         {wipError}
         {!wipError && (
           <div {...swipeHandlers} >
-            <Card.Group className={`${isMobileDevice ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
+            <div className={`${isMobileDevice ? 'margin-top-8' : null} search__cards grid grid-cols-1 sm:grid-cols-3 gap-4`}>
               {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(renderItem)}
-            </Card.Group>
+            </div>
           </div>
         )}
         {pageSize < ids.length ? renderScrollLeft() : null}
         {pageSize < ids.length ? renderScrollRight() : null}
         {pageSize < ids.length ? renderScrollPagination() : null}
-      </List.Content>
-    </List.Item>
+      </div>
+    </div>
   );
 };
-

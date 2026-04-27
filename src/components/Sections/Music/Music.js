@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Container, Divider } from 'semantic-ui-react';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
@@ -34,17 +33,17 @@ const Music = () => {
   }
 
   const content = wipErr || (
-    <Container className="padded">
+    <div className=" px-4 ">
       <ResultsPageHeader pageNo={1} pageSize={1000} total={music.length || 0}/>
-      <Divider fitted/>
+      <hr className="m-0" />
       <List items={music}/>
-    </Container>
+    </div>
   );
 
   return (
     <>
       <SectionHeader section="music"/>
-      <Divider fitted/>
+      <hr className="m-0" />
       {content}
     </>
   );

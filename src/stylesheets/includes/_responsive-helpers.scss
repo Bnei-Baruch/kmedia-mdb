@@ -47,6 +47,11 @@ $widescreenMonitorBreakpoint: 1920px;
     @content;
   }
 }
+@mixin computer-and-above {
+  @media only screen and (min-width: $computerBreakpoint) {
+    @content;
+  }
+}
 
 
 // helper classes

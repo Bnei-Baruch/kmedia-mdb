@@ -1,4 +1,3 @@
-import { Popup } from 'semantic-ui-react';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -38,23 +37,22 @@ const CopyLinkBtn = () => {
   };
 
   return (
-    <Popup
-      open={open}
-      content={t('messages.link-copied-to-clipboard')}
-      position="bottom right"
-      trigger={(
-        <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
-          <ToolbarBtnTooltip
-            textKey="copy-link"
-            className="text_mark_on_select_btn"
-            disabled={noFile}
-            icon={<span className="material-symbols-outlined">link</span>}
-          />
-        </CopyToClipboard>
+    <div className="relative inline-block">
+      <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
+        <ToolbarBtnTooltip
+          textKey="copy-link"
+          className="text_mark_on_select_btn"
+          disabled={noFile}
+          icon={<span className="material-symbols-outlined">link</span>}
+        />
+      </CopyToClipboard>
+      {open && (
+        <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-800 px-3 py-1 small text-white whitespace-nowrap">
+          {t('messages.link-copied-to-clipboard')}
+        </div>
       )}
-    />
+    </div>
   );
 };
 
 export default CopyLinkBtn;
-

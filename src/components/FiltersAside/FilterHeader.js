@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
-import { Button, List } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 
 const FilterHeader = ({ filterName, t, children }) => {
   const [open, setOpen] = useState(true);
-  const toggleOpen      = () => setOpen(!open);
+  const toggleOpen = () => setOpen(!open);
   return (
-    <List className="filter_aside">
-      <List.Header className="title">
-        {t(`filters.aside-filter.${filterName}`)}
-        <Button
-          basic
-          floated="right"
-          color="blue"
-          size="big"
-          className="clear_button"
-          icon={{ name: `caret ${open ? 'up' : 'down'}` }}
-          onClick={toggleOpen}
-        />
-      </List.Header>
+    <div className="filter_aside">
+      <div className="title flex items-center justify-between">
+        <span className="text-lg font-bold">{t(`filters.aside-filter.${filterName}`)}</span>
+        <span className="material-symbols-outlined text-blue-500 cursor-pointer text-3xl" onClick={toggleOpen}>
+          {`arrow_drop_${open ? 'down' : 'up'}`}
+        </span>
+      </div>
       {open && children}
-    </List>
+    </div>
   );
 };
 

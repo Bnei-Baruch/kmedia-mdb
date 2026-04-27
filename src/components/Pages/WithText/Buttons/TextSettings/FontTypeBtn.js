@@ -1,5 +1,4 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/textPage';
 import { textPageGetSettings, textPageGetFileSelector } from '../../../../../redux/selectors';
@@ -19,13 +18,14 @@ const FontTypeBtn = () => {
     <>
       {
         btns.map(d => (
-          <Menu.Item
+          <button
             key={d}
             onClick={() => handleSet(d)}
-            active={d === fontType}
-            content={d}
+            className={`flex-1 px-4 py-2 text-center ${d === fontType ? 'bg-blue-50 font-semibold' : ''}`}
             disabled={isPdf}
-          />
+          >
+            {d}
+          </button>
         ))
       }
     </>

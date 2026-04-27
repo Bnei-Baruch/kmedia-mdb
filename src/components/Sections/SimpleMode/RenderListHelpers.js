@@ -1,6 +1,5 @@
 import groupBy from 'lodash/groupBy';
 import React from 'react';
-import { Button, Card, Image, List } from 'semantic-ui-react';
 
 import {
   CT_ARTICLE,
@@ -82,24 +81,24 @@ const renderHorizontalFilesList = (language, files, contentType, t, chroniclesAp
     const url = downloadLink(file);
     const label = labelTextByFile(file, contentType, t);
     return (
-      <List.Item key={`${file.id}_${file.type}_${file.video_size}_${file.language}`} className="media-file-button">
-        <List.Content>
+      <li key={`${file.id}_${file.type}_${file.video_size}_${file.language}`} className="media-file-button">
+        <div>
           <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })}>
             {label} ({file.language})
-            <Image className="file-list-icon">
+            <div className="file-list-icon inline-block">
               <SectionLogo name="downloads" />
-            </Image>
+            </div>
           </a>
-        </List.Content>
-      </List.Item>
+        </div>
+      </li>
     );
   });
 
   html.unshift(
-    <List.Item key={`language`} class="list-first-item">
+    <li key={`language`} className="list-first-item">
       {LANGUAGES[language].name}:&#8194;
       <nbsp />
-    </List.Item>
+    </li>
   );
 
   return html;
@@ -157,13 +156,11 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
 };
 
 const sortByMediaFunc = (contentLanguages, originalLanguage) => (a, b) => {
-  // sort by media type (i.e. files in all languages are sorted by media type first)
   const media = sortMediaFiles(a, b);
   if (media !== 0) {
     return media;
   }
 
-  // inside media type group sort by language (original language is preferable)
   const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language);
   if (lang !== 0) {
     if (a.language === originalLanguage) {
@@ -181,13 +178,10 @@ const sortByMediaFunc = (contentLanguages, originalLanguage) => (a, b) => {
 };
 
 // TODO: bbdev REFACTOR THIS TO COMMON LIBRARY
-// Order files by types and languages; remove some duplicates
 const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => {
   const filtered = files
-    // filter by requested languages
     .filter(file => contentLanguages.includes(file.language))
     .sort(sortByMediaFunc(contentLanguages, originalLanguage))
-    // Remove duplicated media types on the same language
     .filter((file, index, files) => {
       if (index === 0) {
         return true;
@@ -239,7 +233,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         if (duration) description.push(duration);
 
         title = (
-          <List.Header className="unit-header">
+          <div className="unit-header font-bold">
             <div className="margin-bottom-4">
               <Link className="unit-link" to={to}>
                 {ccu?.name || NO_NAME}
@@ -249,42 +243,42 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
             <Link className="unit-link" to={to}>
               {unit.name || NO_NAME}
             </Link>
-          </List.Header>
+          </div>
         );
       } else {
         title = (
-          <List.Header className="unit-header">
+          <div className="unit-header font-bold">
             <Link className="unit-link" to={to}>
               {unit.name || NO_NAME}
             </Link>
             {duration && <span className="duration">{duration}</span>}
-          </List.Header>
+          </div>
         );
       }
 
       return (
-        <List.Item key={unit.id} className="unit-header">
-          <List.Content>
+        <li key={unit.id} className="unit-header">
+          <div>
             {title}
             {files.length > 0 ? (
-              files.map(f => <List.List className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</List.List>)
+              files.map(f => <ul className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</ul>)
             ) : (
-              <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
-                <List.Item key={`${unit.id}-no-files`} className="no-files">
+              <ul className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
+                <li key={`${unit.id}-no-files`} className="no-files">
                   <SectionLogo name="info" />
-                  <List.Content className="margin-right-8 margin-left-8">
+                  <div className="margin-right-8 margin-left-8">
                     <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                     <br />
                     {t('simple-mode.try-different-language')}
-                    <Button className="choose-language-button" onClick={helpChooseLang}>
+                    <button className="choose-language-button" onClick={helpChooseLang}>
                       {t('simple-mode.language-click')}
-                    </Button>
-                  </List.Content>
-                </List.Item>
-              </List.List>
+                    </button>
+                  </div>
+                </li>
+              </ul>
             )}
-          </List.Content>
-        </List.Item>
+          </div>
+        </li>
       );
     });
 
@@ -297,18 +291,18 @@ export const renderCollection = (collection, contentLanguages, t, helpChooseLang
   const units = renderUnits(collection.content_units, contentLanguages, t, helpChooseLang, chroniclesAppend);
 
   return (
-    <Card fluid key={id}>
-      <Card.Content className={number ? 'gray-header' : ''}>
-        <Card.Header className="unit-header">
+    <div className="rounded shadow border w-full" key={id}>
+      <div className={`p-4 ${number ? 'gray-header' : ''}`}>
+        <div className="font-bold large unit-header">
           <Link to={canonicalLink(collection)}>
             {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
           </Link>
-        </Card.Header>
-      </Card.Content>
-      <Card.Content extra>
-        <List>{units}</List>
-      </Card.Content>
-    </Card>
+        </div>
+      </div>
+      <div className="p-4 border-t">
+        <ul>{units}</ul>
+      </div>
+    </div>
   );
 };
 
@@ -334,16 +328,16 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
       {items.length ? (
         <div className="type-header-top-margin">
           <h2>
-            <Image className="simple-mode-type-icon">
+            <div className="simple-mode-type-icon inline-block">
               <SectionLogo name={icon} />
-            </Image>
+            </div>
             {t(`nav.sidebar.${title.toLowerCase()}`)}
           </h2>
-          <Card fluid>
-            <Card.Content>
-              <List size="large">{items}</List>
-            </Card.Content>
-          </Card>
+          <div className="rounded shadow border w-full">
+            <div className="p-4">
+              <ul className="large">{items}</ul>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

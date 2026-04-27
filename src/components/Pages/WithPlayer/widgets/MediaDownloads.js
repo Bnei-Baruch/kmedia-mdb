@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Grid, Popup, Table, Divider } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import {
@@ -71,7 +70,6 @@ class MediaDownloads extends Component {
     const { unit: stateUnit, isCopyPopupOpen = {} }            = state;
 
     if (stateUnit && isEqual(stateUnit, unit)) {
-      // Only language changed.
       if (state.uiLang !== uiLang
         || state.contentLanguages !== contentLanguages) {
         const selectedLanguage = selectSuitableLanguage(contentLanguages, state.availableLanguages, unit.original_language);
@@ -84,7 +82,6 @@ class MediaDownloads extends Component {
 
     }
 
-    // No unit or a different unit - create new state.
     const groups = MediaDownloads.getFilesByLanguage(unit.files, contentLanguages, unit.original_language);
     const availableLanguages = [...groups.keys()];
     const selectedLanguage = selectSuitableLanguage(contentLanguages, availableLanguages, unit.original_language);
@@ -97,9 +94,6 @@ class MediaDownloads extends Component {
   static getFilesByLanguage = (files = [], contentLanguages, originalLanguage) => {
     const groups = new Map();
 
-    // Keep track of image files. These are a special case. Images, unlike other types, are language agnostic by nature.
-    // However, since they might contain text in them we do have language attached to such files. For other languages,
-    // whom don't have a dedicated translation of these images we give them the images of their fallback language.
     const images = [];
 
     const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
@@ -118,9 +112,7 @@ class MediaDownloads extends Component {
     });
 
     files.filter(f =>
-      // Keep non video/audio/hls files.
       !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))
-      // And skip summary files for download.
       && f.insert_type !== INSERT_TYPE_SUMMARY
     ).forEach(file => {
       if (!groups.has(file.language)) {
@@ -139,10 +131,8 @@ class MediaDownloads extends Component {
       }
     });
 
-    // Sort file lists by size.
     groups.forEach(byType => byType.forEach(v => v.sort((a, b) => a.size - b.size)));
 
-    // Fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
       fallbackImage && groups.forEach(byType => {
@@ -159,7 +149,6 @@ class MediaDownloads extends Component {
     const imageLanguages = images.map(image => image.language);
     const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    // Try looking for selected language, if not exist try looking for original language, otherwise ignore.
     return [
       images.find(image => image.language === imageSelectedLanguage) ||
       images.find(image => image.language === originalLanguage)
@@ -229,44 +218,36 @@ class MediaDownloads extends Component {
     const url                  = downloadLink(file);
 
     return (
-      <Table.Row key={`${file.id}_${file.video_size}`} className="media-downloads__file" verticalAlign="top">
-        <Table.Cell>
+      <tr key={`${file.id}_${file.video_size}`} className="media-downloads__file align-top">
+        <td>
           <span className="media-downloads__file-label">{label}</span>
-        </Table.Cell>
-        <Table.Cell collapsing>
-          <Button
-            compact
-            fluid
-            as="a"
+        </td>
+        <td className="whitespace-nowrap">
+          <a
             href={url}
             target="_blank"
-            className="media-downloads__file-download-btn"
-            size="mini"
-            color="orange"
-            content={ext.toUpperCase()}
+            rel="noreferrer"
+            className="inline-block px-2 py-0.5 bg-orange-500 text-white rounded text-xs media-downloads__file-download-btn"
             onClick={() => chroniclesAppend('download', { url, uid: file.id })}
-          />
-        </Table.Cell>
-        <Table.Cell collapsing>
-          <Popup
-            open={!!isCopyPopupOpen[url]}
-            content={t('messages.link-copied-to-clipboard')}
-            position="bottom center"
-            trigger={(
-              <CopyToClipboard text={url} onCopy={() => this.handleCopied(url)}>
-                <Button
-                  compact
-                  fluid
-                  className="media-downloads__file-copy-link-btn"
-                  size="mini"
-                  color="orange"
-                  content={t('buttons.copy-link')}
-                />
-              </CopyToClipboard>
-            )}
-          />
-        </Table.Cell>
-      </Table.Row>
+          >
+            {ext.toUpperCase()}
+          </a>
+        </td>
+        <td className="whitespace-nowrap relative">
+          <CopyToClipboard text={url} onCopy={() => this.handleCopied(url)}>
+            <button
+              className="px-2 py-0.5 bg-orange-500 text-white rounded text-xs media-downloads__file-copy-link-btn"
+            >
+              {t('buttons.copy-link')}
+            </button>
+          </CopyToClipboard>
+          {!!isCopyPopupOpen[url] && (
+            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap z-10">
+              {t('messages.link-copied-to-clipboard')}
+            </span>
+          )}
+        </td>
+      </tr>
     );
   };
 
@@ -288,28 +269,28 @@ class MediaDownloads extends Component {
     return (
       <div className="media-downloads content__aside-unit">
         {availableLanguages.length > 1 ?
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
+          <div className={classNames('flex flex-wrap', { 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
-              <Grid.Column width={12}>
-              </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
+              <div className="w-3/4">
+              </div>}
+            <div className={classNames(isMobileDevice ? 'w-full' : 'w-1/4', 'text-right', { 'padding_r_l_0': !isMobileDevice })}>
               <MenuLanguageSelector
                 languages={availableLanguages}
                 selected={selectedLanguage}
                 onLanguageChange={this.handleChangeLanguage}
                 multiSelect={false}
               />
-            </Grid.Column>
-          </Grid>
+            </div>
+          </div>
           : displayDivider &&
-          <Divider></Divider>
+          <hr />
         }
-        <Table unstackable className="media-downloads__files" basic="very" compact="very">
-          <Table.Body>
+        <table className="media-downloads__files w-full">
+          <tbody>
             {rows}
             {derivedRows || null}
-          </Table.Body>
-        </Table>
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -388,9 +369,9 @@ class MediaDownloads extends Component {
     let rows;
     if (byType.size === 0) {
       rows = [
-        <Table.Row key="0">
-          <Table.Cell>{t('messages.no-files')}</Table.Cell>
-        </Table.Row>
+        <tr key="0">
+          <td>{t('messages.no-files')}</td>
+        </tr>
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {

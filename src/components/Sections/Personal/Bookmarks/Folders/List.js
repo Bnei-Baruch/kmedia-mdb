@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Segment, Divider, Button, Input, Grid, Icon, Header, Container } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { actions as filtersActions } from '../../../../../redux/modules/bookmarkFilter';
 import FolderItem from './Item';
-import clsx from 'clsx';
 import { bookmarkFilterGetByKeySelector, myGetListSelector } from '../../../../../redux/selectors';
 
 const FolderList = ({ t, close }) => {
@@ -52,7 +51,7 @@ const FolderList = ({ t, close }) => {
     setEditFolder(false);
   };
 
-  const searchChange = (e, { value }) => setQuery(value.toLowerCase());
+  const searchChange = e => setQuery(e.target.value.toLowerCase());
 
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
@@ -61,35 +60,32 @@ const FolderList = ({ t, close }) => {
   };
 
   const renderHeader = () => (
-    <Grid verticalAlign="middle" className="folders padded">
-      <Grid.Column width="7">
-        <Header as="h3" content={t('personal.bookmark.folders')}/>
-      </Grid.Column>
-      <Grid.Column width="9">
-        <Input
-          icon
-          iconPosition="left"
-          placeholder={t('personal.bookmark.searchFolders')}
-          onChange={searchChange}
-          className="bookmark_search"
-          defaultValue={query}
-        >
-          <input/>
-          <Icon name="search"/>
-        </Input>
-      </Grid.Column>
-    </Grid>
+    <div className="flex items-center folders ">
+      <div className="w-[43.75%]">
+        <h3>{t('personal.bookmark.folders')}</h3>
+      </div>
+      <div className="w-[56.25%]">
+        <div className="relative bookmark_search">
+          <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+          <input
+            className="w-full rounded border border-gray-300 py-2 pl-8 pr-3"
+            placeholder={t('personal.bookmark.searchFolders')}
+            onChange={searchChange}
+            defaultValue={query}
+          />
+        </div>
+      </div>
+    </div>
   );
 
   const renderEdit = () => {
     if (!editFolder) return null;
 
     return (
-      <Grid.Row key={'newFolder'}>
-        <Grid.Column>
-          <Input
-            focus
-            fluid
+      <div className="flex flex-wrap" key={'newFolder'}>
+        <div className="w-full">
+          <input
+            className="w-full rounded border border-gray-300 px-3 py-2"
             onBlur={saveFolder}
             onKeyDown={handleKeyDown}
             autoFocus
@@ -98,38 +94,38 @@ const FolderList = ({ t, close }) => {
               e.target.select();
             }}
           />
-        </Grid.Column>
-      </Grid.Row>
+        </div>
+      </div>
     );
   };
 
   const renderActions = () => (
     <>
-      <Button
-        primary
-        basic
-        content={t('personal.bookmark.newFolder')}
+      <button
+        className="rounded border border-blue-500 px-4 py-2 text-blue-500"
         onClick={newFolder}
-      />
+      >
+        {t('personal.bookmark.newFolder')}
+      </button>
       {
         isMobileDevice && (
-          <Button
-            primary
-            floated={'right'}
-            content={t('buttons.apply')}
+          <button
+            className="float-right rounded bg-blue-500 px-4 py-2 text-white"
             onClick={handleClose}
-          />
+          >
+            {t('buttons.apply')}
+          </button>
         )
       }
     </>
   );
 
   return (
-    <Grid.Column mobile={16} tablet={4} computer={4}>
-      <Segment basic={isMobileDevice} className={clsx({ 'no-padding': isMobileDevice })}>
+    <div className="w-full md:w-1/4">
+      <div className={clsx({ 'no-padding': isMobileDevice, 'border rounded p-4 shadow-sm': !isMobileDevice })}>
         {renderHeader()}
-        <Container className="folders_list padded">
-          <Grid className="no-padding">
+        <div className=" px-4 folders_list ">
+          <div className="no-padding">
             <FolderItem
               folder={{ id: 'all', name: t('personal.bookmark.allFolders') }}
               key={'all'}
@@ -149,12 +145,12 @@ const FolderList = ({ t, close }) => {
                 )
               )
             }
-          </Grid>
-        </Container>
-        <Divider/>
+          </div>
+        </div>
+        <hr className="my-4"/>
         {renderActions()}
-      </Segment>
-    </Grid.Column>
+      </div>
+    </div>
   );
 };
 

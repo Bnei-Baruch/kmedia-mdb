@@ -3,7 +3,6 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
@@ -20,20 +19,20 @@ const TextListTemplate = ({ cuID, t }) => {
   const to                                = canonicalLink(cu);
 
   return (
-    <List.Item
+    <div
       key={cuID}
       className="text_item"
     >
-      <Image verticalAlign="top">
+      <div className="align-top">
         <SectionLogo name={icon} height="60" width="60"/>
-      </Image>
-      <Container className="text_item__content">
-        <Header as={Link} to={to} content={name}/>
-        <Container className="description is_single">
+      </div>
+      <div className="text_item__content">
+        <Link to={to} className="large font-bold">{name}</Link>
+        <div className="description is_single">
           <span>{t('values.date', { date: film_date })}</span>
-        </Container>
-      </Container>
-    </List.Item>
+        </div>
+      </div>
+    </div>
   );
 };
 

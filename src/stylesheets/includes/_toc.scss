@@ -24,19 +24,12 @@
     color: colors-helpers.$dark-text !important;
     border-color: colors-helpers.$dark-stroke;
 
-    .ui.accordion .title:not(.ui) {
-      color: colors-helpers.$dark-text !important;
-    }
   }
 
   .is-sepia & {
     background: colors-helpers.$sepia-bg !important;
     color: colors-helpers.$sepia-text !important;
     border-color: colors-helpers.$sepia-stroke;
-
-    .ui.accordion .title:not(.ui) {
-      color: colors-helpers.$sepia-text !important;
-    }
   }
 
   &.toc_active {
@@ -186,7 +179,7 @@
     bottom: 0;
   }
 
-  .ui.input.toc_search {
+  .toc_search {
     width: 100%;
     @include text-page.theme_bg;
 
@@ -220,9 +213,9 @@
     }
   }
 
-  .toc_sort_btn.ui.icon.button {
+  .toc_sort_btn {
     padding: 8px;
-    background: none !important;
+    background: none;
     border: 1px solid colors-helpers.$blue;
 
     &.active {

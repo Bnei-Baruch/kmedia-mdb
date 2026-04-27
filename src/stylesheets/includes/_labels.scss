@@ -5,10 +5,6 @@
     text-align: center
   }
 
-  .scrolling.content {
-    height: 50VH;
-  }
-
   .input {
     font-size: 1.3rem;
     font-weight: normal;
@@ -53,19 +49,7 @@
   }
 
   .label_topic_grid {
-    padding-top: 0 !important;
-
-    .ui.grid {
-      & > .row {
-        & > .column {
-          padding: 0
-        }
-      }
-    }
-  }
-
-  &.ui.modal > .label_topic_grid.content {
-    padding-top: 0 !important;
+    padding-top: 0;
   }
 }
 
@@ -96,14 +80,14 @@
 
 }
 
-.ui.popup.label_mark_popup {
+.label_mark_popup {
   opacity: 0.95;
 
   .link_to_cu {
-    padding: 2px 3px !important;
+    padding: 2px 3px;
     font-size: smaller;
-    background: colors-helpers.$midGrey !important;
-    color: white !important;
+    background: colors-helpers.$midGrey;
+    color: white;
 
     &:hover {
       background-color: colors-helpers.$sepia-bg;

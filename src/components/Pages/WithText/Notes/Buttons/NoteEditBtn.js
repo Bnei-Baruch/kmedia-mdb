@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
@@ -31,15 +30,12 @@ const NoteEditBtn = () => {
   };
 
   return (
-    <Button
-      basic
-      active={active}
-      className="clear_button"
+    <button
+      className={`clear_button ${active ? 'active' : ''}`}
       onClick={handleEdit}
-      icon={
-        <span className="material-symbols-outlined">edit</span>
-      }
-    />
+    >
+      <span className="material-symbols-outlined">edit</span>
+    </button>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Popup } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 import { SectionLogo } from '../../../../helpers/images';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { makeTagLinks } from '../../WithPlayer/widgets/Info/Info';
@@ -8,6 +8,17 @@ import { useSelector } from 'react-redux';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
 import { tagsGetTagByIdSelector } from '../../../../redux/selectors';
+
+const PopoverOpenEffect = ({ open, onOpen, onClose }) => {
+  useEffect(() => {
+    if (open) {
+      onOpen?.();
+    } else {
+      onClose?.();
+    }
+  }, [open]);
+  return null;
+};
 
 const idPrefix  = textMarksPrefixByType['label'];
 const LabelMark = ({ label, offset }) => {
@@ -32,7 +43,6 @@ const LabelMark = ({ label, offset }) => {
       }
     };
 
-    //need to wait till parent DOM will render for find element
     setTimeout(findTopBot, 0);
   }, [id]);
 
@@ -47,28 +57,35 @@ const LabelMark = ({ label, offset }) => {
 
   return (
     <div className="label_mark" style={{ top, height: bottom - top + 20, left: `${offset.x * 5}px` }}>
-      <Popup
-        trigger={
-          <Button basic className="clear_button" style={{ marginTop: `${offset.y * 20}px` }}>
-            <SectionLogo name="topics" width="25" height="25" />
-          </Button>
-        }
-        inverted
-        onOpen={handleOpen}
-        onClose={() => clearHighlightByStyle()}
-        on="click"
-        position={`right center`}
-        className="label_mark_popup"
-        dir={dir}
-      >
-        <Popup.Header>{name}</Popup.Header>
-        <Popup.Content>
-          {
-            t('personal.label.createdBy', { author })
-          }
-          <div>{tagLinks}</div>
-        </Popup.Content>
-      </Popup>
+      <Popover className="relative">
+        {({ open }) => (
+          <>
+            <PopoverOpenEffect
+              open={open}
+              onOpen={handleOpen}
+              onClose={() => clearHighlightByStyle()}
+            />
+            <Popover.Button
+              className="clear_button"
+              style={{ marginTop: `${offset.y * 20}px` }}
+            >
+              <SectionLogo name="topics" width="25" height="25" />
+            </Popover.Button>
+            <Popover.Panel
+              className="label_mark_popup absolute left-full top-0 z-10 ml-2 rounded bg-gray-900 text-white p-3"
+              dir={dir}
+            >
+              <div className="font-semibold">{name}</div>
+              <div>
+                {
+                  t('personal.label.createdBy', { author })
+                }
+                <div>{tagLinks}</div>
+              </div>
+            </Popover.Panel>
+          </>
+        )}
+      </Popover>
     </div>
 
   );

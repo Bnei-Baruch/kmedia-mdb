@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Menu, Popup } from 'semantic-ui-react';
+import React from 'react';
+import { Popover } from '@headlessui/react';
 
 import ZoomSizeBtns from './ZoomSizeBtns';
 import FontTypeBtn from './FontTypeBtn';
@@ -9,45 +9,34 @@ import { textPageGetFileSelector } from '../../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 
 const TextSettings = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const noFile = !useSelector(textPageGetFileSelector);
 
   return (
-    <Popup
-      trigger={
-        <div>
-          <ToolbarBtnTooltip
-            textKey="text-settings"
-            active={isOpen}
-            icon={<span className="material-symbols-outlined">text_fields</span>}
-          />
-        </div>
-      }
-      on="click"
-      position="bottom center"
-      basic
-      className="sources-settings"
-      flowing
-      hideOnScroll
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      onOpen={() => setIsOpen(true)}
-      offset={[0, 10]}
-      disabled={noFile}
-    >
-      <Popup.Content>
-        <Menu fluid widths={2}>
-          <ZoomSizeBtns />
-        </Menu>
-        <Menu fluid widths={2}>
-          <FontTypeBtn />
-        </Menu>
-        <Menu fluid widths={3}>
-          <ThemeBtn />
-        </Menu>
-      </Popup.Content>
-    </Popup>
+    <Popover className="relative">
+      {({ open }) => (
+        <>
+          <Popover.Button as="div">
+            <ToolbarBtnTooltip
+              textKey="text-settings"
+              active={open}
+              disabled={noFile}
+              icon={<span className="material-symbols-outlined">text_fields</span>}
+            />
+          </Popover.Button>
+          <Popover.Panel className="sources-settings absolute z-10 mt-2">
+            <div className="flex">
+              <ZoomSizeBtns />
+            </div>
+            <div className="flex">
+              <FontTypeBtn />
+            </div>
+            <div className="flex">
+              <ThemeBtn />
+            </div>
+          </Popover.Panel>
+        </>
+      )}
+    </Popover>
   );
 };
 

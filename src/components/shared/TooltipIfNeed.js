@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Popup, Ref } from 'semantic-ui-react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 import { settingsGetUIDirSelector } from '../../redux/selectors';
 
@@ -15,6 +15,7 @@ import { settingsGetUIDirSelector } from '../../redux/selectors';
  */
 const TooltipIfNeed = props => {
   const [need, setNeed] = useState(false);
+  const [show, setShow] = useState(false);
 
   const { Component, text, ...propz } = props;
 
@@ -29,21 +30,33 @@ const TooltipIfNeed = props => {
   }, [ref]);
 
   const content = (
-    <Ref innerRef={ref}>
-      <Component {...propz} className="line_clamp_2_lines"/>
-    </Ref>
+    <div ref={ref}>
+      <Component {...propz} className="line_clamp_2_lines" />
+    </div>
   );
 
   if (!need) return content;
 
   return (
-    <Popup
-      content={text}
-      dir={dir}
-      trigger={content}
-      position="top center"
-      className="tooltip_if_need"
-    />
+    <Popover className="relative">
+      <PopoverButton
+        as="div"
+        className="cursor-default"
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+      >
+        {content}
+      </PopoverButton>
+      {show && (
+        <PopoverPanel
+          static
+          className="tooltip_if_need absolute z-50 bottom-full mb-1 left-1/2 -translate-x-1/2 rounded bg-white shadow-lg border border-gray-200 px-3 py-2 small"
+          dir={dir}
+        >
+          {text}
+        </PopoverPanel>
+      )}
+    </Popover>
   );
 };
 

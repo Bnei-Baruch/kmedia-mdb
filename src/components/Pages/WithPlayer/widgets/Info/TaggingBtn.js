@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/player';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
-import { Button } from 'semantic-ui-react';
 import { SectionLogo } from '../../../../../helpers/images';
 import React from 'react';
 import { playerGetOverModeSelector } from '../../../../../redux/selectors';
@@ -21,13 +20,12 @@ export const TaggingBtn = () => {
   };
 
   return (
-    <Button
-      basic
+    <button
       className="clear_button my_tag"
       onClick={handleOpen}
     >
       <SectionLogo name="topics" color="grey" width="20" height="20"/>
       <span>{t('personal.label.tagging')}</span>
-    </Button>
+    </button>
   );
 };

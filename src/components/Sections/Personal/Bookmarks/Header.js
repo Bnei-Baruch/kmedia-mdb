@@ -1,6 +1,5 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import { Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions as filtersActions } from '../../../../redux/modules/bookmarkFilter';
@@ -25,26 +24,27 @@ const BookmarkHeader = ({ t }) => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
   return (
-    <Grid.Row verticalAlign="bottom">
-      <Grid.Column mobile={16} tablet={4} computer={4}/>
-      <Grid.Column mobile={16} tablet={5} computer={5}>
-        <Header as={'h2'} className="my_header">
-          <Icon name="bookmark outline" className="display-iblock"/>
+    <div className="flex flex-wrap items-end">
+      <div className="w-full md:w-1/4"/>
+      <div className="w-full md:w-[31.25%]">
+        <h2 className="my_header">
+          <span className="material-symbols-outlined display-iblock">bookmark</span>
           {t('personal.bookmark.title')}
-        </Header>
-      </Grid.Column>
+        </h2>
+      </div>
 
-      <Grid.Column mobile={16} tablet={7} computer={7} textAlign={'right'}>
-        <Input
-          icon="search"
-          placeholder={placeholder}
-          defaultValue={query}
-          onChange={(e, { value }) => handleSearch(value)}
-          className="bookmark_search"
-          iconPosition="left"
-        />
-      </Grid.Column>
-    </Grid.Row>
+      <div className="w-full md:w-[43.75%] text-right">
+        <div className="relative bookmark_search inline-block">
+          <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+          <input
+            className="rounded border border-gray-300 py-2 pl-8 pr-3"
+            placeholder={placeholder}
+            defaultValue={query}
+            onChange={e => handleSearch(e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

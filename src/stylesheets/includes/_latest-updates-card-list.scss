@@ -1,0 +1,30 @@
+.latestUpdatesCardGroup {
+  padding-top: 0 !important;
+  position: relative;
+
+  .card.cu_item {
+    .header {
+      font-size: 1.3rem;
+    }
+
+    .cu_item_img {
+      min-height: 124px;
+    }
+  }
+
+  .scroll_intents {
+    width: 40px;
+    height: 100%;
+    z-index: 10;
+    font-size: 2rem;
+
+    .icon {
+      transform: scale(2, 3.5);
+      color: #0000008a;
+    }
+  }
+}
+
+.latestUpdatesCardGroupMobile {
+  margin-top: 0 !important;
+}

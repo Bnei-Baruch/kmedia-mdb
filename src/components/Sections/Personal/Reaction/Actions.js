@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
@@ -12,6 +11,7 @@ import { stopBubbling } from '../../../../helpers/utils';
 const Actions = ({ cuId, reaction, t }) => {
   const [open, setOpen] = useState();
   const dispatch        = useDispatch();
+  const menuRef         = useRef(null);
   const { key }         = getMyItemKey(MY_NAMESPACE_REACTIONS, reaction);
 
   const removeItem = e => {
@@ -25,32 +25,41 @@ const Actions = ({ cuId, reaction, t }) => {
   };
 
   const handleClose = e => {
-    stopBubbling(e);
+    if (e) stopBubbling(e);
     setOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = e => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        handleClose();
+      }
+    };
+
+    if (open) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
+
   return (
-    <Dropdown
-      icon={'ellipsis vertical'}
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
-      closeOnChange
-      inline
-      className="cu_item_dropdown"
-    >
-      <Dropdown.Menu direction="left">
-        <Dropdown.Item fitted="horizontally">
-          <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
-        </Dropdown.Item>
-        <Dropdown.Item
-          fitted="vertically"
-          icon="remove circle"
-          onClick={removeItem}
-          content={t('personal.removeLike')}
-        />
-      </Dropdown.Menu>
-    </Dropdown>
+    <div className="relative inline-block cu_item_dropdown" ref={menuRef}>
+      <button className="p-1" onClick={open ? handleClose : handleOpen}>
+        <span className="material-symbols-outlined">more_vert</span>
+      </button>
+      {open && (
+        <div className="absolute right-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
+          <div className="px-4 py-2">
+            <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose}/>
+          </div>
+          <button
+            className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
+            onClick={removeItem}
+          >
+            <span className="material-symbols-outlined text-base">cancel</span>
+            {t('personal.removeLike')}
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

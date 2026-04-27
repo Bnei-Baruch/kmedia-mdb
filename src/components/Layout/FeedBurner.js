@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { getRSSFeedByLangs } from '../../helpers/utils';
-import { Form } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 
 const FeedBurner = ({ t }) => {
   const [email, setEmail] = useState('');
-  const handleChange      = (e, { value }) => setEmail(value);
+  const handleChange      = e => setEmail(e.target.value);
   const contentLanguages  = useSelector(settingsGetContentLanguagesSelector);
 
   const subscribe = () => {
@@ -21,22 +20,25 @@ const FeedBurner = ({ t }) => {
   };
 
   return (
-    <Form>
-      <Form.Input
-        action={{
-          title   : t('nav.sidebar.subscribe'),
-          onClick : subscribe,
-          icon    : 'mail',
-          compact : true,
-          disabled: !email
-        }}
-        onChange={handleChange}
+    <form className="flex">
+      <input
+        type="email"
         name="email"
-        className={'right action'}
+        onChange={handleChange}
         placeholder={t('nav.sidebar.subscribe')}
         value={email}
+        className="flex-1 border border-gray-200 text-gray-700 rounded-l px-3 py-1.5 small outline-none focus:ring-1"
       />
-    </Form>
+      <button
+        type="button"
+        onClick={subscribe}
+        disabled={!email}
+        title={t('nav.sidebar.subscribe')}
+        className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-r small disabled:opacity-50 hover:bg-blue-dark transition-colors"
+      >
+        <span className="material-symbols-outlined text-base">mail</span>
+      </button>
+    </form>
   );
 };
 

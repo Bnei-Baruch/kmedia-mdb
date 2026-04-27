@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { Menu } from 'semantic-ui-react';
 
 import NavLink from '../Language/MultiLanguageNavLink';
 import SectionHeader from './SectionHeader';
@@ -13,15 +12,13 @@ const MainTabPage = ({ tabs, content, section, t }) => {
   const tab = params.tab || tabs[0];
 
   const submenuItems = tabs.map(x => (
-    <Menu.Item
+    <NavLink
       key={x}
-      name={x}
-      as={NavLink}
       to={`/${section}/${x}`}
-      active={tab === x}
+      className={`px-4 py-2 ${tab === x ? 'font-bold border-b-2 border-blue-500' : 'text-gray-600 hover:text-gray-900'}`}
     >
       {t(`${section}.tabs.${x}`)}
-    </Menu.Item>
+    </NavLink>
   ));
 
   return (

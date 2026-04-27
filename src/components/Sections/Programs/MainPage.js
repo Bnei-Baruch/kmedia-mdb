@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Container, Divider } from 'semantic-ui-react';
 import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/lists';
@@ -70,15 +69,13 @@ const MainPage = () => {
         {
           wipErr || items?.map((id, i) => <ItemOfList id={id} key={i}/>)
         }
-        <Divider fitted/>
-        <Container className="padded pagination-wrapper" textAlign="center">
+        <hr className="m-0 border-t"/>
           {total > 0 && <Pagination
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
             onChange={setPage}
           />}
-        </Container>
       </SectionFiltersWithMobile>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Dropdown } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,6 @@ const LessonsByLikutBtn = () => {
 
   const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
 
-  // sort by film date desc
   const lessons = Object.values(unit.source_units)
     .filter(u => UNIT_LESSONS_TYPE.includes(u.content_type))
     .sort((u1, u2) => strCmp(u2.film_date, u1.film_date));
@@ -31,23 +30,22 @@ const LessonsByLikutBtn = () => {
   );
 
   return (
-    <Dropdown
-      item
-      trigger={trigger}
-      icon={null}
-    >
-      <Dropdown.Menu>
+    <Popover className="relative">
+      <Popover.Button as="div">
+        {trigger}
+      </Popover.Button>
+      <Popover.Panel className="absolute z-10 bg-white shadow-lg rounded border">
         {
           lessons.map(u =>
-            <Dropdown.Item key={u.id}>
+            <div key={u.id} className="px-4 py-2 hover:bg-gray-100">
               <Link to={canonicalLink(u)}>
                 {t('values.date', { date: u.film_date })}
               </Link>
-            </Dropdown.Item>
+            </div>
           )
         }
-      </Dropdown.Menu>
-    </Dropdown>
+      </Popover.Panel>
+    </Popover>
   );
 };
 

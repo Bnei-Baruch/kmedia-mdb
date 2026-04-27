@@ -1,5 +1,5 @@
-import { Input, Button, Popup } from 'semantic-ui-react';
 import React, { useState } from 'react';
+import { Popover, PopoverPanel } from '@headlessui/react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
@@ -22,30 +22,29 @@ const CopyShareUrl = ({ t }) => {
   const shareUrl = useShareUrl();
 
   return (
-    <Input
-      size="mini"
-      fluid
-      value={shareUrl}
-      action
-      dir={uiDir}
-      readOnly
-    >
-      <input dir="ltr"/>
-      <Popup
-        open={open}
-        content={t('messages.link-copied-to-clipboard')}
-        position="bottom right"
-        trigger={(
-          <CopyToClipboard text={shareUrl} onCopy={handleCopied}>
-            <Button
-              content={t('buttons.copy')}
-              size="small"
-              compact
-            />
-          </CopyToClipboard>
-        )}
+    <div className="flex w-full" dir={uiDir}>
+      <input
+        className="flex-1 min-w-0 px-2 py-1 small border border-gray-300 rounded-l"
+        dir="ltr"
+        value={shareUrl}
+        readOnly
       />
-    </Input>
+      <Popover className="relative">
+        <CopyToClipboard text={shareUrl} onCopy={handleCopied}>
+          <button className="px-3 py-1 small bg-gray-100 border border-gray-300 border-l-0 rounded-r whitespace-nowrap">
+            {t('buttons.copy')}
+          </button>
+        </CopyToClipboard>
+        {open && (
+          <PopoverPanel
+            static
+            className="absolute top-full right-0 mt-2 rounded bg-gray-900 px-2 py-1 text-xs text-white whitespace-nowrap z-10"
+          >
+            {t('messages.link-copied-to-clipboard')}
+          </PopoverPanel>
+        )}
+      </Popover>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
-import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 const FlatListFilter = (
   {
@@ -21,52 +20,49 @@ const FlatListFilter = (
     setSValue(value);
   }, [value]);
 
-  const onSelectionChange = (event, data) => {
-    const { value } = options.find(x => x.text === data.name);
+  const onSelectionChange = text => {
+    const { value } = options.find(x => x.text === text);
     setSValue(value);
   };
 
   const apply = () => onApply(sValue);
 
   return (
-    <Segment.Group className="filter-popup__wrapper">
-      <Segment basic secondary className="filter-popup__header">
+    <div className="filter-popup__wrapper border rounded">
+      <div className="filter-popup__header bg-gray-100 p-3">
         <div className="title">
-          <Button
-            basic
-            compact
-            size="tiny"
-            content={t('buttons.cancel')}
+          <button
+            className="px-2 py-1 text-xs border border-gray-300 rounded bg-white hover:bg-gray-50"
             onClick={onCancel}
-          />
-          <Header size="small" textAlign="center" content={t(`filters.${name}.label`)}/>
-          <Button
-            primary
-            compact
-            size="small"
-            content={t('buttons.apply')}
+          >
+            {t('buttons.cancel')}
+          </button>
+          <h4 className="small font-semibold text-center flex-1">{t(`filters.${name}.label`)}</h4>
+          <button
+            className="px-2 py-1 small bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
             disabled={!sValue}
             onClick={apply}
-          />
+          >
+            {t('buttons.apply')}
+          </button>
         </div>
-      </Segment>
-      <Segment basic className="filter-popup__body">
-        <Menu vertical fluid size="small">
+      </div>
+      <div className="filter-popup__body p-3">
+        <nav className="flex flex-col w-full small">
           {
             options.map(x => (
-              <Menu.Item
+              <div
                 key={x.value}
-                name={x.text}
-                active={sValue === x.value}
-                onClick={onSelectionChange}
+                className={`px-3 py-2 cursor-pointer hover:bg-gray-100 ${sValue === x.value ? 'bg-blue-50 font-semibold' : ''}`}
+                onClick={() => onSelectionChange(x.text)}
               >
                 {renderItem(x)}
-              </Menu.Item>
+              </div>
             ))
           }
-        </Menu>
-      </Segment>
-    </Segment.Group>
+        </nav>
+      </div>
+    </div>
   );
 };
 

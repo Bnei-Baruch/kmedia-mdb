@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../../../helpers/url';
-import { Button } from 'semantic-ui-react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { ErrorSplash, LoadingSplash } from '../../../../shared/Splash/Splash';
 import { physicalFile } from '../../../../../helpers/utils';
@@ -70,13 +69,13 @@ const ScanPDF = () => {
         <div className="text__scan_prev_next">
           {
             numPages > 1 && (
-              <Button
-                icon={<span className="material-symbols-outlined">{iconBack}</span>}
+              <button
                 onClick={pagePrev}
-                className="text__scan-left"
-                color="blue"
+                className="text__scan-left bg-blue-600 text-white rounded hover:bg-blue-700"
                 disabled={inputValue < 2}
-              />
+              >
+                <span className="material-symbols-outlined">{iconBack}</span>
+              </button>
             )
           }
         </div>
@@ -104,13 +103,13 @@ const ScanPDF = () => {
         <div className="text__scan_prev_next">
           {
             numPages > 1 && (
-              <Button
-                icon={<span className="material-symbols-outlined">{iconForward}</span>}
+              <button
                 onClick={pageNext}
-                className="text__scan-right"
-                color="blue"
+                className="text__scan-right bg-blue-600 text-white rounded hover:bg-blue-700"
                 disabled={inputValue + 1 > numPages}
-              />
+              >
+                <span className="material-symbols-outlined">{iconForward}</span>
+              </button>
             )
           }
         </div>

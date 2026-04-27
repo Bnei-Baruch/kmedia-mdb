@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 import { FN_ORIGINAL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 import { actions } from '../../../redux/modules/filters';
@@ -23,17 +22,20 @@ const OriginalLanguageItem = ({ namespace, id }) => {
   };
 
   return (
-    <List.Item disabled={stat === 0}>
-      <List.Content className="stat" floated="right">
+    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <span className="stat float-right">
         {`(${stat})`}
-      </List.Content>
-      <Checkbox
-        label={LANGUAGES[id]?.name}
-        checked={selected.includes(id)}
-        onChange={handleSelect}
-        disabled={stat === 0}
-      />
-    </List.Item>
+      </span>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={e => handleSelect(e, { checked: e.target.checked })}
+          disabled={stat === 0}
+        />
+        {LANGUAGES[id]?.name}
+      </label>
+    </div>
   );
 };
 

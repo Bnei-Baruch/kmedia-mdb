@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Message, Popup, } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import ShareBar from '../../../Share/ShareBar';
@@ -15,8 +15,7 @@ const ShareTextBtn = () => {
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isCopyOpen, setIsCopyOpen]   = useStateWithCallback(false, isCopyOpen => {
+  const [isCopyOpen, setIsCopyOpen] = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
       timeout = setTimeout(() => setIsCopyOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
     }
@@ -43,60 +42,50 @@ const ShareTextBtn = () => {
     }
   };
 
+  const computeUrl = () => {
+    const _url = new URL(url);
+    for (const key in properties) {
+      _url.searchParams.set(key, properties[key]);
+    }
+
+    setUrlWithParams(_url.toString());
+  };
+
   const buttonSize = isMobileDevice ? 'tiny' : 'small';
 
   return (
-    <Popup // share bar popup
-      className="share-bar"
-      on="click"
-      flowing
-      hideOnScroll
-      disabled={noFile}
-      trigger={
-        <div>
-          <ToolbarBtnTooltip
-            textKey="share"
-            className="text_mark_on_select_btn"
-            icon={<span className="material-symbols-outlined">share</span>}
-          />
-        </div>
-      }
-      open={isPopupOpen}
-      onClose={() => setIsPopupOpen(false)}
-      onOpen={() => {
-        const _url = new URL(url);
-        for (const key in properties) {
-          _url.searchParams.set(key, properties[key]);
-        }
-
-        setUrlWithParams(_url.toString());
-        setIsPopupOpen(true);
-      }}
-    >
-      <Popup.Content>
+    <Popover className="share-bar relative">
+      <Popover.Button as="div" onClick={computeUrl}>
+        <ToolbarBtnTooltip
+          textKey="share"
+          className="text_mark_on_select_btn"
+          disabled={noFile}
+          icon={<span className="material-symbols-outlined">share</span>}
+        />
+      </Popover.Button>
+      <Popover.Panel className="absolute z-10 mt-2">
         <ShareBar
           url={urlWithParams}
           buttonSize={buttonSize}
           messageTitle={t('sources-library.share-title')}
         />
-        <Message
-          content={urlWithParams}
-          size="mini"
-          className="share-bar__message text_ellipsis"
-        />
-        <Popup // link was copied message popup
-          open={isCopyOpen}
-          content={t('messages.link-copied-to-clipboard')}
-          trigger={
-            (
-              <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
-                <Button compact size="small" content={t('buttons.copy')} />
-              </CopyToClipboard>
-            )
-          }
-        />
-      </Popup.Content>
-    </Popup>
+        <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2">
+          {urlWithParams}
+        </div>
+        <div className="relative inline-block mt-2">
+          <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
+            <button className="px-3 py-1 small rounded border border-gray-300 hover:bg-gray-50">
+              {t('buttons.copy')}
+            </button>
+          </CopyToClipboard>
+          {isCopyOpen && (
+            <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-800 px-3 py-1 small text-white whitespace-nowrap">
+              {t('messages.link-copied-to-clipboard')}
+            </div>
+          )}
+        </div>
+      </Popover.Panel>
+    </Popover>
   );
 };
 

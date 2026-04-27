@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Header } from 'semantic-ui-react';
 
 import excerpts from './excerpts';
 import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
@@ -77,12 +76,12 @@ const ExcerptContainer = () => {
         onLanguageChange={handleLanguageChanged}
         multiSelect={false}
       />
-      <Header as="h1" textAlign="center" color="green" size="huge">
+      <h1 className="text-center text-green-600 text-4xl">
         <Countdown finalDate={finalDate}/>
-      </Header>
-      <Container text>
+      </h1>
+      <div className="max-w-prose mx-auto">
         {excerpt}
-      </Container>
+      </div>
       <br/>
       <br/>
     </div>

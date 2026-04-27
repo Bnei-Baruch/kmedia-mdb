@@ -1,12 +1,18 @@
 import React from 'react';
-import { Progress } from 'semantic-ui-react';
 
 export const UnitProgress = ({ unit, playTime }) => {
   if (!unit || !playTime) return null;
 
-  return <Progress
-    size="tiny"
-    className="cu_item_progress"
-    percent={playTime * 100 / unit.duration}
-  />;
+  const percent = playTime * 100 / unit.duration;
+
+  return (
+    <div className="cu_item_progress">
+      <div className="cu_item_progress_track">
+        <div
+          className="cu_item_progress_fill"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    </div>
+  );
 };

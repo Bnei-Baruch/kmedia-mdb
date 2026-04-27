@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';
 
 import { actions } from '../../../redux/modules/filters';
@@ -24,17 +23,20 @@ const MediaTypeItem = ({ namespace, id, t }) => {
   };
 
   return (
-    <List.Item disabled={stat === 0}>
-      <List.Content className="stat" floated="right">
+    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <span className="stat float-right">
         {`(${stat})`}
-      </List.Content>
-      <Checkbox
-        label={t(`filters.media-types.${id}`)}
-        checked={selected.includes(id)}
-        onChange={handleSelect}
-        disabled={stat === 0}
-      />
-    </List.Item>
+      </span>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={e => handleSelect(e, { checked: e.target.checked })}
+          disabled={stat === 0}
+        />
+        {t(`filters.media-types.${id}`)}
+      </label>
+    </div>
   );
 };
 

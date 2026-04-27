@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import { noop } from '../../../../helpers/utils';
-import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import FastDayPicker from './FastDayPicker';
@@ -61,7 +61,6 @@ class DateFilter extends Component {
   onCancel = () => this.props.onCancel();
 
   setRange = (datePreset, from, to) => {
-    // calculate range with regard to the date preset
     let range = {};
     if (datePreset === CUSTOM_RANGE || datePreset === CUSTOM_DAY) {
       range.from = from || this.state.from;
@@ -83,9 +82,9 @@ class DateFilter extends Component {
     this.props.onApply({ from, to, datePreset });
   };
 
-  handleDatePresetsChange = (event, data) => {
+  handleDatePresetsChange = name => {
     this.hidePickers();
-    this.setRange(data.name);
+    this.setRange(name);
   };
 
   handleDayInputChange = value => {
@@ -139,85 +138,98 @@ class DateFilter extends Component {
     const { from, to, datePreset } = this.state;
 
     return (
-      <Segment.Group className="filter-popup__wrapper">
-        <Segment basic secondary className="filter-popup__header">
+      <div className="filter-popup__wrapper border rounded shadow">
+        <div className="filter-popup__header bg-gray-100 p-4">
           <div className="title">
-            <Button
-              basic
-              compact
-              size="tiny"
-              content={t('buttons.cancel')}
+            <button
+              className="px-3 py-1 small border border-gray-300 rounded hover:bg-gray-50"
               onClick={this.onCancel}
-            />
-            <Header size="small" textAlign="center" content={t('filters.date-filter.label')}/>
-            <Button
-              primary
-              compact
-              size="small"
-              content={t('buttons.apply')}
+            >
+              {t('buttons.cancel')}
+            </button>
+            <h4 className="small text-center font-semibold">
+              {t('filters.date-filter.label')}
+            </h4>
+            <button
+              className="px-3 py-1 small bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
               disabled={!this.canApply()}
               onClick={this.apply}
-            />
+            >
+              {t('buttons.apply')}
+            </button>
           </div>
-        </Segment>
-        <Segment basic className="filter-popup__body date-filter">
-          <Accordion as={Menu} vertical fluid size="small">
+        </div>
+        <div className="filter-popup__body date-filter p-4">
+          <div className="flex flex-col">
             {
               datePresets.map(x => {
                 const text = t(`filters.date-filter.presets.${x}`);
                 return (
-                  <Menu.Item
+                  <div
                     key={x}
-                    name={x}
-                    active={datePreset === x}
-                    onClick={this.handleDatePresetsChange}
+                    className={clsx(
+                      'cursor-pointer px-3 py-2 small hover:bg-gray-100',
+                      { 'bg-blue-50 font-semibold text-blue-600': datePreset === x }
+                    )}
+                    onClick={() => this.handleDatePresetsChange(x)}
                   >
                     {text}
-                  </Menu.Item>
+                  </div>
                 );
               })
             }
-            <Menu.Item>
-              <Accordion.Title
-                active={this.state.showDay}
-                content={t('filters.date-filter.presets.CUSTOM_DAY')}
+            <div className="border-t">
+              <div
+                className={clsx(
+                  'cursor-pointer px-3 py-2 small font-semibold hover:bg-gray-100',
+                  { 'text-blue-600': this.state.showDay }
+                )}
                 onClick={this.toggleDay}
-              />
-              <Accordion.Content active={this.state.showDay}>
-                <FastDayPicker
-                  label={null}
-                  value={from}
-                  language={language}
-                  onDayChange={this.handleDayInputChange}
-                />
-              </Accordion.Content>
-
-            </Menu.Item>
-            <Menu.Item>
-              <Accordion.Title
-                active={this.state.showRange}
-                content={t('filters.date-filter.presets.CUSTOM_RANGE')}
+              >
+                {t('filters.date-filter.presets.CUSTOM_DAY')}
+              </div>
+              {this.state.showDay && (
+                <div className="px-3 py-2">
+                  <FastDayPicker
+                    label={null}
+                    value={from}
+                    language={language}
+                    onDayChange={this.handleDayInputChange}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="border-t">
+              <div
+                className={clsx(
+                  'cursor-pointer px-3 py-2 small font-semibold hover:bg-gray-100',
+                  { 'text-blue-600': this.state.showRange }
+                )}
                 onClick={this.toggleRange}
-              />
-              <Accordion.Content active={this.state.showRange}>
-                <FastDayPicker
-                  label={t('filters.date-filter.start')}
-                  value={from}
-                  language={language}
-                  onDayChange={this.handleFromInputChange}
-                />
-                <br/>
-                <FastDayPicker
-                  label={t('filters.date-filter.end')}
-                  value={to}
-                  language={language}
-                  onDayChange={this.handleToInputChange}
-                />
-              </Accordion.Content>
-            </Menu.Item>
-          </Accordion>
-        </Segment>
-      </Segment.Group>
+              >
+                {t('filters.date-filter.presets.CUSTOM_RANGE')}
+              </div>
+              {this.state.showRange && (
+                <div className="px-3 py-2">
+                  <FastDayPicker
+                    label={t('filters.date-filter.start')}
+                    value={from}
+                    language={language}
+                    onDayChange={this.handleFromInputChange}
+                  />
+                  <br/>
+                  <FastDayPicker
+                    label={t('filters.date-filter.end')}
+                    value={to}
+                    language={language}
+                    onDayChange={this.handleToInputChange}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }

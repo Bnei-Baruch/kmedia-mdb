@@ -1,12 +1,14 @@
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+import { faUser, faRss, faAppleWhole } from '@fortawesome/free-solid-svg-icons';
 
 import { getPodcastLinkByLangs, getRSSLinkByLangs } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
+import Icon from '../Icon';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
@@ -34,110 +36,102 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
   const loggedIn         = useIsLoggedIn();
 
   const items = ITEMS.map(x => (
-    <Menu.Item
+    <NavLink
       key={x}
-      as={NavLink}
       to={`/${x}`}
-      className="sidebar-item"
+      className="sidebar-nav__link"
       activeClassName="active"
-      content={t(`nav.sidebar.${x}`)}
       onClick={onItemClick}
-    />
+    >
+      {t(`nav.sidebar.${x}`)}
+    </NavLink>
   ));
 
   const personal = !loggedIn ? (
-    <Menu.Item key={'personal'}>
-      <Header as="h3" className="margin-bottom-4">
-        <Header.Content content={t('nav.sidebar.personal')} className="weight-normal"/>
-        <Header.Subheader content={t('personal.needToLogin')} className="margin-left-4 margin-right-4"/>
-      </Header>
-      <Button
-        compact
-        basic
-        size="big"
-        icon={'user circle outline'}
-        content={t('personal.login')}
-        className="donate-button margin-top-8"
-        color={'blue'}
-        as="a"
-        target="_blank"
+    <div key="personal" className="sidebar-nav__personal">
+      <h3 className="sidebar-nav__title">
+        {t('nav.sidebar.personal')}
+        <span className="sidebar-nav__subtitle">{t('personal.needToLogin')}</span>
+      </h3>
+      <a
+        className="sidebar-nav__login"
         onClick={login}
-      />
-    </Menu.Item>
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Icon icon={faUser} />
+        {t('personal.login')}
+      </a>
+    </div>
   ) : (
-    <Menu.Item
-      key={'personal'}
-      as={NavLink}
-      to={'/personal'}
-      className="sidebar-item"
+    <NavLink
+      key="personal"
+      to="/personal"
+      className="sidebar-nav__link"
       activeClassName="active"
-      content={t('nav.sidebar.personal')}
       onClick={onItemClick}
-    />
+    >
+      {t('nav.sidebar.personal')}
+    </NavLink>
   );
 
   const bookmark = loggedIn ? (
-    <Menu.Item
+    <NavLink
       key={MY_NAMESPACE_BOOKMARKS}
-      as={NavLink}
       to={`/${MY_NAMESPACE_BOOKMARKS}`}
-      className="sidebar-item"
+      className="sidebar-nav__link"
       activeClassName="active"
-      content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
       onClick={onItemClick}
-    />
+    >
+      {t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
+    </NavLink>
   ) : null;
 
   if (simple) {
     return (
-      <Menu vertical borderless fluid color="blue" size="huge">
+      <nav className="sidebar-nav">
         {personal}
         {bookmark}
         {items}
-        <Menu.Item
-          as="a"
+        <a
           href="https://old.kabbalahmedia.info/"
-          className="sidebar-item"
-          content={t('nav.sidebar.old-site')}
-        />
-        <Menu.Item className="mobile-only">
-          <DonateNow/>
-          <VirtualHomeButton/>
-        </Menu.Item>
-        <Menu.Item
-          key="rss"
-          className="sidebar-item"
+          className="sidebar-nav__link"
         >
-          <Button
-            icon="rss"
-            size="mini"
-            color="orange"
-            href={getRSSLinkByLangs(contentLanguages)}/>
-          <span className="margin-right-8 margin-left-8">RSS</span>
-          <Button
-            icon="apple"
-            size="mini"
-            className="margin-left-8"
-            href={getPodcastLinkByLangs(contentLanguages)}/>
-          <span className="margin-right-8 margin-left-8">{t('nav.sidebar.podcast')}</span>
-        </Menu.Item>
-
-        <Menu.Item
-          key="feedBurner"
-          className="sidebar-item"
-        >
-          <FeedBurner/>
-        </Menu.Item>
-      </Menu>
+          {t('nav.sidebar.old-site')}
+        </a>
+        <div className="sidebar-nav__donate">
+          <DonateNow />
+          <VirtualHomeButton />
+        </div>
+        <div className="sidebar-nav__rss">
+          <a
+            className="sidebar-nav__rss-btn sidebar-nav__rss-btn--orange"
+            href={getRSSLinkByLangs(contentLanguages)}
+          >
+            <Icon icon={faRss} />
+          </a>
+          <span className="sidebar-nav__rss-label">RSS</span>
+          <a
+            className="sidebar-nav__rss-btn sidebar-nav__rss-btn--grey"
+            href={getPodcastLinkByLangs(contentLanguages)}
+          >
+            <Icon icon={faAppleWhole} />
+          </a>
+          <span className="sidebar-nav__rss-label">{t('nav.sidebar.podcast')}</span>
+        </div>
+        <div className="sidebar-nav__feed">
+          <FeedBurner />
+        </div>
+      </nav>
     );
   }
 
   return (
-    <Sidebar pointing vertical as={Menu} animation="push" visible={visible}>
+    <aside className={clsx('sidebar-nav sidebar-nav--aside', { 'is-hidden': !visible })}>
       {personal}
       {bookmark}
       {items}
-    </Sidebar>
+    </aside>
   );
 };
 

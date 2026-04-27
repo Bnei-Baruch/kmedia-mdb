@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Popup } from 'semantic-ui-react';
+import { Popover, PopoverPanel } from '@headlessui/react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
 import { actions } from '../../../redux/modules/player';
@@ -33,7 +33,6 @@ export const ProgressBar = ({ left, right }) => {
 
   const handleStart = e => {
     stopBubbling(e);
-    // regard only left mouse button click (0). touch is undefined
     if (mode === PLAYER_OVER_MODES.active && !e.button)
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.dragKnob));
     setActivated(true);
@@ -43,7 +42,6 @@ export const ProgressBar = ({ left, right }) => {
     stopBubbling(e);
     setActivated(false);
     if (mode === PLAYER_OVER_MODES.dragKnob) {
-      //need switch mode after event click will bubble
       setTimeout(() => dispatch(actions.setOverMode(PLAYER_OVER_MODES.active)), 0);
     }
   };
@@ -52,7 +50,6 @@ export const ProgressBar = ({ left, right }) => {
     stopBubbling(e);
     if (!activated) return;
 
-    // Resolve clientX from mouse or touch event.
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
@@ -77,25 +74,23 @@ export const ProgressBar = ({ left, right }) => {
         className="slider__value"
         style={{ width: `${pos}%` }}
       ></div>
-      <Popup
-        inverted
-        size="mini"
-        position="top center"
-        open={activated}
-        trigger={
-          <div
-            className="slider__thumb"
-            style={{ left: `${pos}%` }}
-            onMouseDown={handleStart}
-            onTouchStart={handleStart}
-            onClick={stopBubbling}
-          ></div>
-        }
+      <Popover
+        as="div"
+        className="slider__thumb"
+        style={{ left: `${pos}%` }}
+        onMouseDown={handleStart}
+        onTouchStart={handleStart}
+        onClick={stopBubbling}
       >
-        <Popup.Content>
-          <span>{formatDuration(time)}</span>
-        </Popup.Content>
-      </Popup>
+        {activated && (
+          <PopoverPanel
+            static
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-900 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
+          >
+            <span>{formatDuration(time)}</span>
+          </PopoverPanel>
+        )}
+      </Popover>
     </>
   );
 };

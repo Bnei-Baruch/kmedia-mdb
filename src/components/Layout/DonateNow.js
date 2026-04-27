@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../helpers/consts';
 import { useSelector } from 'react-redux';
@@ -17,19 +17,16 @@ export const VirtualHomeButton = () => {
   });
 };
 
-const DButton = ({ content, href, icon, className, color = 'blue' }) => (
-  <Button
-    compact
-    basic
-    size="small"
-    color={color}
-    icon={icon}
-    content={content}
-    className={className}
-    as="a"
+const DButton = ({ content, href, icon, className }) => (
+  <a
     href={href}
     target="_blank"
-  />
+    rel="noopener noreferrer"
+    className={clsx('inline-flex items-center gap-1.5 px-3 py-1 small border border-semantic-blue text-semantic-blue rounded', className)}
+  >
+    {icon && <span className="material-symbols-outlined text-base">{icon === 'heart' ? 'favorite' : icon}</span>}
+    {content}
+  </a>
 );
 
 const getDonateLinkDetails = language => {

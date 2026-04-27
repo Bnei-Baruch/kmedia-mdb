@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
@@ -27,7 +26,7 @@ const Settings = ({ t }) => {
             <RateControl />
             <QualityControl />
             <div className="settings__row">
-              <Header size="tiny">{t('player.settings.language')}</Header>
+              <h5 className="small font-semibold">{t('player.settings.language')}</h5>
               <PlayerLanguages />
             </div>
           </div>

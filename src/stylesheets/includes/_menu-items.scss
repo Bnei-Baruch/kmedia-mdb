@@ -1,0 +1,119 @@
+@use 'variables' as *;
+@use 'responsive-helpers' as *;
+@use 'colors-helpers';
+
+nav.sidebar-nav,
+aside.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 1.14285714rem;
+  font-family: inherit;
+
+  .sidebar-nav__link {
+    display: block;
+    padding: .7em 1em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    line-height: 1.3;
+    color: black;
+
+    &:hover {
+      background: rgba(0, 0, 0, .03);
+    }
+
+    &.active {
+      background: rgba(0, 0, 0, .03);
+      color: colors-helpers.$blue;
+    }
+  }
+}
+
+.sidebar-nav__personal {
+  padding: .92857143em 1.14285714em;
+}
+
+.sidebar-nav__title {
+  margin: 0 0 .28571429rem;
+  font-size: 1.28571429rem;
+  font-weight: 400;
+  color: #fff;
+}
+
+.sidebar-nav__subtitle {
+  display: block;
+  font-size: .85714286rem;
+  color: rgba(255, 255, 255, .7);
+  margin: .25em .25rem;
+}
+
+.sidebar-nav__login {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  margin-top: .5rem;
+  padding: .5em 1em;
+  font-size: 1.14285714rem;
+  color: rgba(255, 255, 255, .9);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: .28571429rem;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+  }
+}
+
+.sidebar-nav__rss {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  padding: .92857143em 1.14285714em;
+}
+
+.sidebar-nav__rss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .6em .5em;
+  font-size: .78571429rem;
+  color: #fff;
+  border: none;
+  border-radius: .28571429rem;
+  text-decoration: none;
+  cursor: pointer;
+
+  &--orange {
+    background: #f2711c;
+  }
+
+  &--grey {
+    background: #767676;
+  }
+}
+
+.sidebar-nav__rss-label {
+  margin: 0 .5em;
+}
+
+.sidebar-nav__donate {
+  padding: 1em 1.2em;
+
+  @include computer-and-above {
+    display: none;
+  }
+}
+
+.sidebar-nav__feed {
+  padding: 1em 1.2em;
+}
+
+.sidebar-nav--aside {
+  &.is-hidden {
+    display: none;
+  }
+}

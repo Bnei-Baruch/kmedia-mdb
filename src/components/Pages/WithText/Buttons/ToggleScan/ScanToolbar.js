@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Input } from 'semantic-ui-react';
 import AddScanBookmarkBtn from './AddScanBookmarkBtn';
 import DownloadScanBtn from './DownloadScanBtn';
 import ScanZoom from './ScanZoom';
@@ -16,7 +15,6 @@ const ScanToolbar = ({ numPages, page = 1, goToPage, close }) => {
   }, [page]);
 
   const onKeyDown = e => {
-    // Enter
     if (e.keyCode === 13) {
       handleSubmit();
       setInputValue(null);
@@ -45,13 +43,14 @@ const ScanToolbar = ({ numPages, page = 1, goToPage, close }) => {
         <div className="divider"></div>
         <ShareScanBtn/>
       </div>
-      <Input
-        className="pdf_input_wrapper"
-        value={inputValue}
-        onChange={handleChange}
-        placeholder={`${page}/${numPages}`}
-        onKeyDown={onKeyDown}
-      />
+      <div className="pdf_input_wrapper">
+        <input
+          value={inputValue}
+          onChange={handleChange}
+          placeholder={`${page}/${numPages}`}
+          onKeyDown={onKeyDown}
+        />
+      </div>
       <div className="btn_group">
         <ScanZoom/>
         <ScanBtnTpl

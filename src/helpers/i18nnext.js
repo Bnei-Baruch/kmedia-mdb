@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 
 import i18nextBackend from 'i18next-fs-backend';
+import HttpBackend from 'i18next-http-backend';
 import path from 'node:path';
 
 import moment from 'moment';
@@ -41,6 +42,24 @@ export const options = {
 };
 
 // Client side.
+export const initializeI18nClient = async () => {
+  const i18n = i18next.createInstance();
+
+  // ИСПОЛЬЗУЕМ HttpBackend ЗДЕСЬ
+  await i18n.use(HttpBackend).init({
+    ...options,
+    lng: 'en',
+    preload: ['en', 'he', 'ru', 'es'],
+    backend: {
+      loadPath: 'http://localhost:3000/locales/{{lng}}/{{ns}}.json',
+    },
+    initImmediate: false,
+  });
+
+  return i18n;
+};
+
+
 export const initializeI18n = async resources => {
   await i18next.init({
     ...options,

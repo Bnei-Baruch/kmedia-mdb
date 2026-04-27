@@ -6,7 +6,6 @@ import isEqual from 'react-fast-compare';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
 import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/filtersAside';
@@ -34,7 +33,6 @@ const getAllVisibleById = (byId, expandedNodes) => {
     Object.keys(draft).forEach(key => {
       const { id, parent_id } = draft[key];
 
-      // make node visible when its parent is in expandedNodes and its index less than visible items count
       const visible = parent_id
         ? expandedNodes.has(parent_id) || draft[parent_id].children.indexOf(id) < visibleItemsCount
         : true;
@@ -51,29 +49,24 @@ const filterData = (byId, match, sortedRoots) => {
   const parentIdsArr = [];
   const regExp       = getEscapedRegExp(match);
 
-  // filter objects
   Object.keys(byId).forEach(key => {
     const { label, parent_id } = byId[key];
 
-    // add object that includes the match
     if (label && regExp.test(label)) {
       filteredById[key] = { ...byId[key], visible: true };
 
-      // keep its parent_id key
       if (parent_id) {
         parentIdsArr.push(parent_id);
       }
     }
   });
 
-  // add grand parents ids till the root to parentIdsArr
-  const displayRootIndexes = []; // to keep the same order of the roots
+  const displayRootIndexes = [];
   let i                    = 0;
   let index;
   while (i < parentIdsArr.length) {
     const { id, parent_id } = byId[parentIdsArr[i]];
 
-    // keep displayRoot index for the order of the roots
     if (!parent_id) {
       index = sortedRoots.indexOf(id);
       if (index > -1 && !displayRootIndexes.includes(index)) {
@@ -89,7 +82,6 @@ const filterData = (byId, match, sortedRoots) => {
   displayRootIndexes.sort();
   const filteredRoots = displayRootIndexes.map(ind => sortedRoots[ind]);
 
-  // add the parents to filteredById
   parentIdsArr.forEach(parentKey => {
     filteredById[parentKey] = { ...byId[parentKey], visible: true };
   });
@@ -114,8 +106,8 @@ const TopicContainer = ({ t }) => {
     dispatch(actions.fetchStats(namespace, {}, { isPrepare: true, countC: true, countL: true }));
   }, [dispatch]);
 
-  const handleFilterChange = debounce((e, data) => {
-    setMatch(data.value);
+  const handleFilterChange = debounce(e => {
+    setMatch(e.target.value);
   }, 100);
 
   const handleFilterKeyDown = e => {
@@ -135,7 +127,6 @@ const TopicContainer = ({ t }) => {
     return filterData(byId, match, sortedRoots);
   };
 
-  // run filter
   const [filteredById, filteredRoots] = filterTagsById();
 
   const isIncluded = id => !!filteredById[id];
@@ -144,7 +135,6 @@ const TopicContainer = ({ t }) => {
 
   const handleShowMoreClick = nodeId => {
     setExpandedNodes(expNodes => {
-      // a new set has to be created to update the state
       const newSet = new Set(expNodes);
 
       newSet.has(nodeId)
@@ -172,31 +162,30 @@ const TopicContainer = ({ t }) => {
 
     return (
       <>
-        <List>
+        <ul className="list-none pl-4">
           {
             children
               .filter(isIncluded)
               .map(cId => (
-                <List.Item key={cId} className={filteredById[cId].visible
+                <li key={cId} className={filteredById[cId].visible
                   ? isNotEmptyArray(filteredById[cId].children)
                     ? 'subTopic'
                     : ''
                   : 'hide-topic'}>
                   {renderSubTopic(filteredById[cId])}
-                </List.Item>
+                </li>
               ))
           }
-        </List>
+        </ul>
         {
           showExpandButton &&
-          <Button
-            basic
-            icon={expanded ? 'minus' : 'plus'}
-            className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-            size="mini"
-            content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+          <button
+            className={`topics__button border border-gray-300 rounded px-2 py-1 text-xs bg-white hover:bg-gray-50 inline-flex items-center gap-1 ${showExpandButton ? '' : 'hide-button'}`}
             onClick={() => handleShowMoreClick(id)}
-          />
+          >
+            <span className="material-symbols-outlined text-xs">{expanded ? 'remove' : 'add'}</span>
+            {t(`topics.show-${expanded ? 'less' : 'more'}`)}
+          </button>
         }
       </>
     );
@@ -229,10 +218,10 @@ const TopicContainer = ({ t }) => {
         {
           isNotEmptyArray(children)
             ? (
-              <div key={id} className={`topics__card`}>
-                <Header as="h4" className="topics__subtitle">
+              <div key={id} className="topics__card">
+                <h4 className="topics__subtitle">
                   {renderLeaf(node)}
-                </Header>
+                </h4>
                 {renderChildren(node)}
               </div>
             )
@@ -246,10 +235,10 @@ const TopicContainer = ({ t }) => {
     const rootNode = filteredById[rootId];
 
     return rootNode?.children?.length > 0
-      ? <Grid.Column key={rootId} className="topics__section">
-        <Header as="h2" className="topics__title">
+      ? <div key={rootId} className="topics__section">
+        <h2 className="topics__title">
           {rootNode.label}
-        </Header>
+        </h2>
         <div className="topics__list">
           {
             rootNode.children
@@ -257,32 +246,30 @@ const TopicContainer = ({ t }) => {
               .map(id => renderTopicCard(filteredById[id]))
           }
         </div>
-      </Grid.Column>
+      </div>
       : null;
   };
 
   return (
     <>
       <SectionHeader section="topics"/>
-      <Divider fitted/>
-      <Container className="padded">
-        <Input
-          fluid
-          size="large"
-          icon="search"
-          className="search-omnibox"
-          placeholder={t('sources-library.filter')}
-          onChange={handleFilterChange}
-          onKeyDown={handleFilterKeyDown}
-        />
-      </Container>
-      <Container className="padded">
-        <Grid columns={3}>
-          <Grid.Row>
-            {filteredRoots.map(r => renderBranch(r))}
-          </Grid.Row>
-        </Grid>
-      </Container>
+      <hr className="m-0"/>
+      <div className=" px-4 ">
+        <div className="relative w-full">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+          <input
+            className="search-omnibox w-full large border border-gray-300 rounded pl-10 pr-3 py-2"
+            placeholder={t('sources-library.filter')}
+            onChange={handleFilterChange}
+            onKeyDown={handleFilterKeyDown}
+          />
+        </div>
+      </div>
+      <div className=" px-4 ">
+        <div className="grid grid-cols-3 gap-4">
+          {filteredRoots.map(r => renderBranch(r))}
+        </div>
+      </div>
     </>
   );
 };

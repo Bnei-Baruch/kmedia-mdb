@@ -1,29 +1,29 @@
-import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from "@headlessui/react";
-import moment from "moment";
-import React, { useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import moment from 'moment';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { ClientChroniclesContext, DeviceInfoContext } from "../../helpers/app-contexts";
-import { isLanguageRtl } from "../../helpers/i18n-utils";
-import { SuggestionsHelper } from "../../helpers/search";
-import ButtonDayPicker from "../Filters/components/Date/ButtonDayPicker";
+import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
+import { SuggestionsHelper } from '../../helpers/search';
+import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
 
-import { clsx } from "clsx";
-import { actions } from "../../redux/modules/search";
+import { clsx } from 'clsx';
+import { actions } from '../../redux/modules/search';
 import {
   searchGetAutocompleteWipSelector,
   searchGetQuerySelector,
   searchGetSuggestionsSelector,
   settingsGetUILangSelector,
-} from "../../redux/selectors";
-import Icon from "../Icon";
+} from '../../redux/selectors';
+import Icon from '../Icon';
 
 const makeResult = (uiLang, result) => ({
   ...result,
-  className: isLanguageRtl(uiLang) ? "search-result-rtl" : "",
+  className: isLanguageRtl(uiLang) ? 'search-result-rtl' : '',
 });
 
 const OmniBox = ({ isHomePage = false }) => {
@@ -37,7 +37,7 @@ const OmniBox = ({ isHomePage = false }) => {
   const chronicles = useContext(ClientChroniclesContext);
 
   const [autocompleteResults, setAutocompleteResults] = useState([]);
-  const [autocompleteId, setAutocompleteId] = useState("");
+  const [autocompleteId, setAutocompleteId] = useState('');
   const [inputFocused, setInputFocused] = useState(!isMobileDevice);
   const [userInteracted, setUserInteracted] = useState(false);
 
@@ -48,10 +48,10 @@ const OmniBox = ({ isHomePage = false }) => {
     if (suggestions) {
       const helper = new SuggestionsHelper(suggestions);
       setAutocompleteId(helper.autocompleteId);
-      setAutocompleteResults(helper.getSuggestions().map((s) => makeResult(uiLang, { key: s, title: s })));
+      setAutocompleteResults(helper.getSuggestions().map(s => makeResult(uiLang, { key: s, title: s })));
     } else {
       setAutocompleteResults([]);
-      setAutocompleteId("");
+      setAutocompleteId('');
     }
   }, [suggestions, uiLang]);
 
@@ -65,13 +65,13 @@ const OmniBox = ({ isHomePage = false }) => {
     dispatch(actions.search());
   };
 
-  const keyDown = (e) => {
+  const keyDown = e => {
     if (e.keyCode === 13) {
       doSearch();
     }
   };
 
-  const inputChange = (e) => {
+  const inputChange = e => {
     setUserInteracted(true);
     setInputFocused(true);
     dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
@@ -86,43 +86,43 @@ const OmniBox = ({ isHomePage = false }) => {
     setUserInteracted(true);
   };
 
-  const handleResultSelect = (title) => {
+  const handleResultSelect = title => {
     if (!title) return;
     chronicles.autocompleteSelected(title, autocompleteId);
     dispatch(actions.updateQuery({ query: title, autocomplete: false }));
     doSearch();
   };
 
-  const handleFromInputChange = (value) => {
-    navigate(`/${uiLang}/simple-mode?date=${moment(value).format("YYYY-MM-DD")}`);
+  const handleFromInputChange = value => {
+    navigate(`/${uiLang}/simple-mode?date=${moment(value).format('YYYY-MM-DD')}`);
   };
 
   return (
     <Combobox value={query} onChange={handleResultSelect}>
-      <div className={clsx("relative w-full search-omnibox", { homepage: isHomePage })}>
+      <div className={clsx('relative w-full search-omnibox', { homepage: isHomePage })}>
         <div className="flex items-center w-full bg-transparent">
           <ComboboxInput
             className="flex-1 px-4 py-2 text-black outline-none w-full border border-gray-300 rounded-l rounded-r-none max-w-none"
-            placeholder={isHomePage ? `${t("buttons.search")}...` : ""}
+            placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
             onChange={inputChange}
             onKeyDown={keyDown}
             onFocus={onFocus}
             onBlur={onBlur}
             autoFocus={inputFocused}
-            displayValue={(item) => item}
+            displayValue={item => item}
           />
           {isHomePage ? (
             <>
-              <button type="button" onClick={doSearch} className={clsx("ui button dateButton rounded-l-none")}>
+              <button type="button" onClick={doSearch} className={clsx('ui button rounded-l-none')}>
                 {wip ? (
                   <Icon icon={faSpinner} className="animate-spin mr-2" />
                 ) : (
-                  <Icon icon={faSearch} className={clsx(isMobileDevice ? "text-lg" : "mr-2")} />
+                  <Icon icon={faSearch} className={clsx(isMobileDevice ? 'large' : 'mr-2')} />
                 )}
-                {!isMobileDevice ? t("buttons.search").toUpperCase() : null}
+                {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
               </button>
               <ButtonDayPicker
-                label={t("filters.date-filter.presets.CUSTOM_DAY")}
+                label={t('filters.date-filter.presets.CUSTOM_DAY')}
                 onDayChange={handleFromInputChange}
               />
             </>
@@ -138,14 +138,14 @@ const OmniBox = ({ isHomePage = false }) => {
             static
             className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-auto"
           >
-            {autocompleteResults.map((result) => (
+            {autocompleteResults.map(result => (
               <ComboboxOption
                 key={result.key}
                 value={result.title}
                 className={({ active }) =>
                   clsx(
-                    "cursor-pointer select-none relative py-2 px-4",
-                    active ? "bg-gray-100 text-black" : "text-gray-900",
+                    'cursor-pointer select-none relative py-2 px-4',
+                    active ? 'bg-gray-100 text-black' : 'text-gray-900',
                     result.className
                   )
                 }

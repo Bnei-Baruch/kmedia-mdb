@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
 
 import { CT_ARTICLE } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
@@ -13,16 +12,16 @@ const renderUnit = (unit, t) => {
   const relatedItems = articles.map(renderUnitHelper.renderUnitNameAsListItem);
 
   return (
-    <Table.Row key={unit.id} verticalAlign="top" className="no-thumbnail">
-      <Table.Cell collapsing singleLine>
+    <tr key={unit.id} className="align-top no-thumbnail">
+      <td className="whitespace-nowrap w-px">
         {renderUnitHelper.renderUnitFilmDate(unit, t)}
-      </Table.Cell>
-      <Table.Cell>
+      </td>
+      <td>
         {renderUnitHelper.renderUnitNameLink(unit)}
         {renderUnitHelper.renderUnitDescription(unit)}
         {renderUnitHelper.renderRelatedItems(relatedItems, t('publications.list.item_from'))}
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 };
 

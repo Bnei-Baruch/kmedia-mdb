@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
@@ -19,23 +19,22 @@ const AddScanBookmarkBtn = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <Modal
-        trigger={
-          <ScanBtnTpl
-            onClick={handleOpen}
-            icon="bookmark"
-            textKey="add-bookmark"
-          />
-        }
-        open={open}
-        onClose={handleClose}
-        size="tiny"
-        dir={dir}
-        className="bookmark_modal"
-      >
-        <Modal.Header content={t('personal.bookmark.saveBookmark')}/>
-        <BookmarkForm onClose={handleClose} properties={urlProps}/>
-      </Modal>
+      <ScanBtnTpl
+        onClick={handleOpen}
+        icon="bookmark"
+        textKey="add-bookmark"
+      />
+      <Dialog open={open} onClose={handleClose} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center">
+          <Dialog.Panel className="bookmark_modal mx-auto max-w-sm rounded bg-white p-6" dir={dir}>
+            <Dialog.Title className="large font-semibold">
+              {t('personal.bookmark.saveBookmark')}
+            </Dialog.Title>
+            <BookmarkForm onClose={handleClose} properties={urlProps}/>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </>
   );
 };

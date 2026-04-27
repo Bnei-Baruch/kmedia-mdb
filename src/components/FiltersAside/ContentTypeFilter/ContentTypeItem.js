@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/filters';
@@ -11,11 +10,18 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   const selected = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
   const stat     = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(id);
 
-  const dispatch = useDispatch();
+  const dispatch    = useDispatch();
+  const checkboxRef = useRef(null);
 
-  const handleSelect = (e, { checked }) => {
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = isSelChild;
+    }
+  }, [isSelChild]);
+
+  const handleSelect = e => {
     const val = [...selected].filter(x => x !== id);
-    if (checked) {
+    if (e.target.checked) {
       val.push(id);
     }
 
@@ -23,18 +29,21 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   };
 
   return (
-    <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={stat === 0} className="filters-aside-ct">
-      <List.Content className="stat" floated="right">
+    <div className={`filters-aside-ct flex items-center justify-between ${stat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+      <label className="flex items-center justify-between no-wrap gap-2">
+        <input
+          ref={checkboxRef}
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={handleSelect}
+          disabled={stat === 0}
+        />
+        {t(`filters.content-types.${id}`)}
+      </label>
+      <span className="stat">
         {`(${stat})`}
-      </List.Content>
-      <Checkbox
-        label={t(`filters.content-types.${id}`)}
-        checked={selected.includes(id)}
-        onChange={handleSelect}
-        indeterminate={isSelChild}
-        disabled={stat === 0}
-      />
-    </List.Item>
+      </span>
+    </div>
   );
 };
 

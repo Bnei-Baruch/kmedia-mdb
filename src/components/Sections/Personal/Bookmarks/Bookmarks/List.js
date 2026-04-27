@@ -10,7 +10,6 @@ import {
 } from '../../../../../helpers/consts';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import NeedToLogin from '../../NeedToLogin';
-import { Header, List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
 import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
 import {
@@ -59,7 +58,7 @@ const BookmarkList = ({ t }) => {
   };
 
   if (items.length === 0 && !folder_id) {
-    return <Header as="h2" content={t('personal.bookmark.haveNo')} textAlign="center"/>;
+    return <h2 className="text-center">{t('personal.bookmark.haveNo')}</h2>;
   }
 
   if (query) {
@@ -67,11 +66,11 @@ const BookmarkList = ({ t }) => {
   }
 
   return (
-    <List divided relaxed celled>
+    <ul className="divide-y">
       {
         items.map(x => <BookmarksItem bookmark={x} key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}/>)
       }
-    </List>
+    </ul>
   );
 };
 

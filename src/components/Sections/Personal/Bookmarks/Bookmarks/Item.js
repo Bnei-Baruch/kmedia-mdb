@@ -1,6 +1,5 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { SectionLogo } from '../../../../../helpers/images';
@@ -32,10 +31,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   const to = textPartLink(bookmark?.properties, cu);
 
   const renderFolder = f => (
-    <Label key={f.id} basic>
-      <Icon name="folder outline" className="margin-left-4 margin-right-4"/>
+    <span key={f.id} className="inline-flex items-center gap-1 rounded border border-gray-300 px-2 py-0.5 small">
+      <span className="material-symbols-outlined small margin-left-4 margin-right-4">folder_open</span>
       {f.name}
-    </Label>
+    </span>
   );
 
   const title = buildTitleByUnit(cu, t, getPathByID);
@@ -48,33 +47,33 @@ const BookmarksItem = ({ bookmark, t }) => {
     citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
-    <List.Item className="bookmark_item">
-      <List.Icon>
+    <li className="bookmark_item flex items-start gap-3 border-b py-3">
+      <div className="flex-shrink-0">
         <Link to={to}>
-          <Image size="mini" verticalAlign="middle">
+          <div className="inline-block align-middle">
             <SectionLogo name={icon} width="25" height="25"/>
-          </Image>
+          </div>
         </Link>
-      </List.Icon>
-      <List.Content as={Link} to={to} verticalAlign="bottom">
-        <List.Header as="h3" className="display-iblock">
+      </div>
+      <Link to={to} className="flex-1 align-bottom">
+        <h3 className="display-iblock">
           {name}
           <span className="separator">|</span>
           <span className="source_name">
             {title}
           </span>
-        </List.Header>
-        <List.Description as={'em'}>
+        </h3>
+        <em className="block text-gray-500">
           {citates.join(' ... ')}
-        </List.Description>
-        <List.Description>
+        </em>
+        <div>
           {folders.map(renderFolder)}
-        </List.Description>
-      </List.Content>
-      <List.Icon verticalAlign="top">
+        </div>
+      </Link>
+      <div className="flex-shrink-0 self-start">
         <Actions bookmark={bookmark}/>
-      </List.Icon>
-    </List.Item>
+      </div>
+    </li>
   );
 };
 

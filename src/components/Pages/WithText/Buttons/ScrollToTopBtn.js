@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { textPageGetScrollDirSelector } from '../../../../redux/selectors';
@@ -11,12 +10,12 @@ const ScrollToTopBtn = () => {
   const handleScroll = () => window.scrollTo(0, 0);
 
   return (
-    <Button
-      icon={<span className="material-symbols-outlined">arrow_upward</span>}
+    <button
       onClick={handleScroll}
-      className="text__scroll-top"
-      color="blue"
-    />
+      className="text__scroll-top bg-blue-600 text-white rounded hover:bg-blue-700"
+    >
+      <span className="material-symbols-outlined">arrow_upward</span>
+    </button>
   );
 };
 

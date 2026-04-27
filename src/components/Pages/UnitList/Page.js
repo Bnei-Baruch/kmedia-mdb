@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Card, Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
@@ -108,10 +107,10 @@ const UnitListPage = props => {
 
   const content = WipErr({ wip, err, t }) || (
     <div>
-      <Container className="padded">
+      <div className=" px-4 ">
         {
           items.length > 0 &&
-          <Card.Group doubling itemsPerRow={4} stackable className="cu_items">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 cu_items">
             {
               items.filter(x => !!x).map((unit, i) => (
                 <ContentItem id={unit.id} key={i}>
@@ -120,18 +119,16 @@ const UnitListPage = props => {
               )
               )
             }
-          </Card.Group>
+          </div>
         }
-      </Container>
-      <Divider fitted />
-      <Container className="padded pagination-wrapper" textAlign="center">
+      </div>
+      <hr className="m-0 border-t" />
         <Pagination
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
           onChange={onPageChange}
         />
-      </Container>
     </div>
   );
 
@@ -139,7 +136,7 @@ const UnitListPage = props => {
 
   return (
     <div className="unit-list">
-      <Divider fitted />
+      <hr className="m-0 border-t" />
       {
         nsFilters.length > 0 &&
         <Filters

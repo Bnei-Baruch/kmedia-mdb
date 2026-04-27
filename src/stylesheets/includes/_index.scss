@@ -23,10 +23,6 @@
 .section-header {
   background: colors-helpers.$darkWhite;
 
-  .ui.icon.header {
-    margin: 0 !important;
-  }
-
   h1.header {
     @include responsive-helpers.mobile {
       font-size: 2em;
@@ -37,17 +33,13 @@
     font-size: 3em;
     font-weight: 400;
 
-    .sub.header {
-      @include responsive-helpers.mobile {
-        font-size: 1rem;
-        margin: .2rem 0;
-      }
-      margin: .2em 0 .5em;
-
-      &.section-header__subtitle2 {
-        font-size: 1rem;
-      }
+    .section-header__subtitle2 {
+      font-size: 1rem;
     }
+  }
+  .section-header__title {
+    font-size: 1.5em;
+    font-weight: 400;
   }
 
   .menu {

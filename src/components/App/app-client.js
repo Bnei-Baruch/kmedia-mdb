@@ -1,6 +1,5 @@
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { createBrowserHistory } from 'history';
-import moment from 'moment';
 import 'moment/locale/cs';
 import 'moment/locale/de';
 import 'moment/locale/es';
@@ -9,16 +8,17 @@ import 'moment/locale/it';
 import 'moment/locale/ru';
 import 'moment/locale/tr';
 import 'moment/locale/uk';
+import { initializeI18nClient } from '../../helpers/i18nnext';
+import { actions as mdbActions } from '../../redux/modules/mdb';
 
 import React from 'react';
-import { hydrateRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 
 import { UAParser } from 'ua-parser-js';
 import { CreateAbTesting } from '../../helpers/ab-testing';
 import ClientChronicles from '../../helpers/clientChronicles';
-import { DEFAULT_UI_LANGUAGE, KC_BOT_USER_NAME, LANG_UKRAINIAN } from '../../helpers/consts';
-import { initializeI18n } from '../../helpers/i18nnext';
+import { KC_BOT_USER_NAME } from '../../helpers/consts';
 import { initKC } from '../../pkg/ksAdapter/adapter';
 
 import logger from '../../logger/logger';
@@ -50,12 +50,13 @@ async function hydrateApp(kcInfo) {
   setupListeners(store.dispatch);
   store.dispatch(ssr.hydrate());
 
-  const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
+  //const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
 
   // Initialize moment global locale to default language
-  moment.locale(initialLanguage === LANG_UKRAINIAN ? 'uk' : initialLanguage);
+  //moment.locale(initialLanguage === LANG_UKRAINIAN ? 'uk' : initialLanguage);
+  //const i18n = await initializeI18n(initialI18nStore);
 
-  const i18n = await initializeI18n(initialI18nStore);
+  const i18n = await initializeI18nClient();
   const deviceInfo = new UAParser().getResult();
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);
@@ -71,7 +72,10 @@ async function hydrateApp(kcInfo) {
     />
   );
   const el = document.getElementById('root');
-  hydrateRoot(el, component);
+  //hydrateRoot(el, component);
+  createRoot(el).render(component);
+
+  store.dispatch(mdbActions.fetchSQData());
   // We ask for semi-quasi static data here since
   // we strip it from SSR to save initial network bandwidth
   logger.log(NAME_SPACE, 'hydrateApp fetchSQData');
@@ -84,5 +88,6 @@ if (window.__isAuthApp) {
 } else if (window.__botKCInfo?.user?.name === KC_BOT_USER_NAME) {
   hydrateApp(window.__botKCInfo);
 } else {
-  initKC().then(info => hydrateApp(info));
+  hydrateApp({ user: { name: 'test' } });
+  //initKC().then(info => hydrateApp(info));
 }

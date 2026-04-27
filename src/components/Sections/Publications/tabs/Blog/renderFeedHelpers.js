@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { Header, Segment } from 'semantic-ui-react';
 
 import Link from '../../../../Language/MultiLanguageLink';
 
@@ -14,9 +13,9 @@ export const renderBlogItemForHomepage = (item, uiLang, t) => {
 
   return (
     <div key={url} className="post" style={{ direction: dir }}>
-      <Header color="blue">
+      <h3 className="text-blue-600">
         <a className="remove-indent" href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
-      </Header>
+      </h3>
       <div>
         <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
         <Link className="read-more-link remove-indent" to={internalUrl}>{t('publications.read-more')}</Link>
@@ -34,9 +33,9 @@ export const renderBlogItemForPublications = (item, uiLang) => {
 
   return (
     <div key={url} className="post" style={{ direction: dir }}>
-      <Header>
+      <h3>
         <div dangerouslySetInnerHTML={{ __html: title }} />
-        <Header.Subheader>
+        <div className="small font-normal text-gray-500">
           <a
             href={url}
             target="_blank"
@@ -44,11 +43,11 @@ export const renderBlogItemForPublications = (item, uiLang) => {
           >
             {mts.format('lll')}
           </a>
-        </Header.Subheader>
-      </Header>
-      <Segment basic>
+        </div>
+      </h3>
+      <div className="p-0">
         <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
-      </Segment>
+      </div>
     </div>
   );
 };

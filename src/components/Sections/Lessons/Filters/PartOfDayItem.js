@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, List } from 'semantic-ui-react';
 
 import { FN_COLLECTION_MULTI, FN_PART_OF_DAY } from '../../../../helpers/consts';
 import { actions } from '../../../../redux/modules/filters';
@@ -13,8 +12,8 @@ const PartOfDayItem = ({ namespace, dayPart }) => {
 
   const { t }        = useTranslation();
   const dispatch     = useDispatch();
-  const handleSelect = (e, data) => {
-    const { checked } = data;
+  const handleSelect = e => {
+    const { checked } = e.target;
     const val         = [...selected].filter(x => x !== dayPart);
     if (checked) {
       val.push(dayPart);
@@ -24,17 +23,18 @@ const PartOfDayItem = ({ namespace, dayPart }) => {
   };
 
   return (
-    <List.Item key={FN_COLLECTION_MULTI} disabled={stat === 0}>
-      <List.Content className="tree_item_content">
-        <Checkbox
+    <li key={FN_COLLECTION_MULTI} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <div className="tree_item_content">
+        <input
+          type="checkbox"
           checked={!!selected?.find(x => x === dayPart)}
           onChange={handleSelect}
           disabled={stat === 0}
         />
         <span className="tree_item_title">{t(`lessons.list.nameByNum_${dayPart}`)}</span>
         <span className="stat">{`(${stat})`}</span>
-      </List.Content>
-    </List.Item>
+      </div>
+    </li>
   );
 };
 

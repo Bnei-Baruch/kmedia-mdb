@@ -1,64 +1,52 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useSwipeable } from 'react-swipeable';
-import { Button, Card } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { withTranslation } from 'react-i18next';
-import LatestUpdate from './LatestUpdate';
-import { getSectionForTranslation } from '../../../helpers/utils';
 import clsx from 'clsx';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { settingsGetUIDirSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
+import { useSwipeable } from 'react-swipeable';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getSectionForTranslation } from '../../../helpers/utils';
+import { settingsGetLeftRightByDirSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import LatestUpdate from './LatestUpdate';
 
-const LatestUpdatesCardList = (
-  {
-    t,
-    title,
-    maxItems,
-    cts,
-    itemsByCT,
-    itemsPerRow = 4,
-    itemsCount = 4,
-    stackable = true
-  }
-) => {
-  const { isMobileDevice }          = useContext(DeviceInfoContext);
-  const [pageNo, setPageNo]         = useState(0);
-  const [pageStart, setPageStart]   = useState(0);
+const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsPerRow = 4, itemsCount = 4 }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const [pageNo, setPageNo] = useState(0);
+  const [pageStart, setPageStart] = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
-  const uiDir                       = useSelector(settingsGetUIDirSelector);
-  const leftRight                   = useSelector(settingsGetLeftRightByDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
 
   const onScrollLeft = () => onScrollChange(pageNo - 1);
 
-  const getLatestUpdate = item =>
-    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
+  const getLatestUpdate = item => (
+    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />
+  );
 
   const initCardsArray = () => {
-    // arrange cards by type in criss cross order
     const cards = [];
     const items = {};
 
     const getEntryItems = entry => {
-      if (!itemsByCT[entry.ct])
-        return [];
+      if (!itemsByCT[entry.ct]) return [];
       const entryItems = [...itemsByCT[entry.ct]];
-      //return entryItems;
-      return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
+      return entry.daysBack
+        ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack)
+        : entryItems;
     };
 
-    cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
+    cts.forEach(entry => (items[entry.ct] = getEntryItems(entry)));
     let hasItems = true;
     while (hasItems && cards.length < maxItems) {
       hasItems = false;
       cts.forEach(ct => {
         const curItems = items[ct.ct];
-        let count      = ct.itemsPerPage ? ct.itemsPerPage : 1;
+        let count = ct.itemsPerPage ? ct.itemsPerPage : 1;
         while (curItems.length > 0 && count > 0) {
-          cards.push((curItems.shift()));
+          cards.push(curItems.shift());
           count--;
           hasItems = true;
         }
@@ -83,70 +71,69 @@ const LatestUpdatesCardList = (
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: uiDir === 'rtl' ? onScrollRight : onScrollLeft,
-    onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
+    onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight,
   });
 
   const renderScrollRight = () => {
     const dir = uiDir === 'rtl' ? 'right' : 'left';
     return pageNo === 0 ? null : (
-      <Button
-        icon={`chevron ${dir}`}
-        basic
-        size="large"
+      <button
+        type="button"
         onClick={onScrollLeft}
-        className="scroll_intents"
+        className="scroll_intents absolute top-1/2 -translate-y-1/2 border border-gray-300 rounded bg-white p-2 hover:bg-gray-50 large"
         style={{ [dir]: '-40px' }}
-      />
+      >
+        <span className={`material-symbols-outlined`}>chevron_{dir}</span>
+      </button>
     );
   };
 
-  const renderScrollLeft = () => (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
-    <Button
-      icon={`chevron ${leftRight}`}
-      basic
-      size="large"
-      onClick={onScrollRight}
-      className="scroll_intents left"
-      style={{ [leftRight]: '-45px' }}
-    />
-  );
+  const renderScrollLeft = () =>
+    (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
+      <button
+        type="button"
+        onClick={onScrollRight}
+        className="scroll_intents absolute top-1/2 -translate-y-1/2 border border-gray-300 rounded bg-white p-2 hover:bg-gray-50 large"
+        style={{ [leftRight]: '-45px' }}
+      >
+        <span className={`material-symbols-outlined`}>chevron_{leftRight}</span>
+      </button>
+    );
 
   useEffect(() => {
     initCardsArray();
   }, [cts]);
 
+  const gridCols = isMobileDevice ? 'grid-cols-1' : 'grid-cols-4';
+
   const cardsRow = (
-    <Card.Group className={clsx({
-      'latestUpdatesCardGroup': !isMobileDevice,
-      'latestUpdatesCardGroupMobile': isMobileDevice
-    })} itemsPerRow={itemsPerRow} stackable={stackable}>
+    <div
+      className={clsx('relative grid gap-4', gridCols, {
+        latestUpdatesCardGroup: !isMobileDevice,
+        latestUpdatesCardGroupMobile: isMobileDevice,
+      })}
+    >
       {getPageCardArray()}
       {!isMobileDevice && renderScrollLeft()}
       {!isMobileDevice && renderScrollRight()}
-    </Card.Group>
+    </div>
   );
 
-  const swipCards = !isMobileDevice ?
-    (
-      <div {...swipeHandlers}>
-        {cardsRow}
-      </div>
-    )
-    : cardsRow;
+  const swipCards = !isMobileDevice ? <div {...swipeHandlers}>{cardsRow}</div> : cardsRow;
 
-  return <>
-    <div className="cardsTitle">
-      {title}
-    </div>
-    {swipCards}
-  </>;
+  return (
+    <>
+      <div className="cardsTitle">{title}</div>
+      {swipCards}
+    </>
+  );
 };
 
 LatestUpdatesCardList.propTypes = {
   t: PropTypes.func.isRequired,
   title: PropTypes.string,
   cts: PropTypes.array,
-  itemsByCT: PropTypes.any
+  itemsByCT: PropTypes.any,
 };
 
 export default withTranslation()(LatestUpdatesCardList);

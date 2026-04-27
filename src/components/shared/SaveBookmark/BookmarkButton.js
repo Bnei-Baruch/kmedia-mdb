@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Button, Modal } from 'semantic-ui-react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import BookmarkForm from './BookmarkForm';
@@ -28,29 +28,30 @@ const BookmarkButton = ({ t, source, disabled }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
-      <Modal
-        trigger={
-          <Button
-            compact
-            size="small"
-            icon="bookmark outline"
-            onClick={handleOpen}
-            disabled={disabled}
-          />
-        }
-        open={open}
-        onClose={handleClose}
-        size={!isMobileDevice ? 'tiny' : 'fullscreen'}
-        dir={dir}
-        className="bookmark_modal"
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <button
+        className="px-2 py-1 small border rounded hover:bg-gray-100 inline-flex items-center"
+        onClick={handleOpen}
+        disabled={disabled}
       >
-        <Modal.Header content={t('personal.bookmark.saveBookmark')}/>
-        {
-          !needToLogin ? <BookmarkForm onClose={handleClose} source={source}/> :
-            <Modal.Content content={needToLogin}/>
-        }
-      </Modal>
+        <span className="material-symbols-outlined text-base">bookmark</span>
+      </button>
+      <Dialog open={!!open} onClose={handleClose} className="relative z-50" dir={dir}>
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel
+            className={`bg-white rounded-lg shadow-xl bookmark_modal ${!isMobileDevice ? 'max-w-sm w-full' : 'w-full h-full'}`}
+          >
+            <div className="px-6 py-4 border-b font-bold large">
+              {t('personal.bookmark.saveBookmark')}
+            </div>
+            {
+              !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> :
+                <div className="p-6">{needToLogin}</div>
+            }
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 };

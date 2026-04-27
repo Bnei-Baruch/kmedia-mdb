@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import moment from 'moment/moment';
 import { useSelector } from 'react-redux';
@@ -22,27 +22,31 @@ const NoteItemSticky = () => {
   const dir = getLanguageDirection(note.language);
 
   return (
-    <Modal
-      size="large"
+    <Dialog
       open={true}
-      dir={dir}
-      className="note_modal note_item"
-      closeOnDimmerClick={false}
+      onClose={() => {}}
+      className="relative z-50"
     >
-      <Modal.Content>
-        <div className="note_info">
-          <div className="note_buttons">
-            <NoteCloseBtn />
-            <NoteInModalBtn />
-            <NoteEditBtn />
-            <NoteCopyBtn text={note.content} />
-            <NoteRemoveBtn />
+      <div className="fixed inset-0 bg-black/30" />
+      <div className="fixed inset-0 flex items-center justify-center">
+        <Dialog.Panel
+          className="note_modal note_item mx-auto w-full max-w-2xl rounded bg-white p-6"
+          dir={dir}
+        >
+          <div className="note_info">
+            <div className="note_buttons">
+              <NoteCloseBtn />
+              <NoteInModalBtn />
+              <NoteEditBtn />
+              <NoteCopyBtn text={note.content} />
+              <NoteRemoveBtn />
+            </div>
+            <span>{moment.utc(note.created_at).format('YYYY-MM-DD')}</span>
           </div>
-          <span>{moment.utc(note.created_at).format('YYYY-MM-DD')}</span>
-        </div>
-        <NoteContent />
-      </Modal.Content>
-    </Modal>
+          <NoteContent />
+        </Dialog.Panel>
+      </div>
+    </Dialog>
 
   );
 };

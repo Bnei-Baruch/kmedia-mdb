@@ -55,36 +55,36 @@ const Layout = ({ playerContainer }) => {
   }
 
   const toggleSidebar = () => setSidebarActive(!sidebarActive);
-  const sideBarIcon   = sidebarActive ? <Icon icon={faXmark} className="large" />: <Icon icon={faBars} />;
+  const sideBarIcon = sidebarActive ? <Icon icon={faXmark} className="sidebar-icon" /> : <Icon icon={faBars} className="sidebar-icon" />;
   return (
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
       <GAPageView location={location} />
       <div className="headroom-z-index-802">
         <HeadroomWraper>
           <div className="layout__header">
-            <div className="ui blue inverted borderless huge menu flex items-center w-full text-white text-lg">
+            <div className="layout__topbar flex items-center text-white ">
               <div ref={toggleSidebarBtnRef}>
                 <a
-                  className="layout__sidebar-toggle flex items-center justify-center p-4 cursor-pointer"
+                  className="layout__sidebar-toggle p-4 cursor-pointer large"
                   onClick={toggleSidebar}
                 >
                   {sideBarIcon}
                 </a>
               </div>
-              <Link className="logo flex items-center p-4 text-white hover:text-white" to="/">
-                <Logo width="2.5em" height="120" />
-                <div className="logo__titles ml-4">
+              <Link className="logo flex items-center no-underline" to="/">
+                <Logo width="42px" height="80px" />
+                <div className="logo__titles">
                   {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
                     <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
                   )}
-                  <h1 className="text-white m-0 text-2xl font-normal">{t('nav.top.header')}</h1>
+                  <h1 className="text-white m-0 font-normal text-2xl">{t('nav.top.header')}</h1>
                 </div>
               </Link>
               <div className={isMobileDevice ? 'layout__search mobile-hidden p-4 flex-1' : 'layout__search layout__search_max_width p-4 flex-1'}>
                 {isNotHome && <OmniBox />}
               </div>
               <div className="layout__header-buttons flex items-center ml-auto">
-                <div className="no-margin p-4">
+                <div className="no-margin">
                   <HandleLanguages />
                 </div>
                 {
@@ -113,7 +113,7 @@ const Layout = ({ playerContainer }) => {
           {
             isShowSearch && (
               <div ref={headerSearchRef}>
-                <div className="header_search ui blue inverted segment text-white p-4">
+                <div className="header_search bg-[#2185d0] text-white p-4">
                   <OmniBox />
                 </div>
               </div>
@@ -125,7 +125,7 @@ const Layout = ({ playerContainer }) => {
         ref={sidebarRef}
         className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
       >
-        <div className="ui blue inverted huge menu flex flex-col text-white text-lg">
+        <div className="layout__sidebar-header flex flex-col">
           <div ref={closeSidebarBtnRef}>
             <a
               className="layout__sidebar-toggle flex items-center p-4 cursor-pointer"

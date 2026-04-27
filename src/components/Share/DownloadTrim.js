@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
+import { faXmark, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
 import clsx from 'clsx';
+import Icon from '../Icon';
 import { trimGetListSelector, trimGetWipsSelector } from '../../redux/selectors';
 
 const DownloadTrim = ({ t }) => {
@@ -24,62 +25,51 @@ const DownloadTrim = ({ t }) => {
   const renderWip = (x, i) => {
     i = list.length + i + 1;
     return (
-      <GridRow key={`wip_${i}`}>
-        <GridColumn width={9} verticalAlign={'middle'}>
+      <div className="flex" key={`wip_${i}`}>
+        <div className="flex-[9] flex items-center">
           {`${i}. ${t('messages.trimmed-content-wip')} `}
           <Splash isLoading icon="circle notch" color="blue" width="20" text=""/>
-        </GridColumn>
-        <GridColumn>
-        </GridColumn>
-      </GridRow>
+        </div>
+        <div className="flex-[7]">
+        </div>
+      </div>
     );
   };
 
   return (
     <div className={clsx('trimmed_files', { 'minimized': isMin })}>
-      <Segment clearing className="top">
-        <Button
-          basic
-          icon="close"
-          floated="right"
-          compact
-          inverted
-          size="medium"
-          color="grey"
+      <div className="top clearfix border rounded p-4">
+        <button
+          className="float-right p-1 text-gray-400 hover:text-gray-200"
           onClick={() => setOpen(false)}
-        />
-        <Button
-          basic
-          icon={`chevron ${isMin ? 'up' : 'down'}`}
-          floated="right"
-          compact
-          inverted
-          size="medium"
-          color="grey"
+        >
+          <Icon icon={faXmark} />
+        </button>
+        <button
+          className="float-right p-1 text-gray-400 hover:text-gray-200"
           onClick={() => setIsMin(!isMin)}
-        />
-        <Header
-          as="h3"
-          floated="left"
-          inverted
-          content={wips.length > 0 ? t('messages.trimmed-title-wip') : t('messages.trimmed-title')}
-        />
-      </Segment>
+        >
+          <Icon icon={isMin ? faChevronUp : faChevronDown} />
+        </button>
+        <h3 className="float-left text-white">
+          {wips.length > 0 ? t('messages.trimmed-title-wip') : t('messages.trimmed-title')}
+        </h3>
+      </div>
       {
         !isMin && (
           <>
-            <Container className="padded content">
-              <Grid>
+            <div className=" px-4  content">
+              <div>
                 {
                   list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item}/>)
                 }
                 {
                   wips.map(renderWip)
                 }
-              </Grid>
-            </Container>
-            <Container className="padded" content={t('messages.trim-expiration')}/>
-            <Divider hidden/>
+              </div>
+            </div>
+            <div className=" px-4 ">{t('messages.trim-expiration')}</div>
+            <hr className="invisible my-4" />
           </>
         )
       }

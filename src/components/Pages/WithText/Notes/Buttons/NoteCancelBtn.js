@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
 import { useTranslation } from 'react-i18next';
@@ -14,12 +13,12 @@ const NoteCancelBtn = () => {
   };
 
   return (
-    <Button
-      inverted
+    <button
       onClick={handleCancel}
-      color="blue"
-      content={t('buttons.cancel')}
-    />
+      className="border border-blue-600 text-blue-600 bg-transparent rounded px-4 py-2 hover:bg-blue-50"
+    >
+      {t('buttons.cancel')}
+    </button>
   );
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { Container, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
@@ -14,12 +13,12 @@ const TextList = ({ t }) => {
   const items = ids?.filter(x => !!x.isText) || [];
 
   return (
-    <Container className="padded topics_texts">
-      <Header as="h3" content={`${t('topics.texts-title')} (${textTotal})`}/>
+    <div className=" px-4  topics_texts">
+      <h3>{`${t('topics.texts-title')} (${textTotal})`}</h3>
       {
         items?.map(({ cuID, lID }, i) => (<TextListTemplate cuID={cuID} lID={lID} key={i}/>))
       }
-    </Container>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Button } from 'semantic-ui-react';
 
 const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)[0]) => {
   const blob = new Blob([data], { type: mimeType || 'application/octet-stream' });
@@ -68,7 +67,14 @@ const Download = props => {
   }
 
   return ReactDOM.createPortal(
-    <Button compact size="small" icon="download" disabled={!path} onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
+    <button
+      className="inline-flex items-center gap-1 border border-gray-300 rounded px-3 py-1 small hover:bg-gray-50"
+      disabled={!path}
+      onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}
+    >
+      <span className="material-symbols-outlined text-base">download</span>
+      {children}
+    </button>,
     mountPoint,
   );
 };

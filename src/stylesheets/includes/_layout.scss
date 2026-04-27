@@ -16,11 +16,18 @@
   scrollbar-color: #646464 #FFFFFF;
 }
 
-h1, h2, h3, h4, h5, .ui.accordion .title:not(.ui), .ui.button, .ui.input > input {
+h1,
+h2,
+h3,
+h4,
+h5,
+.header {
   font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 body {
+  padding: 0;
+  margin: 0;
   overflow-y: scroll;
   font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
@@ -42,12 +49,10 @@ body {
 
   &__header,
   &__sidebar {
-    .menu,
-    .item {
-      border-radius: 0 !important;
-    }
 
-    > .menu {
+    .layout__topbar,
+    .layout__sidebar-header {
+      border-radius: 0;
       height: $main-menu-height;
 
       small {
@@ -62,18 +67,12 @@ body {
     top: 0;
     z-index: 2000;
 
-    // Add horizontal breathing room on full-width header and center items vertically
-    > .menu {
+    .layout__topbar {
       padding-left: 15px;
       padding-right: 15px;
-      align-items: center !important;
+      align-items: center;
+      background-color: #1A4378 !important;
     }
-
-    // Custom brand color for top header bar
-    .ui.menu.inverted {
-      background-color: #1A4378 !important; // brand blue
-    }
-
   }
 
   &__search {
@@ -92,6 +91,7 @@ body {
     @include small-mobile {
       width: 100%;
     }
+
     background: $white;
     bottom: 0;
     left: 0;
@@ -107,11 +107,12 @@ body {
       transform: none;
     }
 
-    > .menu {
+    .layout__sidebar-header {
       left: 0;
       position: absolute;
       right: 0;
       top: 0;
+      background-color: #1A4378 !important;
     }
 
     &-menu {
@@ -122,20 +123,10 @@ body {
       position: absolute;
       right: 0;
       top: $main-menu-height;
-
-      .menu {
-        border: 0;
-        box-shadow: none !important;
-      }
     }
 
     &-search {
       flex: 1 0 auto !important;
-    }
-
-    // Match brand color for the sidebar's own top menu bar
-    .ui.menu.inverted {
-      background-color: #1A4378 !important;
     }
   }
 
@@ -154,36 +145,28 @@ body {
     min-height: $secondary-header-height;
     right: 0;
 
-    .row {
-      padding-bottom: .5rem !important;
-      padding-top: .5rem !important;
-    }
-
-    + .ui.container {
-      background-clip: content-box;
-      padding-top: $secondary-header-height;
-    }
   }
 }
 
-// Mobile search bar container under header (outside of .layout__header)
-.header_search.ui.segment,
-.ui.segment.header_search,
-.ui.blue.inverted.segment.header_search {
+.sidebar-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.header_search {
   background-color: #1A4378 !important;
-  background-image: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+  border: none;
+  box-shadow: none;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .logo {
-  flex: 0 1 auto !important;
-  padding: 0 !important;
+  flex: 0 1 auto;
+  padding: 0;
 
   img {
-    display: inline-block !important;
+    display: inline-block;
     height: 120px; // 20% bigger
     width: auto;
   }
@@ -194,27 +177,30 @@ body {
     margin-left: 10px;
     line-height: 1;
     justify-content: center;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   }
 
   h1.header {
     @include mobile {
-      font-size: 1.0rem !important;
+      font-size: 1.0rem;
     }
-    font-size: 1.25rem; // smaller than subtitle
-    font-weight: 500;
+
+    font-size: 1rem;
     margin-left: 0;
     margin-top: 0.1rem;
   }
 
   .logo__subtitle {
     color: #ffffff;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 1000;
     letter-spacing: 0.02em;
     text-transform: uppercase;
+    text-decoration: none;
     opacity: 0.9;
     line-height: 1;
     margin-bottom: 0.1rem;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
     @include mobile {
       font-size: 1.2rem;
@@ -242,7 +228,7 @@ body {
       top: $main-menu-height;
       transform: none;
 
-      > .menu {
+      .layout__sidebar-header {
         display: none;
       }
 
@@ -265,99 +251,56 @@ body {
   }
 }
 
-.ui.container.padded {
-  padding: 1em;
-
-  &.vertically {
-    padding: 1em 0;
+.layout__sidebar-toggle {
+  @include tablet-mobile {
+    display: flex !important;
+    align-items: center !important;
+    height: $main-menu-height !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
-  &.horizontally {
-    padding: 0 1em;
-
-    &.vertically {
-      padding: 1em;
-    }
-  }
-}
-
-.ui.grid {
-  .is-fitted {
-    padding: 0 !important;
-  }
-}
-
-.ui.menu {
-  .layout__sidebar-toggle.item,
-  .item.layout__sidebar-toggle {
-    @include tablet-mobile {
-      display: flex !important;
-      align-items: center !important;
-      height: $main-menu-height !important;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-    }
-  }
-
-  // Toggle icon size
-  .layout__sidebar-toggle .icon {
+  .icon {
     font-size: 1.8rem !important;
     line-height: 1 !important;
   }
+}
 
-  .donate-button {
-    &.ui.button,
-    &.ui.button:hover,
-    &.ui.button:focus {
-      background: #fc6719 !important;
-      color: white !important;
-      font-size: .92857143rem !important;
-    }
+.donate-button {
+  background: #fc6719 !important;
+  color: white !important;
+  font-size: .92857143rem !important;
+}
+
+.auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  border: 1px solid #2185d0;
+  color: gray;
+  cursor: pointer;
+  background: $white;
+  font-weight: 700;
+  padding: 0;
+  transition: color 150ms, background-color 150ms;
+
+  &:hover {
+    color: black;
   }
+}
 
-  .auth-button {
-    &.ui.button,
-    &.ui.button:hover,
-    &.ui.button:focus {
-
-      background: $white !important;
-      font-size: 1.8em !important;
-      width: 2.9rem;
-      text-align: center;
-      padding: 0;
-      line-height: 1.3em;
-
-      @include mobile {
-        font-size: 1rem !important;
-        width: 2.3rem;
-        line-height: 2.3rem;
-      }
-    }
-  }
-
-  .vh-button {
-    font-size: .92857143rem !important;
-    margin: 0 0.5em !important;
-
-    &.ui.button,
-    &.ui.button:hover,
-    &.ui.button:focus {
-      background: $white !important;
-    }
-
-  }
+.vh-button {
+  font-size: .92857143rem !important;
+  margin: 0 0.5em !important;
+  background: $white !important;
 }
 
 .auth-popup {
   text-align: center;
   padding: 0 2em;
-
-  .ui.list > a {
-    &.item, &.item:hover, &.item:focus {
-      color: $black;
-      padding: 0.5em 0;
-    }
-  }
 }
 
 .splash {
@@ -366,9 +309,9 @@ body {
   justify-content: center;
 }
 
-.layout__header-buttons > .item {
-  padding-right: 0.7em !important;
-  padding-left: 0.7em !important;
+.layout__header-buttons>div {
+  padding-right: 0.7em;
+  padding-left: 0.7em;
 }
 
 .tooltip_if_need {
@@ -379,18 +322,14 @@ body {
 
 .donationPopup {
   .donate-button {
-    &.ui.button,
-    &.ui.button:hover,
-    &.ui.button:focus {
-      background: #fc6719 !important;
-      color: white !important;
-      font-size: .92857143rem !important;
+    background: #fc6719 !important;
+    color: white !important;
+    font-size: .92857143rem !important;
 
-      i {
-        margin-left: 6px !important;
-        margin-right: 0px !important;
-        float: right;
-      }
+    i {
+      margin-left: 6px !important;
+      margin-right: 0 !important;
+      float: right;
     }
   }
 
@@ -405,14 +344,10 @@ body {
 
 .donationPopup.rtl {
   .donate-button {
-    &.ui.button,
-    &.ui.button:hover,
-    &.ui.button:focus {
-      i {
-        margin-left: 0px !important;
-        margin-right: 6px !important;
-        float: left !important;
-      }
+    i {
+      margin-left: 0 !important;
+      margin-right: 6px !important;
+      float: left !important;
     }
   }
 }

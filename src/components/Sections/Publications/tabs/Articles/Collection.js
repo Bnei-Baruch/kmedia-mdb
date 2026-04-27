@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
 
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import Collection from '../../../../Pages/Collection/Container';
@@ -8,15 +7,15 @@ const PublicationCollection = () => <Collection namespace="publications-collecti
 
 const renderUnit = (unit, t) =>
   (
-    <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine>
+    <tr key={unit.id} className="align-top">
+      <td className="whitespace-nowrap w-px">
         { renderUnitHelper.renderUnitFilmDate(unit, t)}
-      </Table.Cell>
-      <Table.Cell>
+      </td>
+      <td>
         { renderUnitHelper.renderUnitNameLink(unit)}
         { renderUnitHelper.renderUnitDescription(unit)}
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 
 export default PublicationCollection;

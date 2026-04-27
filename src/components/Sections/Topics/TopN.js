@@ -2,7 +2,6 @@ import { produce } from 'immer';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
-import { Button, Header, Image, Table } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
@@ -27,8 +26,6 @@ const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {
 };
 
 const isButtonViewAllVisible = (totalUnits, N, url) => (
-  // don't show button to events - page not exists
-  // show only for more than N units
   totalUnits > N && !url.includes('events')
 );
 
@@ -49,46 +46,51 @@ const getTopNUnits = (units, N) => {
 const compareUnits = (u1, u2) => strCmp(u2.film_date, u1.film_date);
 
 const renderTable = (topNUnits, section, url, t) => (
-  <Table unstackable basic="very">
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell>
-          <Header icon as="h3">
-            <Image size="big" verticalAlign="middle">
+  <table className="w-full border-collapse">
+    <thead>
+      <tr>
+        <th className="text-left">
+          <h3 className="flex items-center gap-2">
+            <span className="inline-block align-middle">
               <SectionLogo name={section} />
-            </Image>
+            </span>
             {t(`nav.sidebar.${section}`)}
-          </Header>
-        </Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
+          </h3>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
       {topNUnits.map(x => renderUnit(x, t))}
-    </Table.Body>
+    </tbody>
     {
       url
         ? (
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell>
-                <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
+          <tfoot>
+            <tr>
+              <th className="text-left">
+                <a
+                  className="inline-block bg-blue-500 text-white small px-3 py-1.5 rounded hover:bg-blue-600"
+                  href={url}
+                >
+                  {t('buttons.view-all')}
+                </a>
+              </th>
+            </tr>
+          </tfoot>
         )
         : null
     }
-  </Table>
+  </table>
 );
 
 const renderUnit = (unit, t) =>
   (
-    <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell>
+    <tr key={unit.id} className="align-top">
+      <td>
         { renderUnitHelper.renderUnitFilmDate(unit, t)}
         { renderUnitHelper.renderUnitNameLink(unit)}
-      </Table.Cell>
-    </Table.Row>
+      </td>
+    </tr>
   );
 
 TopN.propTypes = {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Button, Card, Confirm, Header } from 'semantic-ui-react';
+import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../redux/modules/my';
 import { actions as statsActions } from '../../../../redux/modules/stats';
@@ -68,37 +68,49 @@ export const SubscriptionsItem = ({ item, t }) => {
     to    = { pathname: `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}` };
   }
 
+  const borderColor = cuStats?.data?.total ? 'border-red-500' : 'border-green-500';
+
   return (
-    <Card raised color={cuStats?.data?.total ? 'red' : 'green'}>
+    <div className={`rounded-lg shadow-md overflow-hidden border-t-4 ${borderColor}`}>
       {logo}
-      <Card.Content>
-        <Header size="medium" className="no-margin-top">
+      <div className="p-4">
+        <h4 className="no-margin-top font-medium">
           <Link to={to}>
             {title}
           </Link>
-        </Header>
-        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`}/>
-      </Card.Content>
-      <Card.Content extra textAlign="center">
-        <Confirm
-          size="tiny"
-          open={confirm}
-          onCancel={handleConfirmCancel}
-          onConfirm={handleConfirmSuccess}
-          cancelButton={t('buttons.cancel')}
-          confirmButton={t('buttons.apply')}
-          content={t('personal.confirmUnsubscribe', { name: title })}
-          dir={uiDir}
-        />
-        <Button
-          basic
-          size="large"
-          content={t('personal.unsubscribe')}
+        </h4>
+        <p className="small text-gray-500">{`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`}</p>
+      </div>
+      <div className="border-t p-4 text-center">
+        <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
+              <p>{t('personal.confirmUnsubscribe', { name: title })}</p>
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  className="rounded border border-gray-300 px-4 py-2 small"
+                  onClick={handleConfirmCancel}
+                >
+                  {t('buttons.cancel')}
+                </button>
+                <button
+                  className="rounded bg-blue-500 px-4 py-2 small text-white"
+                  onClick={handleConfirmSuccess}
+                >
+                  {t('buttons.apply')}
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+        <button
+          className="rounded border border-gray-300 px-4 py-2 large text-gray-500 uppercase"
           onClick={remove}
-          color="grey"
-          className="uppercase"
-        />
-      </Card.Content>
-    </Card>
+        >
+          {t('personal.unsubscribe')}
+        </button>
+      </div>
+    </div>
   );
 };

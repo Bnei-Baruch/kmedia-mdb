@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { noop } from '../../helpers/utils';
-import { Accordion, Checkbox, Icon, List, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { FN_DATE_FILTER } from '../../helpers/consts';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
+import { actions } from '../../redux/modules/filters';
+import { filtersAsideGetMultipleStatsSelector, filtersGetFilterByNameSelector, settingsGetUILangSelector } from '../../redux/selectors';
+import FastDayPicker from '../Filters/components/Date/FastDayPicker';
 import {
   CUSTOM_DAY,
   CUSTOM_RANGE,
@@ -14,13 +19,7 @@ import {
   rangeToPreset,
   TODAY
 } from '../Filters/components/Date/helper';
-import { FN_DATE_FILTER } from '../../helpers/consts';
-import FastDayPicker from '../Filters/components/Date/FastDayPicker';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';
-import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { filtersGetFilterByNameSelector, filtersAsideGetMultipleStatsSelector, settingsGetUILangSelector } from '../../redux/selectors';
 
 const ENABLED_STATS_NAMESPACE = ['search'];
 
@@ -65,7 +64,9 @@ const DateFilter = ({ t, namespace }) => {
 
   };
 
-  const handleDatePresetsChange = (event, { value, checked }) => {
+  const handleDatePresetsChange = event => {
+    let { value } = event.target;
+    const { checked } = event.target;
     setShowRange(false);
     setShowDay(false);
     if (!checked) value = null;
@@ -114,70 +115,77 @@ const DateFilter = ({ t, namespace }) => {
     setShowDay(!showDay);
   };
 
-  const iconName      = `caret ${isLanguageRtl(uiLang) ? 'left' : 'right'}`;
+  const iconName      = isLanguageRtl(uiLang) ? 'arrow_left' : 'arrow_right';
   const renderContent = () => (
-    <Segment.Group className="filter-popup__wrapper">
+    <div className="filter-popup__wrapper border rounded bg-white p-4">
       {
         datePresets.map((x, i) =>
           (
-            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-              <List.Content className="date-filter-presets">
-                <Checkbox
-                  label={t(`filters.date-filter.presets.${x}`)}
-                  checked={preset === x}
-                  value={x}
-                  onChange={handleDatePresetsChange}
-                />
+            <li key={`${FN_DATE_FILTER}_${i}`}>
+              <div className="date-filter-presets">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={preset === x}
+                    value={x}
+                    onChange={handleDatePresetsChange}
+                  />
+                  {t(`filters.date-filter.presets.${x}`)}
+                </label>
                 {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
-              </List.Content>
-            </List.Item>
+              </div>
+            </li>
           )
         )
       }
-      <Accordion as={List} vertical="true" className="date-filter">
-        <List.Item>
-          <Accordion.Title
-            active={showDay}
+      <ul className="date-filter">
+        <li>
+          <div
+            className="cursor-pointer flex items-center"
             onClick={toggleDay}
           >
             {t('filters.date-filter.presets.CUSTOM_DAY')}
-            <Icon color="blue" name={iconName}/>
-          </Accordion.Title>
-          <Accordion.Content active={showDay}>
-            <FastDayPicker
-              label={null}
-              value={from}
-              language={uiLang}
-              onDayChange={handleDayInputChange}
-            />
-          </Accordion.Content>
-        </List.Item>
-        <List.Item>
-          <Accordion.Title
-            active={showRange}
+            <span className="material-symbols-outlined text-blue-500">{iconName}</span>
+          </div>
+          {showDay && (
+            <div>
+              <FastDayPicker
+                label={null}
+                value={from}
+                language={uiLang}
+                onDayChange={handleDayInputChange}
+              />
+            </div>
+          )}
+        </li>
+        <li>
+          <div
+            className="cursor-pointer flex items-center"
             onClick={toggleRange}
           >
             {t('filters.date-filter.presets.CUSTOM_RANGE')}
-            <Icon color="blue" name={iconName}/>
-          </Accordion.Title>
-          <Accordion.Content active={showRange}>
-            <FastDayPicker
-              label={t('filters.date-filter.start')}
-              value={from}
-              language={uiLang}
-              onDayChange={handleFromInputChange}
-            />
-            <br/>
-            <FastDayPicker
-              label={t('filters.date-filter.end')}
-              value={to}
-              language={uiLang}
-              onDayChange={handleToInputChange}
-            />
-          </Accordion.Content>
-        </List.Item>
-      </Accordion>
-    </Segment.Group>
+            <span className="material-symbols-outlined text-blue-500">{iconName}</span>
+          </div>
+          {showRange && (
+            <div>
+              <FastDayPicker
+                label={t('filters.date-filter.start')}
+                value={from}
+                language={uiLang}
+                onDayChange={handleFromInputChange}
+              />
+              <br/>
+              <FastDayPicker
+                label={t('filters.date-filter.end')}
+                value={to}
+                language={uiLang}
+                onDayChange={handleToInputChange}
+              />
+            </div>
+          )}
+        </li>
+      </ul>
+    </div>
   );
   return (
     <FilterHeader

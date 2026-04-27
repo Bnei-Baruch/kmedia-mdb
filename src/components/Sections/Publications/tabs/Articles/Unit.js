@@ -1,7 +1,6 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Grid, Header } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
@@ -23,30 +22,28 @@ import {
 import TextLayoutMobile from '../../../../Pages/WithText/TextLayoutMobile';
 
 const renderHeader = (unit, t) => {
-  const subText2 = t(`publications.header.subtext2`);
+  const subText2 = t('publications.header.subtext2');
 
   return (
     <div className="section-header">
-      <Container className="padded">
-        <Header as="h1">
-          <Header.Content>
-            {unit.name}
-            {
-              unit.description &&
-              <Header.Subheader>{unit.description}</Header.Subheader>
-            }
-            {
-              subText2 &&
-              <Header.Subheader className="section-header__subtitle2">
-                {subText2}
-              </Header.Subheader>
-            }
-          </Header.Content>
-        </Header>
-        <Header as="h4" color="grey" className="display-inline">
+      <div className=" px-1 ">
+        <h1>
+          {unit.name}
+          {
+            unit.description &&
+            <div className="text-base font-normal text-gray-500">{unit.description}</div>
+          }
+          {
+            subText2 &&
+            <div className="text-base font-normal text-gray-500 section-header__subtitle2">
+              {subText2}
+            </div>
+          }
+        </h1>
+        <h4 className="text-gray-500 display-inline">
           {t('values.date', { date: unit.film_date })}
-        </Header>
-      </Container>
+        </h4>
+      </div>
     </div>
   );
 };
@@ -98,42 +95,26 @@ const ArticlePage = () => {
     ? (
       <>
         {renderHelmet(unit)}
-        <Container>
-          <Grid padded>
-            <Grid.Row>
-              <Grid.Column mobile={16} tablet={10} computer={10}>
-                <Grid.Row>
-                  {renderHeader(unit, t, uiDir)}
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column>
-                    <Grid padded>
-                      <Grid.Row>
-                        <Grid.Column>
-                          {
-                            isMobileDevice ? (
-                              <TextLayoutMobile toolbar={toolbar} playerPage={true} />
-                            ) : (
-                              <TextLayoutWeb toolbar={toolbar} playerPage={true} />
-                            )
-                          }
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row>
-                        <Grid.Column>
-                          <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended cuId={unit.id} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+        <div className=" px-4">
+          <div className="flex flex-wrap p-4">
+            <div className="w-full md:w-[62.5%]">
+              {renderHeader(unit, t, uiDir)}
+              <div className="p-4">
+                {
+                  isMobileDevice ? (
+                    <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+                  ) : (
+                    <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+                  )
+                }
+                <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
+              </div>
+            </div>
+            <div className="w-full md:w-[37.5%]">
+              <Recommended cuId={unit.id} />
+            </div>
+          </div>
+        </div>
       </>
     ) : (
       renderHeader(unit, t, uiDir)

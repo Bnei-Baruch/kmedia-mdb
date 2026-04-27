@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Popover } from '@headlessui/react';
 
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
@@ -18,28 +18,25 @@ const LikutToolbarMobile = () => (
       <TextSettings />
       <SearchOnPageBtn />
       <LessonsByLikutBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        className="text_toolbar__dropdown"
-        direction="left"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
+      <Popover className="relative text_toolbar__dropdown">
+        <Popover.Button as="div">
+          <MoreOptionsBtn />
+        </Popover.Button>
+        <Popover.Panel className="absolute right-0 z-10 bg-white shadow-lg rounded border">
+          <div className="px-4 py-2 hover:bg-gray-100">
             <AddBookmarkBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-4 py-2 hover:bg-gray-100">
             <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-4 py-2 hover:bg-gray-100">
             <ShareTextModalBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
+          </div>
+          <div className="px-4 py-2 hover:bg-gray-100">
             <CopyLinkBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+          </div>
+        </Popover.Panel>
+      </Popover>
     </div>
   </div>
 );
