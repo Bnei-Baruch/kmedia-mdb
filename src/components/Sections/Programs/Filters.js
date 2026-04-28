@@ -42,6 +42,7 @@ const Filters = ({ namespace, baseParams }) => {
         with_original_languages: true
       }, { isPrepare: true }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isReady, baseParams]);
 
   const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);

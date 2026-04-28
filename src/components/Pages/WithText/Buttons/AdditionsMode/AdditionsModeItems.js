@@ -24,6 +24,7 @@ const AdditionsModeItems = () => {
       m     = isNaN(m) ? TEXT_PAGE_ADDITIONS_MODS.showMy : m;
       dispatch(actions.setAdditionsMode(m));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   const handleSet = m => dispatch(actions.setAdditionsMode(m));

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';

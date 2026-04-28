@@ -109,7 +109,7 @@ export default class ClientChronicles {
       }
     }, APPENDS_FLUSH_MS);
 
-    window.addEventListener('beforeunload', event => {
+    window.addEventListener('beforeunload', () => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.

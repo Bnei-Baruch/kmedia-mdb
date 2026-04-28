@@ -11,7 +11,8 @@ const TimedPopup = ({
   openOnInit = false,
   timeout = POPOVER_CONFIRMATION_TIMEOUT,
   language,
-  refElement = null,
+  // eslint-disable-next-line no-unused-vars
+  refElement: _refElement = null,
   updateTrigger }) => {
 
   const [opened, setOpened] = useState(false);

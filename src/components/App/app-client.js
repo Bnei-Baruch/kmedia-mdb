@@ -30,6 +30,7 @@ const NAME_SPACE = 'app-client';
 logger.log(NAME_SPACE, 'loaded');
 
 async function hydrateApp(kcInfo) {
+  // eslint-disable-next-line import/no-named-as-default-member
   ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
   logger.log(NAME_SPACE, 'hydrateApp __i18n', window.__i18n);
   logger.log(NAME_SPACE, 'hydrateApp __data', window.__data);

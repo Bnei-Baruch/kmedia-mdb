@@ -20,7 +20,8 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
       dispatch(actions.hydrateFilters(namespace));
       hydrated.current = true;
     }
-  }, [dispatch, hydrated.current, isHydrated, namespace]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, isHydrated, namespace]);
 
   return null;
 };

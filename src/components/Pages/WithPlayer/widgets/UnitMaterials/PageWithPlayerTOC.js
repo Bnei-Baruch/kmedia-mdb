@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { textPageGetTocIsActiveSelector, textPageGetSubjectSelector } from '../../../../../redux/selectors';
 import { actions } from '../../../../../redux/modules/textPage';

@@ -48,6 +48,7 @@ const PersonalInfo = ({ collection }) => {
     if (id !== undefined) {
       dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, key, id, content_type]);
 
   useEffect(() => {

@@ -24,7 +24,7 @@ const groupByName = {
 };
 const cts         = Object.values(groupByName).flatMap(x => x.cts);
 
-const ContentType = ({ namespace, t }) => {
+const ContentType = ({ namespace }) => {
   let items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
   items     = items.filter(ct => !cts.includes(ct));
 

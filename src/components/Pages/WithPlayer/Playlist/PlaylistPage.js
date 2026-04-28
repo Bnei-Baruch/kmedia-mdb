@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';

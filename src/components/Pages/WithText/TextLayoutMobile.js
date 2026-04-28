@@ -3,7 +3,7 @@ import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
 import TextContentMobile from './Content/TextContentMobile';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import SearchOnPageBar from './SearchOnPageBar';
 import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';

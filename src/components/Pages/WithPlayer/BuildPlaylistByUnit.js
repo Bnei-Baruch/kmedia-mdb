@@ -35,6 +35,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     if (!wipCU && !errCU && !fetched) {
       dispatch(mdbActions.fetchUnit(id));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errCU, wipCU, fetched, id]);
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     } else if (id && prevCuId !== id) {
       dispatch(actions.select({ id, cuId: id }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cId, id, prevCuId, wip, fetched, dispatch]);
 
   return <Helmets.AVUnit id={id} />;

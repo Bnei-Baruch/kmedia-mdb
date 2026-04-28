@@ -142,7 +142,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    fetchAsset       : (state, _) => state.asset.wip = true,
+    fetchAsset       : state => void (state.asset.wip = true),
     fetchAssetSuccess: (state, action) => {
       state.asset.data = action.payload;
       state.asset.wip  = false;
@@ -153,7 +153,7 @@ const assetsSlice = createSlice({
       state.asset.err = action.payload;
     },
 
-    fetchPerson           : (state, _) => void (state.person.wip = true),
+    fetchPerson           : state => void (state.person.wip = true),
     fetchPersonSuccess    : (state, action) => {
       state.person.data = action.payload;
       state.person.wip  = false;
@@ -163,7 +163,7 @@ const assetsSlice = createSlice({
       state.person.wip = false;
       state.person.err = action.payload;
     },
-    fetchAbout            : (state, _) => void (state.about.wip = true),
+    fetchAbout            : state => void (state.about.wip = true),
     fetchAboutSuccess     : (state, action) => {
       state.about.data = action.payload;
       state.about.wip  = false;

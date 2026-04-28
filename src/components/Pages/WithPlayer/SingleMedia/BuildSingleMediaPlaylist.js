@@ -15,6 +15,7 @@ const BuildSingleMediaPlaylist = () => {
     if (!wip && id !== cuId) {
       dispatch(actions.singleMediaBuild(id));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cuId, id, wip]);
 
   return <Helmets.AVUnit id={id}/>;

@@ -1,11 +1,11 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
-import { canonicalCollection, tracePath } from '../../helpers/utils';
+import { canonicalCollection } from '../../helpers/utils';
 import { actions as listsActions } from '../../redux/modules/lists';
 import { actions as publicationActions } from '../../redux/modules/publications';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
@@ -45,9 +45,7 @@ import {
   recommendedGetViewsSelector,
   settingsGetLeftRightByDirSelector,
   settingsGetUIDirSelector,
-  settingsGetUILangSelector,
-  sourcesGetSourceByIdSelector,
-  tagsGetTagByIdSelector
+  settingsGetUILangSelector
 } from '../../redux/selectors';
 import Link from '../Language/MultiLanguageLink';
 import UnitLogo from '../shared/Logo/UnitLogo';
@@ -363,18 +361,7 @@ export const SearchResultOneItem = props => {
   );
 };
 
-const getFilterById = (getTagById, getSourceById, index) => {
-  switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return getTagById;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return getSourceById;
-    default:
-      return x => x;
-  }
-};
-
-export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
+export const SearchResultIntent = ({ id, type, index, clickData }) => {
   const { t }      = useTranslation();
   const chronicles = useContext(ClientChroniclesContext);
   const namespace  = `intents_${id}_${type}`;
@@ -386,37 +373,28 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
       [index === SEARCH_INTENT_INDEX_SOURCE ? 'source' : 'tag']: id
     };
     dispatch(listsActions.fetchList(namespace, 1, params));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const { items, wip, err, total } = useSelector(state => listsGetNamespaceStateSelector(state, namespace));
   // MAP items to SearchResultOneItem
   const cuItems                    = useSelector(state => (items || []).map(x => mdbGetDenormContentUnitSelector(state, x)));
-
-  const getTagById    = useSelector(tagsGetTagByIdSelector);
-  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   const section    = SEARCH_INTENT_SECTIONS[type];
   const intentType = SEARCH_INTENT_NAMES[index];
   const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
   const logo        = <SectionLogo name={type} height="50" width="50" />;
-  const getById     = getFilterById(getTagById, getSourceById, index);
   const link        = intentSectionLink(section, [{ name: filterName, values: [id] }]);
   const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
 
   let resultsType = '';
-  const path      = tracePath(getById(id), getById);
-  let display     = '';
   switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
-      display     = path[path.length - 1].label;
       resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     case SEARCH_INTENT_INDEX_SOURCE:
-      display     = path.map(y => y.name).join(' > ');
       resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
-    default:
-      display = name;
   }
 
   const props = {
@@ -589,6 +567,7 @@ export const SearchResultTweets = ({ source }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     askForData(0, pageSize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const askForData = (pageNo, pageSize) => {

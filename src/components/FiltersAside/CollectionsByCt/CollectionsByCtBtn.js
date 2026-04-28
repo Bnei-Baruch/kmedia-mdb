@@ -16,6 +16,7 @@ const CollectionsByCtBtn = ({ namespace, ct }) => {
   const { t } = useTranslation();
 
   const leftRight = useSelector(settingsGetLeftRightByDirSelector);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedCollections =
     useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_COLLECTION_MULTI))?.values || [];
   const selectedCT =

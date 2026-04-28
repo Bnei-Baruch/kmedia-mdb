@@ -36,6 +36,7 @@ const Filters = ({ namespace, baseParams }) => {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, countC: true, countL: true }));
       prevSelRef.current = selectedSignature;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needFetch, baseParams, namespace, dispatch, selectedSignature]);
 
   const handleOnHydrated = () => setIsHydrated(true);

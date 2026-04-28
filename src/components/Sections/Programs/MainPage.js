@@ -55,6 +55,7 @@ const MainPage = () => {
         withViews   : true
       }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr          = WipErr({ wip, err, t });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from '../../../helpers/utils';
 
@@ -25,7 +25,7 @@ const AlphabetFilter = ({ letters, onLetterClick }) => {
     <ul className="flex flex-wrap items-center gap-2 list-none p-0 m-0">
       <li key="all">
         <a
-          className={clsx('cursor-pointer px-1', { 'font-bold text-blue-600': clickedLetter == null })}
+          className={clsx('cursor-pointer px-1', { 'font-bold text-blue-600': clickedLetter === null })}
           onClick={() => processClicked(null)}
         >
           {t('filters.all')}

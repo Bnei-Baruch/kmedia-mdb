@@ -50,6 +50,7 @@ const LessonPage = ({ t }) => {
     } else {
       dispatch(actions.fetchList(namespace, pageNo, { collection: cid, pageSize, withViews: true }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, pageNo, selected, cid]);
 
   const wipErr = WipErr({ wip, err, t });

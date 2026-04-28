@@ -44,6 +44,7 @@ const MainPage = ({ t }) => {
     } else {
       dispatch(actions.fetchList(PAGE_NS_LIKUTIM, pageNo, { pageSize, ...FILTER_PARAMS }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });

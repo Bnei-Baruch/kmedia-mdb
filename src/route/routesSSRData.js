@@ -364,7 +364,7 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
   [LANG_ENGLISH, 'laitman'],
 ]);
 
-export const likutPage = async (store, match, show_console = false) => {
+export const likutPage = async (store, match) => {
   const { id } = match.params;
 
   const location = store.getState()?.router.location ?? {};

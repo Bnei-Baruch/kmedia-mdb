@@ -40,11 +40,11 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
   const suggesterIncludes       = (uid, str) => (suggesters.get(uid) || '').includes(str);
   const unitsViews              = useSelector(state => recommendedGetManyViewsSelector(state, unitsToDisplay));
   const unitsWatchingNow        = useSelector(state => recommendedGetManyWatchingNowSelector(state, unitsToDisplay));
-  const watchingNow             = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
+  const watchingNow             = (uid, _index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[_index]) || -1;
   const twoDaysAgo              = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
   const filmDateNow    = `${twoDaysAgo.getFullYear()}-${padOneZero(String(twoDaysAgo.getMonth() + 1))}-${padOneZero(String(twoDaysAgo.getDate()))}`;
-  const suggesterLabel = (recommendForUnit, unit, index) => {
+  const suggesterLabel = (recommendForUnit, unit) => {
     if (unit.film_date && unit.film_date.localeCompare(filmDateNow) >= 0) {
       return t('materials.recommended.new');
     }

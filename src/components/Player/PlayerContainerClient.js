@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, createContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES, MT_AUDIO } from '../../helpers/consts';

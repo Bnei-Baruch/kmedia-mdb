@@ -2,7 +2,7 @@ import React, { useRef, useContext } from 'react';
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useSelector } from 'react-redux';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import NoteItemSticky from './Notes/NoteItemSticky';

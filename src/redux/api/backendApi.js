@@ -9,6 +9,6 @@ export const backendApi = createApi({
   }),
 
   // Real endpoints are injected in api files
-  endpoints: builder => ({})
+  endpoints: () => ({})
 });
 

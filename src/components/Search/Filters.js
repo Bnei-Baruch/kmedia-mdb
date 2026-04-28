@@ -66,6 +66,7 @@ const Filters = ({ namespace }) => {
     if (isHydrated && !wip && !err) {
       dispatch(actions.fetchElasticStats(namespace));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isHydrated]);
 
   const handleOnHydrated = () => setIsHydrated(true);

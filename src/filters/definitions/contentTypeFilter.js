@@ -7,7 +7,7 @@ const contentTypeFilter = {
   valueToQuery: value => value,
   queryToValue: queryValue => queryValue,
   valueToApiParam: value => ({ content_type: value }),
-  valueToTagLabel: (value, props, { getState }) => {
+  valueToTagLabel: value => {
     if (!value) {
       return '';
     }

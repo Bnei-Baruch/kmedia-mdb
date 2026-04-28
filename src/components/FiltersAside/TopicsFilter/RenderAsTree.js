@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import React, { useMemo } from 'react';
 import TagSourceItem from './TagSourceItem';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import { sourcesAreLoadedSelector, sourcesGetPathByIDSelector, tagsGetPathByIDSelector, sourcesGetRootsSelector, tagsGetRootsSelector } from '../../../redux/selectors';
+import { sourcesGetPathByIDSelector, tagsGetPathByIDSelector, sourcesGetRootsSelector, tagsGetRootsSelector } from '../../../redux/selectors';
 
 const treeItems = (items, getPath) => items.map(getPath)
   .flat()
@@ -21,13 +21,11 @@ const RenderAsTree = ({ namespace, filterName, baseItems }) => {
   const rootsTags        = useSelector(tagsGetRootsSelector);
   const getPathSources   = useSelector(sourcesGetPathByIDSelector);
   const rootsSources     = useSelector(sourcesGetRootsSelector);
-  const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
-
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getPath = isTag ? getPathTags : getPathSources;
   const roots   = isTag ? rootsTags : rootsSources;
 
-  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, areSourcesLoaded, getPath]);
+  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, getPath]);
 
   return (
     <>

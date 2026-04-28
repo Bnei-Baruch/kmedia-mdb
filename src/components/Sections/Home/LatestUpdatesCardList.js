@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import { settingsGetLeftRightByDirSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 import LatestUpdate from './LatestUpdate';
 
-const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsPerRow = 4, itemsCount = 4 }) => {
+const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsCount = 4 }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const [pageNo, setPageNo] = useState(0);
   const [pageStart, setPageStart] = useState(0);
@@ -102,6 +102,7 @@ const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsPerRow
 
   useEffect(() => {
     initCardsArray();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cts]);
 
   const gridCols = isMobileDevice ? 'grid-cols-1' : 'grid-cols-4';

@@ -46,7 +46,7 @@ const PDFClient = ({ pdfFile, startsFrom, isTaas = true }) => {
     return () => {
       window.removeEventListener('resize', setDivSize);
     };
-  }, [pdfFile, ref.current]);
+  }, [pdfFile]);
 
   const onDocumentLoadSuccess = ({ numPages: _numPages }) => setNumPages(_numPages);
   const onDocumentLoadError   = () => {

@@ -57,7 +57,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
     .map(word => {
 
       const tags = allTags
-        .filter((t, i) => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
+        .filter(t => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
       currentPos += word.length + 1;
 
       const cssClass = `_h ${isBold ? '_b' : ''}`;

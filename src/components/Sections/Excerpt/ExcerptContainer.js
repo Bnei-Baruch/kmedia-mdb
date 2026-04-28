@@ -33,7 +33,7 @@ const calculateTimeLeft = finalDate => {
   };
 };
 
-const nowPlus5min = () => +Date.now() + 5 * 60 * 1000;
+const nowPlus5min = () => +Date.now() + (5 * 60 * 1000);
 
 const Countdown = ({ finalDate }) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(finalDate));

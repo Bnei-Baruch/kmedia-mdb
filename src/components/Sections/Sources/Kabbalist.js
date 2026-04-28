@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useDispatch } from 'react-redux';
 
 import * as shapes from '../../shapes';

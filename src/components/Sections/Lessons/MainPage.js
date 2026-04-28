@@ -71,6 +71,7 @@ const MainPage = ({ t }) => {
         ...listParams
       }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected, listParams]);
 
   const wipErr = WipErr({ wip, err, t });

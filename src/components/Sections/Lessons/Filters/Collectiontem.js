@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';

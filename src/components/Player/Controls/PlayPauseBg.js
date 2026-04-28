@@ -18,7 +18,7 @@ const PlayPauseBg = () => {
   const mode     = useSelector(playerGetOverModeSelector);
   const { type } = useSelector(playerGetFileSelector) || false;
 
-  const handleClick = e => {
+  const handleClick = () => {
     const pos = getPosition();
     isPlay ? pause() : isIPhone ? play().seek(pos).play() : play()?.play();
   };

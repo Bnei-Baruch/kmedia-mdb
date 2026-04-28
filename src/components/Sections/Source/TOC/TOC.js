@@ -8,7 +8,7 @@ import { properParentId, getFullPath } from '../helper';
 import { useNavigate } from 'react-router-dom';
 import TOCSearch from './TOCSearch';
 import TOCControl from './TOCControl';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import {
   textPageGetTocIsActiveSelector,
   textPageGetTocInfoSelector,

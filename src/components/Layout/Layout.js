@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useContext, useRef, useState } from 'react';
 
 import { faBars, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';

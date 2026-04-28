@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { isTaas } from '../../shared/PDF/helper';
 import { getFullPath, fixPrevNextZoharTaas } from './helper';

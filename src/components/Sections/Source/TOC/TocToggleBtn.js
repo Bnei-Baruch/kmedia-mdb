@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { actions } from '../../../../redux/modules/textPage';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

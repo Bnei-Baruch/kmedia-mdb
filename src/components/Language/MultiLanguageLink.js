@@ -20,7 +20,8 @@ const Link = (
     to = undefined,
     language = '',
     contentLanguage = undefined,
-    staticContext,
+    // eslint-disable-next-line no-unused-vars
+    staticContext: _staticContext,
     ...rest
   }
 ) => {

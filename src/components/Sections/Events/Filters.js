@@ -33,6 +33,7 @@ const Filters = ({ namespace, baseParams }) => {
         { ...baseParams, with_original_languages: true, with_locations: true },
         { isPrepare: true, countC: true }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isReady]);
 
   const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
@@ -44,6 +45,7 @@ const Filters = ({ namespace, baseParams }) => {
       ));
       prevSelRef.current = selLen;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isHydrated, isReady, baseParams, selLen]);
 
   const handleOnHydrated = () => setIsHydrated(true);

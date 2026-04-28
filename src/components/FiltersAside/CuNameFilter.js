@@ -21,6 +21,7 @@ const CuName = ({ namespace }) => {
 
     return () => clearTimeout(timer);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, temporaryName]);
 
   useEffect(() => {

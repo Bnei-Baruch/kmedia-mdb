@@ -188,6 +188,7 @@ function* fetchMyReactions() {
     .map(x => x.subject_uid);
 
   yield call(fetchUnitsByIDs, { payload: { id, with_files: true } });
+  // eslint-disable-next-line import/no-named-as-default-member
   const name  = i18n.t('personal.reactions');
   const items = id.map(x => ({ content_unit_uid: x }));
   return { items, name };

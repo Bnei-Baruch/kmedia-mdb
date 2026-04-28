@@ -39,7 +39,8 @@ export class RenderBase {
     throw new Error('abstract method');
   };
 
-  findClose(list, pos) {
+  // eslint-disable-next-line no-unused-vars
+  findClose(_list, _pos) {
     throw new Error('abstract method');
   }
 

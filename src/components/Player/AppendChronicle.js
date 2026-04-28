@@ -45,6 +45,7 @@ const AppendChronicle = () => {
 
       chronicles.append(event, data, /*sync*/ false, _defaultUnload);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event, prevEvent, file, item, autoPlay, isPlayerReady]);
 
   return null;

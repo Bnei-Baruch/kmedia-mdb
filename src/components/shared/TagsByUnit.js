@@ -26,7 +26,7 @@ const TagsByUnit = ({ id }) => {
     const _cur = ref.current;
     if (_cur && (_cur.scrollWidth > _cur.clientWidth))
       setShowArrow(1);
-  }, [ref.current]);
+  }, []);
 
   if (isEmpty(unit?.tags) && isEmpty(lids))
     return null;

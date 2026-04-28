@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
 import { getQuery } from '../../../helpers/url';

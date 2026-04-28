@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { SectionLogo } from '../../../helpers/images';

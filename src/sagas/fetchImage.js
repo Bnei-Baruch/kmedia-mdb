@@ -67,7 +67,7 @@ async function tryFetch(src) {
   const promise = new Promise((resolve, reject) => {
     const displayImage   = new window.Image();
     displayImage.onerror = err => reject({ err });
-    displayImage.onload  = r => resolve(src);
+    displayImage.onload  = () => resolve(src);
 
     displayImage.src = src;
   });

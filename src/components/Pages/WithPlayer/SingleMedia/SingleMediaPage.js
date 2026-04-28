@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';

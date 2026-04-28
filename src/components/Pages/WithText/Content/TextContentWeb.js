@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { urlParamFromSelect } from '../scrollToSearch/helper';
 import { actions } from '../../../../redux/modules/textPage';
@@ -33,7 +33,7 @@ const TextContentWeb = ({ playerPage }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const handleSelectionChange = debounce((e, x) => {
+    const handleSelectionChange = debounce(() => {
       const { query, wordOffset } = urlParamFromSelect();
       dispatch(actions.setUrlSelect(query));
       dispatch(actions.setWordOffset(wordOffset));

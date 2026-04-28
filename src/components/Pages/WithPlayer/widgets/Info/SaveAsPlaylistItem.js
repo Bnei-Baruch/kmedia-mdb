@@ -31,6 +31,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (checked, p) => {

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/filters';

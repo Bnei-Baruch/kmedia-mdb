@@ -65,7 +65,7 @@ export function* fetchPerson(action) {
   }
 }
 
-export function* fetchAbout(action) {
+export function* fetchAbout() {
   const langs = yield select(settingsGetContentLanguagesSelector);
   try {
     const { data } = yield call(Api.getCMS, 'about', { contentLanguages: [...langs, DEFAULT_CONTENT_LANGUAGE] });

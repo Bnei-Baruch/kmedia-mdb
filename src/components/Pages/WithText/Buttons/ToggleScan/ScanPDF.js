@@ -14,7 +14,8 @@ const ScanPDF = () => {
   const { t }              = useTranslation();
   const location           = useLocation();
   const navigate           = useNavigate();
-  const { scan, ...query } = getQuery(location);
+  // eslint-disable-next-line no-unused-vars
+  const { scan: _scan, ...query } = getQuery(location);
   const file               = useSelector(textPageGetScanFileSelector);
   const ref                = useRef(null);
 

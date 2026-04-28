@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { withTranslation } from 'react-i18next';
 import { noop } from '../../../../helpers/utils';
 

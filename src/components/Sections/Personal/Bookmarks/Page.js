@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import BookmarkList from './Bookmarks/List';

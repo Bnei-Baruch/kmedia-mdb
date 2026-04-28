@@ -52,6 +52,7 @@ const LessonDatePickerContainer = () => {
       const { start_date, end_date } = getStartEndByFilmDate(film_date);
       dispatch(mdbActions.fetchWindow({ id: cId, start_date, end_date }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, cId, cWindow, wipMap.cWindow, curIndex]);
 
   if (!isReady) {

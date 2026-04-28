@@ -8,12 +8,11 @@ export const getCurrentDirection = () => {
   return document.getElementById('root').style.getPropertyValue('direction');
 };
 
+// eslint-disable-next-line no-unused-vars
 export const changeDirection = direction => {
   if (typeof window === 'undefined') {
     return;
   }
-
-  const isRTL = direction === 'rtl';
 
   // replace semantic-ui css
   // We remove current loaded css once new css finish loading.

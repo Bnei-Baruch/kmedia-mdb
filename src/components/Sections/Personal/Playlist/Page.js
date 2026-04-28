@@ -3,7 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Popover } from '@headlessui/react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

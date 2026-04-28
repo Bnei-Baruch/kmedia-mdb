@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const WebWrapTooltip = ({ trigger, content, ...propz }) => {
+const WebWrapTooltip = ({ trigger, content }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const [show, setShow] = useState(false);
 

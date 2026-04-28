@@ -39,9 +39,9 @@ export const fromHumanReadableTime = str => {
   let m = str.match(/(\d+)m/i);
   let s = str.match(/(\d+)s/i);
 
-  h = (h == null) ? 0 : h[1];
-  m = (m == null) ? 0 : m[1];
-  s = (s == null) ? 0 : s[1];
+  h = (h === null) ? 0 : h[1];
+  m = (m === null) ? 0 : m[1];
+  s = (s === null) ? 0 : s[1];
 
   return moment.duration({
     hours: h,

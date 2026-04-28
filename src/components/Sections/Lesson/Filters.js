@@ -30,6 +30,7 @@ const Filters = ({ namespace, baseParams }) => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isReady, wip, err]);
 
   const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
@@ -38,6 +39,7 @@ const Filters = ({ namespace, baseParams }) => {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false }));
       prevSelRef.current = selLen;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isHydrated, isReady, selLen]);
 
   const handleOnHydrated = () => setIsHydrated(true);

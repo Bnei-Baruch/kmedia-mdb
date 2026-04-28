@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
@@ -9,7 +9,7 @@ import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { getMyItemKey } from '../../../../helpers/my';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
-export const PlaylistItem = ({ item, t, language, asList = false }) => {
+export const PlaylistItem = ({ item, t, asList = false }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
 
   const link    = `/personal/${MY_NAMESPACE_PLAYLISTS}/${item.id}`;

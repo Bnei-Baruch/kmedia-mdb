@@ -58,7 +58,7 @@ export const login = async () => {
   url.searchParams.set('authorised', 'true');
   try {
     await healthCheckKC();
-  } catch (e) {
+  } catch {
     alert('Keycloak server is down');
     return;
   }
@@ -89,7 +89,7 @@ export const initKC = async () => {
   try {
     await healthCheckKC();
 
-  } catch (e) {
+  } catch {
     return { user: null };
   }
 
@@ -132,7 +132,7 @@ const updateToken = token => {
   window.dispatchEvent(ev);
 };
 
-const renewRetry = (retry, err) => {
+const renewRetry = retry => {
   if (retry > 5) {
     getKeycloak().then(kc => {
       if (kc.clearToken) {

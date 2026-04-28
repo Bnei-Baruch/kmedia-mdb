@@ -12,7 +12,7 @@ import ShareForm from './ShareForm';
 import SubscribeBtn from '../../shared/SubscribeBtn';
 import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
-const CollectionPageHeader = ({ collection = null, namespace, title = namespace, t }) => {
+const CollectionPageHeader = ({ collection = null }) => {
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (collection === null) {

@@ -30,6 +30,7 @@ const Filters = ({ namespace, baseParams }) => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isReady, baseParams]);
 
   const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);

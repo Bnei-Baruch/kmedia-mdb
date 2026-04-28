@@ -38,7 +38,7 @@ export const makeTagLinks = (tags = [], getTagById) =>
       </Link>;
     }), ''));
 
-const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
+const makeCollectionsLinks = (collections = {}) => {
   const colValues = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
 
   const noSSeries = Array.from(intersperse(

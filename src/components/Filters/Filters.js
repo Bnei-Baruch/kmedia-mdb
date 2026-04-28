@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
-import { getDirectionProperty } from '../../helpers/i18n-utils';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';

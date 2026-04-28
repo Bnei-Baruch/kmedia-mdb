@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ import { filtersAsideCitiesByCountrySelector, settingsGetUIDirSelector } from '.
 const ITEMS_PER_ROW = 3;
 const buildRowArr   = n => {
   const abs = n % ITEMS_PER_ROW;
-  const len = (n - abs) / ITEMS_PER_ROW + ((abs === 0) ? 0 : 1);
+  const len = ((n - abs) / ITEMS_PER_ROW) + ((abs === 0) ? 0 : 1);
   return Array(len).fill(0);
 };
 

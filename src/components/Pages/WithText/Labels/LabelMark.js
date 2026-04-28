@@ -16,6 +16,7 @@ const PopoverOpenEffect = ({ open, onOpen, onClose }) => {
     } else {
       onClose?.();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   return null;
 };

@@ -15,8 +15,6 @@ import 'moment/locale/tr';
 import 'moment/locale/uk';
 
 import { DEFAULT_UI_LANGUAGE } from './consts';
-const _dirname = typeof __dirname !== 'undefined' ? __dirname : '';
-
 let i18n;
 export const options = {
   load: 'languageOnly',
@@ -43,6 +41,7 @@ export const options = {
 
 // Client side.
 export const initializeI18nClient = async () => {
+  // eslint-disable-next-line import/no-named-as-default-member
   const i18n = i18next.createInstance();
 
   // ИСПОЛЬЗУЕМ HttpBackend ЗДЕСЬ
@@ -61,6 +60,7 @@ export const initializeI18nClient = async () => {
 
 
 export const initializeI18n = async resources => {
+  // eslint-disable-next-line import/no-named-as-default-member
   await i18next.init({
     ...options,
     resources,
@@ -72,6 +72,7 @@ export const initializeI18n = async resources => {
 
 export const initializeI18nBackend = async uiLang => {
   console.log('initializeI18nBackend', uiLang);
+  // eslint-disable-next-line import/no-named-as-default-member
   i18n = i18next.createInstance();
   await i18n.use(i18nextBackend).init({
     ...options,

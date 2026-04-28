@@ -46,6 +46,7 @@ export const VolumeKnob = ({ onChangePosition }) => {
     };
 
     return removeListeners;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, activated]);
 
   return (

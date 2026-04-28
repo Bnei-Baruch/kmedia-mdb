@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import Icon from '../Icon';
 import { trimGetListSelector, trimGetWipsSelector } from '../../redux/selectors';
 

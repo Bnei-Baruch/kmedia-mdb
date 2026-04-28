@@ -28,7 +28,8 @@ export const useScrollBehavior = ref => {
     window.addEventListener('scroll', handleScroll);
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [ref.current, isMobileDevice, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobileDevice, dispatch]);
 
   return null;
 };

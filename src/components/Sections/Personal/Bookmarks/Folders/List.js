@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';

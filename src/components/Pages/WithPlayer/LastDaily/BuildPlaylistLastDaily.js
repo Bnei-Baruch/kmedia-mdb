@@ -57,6 +57,7 @@ const BuildPlaylistLastDaily = () => {
     const to   = canonicalLink(denormCU(cuId), null, ccu);
     if (embed) to.search = `embed=${embedIdx}`;
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` }, { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ccu, historyItems, navigate, embed, embedIdx]);
 
   return null;

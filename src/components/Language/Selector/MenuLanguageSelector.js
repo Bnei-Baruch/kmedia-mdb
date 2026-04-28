@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { noop } from '../../../helpers/utils';

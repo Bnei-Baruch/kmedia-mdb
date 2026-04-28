@@ -113,7 +113,8 @@ export function* fetchStat(action) {
 
     if (isFilteredByBase) {
       const dataCUPart                            = countCU ? responses.shift()?.data : {};
-      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : { data: {} };
+      // eslint-disable-next-line no-unused-vars
+      const { data: { locations: _locations, ...dataCPart } } = countC ? responses.shift() : { data: {} };
       const dataLPart                             = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
@@ -168,7 +169,7 @@ export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, cou
   }
 }
 
-export function* fetchElasticStat(action) {
+export function* fetchElasticStat() {
   const filters          = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
   const apiParams        = filtersTransformer.toApiParams(filters);
   const filterKeyValues  = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');

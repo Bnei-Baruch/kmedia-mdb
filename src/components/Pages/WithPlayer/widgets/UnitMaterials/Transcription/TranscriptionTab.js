@@ -21,6 +21,7 @@ const TranscriptionTab = ({ id }) => {
   useEffect(() => {
     dispatch(actions.setFileFilter(transcriptionFileFilter));
     return () => dispatch(actions.setFileFilter());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

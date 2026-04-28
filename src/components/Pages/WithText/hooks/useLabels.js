@@ -24,6 +24,7 @@ export const useLabels = () => {
     .filter(l => (l.properties?.srchstart || l.properties?.srchend))
     .filter(l => l.properties?.language === language)
     .map(l => ({ type: 'label', ...l }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   , [byId, ids, additionsMode, userName]) || [];
 
   const offsets = buildOffsets(labels);

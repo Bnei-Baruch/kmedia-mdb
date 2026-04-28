@@ -51,7 +51,7 @@ export const getSavedTime = (cuId, ht) => {
   let lt;
   try {
     lt = JSON.parse(json);
-  } catch (e) {
+  } catch {
     console.error('broken json', json);
   }
 

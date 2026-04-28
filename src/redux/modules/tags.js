@@ -35,7 +35,7 @@ const tagsSlice = createSlice({
     },
     fetchDashboardFailure: {
       prepare: (id, err) => ({ payload: { id, err } }),
-      reducer: (state, { payload: { id, err } }) => {
+      reducer: (state, { payload: { err } }) => {
         state.wip   = false;
         state.error = err;
       }

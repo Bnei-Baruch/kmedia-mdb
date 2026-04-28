@@ -59,6 +59,7 @@ const MainPage = ({ t }) => {
       dispatch(actions.fetchSectionList(PAGE_NS_EVENTS, pageNo, { pageSize, content_type: EVENT_PAGE_CTS }));
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });

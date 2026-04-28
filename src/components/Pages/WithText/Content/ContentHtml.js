@@ -28,13 +28,14 @@ const ContentHtml = ({ labels = [] }) => {
       { srchstart, srchend },
       highlightAll === 'true',
       [...labels, ...notes]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [srchstart, srchend, getDoc2htmlById, id, labels, notes]);
 
   const _needScroll = !!__html && !!srchstart && !!srchend;
   useEffect(() => {
     const el = document.getElementById(SCROLL_SEARCH_ID);
     el && el.scrollIntoView({ behavior: 'smooth' });
-  }, [_needScroll, ref.current]);
+  }, [_needScroll]);
 
   const wipErr = useTextContent();
 

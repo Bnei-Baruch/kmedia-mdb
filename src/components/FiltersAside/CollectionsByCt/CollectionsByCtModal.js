@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
@@ -15,7 +15,7 @@ import { actions } from '../../../redux/modules/filtersAside';
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
   const abs = n % ITEMS_PER_ROW;
-  const len = (n - abs) / ITEMS_PER_ROW + ((abs === 0) ? 0 : 1);
+  const len = ((n - abs) / ITEMS_PER_ROW) + ((abs === 0) ? 0 : 1);
   return Array(len).fill(0);
 };
 
@@ -39,7 +39,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.collectionsByCt({ namespace, content_type: ct }));
-  }, [dispatch, namespace]);
+  }, [dispatch, namespace, ct]);
 
   const handleSetQuery = e => setQuery(e.target.value);
 

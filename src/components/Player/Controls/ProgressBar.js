@@ -29,6 +29,7 @@ export const ProgressBar = ({ left, right }) => {
 
     if (isReady && !activated) removeListeners();
     return removeListeners;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, activated]);
 
   const handleStart = e => {

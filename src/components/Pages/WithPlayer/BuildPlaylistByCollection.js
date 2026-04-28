@@ -19,6 +19,7 @@ const BuildPlaylistByCollection = ({ cuId, id }) => {
     } else if (cuId && prevCuId !== cuId) {
       dispatch(actions.select({ cuId, id: cuId }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, cuId, wip, fetched]);
 
   return <Helmets.AVUnit id={cuId}/>;

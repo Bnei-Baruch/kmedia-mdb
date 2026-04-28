@@ -27,7 +27,7 @@ export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 const makeParams = params => (
   `${Object
     .entries(params)
-    .filter(([_, v]) => v !== undefined && v !== null)
+    .filter(([, v]) => v !== undefined && v !== null)
     .map(pair => {
       const key   = pair[0];
       const value = pair[1];

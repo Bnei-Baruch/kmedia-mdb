@@ -8,6 +8,7 @@ import i18next from 'i18next';
 const SectionHeader = ({ section, t, submenuItems }) => {
   const title    = t(`${section}.header.text`);
   const subText1 = t(`${section}.header.subtext`);
+  // eslint-disable-next-line import/no-named-as-default-member
   const subText2 = i18next.exists(`${section}.header.subtext2`) ? t(`${section}.header.subtext2`) : '';
 
   return (

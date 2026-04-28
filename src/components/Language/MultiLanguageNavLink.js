@@ -15,7 +15,8 @@ const NavLink = React.forwardRef(
       to = undefined,
       language = '',
       contentLanguage = undefined,
-      staticContext,
+      // eslint-disable-next-line no-unused-vars
+      staticContext: _staticContext,
       className = undefined,
       style = undefined,
       ...rest

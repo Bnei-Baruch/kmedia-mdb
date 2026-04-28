@@ -1,7 +1,7 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import Navbar from 'react-day-picker/build/Navbar';
 import 'react-day-picker/lib/style.css';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';

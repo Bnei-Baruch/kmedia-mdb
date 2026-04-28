@@ -292,7 +292,7 @@ export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
   try {
     return new RegExp(escaped, 'i');
-  } catch (e) {
+  } catch {
     return new RegExp(escapeRegExp(escaped), 'i');
   }
 };

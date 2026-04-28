@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import moment from 'moment';
 
 import { actions } from '../../../../redux/modules/my';
