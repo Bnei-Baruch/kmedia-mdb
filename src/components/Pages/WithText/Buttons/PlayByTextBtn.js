@@ -12,13 +12,20 @@ import {
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 import { PlayByText } from '../../../../images/icons';
 
+
+const recursiveFindPrevTimeByPos = (pos, timeCode) => {
+  if (pos === 0 || Object.keys(timeCode).length === 0) return 0;
+  if (timeCode[pos]) return timeCode[pos];
+  return recursiveFindPrevTimeByPos(pos - 1, timeCode);
+};
+
 const PlayByTextBtn = () => {
-  const { id }        = useSelector(textPageGetSubjectSelector);
-  const { language }  = useSelector(textPageGetFileSelector);
-  const wordOffset    = useSelector(textPageGetWordOffsetSelector);
-  const hasTimeCode   = useSelector(state => assets.hasTimeCode(state.assets));
-  const timeCodeByPos = useSelector(state => assets.getTimeCode(state.assets));
-  const hasNoSel      = !useSelector(textPageGetUrlInfoSelector).select;
+  const { id } = useSelector(textPageGetSubjectSelector);
+  const { language } = useSelector(textPageGetFileSelector);
+  const wordOffset = useSelector(textPageGetWordOffsetSelector);
+  const timeCode = useSelector(state => assets.getTimeCode(state.assets));
+  const hasTimeCode = Object.keys(timeCode).length > 0;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   const dispatch = useDispatch();
 
@@ -29,7 +36,7 @@ const PlayByTextBtn = () => {
   if (!hasTimeCode) return null;
 
   const handlePlay = () => {
-    const startTime = timeCodeByPos(wordOffset - 2);
+    const startTime = recursiveFindPrevTimeByPos(wordOffset - 2, timeCode);
     seek(startTime).play();
     setPip(true);
   };

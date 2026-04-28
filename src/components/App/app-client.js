@@ -89,6 +89,7 @@ if (window.__isAuthApp) {
 } else if (window.__botKCInfo?.user?.name === KC_BOT_USER_NAME) {
   hydrateApp(window.__botKCInfo);
 } else {
+  logger.log(NAME_SPACE, 'No auth info found, starting app without auth');
   hydrateApp({ user: { name: 'test' } });
   //initKC().then(info => hydrateApp(info));
 }
