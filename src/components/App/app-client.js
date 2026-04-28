@@ -26,7 +26,7 @@ import { createStore } from '../../redux/createStore';
 import { actions as ssr } from '../../redux/modules/ssr';
 import AppClient from './AppClient';
 
-const NAME_SPACE = 'app-client';
+const NAME_SPACE = 'app_client';
 logger.log(NAME_SPACE, 'loaded');
 
 async function hydrateApp(kcInfo) {
@@ -50,6 +50,7 @@ async function hydrateApp(kcInfo) {
   // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
   setupListeners(store.dispatch);
   store.dispatch(ssr.hydrate());
+  store.dispatch(mdbActions.fetchSQData());
 
   //const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
 
@@ -72,11 +73,10 @@ async function hydrateApp(kcInfo) {
       abTesting={abTesting}
     />
   );
+
   const el = document.getElementById('root');
   //hydrateRoot(el, component);
   createRoot(el).render(component);
-
-  store.dispatch(mdbActions.fetchSQData());
   // We ask for semi-quasi static data here since
   // we strip it from SSR to save initial network bandwidth
   logger.log(NAME_SPACE, 'hydrateApp fetchSQData');

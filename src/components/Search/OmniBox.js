@@ -98,7 +98,7 @@ const OmniBox = ({ isHomePage = false }) => {
   };
 
   return (
-    <Combobox value={query} onChange={handleResultSelect}>
+    <Combobox value={query ?? ''} onChange={handleResultSelect}>
       <div className={clsx('relative w-full search-omnibox', { homepage: isHomePage })}>
         <div className="flex items-center w-full bg-transparent">
           <ComboboxInput

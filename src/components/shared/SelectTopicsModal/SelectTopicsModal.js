@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  authGetUserSelector,
   settingsGetUIDirSelector,
   settingsGetUILangSelector,
   tagsGetDisplayRootsSelector,
@@ -32,6 +33,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   const language = useSelector(settingsGetUILangSelector);
   const dir      = useSelector(settingsGetUIDirSelector);
 
+  const user     = useSelector(authGetUserSelector);
   const dispatch = useDispatch();
 
   const create = () => {
@@ -93,8 +95,6 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   const handleSetSelected = useCallback(sel => setSelected(sel), []);
 
-  const needToLogin = NeedToLogin();
-
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
@@ -107,9 +107,9 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
               {t('personal.label.header')}
             </div>
             {
-              needToLogin ?
+              !user ?
                 (
-                  <div className="p-6">{needToLogin}</div>
+                  <div className="p-6"><NeedToLogin /></div>
                 ) : (
                   <>
                     <div className="px-6 py-4 pt-0">
