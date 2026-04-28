@@ -70,12 +70,12 @@ const MainPage = () => {
           wipErr || items?.map((id, i) => <ItemOfList id={id} key={i}/>)
         }
         <hr className="m-0 border-t"/>
-          {total > 0 && <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            onChange={setPage}
-          />}
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={setPage}
+        />}
       </SectionFiltersWithMobile>
     </>
   );

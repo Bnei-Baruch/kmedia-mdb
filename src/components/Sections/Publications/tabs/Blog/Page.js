@@ -39,12 +39,12 @@ const BlogPage = ({
         }
       </div>
       <hr className="m-0" />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={onPageChange}
-        />
+      <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={onPageChange}
+      />
     </div>
   );
 

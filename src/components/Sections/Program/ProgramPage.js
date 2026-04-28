@@ -70,12 +70,12 @@ const ProgramPage = ({ t }) => {
         wipErr || items?.map(id => <ItemOfList id={id} ccu={collection} key={id}/>)
       }
       <hr className="m-0 border-t"/>
-        {total > 0 && <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={setPage}
-        />}
+      {total > 0 && <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={setPage}
+      />}
     </SectionFiltersWithMobile>
   </>);
 };

@@ -75,9 +75,9 @@ const ProjectStatus = () => {
     default:
       return (
         <div className="border rounded p-6">
-          <h1 className="text-center">What's new?</h1>
+          <h1 className="text-center">What&apos;s new?</h1>
 
-          <h3>What we've been working on lately:</h3>
+          <h3>What we&apos;ve been working on lately:</h3>
           <ul>
             <li>HD - Finally, you can see our lessons and programs in HD</li>
             <li>Library - Option to search by article name in the table of contents</li>

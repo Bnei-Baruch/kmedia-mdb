@@ -123,12 +123,12 @@ const UnitListPage = props => {
         }
       </div>
       <hr className="m-0 border-t" />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={onPageChange}
-        />
+      <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={onPageChange}
+      />
     </div>
   );
 

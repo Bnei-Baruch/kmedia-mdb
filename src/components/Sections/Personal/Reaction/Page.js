@@ -98,12 +98,12 @@ const Page      = ({ location, t }) => {
               </div>
             ) : null
           }
-            <Pagination
-              pageNo={pageNo}
-              pageSize={PAGE_SIZE}
-              total={total}
-              onChange={setPage}
-            />
+          <Pagination
+            pageNo={pageNo}
+            pageSize={PAGE_SIZE}
+            total={total}
+            onChange={setPage}
+          />
         </div>
         {
           !isMobileDevice && <div className="w-full md:w-[37.5%]"/>

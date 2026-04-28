@@ -41,7 +41,7 @@ const CollectionItem = ({ id }) => {
         <UnitLogoWithDuration unit={logoUnit} displayDuration={displayDuration}/>
       </Link>
       <div className="media_item__content">
-        <h5 className="font-bold" as={Link} to={canonicalLink(c)}><Link to={canonicalLink(c)}>{name}</Link></h5>
+        <h5 className="font-bold"><Link to={canonicalLink(c)}>{name}</Link></h5>
         <div>{t(`constants.content-types.${content_type}`)}</div>
         <div className={clsx('description', { 'is_single': description.length <= 1 })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}

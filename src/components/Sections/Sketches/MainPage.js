@@ -94,12 +94,12 @@ const MainPage = () => {
       </div>
 
       <hr className="m-0" />
-        {total > 0 && <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={setPage}
-        />}
+      {total > 0 && <Pagination
+        pageNo={pageNo}
+        pageSize={pageSize}
+        total={total}
+        onChange={setPage}
+      />}
     </SectionFiltersWithMobile>
   </>);
 };

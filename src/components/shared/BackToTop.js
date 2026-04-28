@@ -2,14 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-const BackToTop = ({ isRTL, offset = [0, 0] }) => {
+const BackToTop = ({ isRTL }) => {
   const [backToTop, setBackToTop] = useState(false);
   const sentinelRef = useRef(null);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         setBackToTop(!entry.isIntersecting);
@@ -17,7 +15,10 @@ const BackToTop = ({ isRTL, offset = [0, 0] }) => {
       { threshold: 0 }
     );
 
-    observer.observe(sentinel);
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
     return () => observer.disconnect();
   }, []);
 
@@ -49,11 +50,6 @@ BackToTop.isBrowser = () => (typeof window !== 'undefined' && window.document);
 
 BackToTop.propTypes = {
   isRTL: PropTypes.bool.isRequired,
-  offset: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string]))
-  ]),
 };
 
 export default BackToTop;
