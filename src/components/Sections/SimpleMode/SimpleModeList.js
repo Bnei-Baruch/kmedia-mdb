@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { isEmpty, isToday, noop } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
@@ -33,7 +33,7 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
   const lessons     = useSelector(state => dataLessons.map(x => mdbGetDenormCollectionWUnitsSelector(state, x.id)).filter(x => !isEmpty(x)));
   const others      = useSelector(state => dataOthers.map(x => mdbGetDenormContentUnitSelector(state, x.id)).filter(x => !isEmpty(x)));
 
-  const wipErr = WipErr({ wip: isLoading, err: isError });
+  const wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
       console.error('========> SimpleModeList error', error);

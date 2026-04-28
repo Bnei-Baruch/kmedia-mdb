@@ -5,7 +5,7 @@ import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import ContentItem from '../../shared/ContentItem/ContentItemContainer';
 
 const filters = {
@@ -103,7 +103,7 @@ const UnitListPage = props => {
       renderActions
     } = props;
 
-  const content = WipErr({ wip, err }) || (
+  const content = getWipErr(wip, err) || (
     <div>
       <div className=" px-4 ">
         {

@@ -7,7 +7,7 @@ import moment from 'moment';
 import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
@@ -60,7 +60,7 @@ const Page = ({ location }) => {
   const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
   const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';

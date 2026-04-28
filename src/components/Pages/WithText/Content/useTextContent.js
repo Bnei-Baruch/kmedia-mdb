@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors as assets, actions } from '../../../../redux/modules/assets';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { textPageGetFileSelector } from '../../../../redux/selectors';
 
 export const useTextContent = () => {
@@ -15,7 +15,7 @@ export const useTextContent = () => {
     needFetch && dispatch(actions.doc2html(id));
   }, [id, needFetch, dispatch]);
 
-  const wipErr = WipErr({ wip: wip || !id, err });
+  const wipErr = getWipErr(wip || !id, err);
   return wipErr;
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import { settingsGetContentLanguagesSelector, assetsGetAboutSelector } from '../../../redux/selectors';
 import { usePrevious } from '../../../helpers/utils';
 
@@ -21,7 +21,7 @@ const AboutPage = () => {
     }
   }, [contentLanguages, dispatch, needFetch]);
 
-  const wipErr = WipErr({ wip: wip || !data, err });
+  const wipErr = getWipErr(wip || !data, err);
   if (wipErr) {
     return wipErr;
   }

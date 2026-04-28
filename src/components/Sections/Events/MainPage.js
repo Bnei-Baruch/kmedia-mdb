@@ -21,7 +21,7 @@ import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import CollectionItem from './CollectionItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
@@ -61,7 +61,7 @@ const MainPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   return (<>
     <SectionHeader section="events" />
     <SectionFiltersWithMobile

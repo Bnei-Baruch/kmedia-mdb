@@ -8,7 +8,7 @@ import { clsx } from 'clsx';
 import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import AlertModal from '../../../shared/AlertModal';
 import PlaylistHeaderContainer from './HeaderContainer';
@@ -48,7 +48,7 @@ const Page = () => {
   const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
   if (!playlist) return null;

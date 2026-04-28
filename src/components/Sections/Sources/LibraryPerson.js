@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';
 import { settingsGetContentLanguagesSelector, assetsGetPersonSelector } from '../../../redux/selectors';
@@ -46,7 +46,7 @@ const LibraryPerson = () => {
     dispatch(assetsActions.fetchPerson({ sourceId, contentLanguages }));
   }, [sourceId, contentLanguages, dispatch]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) {
     return wipErr;
   }

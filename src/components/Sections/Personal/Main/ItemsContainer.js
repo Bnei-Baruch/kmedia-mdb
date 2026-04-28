@@ -11,7 +11,7 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import ContentItem from '../../../shared/ContentItem/ContentItemContainer';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
@@ -38,7 +38,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
   const err = useSelector(state => myGetErrSelector(state, namespace));
   const wip = useSelector(state => myGetWipSelector(state, namespace));
 
-  if (wip || err) return WipErr({ wip, err });
+  if (wip || err) return getWipErr(wip, err);
   if (items.length === 0)
     return <ItemTemplate namespace={namespace} children={[]} />;
 

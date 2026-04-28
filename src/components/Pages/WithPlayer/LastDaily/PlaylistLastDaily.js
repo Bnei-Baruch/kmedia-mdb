@@ -6,13 +6,13 @@ import { publicFile } from '../../../../helpers/utils';
 import PlaylistPage from '../Playlist/PlaylistPage';
 import BuildPlaylistLastDaily from './BuildPlaylistLastDaily';
 import { useSelector } from 'react-redux';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistLastDaily = ({ playerContainer }) => {
   const { t }                        = useTranslation();
   const { isReady: isPlaylistReady } = useSelector(playlistGetInfoSelector);
-  const wipErr                       = WipErr({ wip: !isPlaylistReady });
+  const wipErr                       = getWipErr(!isPlaylistReady, null);
 
   return (
     <div>

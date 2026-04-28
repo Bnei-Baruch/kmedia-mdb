@@ -8,7 +8,7 @@ import {
   MY_BOOKMARK_FILTER_QUERY,
   MY_NAMESPACE_BOOKMARKS
 } from '../../../../../helpers/consts';
-import WipErr from '../../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../../shared/WipErr/WipErr';
 import NeedToLogin from '../../NeedToLogin';
 import BookmarksItem from './Item';
 import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
@@ -42,7 +42,7 @@ const BookmarkList = () => {
   const needToLogin = NeedToLogin();
 
   if (needToLogin) return needToLogin;
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
 
   if (wipErr) return wipErr;
 

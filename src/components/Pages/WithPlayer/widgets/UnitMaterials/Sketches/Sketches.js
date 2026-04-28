@@ -8,7 +8,7 @@ import { actions } from '../../../../../../redux/modules/assets';
 import { assetsNestedGetZipByIdSelector, settingsGetContentLanguagesSelector } from '../../../../../../redux/selectors';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 import NotFound from '../../../../../shared/NotFound';
-import WipErr from '../../../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../../../shared/WipErr/WipErr';
 import SketchesGallery from './SketchesGallery';
 import { imageGalleryItem, isZipFile } from './helper';
 
@@ -40,7 +40,7 @@ const Sketches = ({ unit }) => {
     }
   }, [zipId, _needFetch, dispatch]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
   const handleLanguageChanged = l => setLanguage(l);

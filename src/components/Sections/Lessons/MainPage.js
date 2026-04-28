@@ -25,7 +25,7 @@ import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import CollectionItem from './Filters/Collectiontem';
 import DailyLessonItem from './Filters/DailyLessonItem';
 import Filters from './Filters';
@@ -73,7 +73,7 @@ const MainPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected, listParams]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
 
   return (

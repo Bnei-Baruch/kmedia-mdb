@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import {
   mdbGetDenormCollectionSelector,
   playlistGetFetchedSelector,
@@ -28,7 +28,7 @@ const PlaylistItems               = () => {
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
   const dispatch               = useDispatch();
 
-  if (!isReady) return WipErr({ wip: !isReady });
+  if (!isReady) return getWipErr(!isReady, null);
 
   const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
   const handleScroll   = e => {

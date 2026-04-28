@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
 import { actions } from '../../redux/modules/fetchImage';
 import { fetchImageGetBySrcSelector } from '../../redux/selectors';
-import WipErr from './WipErr/WipErr';
+import { getWipErr } from './WipErr/WipErr';
 
 const getFloatClass = floated => {
   if (floated === 'left') return 'float-left';
@@ -36,16 +36,12 @@ const FallbackImage = props => {
     }
   }, [fallbackImage, src, imageSource, wip, err, dispatch]);
 
-  if (!imageSource || imageSource === NoneFallbackImage) {
-    /* There is no fallbacks and src was not found */
-    return null;
+  const wipErr = getWipErr(wip, err);
+  if (wipErr) {
+    return wipErr;
   }
 
-  const wipErr = WipErr({ wip: (wip || !imageSource), err });
-  if (wipErr) return wipErr;
-
   if (!imageSource || imageSource === NoneFallbackImage) {
-    /* There is no fallbacks and src was not found */
     return null;
   }
 

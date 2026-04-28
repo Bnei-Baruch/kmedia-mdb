@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as shapes from '../../shapes';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import UnitList from '../UnitList/Container';
 import PageHeader from './Header';
 
@@ -11,7 +11,7 @@ const CollectionPage = ({ collection = null, wip = false, err = null, namespace 
   // Most chances we already have the collection either SSR or some nav link.
   // Only in case we don't, we'll show wipErr.
   if (!collection) {
-    return WipErr({ wip, err });
+    return getWipErr(wip, err);
   }
 
   return (

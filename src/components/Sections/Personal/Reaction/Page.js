@@ -8,7 +8,7 @@ import { MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS } from '../../../../help
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
 import Pagination from '../../../Pagination/Pagination';
 import Link from '../../../Language/MultiLanguageLink';
@@ -59,7 +59,7 @@ const Page      = ({ location }) => {
   const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
   const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';

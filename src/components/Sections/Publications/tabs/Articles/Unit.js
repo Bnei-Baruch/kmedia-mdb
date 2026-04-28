@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
-import WipErr from '../../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
@@ -78,7 +78,7 @@ const ArticlePage = () => {
     dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) {
     return wipErr;
   }

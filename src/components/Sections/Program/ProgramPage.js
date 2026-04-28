@@ -13,7 +13,7 @@ import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 import {
@@ -51,7 +51,7 @@ const ProgramPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, pageNo, selected]);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
 
   return (<>
     <PageHeader collection={collection} namespace={namespace} title="programs-collection"/>

@@ -6,7 +6,7 @@ import Pagination from '../../../../Pagination/Pagination';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import Filters from '../../../../Filters/Filters';
 import filterComponents from '../../../../Filters/components/index';
-import WipErr from '../../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../../shared/WipErr/WipErr';
 import TwitterFeed from './Feed';
 
 const filters = [
@@ -38,7 +38,7 @@ const TwitterPage = ({
   onFiltersChanged,
   onFiltersHydrated
 }) => {
-  const content = WipErr({ wip, err }) || (
+  const content = getWipErr(wip, err) || (
     <div>
       <div className=" px-4 ">
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />

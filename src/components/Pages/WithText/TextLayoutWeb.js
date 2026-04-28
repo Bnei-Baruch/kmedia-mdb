@@ -11,7 +11,7 @@ import NoteItemModal from './Notes/NoteItemModal';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
 import SearchOnPageBar from './SearchOnPageBar';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import {
   textPageGetSettings,
@@ -52,7 +52,7 @@ const TextLayoutWeb = props => {
   useInitTextUrl(null, !playerPage);
   useFetchNotes();
 
-  const wipErr = WipErr({ wip, err: null });
+  const wipErr = getWipErr(wip, null);
   if (wipErr) return wipErr;
 
   const renderToolbar = () => (

@@ -34,7 +34,7 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import Helmets from '../shared/Helmets';
 import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
-import WipErr from '../shared/WipErr/WipErr';
+import { getWipErr } from '../shared/WipErr/WipErr';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
 import ScoreDebug from './ScoreDebug';
@@ -183,7 +183,7 @@ const SearchResults = () => {
   };
 
 
-  const wipErr = WipErr({ wip: wip || !areSourcesLoaded || !areTagsLoaded, err });
+  const wipErr = getWipErr(wip || !areSourcesLoaded || !areTagsLoaded, err);
   if (wipErr) {
     return wipErr;
   }

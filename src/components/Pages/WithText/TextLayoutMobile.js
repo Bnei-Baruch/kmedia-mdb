@@ -8,7 +8,7 @@ import SearchOnPageBar from './SearchOnPageBar';
 import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import {
   textPageGetSettings,
   textPageGetScrollDirSelector,
@@ -44,7 +44,7 @@ const TextLayoutMobile = props => {
   useScrollBehavior(ref);
   useInitTextUrl(null, !playerPage);
 
-  const wipErr = WipErr({ wip, err: null });
+  const wipErr = getWipErr(wip, null);
   if (wipErr) return wipErr;
 
   const renderToolbar = () => (

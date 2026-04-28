@@ -25,7 +25,7 @@ import {
 } from '../../../../../../redux/selectors';
 import Link from '../../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../../shapes';
-import WipErr from '../../../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
 
@@ -251,7 +251,7 @@ const Recommended = ({ filterOutUnits = [], displayTitle = true, cuId }) => {
     });
   }
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) {
     return wipErr;
   }

@@ -12,7 +12,7 @@ import {
 } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/home';
 import { actions as publicationsActions } from '../../../redux/modules/publications';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
 import {
   homeErrSelector,
@@ -98,7 +98,7 @@ const HomePageContainer = () => {
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 
-  const wipErr = WipErr({ wip, err });
+  const wipErr = getWipErr(wip, err);
   if (wipErr) {
     return null;
   }

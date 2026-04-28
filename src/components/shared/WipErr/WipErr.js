@@ -38,7 +38,6 @@ const WipErr = ({ wip = false, err = null }) => {
 WipErr.propTypes = {
   wip: shapes.WIP,
   err: shapes.Error,
-  t: PropTypes.func.isRequired,
 };
-
+export const getWipErr = (wip, err) => wip || err ? <WipErr wip={wip} err={err} /> : null;
 export default WipErr;

@@ -6,7 +6,7 @@ import Info from '../widgets/Info/Info';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { clsx } from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
@@ -16,7 +16,7 @@ const PlaylistMyPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { cuId } = useSelector(playlistGetInfoSelector);
   if (!isReady)
-    return WipErr({ wip: !isReady });
+    return getWipErr(!isReady, null);
 
   return (
     <div className="flex flex-wrap avbox">

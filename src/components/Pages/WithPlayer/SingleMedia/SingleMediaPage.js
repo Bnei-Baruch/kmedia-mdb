@@ -8,7 +8,7 @@ import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
-import WipErr from '../../../shared/WipErr/WipErr';
+import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const SingleMediaPage = ({ playerContainer }) => {
@@ -20,7 +20,7 @@ const SingleMediaPage = ({ playerContainer }) => {
   const { cuId } = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
-  if (!isReady) return WipErr({ wip: !isReady });
+  if (!isReady) return getWipErr(!isReady, null);
 
   return (
     <>

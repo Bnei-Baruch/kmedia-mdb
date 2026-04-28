@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { noop } from '../../helpers/utils';
 
 import 'react-day-picker/lib/style.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -198,21 +197,7 @@ const DateFilter = ({ namespace }) => {
 };
 
 DateFilter.propTypes = {
-  value   : PropTypes.shape({
-    from  : PropTypes.objectOf(Date),
-    to    : PropTypes.objectOf(Date),
-    preset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-  }),
-  onCancel: PropTypes.func,
-  onApply : PropTypes.func,
-};
-
-DateFilter.defaultProps = {
-  onApply: noop,
-  value  : {
-    preset: TODAY,
-    ...presetToRange[TODAY]()
-  }
+  namespace: PropTypes.string.isRequired,
 };
 
 export default DateFilter;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
-import WipErr from '../../shared/WipErr/WipErr';
+import { getWipErr } from '../../shared/WipErr/WipErr';
 import List from './List';
 import { useMusicQuery } from '../../../redux/api/music';
 import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../../../redux/selectors';
@@ -17,7 +17,7 @@ const Music = () => {
     contentLanguages
   });
 
-  let wipErr = WipErr({ wip: isLoading, err: isError });
+  let wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
       console.error('========> Music error', error);
