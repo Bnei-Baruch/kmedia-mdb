@@ -184,7 +184,6 @@ export async function render(req) {
       )}${ogUrl(req, uiLang)}</head>`
     )
     .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-    .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
 
     .replace(/<div id="root"><\/div>/, rootDiv);
 
