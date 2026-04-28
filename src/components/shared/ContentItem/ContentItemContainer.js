@@ -34,7 +34,6 @@ const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS]
 const TagItemContainerHook = (
   {
     id,
-    t,
     asList = false,
     link,
     size,
@@ -44,9 +43,11 @@ const TagItemContainerHook = (
     withInfo = undefined
   }
 ) => {
+
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const tag                = useSelector(tagsGetTagByIdSelector)(id);
-  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
+  const tag = useSelector(tagsGetTagByIdSelector)(id);
+  const views = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!tag) return null;
   if (withInfo === undefined) {
@@ -58,11 +59,11 @@ const TagItemContainerHook = (
 
   const props = {
     tag,
-    link       : link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
-    withCUInfo : false,
+    link: link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
+    withCUInfo: false,
     withCCUInfo: withInfo,
     description,
-    size       : !isMobileDevice ? size : '',
+    size: !isMobileDevice ? size : '',
     selected,
     label
   };
@@ -73,7 +74,6 @@ const TagItemContainerHook = (
 const SourceItemContainerHook = (
   {
     id,
-    t,
     asList = false,
     link,
     size,
@@ -84,8 +84,10 @@ const SourceItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const source             = useSelector(state => sourcesGetSourceByIdSelector(state))(id);
-  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
+
+  const { t } = useTranslation();
+  const source = useSelector(state => sourcesGetSourceByIdSelector(state))(id);
+  const views = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!source) return null;
   if (withInfo === undefined) {
@@ -97,11 +99,11 @@ const SourceItemContainerHook = (
 
   const props = {
     source,
-    link       : link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
-    withCUInfo : false,
+    link: link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
+    withCUInfo: false,
     withCCUInfo: withInfo,
     description,
-    size       : !isMobileDevice ? size : '',
+    size: !isMobileDevice ? size : '',
     selected,
     label
   };
@@ -130,10 +132,10 @@ const ContentItemContainer = (
 ) => {
   const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const unit               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
-  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
-  const ccu                = useSelector(state => mdbGetDenormCollectionSelector(state, ccuId)) || canonicalCollection(unit);
-  const denormLabel        = useSelector(mdbGetDenormLabelSelector);
+  const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const views = useSelector(state => recommendedGetViewsSelector(state, id));
+  const ccu = useSelector(state => mdbGetDenormCollectionSelector(state, ccuId)) || canonicalCollection(unit);
+  const denormLabel = useSelector(mdbGetDenormLabelSelector);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -159,7 +161,7 @@ const ContentItemContainer = (
   if (withCCUInfo && ccu?.content_units?.length)
     description.push(t(`${cuPartNameByCCUType(ccu?.content_type)}s`, { name: ccu?.content_units.length }));
 
-  const part     = Number(ccu?.ccuNames[unit.id]);
+  const part = Number(ccu?.ccuNames[unit.id]);
   const withPart = ccu && ![CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CONGRESS].includes(ccu.content_type);
 
   if (withPart && part && !isNaN(part))
@@ -174,8 +176,8 @@ const ContentItemContainer = (
   link = link || canonicalLink(unit, null, ccu);
   if (lID) {
     const l = denormLabel(lID);
-    name    = name || l?.name;
-    link    = { ...link, search: stringify(l?.properties) };
+    name = name || l?.name;
+    link = { ...link, search: stringify(l?.properties) };
   }
 
   const props = {
@@ -197,18 +199,18 @@ const ContentItemContainer = (
 };
 
 ContentItemContainer.propTypes = {
-  id      : PropTypes.string.isRequired,
-  link    : PropTypes.object,
-  asList  : PropTypes.bool,
+  id: PropTypes.string.isRequired,
+  link: PropTypes.object,
+  asList: PropTypes.bool,
   playTime: PropTypes.number
 };
 
 SourceItemContainerHook.propTypes = {
-  id    : PropTypes.string.isRequired,
-  link  : PropTypes.object,
+  id: PropTypes.string.isRequired,
+  link: PropTypes.object,
   asList: PropTypes.bool
 };
 
 export default ContentItemContainer;
-export const SourceItemContainer = useTranslation()(SourceItemContainerHook);
-export const TagItemContainer    = useTranslation()(TagItemContainerHook);
+export const SourceItemContainer = SourceItemContainerHook;
+export const TagItemContainer = TagItemContainerHook;

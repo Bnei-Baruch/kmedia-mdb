@@ -46,7 +46,7 @@ const LibraryPerson = () => {
     dispatch(assetsActions.fetchPerson({ sourceId, contentLanguages }));
   }, [sourceId, contentLanguages, dispatch]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   if (wipErr) {
     return wipErr;
   }

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 import ImageGallery from 'react-image-gallery';
@@ -8,10 +7,9 @@ import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/S
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ImageFileModal = ({ file }) => {
-  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const ref   = useRef();
+  const ref = useRef();
   const uiDir = useSelector(settingsGetUIDirSelector);
   const items = [file].map(imageGalleryItem);
 

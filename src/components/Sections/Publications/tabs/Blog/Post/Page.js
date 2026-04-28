@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
@@ -8,8 +7,9 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import Share from '../../../../../Pages/WithText/Buttons/ShareTextBtn';
 import { getBlogLanguage, isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 
-export const BlogPostPage = ({ post = null, wip = false, err = null, t }) => {
-  const wipErr = WipErr({ wip, err, t });
+export const BlogPostPage = ({ post = null, wip = false, err = null }) => {
+  const wipErr = WipErr({ wip, err });
+
   if (wipErr) {
     return wipErr;
   }

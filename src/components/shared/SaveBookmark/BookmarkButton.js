@@ -14,7 +14,7 @@ const BookmarkButton = ({ source, disabled }) => {
   const { t } = useTranslation();
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
-  const needToLogin             = NeedToLogin({ t });
+  const needToLogin             = NeedToLogin();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const dir                = useSelector(settingsGetUIDirSelector);

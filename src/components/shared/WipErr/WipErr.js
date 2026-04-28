@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import * as shapes from '../../shapes';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../Splash/Splash';
+import { useTranslation } from 'react-i18next';
 
 const errorStatusNotFound = err => err.response?.status === 404;
 
@@ -19,7 +20,8 @@ export const getSourceErrorSplash = (err, t) =>
       : serverErrorSplash(err, t)
   )
 
-const WipErr = ({ wip = false, err = null, t }) => {
+const WipErr = ({ wip = false, err = null }) => {
+  const { t } = useTranslation();
   if (err) {
     return errorStatusNotFound(err)
       ? frownSplashNotFound(t)

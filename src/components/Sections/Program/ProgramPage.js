@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -26,7 +25,6 @@ import {
 } from '../../../redux/selectors';
 
 const ProgramPage = () => {
-  const { t } = useTranslation();
   const { id: cid } = useParams();
   const namespace   = `${PAGE_NS_PROGRAMS}_${cid}`;
 
@@ -53,7 +51,7 @@ const ProgramPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, pageNo, selected]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
 
   return (<>
     <PageHeader collection={collection} namespace={namespace} title="programs-collection"/>

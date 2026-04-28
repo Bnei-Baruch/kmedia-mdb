@@ -12,7 +12,6 @@ import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
 import SearchOnPageBar from './SearchOnPageBar';
 import WipErr from '../../shared/WipErr/WipErr';
-import { useTranslation } from 'react-i18next';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import {
   textPageGetSettings,
@@ -38,7 +37,6 @@ const TextLayoutWeb = props => {
   } = props;
 
   const ref   = useRef();
-  const { t } = useTranslation();
 
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
   const subject            = useSelector(textPageGetSubjectSelector);
@@ -54,7 +52,7 @@ const TextLayoutWeb = props => {
   useInitTextUrl(null, !playerPage);
   useFetchNotes();
 
-  const wipErr = WipErr({ wip, err: null, t });
+  const wipErr = WipErr({ wip, err: null });
   if (wipErr) return wipErr;
 
   const renderToolbar = () => (

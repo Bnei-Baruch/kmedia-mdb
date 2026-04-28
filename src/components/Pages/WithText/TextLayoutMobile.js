@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import WipErr from '../../shared/WipErr/WipErr';
-import { useTranslation } from 'react-i18next';
 import {
   textPageGetSettings,
   textPageGetScrollDirSelector,
@@ -23,22 +22,21 @@ import { LANGUAGE_LONG_TRANSLATION } from '../../../helpers/consts';
 
 const TextLayoutMobile = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
+    toolbar = null,
+    toc = null,
+    prevNext = null,
     breadcrumb = null,
     playerPage = false,
     id,
   } = props;
 
-  const ref   = useRef();
-  const { t } = useTranslation();
+  const ref = useRef();
 
-  const { theme }         = useSelector(textPageGetSettings);
-  const scrollDir         = useSelector(textPageGetScrollDirSelector);
-  const subject           = useSelector(textPageGetSubjectSelector);
-  const isSearch          = useSelector(textPageGetIsSearchSelector);
-  const uiLang            = useSelector(settingsGetUILangSelector);
+  const { theme } = useSelector(textPageGetSettings);
+  const scrollDir = useSelector(textPageGetScrollDirSelector);
+  const subject = useSelector(textPageGetSubjectSelector);
+  const isSearch = useSelector(textPageGetIsSearchSelector);
+  const uiLang = useSelector(settingsGetUILangSelector);
   const isLongTranslation = LANGUAGE_LONG_TRANSLATION.includes(uiLang);
 
   const wip = useTextSubject(id);
@@ -46,7 +44,7 @@ const TextLayoutMobile = props => {
   useScrollBehavior(ref);
   useInitTextUrl(null, !playerPage);
 
-  const wipErr = WipErr({ wip, err: null, t });
+  const wipErr = WipErr({ wip, err: null });
   if (wipErr) return wipErr;
 
   const renderToolbar = () => (

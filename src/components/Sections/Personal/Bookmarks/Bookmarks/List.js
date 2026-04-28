@@ -39,10 +39,10 @@ const BookmarkList = () => {
     dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, { folder_id }));
   }, [folder_id, uiLang, dispatch]);
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin();
 
   if (needToLogin) return needToLogin;
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
 
   if (wipErr) return wipErr;
 

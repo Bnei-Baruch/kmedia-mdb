@@ -428,7 +428,7 @@ export const SearchResultManyItems = (
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
-  const wipError = WipErr({ wip: wip || items.some(item => !item), err, t });
+  const wipError = WipErr({ wip: wip || items.some(item => !item), err });
 
   return (
     <div className="media_item list-none">
@@ -514,7 +514,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
     collections.unshift(found);
   }
 
-  const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
+  const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null });
 
   // If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
@@ -554,7 +554,7 @@ export const SearchResultTweets = ({ source }) => {
   const ids                = source.map(x => x._source.mdb_uid) || [];
   const wip                = useSelector(publicationsGetTweetsWipSelector);
   const err                = useSelector(publicationsGetTweetsErrorSelector);
-  const wipError           = WipErr({ wip, err, t });
+  const wipError           = WipErr({ wip, err });
   const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);

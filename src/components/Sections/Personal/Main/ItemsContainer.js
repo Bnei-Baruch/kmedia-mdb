@@ -27,20 +27,20 @@ import {
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => {
   const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const uiLang             = useSelector(settingsGetUILangSelector);
-  const dispatch           = useDispatch();
+  const uiLang = useSelector(settingsGetUILangSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
   }, [dispatch, pageNo, pageSize, uiLang, namespace]);
 
   const items = useSelector(state => myGetListSelector(state, namespace));
-  const err   = useSelector(state => myGetErrSelector(state, namespace));
-  const wip   = useSelector(state => myGetWipSelector(state, namespace));
+  const err = useSelector(state => myGetErrSelector(state, namespace));
+  const wip = useSelector(state => myGetWipSelector(state, namespace));
 
-  if (wip || err) return WipErr({ wip, err, t });
+  if (wip || err) return WipErr({ wip, err });
   if (items.length === 0)
-    return <ItemTemplate namespace={namespace} children={[]} t={t}/>;
+    return <ItemTemplate namespace={namespace} children={[]} />;
 
   let children = null;
 
@@ -48,7 +48,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
     case MY_NAMESPACE_REACTIONS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice}/>;
+        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
       });
       break;
     case MY_NAMESPACE_HISTORY:
@@ -67,14 +67,14 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
     case MY_NAMESPACE_PLAYLISTS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice}/>;
+        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice} />;
       });
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
       children = items.map(
         x => {
           const { key } = getMyItemKey(namespace, x);
-          return <SubscriptionsItem item={x} key={key} t={t}/>;
+          return <SubscriptionsItem item={x} key={key} t={t} />;
         }
       );
       break;
@@ -88,13 +88,13 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
     children = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 cu_items">{children}</div>;
   }
 
-  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll}/>;
+  return <ItemTemplate namespace={namespace} children={children} withSeeAll={withSeeAll} />;
 };
 
 ItemsContainer.propTypes = {
   namespace: PropTypes.string.isRequired,
-  pageSize : PropTypes.number,
-  pageNo   : PropTypes.number
+  pageSize: PropTypes.number,
+  pageNo: PropTypes.number
 };
 
 export default ItemsContainer;

@@ -12,7 +12,7 @@ import { playlistGetInfoSelector } from '../../../../redux/selectors';
 const PlaylistLastDaily = ({ playerContainer }) => {
   const { t }                        = useTranslation();
   const { isReady: isPlaylistReady } = useSelector(playlistGetInfoSelector);
-  const wipErr                       = WipErr({ wip: !isPlaylistReady, t });
+  const wipErr                       = WipErr({ wip: !isPlaylistReady });
 
   return (
     <div>

@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -45,7 +44,6 @@ export const LESSON_AS_UNIT = [CT_LESSON_PART, ...SHOWED_CT];
 const FILTER_PARAMS = { content_type: LESSON_AS_UNIT };
 
 const MainPage = () => {
-  const { t } = useTranslation();
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_LESSONS)) || {};
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -72,10 +70,10 @@ const MainPage = () => {
         ...listParams
       }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected, listParams]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
 
   return (

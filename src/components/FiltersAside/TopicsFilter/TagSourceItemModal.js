@@ -10,7 +10,7 @@ import TagSourceItem from './TagSourceItem';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 3;
-const buildRowArr   = n => {
+const buildRowArr = n => {
   const abs = n % ITEMS_PER_ROW;
   const len = ((n - abs) / ITEMS_PER_ROW) + ((abs === 0) ? 0 : 1);
   return Array(len).fill(0);
@@ -26,10 +26,11 @@ const TagSourceItemModal = props => {
       onClose,
       getById,
       getPath,
-      t
     } = props;
 
   const [query, setQuery] = useState('');
+
+  const { t } = useTranslation();
 
   const uiDir = useSelector(settingsGetUIDirSelector);
 
@@ -48,7 +49,7 @@ const TagSourceItemModal = props => {
   let children = parent.children?.filter(r => baseItems.includes(r)).map(getById);
   if (query) {
     const reg = new RegExp(query, 'i');
-    children  = baseItems.filter(id => id !== parent.id && getPath(id).some(x => !!x && x.id === parent.id))
+    children = baseItems.filter(id => id !== parent.id && getPath(id).some(x => !!x && x.id === parent.id))
       .map(id => getById(id))
       .filter(x => x?.[field] && reg.test(x[field]));
   }
@@ -62,14 +63,14 @@ const TagSourceItemModal = props => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <td key={i}/>;
+    if (!item) return <td key={i} />;
 
     return (
       <td
         className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
         key={i}
       >
-        <TagSourceItem {...props} id={item.id} deep={-1}/>
+        <TagSourceItem {...props} id={item.id} deep={-1} />
       </td>
     );
   };

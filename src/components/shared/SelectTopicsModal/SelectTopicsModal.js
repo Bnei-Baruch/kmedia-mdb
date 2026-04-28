@@ -93,7 +93,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   const handleSetSelected = useCallback(sel => setSelected(sel), []);
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin();
 
   return (
     <>

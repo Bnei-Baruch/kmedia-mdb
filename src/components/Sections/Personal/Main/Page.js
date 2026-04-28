@@ -20,7 +20,7 @@ const Page = () => {
   const deletedPlaylist = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_PLAYLISTS));
   const dispatch        = useDispatch();
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
   const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_PLAYLISTS, false));

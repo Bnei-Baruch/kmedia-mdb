@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../shapes';
 import Pagination from '../../../../Pagination/Pagination';
@@ -39,8 +38,7 @@ const TwitterPage = ({
   onFiltersChanged,
   onFiltersHydrated
 }) => {
-  const { t } = useTranslation();
-  const content = WipErr({ wip, err, t }) || (
+  const content = WipErr({ wip, err }) || (
     <div>
       <div className=" px-4 ">
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />

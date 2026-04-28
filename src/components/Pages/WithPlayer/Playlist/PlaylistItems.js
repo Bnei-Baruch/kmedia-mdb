@@ -16,6 +16,7 @@ import {
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
 let timer;
+
 const PlaylistItems               = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
@@ -27,7 +28,7 @@ const PlaylistItems               = () => {
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
   const dispatch               = useDispatch();
 
-  if (!isReady) return WipErr({ wip: !isReady, t });
+  if (!isReady) return WipErr({ wip: !isReady });
 
   const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
   const handleScroll   = e => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../shapes';
 import {
@@ -15,13 +16,14 @@ import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const iconByNamespace = {
-  [MY_NAMESPACE_REACTIONS]    : 'favorite_border',
-  [MY_NAMESPACE_HISTORY]      : 'history',
-  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon"/>,
-  [MY_NAMESPACE_PLAYLISTS]    : <PlaylistPlayIcon className="playlist_icon"/>
+  [MY_NAMESPACE_REACTIONS]: 'favorite_border',
+  [MY_NAMESPACE_HISTORY]: 'history',
+  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon" />,
+  [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon className="playlist_icon" />
 };
 
-const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
+const ItemTemplate = ({ children, namespace, withSeeAll = false }) => {
+  const { t } = useTranslation();
   const uiDir = useSelector(settingsGetUIDirSelector);
 
   const seeAll = withSeeAll ? (
@@ -31,9 +33,9 @@ const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
   ) : null;
 
   let marginClass = null;
-  let icon        = null;
+  let icon = null;
   if ([MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS].includes(namespace)) {
-    icon        = iconByNamespace[namespace];
+    icon = iconByNamespace[namespace];
     marginClass = uiDir === 'rtl' ? ' margin-right-8' : ' margin-left-8';
   } else {
     icon = <span className="material-symbols-outlined">{iconByNamespace[namespace]}</span>;
@@ -65,7 +67,7 @@ const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
 
 ItemTemplate.propTypes = {
   items: PropTypes.arrayOf(shapes.ContentUnit),
-  t    : PropTypes.func.isRequired
+  t: PropTypes.func.isRequired
 };
 
 export default ItemTemplate;

@@ -78,7 +78,7 @@ const ArticlePage = () => {
     dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   if (wipErr) {
     return wipErr;
   }

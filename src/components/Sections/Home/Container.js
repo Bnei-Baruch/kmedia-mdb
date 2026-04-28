@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
 import {
@@ -60,7 +59,6 @@ export const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
 };
 
 const HomePageContainer = () => {
-  const { t } = useTranslation();
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
@@ -100,7 +98,7 @@ const HomePageContainer = () => {
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   if (wipErr) {
     return null;
   }

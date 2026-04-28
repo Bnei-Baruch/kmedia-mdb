@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
@@ -32,7 +31,6 @@ const MainPage = () => {
   const pageSize                   = useSelector(settingsGetPageSizeSelector);
   const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_PROGRAMS), isEqual);
 
-  const { t }   = useTranslation();
   const prevSel = usePrevious(selected);
 
   const dispatch = useDispatch();
@@ -58,7 +56,7 @@ const MainPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
-  const wipErr          = WipErr({ wip, err, t });
+  const wipErr          = WipErr({ wip, err });
   const filterComponent = <Filters namespace={PAGE_NS_PROGRAMS} baseParams={FILTER_PARAMS}/>;
 
   return (

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
@@ -13,7 +12,6 @@ import SubscribeBtn from '../../shared/SubscribeBtn';
 import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const CollectionPageHeader = ({ collection = null }) => {
-  const { t } = useTranslation();
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (collection === null) {

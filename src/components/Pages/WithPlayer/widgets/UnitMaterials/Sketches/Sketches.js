@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -19,21 +18,20 @@ const findFiles = (files = [], language) => {
     .filter(f => f.language === language);
 
   const zipId = _files.find(isZipFile)?.id;
-  const imgs  = _files.filter(f => !isZipFile(f));
+  const imgs = _files.filter(f => !isZipFile(f));
   return { zipId, imgs };
 };
 
 const Sketches = ({ unit }) => {
   const dispatch = useDispatch();
-  const { t }    = useTranslation();
 
-  const imgFiles                = unit.files.filter(f => f.type === 'image');
-  const contentLanguages        = useSelector(settingsGetContentLanguagesSelector);
-  const languages               = imgFiles.map(file => file.language);
-  const _language               = selectSuitableLanguage(contentLanguages, languages, unit.original_language, languages[0]);
+  const imgFiles = unit.files.filter(f => f.type === 'image');
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const languages = imgFiles.map(file => file.language);
+  const _language = selectSuitableLanguage(contentLanguages, languages, unit.original_language, languages[0]);
   const [language, setLanguage] = useState(_language || '');
-  const { zipId, imgs }         = findFiles(unit.files, language);
-  const { wip, err, data }      = useSelector(assetsNestedGetZipByIdSelector)(zipId) || {};
+  const { zipId, imgs } = findFiles(unit.files, language);
+  const { wip, err, data } = useSelector(assetsNestedGetZipByIdSelector)(zipId) || {};
 
   const _needFetch = !wip && !err && !data;
   useEffect(() => {
@@ -42,7 +40,7 @@ const Sketches = ({ unit }) => {
     }
   }, [zipId, _needFetch, dispatch]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   if (wipErr) return wipErr;
 
   const handleLanguageChanged = l => setLanguage(l);

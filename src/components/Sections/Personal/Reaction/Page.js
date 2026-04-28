@@ -56,10 +56,10 @@ const Page      = ({ location }) => {
     dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { page_no: pageNo, page_size: PAGE_SIZE }));
   }, [pageNo, contentLanguages, dispatch]);
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
   if (wipErr) return wipErr;
 
   const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';

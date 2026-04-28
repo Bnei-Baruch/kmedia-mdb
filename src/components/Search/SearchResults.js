@@ -183,7 +183,7 @@ const SearchResults = () => {
   };
 
 
-  const wipErr = WipErr({ wip: wip || !areSourcesLoaded || !areTagsLoaded, err, t });
+  const wipErr = WipErr({ wip: wip || !areSourcesLoaded || !areTagsLoaded, err });
   if (wipErr) {
     return wipErr;
   }
@@ -206,7 +206,6 @@ const SearchResults = () => {
   // Elastic too slow and might fails on more than 1k results.
   const totalForPagination = Math.min(1000, total);
 
-  //const wipErr = WipErr({ wip, err: null, t });
   const renderHelmet = section => {
     const title = t(`${section}.header.text`);
     const subText1 = t(`${section}.header.subtext`);

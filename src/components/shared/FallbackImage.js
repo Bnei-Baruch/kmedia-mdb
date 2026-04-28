@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useTranslation } from 'react-i18next';
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
 import { actions } from '../../redux/modules/fetchImage';
 import { fetchImageGetBySrcSelector } from '../../redux/selectors';
@@ -20,8 +19,8 @@ const FallbackImage = props => {
       src,
       fallbackImage = ['default'],
       className,
-      width         = 'auto',
-      height        = 'auto',
+      width = 'auto',
+      height = 'auto',
 
       floated,
       force16x9,
@@ -29,8 +28,7 @@ const FallbackImage = props => {
     } = props;
 
   const { src: imageSource, wip, err } = useSelector(state => fetchImageGetBySrcSelector(state, src));
-  const dispatch                       = useDispatch();
-  const { t }                          = useTranslation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!imageSource && !wip && !err) {
@@ -43,7 +41,7 @@ const FallbackImage = props => {
     return null;
   }
 
-  const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
+  const wipErr = WipErr({ wip: (wip || !imageSource), err });
   if (wipErr) return wipErr;
 
   if (!imageSource || imageSource === NoneFallbackImage) {

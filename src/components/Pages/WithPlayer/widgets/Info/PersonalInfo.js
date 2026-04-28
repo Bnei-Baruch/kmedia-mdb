@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 
@@ -21,7 +20,6 @@ import {
 } from '../../../../../redux/selectors';
 
 const PersonalInfo = ({ collection }) => {
-  const { t } = useTranslation();
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const { cuId }             = useSelector(playlistGetInfoSelector);

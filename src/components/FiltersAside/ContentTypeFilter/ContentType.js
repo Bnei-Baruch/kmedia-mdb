@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import {
   CT_LESSONS_SERIES,
   CT_SOURCE,
@@ -25,7 +24,6 @@ const groupByName = {
 const cts         = Object.values(groupByName).flatMap(x => x.cts);
 
 const ContentType = ({ namespace }) => {
-  const { t } = useTranslation();
   let items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
   items     = items.filter(ct => !cts.includes(ct));
 

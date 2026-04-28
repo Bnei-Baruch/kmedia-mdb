@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
@@ -11,16 +10,14 @@ import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '
 import NotFound from '../../shared/NotFound';
 
 const Music = () => {
-  const { t } = useTranslation();
-
-  const uiLanguage                                     = useSelector(settingsGetUILangSelector);
-  const contentLanguages                               = useSelector(settingsGetContentLanguagesSelector);
+  const uiLanguage = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const { isError, isLoading, isSuccess, error, data } = useMusicQuery({
     uiLanguage,
     contentLanguages
   });
 
-  let wipErr = WipErr({ wip: isLoading, err: isError, t });
+  let wipErr = WipErr({ wip: isLoading, err: isError });
   if (wipErr) {
     if (error) {
       console.error('========> Music error', error);
@@ -29,20 +26,20 @@ const Music = () => {
 
   const music = data?.collections;
   if (!isSuccess || !music) {
-    wipErr = <NotFound/>;
+    wipErr = <NotFound />;
   }
 
   const content = wipErr || (
     <div className=" px-4 ">
-      <ResultsPageHeader pageNo={1} pageSize={1000} total={music.length || 0}/>
+      <ResultsPageHeader pageNo={1} pageSize={1000} total={music.length || 0} />
       <hr className="m-0" />
-      <List items={music}/>
+      <List items={music} />
     </div>
   );
 
   return (
     <>
-      <SectionHeader section="music"/>
+      <SectionHeader section="music" />
       <hr className="m-0" />
       {content}
     </>

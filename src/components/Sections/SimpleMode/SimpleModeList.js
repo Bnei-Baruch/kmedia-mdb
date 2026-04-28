@@ -33,7 +33,7 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
   const lessons     = useSelector(state => dataLessons.map(x => mdbGetDenormCollectionWUnitsSelector(state, x.id)).filter(x => !isEmpty(x)));
   const others      = useSelector(state => dataOthers.map(x => mdbGetDenormContentUnitSelector(state, x.id)).filter(x => !isEmpty(x)));
 
-  const wipErr = WipErr({ wip: isLoading, err: isError, t });
+  const wipErr = WipErr({ wip: isLoading, err: isError });
   if (wipErr) {
     if (error) {
       console.error('========> SimpleModeList error', error);

@@ -45,7 +45,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
   if (!subject && !bookmark)
     return null;
 
-  const needToLogin = NeedToLogin({ t });
+  const needToLogin = NeedToLogin();
   if (needToLogin) {
     return (<div className="p-6">{needToLogin}</div>);
   }

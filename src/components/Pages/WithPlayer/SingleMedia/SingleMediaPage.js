@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { clsx } from 'clsx';
 import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import Recommended from '../widgets/Recommended/Main/Recommended';
@@ -13,16 +12,15 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const SingleMediaPage = ({ playerContainer }) => {
-  const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location           = useLocation();
+  const location = useLocation();
 
-  const { embed }   = getEmbedFromQuery(location);
+  const { embed } = getEmbedFromQuery(location);
   const { isReady } = useSelector(playlistGetInfoSelector);
-  const { cuId }      = useSelector(playlistGetInfoSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
-  if (!isReady) return WipErr({ wip: !isReady, t });
+  if (!isReady) return WipErr({ wip: !isReady });
 
   return (
     <>
@@ -42,7 +40,7 @@ const SingleMediaPage = ({ playerContainer }) => {
         {
           !isMobileDevice && (
             <div className="w-[37.5%]">
-              <Recommended cuId={cuId}/>
+              <Recommended cuId={cuId} />
             </div>
           )
         }

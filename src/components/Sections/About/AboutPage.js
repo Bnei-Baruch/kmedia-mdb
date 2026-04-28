@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -8,7 +7,6 @@ import { settingsGetContentLanguagesSelector, assetsGetAboutSelector } from '../
 import { usePrevious } from '../../../helpers/utils';
 
 const AboutPage = () => {
-  const { t } = useTranslation();
 
   const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
   const { wip, err, data } = useSelector(assetsGetAboutSelector);
@@ -23,7 +21,7 @@ const AboutPage = () => {
     }
   }, [contentLanguages, dispatch, needFetch]);
 
-  const wipErr = WipErr({ wip: wip || !data, err, t });
+  const wipErr = WipErr({ wip: wip || !data, err });
   if (wipErr) {
     return wipErr;
   }

@@ -27,7 +27,9 @@ const buildNode = (id, getSourceById, cuStats) => {
 };
 
 const SourcesFilter = props => {
-  const { namespace, t } = props;
+  const { namespace } = props;
+  const { t } = useTranslation();
+
   let cuStats            = useSelector(state => statsGetCUSelector(state, namespace)) || undefined;
   cuStats                = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.sources;
 

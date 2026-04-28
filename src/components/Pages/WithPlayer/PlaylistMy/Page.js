@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import Materials from '../widgets/UnitMaterials/Materials';
 import Info from '../widgets/Info/Info';
@@ -13,32 +12,31 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistMyPage = ({ playerContainer }) => {
-  const { t } = useTranslation();
-  const { isReady }        = useSelector(playlistGetInfoSelector);
+  const { isReady } = useSelector(playlistGetInfoSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { cuId }      = useSelector(playlistGetInfoSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
   if (!isReady)
-    return WipErr({ wip: !isReady, t });
+    return WipErr({ wip: !isReady });
 
   return (
     <div className="flex flex-wrap avbox">
       <div
         className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          <PlaylistHeader/>
+          <PlaylistHeader />
         </div>
         {playerContainer}
         <div className=" px-4" id="unit_container">
-          <Info/>
-          <Materials/>
+          <Info />
+          <Materials />
         </div>
       </div>
       {
         !isMobileDevice && (
           <div className="w-[37.5%]">
-            <PlaylistItems/>
+            <PlaylistItems />
             <div className="my-4" />
-            <Recommended cuId={cuId} filterOutUnits={[]}/>
+            <Recommended cuId={cuId} filterOutUnits={[]} />
           </div>
         )
       }

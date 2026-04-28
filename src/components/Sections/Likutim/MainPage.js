@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -26,7 +25,6 @@ import {
 const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
 
 const MainPage = () => {
-  const { t } = useTranslation();
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_LIKUTIM)) || {};
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -48,7 +46,7 @@ const MainPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentLanguages, dispatch, pageNo, selected]);
 
-  const wipErr = WipErr({ wip, err, t });
+  const wipErr = WipErr({ wip, err });
 
   return (<>
     <SectionHeader section="likutim" />
