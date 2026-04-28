@@ -120,6 +120,4 @@ const getDonateLinkDetails = contentLanguages => {
   return (language && DONATION_LINKS_DETAILS.get(language)) || { linkLang: 'en', utmTerm: 'other_lang' };
 };
 
-DonationPopup.propTypes = { t: PropTypes.func.isRequired };
-
 export default DonationPopup;

@@ -66,6 +66,4 @@ const Login = () => {
   return loggedIn ? renderAccount() : renderLogin();
 };
 
-Login.propTypes = { t: PropTypes.func.isRequired };
-
 export default Login;
