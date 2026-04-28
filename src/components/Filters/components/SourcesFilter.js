@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -39,8 +38,5 @@ const SourcesFilter = props => {
   return <HierarchicalFilter name="sources-filter" tree={tree} {...props} />;
 };
 
-SourcesFilter.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(SourcesFilter);
+export default SourcesFilter;

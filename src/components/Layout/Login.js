@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
@@ -10,7 +10,8 @@ import { login, logout, KC_API_WITH_REALM } from '../../pkg/ksAdapter/adapter';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
 import { settingsGetUIDirSelector, settingsGetUILangSelector, authGetUserSelector } from '../../redux/selectors';
 
-const Login = ({ t }) => {
+const Login = () => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);
   const uiDir              = useSelector(settingsGetUIDirSelector);
@@ -67,4 +68,4 @@ const Login = ({ t }) => {
 
 Login.propTypes = { t: PropTypes.func.isRequired };
 
-export default withTranslation()(Login);
+export default Login;

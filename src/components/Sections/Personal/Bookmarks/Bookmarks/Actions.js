@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 
@@ -11,7 +11,8 @@ import { stopBubbling } from '../../../../../helpers/utils';
 import AlertModal from '../../../../shared/AlertModal';
 import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 
-const Actions = ({ bookmark, t }) => {
+const Actions = ({ bookmark }) => {
+  const { t } = useTranslation();
   const [open, setOpen]         = useState();
   const [openEdit, setOpenEdit] = useState();
   const [alertMsg, setAlertMsg] = useState();
@@ -131,4 +132,4 @@ const Actions = ({ bookmark, t }) => {
   );
 };
 
-export default withTranslation()(Actions);
+export default Actions;

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
@@ -17,7 +17,8 @@ import {
   settingsGetUILangSelector
 } from '../../../../redux/selectors';
 
-const LessonDatePicker = ({ t }) => {
+const LessonDatePicker = () => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const navigate = useNavigate();
@@ -64,4 +65,4 @@ const LessonDatePicker = ({ t }) => {
   );
 };
 
-export default withTranslation()(LessonDatePicker);
+export default LessonDatePicker;

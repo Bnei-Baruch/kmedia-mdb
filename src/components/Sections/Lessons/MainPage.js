@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -44,7 +44,8 @@ export const LESSON_AS_COLLECTION = [CT_DAILY_LESSON, ...SHOWED_CT];
 export const LESSON_AS_UNIT = [CT_LESSON_PART, ...SHOWED_CT];
 const FILTER_PARAMS = { content_type: LESSON_AS_UNIT };
 
-const MainPage = ({ t }) => {
+const MainPage = () => {
+  const { t } = useTranslation();
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_LESSONS)) || {};
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -110,4 +111,4 @@ const MainPage = ({ t }) => {
   );
 };
 
-export default withTranslation()(MainPage);
+export default MainPage;

@@ -1,14 +1,15 @@
 import { produce } from 'immer';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { SectionLogo } from '../../../helpers/images';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
 import { isNotEmptyArray, strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
-const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {
+const TopN = ({ units, N, sectionCount, section, topicUrl }) => {
+  const { t } = useTranslation();
   const [topNUnits, setTopNUnits]         = useState([]);
   const [buttonVisible, setButtonVisible] = useState(true);
 
@@ -99,7 +100,6 @@ TopN.propTypes = {
   N: PropTypes.number.isRequired,
   sectionCount: PropTypes.number.isRequired,
   topicUrl: PropTypes.string,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(TopN);
+export default TopN;

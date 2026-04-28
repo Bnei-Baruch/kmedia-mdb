@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import QualityControl from './QualityControl';
@@ -11,7 +11,8 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import SubsControl from './SubsControl';
 import { playerGetOverModeSelector } from '../../../redux/selectors';
 
-const Settings = ({ t }) => {
+const Settings = () => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const mode = useSelector(playerGetOverModeSelector);
@@ -38,4 +39,4 @@ const Settings = ({ t }) => {
   );
 };
 
-export default withTranslation()(Settings);
+export default Settings;

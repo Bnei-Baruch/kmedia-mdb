@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Dialog } from '@headlessui/react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
@@ -10,7 +10,8 @@ import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { useSelector } from 'react-redux';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
-const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
+const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
+  const { t } = useTranslation();
   const [isEditName, setIsEditName] = useState();
   const [name, setName]             = useState();
   const [confirm, setConfirm]       = useState();
@@ -117,4 +118,4 @@ PlaylistHeader.propTypes = {
   save          : PropTypes.func
 };
 
-export default withTranslation()(PlaylistHeader);
+export default PlaylistHeader;

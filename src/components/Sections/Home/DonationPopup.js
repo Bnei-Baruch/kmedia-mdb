@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,8 @@ import {
   settingsGetUILangSelector
 } from '../../../redux/selectors';
 
-function DonationPopup({ t }) {
+function DonationPopup() {
+  const { t } = useTranslation();
   const user       = useSelector(authGetUserSelector);
   const shouldOpen = () => {
     if (user?.name === KC_BOT_USER_NAME) return false;
@@ -121,4 +122,4 @@ const getDonateLinkDetails = contentLanguages => {
 
 DonationPopup.propTypes = { t: PropTypes.func.isRequired };
 
-export default withTranslation()(DonationPopup);
+export default DonationPopup;

@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -25,7 +25,8 @@ import {
 
 const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
 
-const MainPage = ({ t }) => {
+const MainPage = () => {
+  const { t } = useTranslation();
   const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_LIKUTIM)) || {};
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -76,4 +77,4 @@ const MainPage = ({ t }) => {
   </>);
 };
 
-export default withTranslation()(MainPage);
+export default MainPage;

@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import * as shapes from '../../shapes';
@@ -111,7 +111,8 @@ const renderSearchBar = location => (
   </div>
 );
 
-const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPosts = [], latestTweets = [], t }) => {
+const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPosts = [], latestTweets = [] }) => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location = useLocation();
 
@@ -132,7 +133,6 @@ HomePage.propTypes = {
   latestItems: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection])),
   latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
   latestTweets: PropTypes.arrayOf(shapes.Tweet),
-  t: PropTypes.func.isRequired,
 };
 
 const arePropsEqual = (prevProps, nextProps) =>
@@ -142,4 +142,4 @@ const arePropsEqual = (prevProps, nextProps) =>
   isEqual(prevProps.latestBlogPosts, nextProps.latestBlogPosts) &&
   isEqual(prevProps.latestTweets, nextProps.latestTweets);
 
-export default React.memo(withTranslation()(HomePage), arePropsEqual);
+export default React.memo(HomePage, arePropsEqual);

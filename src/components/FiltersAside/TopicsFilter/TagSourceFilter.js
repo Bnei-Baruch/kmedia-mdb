@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import RenderAsList from './RenderAsList';
 import RenderAsTree from './RenderAsTree';
 import FilterHeader from '../FilterHeader';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
-const TagSourceFilter = ({ namespace, filterName, t }) => {
+const TagSourceFilter = ({ namespace, filterName }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState();
   const baseItems         = useSelector(state => filtersAsideGetTreeSelector(state, namespace, filterName));
 
@@ -43,4 +44,4 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
   );
 };
 
-export default withTranslation()(TagSourceFilter);
+export default TagSourceFilter;

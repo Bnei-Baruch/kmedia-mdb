@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import countBy from 'lodash/countBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
@@ -61,14 +60,11 @@ const LocationsFilter = props => {
   const cIDs           = useSelector(state => eventsGetEventByTypeSelector(state, CT_CONGRESS)) || [];
   const congressEvents = useSelector(state => mdbGetDenormCollectionArrSelector(state, cIDs));
 
-  const { t } = props;
+  const { t } = useTranslation();
   const tree  = useMemo(() => getTree(congressEvents, t), [congressEvents, t]);
 
   return <HierarchicalFilter name="locations-filter" tree={tree} {...props} t={t}/>;
 };
 
-LocationsFilter.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(LocationsFilter);
+export default LocationsFilter;

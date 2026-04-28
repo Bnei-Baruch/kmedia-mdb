@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { FN_LOCATIONS } from '../../../helpers/consts';
 
@@ -7,7 +7,8 @@ import { actions } from '../../../redux/modules/filters';
 import { getTitle } from './helper';
 import { filtersAsideCitiesByCountrySelector, filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
-const CityItem = ({ namespace, id, country, t }) => {
+const CityItem = ({ namespace, id, country }) => {
+  const { t } = useTranslation();
   const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_LOCATIONS));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
   const stat            = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_LOCATIONS))(id);
@@ -48,4 +49,4 @@ const CityItem = ({ namespace, id, country, t }) => {
   );
 };
 
-export default withTranslation()(CityItem);
+export default CityItem;

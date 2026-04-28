@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Popover } from '@headlessui/react';
@@ -27,7 +27,8 @@ import {
   authGetUserSelector
 } from '../../../../redux/selectors';
 
-const Page = ({ t }) => {
+const Page = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -143,4 +144,4 @@ const Page = ({ t }) => {
   );
 };
 
-export default withTranslation()(withRouter(Page));
+export default withRouter(Page);

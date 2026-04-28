@@ -3,12 +3,13 @@ import { Popover, PopoverPanel } from '@headlessui/react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../helpers/consts';
 
 let timeout;
-const CopyShareUrl = ({ t }) => {
+const CopyShareUrl = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
@@ -48,4 +49,4 @@ const CopyShareUrl = ({ t }) => {
   );
 };
 
-export default withTranslation()(CopyShareUrl);
+export default CopyShareUrl;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { setPlaybackRate } from '../../../pkg/jwpAdapter/adapter';
@@ -7,7 +7,8 @@ import { playerGetFileSelector, playerGetRateSelector } from '../../../redux/sel
 
 const PLAYER_SPEEDS = [0.75, 1, 1.25, 1.5, 2];
 
-const RateControl = ({ t }) => {
+const RateControl = () => {
+  const { t } = useTranslation();
   const rate = useSelector(playerGetRateSelector);
   const file = useSelector(playerGetFileSelector);
 
@@ -36,4 +37,4 @@ const RateControl = ({ t }) => {
   );
 };
 
-export default withTranslation()(RateControl);
+export default RateControl;

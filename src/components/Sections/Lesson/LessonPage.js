@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -24,7 +24,8 @@ import {
   settingsGetPageSizeSelector
 } from '../../../redux/selectors';
 
-const LessonPage = ({ t }) => {
+const LessonPage = () => {
+  const { t } = useTranslation();
   const { id: cid } = useParams();
 
   const namespace = `${PAGE_NS_LESSONS}_${cid}`;
@@ -84,4 +85,4 @@ const LessonPage = ({ t }) => {
   </>);
 };
 
-export default withTranslation()(LessonPage);
+export default LessonPage;

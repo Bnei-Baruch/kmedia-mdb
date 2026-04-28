@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
 import { tagsGetItemsSelector } from '../../../redux/selectors';
 
-const TextList = ({ t }) => {
+const TextList = () => {
+  const { t } = useTranslation();
 
   const { items: ids, textTotal } = useSelector(tagsGetItemsSelector);
 
@@ -22,8 +22,5 @@ const TextList = ({ t }) => {
   );
 };
 
-TextList.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(TextList);
+export default TextList;

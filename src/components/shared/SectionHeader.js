@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import Helmets from './Helmets';
 import i18next from 'i18next';
 
-const SectionHeader = ({ section, t, submenuItems }) => {
+const SectionHeader = ({ section, submenuItems }) => {
+  const { t } = useTranslation();
   const title    = t(`${section}.header.text`);
   const subText1 = t(`${section}.header.subtext`);
   // eslint-disable-next-line import/no-named-as-default-member
@@ -52,7 +53,6 @@ const SectionHeader = ({ section, t, submenuItems }) => {
 SectionHeader.propTypes = {
   section: PropTypes.string.isRequired,
   submenuItems: PropTypes.arrayOf(PropTypes.node),
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(SectionHeader);
+export default SectionHeader;

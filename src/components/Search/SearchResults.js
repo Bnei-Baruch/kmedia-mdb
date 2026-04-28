@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Trans, withTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -99,7 +98,8 @@ const cMapFromState = (state, results) => (
     : {}
 );
 
-const SearchResults = ({ t }) => {
+const SearchResults = () => {
+  const { t } = useTranslation();
   const queryResult = useSelector(searchGetQueryResultSelector) || false;
   const searchResults = queryResult.search_result;
 
@@ -241,9 +241,6 @@ const SearchResults = ({ t }) => {
     </>);
 };
 
-SearchResults.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
 SearchResults.defaultProps = {
   queryResult: null,
@@ -254,4 +251,4 @@ SearchResults.defaultProps = {
   getSourcePath: undefined
 };
 
-export default withTranslation()(SearchResults);
+export default SearchResults;

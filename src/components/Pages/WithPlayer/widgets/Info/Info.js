@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -69,7 +69,8 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ t }) => {
+const Info = () => {
+  const { t } = useTranslation();
   const { cId, cuId, isSingleMedia } = useSelector(playlistGetInfoSelector);
   const { id: paramsId }             = useParams();
   const unit                         = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
@@ -148,4 +149,4 @@ const Info = ({ t }) => {
   );
 };
 
-export default withTranslation()(Info);
+export default Info;

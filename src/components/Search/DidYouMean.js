@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const DidYouMean = ({ typo_suggest, t }) => {
+const DidYouMean = ({ typo_suggest }) => {
+  const { t } = useTranslation();
   if (!typo_suggest) {
     return null;
   }
@@ -20,7 +21,6 @@ const DidYouMean = ({ typo_suggest, t }) => {
 
 DidYouMean.propTypes = {
   typo_suggest: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(DidYouMean);
+export default DidYouMean;

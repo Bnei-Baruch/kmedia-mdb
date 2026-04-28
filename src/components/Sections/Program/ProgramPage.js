@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -25,7 +25,8 @@ import {
   settingsGetPageSizeSelector
 } from '../../../redux/selectors';
 
-const ProgramPage = ({ t }) => {
+const ProgramPage = () => {
+  const { t } = useTranslation();
   const { id: cid } = useParams();
   const namespace   = `${PAGE_NS_PROGRAMS}_${cid}`;
 
@@ -81,4 +82,4 @@ const ProgramPage = ({ t }) => {
   </>);
 };
 
-export default withTranslation()(ProgramPage);
+export default ProgramPage;

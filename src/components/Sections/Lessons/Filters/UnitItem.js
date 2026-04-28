@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
@@ -11,7 +11,8 @@ import TooltipIfNeed from '../../../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../../../shared/UnitLogoWithDuration';
 import { mdbGetDenormContentUnitSelector, recommendedGetViewsSelector } from '../../../../redux/selectors';
 
-const UnitItem = ({ id, t }) => {
+const UnitItem = ({ id }) => {
+  const { t } = useTranslation();
   const cu    = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const views = useSelector(state => recommendedGetViewsSelector(state, id));
 
@@ -52,4 +53,4 @@ const UnitItem = ({ id, t }) => {
   );
 };
 
-export default withTranslation()(UnitItem);
+export default UnitItem;

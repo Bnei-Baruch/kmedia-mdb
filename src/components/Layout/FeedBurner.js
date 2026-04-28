@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { getRSSFeedByLangs } from '../../helpers/utils';
 import { useSelector } from 'react-redux';
 import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 
-const FeedBurner = ({ t }) => {
+const FeedBurner = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const handleChange      = e => setEmail(e.target.value);
   const contentLanguages  = useSelector(settingsGetContentLanguagesSelector);
@@ -42,8 +42,5 @@ const FeedBurner = ({ t }) => {
   );
 };
 
-FeedBurner.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(FeedBurner);
+export default FeedBurner;

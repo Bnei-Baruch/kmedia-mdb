@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { FN_LANGUAGES, POPULAR_LANGUAGES, ALL_LANGUAGES } from '../../../helpers/consts';
 import FilterHeader from '../FilterHeader';
 import LanguageItem from './LanguageItem';
 import { filtersAsideGetTreeSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
-const Language = ({ namespace, t }) => {
+const Language = ({ namespace }) => {
+  const { t } = useTranslation();
   const items           = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_LANGUAGES));
   const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_LANGUAGES));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
@@ -54,4 +55,4 @@ const Language = ({ namespace, t }) => {
   );
 };
 
-export default withTranslation()(Language);
+export default Language;

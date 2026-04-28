@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { noop } from '../../helpers/utils';
 
 import 'react-day-picker/lib/style.css';
@@ -23,7 +23,8 @@ import FilterHeader from './FilterHeader';
 
 const ENABLED_STATS_NAMESPACE = ['search'];
 
-const DateFilter = ({ t, namespace }) => {
+const DateFilter = ({ namespace }) => {
+  const { t } = useTranslation();
   const [to, setTo]               = useState();
   const [from, setFrom]           = useState();
   const [preset, setPreset]       = useState();
@@ -204,7 +205,6 @@ DateFilter.propTypes = {
   }),
   onCancel: PropTypes.func,
   onApply : PropTypes.func,
-  t       : PropTypes.func.isRequired
 };
 
 DateFilter.defaultProps = {
@@ -215,4 +215,4 @@ DateFilter.defaultProps = {
   }
 };
 
-export default withTranslation()(DateFilter);
+export default DateFilter;

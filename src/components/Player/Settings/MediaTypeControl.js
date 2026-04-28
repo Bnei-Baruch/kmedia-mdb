@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
 import { playerGetFileSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
-const MediaTypeControl = ({ t }) => {
+const MediaTypeControl = () => {
+  const { t } = useTranslation();
   const { type, language }  = useSelector(playerGetFileSelector);
   const { isHLS, mtByLang } = useSelector(playlistGetPlayedSelector);
 
@@ -37,4 +38,4 @@ const MediaTypeControl = ({ t }) => {
   );
 };
 
-export default withTranslation()(MediaTypeControl);
+export default MediaTypeControl;

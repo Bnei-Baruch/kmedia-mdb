@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import NavLink from '../Language/MultiLanguageNavLink';
 import SectionHeader from './SectionHeader';
 
-const MainTabPage = ({ tabs, content, section, t }) => {
+const MainTabPage = ({ tabs, content, section }) => {
+  const { t } = useTranslation();
   const params = useParams();
 
   const tab = params.tab || tabs[0];
@@ -33,7 +34,6 @@ MainTabPage.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.string).isRequired,
   content: PropTypes.func.isRequired,
   section: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(MainTabPage);
+export default MainTabPage;

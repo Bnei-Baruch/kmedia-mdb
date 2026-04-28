@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { VolumeKnob } from './VolumeKnob';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
@@ -8,7 +8,8 @@ import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
 import { setMute, setVolume } from '../../../pkg/jwpAdapter/adapter';
 import { playerGetPlayerWidthSelector, playerIsMutedSelector } from '../../../redux/selectors';
 
-const VolumeCtrl = ({ t }) => {
+const VolumeCtrl = () => {
+  const { t } = useTranslation();
   const widthRef = useRef({});
 
   const [left, setLeft]   = useState();
@@ -64,4 +65,4 @@ const VolumeCtrl = ({ t }) => {
   );
 };
 
-export default withTranslation()(VolumeCtrl);
+export default VolumeCtrl;

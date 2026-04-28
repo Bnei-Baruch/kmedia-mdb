@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 
@@ -122,4 +122,4 @@ const TagSourceItemModal = props => {
   );
 };
 
-export default withTranslation()(TagSourceItemModal);
+export default TagSourceItemModal;

@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
 import { settingsGetUILangSelector } from '../../../../../redux/selectors';
 
-const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null, t }) => {
+const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null }) => {
+  const { t } = useTranslation();
   const uiLang = useSelector(settingsGetUILangSelector);
   const length = limitLength || items.length;
 
@@ -26,7 +27,6 @@ BlogFeed.propTypes = {
   items         : PropTypes.arrayOf(shapes.BlogPost),
   snippetVersion: PropTypes.bool,
   limitLength   : PropTypes.number,
-  t             : PropTypes.func.isRequired
 };
 
-export default withTranslation()(BlogFeed);
+export default BlogFeed;

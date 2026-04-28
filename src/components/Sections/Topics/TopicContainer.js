@@ -1,9 +1,8 @@
 import { produce } from 'immer';
 import debounce from 'lodash/debounce';
-import PropTypes from 'prop-types';
 import React, { Fragment, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
@@ -92,7 +91,8 @@ const filterData = (byId, match, sortedRoots) => {
 /* root will become main title
   subroot will become subtitle
   the rest will be a tree - List of Lists */
-const TopicContainer = ({ t }) => {
+const TopicContainer = () => {
+  const { t } = useTranslation();
   const statsById = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_TOPICS_MULTI));
   const roots     = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
   const byId      = useSelector(tagsGetTagsSelector, isEqual);
@@ -274,8 +274,5 @@ const TopicContainer = ({ t }) => {
   );
 };
 
-TopicContainer.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(TopicContainer);
+export default TopicContainer;

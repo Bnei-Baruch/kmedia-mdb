@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { clsx } from 'clsx';
 
@@ -10,7 +10,8 @@ import { actions as filtersActions } from '../../../../../redux/modules/bookmark
 import FolderItem from './Item';
 import { bookmarkFilterGetByKeySelector, myGetListSelector } from '../../../../../redux/selectors';
 
-const FolderList = ({ t, close }) => {
+const FolderList = ({ close }) => {
+  const { t } = useTranslation();
   const [editFolder, setEditFolder]         = useState(false);
   const [query, setQuery]                   = useState();
   const [selectedMobile, setSelectedMobile] = useState();
@@ -154,4 +155,4 @@ const FolderList = ({ t, close }) => {
   );
 };
 
-export default withTranslation()(FolderList);
+export default FolderList;

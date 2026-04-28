@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -14,11 +14,11 @@ const TagsFilter = props => {
   let cuStats = useSelector(state => statsGetCUSelector(state, props.namespace)) || { data: { tags: {} } };
   cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
 
-  const { t } = props;
+  const { t } = useTranslation();
 
   const tree = getTree(roots, getTagById, cuStats, t);
 
   return <HierarchicalFilter name="topics-filter" tree={tree} {...props} />;
 };
 
-export default withTranslation()(TagsFilter);
+export default TagsFilter;

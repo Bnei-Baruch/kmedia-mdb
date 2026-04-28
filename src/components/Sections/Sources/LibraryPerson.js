@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { actions as assetsActions } from '../../../redux/modules/assets';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -36,7 +35,8 @@ const convertImages = content => {
   return content;
 };
 
-const LibraryPerson = ({ t }) => {
+const LibraryPerson = () => {
+  const { t } = useTranslation();
   const { id: sourceId }   = useParams();
   const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
   const { wip, err, data } = useSelector(assetsGetPersonSelector);
@@ -64,8 +64,5 @@ const LibraryPerson = ({ t }) => {
   );
 };
 
-LibraryPerson.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(LibraryPerson);
+export default LibraryPerson;

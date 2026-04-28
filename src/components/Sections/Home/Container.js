@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
 import {
@@ -60,7 +59,8 @@ export const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
   });
 };
 
-const HomePageContainer = ({ t }) => {
+const HomePageContainer = () => {
+  const { t } = useTranslation();
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
@@ -116,8 +116,5 @@ const HomePageContainer = ({ t }) => {
   );
 };
 
-HomePageContainer.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default withTranslation()(HomePageContainer);
+export default HomePageContainer;

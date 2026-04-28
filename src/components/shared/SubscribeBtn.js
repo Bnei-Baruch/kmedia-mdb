@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogPanel } from '@headlessui/react';
 
@@ -17,7 +17,8 @@ import {
   authGetUserSelector
 } from '../../redux/selectors';
 
-const SubscribeBtn = ({ t, collection }) => {
+const SubscribeBtn = ({ collection }) => {
+  const { t } = useTranslation();
   const [alertMsg, setAlertMsg]       = useState();
   const [confirm, setConfirm]         = useState();
   const [isNeedLogin, setIsNeedLogin] = useState();
@@ -138,4 +139,4 @@ SubscribeBtn.propTypes = {
 
 };
 
-export default withTranslation()(SubscribeBtn);
+export default SubscribeBtn;

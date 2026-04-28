@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const FilterHeader = ({ filterName, t, children }) => {
+const FilterHeader = ({ filterName, children }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(true);
   const toggleOpen = () => setOpen(!open);
   return (
@@ -17,4 +18,4 @@ const FilterHeader = ({ filterName, t, children }) => {
   );
 };
 
-export default withTranslation()(FilterHeader);
+export default FilterHeader;

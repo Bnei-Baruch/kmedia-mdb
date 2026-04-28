@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { canonicalLink } from '../../../helpers/links';
 import MediaHelper from '../../../helpers/media';
@@ -32,7 +32,8 @@ const findZipFile = (cu, contentLanguages) => {
   return files[0] || zips[0];
 };
 
-const UnitItem = ({ id, t }) => {
+const UnitItem = ({ id }) => {
+  const { t } = useTranslation();
   const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const getZipById       = useSelector(assetsNestedGetZipByIdSelector);
   const getPathByID      = useSelector(sourcesGetPathByIDSelector);
@@ -83,4 +84,4 @@ const UnitItem = ({ id, t }) => {
   );
 };
 
-export default withTranslation()(UnitItem);
+export default UnitItem;

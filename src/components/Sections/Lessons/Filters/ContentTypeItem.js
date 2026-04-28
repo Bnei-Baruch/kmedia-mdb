@@ -1,12 +1,13 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CT_LESSONS, FN_CONTENT_TYPE } from '../../../../helpers/consts';
 import { actions } from '../../../../redux/modules/filters';
 import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../../redux/selectors';
 
-const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
+const ContentTypeItem = ({ namespace, id, isSelChild = false }) => {
+  const { t } = useTranslation();
   const isLesson = CT_LESSONS.includes(id);
   const selected = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
   const stat     = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(id);
@@ -46,4 +47,4 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   );
 };
 
-export default withTranslation()(ContentTypeItem);
+export default ContentTypeItem;

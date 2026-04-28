@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
@@ -66,7 +65,6 @@ BlogPostPage.propTypes = {
   post: shapes.BlogPost,
   wip: shapes.WIP,
   err: shapes.Error,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(BlogPostPage);
+export default BlogPostPage;

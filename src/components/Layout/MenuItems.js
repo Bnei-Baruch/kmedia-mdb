@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
 import { useSelector } from 'react-redux';
 import { faUser, faRss, faAppleWhole } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +31,8 @@ const ITEMS = [
   'help'
 ];
 
-const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity }) => {
+const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) => {
+  const { t } = useTranslation();
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const loggedIn         = useIsLoggedIn();
 
@@ -138,14 +139,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
 MenuItems.propTypes = {
   simple     : PropTypes.bool,
   visible    : PropTypes.bool,
-  t          : PropTypes.func.isRequired,
   onItemClick: PropTypes.func
 };
 
-MenuItems.defaultProps = {
-  simple     : false,
-  visible    : false,
-  onItemClick: identity
-};
-
-export default withTranslation()(MenuItems);
+export default MenuItems;

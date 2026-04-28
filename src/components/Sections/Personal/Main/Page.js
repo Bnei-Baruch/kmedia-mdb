@@ -11,11 +11,12 @@ import NeedToLogin from '../NeedToLogin';
 import ItemsContainer from './ItemsContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from '../../../shared/AlertModal';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { withRouter } from '../../../../helpers/withRouterPatch';
 import { myGetDeletedSelector } from '../../../../redux/selectors';
 
-const Page = ({ t }) => {
+const Page = () => {
+  const { t } = useTranslation();
   const deletedPlaylist = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_PLAYLISTS));
   const dispatch        = useDispatch();
 
@@ -35,4 +36,4 @@ const Page = ({ t }) => {
   );
 };
 
-export default withTranslation()(withRouter(Page));
+export default withRouter(Page);

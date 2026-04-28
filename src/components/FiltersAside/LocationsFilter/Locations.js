@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
@@ -9,7 +9,8 @@ import CountryItem from './CountryItem';
 import { getTitle } from './helper';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
-const Locations = ({ namespace, t }) => {
+const Locations = ({ namespace }) => {
+  const { t } = useTranslation();
   const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_LOCATIONS));
 
   if (isEmpty(items))
@@ -38,4 +39,4 @@ const Locations = ({ namespace, t }) => {
   );
 };
 
-export default withTranslation()(Locations);
+export default Locations;

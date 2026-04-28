@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
 import { playerGetFileSelector } from '../../../redux/selectors';
 
-const MediaTypeControlMobile = ({ t }) => {
+const MediaTypeControlMobile = () => {
+  const { t } = useTranslation();
   const { type } = useSelector(playerGetFileSelector) || false;
 
   const dispatch = useDispatch();
@@ -29,4 +30,4 @@ const MediaTypeControlMobile = ({ t }) => {
   );
 };
 
-export default withTranslation()(MediaTypeControlMobile);
+export default MediaTypeControlMobile;

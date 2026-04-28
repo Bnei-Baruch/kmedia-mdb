@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   EmailIcon,
   EmailShareButton,
@@ -63,7 +62,8 @@ const RenderShare = ({ collection, callback, t }) => {
   );
 };
 
-const ShareForm = ({ collection, t }) => {
+const ShareForm = ({ collection }) => {
+  const { t } = useTranslation();
   const [share, setShare] = useState(false);
 
   return (
@@ -81,8 +81,5 @@ const ShareForm = ({ collection, t }) => {
   );
 };
 
-ShareForm.propTypes = {
-  t: PropTypes.func.isRequired,
-};
 
-export default withTranslation()(ShareForm);
+export default ShareForm;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 import { clsx } from 'clsx';
@@ -10,7 +10,8 @@ import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 
-const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
+const FolderItem = ({ folder, selectedId, selectFolder }) => {
+  const { t } = useTranslation();
   const [edit, setEdit]       = useState();
   const [name, setName]       = useState();
   const [confirm, setConfirm] = useState();
@@ -135,4 +136,4 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
   );
 };
 
-export default withTranslation()(FolderItem);
+export default FolderItem;

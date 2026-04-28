@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorSplash, FrownSplash, LoadingSplash } from './Splash/Splash';
 
@@ -22,11 +22,10 @@ const Loading = props => {
 };
 
 Loading.propTypes = {
-  t: PropTypes.func.isRequired,
   error: PropTypes.bool,
   timedOut: PropTypes.bool,
   pastDelay: PropTypes.bool,
   retry: PropTypes.func,
 };
 
-export default withTranslation()(Loading);
+export default Loading;

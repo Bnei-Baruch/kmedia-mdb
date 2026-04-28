@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
@@ -13,6 +13,7 @@ import SubscribeBtn from '../../shared/SubscribeBtn';
 import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const CollectionPageHeader = ({ collection = null }) => {
+  const { t } = useTranslation();
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (collection === null) {
@@ -61,7 +62,6 @@ const CollectionPageHeader = ({ collection = null }) => {
 CollectionPageHeader.propTypes = {
   collection: shapes.GenericCollection,
   namespace: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(CollectionPageHeader);
+export default CollectionPageHeader;

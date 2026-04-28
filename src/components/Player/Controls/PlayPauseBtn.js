@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { pause, play } from '../../../pkg/jwpAdapter/adapter';
 import { playerIsPlaySelector } from '../../../redux/selectors';
 
-const PlayPauseBtn = ({ t }) => {
+const PlayPauseBtn = () => {
+  const { t } = useTranslation();
   const isPlay = useSelector(playerIsPlaySelector);
 
   const handlePlayPause = () => {
@@ -25,4 +26,4 @@ const PlayPauseBtn = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlayPauseBtn);
+export default PlayPauseBtn;

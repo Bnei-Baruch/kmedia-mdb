@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -7,7 +7,8 @@ import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
 import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
-const QualityControl = ({ t }) => {
+const QualityControl = () => {
+  const { t } = useTranslation();
   const { browserName } = useContext(DeviceInfoContext);
 
   const playedItem            = useSelector(playlistGetPlayedSelector);
@@ -43,4 +44,4 @@ const QualityControl = ({ t }) => {
   );
 };
 
-export default withTranslation()(QualityControl);
+export default QualityControl;

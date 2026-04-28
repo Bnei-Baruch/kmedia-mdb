@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { actions } from '../../../../redux/modules/my';
@@ -8,7 +8,8 @@ import PlaylistInfo from '../../../Pages/WithPlayer/widgets/Info/SavePlaylistIte
 import { getMyItemKey } from '../../../../helpers/my';
 import { stopBubbling } from '../../../../helpers/utils';
 
-const Actions = ({ history, t }) => {
+const Actions = ({ history }) => {
+  const { t } = useTranslation();
   const [open, setOpen]          = useState();
   const dispatch                 = useDispatch();
   const menuRef                  = useRef(null);
@@ -64,4 +65,4 @@ const Actions = ({ history, t }) => {
   );
 };
 
-export default withTranslation()(Actions);
+export default Actions;

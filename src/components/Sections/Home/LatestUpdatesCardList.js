@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -10,7 +10,8 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import { settingsGetLeftRightByDirSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 import LatestUpdate from './LatestUpdate';
 
-const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsCount = 4 }) => {
+const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4 }) => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const [pageNo, setPageNo] = useState(0);
   const [pageStart, setPageStart] = useState(0);
@@ -131,10 +132,9 @@ const LatestUpdatesCardList = ({ t, title, maxItems, cts, itemsByCT, itemsCount 
 };
 
 LatestUpdatesCardList.propTypes = {
-  t: PropTypes.func.isRequired,
   title: PropTypes.string,
   cts: PropTypes.array,
   itemsByCT: PropTypes.any,
 };
 
-export default withTranslation()(LatestUpdatesCardList);
+export default LatestUpdatesCardList;

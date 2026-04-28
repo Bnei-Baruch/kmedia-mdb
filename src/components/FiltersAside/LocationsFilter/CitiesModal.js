@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 
@@ -17,7 +17,8 @@ const buildRowArr   = n => {
   return Array(len).fill(0);
 };
 
-const CitiesModal = ({ country, namespace, open, onClose, t }) => {
+const CitiesModal = ({ country, namespace, open, onClose }) => {
+  const { t } = useTranslation();
 
   const items = useSelector(state => filtersAsideCitiesByCountrySelector(state, namespace, FN_LOCATIONS))(country);
 
@@ -84,4 +85,4 @@ const CitiesModal = ({ country, namespace, open, onClose, t }) => {
   );
 };
 
-export default withTranslation()(CitiesModal);
+export default CitiesModal;

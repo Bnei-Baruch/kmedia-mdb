@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import Materials from '../widgets/UnitMaterials/Materials';
 import Info from '../widgets/Info/Info';
@@ -12,7 +12,8 @@ import { clsx } from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
-const PlaylistMyPage = ({ playerContainer, t }) => {
+const PlaylistMyPage = ({ playerContainer }) => {
+  const { t } = useTranslation();
   const { isReady }        = useSelector(playlistGetInfoSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { cuId }      = useSelector(playlistGetInfoSelector);
@@ -45,4 +46,4 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
   );
 };
 
-export default withTranslation()(PlaylistMyPage);
+export default PlaylistMyPage;

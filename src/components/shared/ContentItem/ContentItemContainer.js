@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -113,7 +113,6 @@ const ContentItemContainer = (
   {
     id,
     children,
-    t,
     asList = false,
     link,
     playTime,
@@ -129,6 +128,7 @@ const ContentItemContainer = (
     showImg
   }
 ) => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const views              = useSelector(state => recommendedGetViewsSelector(state, id));
@@ -209,6 +209,6 @@ SourceItemContainerHook.propTypes = {
   asList: PropTypes.bool
 };
 
-export default withTranslation()(ContentItemContainer);
-export const SourceItemContainer = withTranslation()(SourceItemContainerHook);
-export const TagItemContainer    = withTranslation()(TagItemContainerHook);
+export default ContentItemContainer;
+export const SourceItemContainer = useTranslation()(SourceItemContainerHook);
+export const TagItemContainer    = useTranslation()(TagItemContainerHook);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../shapes';
 import Pagination from '../../../../Pagination/Pagination';
@@ -23,11 +23,11 @@ const BlogPage = ({
   total,
   pageSize,
   namespace,
-  t,
   onPageChange,
   onFiltersChanged,
   onFiltersHydrated,
 }) => {
+  const { t } = useTranslation();
   const content = WipErr({ wip, err, t }) || (
     <div>
       <div className=" px-4 ">
@@ -71,10 +71,9 @@ BlogPage.propTypes = {
   pageNo: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  t: PropTypes.func.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,
   onFiltersHydrated: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(BlogPage);
+export default BlogPage;

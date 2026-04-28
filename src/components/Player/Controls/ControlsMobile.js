@@ -11,10 +11,11 @@ import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 import { setMute } from '../../../pkg/jwpAdapter/adapter';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { playerGetOverModeSelector, playerIsLoadedSelector, playerIsMutedSelector } from '../../../redux/selectors';
 
-const ControlsMobile = ({ fullscreenRef, t }) => {
+const ControlsMobile = ({ fullscreenRef }) => {
+  const { t } = useTranslation();
   const mode    = useSelector(playerGetOverModeSelector);
   const isMuted = useSelector(playerIsMutedSelector);
   const loaded  = useSelector(playerIsLoadedSelector);
@@ -72,4 +73,4 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
   );
 };
 
-export default withTranslation()(ControlsMobile);
+export default ControlsMobile;

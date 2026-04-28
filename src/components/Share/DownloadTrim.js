@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { faXmark, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
 import { clsx } from 'clsx';
 import Icon from '../Icon';
 import { trimGetListSelector, trimGetWipsSelector } from '../../redux/selectors';
 
-const DownloadTrim = ({ t }) => {
+const DownloadTrim = () => {
+  const { t } = useTranslation();
   const [open, setOpen]   = useState(true);
   const [isMin, setIsMin] = useState(false);
 
@@ -77,4 +78,4 @@ const DownloadTrim = ({ t }) => {
   );
 };
 
-export default withTranslation()(DownloadTrim);
+export default DownloadTrim;

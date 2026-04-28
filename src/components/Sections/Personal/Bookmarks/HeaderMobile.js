@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 
@@ -18,7 +18,8 @@ import {
   settingsGetLeftRightByDirSelector
 } from '../../../../redux/selectors';
 
-const BookmarkHeaderMobile = ({ t }) => {
+const BookmarkHeaderMobile = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState();
 
   const folder_id = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
@@ -107,4 +108,4 @@ const BookmarkHeaderMobile = ({ t }) => {
   );
 };
 
-export default withTranslation()(BookmarkHeaderMobile);
+export default BookmarkHeaderMobile;

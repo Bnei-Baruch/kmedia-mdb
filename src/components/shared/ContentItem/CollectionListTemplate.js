@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { canonicalLink } from '../../../helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as mdbActions } from '../../../redux/modules/mdb';
@@ -13,7 +13,8 @@ import { assetUrl } from '../../../helpers/Api';
 import { fromToLocalized } from '../../../helpers/date';
 import { mdbGetDenormCollectionSelector } from '../../../redux/selectors';
 
-const CollectionListTemplate = ({ cID, size = 'big', t }) => {
+const CollectionListTemplate = ({ cID, size = 'big' }) => {
+  const { t } = useTranslation();
   const c = useSelector(state => mdbGetDenormCollectionSelector(state, cID));
 
   const dispatch = useDispatch();
@@ -61,4 +62,4 @@ CollectionListTemplate.propTypes = {
   cID: PropTypes.string
 };
 
-export default withTranslation()(CollectionListTemplate);
+export default CollectionListTemplate;

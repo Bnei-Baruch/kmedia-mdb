@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment/moment';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
@@ -13,7 +13,8 @@ import { MT_VIDEO, LANGUAGES } from '../../helpers/consts';
 import { playerGetFileSelector, playlistGetInfoSelector, playerGetShareStartEndSelector } from '../../redux/selectors';
 import Icon from '../Icon';
 
-const TrimBtn = ({ t }) => {
+const TrimBtn = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const chronicles       = useContext(ClientChroniclesContext);
@@ -75,4 +76,4 @@ const TrimBtn = ({ t }) => {
   );
 };
 
-export default withTranslation()(TrimBtn);
+export default TrimBtn;

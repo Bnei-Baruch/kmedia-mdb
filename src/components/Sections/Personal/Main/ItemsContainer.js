@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -24,7 +24,8 @@ import {
   settingsGetUILangSelector
 } from '../../../../redux/selectors';
 
-const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
+const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);
   const dispatch           = useDispatch();
@@ -96,4 +97,4 @@ ItemsContainer.propTypes = {
   pageNo   : PropTypes.number
 };
 
-export default withTranslation()(ItemsContainer);
+export default ItemsContainer;

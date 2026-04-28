@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -20,7 +20,8 @@ const clear = () => {
   }
 };
 
-const EmbeddedShareButton = ({ url = '', t }) => {
+const EmbeddedShareButton = ({ url = '' }) => {
+  const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
 
@@ -53,4 +54,4 @@ const EmbeddedShareButton = ({ url = '', t }) => {
   );
 };
 
-export default withTranslation()(EmbeddedShareButton);
+export default EmbeddedShareButton;

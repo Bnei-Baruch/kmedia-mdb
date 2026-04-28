@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import dateFilter from '../../filters/definitions/dateFilter';
@@ -20,7 +20,8 @@ import { actions } from '../../redux/modules/filters';
 import { getTitle } from './LocationsFilter/helper';
 import { filtersGetFiltersSelector, mdbGetPersonByIdSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, mdbNestedGetCollectionByIdSelector } from '../../redux/selectors';
 
-const FilterLabels = ({ namespace, t }) => {
+const FilterLabels = ({ namespace }) => {
+  const { t } = useTranslation();
   const list          = useSelector(state => filtersGetFiltersSelector(state, namespace)) || [];
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
   const getTagById    = useSelector(tagsGetTagByIdSelector);
@@ -96,4 +97,4 @@ const FilterLabels = ({ namespace, t }) => {
   );
 };
 
-export default withTranslation()(FilterLabels);
+export default FilterLabels;

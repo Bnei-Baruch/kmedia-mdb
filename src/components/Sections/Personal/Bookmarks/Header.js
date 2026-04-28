@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions as filtersActions } from '../../../../redux/modules/bookmarkFilter';
@@ -11,7 +11,8 @@ import {
 import { getMyItemKey } from '../../../../helpers/my';
 import { bookmarkFilterGetByKeySelector, myGetItemByKeySelector } from '../../../../redux/selectors';
 
-const BookmarkHeader = ({ t }) => {
+const BookmarkHeader = () => {
+  const { t } = useTranslation();
   const query     = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
   const folder_id = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
 
@@ -48,4 +49,4 @@ const BookmarkHeader = ({ t }) => {
   );
 };
 
-export default withTranslation()(BookmarkHeader);
+export default BookmarkHeader;

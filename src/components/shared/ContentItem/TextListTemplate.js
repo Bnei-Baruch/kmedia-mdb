@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { iconByContentTypeMap } from '../../../helpers/consts';
@@ -15,7 +15,8 @@ import {
   sourcesGetPathByIDSelector
 } from '../../../redux/selectors';
 
-const TextListTemplate = ({ cuID, lID, t }) => {
+const TextListTemplate = ({ cuID, lID }) => {
+  const { t } = useTranslation();
   const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
   const label            = useSelector(state => mdbGetDenormLabelSelector(state))(lID);
   const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
@@ -53,4 +54,4 @@ TextListTemplate.propTypes = {
 
 };
 
-export default withTranslation()(TextListTemplate);
+export default TextListTemplate;

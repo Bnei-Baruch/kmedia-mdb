@@ -1,12 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import ContentTypeItem from './ContentTypeItem';
 import { actions } from '../../../redux/modules/filters';
 import { filtersAsideGetStatsSelector, filtersAsideGetTreeSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
-const ContentTypeItemGroup = ({ namespace, group, t }) => {
+const ContentTypeItemGroup = ({ namespace, group }) => {
+  const { t } = useTranslation();
   const { cts, key } = group;
 
   const selectedItems = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
@@ -69,4 +70,4 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
   );
 };
 
-export default withTranslation()(ContentTypeItemGroup);
+export default ContentTypeItemGroup;

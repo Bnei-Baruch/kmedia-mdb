@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { iconByContentTypeMap } from '../../../helpers/consts';
@@ -9,7 +9,8 @@ import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
-const TextListTemplate = ({ cuID, t }) => {
+const TextListTemplate = ({ cuID }) => {
+  const { t } = useTranslation();
   const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
 
   if (!cu) return null;
@@ -40,4 +41,4 @@ TextListTemplate.propTypes = {
   cuID: PropTypes.string
 };
 
-export default withTranslation()(TextListTemplate);
+export default TextListTemplate;

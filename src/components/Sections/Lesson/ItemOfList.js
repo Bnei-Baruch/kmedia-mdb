@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { canonicalLink } from '../../../helpers/links';
 
@@ -9,7 +9,8 @@ import TooltipIfNeed from '../../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 import { mdbGetDenormContentUnitSelector, recommendedGetViewsSelector } from '../../../redux/selectors';
 
-const ItemOfList = ({ id, ccu, t }) => {
+const ItemOfList = ({ id, ccu }) => {
+  const { t } = useTranslation();
 
   const views = useSelector(state => recommendedGetViewsSelector(state, id));
   const cu    = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -47,4 +48,4 @@ const ItemOfList = ({ id, ccu, t }) => {
   </div>);
 };
 
-export default withTranslation()(ItemOfList);
+export default ItemOfList;

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -46,7 +45,8 @@ const derivedTextUnits = unit => {
   return types;
 };
 
-const Materials = ({ t }) => {
+const Materials = () => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
@@ -138,7 +138,6 @@ const Materials = ({ t }) => {
 
 Materials.propTypes = {
   unit: shapes.ContentUnit,
-  t   : PropTypes.func.isRequired
 };
 
-export default withTranslation()(Materials);
+export default Materials;

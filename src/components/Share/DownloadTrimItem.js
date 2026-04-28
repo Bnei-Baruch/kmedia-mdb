@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { faDownload, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Icon from '../Icon';
 import { POPOVER_CONFIRMATION_TIMEOUT } from '../../helpers/consts';
 
-const DownloadTrimItem = ({ item, pos, t }) => {
+const DownloadTrimItem = ({ item, pos }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -74,4 +75,4 @@ const DownloadTrimItem = ({ item, pos, t }) => {
   );
 };
 
-export default withTranslation()(DownloadTrimItem);
+export default DownloadTrimItem;

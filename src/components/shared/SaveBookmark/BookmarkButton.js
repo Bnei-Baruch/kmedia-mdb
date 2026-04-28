@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogPanel } from '@headlessui/react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
@@ -10,7 +10,8 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import AlertModal from '../AlertModal';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const BookmarkButton = ({ t, source, disabled }) => {
+const BookmarkButton = ({ source, disabled }) => {
+  const { t } = useTranslation();
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
   const needToLogin             = NeedToLogin({ t });
@@ -57,8 +58,7 @@ const BookmarkButton = ({ t, source, disabled }) => {
 };
 
 BookmarkButton.propTypes = {
-  t     : PropTypes.func.isRequired,
   source: PropTypes.object.isRequired
 };
 
-export default withTranslation()(BookmarkButton);
+export default BookmarkButton;

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -21,7 +21,8 @@ const SocialBtn = ({ className, children }) => (
   </span>
 );
 
-const ShareBarPlayer = ({ t }) => {
+const ShareBarPlayer = () => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const title              = t('player.share.title');
   const url                = useShareUrl();
@@ -99,4 +100,4 @@ const ShareBarPlayer = ({ t }) => {
   );
 };
 
-export default withTranslation()(ShareBarPlayer);
+export default ShareBarPlayer;

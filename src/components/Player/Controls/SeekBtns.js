@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
@@ -13,7 +13,7 @@ const handleSeek  = pos => {
   seek(nPos > 0 ? nPos : 0);
 };
 
-export const SeekBackwardBtn = withTranslation()(({ t }) => {
+export const SeekBackwardBtn = useTranslation()(({ t }) => {
   const ctx                = useContext(PlayerContext);
   const seek               = NORMAL_SEEK * useSelector(playerGetKeyboardCoefSelector);
   const handleSeekBackward = () => {
@@ -34,7 +34,7 @@ export const SeekBackwardBtn = withTranslation()(({ t }) => {
   );
 });
 
-export const SeekForwardBtn = withTranslation()(({ t }) => {
+export const SeekForwardBtn = useTranslation()(({ t }) => {
   const ctx               = useContext(PlayerContext);
   const seek              = NORMAL_SEEK * useSelector(playerGetKeyboardCoefSelector);
   const handleSeekForward = () => {

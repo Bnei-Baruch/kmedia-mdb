@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
@@ -84,7 +84,8 @@ const makeCollectionLink = (collection, t) => {
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
 };
 
-const Recommended = ({ t, filterOutUnits = [], displayTitle = true, cuId }) => {
+const Recommended = ({ filterOutUnits = [], displayTitle = true, cuId }) => {
+  const { t } = useTranslation();
   const abTesting                                         = useContext(AbTestingContext);
   const [unitId, setUnitId]                               = useState(null);
   const [unitContentType, setUnitContentType]             = useState(null);
@@ -267,9 +268,8 @@ const Recommended = ({ t, filterOutUnits = [], displayTitle = true, cuId }) => {
 };
 
 Recommended.propTypes = {
-  t: PropTypes.func.isRequired,
   filterOutUnits: PropTypes.arrayOf(shapes.EventItem),
   displayTitle: PropTypes.bool
 };
 
-export default withTranslation()(Recommended);
+export default Recommended;

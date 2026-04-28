@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 import ImageGallery from 'react-image-gallery';
@@ -9,6 +9,7 @@ import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/S
 import { settingsGetUIDirSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
 
 const ZipFileModal = ({ id, path }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const getZipById = useSelector(assetsNestedGetZipByIdSelector);
@@ -94,4 +95,4 @@ const ZipFileModal = ({ id, path }) => {
   );
 };
 
-export default withTranslation()(ZipFileModal);
+export default ZipFileModal;

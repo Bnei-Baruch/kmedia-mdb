@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../../../../redux/modules/my';
 import {
@@ -22,7 +22,8 @@ import {
   mdbNestedGetDenormContentUnitSelector
 } from '../../../../../redux/selectors';
 
-const BookmarkList = ({ t }) => {
+const BookmarkList = () => {
+  const { t } = useTranslation();
   let items         = useSelector(state => myGetListSelector(state, MY_NAMESPACE_BOOKMARKS));
   const wip         = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_BOOKMARKS));
   const err         = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_BOOKMARKS));
@@ -74,4 +75,4 @@ const BookmarkList = ({ t }) => {
   );
 };
 
-export default withTranslation()(BookmarkList);
+export default BookmarkList;

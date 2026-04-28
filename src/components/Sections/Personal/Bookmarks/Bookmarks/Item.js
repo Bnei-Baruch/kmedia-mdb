@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { SectionLogo } from '../../../../../helpers/images';
@@ -16,7 +16,8 @@ import {
   sourcesGetPathByIDSelector
 } from '../../../../../redux/selectors';
 
-const BookmarksItem = ({ bookmark, t }) => {
+const BookmarksItem = ({ bookmark }) => {
+  const { t } = useTranslation();
   const { properties, folder_ids = [], name, subject_uid } = bookmark;
 
   const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, subject_uid));
@@ -77,4 +78,4 @@ const BookmarksItem = ({ bookmark, t }) => {
   );
 };
 
-export default withTranslation()(BookmarksItem);
+export default BookmarksItem;

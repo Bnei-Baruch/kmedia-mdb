@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { clsx } from 'clsx';
 import moment from 'moment';
@@ -28,7 +28,8 @@ import {
 
 export const PAGE_SIZE = 20;
 
-const Page = ({ location, t }) => {
+const Page = ({ location }) => {
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageNo = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
@@ -121,4 +122,4 @@ const Page = ({ location, t }) => {
   );
 };
 
-export default withTranslation()(withRouter(Page));
+export default withRouter(Page);
