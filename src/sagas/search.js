@@ -41,6 +41,9 @@ const reasoningStatusFailed = status => !!status && (status.state === 'failed' |
 const reasoningStatusCanceled = status => !!status && (status.state === 'canceled' || status.phase === 'canceled');
 const reasoningStatusTerminal = status => reasoningStatusCompleted(status) || reasoningStatusFailed(status) || reasoningStatusCanceled(status);
 const isConnectionRefused = err => err?.code === 'ERR_CONNECTION_REFUSED' || err?.message?.includes('ERR_CONNECTION_REFUSED');
+const responseStatus = value => value?.http_status || value?.status || value?.response?.status;
+const isNotFound = value => responseStatus(value) === 404;
+const combineFollowupQuery = (originalQuery, followupQuery) => [originalQuery, followupQuery].filter(Boolean).join('; ');
 
 const reasoningErrorMessage = err => {
   if (isConnectionRefused(err)) {
@@ -50,11 +53,12 @@ const reasoningErrorMessage = err => {
   return err?.response?.data?.error || err?.message || 'Reasoning search failed';
 };
 
-const failedReasoningStatus = (sessionId, message) => ({
+const failedReasoningStatus = (sessionId, message, httpStatus) => ({
   session_id: sessionId,
   state     : 'failed',
   phase     : 'error',
   done      : true,
+  http_status: httpStatus,
   message
 });
 
@@ -82,7 +86,8 @@ function* fetchReasoningStatus(sessionId) {
     if (response.status >= 400) {
       return failedReasoningStatus(
         sessionId,
-        response.data?.error || response.statusText || 'Reasoning search failed'
+        response.data?.error || response.statusText || 'Reasoning search failed',
+        response.status
       );
     }
 
@@ -94,6 +99,44 @@ function* fetchReasoningStatus(sessionId) {
 
     return null;
   }
+}
+
+function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb) {
+  let cacheData = null;
+  try {
+    const cacheResponse = yield call(Api.reasoningSearchCache, {
+      q          : originalQuery,
+      ui_language: uiLang
+    });
+    cacheData = cacheResponse?.data;
+  } catch (_) {
+    cacheData = null;
+  }
+
+  if (cacheData?.cache_hit && cacheData.session_id) {
+    return {
+      keepResult: true,
+      resultQuery: originalQuery,
+      request   : {
+        q          : followupQuery,
+        session_id : cacheData.session_id,
+        ui_language: uiLang,
+        deb        : isDebEnabled(deb)
+      }
+    };
+  }
+
+  // If the expired session cannot be recovered, run a plain search that carries both user intents.
+  const fallbackQuery = combineFollowupQuery(originalQuery, followupQuery);
+  return {
+    keepResult: false,
+    resultQuery: fallbackQuery,
+    request   : {
+      q          : fallbackQuery,
+      ui_language: uiLang,
+      deb        : isDebEnabled(deb)
+    }
+  };
 }
 
 function* pollReasoningStatus(sessionId) {
@@ -266,14 +309,16 @@ export function* search(action) {
       const sessionIdFromPrevious   = previousReasoningResult?.session_id;
       const runningSessionId        = !reasoningStatusTerminal(previousReasoningStatus) ? previousReasoningStatus?.session_id : null;
       const restoreSessionId        = !isExplicitSearch && !isFollowup ? urlQuery.session_id : null;
+      const originalQuery           = previousReasoningResult?.query || query?.trim();
       const q                       = isFollowup ? action.payload?.query?.trim() : query?.trim();
-      const request                 = {
+      let request                   = {
         q,
         session_id : isFollowup ? sessionIdFromPrevious : undefined,
         cancel_session_id: !isFollowup && !restoreSessionId ? runningSessionId : undefined,
         ui_language: uiLang,
         deb        : isDebEnabled(deb)
       };
+      let resultQuery               = isFollowup ? originalQuery : query;
       if (!q) {
         yield put(actions.searchFailure(null));
         return;
@@ -286,11 +331,18 @@ export function* search(action) {
       if (restoreSessionId) {
         yield put(actions.reasoningSearchStart({ keepResult: false, sessionId: restoreSessionId }));
         const status = yield call(fetchReasoningStatus, restoreSessionId);
-        if (status) {
+        // URL sessions can expire on the backend. A 404 should silently restart the search.
+        if (status && !isNotFound(status)) {
           yield put(actions.reasoningStatusUpdate(status));
           if (reasoningStatusCompleted(status)) {
-            yield call(fetchReasoningResult, restoreSessionId, query);
-            return;
+            try {
+              yield call(fetchReasoningResult, restoreSessionId, query);
+              return;
+            } catch (err) {
+              if (!isNotFound(err)) {
+                throw err;
+              }
+            }
           }
 
           if (!reasoningStatusFailed(status) && !reasoningStatusCanceled(status)) {
@@ -304,8 +356,30 @@ export function* search(action) {
 
       yield put(actions.reasoningSearchStart({ keepResult: isFollowup, sessionId: sessionIdFromPrevious }));
 
-      const { data: startData } = yield call(Api.reasoningSearchStart, request);
-      const sessionId           = startData?.session_id || sessionIdFromPrevious;
+      let startData;
+      try {
+        const { data } = yield call(Api.reasoningSearchStart, request);
+        startData = data;
+      } catch (err) {
+        if (!isFollowup || !isNotFound(err)) {
+          throw err;
+        }
+
+        // Follow-up sessions can expire. Recover the original search from cache, or start over with a combined query.
+        const recovery = yield call(recoverFollowupRequest, originalQuery, q, uiLang, deb);
+        const { keepResult, request: recoveryRequest, resultQuery: recoveryResultQuery } = recovery;
+        request = recoveryRequest;
+        resultQuery = recoveryResultQuery;
+        if (!keepResult) {
+          yield put(actions.updateQuery({ query: resultQuery, autocomplete: false }));
+          yield put(actions.reasoningSearchStart({ keepResult: false }));
+        }
+
+        const { data } = yield call(Api.reasoningSearchStart, request);
+        startData = data;
+      }
+
+      const sessionId           = startData?.session_id || request.session_id || sessionIdFromPrevious;
       if (!sessionId) {
         throw buildReasoningError('Reasoning search did not return a session ID');
       }
@@ -318,7 +392,7 @@ export function* search(action) {
         done      : false
       }));
 
-      yield spawn(runReasoningSession, sessionId, isFollowup ? previousReasoningResult.query : query);
+      yield spawn(runReasoningSession, sessionId, resultQuery);
       return;
     }
 

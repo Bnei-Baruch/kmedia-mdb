@@ -224,6 +224,13 @@ class Api {
     data   : JSON.stringify(request)
   });
 
+  static reasoningSearchCache = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cache'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
   static reasoningSearch = request => axios({
     method : 'post',
     url    : backendUrl('search/reasoning'),
