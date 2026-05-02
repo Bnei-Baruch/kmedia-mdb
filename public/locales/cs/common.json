@@ -330,6 +330,7 @@
           "get_sources_by_author": "Vyhledávání zdrojů podle autora...",
           "get_sources_by_source": "Vyhledávání struktury zdroje...",
           "get_collections": "Vyhledávání kolekcí...",
+          "get_content_unit": "Vyhledávání položky obsahu...",
           "get_content_units_by_collection": "Vyhledávání položek kolekce..."
         }
       }

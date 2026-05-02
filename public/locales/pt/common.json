@@ -328,6 +328,7 @@
           "get_sources_by_author": "Procurando fontes por autor...",
           "get_sources_by_source": "Procurando estrutura da fonte...",
           "get_collections": "Procurando coleções...",
+          "get_content_unit": "Procurando item de conteúdo...",
           "get_content_units_by_collection": "Procurando itens da coleção..."
         }
       }

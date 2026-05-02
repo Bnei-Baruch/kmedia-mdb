@@ -327,6 +327,7 @@
           "get_sources_by_author": "Quellen nach Autor werden gesucht...",
           "get_sources_by_source": "Quellenstruktur wird gesucht...",
           "get_collections": "Sammlungen werden gesucht...",
+          "get_content_unit": "Inhaltselement wird gesucht...",
           "get_content_units_by_collection": "Sammlungselemente werden gesucht..."
         }
       }

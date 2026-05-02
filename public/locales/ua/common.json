@@ -328,6 +328,7 @@
           "get_sources_by_author": "Пошук джерел за автором...",
           "get_sources_by_source": "Пошук структури джерела...",
           "get_collections": "Пошук колекцій...",
+          "get_content_unit": "Пошук матеріалу...",
           "get_content_units_by_collection": "Пошук матеріалів колекції..."
         }
       }

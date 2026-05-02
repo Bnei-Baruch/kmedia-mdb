@@ -330,6 +330,7 @@
           "get_sources_by_author": "جار البحث عن المصادر حسب المؤلف...",
           "get_sources_by_source": "جار البحث عن بنية المصدر...",
           "get_collections": "جار البحث عن المجموعات...",
+          "get_content_unit": "جار البحث عن عنصر محتوى...",
           "get_content_units_by_collection": "جار البحث عن عناصر المجموعة..."
         }
       }

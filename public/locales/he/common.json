@@ -330,6 +330,7 @@
           "get_sources_by_author": "מחפש מקורות לפי מחבר...",
           "get_sources_by_source": "מחפש מבנה מקור...",
           "get_collections": "מחפש אוספים...",
+          "get_content_unit": "מחפש פריט תוכן...",
           "get_content_units_by_collection": "מחפש פריטים באוסף..."
         }
       }

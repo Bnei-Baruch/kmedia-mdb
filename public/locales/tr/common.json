@@ -330,6 +330,7 @@
           "get_sources_by_author": "Yazara göre kaynaklar aranıyor...",
           "get_sources_by_source": "Kaynak yapısı aranıyor...",
           "get_collections": "Koleksiyonlar aranıyor...",
+          "get_content_unit": "İçerik öğesi aranıyor...",
           "get_content_units_by_collection": "Koleksiyon öğeleri aranıyor..."
         }
       }

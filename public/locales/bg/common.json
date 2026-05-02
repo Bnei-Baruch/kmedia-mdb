@@ -331,6 +331,7 @@
           "get_sources_by_author": "Търсене на източници по автор...",
           "get_sources_by_source": "Търсене на структура на източника...",
           "get_collections": "Търсене на колекции...",
+          "get_content_unit": "Търсене на съдържателен елемент...",
           "get_content_units_by_collection": "Търсене на елементи от колекцията..."
         }
       }
