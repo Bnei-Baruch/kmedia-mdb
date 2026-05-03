@@ -4,24 +4,10 @@
 @use "sass:math";
 
 .avbox {
-  @include responsive-helpers.mobile {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
   background-color: colors-helpers.$darkWhite;
-  width: 100% !important;
 
   .unit_container {
-    @include responsive-helpers.mobile {
-      padding-bottom: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
     background-color: colors-helpers.$darkWhite;
-    padding: 1em;
-    width: 100%
   }
 
   /* player on mobile devices */
@@ -108,47 +94,34 @@
     width: 100%;
   }
 
-  #avbox_playlist {
-    max-height: 40rem;
+  .avbox__playlist-header {
+    color: colors-helpers.$darkWhite;
+    background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
 
-    > .header, .sub {
-      color: colors-helpers.$darkWhite;
-      align-items: flex-start;
-    }
-
-    > .header {
-      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
-      @include responsive-helpers.mobile {
-        padding: 1em 0.5em;
-        font-size: 18px;
-
-        & small {
-          font-size: 14px !important;
-
-        }
-      }
-      font-size: 2.0rem;
-      padding: 0.5em;
-      margin-top: 0;
-      margin-bottom: 0;
-
-      .content {
-        padding: 0 1em;
-        vertical-align: middle;
-      }
-
-      .playlist_icon {
-        vertical-align: bottom;
-      }
+    @include responsive-helpers.mobile {
+      padding: 1em 0.5em;
+      font-size: 18px;
 
       & small {
-        font-size: 70%;
-        padding: 5px;
-      }
+        font-size: 14px;
 
-      &.h3 {
-        font-size: 1.5rem;
       }
+    }
+
+    font-size: 1.3rem;
+
+    .content {
+      padding: 0 1em;
+      vertical-align: middle;
+    }
+
+    .playlist_icon {
+      vertical-align: bottom;
+    }
+
+    & small {
+      font-size: 70%;
+      padding: 5px;
     }
   }
 
@@ -166,7 +139,7 @@
         content: none;
       }
 
-      > .header {
+      >.header {
         &::before {
           content: none;
         }
@@ -177,7 +150,7 @@
     display: flex;
     flex-direction: column;
 
-    > .header {
+    >.header {
       flex: 0 0 auto;
       position: relative;
       padding: 0 0.5em;
@@ -218,7 +191,7 @@
     }
 
 
-    .menu > .item {
+    .menu>.item {
       &.active {
         background-color: rgba(colors-helpers.$blue, .2) !important;
       }
@@ -227,32 +200,27 @@
 }
 
 
-.avbox__playlist-prev-button, .avbox__playlist-next-button {
-  @include responsive-helpers.mobile {
-    padding: 0 4px;
-  }
+.avbox__playlist-prev-button,
+.avbox__playlist-next-button {
+  color: white;
+  display: inline-block;
 
-  i.icon {
-    margin: 0 .25rem !important;
+  &:hover {
+    opacity: 0.8;
     color: white;
-    width: 15px;
-    display: inline-block;
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 }
 
 
-.cut_and_download_btn, .embed-share-button {
+.cut_and_download_btn,
+.embed-share-button {
   padding: 0 !important;
   margin: 0 1px !important;
   position: relative;
   font-size: 1.7em !important;
   align-self: flex-start;
 
-  & > .icon {
+  &>.icon {
     margin: 0 !important;
     width: auto !important;
   }
@@ -263,11 +231,11 @@
   text-align: center;
   padding: 3em 1em;
 
-  & > .header {
+  &>.header {
     padding-bottom: 1em;
   }
 
-  & > .container {
+  &>.container {
     padding-top: 2em;
   }
 

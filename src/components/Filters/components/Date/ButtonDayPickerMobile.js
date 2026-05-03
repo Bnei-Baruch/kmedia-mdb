@@ -18,11 +18,11 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
   const uiDir = useSelector(state => settings.getUIDir(state.settings));
   const { isIOS, isAndroid } = useContext(DeviceInfoContext);
 
-  const [selectedDate, setSelectedDate]         = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [isNativePopupOpen, setNativePopupOpen] = useState(false);
 
   const nativeDateInputRef = useRef();
-  const localeDateFormat   = useMemo(() => moment.localeData().longDateFormat('L'), []);
+  const localeDateFormat = useMemo(() => moment.localeData().longDateFormat('L'), []);
 
   const openNativeDatePicker = useCallback(() => {
     if (isAndroid) {
@@ -45,12 +45,12 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
     onDayChange(selectedDate || value || today().toDate());
   }, [selectedDate, value, onDayChange]);
 
-  const selected         = selectedDate || value;
+  const selected = selectedDate || value;
   const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
 
   const dateButton = (
     <button
-      className={clsx('dateButton inline-flex items-center px-2 py-2 font-bold bg-gray-200 text-gray-700 rounded cursor-pointer hover:bg-gray-300', { 'dateButton_with_label': withLabel })}
+      className={clsx('dateButton inline-flex items-center py-2 font-bold cursor-pointer', { 'dateButton_with_label': withLabel })}
       onClick={openNativeDatePicker}
     >
       <Icon icon={faCalendarDays} className="large" />
@@ -110,10 +110,10 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
 };
 
 ButtonDayPickerMobile.propTypes = {
-  value      : PropTypes.instanceOf(Date),
-  label      : PropTypes.string,
+  value: PropTypes.instanceOf(Date),
+  label: PropTypes.string,
   onDayChange: PropTypes.func,
-  withLabel  : PropTypes.bool,
+  withLabel: PropTypes.bool,
 };
 
 export default ButtonDayPickerMobile;

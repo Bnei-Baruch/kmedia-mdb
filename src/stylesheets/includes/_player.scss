@@ -608,8 +608,8 @@ video {
       right: 0;
       background: $controls-bg;
       display: flex;
-      padding: 10px;
-      align-items: stretch;
+      padding:  0 10px;
+      align-items: center;
 
       > * {
         flex: 0 0 34px;

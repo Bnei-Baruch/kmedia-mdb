@@ -51,8 +51,8 @@ const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }
 
   return (
     <Popover className="relative inline-block">
-      <PopoverButton className="ui button">
-        <Icon icon={faCalendarDays} className="mr-1.5 text-gray-500" />
+      <PopoverButton className="day-picker-button button-reset py-2">
+        <Icon icon={faCalendarDays} className="mr-1.5 text-white" />
         {label}
       </PopoverButton>
       <PopoverPanel className="absolute z-50 mt-1 bg-white border border-gray-200 rounded shadow-lg p-4" dir={uiDir}>

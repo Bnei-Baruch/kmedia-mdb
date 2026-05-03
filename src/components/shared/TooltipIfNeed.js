@@ -17,7 +17,7 @@ const TooltipIfNeed = props => {
   const [need, setNeed] = useState(false);
   const [show, setShow] = useState(false);
 
-  const { Component, text, ...propz } = props;
+  const { Component, text, as: asTag, content: contentProp, ...propz } = props;
 
   const ref = useRef();
 
@@ -29,9 +29,15 @@ const TooltipIfNeed = props => {
     }
   }, [ref]);
 
+  const isNativeElement = typeof Component === 'string';
+  const compProps = isNativeElement ? propz : { ...propz, as: asTag, content: contentProp };
+  const childContent = isNativeElement ? (contentProp || text) : undefined;
+
   const content = (
     <div ref={ref}>
-      <Component {...propz} className="line_clamp_2_lines" />
+      <Component {...compProps} className="line_clamp_2_lines">
+        {childContent}
+      </Component>
     </div>
   );
 

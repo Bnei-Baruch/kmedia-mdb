@@ -24,14 +24,13 @@ const SingleMediaPage = ({ playerContainer }) => {
 
   return (
     <>
-      <div className={clsx('flex flex-wrap avbox', { 'p-4': !isMobileDevice })}>
-        <div
-          className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
+      <div className='flex flex-wrap avbox max-md:p4'>
+        <div className='flex-1 min-w-0'>
           <div>
             {playerContainer}
           </div>
           <div>
-            <div className="unit_container">
+            <div className="max-md:px-4">
               <Info />
               <Materials />
             </div>
@@ -39,7 +38,7 @@ const SingleMediaPage = ({ playerContainer }) => {
         </div>
         {
           !isMobileDevice && (
-            <div className="w-[37.5%]">
+            <div className="w-[36%]">
               <Recommended cuId={cuId} />
             </div>
           )

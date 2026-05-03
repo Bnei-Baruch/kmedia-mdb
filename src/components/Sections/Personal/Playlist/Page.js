@@ -137,7 +137,7 @@ const Page = () => {
           }
         </div>
         {
-          !isMobileDevice && <div className="w-full md:w-[37.5%]" />
+          !isMobileDevice && <div className="sm:hidden w-[36%]" />
         }
       </div>
     </div>

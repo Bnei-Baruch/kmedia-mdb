@@ -60,6 +60,7 @@ const TagsByUnit = ({ id }) => {
       <div className="unit-tags-bar_tags" onScroll={handleScroll} ref={ref}>
         {
           names
+            .filter(tag => !!tag)
             .map((tag, index) =>
               <button key={`${tag.id}${index}`} className="unit-tag-item">
                 <Link to={`/topics/${tag.id}`}>{tag.label}</Link>

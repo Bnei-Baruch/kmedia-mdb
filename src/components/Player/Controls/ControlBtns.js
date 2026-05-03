@@ -68,14 +68,16 @@ export const FullscreenBtn = ({ fullscreenRef }) => {
   };
 
   return (
-    <WebWrapTooltip
-      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen'}`)}
-      position="top right"
-      trigger={
-        <div className="controls__fullscreen" onClick={handleClick}>
-          <span className="material-symbols-outlined text-base">{isFullScreen ? 'fullscreen_exit' : 'fullscreen'}</span>
-        </div>
-      }/>
+    <div className="controls__fullscreen">
+      <WebWrapTooltip
+        content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen'}`)}
+        position="top right"
+        trigger={
+          <div className="controls__fullscreen" onClick={handleClick}>
+            <div className="material-symbols-outlined">{isFullScreen ? 'fullscreen_exit' : 'fullscreen'}</div>
+          </div>
+        }/>
+    </div>
   );
 };
 
@@ -94,17 +96,19 @@ export const ShareBtn = () => {
   };
 
   return (
-    <WebWrapTooltip
-      content={t('player.controls.share')}
-      trigger={
-        <div
-          className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
-          onClick={handleOpen}
-        >
-          <span className="material-symbols-outlined text-base">share</span>
-        </div>
-      }
-    />
+    <div className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}>
+      <WebWrapTooltip
+        content={t('player.controls.share')}
+        trigger={
+          <div
+            className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
+            onClick={handleOpen}
+          >
+            <div className="material-symbols-outlined">share</div>
+          </div>
+        }
+      />
+    </div>
   );
 };
 
@@ -120,16 +124,18 @@ export const SettingsBtn = () => {
   };
 
   return (
-    <WebWrapTooltip
-      content={t('player.controls.settings')}
-      trigger={
-        <div
-          className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
-          onClick={handleOpen}
-        >
-          <span className="material-symbols-outlined text-base">settings</span>
-        </div>
-      }
-    />
+    <div className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}>
+      <WebWrapTooltip
+        content={t('player.controls.settings')}
+        trigger={
+          <div
+            className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
+            onClick={handleOpen}
+          >
+            <div className="material-symbols-outlined">settings</div>
+          </div>
+        }
+      />
+    </div>
   );
 };

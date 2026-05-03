@@ -15,14 +15,17 @@ const PlayPauseBtn = () => {
   };
 
   return (
-    <WebWrapTooltip
-      content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
-      trigger={
-        <div className="controls__play" onClick={handlePlayPause}>
-          <span className="material-symbols-outlined text-base">{isPlay ? 'pause' : 'play_arrow'}</span>
-        </div>
-      }
-    />
+    <div className="controls__play">
+
+      <WebWrapTooltip
+        content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
+        trigger={
+          <div onClick={handlePlayPause}>
+            <span className="material-symbols-outlined">{isPlay ? 'pause' : 'play_arrow'}</span>
+          </div>
+        }
+      />
+    </div>
   );
 };
 

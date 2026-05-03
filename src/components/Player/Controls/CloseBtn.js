@@ -15,7 +15,7 @@ const CloseBtn = ({ className }) => {
 
   return (
     <div className={className} onClick={handleClose}>
-      <span className="material-symbols-outlined text-base">close</span>
+      <span className="material-symbols-outlined">close</span>
     </div>
   );
 };

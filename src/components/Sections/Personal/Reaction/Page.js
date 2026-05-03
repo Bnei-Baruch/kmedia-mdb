@@ -88,7 +88,7 @@ const Page      = ({ location }) => {
           <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
           {
             items?.length > 0 ? (
-              <div className=" px-4 ">
+              <div className="px-4 ">
                 {items.map((x, i) =>
                   (
                     <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
@@ -107,7 +107,7 @@ const Page      = ({ location }) => {
           />
         </div>
         {
-          !isMobileDevice && <div className="w-full md:w-[37.5%]"/>
+          !isMobileDevice && <div className="w-full md:w-[36%]"/>
         }
       </div>
     </div>

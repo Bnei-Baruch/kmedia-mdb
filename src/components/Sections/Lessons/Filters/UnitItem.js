@@ -37,7 +37,7 @@ const UnitItem = ({ id }) => {
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component="h5" className="font-bold" as={Link} to={link} content={cu.name}/>
+        <Link to={link}><TooltipIfNeed text={cu.name} Component="h5" className="font-bold" content={cu.name}/></Link>
         {
           !isEmpty(additionCCUs) && (
             <div className="additional_links">

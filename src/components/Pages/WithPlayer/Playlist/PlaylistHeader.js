@@ -90,9 +90,9 @@ const PlaylistHeader = () => {
       } else if (content_type === CT_LESSONS_SERIES) {
         playNow = <>
           {t(cuPartNameByCCUType(content_type), { name: part })}
-          <small className="display-iblock margin-left-8 margin-right-8 font-normal">
+          <span className="mx-1 text-sm font-normal">
             {t('values.date', { date: unit.film_date })}
-          </small>
+          </span>
         </>;
       } else {
         playNow = unit?.name;
@@ -100,28 +100,20 @@ const PlaylistHeader = () => {
     }
 
     return (
-      <>
-        {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
-        <h2>{getTitle()}</h2>
-        {
-          subheader && (
-            <h4 className="font-normal text-white">{subheader}</h4>
-          )
-        }
-        {
-          playNow && (
-            <h2 className="text-white">{playNow}</h2>
-          )
-        }
-      </>
+      <div className='avbox__playlist-header px-4 py-4'>
+        <div className='flex flex-justify gap-4 justify-between py-2'>
+          <h2 className='my-0 bold'>{getTitle()}</h2>
+          {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
+        </div>
+        {subheader && (<h4 className="font-normal my-0">{subheader}</h4>)}
+        {playNow && (<h3 className="my-0 text-xl bold">{playNow}</h3>)}
+      </div>
     );
   };
 
   return (
-    <div>
-      <div className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
-        {getTitleByCO()}
-      </div>
+    <div id="avbox_playlist">
+      {getTitleByCO()}
       {isLesson && isMobileDevice && <LessonDatePickerContainer />}
     </div>
   );

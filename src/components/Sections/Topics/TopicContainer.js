@@ -21,9 +21,9 @@ const namespace = 'topics';
 const hasChildren = node => node && isNotEmptyArray(node.children);
 
 export const sortRootsPosition = roots => {
-  const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
+  const extra = roots?.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
 
-  return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
+  return roots?.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
 };
 
 const getAllVisibleById = (byId, expandedNodes) => {

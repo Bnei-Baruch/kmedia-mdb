@@ -44,7 +44,7 @@ const PlaylistItems               = () => {
     <div id="avbox_playlist" className="avbox__playlist-view" onScroll={handleScroll}>
       {
         !isMobileDevice && (
-          <h3 className="avbox__playlist-header h3">
+          <h3 className="avbox__playlist-header px-4 py-2 my-0">
             {title || t(`playlist.title-by-type.${content_type}`)}
           </h3>
         )

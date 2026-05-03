@@ -40,14 +40,16 @@ const VolumeCtrl = () => {
 
   return (
     <div className="controls__volume">
-      <WebWrapTooltip
-        content={t('player.controls.mute')}
-        trigger={
-          <div className="controls__volume-icon" onClick={handleMute}>
-            <span className="material-symbols-outlined text-base">{`volume_${icon}`}</span>
-          </div>
-        }
-      />
+      <div className="controls__volume-icon">
+        <WebWrapTooltip
+          content={t('player.controls.mute')}
+          trigger={
+            <div className="controls__volume-icon" onClick={handleMute}>
+              <div className="material-symbols-outlined">{`volume_${icon}`}</div>
+            </div>
+          }
+        />
+      </div>
       <div className="controls__slider">
         <div
           className="slider__wrapper"

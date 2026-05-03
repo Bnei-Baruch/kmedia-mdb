@@ -32,7 +32,7 @@ const ItemOfList = ({ id }) => {
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component="h5" className="font-bold" as={Link} to={to} content={cu.name}/>
+        <Link to={to}><TooltipIfNeed text={cu.name} Component="h5" className="font-bold" content={cu.name}/></Link>
         {
           cu.description && (
             <TooltipIfNeed

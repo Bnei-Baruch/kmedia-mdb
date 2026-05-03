@@ -24,21 +24,21 @@ const getStartEndByFilmDate = d => {
   return (
     {
       start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-      end_date  : filmDate.add(10, 'days').format(DATE_FORMAT)
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
     }
   );
 };
 
 const LessonDatePickerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { t }              = useTranslation();
+  const { t } = useTranslation();
 
-  const wipMap  = useSelector(mdbGetWipFn, shallowEqual);
+  const wipMap = useSelector(mdbGetWipFn, shallowEqual);
   const cWindow = useSelector(mdbGetWindowSelector, shallowEqual);
 
   const { isReady, cId } = useSelector(playlistGetInfoSelector);
-  const denorm           = useSelector(mdbNestedGetDenormCollectionSelector);
-  const uiDir            = useSelector(settingsGetUIDirSelector);
+  const denorm = useSelector(mdbNestedGetDenormCollectionSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const location = useLocation();
   const { type } = getEmbedFromQuery(location);
@@ -48,18 +48,18 @@ const LessonDatePickerContainer = () => {
   const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
   useEffect(() => {
     if (isReady && curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
-      const { film_date }            = denorm(cId);
+      const { film_date } = denorm(cId);
       const { start_date, end_date } = getStartEndByFilmDate(film_date);
       dispatch(mdbActions.fetchWindow({ id: cId, start_date, end_date }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, cId, cWindow, wipMap.cWindow, curIndex]);
 
   if (!isReady) {
     return null;
   }
 
-  const isLtr          = uiDir === 'ltr';
+  const isLtr = uiDir === 'ltr';
   const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
   const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
 
@@ -71,33 +71,31 @@ const LessonDatePickerContainer = () => {
   }
 
   return (
-    <div
-      className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}
-    >
+    <div className="flex items-center justify-between flex-wrap">
       {
         !!prevTo && (
           <Link
             to={prevTo}
-            className="avbox__playlist-prev-button"
+            className="avbox__playlist-prev-button material-symbols-outlined text-4xl"
             title={t('buttons.previous-lesson')}
           >
-            <span className="material-symbols-outlined text-2xl">{isLtr ? 'arrow_left' : 'arrow_right'}</span>
+            {isLtr ? 'arrow_left' : 'arrow_right'}
           </Link>
         )
       }
-      <CollectionDatePicker/>
+      <CollectionDatePicker />
       {
         !nextTo ? (
-          <span className="avbox__playlist-next-button">
-            <span className="material-symbols-outlined text-2xl opacity-50">{isLtr ? 'arrow_right' : 'arrow_left'}</span>
+          <span className="avbox__playlist-next-button material-symbols-outlined text-4xl opacity-50">
+            {isLtr ? 'arrow_right' : 'arrow_left'}
           </span>
         ) : (
           <Link
             to={nextTo}
-            className="avbox__playlist-next-button"
+            className="avbox__playlist-next-button material-symbols-outlined text-4xl"
             title={t('buttons.next-lesson')}
           >
-            <span className="material-symbols-outlined text-2xl">{isLtr ? 'arrow_right' : 'arrow_left'}</span>
+            {isLtr ? 'arrow_right' : 'arrow_left'}
           </Link>
 
         )

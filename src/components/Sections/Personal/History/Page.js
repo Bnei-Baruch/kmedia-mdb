@@ -102,7 +102,7 @@ const Page = ({ location }) => {
           <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
           {
             items?.length > 0 ? (
-              <div className=" px-4 ">
+              <div className="px-4 ">
                 {items.map(renderItem)}
               </div>
             ) : null
@@ -114,9 +114,6 @@ const Page = ({ location }) => {
             onChange={setPage}
           />
         </div>
-        {
-          !isMobileDevice && <div className="w-full md:w-[37.5%]" />
-        }
       </div>
     </div>
   );

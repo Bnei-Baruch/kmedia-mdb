@@ -110,7 +110,7 @@ const ArticlePage = () => {
                 <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
               </div>
             </div>
-            <div className="w-full md:w-[37.5%]">
+            <div className="w-full md:w-[36%]">
               <Recommended cuId={unit.id} />
             </div>
           </div>

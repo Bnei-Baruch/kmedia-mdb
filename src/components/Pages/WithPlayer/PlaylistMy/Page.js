@@ -19,12 +19,10 @@ const PlaylistMyPage = ({ playerContainer }) => {
     return getWipErr(!isReady, null);
 
   return (
-    <div className="flex flex-wrap avbox">
+    <div className="flex flex-wrap avbox gap-4">
       <div
-        className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
-        <div id="avbox_playlist">
-          <PlaylistHeader />
-        </div>
+        className="flex-1 min-w-0">
+        <PlaylistHeader />
         {playerContainer}
         <div className=" px-4" id="unit_container">
           <Info />
@@ -33,7 +31,7 @@ const PlaylistMyPage = ({ playerContainer }) => {
       </div>
       {
         !isMobileDevice && (
-          <div className="w-[37.5%]">
+          <div className="w-[36%]">
             <PlaylistItems />
             <div className="my-4" />
             <Recommended cuId={cuId} filterOutUnits={[]} />

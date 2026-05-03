@@ -14,42 +14,37 @@ import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location           = useLocation();
-  const { isReady }        = useSelector(playlistGetInfoSelector);
-  const { cuId }      = useSelector(playlistGetInfoSelector);
-  const { embed, type }    = getEmbedFromQuery(location);
+  const location = useLocation();
+  const { isReady } = useSelector(playlistGetInfoSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
+  const { embed, type } = getEmbedFromQuery(location);
 
   if (embed && type === EMBED_TYPE_PLAYER) return playerContainer;
   if (type === EMBED_TYPE_PLAYLIST) {
     return (
-      <div className=" px-4 avbox">
-        <div id="avbox_playlist">
-          <PlaylistHeader />
-        </div>
+      <div className="px-4 avbox">
+        <PlaylistHeader />
         {isReady && playerContainer}
       </div>
     );
   }
 
   return (
-    <div className={clsx('flex flex-wrap avbox', { 'p-4': !isMobileDevice })}>
-      <div
-        className={clsx(isMobileDevice ? 'w-full' : 'w-[62.5%]', { 'is-fitted': isMobileDevice })}>
-        <div id="avbox_playlist">
-          <PlaylistHeader/>
-        </div>
+    <div className='py-4 lg:px-4 md:px-2 avbox flex gap-4 max-md:flex-col'>
+      <div className='flex-1 min-w-0'>
+        <PlaylistHeader />
         {isReady && playerContainer}
-        <div className=" px-4" id="unit_container">
-          <Info/>
-          <Materials/>
+        <div className="px-4" id="unit_container">
+          <Info />
+          <Materials />
         </div>
       </div>
       {
         !isMobileDevice && (
-          <div className="w-[37.5%]">
-            {isReady && <PlaylistItems/>}
+          <div className="max-w-[36%] max-md:hidden">
+            {isReady && <PlaylistItems />}
             <div className="my-4" />
-            {isReady && <Recommended cuId={cuId} filterOutUnits={[]}/>}
+            {isReady && <Recommended cuId={cuId} filterOutUnits={[]} />}
           </div>
         )
       }
