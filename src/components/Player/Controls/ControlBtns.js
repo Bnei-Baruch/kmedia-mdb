@@ -73,7 +73,7 @@ export const FullscreenBtn = ({ fullscreenRef }) => {
         content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen'}`)}
         position="top right"
         trigger={
-          <div className="controls__fullscreen" onClick={handleClick}>
+          <div onClick={handleClick}>
             <div className="material-symbols-outlined">{isFullScreen ? 'fullscreen_exit' : 'fullscreen'}</div>
           </div>
         }/>
@@ -100,10 +100,7 @@ export const ShareBtn = () => {
       <WebWrapTooltip
         content={t('player.controls.share')}
         trigger={
-          <div
-            className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
-            onClick={handleOpen}
-          >
+          <div onClick={handleOpen}>
             <div className="material-symbols-outlined">share</div>
           </div>
         }
@@ -128,10 +125,7 @@ export const SettingsBtn = () => {
       <WebWrapTooltip
         content={t('player.controls.settings')}
         trigger={
-          <div
-            className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
-            onClick={handleOpen}
-          >
+          <div onClick={handleOpen}>
             <div className="material-symbols-outlined">settings</div>
           </div>
         }

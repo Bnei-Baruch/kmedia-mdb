@@ -23,17 +23,15 @@ export const SeekBackwardBtn = () => {
   };
 
   return (
-    <div className="controls__rewind">
-      <WebWrapTooltip
-        content={t('player.controls.rewind', { seek })}
-        closeOnTriggerClick={false}
-        trigger={
-          <div className="controls__rewind" onClick={handleSeekBackward}>
-            <div className="material-symbols-outlined">undo</div>
-          </div>
-        }
-      />
-    </div>
+    <WebWrapTooltip
+      content={t('player.controls.rewind', { seek })}
+      closeOnTriggerClick={false}
+      trigger={
+        <div className="controls__rewind" onClick={handleSeekBackward}>
+          <div className="material-symbols-outlined">undo</div>
+        </div>
+      }
+    />
   );
 };
 
@@ -47,16 +45,14 @@ export const SeekForwardBtn = () => {
   };
 
   return (
-    <div className="controls__forward">
-      <WebWrapTooltip
-        content={t('player.controls.skip', { seek })}
-        closeOnTriggerClick={false}
-        trigger={
-          <div className="controls__forward" onClick={handleSeekForward}>
-            <div className="material-symbols-outlined">redo</div>
-          </div>
-        }
-      />
-    </div>
+    <WebWrapTooltip
+      content={t('player.controls.skip', { seek })}
+      closeOnTriggerClick={false}
+      trigger={
+        <div className="controls__forward" onClick={handleSeekForward}>
+          <div className="material-symbols-outlined">redo</div>
+        </div>
+      }
+    />
   );
 };

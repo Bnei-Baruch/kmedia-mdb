@@ -44,7 +44,7 @@ const VolumeCtrl = () => {
         <WebWrapTooltip
           content={t('player.controls.mute')}
           trigger={
-            <div className="controls__volume-icon" onClick={handleMute}>
+            <div onClick={handleMute}>
               <div className="material-symbols-outlined">{`volume_${icon}`}</div>
             </div>
           }

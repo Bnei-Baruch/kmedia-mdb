@@ -22,20 +22,18 @@ export const PrevBtn = () => {
   }
 
   return (
-    <div className="controls__prev">
-      <WebWrapTooltip
-        content={t('player.controls.prev-video')}
-        position="top left"
-        trigger={
-          <Link
-            as="div"
-            className="controls__prev"
-            to={to}
-          >
-            <div className="material-symbols-outlined">fast_rewind</div>
-          </Link>
-        }/>
-    </div>
+    <WebWrapTooltip
+      content={t('player.controls.prev-video')}
+      position="top left"
+      trigger={
+        <Link
+          as="div"
+          className="controls__prev"
+          to={to}
+        >
+          <div className="material-symbols-outlined">fast_rewind</div>
+        </Link>
+      }/>
   );
 };
 
@@ -52,20 +50,18 @@ export const NextBtn = () => {
   }
 
   return (
-    <div className="controls__next">
-      <WebWrapTooltip
-        content={t('player.controls.next-video')}
-        position="top right"
-        trigger={
-          <Link
-            as="div"
-            className="controls__next"
-            to={to}
-          >
-            <div className="material-symbols-outlined">fast_forward</div>
-          </Link>
-        }
-      />
-    </div>
+    <WebWrapTooltip
+      content={t('player.controls.next-video')}
+      position="top right"
+      trigger={
+        <Link
+          as="div"
+          className="controls__next"
+          to={to}
+        >
+          <div className="material-symbols-outlined">fast_forward</div>
+        </Link>
+      }
+    />
   );
 };

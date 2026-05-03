@@ -1,10 +1,10 @@
 @use "colors-helpers";
+@use "sass:color";
 
 $controls-bg: rgba(27, 28, 29, .9);
 $controls-overlay: rgba(0, 0, 0, .7);
 $controls-bg-hover: rgba(27, 28, 29, 1);
 $controls-radius: 4px;
-@use "sass:color";
 
 //Colors
 $whatsappColor: #25d366;
@@ -557,15 +557,20 @@ video {
     overflow: hidden;
     color: #fff;
 
-    .icon {
+    .icon,
+    .material-symbols-outlined {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
 
-      &::before {
-        color: hsla(0, 0%, 100%, .8) !important;
-      }
+    .icon::before {
+      color: hsla(0, 0%, 100%, .8) !important;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
     }
 
     &__prev, &__rewind, &__forward, &__next, &__pause {
@@ -577,14 +582,17 @@ video {
       border-radius: $controls-radius;
       cursor: pointer;
 
+      .material-symbols-outlined {
+        font-size: 36px;
+      }
+
       &:hover {
         cursor: pointer;
         background: $controls-bg-hover;
 
-        .icon {
-          &:before {
-            color: hsla(0, 0%, 100%, 1) !important;
-          }
+        .icon:before,
+        .material-symbols-outlined {
+          color: hsla(0, 0%, 100%, 1) !important;
         }
       }
     }
@@ -616,19 +624,20 @@ video {
         position: relative;
 
         &:hover {
-          .icon {
-            &:before {
-              color: hsla(0, 0%, 100%, 1) !important;
-            }
+          .icon:before,
+          .material-symbols-outlined {
+            color: hsla(0, 0%, 100%, 1) !important;
           }
         }
 
-        &.active .icon:before {
+        &.active .icon:before,
+        &.active .material-symbols-outlined {
           color: colors-helpers.$blue !important;
         }
       }
 
-      .icon {
+      .icon,
+      .material-symbols-outlined {
         line-height: 100%;
       }
     }
