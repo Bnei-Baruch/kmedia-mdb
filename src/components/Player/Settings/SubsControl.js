@@ -18,16 +18,16 @@ const SubsControl = () => {
   return (
     <div className="settings__row">
       <h5 className="small font-semibold">{t('player.settings.subtitles')}</h5>
-      <div className="inline-flex">
+      <div className="settings__options">
         {
           ['off', ...subtitles.map(x => x.language)].map(l => (
-            <button
-              className={`px-2 py-1 text-xs border border-white/30 ${l === subsLanguage ? 'bg-white text-black' : 'bg-transparent text-white'}`}
+            <div
+              className={`settings__option${l === subsLanguage ? ' active' : ''}`}
               onClick={() => handleSetSubtitlesLang(l)}
               key={l}
             >
               {l}
-            </button>
+            </div>
           ))
         }
       </div>

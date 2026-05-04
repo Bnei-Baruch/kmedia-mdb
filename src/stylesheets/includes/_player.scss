@@ -266,17 +266,13 @@ video {
 
   &__pane {
     padding: 16px;
-    overflow: hidden;
-    flex: 1 0 100%;
+    color: white;
+    //flex: 1 0 100%;
 
     &:last-child {
       display: flex;
       flex-direction: column;
       align-self: stretch;
-
-      button {
-        flex: 0 0 auto;
-      }
 
       .menu {
         width: 100%;
@@ -296,7 +292,46 @@ video {
     align-items: center;
 
     + .settings__row {
-      margin-top: 8px;
+      margin-top: 1.5rem;
+      gap: 2em;
+    }
+  }
+
+  &__options {
+    display: inline-flex;
+  }
+
+  &__option {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    border: 2px solid white;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+
+    & + & {
+      border-left: none;
+    }
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &.active {
+      background: white;
+      color: black;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 
@@ -624,6 +659,7 @@ video {
         flex: 0 0 34px;
         position: relative;
         cursor: pointer;
+        align-self: stretch;
 
         &:hover {
           .icon:before,
@@ -646,7 +682,6 @@ video {
 
     &__volume {
       display: flex;
-      align-self: stretch;
 
       &-icon {
         width: 34px;
@@ -656,10 +691,11 @@ video {
 
     &__timecode {
       flex: 0 0 auto;
-      line-height: 34px;
+      display: flex;
+      align-items: center;
       font-size: 11px;
       width: 113px;
-      text-align: center;
+      justify-content: center;
     }
 
     &__progress {
@@ -730,10 +766,6 @@ video {
         align-self: stretch;
         width: 0;
         padding: 0;
-
-        button {
-          flex: 0 0 auto;
-        }
 
         .menu {
           flex: 1 1 auto;

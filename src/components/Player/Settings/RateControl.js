@@ -17,18 +17,18 @@ const RateControl = () => {
   return (
     <div className="settings__row">
       <h5 className="small font-semibold">{t('player.settings.playback-speed')}</h5>
-      <div className="inline-flex">
+      <div className="settings__options">
         {
           PLAYER_SPEEDS.map(x => {
             const content = x !== 1 ? `${x}x` : t('player.settings.normal');
             return (
-              <button
-                className={`px-2 py-1 text-xs border border-white/30 ${x === rate ? 'bg-white text-black' : 'bg-transparent text-white'}`}
+              <div
+                className={`settings__option${x === rate ? ' active' : ''}`}
                 onClick={() => setPlaybackRate(x)}
                 key={x}
               >
                 {content}
-              </button>
+              </div>
             );
           })
         }

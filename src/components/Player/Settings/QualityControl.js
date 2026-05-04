@@ -27,16 +27,16 @@ const QualityControl = () => {
   return (
     <div className="settings__row">
       <h5 className="small font-semibold">{t('player.settings.quality')}</h5>
-      <div className="inline-flex">
+      <div className="settings__options">
         {
           qualities?.map((x, i) => (
-            <button
-              className={`px-2 py-1 text-xs border border-white/30 ${x === quality ? 'bg-white text-black' : 'bg-transparent text-white'}`}
+            <div
+              className={`settings__option${x === quality ? ' active' : ''}`}
               onClick={() => handleSetQuality(x)}
               key={`${x}_${i}`}
             >
               {VS_NAMES[x]}
-            </button>
+            </div>
           ))
         }
       </div>

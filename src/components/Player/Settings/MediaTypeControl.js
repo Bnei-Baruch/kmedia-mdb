@@ -20,17 +20,16 @@ const MediaTypeControl = () => {
   return (
     <div className="settings__row">
       <h5 className="small font-semibold">{t('player.settings.playback')}</h5>
-      <div className="inline-flex">
+      <div className="settings__options">
         {
           [MT_VIDEO, MT_AUDIO].map(mt => (
-            <button
-              onClick={() => handleSetMediaType(mt)}
+            <div
+              onClick={() => !(mt === MT_VIDEO && !hasVideo) && handleSetMediaType(mt)}
               key={mt}
-              className={`px-2 py-1 text-xs border border-white/30 ${type === mt ? 'bg-white text-black' : 'bg-transparent text-white'}`}
-              disabled={mt === MT_VIDEO && !hasVideo}
+              className={`settings__option${type === mt ? ' active' : ''}${mt === MT_VIDEO && !hasVideo ? ' disabled' : ''}`}
             >
               {t(`player.settings.${mt}`)}
-            </button>
+            </div>
           ))
         }
       </div>
