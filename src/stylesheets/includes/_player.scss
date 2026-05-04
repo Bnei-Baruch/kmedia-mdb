@@ -584,6 +584,7 @@ video {
 
       .material-symbols-outlined {
         font-size: 36px;
+        color: white;
       }
 
       &:hover {
@@ -622,6 +623,7 @@ video {
       > * {
         flex: 0 0 34px;
         position: relative;
+        cursor: pointer;
 
         &:hover {
           .icon:before,
@@ -644,6 +646,7 @@ video {
 
     &__volume {
       display: flex;
+      align-self: stretch;
 
       &-icon {
         width: 34px;

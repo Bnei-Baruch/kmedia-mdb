@@ -74,12 +74,12 @@ const PersonalInfo = ({ collection }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
-            <button
-              className="absolute top-2 right-2"
+            <div
+              className="absolute top-2 right-2 cursor-pointer"
               onClick={() => setIsNeedLogin(false)}
             >
               <span className="material-symbols-outlined">close</span>
-            </button>
+            </div>
             <NeedToLogin />
           </Dialog.Panel>
         </div>
@@ -89,13 +89,13 @@ const PersonalInfo = ({ collection }) => {
           <TaggingBtn />
         </div>
         <div className="item">
-          <button
-            className="clear_button"
+          <div
+            className="cursor-pointer"
             onClick={() => toggleReaction(reaction)}
           >
             <span className="material-symbols-outlined margin-right-4 margin-left-4">{reaction ? 'favorite' : 'favorite_border'}</span>
             <span>{reactionsCount}</span>
-          </button>
+          </div>
         </div>
         <div className="item">
           <ToPlaylistBtn />

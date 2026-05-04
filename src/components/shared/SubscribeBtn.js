@@ -19,26 +19,26 @@ import {
 
 const SubscribeBtn = ({ collection }) => {
   const { t } = useTranslation();
-  const [alertMsg, setAlertMsg]       = useState();
-  const [confirm, setConfirm]         = useState();
+  const [alertMsg, setAlertMsg] = useState();
+  const [confirm, setConfirm] = useState();
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const dispatch = useDispatch();
-  const user     = useSelector(authGetUserSelector);
+  const user = useSelector(authGetUserSelector);
 
-  const { cuId }                                = useSelector(playlistGetInfoSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
   const { collections, content_type: type, id } = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId)) || {};
 
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
-  const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);
+  const cId = collection?.id || (collections && Object.values(collections)[0]?.id);
 
-  const subsByCO  = !type || CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
+  const subsByCO = !type || CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
   const subParams = useMemo(() => ({
-    'collection_uid'  : subsByCO,
-    'content_type'    : subsByType,
+    'collection_uid': subsByCO,
+    'content_type': subsByType,
     'content_unit_uid': id
   }), [subsByCO, subsByType, id]);
-  const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
+  const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
 
   const sub = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_SUBSCRIPTIONS, key));
   const dir = useSelector(settingsGetUIDirSelector);
@@ -88,13 +88,13 @@ const SubscribeBtn = ({ collection }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="relative bg-white rounded-lg p-6 max-w-lg w-full shadow-xl">
-            <button
+            <div
               onClick={() => setIsNeedLogin(false)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 cursor-pointer"
               aria-label="Close"
             >
               <span className="material-symbols-outlined">close</span>
-            </button>
+            </div>
             <NeedToLogin />
           </DialogPanel>
         </div>
@@ -106,35 +106,35 @@ const SubscribeBtn = ({ collection }) => {
           <DialogPanel className="bg-white rounded-lg p-6 max-w-sm w-full shadow-xl" dir={dir}>
             <p className="mb-4">{t('personal.confirmUnsubscribe', { name: title })}</p>
             <div className="flex justify-end gap-2">
-              <button
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+              <div
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 cursor-pointer"
                 onClick={handleConfirmCancel}
               >
                 {t('buttons.cancel')}
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              </div>
+              <div
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
                 onClick={handleConfirmSuccess}
               >
                 {t('buttons.apply')}
-              </button>
+              </div>
             </div>
           </DialogPanel>
         </div>
       </Dialog>
-      <button
+      <div
         className={`uppercase border rounded px-3 py-1 ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
         onClick={() => subsUnsubs(sub)}
         style={{ fontSize: '0.9em' }}
       >
         {t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
-      </button>
+      </div>
     </>
   );
 };
 
 SubscribeBtn.propTypes = {
-  unit      : shapes.ContentUnit,
+  unit: shapes.ContentUnit,
   collection: shapes.Collection
 
 };

@@ -20,12 +20,12 @@ export const ToPlaylistBtn = () => {
   };
 
   return (
-    <button
-      className="my_playlist_add clear_button uppercase no-padding"
+    <div
+      className="my_playlist_add uppercase no-padding cursor-pointer"
       onClick={handleOpen}
     >
       <PlaylistAddIcon className="playlist_add" fill="#767676"/>
       <span>{t('buttons.save')}</span>
-    </button>
+    </div>
   );
 };

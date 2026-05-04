@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const WebWrapTooltip = ({ trigger, content }) => {
@@ -9,20 +10,26 @@ const WebWrapTooltip = ({ trigger, content }) => {
   if (isMobileDevice)
     return trigger;
 
-  return React.cloneElement(trigger, {
-    onMouseEnter: () => setShow(true),
-    onMouseLeave: () => setShow(false),
-    children: (
-      <>
-        {trigger.props.children}
-        {show && content && (
-          <span className="absolute z-50 bottom-full left-1/2 mb-1 -translate-x-1/2 rounded bg-gray-800 text-white shadow-lg px-2 py-1 text-xs whitespace-nowrap pointer-events-none">
-            {content}
-          </span>
-        )}
-      </>
-    ),
-  });
+  return (
+    <Popover as={Fragment}>
+      <PopoverButton
+        as="div"
+        style={{ display: 'contents' }}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+      >
+        {trigger}
+      </PopoverButton>
+      {show && content && (
+        <PopoverPanel
+          static
+          className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 rounded bg-gray-800 text-white shadow-lg px-2 py-1 text-xs whitespace-nowrap pointer-events-none"
+        >
+          {content}
+        </PopoverPanel>
+      )}
+    </Popover>
+  );
 };
 
 WebWrapTooltip.propTypes = {

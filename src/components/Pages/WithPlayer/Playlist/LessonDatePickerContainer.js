@@ -71,7 +71,7 @@ const LessonDatePickerContainer = () => {
   }
 
   return (
-    <div className="flex items-center justify-between flex-wrap">
+    <div className="flex items-center justify-between flex-nowrap">
       {
         !!prevTo && (
           <Link

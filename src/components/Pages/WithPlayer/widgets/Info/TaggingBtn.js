@@ -20,12 +20,12 @@ export const TaggingBtn = () => {
   };
 
   return (
-    <button
-      className="clear_button my_tag"
+    <div
+      className="my_tag cursor-pointer"
       onClick={handleOpen}
     >
       <SectionLogo name="topics" color="grey" width="20" height="20"/>
       <span>{t('personal.label.tagging')}</span>
-    </button>
+    </div>
   );
 };
