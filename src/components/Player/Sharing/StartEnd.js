@@ -36,7 +36,7 @@ const StartEnd = ({ action }) => {
   return (
     <div className="sharing__times">
       <div className="sharing__inputs">
-        <div className="flex w-full" onClick={handleSetStart}>
+        <div className="flex" onClick={handleSetStart}>
           <button
             className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
             onClick={handleSetStart}
@@ -52,7 +52,7 @@ const StartEnd = ({ action }) => {
             dir={uiDir}
           />
         </div>
-        <div className="flex w-full" onClick={handleSetEnd}>
+        <div className="flex" onClick={handleSetEnd}>
           <button
             className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
             onClick={handleSetEnd}

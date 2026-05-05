@@ -35,7 +35,7 @@ const Sharing = () => {
           }
         </div>
       }/>
-      <div className="sharing__buttons">
+      <div className="sharing__buttons gap-1">
         <CopyShareUrl/>
         <ShareBarPlayer/>
       </div>

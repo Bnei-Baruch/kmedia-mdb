@@ -489,6 +489,7 @@ video {
 }
 
 .sharing__buttons {
+  
   .is-mobile:not(.is-fullscreen) & {
     flex-wrap: wrap;
     justify-content: space-between;

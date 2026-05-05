@@ -57,7 +57,7 @@ const TrimBtn = () => {
     <Popover className="relative inline-block">
       <PopoverButton
         as="span"
-        className="inline-flex items-center justify-center rounded-full p-2 cursor-pointer"
+        className="inline-flex items-center justify-center"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
         onClick={handleCut}
