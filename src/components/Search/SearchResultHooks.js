@@ -658,7 +658,7 @@ export const SearchResultTweets = ({ source }) => {
         {wipError}
         {!wipError && (
           <div {...swipeHandlers} >
-            <div className={`${isMobileDevice ? 'margin-top-8' : null} search__cards grid grid-cols-1 sm:grid-cols-3 gap-4`}>
+            <div className={`${isMobileDevice ? 'mt-1' : null} search__cards grid grid-cols-1 sm:grid-cols-3 gap-4`}>
               {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(renderItem)}
             </div>
           </div>

@@ -5,6 +5,7 @@
   @include responsive-helpers.mobile {
     margin: 0 1em 1em 1em;
   }
+
   clear: both;
   margin: 0 1em 2em 0;
 
@@ -73,7 +74,7 @@
 
   background: colors-helpers.$darkWhite;
 
-  & > .menu {
+  &>.menu {
     @include responsive-helpers.mobile {
       overflow-x: auto;
       overflow-y: hidden;
@@ -99,7 +100,8 @@
   display: flex;
   overflow: hidden;
 
-  .unit-tags-bar_tags {
+
+  .unit-tags-bar_scroll {
     scrollbar-gutter: stable;
     overflow-y: hidden;
     overflow-x: scroll;
@@ -109,18 +111,25 @@
     &::-webkit-scrollbar {
       display: none;
     }
+  }
 
+
+  .unit-tags-bar_tags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .5rem;
 
     .unit-tag-item {
       scroll-snap-align: start;
-      padding: 8px 14px;
-      margin: 0 4px;
       background: rgba(51, 118, 214, 0.08);
-      box-shadow: none;
-      font-weight: normal;
+      border-radius: 5px;
+
 
       a {
         color: colors-helpers.$blue;
+        padding: 0 1rem;
+        font-size: .8rem;
+        line-height: 1.8rem;
       }
 
       &:hover {

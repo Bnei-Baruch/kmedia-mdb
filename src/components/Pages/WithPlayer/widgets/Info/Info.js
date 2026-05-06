@@ -121,29 +121,29 @@ const Info = () => {
           }
         </div>
 
-        <ul className="list-none p-0">
+        <div className="mt-2">
           <TagsByUnit id={id}/>
           {
             sSeries.length > 0 && (
-              <li key="co-links-series" className="margin-top-8">
+              <div key="co-links-series" className="mt-1">
                 <strong>
                   {`${t('pages.unit.info.study-series')}: `}
                 </strong>
                 {sSeries}
-              </li>
+              </div>
             )
           }
           {
             isMultiLessons && noSSeries.length > 0 && (
-              <li key="co-links" className="margin-top-8">
+              <div key="co-links" className="mt-1">
                 <strong>
                   {`${t('pages.unit.info.collections')}: `}
                 </strong>
                 {noSSeries}
-              </li>
+              </div>
             )
           }
-        </ul>
+        </div>
       </div>
     </>
   );

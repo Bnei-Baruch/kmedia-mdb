@@ -96,7 +96,7 @@ const Actions = ({ bookmark }) => {
           className="p-1"
           onClick={open ? handleClose : handleOpen}
         >
-          <span className="material-symbols-outlined text-2xl text-gray-400 margin-top-8">more_vert</span>
+          <span className="material-symbols-outlined text-2xl text-gray-400 mt-1">more_vert</span>
         </button>
         {open && (
           <div className="absolute right-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">

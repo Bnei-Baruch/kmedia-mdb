@@ -43,7 +43,7 @@ const CollectionPageHeader = ({ collection = null }) => {
                     <span className="material-symbols-outlined small">rss_feed</span>
                   </a>
                   <ShareForm collection={collection} />
-                  <div className="margin-top-8 display-iblock">
+                  <div className="mt-1 display-iblock">
                     <SubscribeBtn collection={collection} />
                   </div>
                 </div>
