@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import Link from '../Language/MultiLanguageLink';
 import { isEmpty } from '../../helpers/utils';
 import { useSelector } from 'react-redux';
@@ -11,27 +11,27 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const TagsByUnit = ({ id }) => {
-  const { t }                     = useTranslation();
+  const { t } = useTranslation();
   const [showArrow, setShowArrow] = useState(0);
 
-  const unit       = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
-  const lids       = useSelector(state => mdbGetLabelsByCUSelector(state, id));
-  const denorm     = useSelector(mdbGetDenormLabelSelector);
-  const labelTags  = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
+  const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const lids = useSelector(state => mdbGetLabelsByCUSelector(state, id));
+  const denorm = useSelector(mdbGetDenormLabelSelector);
+  const labelTags = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
   const getTagById = useSelector(tagsGetTagByIdSelector);
 
-  const ref = useRef();
-
-  useEffect(() => {
-    const _cur = ref.current;
-    if (_cur && (_cur.scrollWidth > _cur.clientWidth))
+  const nodeRef = useRef(null);
+  const ref = useCallback(node => {
+    nodeRef.current = node;
+    if (!node) return;
+    if (node.scrollWidth > node.clientWidth)
       setShowArrow(1);
   }, []);
 
   if (isEmpty(unit?.tags) && isEmpty(lids))
     return null;
 
-  const names        = [...(new Set([...(unit?.tags || []), ...labelTags]))].map(getTagById);
+  const names = [...(new Set([...(unit?.tags || []), ...labelTags]))].map(getTagById);
   const handleScroll = e => {
     const _t = e.target;
     if (Math.abs(_t.scrollLeft) < 10) {
@@ -41,44 +41,40 @@ const TagsByUnit = ({ id }) => {
     }
   };
 
-  const scrollLeft  = () => ref.current.scrollLeft += 300;
-  const scrollRight = () => ref.current.scrollLeft -= 300;
+  const scrollLeft = () => nodeRef.current.scrollLeft += 300;
+  const scrollRight = () => nodeRef.current.scrollLeft -= 300;
 
   return (
     <div className="unit-tags-bar">
       <div className="unit-tags-title">{t('messages.unit-tags')}:</div>
       {
         showArrow > 0 && (
-          <button
-            className="clear_button"
-            onClick={scrollLeft}
-          >
-            <span className="material-symbols-outlined">chevron_right</span>
-          </button>
+          <div onClick={scrollLeft}          >
+            <span className="material-symbols-outlined  text-blue-600">chevron_right</span>
+          </div>
         )
       }
-      <div className="unit-tags-bar_tags" onScroll={handleScroll} ref={ref}>
-        {
-          names
-            .filter(tag => !!tag)
-            .map((tag, index) =>
-              <button key={`${tag.id}${index}`} className="unit-tag-item">
-                <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-              </button>
-            )
-        }
+      <div onScroll={handleScroll} ref={ref} className="unit-tags-bar_scroll">
+        <div className="unit-tags-bar_tags">
+          {
+            names
+              .filter(tag => !!tag)
+              .map((tag, index) =>
+                <div key={`${tag.id}${index}`} className="unit-tag-item">
+                  <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+                </div>
+              )
+          }
+        </div>
       </div>
       {
         showArrow > 0 && (
-          <button
-            className="clear_button"
-            onClick={scrollRight}
-          >
-            <span className="material-symbols-outlined">chevron_left</span>
-          </button>
+          <div onClick={scrollRight}>
+            <span className="material-symbols-outlined text-blue-600">chevron_left</span>
+          </div>
         )
       }
-    </div>
+    </div >
   );
 };
 

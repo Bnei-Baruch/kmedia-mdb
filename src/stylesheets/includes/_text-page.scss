@@ -125,32 +125,6 @@
     }
   }
 
-  .text_align_to_text {
-    width: variables.$max-readble-width;
-    transform: translate3d(-30px, 0, 0px);
-    margin: 0 auto;
-
-    .ltr & {
-      transform: translate3d(30px, 0, 0px);
-    }
-
-    @media only screen and (max-width: variables.$max-readble-width - 1) {
-      padding: 0 1em;
-      transform: translate3d(-60px, 0, 0px);
-
-      .ltr & {
-        transform: translate3d(60px, 0, 0px);
-      }
-    }
-
-    &.text_align_to_text_text_only {
-      transform: none !important;
-    }
-
-    .stick_toolbar_search & {
-      margin-top: 0;
-    }
-  }
 
   .toc_trigger {
     justify-self: flex-start;

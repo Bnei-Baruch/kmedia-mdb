@@ -74,11 +74,7 @@ const TextLayoutWeb = props => {
         'stick_toolbar_unpinned': scrollDir !== -1,
         'stick_toolbar_pinned'  : scrollDir === -1
       })}>
-      <div className={
-        clsx('no-margin-top', {
-          'text_align_to_text'          : (!isMobileDevice),
-          'text_align_to_text_text_only': additionsMode === TEXT_PAGE_ADDITIONS_MODS.hideAll && (!isMobileDevice)
-        })}>
+      <div className='mx-auto px-2 flex justify-center'>
         <SearchOnPageBar/>
       </div>
     </div>
@@ -92,10 +88,7 @@ const TextLayoutWeb = props => {
     >
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
-      <div className={clsx({
-        'text_align_to_text'          : (!isMobileDevice),
-        'text_align_to_text_text_only': additionsMode === TEXT_PAGE_ADDITIONS_MODS.hideAll && (!isMobileDevice)
-      })}>
+      <div  className='mx-auto px-2 flex justify-center'>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer/>
       </div>

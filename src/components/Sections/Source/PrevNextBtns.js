@@ -47,10 +47,7 @@ const PrevNextBtns = () => {
   const nextId       = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
 
   return (
-    <div className={clsx('source_prev_next', {
-      'text_align_to_text'          : (!isMobileDevice),
-      'text_align_to_text_text_only': additionsMode === TEXT_PAGE_ADDITIONS_MODS.hideAll && (!isMobileDevice)
-    })}>
+    <div className='mx-auto px-2 max-w-10'>
       {prevId && <PrevBtn id={prevId}/>}
       <span/>
       {nextId && <NextBtn id={nextId}/>}
