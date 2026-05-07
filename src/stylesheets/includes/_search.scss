@@ -142,6 +142,28 @@
     }
   }
 
+  &__status-lines {
+    margin-top: .45em;
+  }
+
+  &__status-line {
+    align-items: flex-start;
+    color: #395769;
+    display: flex;
+    gap: .45em;
+    line-height: 1.35;
+    margin-top: .3em;
+
+    > .icon {
+      color: #5f8397;
+      flex: 0 0 auto;
+    }
+
+    > .icon.is-checked {
+      color: #2f8a55;
+    }
+  }
+
   &__status-query {
     color: #4f6775;
     margin-top: .35em !important;

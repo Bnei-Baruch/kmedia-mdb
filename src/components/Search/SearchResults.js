@@ -233,6 +233,15 @@ const SearchResults = ({ t }) => {
       });
     }
 
+    if (status.phase === 'thinking' && !status.query_analyzed) {
+      return t('search.agentic.status.initializingAgent');
+    }
+
+    if (status.phase === 'thinking') {
+      const variants = t('search.agentic.status.thinking', { returnObjects: true });
+      return Array.isArray(variants) ? variants[Math.floor(Math.random() * variants.length)] : variants;
+    }
+
     if (REASONING_STATUS_PHASES.includes(status.phase)) {
       return t(`search.agentic.status.${status.phase}`);
     }
@@ -248,11 +257,46 @@ const SearchResults = ({ t }) => {
     return t('search.agentic.status.working');
   };
 
+  const getAgenticStatusLines = status => {
+    const lines = [];
+
+    if (status?.query_analyzed) {
+      lines.push({ key: 'query-analyzed', text: t('search.agentic.progress.queryAnalyzed'), icon: 'check circle', checked: true });
+    }
+
+    if (status?.has_potentially_good_results) {
+      lines.push({ key: 'good-results', text: t('search.agentic.progress.goodCandidates'), icon: 'check circle', checked: true });
+    } else if (status?.has_any_results) {
+      lines.push({ key: 'initial-results', text: t('search.agentic.progress.initialResults'), icon: 'search' });
+    }
+
+    if (status?.may_take_longer) {
+      lines.push({ key: 'may-take-longer', text: t('search.agentic.progress.mayTakeLonger'), icon: 'info circle' });
+    }
+
+    if (status?.near_finish) {
+      lines.push({ key: 'near-finish', text: t('search.agentic.progress.nearFinish'), icon: 'hourglass half' });
+    }
+
+    const isFailed = status?.state === 'failed' || status?.phase === 'error';
+
+    // Keep a live line from the current backend phase/tool so progress changes between milestone flags.
+    lines.push({
+      key    : 'current',
+      text   : getAgenticStatusText(status),
+      icon   : isFailed ? 'warning sign' : 'circle notched',
+      loading: !isFailed
+    });
+
+    return lines;
+  };
+
   const renderAgenticStatus = () => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
     const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
     const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
     const statusMessage  = hasErrorStatus && reasoningStatus?.message;
+    const statusLines = getAgenticStatusLines(reasoningStatus);
 
     if (!isAgenticSearch || (!wip && !hasErrorStatus && !hasCanceledStatus)) {
       return null;
@@ -291,12 +335,14 @@ const SearchResults = ({ t }) => {
                 )}
               </div>
               {!hasCanceledStatus && (
-                <p>
-                  {[
-                    getAgenticStatusText(reasoningStatus),
-                    reasoningStatus?.iteration ? t('search.agentic.statusIteration', { iteration: reasoningStatus.iteration }) : null
-                  ].filter(Boolean).join(' | ')}
-                </p>
+                <div className="agentic-search__status-lines">
+                  {statusLines.map(line => (
+                    <div key={line.key} className="agentic-search__status-line">
+                      <Icon name={line.icon} loading={line.loading} className={line.checked ? 'is-checked' : ''} />
+                      <span>{line.text}</span>
+                    </div>
+                  ))}
+                </div>
               )}
               {statusMessage && (
                 <p className="agentic-search__status-error">{statusMessage}</p>
