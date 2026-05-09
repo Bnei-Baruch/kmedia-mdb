@@ -310,7 +310,7 @@
       "followupButton": "שפר",
       "finishNowButton": "תוצאות מיידיות",
       "followupsRemaining": "נותרו {{count}} שאלות המשך",
-      "followupsExhausted": "לא נותרו שאלות המשך בסשן הזה. התחילו חיפוש סוכני חדש כדי להמשיך.",
+      "followupsExhausted": "לא נותרו שאלות המשך בהקשר של החיפוש הזה. התחילו חיפוש סוכני חדש כדי להמשיך.",
       "statusTitle": "התקדמות החיפוש",
       "statusIteration": "שלב {{iteration}}",
       "progress": {
