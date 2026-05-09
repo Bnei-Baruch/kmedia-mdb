@@ -308,6 +308,7 @@
       "followupTitle": "Bu sonuçları iyileştir",
       "followupPlaceholder": "Bir takip sorusu sorun...",
       "followupButton": "İyileştir",
+      "finishNowButton": "Anında sonuçlar",
       "followupsRemaining": "{{count}} takip hakkı kaldı",
       "followupsExhausted": "Bu oturum için takip hakkı kalmadı. Devam etmek için yeni bir ajanlı arama başlatın.",
       "statusTitle": "Arama ilerlemesi",

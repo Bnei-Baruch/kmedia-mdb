@@ -309,6 +309,7 @@
       "followupTitle": "Уточнить результаты",
       "followupPlaceholder": "Задайте уточняющий вопрос...",
       "followupButton": "Уточнить",
+      "finishNowButton": "Мгновенные результаты",
       "followupsRemaining": "Осталось уточнений: {{count}}",
       "followupsExhausted": "Для этой сессии больше нет уточнений. Начните новый агентный поиск, чтобы продолжить.",
       "statusTitle": "Ход поиска",

@@ -309,6 +309,7 @@
       "followupTitle": "Refine these results",
       "followupPlaceholder": "Ask a follow-up...",
       "followupButton": "Refine",
+      "finishNowButton": "Immediate results",
       "followupsRemaining": "{{count}} follow-ups remaining",
       "followupsExhausted": "No follow-ups remain for this session. Start a new Agentic Search to continue.",
       "statusTitle": "Search progress",

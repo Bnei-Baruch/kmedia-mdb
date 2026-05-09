@@ -142,6 +142,11 @@
     }
   }
 
+  &__status-actions {
+    display: flex;
+    gap: .4em;
+  }
+
   &__status-lines {
     margin-top: .45em;
   }

@@ -245,6 +245,31 @@ function* cancelReasoningSearch() {
   }
 }
 
+function* finishReasoningSearchNow() {
+  const status    = yield select(searchGetReasoningStatusSelector);
+  const sessionId = status?.session_id;
+  if (!sessionId) {
+    return;
+  }
+
+  try {
+    const response = yield call(Api.reasoningSearchFinishNow, sessionId);
+    if (!response?.data || response?.status >= 400 || !response.data.result_ready) {
+      throw buildReasoningError(
+        response?.data?.error || response?.statusText || 'Reasoning search draft result is not ready',
+        response
+      );
+    }
+
+    const reasoningResult = yield select(searchGetReasoningResultSelector);
+    const query = reasoningResult?.query || (yield select(searchGetQuerySelector));
+    yield call(fetchReasoningResult, sessionId, query);
+  } catch (err) {
+    yield put(actions.reasoningStatusUpdate(failedReasoningStatus(sessionId, reasoningErrorMessage(err), responseStatus(err))));
+    yield put(actions.searchFailure(err));
+  }
+}
+
 function* autocomplete(action) {
   try {
     if (!action.payload.autocomplete) {
@@ -635,6 +660,10 @@ function* watchReasoningCancel() {
   yield takeLatest(types['search/reasoningCancel'], cancelReasoningSearch);
 }
 
+function* watchReasoningFinishNow() {
+  yield takeLatest(types['search/reasoningFinishNow'], finishReasoningSearchNow);
+}
+
 function* watchSetPage() {
   yield takeLatest(types['search/setPage'], updatePageInQuery);
 }
@@ -656,6 +685,7 @@ export const sagas = [
   watchQueryUpdate,
   watchSearch,
   watchReasoningCancel,
+  watchReasoningFinishNow,
   watchSetPage,
   watchSetSearchType,
   watchSetSortBy

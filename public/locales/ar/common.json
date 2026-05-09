@@ -308,6 +308,7 @@
       "followupTitle": "تنقيح هذه النتائج",
       "followupPlaceholder": "اطرح سؤال متابعة...",
       "followupButton": "تنقيح",
+      "finishNowButton": "نتائج فورية",
       "followupsRemaining": "تبقى {{count}} من أسئلة المتابعة",
       "followupsExhausted": "لم تتبق أسئلة متابعة لهذه الجلسة. ابدأ بحث وكيل ذكي جديد للمتابعة.",
       "statusTitle": "تقدم البحث",

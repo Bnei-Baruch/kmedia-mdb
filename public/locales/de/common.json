@@ -305,6 +305,7 @@
       "followupTitle": "Diese Ergebnisse verfeinern",
       "followupPlaceholder": "Stelle eine Folgefrage...",
       "followupButton": "Verfeinern",
+      "finishNowButton": "Sofortige Ergebnisse",
       "followupsRemaining": "{{count}} Folgefragen verbleibend",
       "followupsExhausted": "Für diese Sitzung sind keine Folgefragen mehr verfügbar. Starte eine neue Agenten-Suche, um fortzufahren.",
       "statusTitle": "Suchfortschritt",

@@ -308,6 +308,7 @@
       "followupTitle": "Upřesnit tyto výsledky",
       "followupPlaceholder": "Položte doplňující otázku...",
       "followupButton": "Upřesnit",
+      "finishNowButton": "Okamžité výsledky",
       "followupsRemaining": "Zbývá doplňujících dotazů: {{count}}",
       "followupsExhausted": "Pro tuto relaci nezbývají žádné doplňující dotazy. Pro pokračování spusťte nové agentní vyhledávání.",
       "statusTitle": "Průběh vyhledávání",

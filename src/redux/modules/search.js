@@ -66,6 +66,7 @@ const searchSlice = createSlice({
         done      : true
       };
     },
+    reasoningFinishNow: () => void ({}),
     searchSuccess: (state, { payload }) => {
       state.wip              = false;
       state.error            = null;

@@ -306,6 +306,7 @@
       "followupTitle": "Уточнити результати",
       "followupPlaceholder": "Поставте уточнювальне питання...",
       "followupButton": "Уточнити",
+      "finishNowButton": "Миттєві результати",
       "followupsRemaining": "Залишилось уточнень: {{count}}",
       "followupsExhausted": "Для цієї сесії більше немає уточнень. Почніть новий агентний пошук, щоб продовжити.",
       "statusTitle": "Хід пошуку",

@@ -252,6 +252,13 @@ class Api {
     data   : JSON.stringify({ session_id: sessionId })
   });
 
+  static reasoningSearchFinishNow = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/finish-now'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
+
   static getAsset = path => Requests.getAsset(path);
 
   static getUnzipUIDs = ({ path, ids }) => {

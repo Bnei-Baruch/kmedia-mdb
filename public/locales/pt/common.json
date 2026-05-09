@@ -306,6 +306,7 @@
       "followupTitle": "Refinar estes resultados",
       "followupPlaceholder": "Faça uma pergunta de acompanhamento...",
       "followupButton": "Refinar",
+      "finishNowButton": "Resultados imediatos",
       "followupsRemaining": "{{count}} acompanhamentos restantes",
       "followupsExhausted": "Não restam acompanhamentos para esta sessão. Inicie uma nova busca com agente para continuar.",
       "statusTitle": "Progresso da busca",

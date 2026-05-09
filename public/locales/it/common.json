@@ -306,6 +306,7 @@
       "followupTitle": "Affina questi risultati",
       "followupPlaceholder": "Fai una domanda di follow-up...",
       "followupButton": "Affina",
+      "finishNowButton": "Risultati immediati",
       "followupsRemaining": "{{count}} follow-up rimanenti",
       "followupsExhausted": "Non restano follow-up per questa sessione. Avvia una nuova ricerca agentica per continuare.",
       "statusTitle": "Avanzamento della ricerca",

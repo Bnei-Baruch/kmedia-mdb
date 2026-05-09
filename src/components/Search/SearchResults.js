@@ -295,6 +295,7 @@ const SearchResults = ({ t }) => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
     const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
     const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
+    const canFinishNow = canCancel && reasoningStatus?.has_draft_results;
     const statusMessage  = hasErrorStatus && reasoningStatus?.message;
     const statusLines = getAgenticStatusLines(reasoningStatus);
 
@@ -323,15 +324,29 @@ const SearchResults = ({ t }) => {
                 <Message.Header>
                   {hasCanceledStatus ? getAgenticStatusText(reasoningStatus) : t('search.agentic.statusTitle')}
                 </Message.Header>
-                {canCancel && (
-                  <Button
-                    basic
-                    compact
-                    size="mini"
-                    icon="stop circle outline"
-                    content={t('buttons.cancel')}
-                    onClick={() => dispatch(actions.reasoningCancel())}
-                  />
+                {(canFinishNow || canCancel) && (
+                  <div className="agentic-search__status-actions">
+                    {canFinishNow && (
+                      <Button
+                        basic
+                        compact
+                        size="mini"
+                        icon="forward"
+                        content={t('search.agentic.finishNowButton')}
+                        onClick={() => dispatch(actions.reasoningFinishNow())}
+                      />
+                    )}
+                    {canCancel && (
+                      <Button
+                        basic
+                        compact
+                        size="mini"
+                        icon="stop circle outline"
+                        content={t('buttons.cancel')}
+                        onClick={() => dispatch(actions.reasoningCancel())}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
               {!hasCanceledStatus && (

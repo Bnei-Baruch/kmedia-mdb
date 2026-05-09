@@ -308,6 +308,7 @@
       "followupTitle": "שיפור התוצאות",
       "followupPlaceholder": "שאלו שאלת המשך...",
       "followupButton": "שפר",
+      "finishNowButton": "תוצאות מיידיות",
       "followupsRemaining": "נותרו {{count}} שאלות המשך",
       "followupsExhausted": "לא נותרו שאלות המשך בסשן הזה. התחילו חיפוש סוכני חדש כדי להמשיך.",
       "statusTitle": "התקדמות החיפוש",
