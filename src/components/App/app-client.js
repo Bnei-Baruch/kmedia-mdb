@@ -60,6 +60,7 @@ async function hydrateApp(kcInfo) {
 
   const i18n = await initializeI18nClient();
   const deviceInfo = new UAParser().getResult();
+  deviceInfo.isMobileDevice = new URLSearchParams(window.location.search).has('isMob');
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);
   clientChronicles.setAbTesting(abTesting);

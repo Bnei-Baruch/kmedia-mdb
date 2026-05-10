@@ -10,6 +10,7 @@ import CloseBtn from '../Controls/CloseBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import SubsControl from './SubsControl';
 import { playerGetOverModeSelector } from '../../../redux/selectors';
+import clsx from 'clsx';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ const Settings = () => {
     <div className="settings">
       {
         mode !== PLAYER_OVER_MODES.languages && (
-          <div className="settings__pane">
+          <div className={clsx("settings__pane", { "w-full": isMobileDevice })} >
             {!isMobileDevice && <MediaTypeControl />}
             <SubsControl />
             <RateControl />

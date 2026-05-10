@@ -1,6 +1,7 @@
+@use 'includes/colors-helpers';
+@use 'includes/responsive-helpers';
+@use 'includes/layout';
+@use 'includes/layout-header';
+@use 'includes/text-helpers';
+@use 'includes/common';
 @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
-@import 'includes/_colors-helpers.scss';
-@import 'includes/_responsive-helpers.scss';
-@import 'includes/_layout.scss';
-@import 'includes/_text-helpers.scss';
-@import 'includes/_common.scss';

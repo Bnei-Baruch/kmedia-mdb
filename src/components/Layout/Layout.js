@@ -62,48 +62,46 @@ const Layout = ({ playerContainer }) => {
       <div className="headroom-z-index-802">
         <HeadroomWraper>
           <div className="layout__header">
-            <div className="layout__topbar flex items-center text-white ">
+            <div className="layout__topbar">
               <div ref={toggleSidebarBtnRef}>
                 <a
-                  className="layout__sidebar-toggle p-4 cursor-pointer large"
+                  className="layout__sidebar-toggle"
                   onClick={toggleSidebar}
                 >
                   {sideBarIcon}
                 </a>
               </div>
-              <Link className="logo flex items-center no-underline" to="/">
+              <Link className="logo" to="/">
                 <Logo width="42px" height="80px" />
                 <div className="logo__titles">
                   {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
                     <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
                   )}
-                  <h1 className="text-white m-0 font-normal text-2xl">{t('nav.top.header')}</h1>
+                  <h1>{t('nav.top.header')}</h1>
                 </div>
               </Link>
-              <div className={isMobileDevice ? 'layout__search mobile-hidden p-4 flex-1' : 'layout__search layout__search_max_width p-4 flex-1'}>
+              <div className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                 {isNotHome && <OmniBox />}
               </div>
-              <div className="layout__header-buttons flex items-center ml-auto">
-                <div className="no-margin">
-                  <HandleLanguages />
-                </div>
+              <div className="layout__header-buttons">
+                <HandleLanguages />
                 {
                   isNotHome && isMobileDevice &&
                   <div ref={toggleSearchBtnRef}>
-                    <a className="flex items-center justify-center p-4 cursor-pointer ml-auto">
+                    <a className="layout__mobile-search-toggle text-white">
                       <Icon icon={faSearch} className="no-margin" onClick={openHeaderSearch} />
                     </a>
                   </div>
                 }
                 {
                   !isMobileDevice && (
-                    <div className="flex items-center p-4 ml-auto">
+                    <div>
                       <DonateNow />
                       <VirtualHomeButton />
                     </div>
                   )
                 }
-                <div className="flex items-center p-4 ml-auto">
+                <div>
                   <Login />
                 </div>
                 <TopMost />
@@ -113,7 +111,7 @@ const Layout = ({ playerContainer }) => {
           {
             isShowSearch && (
               <div ref={headerSearchRef}>
-                <div className="header_search bg-[#2185d0] text-white p-4">
+                <div className="header_search">
                   <OmniBox />
                 </div>
               </div>
@@ -125,22 +123,22 @@ const Layout = ({ playerContainer }) => {
         ref={sidebarRef}
         className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
       >
-        <div className="layout__sidebar-header flex flex-col">
+        <div className="layout__sidebar-header">
           <div ref={closeSidebarBtnRef}>
             <a
-              className="layout__sidebar-toggle flex items-center p-4 cursor-pointer"
+              className="layout__sidebar-toggle"
               onClick={closeSidebar}
             >
               {sideBarIcon}
             </a>
           </div>
-          <Link className="logo mobile-hidden flex items-center p-4 text-white hover:text-white" to="/" onClick={closeSidebar}>
+          <Link className="logo mobile-hidden" to="/" onClick={closeSidebar}>
             <Logo width="2.5em" height="2.5em" />
-            <div className="logo__titles ml-4">
+            <div className="logo__titles">
               {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
                 <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
               )}
-              <h1 className="text-white m-0 text-2xl font-normal">{t('nav.top.header')}</h1>
+              <h1>{t('nav.top.header')}</h1>
             </div>
           </Link>
         </div>

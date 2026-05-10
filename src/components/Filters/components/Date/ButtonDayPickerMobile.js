@@ -49,8 +49,8 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
   const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
 
   const dateButton = (
-    <button
-      className={clsx('dateButton inline-flex items-center py-2 font-bold cursor-pointer', { 'dateButton_with_label': withLabel })}
+    <div
+      className={clsx('dateButton inline-flex items-center py-2 font-bold cursor-pointer gap-2', { 'dateButton_with_label': withLabel })}
       onClick={openNativeDatePicker}
     >
       <Icon icon={faCalendarDays} className="large" />
@@ -65,7 +65,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
         onChange={handleNativeDateInputChange}
         ref={nativeDateInputRef}
       />
-    </button>
+    </div>
   );
 
   if (!isIOS) {

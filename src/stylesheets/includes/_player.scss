@@ -71,7 +71,7 @@ video {
     flex-direction: column;
     justify-content: space-between;
 
-    .icon {
+    .material-symbols-outlined {
       line-height: 40px;
       display: inline;
     }
@@ -85,7 +85,7 @@ video {
         padding: 6px 1em;
         line-height: 16px;
 
-        .icon {
+        .material-symbols-outlined {
           line-height: 16px;
         }
       }
@@ -258,7 +258,7 @@ video {
     height: 40px;
     text-align: center;
 
-    .icon {
+    .material-symbols-outlined {
       line-height: 40px;
       display: inline;
     }
@@ -267,7 +267,7 @@ video {
   &__pane {
     padding: 16px;
     color: white;
-    //flex: 1 0 100%;
+    gap: 1em;
 
     &:last-child {
       display: flex;
@@ -603,10 +603,6 @@ video {
 
     .icon::before {
       color: hsla(0, 0%, 100%, .8) !important;
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1;
     }
 
     &__prev, &__rewind, &__forward, &__next, &__pause {
@@ -989,6 +985,10 @@ video {
       display: none;
     }
   }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+    }
 }
 
 .sharing {

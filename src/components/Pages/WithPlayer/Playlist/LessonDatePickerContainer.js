@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
 import { actions as mdbActions } from '../../../../redux/modules/mdb';
@@ -30,7 +29,6 @@ const getStartEndByFilmDate = d => {
 };
 
 const LessonDatePickerContainer = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t } = useTranslation();
 
   const wipMap = useSelector(mdbGetWipFn, shallowEqual);

@@ -99,13 +99,21 @@ const PlaylistHeader = () => {
       }
     }
 
+    const _mobStyles = isMobileDevice ? 'flex justify-between gap-2 items-end' : '';
+
     return (
       <div className='avbox__playlist-header px-4 py-4'>
         <div className='flex flex-justify gap-4 justify-between py-2'>
           <h2 className='my-0 bold'>{getTitle()}</h2>
           {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
         </div>
-        {subheader && (<h4 className="font-normal my-0">{subheader}</h4>)}
+        {
+          subheader && (
+            <h4 className={clsx('font-normal my-0', _mobStyles)}>
+              {subheader}
+              {isLesson && isMobileDevice && <LessonDatePickerContainer />}
+            </h4>)
+        }
         {playNow && (<h3 className="my-0 text-xl bold">{playNow}</h3>)}
       </div>
     );
@@ -114,7 +122,6 @@ const PlaylistHeader = () => {
   return (
     <div id="avbox_playlist">
       {getTitleByCO()}
-      {isLesson && isMobileDevice && <LessonDatePickerContainer />}
     </div>
   );
 };

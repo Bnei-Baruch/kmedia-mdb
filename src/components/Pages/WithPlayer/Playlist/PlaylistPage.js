@@ -30,7 +30,7 @@ const PlaylistPage = ({ playerContainer }) => {
   }
 
   return (
-    <div className='py-4 lg:px-4 md:px-2 avbox flex gap-4 max-md:flex-col'>
+    <div className='py-4 lg:px-4 md:px-2 avbox flex gap-4 max-md:flex-col max-md:pt-0'>
       <div className='flex-1 min-w-0'>
         <PlaylistHeader />
         {isReady && playerContainer}
