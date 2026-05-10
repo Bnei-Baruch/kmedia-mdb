@@ -620,30 +620,33 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticResults = query => {
-    const results     = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
-    const resultQuery = reasoningResult?.query || query;
+    const results            = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
+    const resultQuery        = reasoningResult?.query || query;
+    const isFollowupLoading  = wip && !!followupStatusQuery;
 
     return renderSearchFrame(
       <>
         {renderAgenticStatus()}
-        <Container className="padded">
-          <div className="agentic-search__ai-note">
-            <Icon name="info circle" />
-            <span className="agentic-search__ai-note-title">{t('search.agentic.warningTitle')}:</span>
-            {' '}
-            {t('search.agentic.warning')}
-          </div>
-          {reasoningResult?.summary && (
-            <Message
-              info
-              header={t('search.agentic.summary')}
-              content={reasoningResult.summary}
-            />
-          )}
-          {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
-          {results.length > 0 && <div className="agentic-search__results">{results.map(renderAgenticHit)}</div>}
-          {renderAgenticFollowup()}
-        </Container>
+        {!isFollowupLoading && (
+          <Container className="padded">
+            <div className="agentic-search__ai-note">
+              <Icon name="info circle" />
+              <span className="agentic-search__ai-note-title">{t('search.agentic.warningTitle')}:</span>
+              {' '}
+              {t('search.agentic.warning')}
+            </div>
+            {reasoningResult?.summary && (
+              <Message
+                info
+                header={t('search.agentic.summary')}
+                content={reasoningResult.summary}
+              />
+            )}
+            {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
+            {results.length > 0 && <div className="agentic-search__results">{results.map(renderAgenticHit)}</div>}
+            {renderAgenticFollowup()}
+          </Container>
+        )}
       </>
     );
   };
