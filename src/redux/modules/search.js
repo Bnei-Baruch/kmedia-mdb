@@ -7,6 +7,19 @@ export const SEARCH_TYPES = {
   AGENTIC: 'agentic'
 };
 
+const dedupePreviousAgenticResults = results => {
+  const seen = new Set();
+  return (Array.isArray(results) ? results : []).filter(result => {
+    const mdbUid = result?.mdb_uid;
+    if (!mdbUid || seen.has(mdbUid)) {
+      return false;
+    }
+
+    seen.add(mdbUid);
+    return true;
+  });
+};
+
 const initialState = {
   suggestions: {},
   q: '',
@@ -14,7 +27,9 @@ const initialState = {
   prevFilterParams: '',
   queryResult: {},
   reasoningResult: null,
+  reasoningPreviousResults: [],
   reasoningStatus: null,
+  reasoningRequestKind: null,
   searchType: SEARCH_TYPES.REGULAR,
   pageNo: 1,
   sortBy: 'relevance',
@@ -45,9 +60,11 @@ const searchSlice = createSlice({
       state.wip             = true;
       state.error           = null;
       if (!payload?.keepResult) {
-        state.reasoningResult = null;
+        state.reasoningResult          = null;
+        state.reasoningPreviousResults = [];
       }
 
+      state.reasoningRequestKind = payload?.requestKind || 'initial';
       state.reasoningStatus = {
         session_id: payload?.sessionId,
         state     : 'pending',
@@ -59,6 +76,7 @@ const searchSlice = createSlice({
     reasoningCancel: state => {
       state.wip             = false;
       state.error           = null;
+      state.reasoningRequestKind = null;
       state.reasoningStatus = {
         session_id: state.reasoningStatus?.session_id,
         state     : 'canceled',
@@ -76,9 +94,23 @@ const searchSlice = createSlice({
       state.pageNo           = payload.pageNo;
     },
     reasoningSearchSuccess: (state, { payload }) => {
+      const nextResults = Array.isArray(payload.searchResults?.results) ? payload.searchResults.results : [];
+      if (state.reasoningRequestKind === 'followup') {
+        const nextResultIds = new Set(nextResults.map(result => result?.mdb_uid).filter(Boolean));
+        const currentResults = Array.isArray(state.reasoningResult?.results) ? state.reasoningResult.results : [];
+
+        state.reasoningPreviousResults = dedupePreviousAgenticResults([
+          ...currentResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid)),
+          ...state.reasoningPreviousResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid))
+        ]);
+      } else {
+        state.reasoningPreviousResults = [];
+      }
+
       state.wip             = false;
       state.error           = null;
       state.reasoningResult = payload.searchResults;
+      state.reasoningRequestKind = null;
       state.reasoningStatus = {
         session_id: payload.searchResults.session_id || state.reasoningStatus?.session_id,
         state     : 'completed',
@@ -92,11 +124,13 @@ const searchSlice = createSlice({
       state.reasoningStatus = payload;
       if (payload?.state === 'canceled' || payload?.phase === 'canceled') {
         state.wip = false;
+        state.reasoningRequestKind = null;
       }
     },
     searchFailure: (state, { payload }) => {
-      state.wip   = false;
-      state.error = payload;
+      state.wip                = false;
+      state.reasoningRequestKind = null;
+      state.error              = payload;
     },
     hydrateUrl: () => ({}),
     setPage: (state, { payload }) => void (state.pageNo = payload),
@@ -128,6 +162,7 @@ const searchSlice = createSlice({
     getQuery           : state => state.q,
     getPrevQuery       : state => state.prevQuery,
     getQueryResult     : state => state.queryResult,
+    getReasoningPreviousResults: state => state.reasoningPreviousResults,
     getReasoningResult : state => state.reasoningResult,
     getReasoningStatus : state => state.reasoningStatus,
     getSearchType      : state => state.searchType,

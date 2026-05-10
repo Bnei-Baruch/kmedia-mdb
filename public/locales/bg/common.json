@@ -307,6 +307,7 @@
       "highlights": "Акценти",
       "no-results": "Агентното търсене не намери резултати за \"{{query}}\".",
       "followupTitle": "Уточняване на тези резултати",
+      "previousResultsTitle": "Резултати от предишни търсения в този контекст",
       "followupPlaceholder": "Задайте последващ въпрос...",
       "followupButton": "Уточни",
       "finishNowButton": "Незабавни резултати",

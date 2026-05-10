@@ -304,6 +304,7 @@
       "highlights": "Evidenziazioni",
       "no-results": "La ricerca agentica non ha trovato risultati per \"{{query}}\".",
       "followupTitle": "Affina questi risultati",
+      "previousResultsTitle": "Risultati di ricerche precedenti in questo contesto",
       "followupPlaceholder": "Fai una domanda di follow-up...",
       "followupButton": "Affina",
       "finishNowButton": "Risultati immediati",

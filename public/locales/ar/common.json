@@ -306,6 +306,7 @@
       "highlights": "مقاطع بارزة",
       "no-results": "لم يجد بحث الوكيل الذكي نتائج لـ \"{{query}}\".",
       "followupTitle": "تنقيح هذه النتائج",
+      "previousResultsTitle": "نتائج من عمليات بحث سابقة في هذا السياق",
       "followupPlaceholder": "اطرح سؤال متابعة...",
       "followupButton": "تنقيح",
       "finishNowButton": "نتائج فورية",

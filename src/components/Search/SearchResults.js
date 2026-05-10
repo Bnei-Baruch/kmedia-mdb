@@ -61,6 +61,7 @@ import {
   searchGetPageNoSelector,
   settingsGetPageSizeSelector,
   searchGetQueryResultSelector,
+  searchGetReasoningPreviousResultsSelector,
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
@@ -122,6 +123,7 @@ const cMapFromState = (state, results) => (
 
 const SearchResults = ({ t }) => {
   const queryResult   = useSelector(searchGetQueryResultSelector) || false;
+  const reasoningPreviousResults = useSelector(searchGetReasoningPreviousResultsSelector);
   const reasoningResult = useSelector(searchGetReasoningResultSelector);
   const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
   const searchType    = useSelector(searchGetSearchTypeSelector);
@@ -622,11 +624,14 @@ const SearchResults = ({ t }) => {
   const renderAgenticResults = query => {
     const results               = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
     const resultQuery           = reasoningResult?.query || query;
+    const currentResultIds      = new Set(results.map(result => result?.mdb_uid).filter(Boolean));
+    const previousResults       = (Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [])
+      .filter(result => result?.mdb_uid && !currentResultIds.has(result.mdb_uid));
     const agenticResultRenderKey = [
       reasoningResult?.session_id || 'no-session',
       reasoningResult?.followups_remaining ?? 'no-followups',
-      reasoningResult?.summary || '',
-      results.length
+      results.map(result => result?.mdb_uid).filter(Boolean).join(','),
+      previousResults.map(result => result?.mdb_uid).filter(Boolean).join(',')
     ].join('|');
 
     return renderSearchFrame(
@@ -649,6 +654,12 @@ const SearchResults = ({ t }) => {
           {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
           {results.length > 0 && <div className="agentic-search__results">{results.map(renderAgenticHit)}</div>}
           {renderAgenticFollowup()}
+          {previousResults.length > 0 && (
+            <>
+              <Header as="h4" content={t('search.agentic.previousResultsTitle')} />
+              <div className="agentic-search__results">{previousResults.map((result, rank) => renderAgenticHit(result, rank))}</div>
+            </>
+          )}
         </Container>
       </>
     );

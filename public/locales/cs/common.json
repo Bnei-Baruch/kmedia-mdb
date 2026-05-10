@@ -306,6 +306,7 @@
       "highlights": "Zvýraznění",
       "no-results": "Agentní vyhledávání nenašlo žádné výsledky pro \"{{query}}\".",
       "followupTitle": "Upřesnit tyto výsledky",
+      "previousResultsTitle": "Výsledky z předchozích hledání v tomto kontextu",
       "followupPlaceholder": "Položte doplňující otázku...",
       "followupButton": "Upřesnit",
       "finishNowButton": "Okamžité výsledky",

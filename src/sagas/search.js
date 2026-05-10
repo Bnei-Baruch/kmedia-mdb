@@ -354,7 +354,7 @@ export function* search(action) {
       }
 
       if (restoreSessionId) {
-        yield put(actions.reasoningSearchStart({ keepResult: false, sessionId: restoreSessionId }));
+        yield put(actions.reasoningSearchStart({ keepResult: false, sessionId: restoreSessionId, requestKind: 'initial' }));
         const status = yield call(fetchReasoningStatus, restoreSessionId);
         // URL sessions can expire on the backend. A 404 should silently restart the search.
         if (status && !isNotFound(status)) {
@@ -379,7 +379,11 @@ export function* search(action) {
         yield* urlUpdateQuery(query => Object.assign(query, { session_id: null }));
       }
 
-      yield put(actions.reasoningSearchStart({ keepResult: isFollowup, sessionId: sessionIdFromPrevious }));
+      yield put(actions.reasoningSearchStart({
+        keepResult : isFollowup,
+        sessionId  : sessionIdFromPrevious,
+        requestKind: isFollowup ? 'followup' : 'initial'
+      }));
 
       let startData;
       try {
@@ -397,7 +401,7 @@ export function* search(action) {
         resultQuery = recoveryResultQuery;
         if (!keepResult) {
           yield put(actions.updateQuery({ query: resultQuery, autocomplete: false }));
-          yield put(actions.reasoningSearchStart({ keepResult: false }));
+          yield put(actions.reasoningSearchStart({ keepResult: false, requestKind: 'initial' }));
         }
 
         const { data } = yield call(Api.reasoningSearchStart, request);

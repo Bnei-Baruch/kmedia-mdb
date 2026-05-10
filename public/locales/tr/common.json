@@ -306,6 +306,7 @@
       "highlights": "Öne çıkanlar",
       "no-results": "Ajanlı arama \"{{query}}\" için sonuç bulamadı.",
       "followupTitle": "Bu sonuçları iyileştir",
+      "previousResultsTitle": "Bu bağlamdaki önceki aramalardan sonuçlar",
       "followupPlaceholder": "Bir takip sorusu sorun...",
       "followupButton": "İyileştir",
       "finishNowButton": "Anında sonuçlar",

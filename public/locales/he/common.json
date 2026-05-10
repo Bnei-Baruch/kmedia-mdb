@@ -306,6 +306,7 @@
       "highlights": "קטעים מודגשים",
       "no-results": "החיפוש הסוכני לא מצא תוצאות עבור \"{{query}}\".",
       "followupTitle": "שיפור התוצאות",
+      "previousResultsTitle": "תוצאות מחיפושים קודמים בהקשר הזה",
       "followupPlaceholder": "שאלו שאלת המשך...",
       "followupButton": "שפר",
       "finishNowButton": "תוצאות מיידיות",

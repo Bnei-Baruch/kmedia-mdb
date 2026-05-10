@@ -304,6 +304,7 @@
       "highlights": "Фрагменти",
       "no-results": "Агентний пошук не знайшов результатів для \"{{query}}\".",
       "followupTitle": "Уточнити результати",
+      "previousResultsTitle": "Результати попередніх пошуків у цьому контексті",
       "followupPlaceholder": "Поставте уточнювальне питання...",
       "followupButton": "Уточнити",
       "finishNowButton": "Миттєві результати",

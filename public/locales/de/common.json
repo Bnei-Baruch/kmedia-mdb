@@ -303,6 +303,7 @@
       "highlights": "Hervorhebungen",
       "no-results": "Die Agenten-Suche hat keine Ergebnisse für \"{{query}}\" gefunden.",
       "followupTitle": "Diese Ergebnisse verfeinern",
+      "previousResultsTitle": "Ergebnisse aus vorherigen Suchen in diesem Kontext",
       "followupPlaceholder": "Stelle eine Folgefrage...",
       "followupButton": "Verfeinern",
       "finishNowButton": "Sofortige Ergebnisse",

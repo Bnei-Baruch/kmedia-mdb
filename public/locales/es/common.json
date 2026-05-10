@@ -305,6 +305,7 @@
       "highlights": "Fragmentos destacados",
       "no-results": "La búsqueda con agente no encontró resultados para \"{{query}}\".",
       "followupTitle": "Refinar estos resultados",
+      "previousResultsTitle": "Resultados de búsquedas anteriores en este contexto",
       "followupPlaceholder": "Haz una pregunta de seguimiento...",
       "followupButton": "Refinar",
       "finishNowButton": "Resultados inmediatos",
