@@ -70,9 +70,9 @@ body {
     .layout__sidebar-header {
       height: $main-menu-height;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       flex-direction: column;
-      gap: 1em;
+      padding: 0 1em;
       left: 0;
       position: absolute;
       right: 0;

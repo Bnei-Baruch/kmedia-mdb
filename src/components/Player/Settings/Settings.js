@@ -22,7 +22,7 @@ const Settings = () => {
     <div className="settings">
       {
         mode !== PLAYER_OVER_MODES.languages && (
-          <div className={clsx("settings__pane", { "w-full": isMobileDevice })} >
+          <div className={clsx('settings__pane', { 'w-full': isMobileDevice })} >
             {!isMobileDevice && <MediaTypeControl />}
             <SubsControl />
             <RateControl />

@@ -92,7 +92,7 @@ const Info = () => {
   return (
     <>
       <PersonalInfo collection={currentCollection}/>
-      <div className="unit-info">
+      <div className="unit-info px-2 md:px-1">
         {
           !isMultiLessons && noSSeries.length > 0 && (
             <>

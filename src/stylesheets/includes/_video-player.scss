@@ -97,15 +97,11 @@
   .avbox__playlist-header {
     color: colors-helpers.$darkWhite;
     background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
+    padding: .5rem;
+
 
     @include responsive-helpers.mobile {
-      padding: 1em 0.5em;
-      font-size: 18px;
-
-      & small {
-        font-size: 14px;
-
-      }
+      font-size: 1rem;
     }
 
     font-size: 1.3rem;
@@ -117,11 +113,6 @@
 
     .playlist_icon {
       vertical-align: bottom;
-    }
-
-    & small {
-      font-size: 70%;
-      padding: 5px;
     }
   }
 

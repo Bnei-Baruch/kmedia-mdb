@@ -74,23 +74,39 @@
 
   background: colors-helpers.$darkWhite;
 
-  &>.menu {
+  &>.tabs {
+    display: flex;
+    border-bottom: 1px solid grey-500;
+    gap: 1em;
+
     @include responsive-helpers.mobile {
       overflow-x: auto;
       overflow-y: hidden;
       border-bottom: 0 !important;
     }
 
-    padding: 0 0 0.5em 0;
-    margin: 0;
-
     .item {
       @include responsive-helpers.mobile {
-        flex: 2 0 auto !important;
-        padding: 1em 0.5em !important;
+        flex: 2 0 auto;
+        padding: 1em 0.5em;
+        white-space: nowrap;
       }
 
-      padding: 1em !important;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      color: #6b7280;
+
+      &:hover {
+        color: #374151;
+        border-bottom-color: #d1d5db;
+      }
+
+      &.active {
+        border-bottom-color: #3b82f6;
+        color: #2563eb;
+      }
     }
   }
 

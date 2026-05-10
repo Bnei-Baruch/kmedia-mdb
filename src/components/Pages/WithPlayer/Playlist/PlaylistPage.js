@@ -34,7 +34,7 @@ const PlaylistPage = ({ playerContainer }) => {
       <div className='flex-1 min-w-0'>
         <PlaylistHeader />
         {isReady && playerContainer}
-        <div className="px-4" id="unit_container">
+        <div id="unit_container">
           <Info />
           <Materials />
         </div>

@@ -102,7 +102,7 @@ const PlaylistHeader = () => {
     const _mobStyles = isMobileDevice ? 'flex justify-between gap-2 items-end' : '';
 
     return (
-      <div className='avbox__playlist-header px-4 py-4'>
+      <div className='avbox__playlist-header'>
         <div className='flex flex-justify gap-4 justify-between py-2'>
           <h2 className='my-0 bold'>{getTitle()}</h2>
           {isLesson && !isMobileDevice && <LessonDatePickerContainer />}

@@ -50,7 +50,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
 
   const dateButton = (
     <div
-      className={clsx('dateButton inline-flex items-center py-2 font-bold cursor-pointer gap-2', { 'dateButton_with_label': withLabel })}
+      className={clsx('dateButton inline-flex items-center py-2 font-bold cursor-pointer gap-1 md:text-sm', { 'dateButton_with_label': withLabel })}
       onClick={openNativeDatePicker}
     >
       <Icon icon={faCalendarDays} className="large" />

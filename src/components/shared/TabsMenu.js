@@ -15,7 +15,7 @@ const paramsFromLocation = location => {
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
 const TabsMenu = ({ items = [], active = '' }) => {
-  const location                          = useLocation();
+  const location = useLocation();
   const { activeLocation, isHighLighted } = paramsFromLocation(location);
 
   const computedActive = active
@@ -23,7 +23,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
-  const handleActiveChange                  = useCallback((e, { name }) => setInternalActive(name), []);
+  const handleActiveChange = useCallback((e, { name }) => setInternalActive(name), []);
 
   const scrollRef = useRef();
 
@@ -39,7 +39,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
 
   return (
     <div className="unit-materials">
-      <nav ref={scrollRef} className="flex border-b border-gray-200 no_print">
+      <nav ref={scrollRef} className="tabs no_print">
         {
           items.map(item => {
             const { name, label } = item;
@@ -47,7 +47,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
               <Link
                 key={name}
                 to={`?activeTab=${name}`}
-                className={`tab-${name} px-4 py-2 small font-medium border-b-2 ${internalActive === name ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                className={`tab-${name} item${internalActive === name ? ' active' : ''}`}
                 onClick={e => handleActiveChange(e, { name })}
               >{label}</Link>
             );
