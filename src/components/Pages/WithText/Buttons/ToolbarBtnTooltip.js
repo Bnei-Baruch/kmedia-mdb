@@ -34,7 +34,7 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
     <div className="relative inline-block group">
       <div
         {...rest}
-        className={clsx(extraClass, { 'active': active, 'disabled': disabled })}
+        className={clsx(extraClass, { active, disabled })}
         disabled={disabled}
       >
         {icon}

@@ -21,7 +21,8 @@ const tagsSlice = createSlice({
     error: null,
     dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
     loaded: false,
-    byId: {}
+    byId: {},
+    roots: [],
   },
 
   reducers: {

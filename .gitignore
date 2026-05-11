@@ -44,3 +44,7 @@ build.zip
 !/.yarn/releases/
 /__MACOSX
 .cursorrules
+/playwright-report
+e2e/snapshots/
+/playwright-report
+/test-results

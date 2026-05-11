@@ -31,7 +31,13 @@
     "prepare": "husky install",
     "start-js": "vite",
     "build:scripts": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "e2e": "playwright test",
+    "e2e:update": "BASE_URL=https://kabbalahmedia.info playwright test --update-snapshots",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report",
+    "e2e:lessons": "playwright test e2e/lessons/",
+    "e2e:install": "playwright install"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -44,6 +50,7 @@
     "@babel/traverse": "^7.28.5",
     "@babel/types": "^7.28.5",
     "@eslint/compat": "^2.0.1",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/cli": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.3.1",

@@ -1,0 +1,84 @@
+import { test, expect } from '@playwright/test';
+import { LessonItemPage } from '../pages/LessonItemPage';
+
+test.describe('Lesson item page (daily/latest)', () => {
+  test('loads player container', async ({ page }) => {
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    await expect(lessonPage.playerContainer).toBeVisible();
+  });
+
+  test('shows unit info section', async ({ page }) => {
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    await expect(lessonPage.unitContainer).toBeVisible();
+  });
+
+  test('shows sidebar with playlist on desktop', async ({ page }) => {
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    // sidebar is only visible on desktop (hidden via max-md:hidden)
+    const viewport = page.viewportSize();
+    if (viewport && viewport.width >= 768) {
+      await expect(lessonPage.sidebarItems).toBeVisible();
+    }
+  });
+
+  test('no JS errors on page load', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', err => errors.push(err.message));
+
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    expect(errors).toHaveLength(0);
+  });
+});
+
+test.describe('Lesson item — materials section', () => {
+  test('materials tabs visible after scroll', async ({ page }) => {
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    await lessonPage.materialsContainer.scrollIntoViewIfNeeded();
+    await expect(lessonPage.materialsTabs).toBeVisible();
+
+    await expect(page).toHaveScreenshot('lesson-item-materials-top.png', {
+      fullPage: false,
+      maxDiffPixelRatio: 0.02,
+    });
+  });
+
+  for (const tab of ['transcription', 'sources', 'sketches', 'downloads'] as const) {
+    test(`materials tab "${tab}" renders content`, async ({ page }) => {
+      const lessonPage = new LessonItemPage(page);
+      await lessonPage.gotoDailyLatest();
+
+      await lessonPage.materialsContainer.scrollIntoViewIfNeeded();
+      await lessonPage.materialsTab(tab).click();
+      await expect(lessonPage.materialsTab(tab)).toHaveClass(/active/);
+
+      await expect(page).toHaveScreenshot(`lesson-item-tab-${tab}.png`, {
+        fullPage: false,
+        maxDiffPixelRatio: 0.02,
+      });
+    });
+  }
+});
+
+test.describe('Lesson item — visual snapshots', () => {
+  test('daily latest matches snapshot', async ({ page }) => {
+    const lessonPage = new LessonItemPage(page);
+    await lessonPage.gotoDailyLatest();
+
+    await page.waitForTimeout(1000);
+
+    await expect(page).toHaveScreenshot('lesson-item-daily-latest.png', {
+      fullPage: false,
+      maxDiffPixelRatio: 0.02,
+    });
+  });
+});

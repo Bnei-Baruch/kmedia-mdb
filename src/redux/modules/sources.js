@@ -109,7 +109,7 @@ const sourcesSlice = createSlice({
       state.byId           = byId;
       state.byIdAZ         = byIdAZ;
       state.loaded         = true;
-      state.roots          = sources.map(x => x.id);
+      state.roots          = sources?.map(x => x.id) || [];
       state.sortBy         = 'Book';
     },
 
