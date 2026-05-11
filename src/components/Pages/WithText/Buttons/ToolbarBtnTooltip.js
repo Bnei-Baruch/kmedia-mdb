@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { settingsGetUIDirSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import clsx from 'clsx';
 
 const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, active, content, ...rest }) => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
   disabled = disabled ?? noFile;
   if (isMobileDevice) {
     return (
-      <button
+      <div
         {...rest}
         className={`text_toolbar_btn_with_text ${extraClass || ''}`}
         disabled={disabled}
@@ -25,20 +26,20 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
         <span className="title">
           {t(`page-with-text.buttons.mobile.${textKey}`)}
         </span>
-      </button>
+      </div>
     );
   }
 
   return (
     <div className="relative inline-block group">
-      <button
+      <div
         {...rest}
-        className={`${extraClass || ''} ${active ? 'active' : ''}`}
+        className={clsx(extraClass, { 'active': active, 'disabled': disabled })}
         disabled={disabled}
       >
         {icon}
         {content}
-      </button>
+      </div>
       {!disabled && (
         <div
           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block rounded bg-gray-800 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
