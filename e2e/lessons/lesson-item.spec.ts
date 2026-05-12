@@ -59,8 +59,14 @@ test.describe('Lesson item — materials section', () => {
       await lessonPage.materialsContainer.evaluate(el => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
       await lessonPage.materialsTab(tab).click();
       await expect(lessonPage.materialsTab(tab)).toHaveClass(/active/);
-      // wait for TabsMenu's built-in 150ms scroll effect and content load to settle
-      await page.waitForTimeout(300);
+      // wait for text content fetch + TabsMenu 150ms scroll animation to settle
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(150);
+
+      if (tab === 'transcription') {
+        // verify the transcription tab component itself is rendered
+        await expect(page.locator('.player_page_tab')).toBeVisible({ timeout: 5000 });
+      }
 
       await expect(lessonPage.materialsContainer).toHaveScreenshot(`lesson-item-tab-${tab}.png`, {
         maxDiffPixelRatio: 0.02,

@@ -81,8 +81,6 @@
 
     @include responsive-helpers.mobile {
       overflow-x: auto;
-      overflow-y: hidden;
-      border-bottom: 0 !important;
     }
 
     .item {

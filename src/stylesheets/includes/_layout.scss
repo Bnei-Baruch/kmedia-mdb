@@ -120,14 +120,9 @@ body {
   }
 }
 
-.content {
-  &__aside {
-    &-unit {
-      padding: 1em;
-      margin-bottom: 2em;
-      width: 100%
-    }
-  }
+.content__aside-unit {
+  margin-bottom: 2em;
+  width: 100%
 }
 
 @media only screen and (min-width: $largeMonitorBreakpoint) {

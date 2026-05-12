@@ -39,7 +39,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
 
   return (
     <div className="unit-materials">
-      <nav ref={scrollRef} className="tabs no_print">
+      <nav ref={scrollRef} className="tabs no_print md:border-b-0 pb-0.5">
         {
           items.map(item => {
             const { name, label } = item;

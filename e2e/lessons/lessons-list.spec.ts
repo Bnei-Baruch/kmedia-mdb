@@ -30,6 +30,7 @@ test.describe('Lessons list page', () => {
     const lessonsPage = new LessonsListPage(page);
     await lessonsPage.gotoTab();
 
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await expect(lessonsPage.pagination).toBeVisible();
   });
 

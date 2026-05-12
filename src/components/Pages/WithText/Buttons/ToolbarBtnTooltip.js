@@ -34,7 +34,7 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
     <div className="relative inline-block group">
       <div
         {...rest}
-        className={clsx(extraClass, { active, disabled })}
+        className={clsx('button', extraClass, { active, disabled })}
         disabled={disabled}
       >
         {icon}
@@ -42,7 +42,7 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
       </div>
       {!disabled && (
         <div
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block rounded bg-gray-800 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
+          className="absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block rounded bg-gray-800 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
           dir={dir}
         >
           {t(`page-with-text.buttons.web.${textKey}`)}

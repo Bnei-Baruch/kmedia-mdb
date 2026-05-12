@@ -218,25 +218,25 @@ class MediaDownloads extends Component {
     const url                  = downloadLink(file);
 
     return (
-      <tr key={`${file.id}_${file.video_size}`} className="media-downloads__file align-top">
-        <td>
+      <div key={`${file.id}_${file.video_size}`} className="flex items-start gap-4 py-1 border-b last:border-b-0 border-gray-300">
+        <div className="flex-1">
           <span className="media-downloads__file-label">{label}</span>
-        </td>
-        <td className="whitespace-nowrap">
+        </div>
+        <div className="shrink-0 whitespace-nowrap">
           <a
             href={url}
             target="_blank"
             rel="noreferrer"
-            className="inline-block px-2 py-0.5 bg-orange-500 text-white rounded text-xs media-downloads__file-download-btn"
+            className="inline-block px-2 py-0.5 bg-orange-500 text-white rounded text-xs hover:text-white"
             onClick={() => chroniclesAppend('download', { url, uid: file.id })}
           >
             {ext.toUpperCase()}
           </a>
-        </td>
-        <td className="whitespace-nowrap relative">
+        </div>
+        <div className="shrink-0 whitespace-nowrap relative">
           <CopyToClipboard text={url} onCopy={() => this.handleCopied(url)}>
             <button
-              className="px-2 py-0.5 bg-orange-500 text-white rounded text-xs media-downloads__file-copy-link-btn"
+              className="px-2 py-0.5 bg-orange-500 text-white rounded text-xs cursor-pointer border-none"
             >
               {t('buttons.copy-link')}
             </button>
@@ -246,8 +246,8 @@ class MediaDownloads extends Component {
               {t('messages.link-copied-to-clipboard')}
             </span>
           )}
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   };
 
@@ -267,13 +267,13 @@ class MediaDownloads extends Component {
     const derivedRows = this.getDerivedRows(derivedGroups, selectedLanguage, t, typeOverrides, publisherById);
 
     return (
-      <div className="media-downloads content__aside-unit">
+      <div className="p-4 ">
         {availableLanguages.length > 1 ?
-          <div className={classNames('flex flex-wrap', { 'padding_r_l_0': !isMobileDevice })}>
+          <div className='flex flex-wrap mb-4'>
             {!isMobileDevice &&
               <div className="w-3/4">
               </div>}
-            <div className={classNames(isMobileDevice ? 'w-full' : 'w-1/4', 'text-right', { 'padding_r_l_0': !isMobileDevice })}>
+            <div className={classNames(isMobileDevice ? 'w-full' : 'w-1/4', 'text-right')}>
               <MenuLanguageSelector
                 languages={availableLanguages}
                 selected={selectedLanguage}
@@ -285,12 +285,10 @@ class MediaDownloads extends Component {
           : displayDivider &&
           <hr />
         }
-        <table className="media-downloads__files w-full">
-          <tbody>
-            {rows}
-            {derivedRows || null}
-          </tbody>
-        </table>
+        <div className="media-downloads__files w-full">
+          {rows}
+          {derivedRows || null}
+        </div>
       </div>
     );
   }
@@ -369,9 +367,7 @@ class MediaDownloads extends Component {
     let rows;
     if (byType.size === 0) {
       rows = [
-        <tr key="0">
-          <td>{t('messages.no-files')}</td>
-        </tr>
+        <div key="0">{t('messages.no-files')}</div>
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
