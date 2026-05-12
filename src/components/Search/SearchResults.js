@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Button, Container, Divider, Header, Icon, Input, Label, Message } from 'semantic-ui-react';
+import { Button, Card, Container, Divider, Feed, Header, Icon, Input, Label, Message } from 'semantic-ui-react';
 
 import {
   CT_BLOG_POST,
@@ -26,6 +26,7 @@ import { getQuery, isDebMode } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
 import { actions, SEARCH_TYPES } from '../../redux/modules/search';
+import { actions as publicationActions } from '../../redux/modules/publications';
 
 import { filtersTransformer } from '../../filters';
 import WipErr from '../shared/WipErr/WipErr';
@@ -50,11 +51,13 @@ import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
 import UnitLogo from '../shared/Logo/UnitLogo';
+import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { SectionLogo } from '../../helpers/images';
 import {
   sourcesAreLoadedSelector,
   tagsAreLoadedSelector,
   publicationsGetBlogPostSelector,
+  publicationsGetTwitterSelector,
   mdbGetDenormCollectionSelector,
   mdbGetDenormContentUnitSelector,
   filtersGetFiltersSelector,
@@ -71,6 +74,57 @@ import {
 import Link from '../Language/MultiLanguageLink';
 
 const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'done', 'error'];
+const AGENTIC_TWEET_RESULT_TYPES = new Set(['twitter', 'tweet', 'tweets', 'tweets_many']);
+
+const getAgenticResultMeta = result => {
+  const resultType = result.result_type || '';
+
+  switch (resultType) {
+    case 'sources':
+    case 'source':
+      return { contentType: result.content_type || CT_SOURCE, linkContentType: CT_SOURCE };
+    case 'tags':
+    case 'tag':
+    case 'topics':
+    case 'topic':
+      return { contentType: result.content_type || CT_TAG, linkContentType: CT_TAG };
+    case 'posts':
+    case 'post':
+    case 'blog_posts':
+    case 'blog_post':
+      return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+    case 'tweets':
+    case 'tweet':
+    case 'tweets_many':
+    case 'twitter':
+      return { contentType: result.content_type || SCT_TWEET, linkContentType: SCT_TWEET };
+    default:
+      if (result.content_type === 'POST') {
+        return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+      }
+
+      if (result.content_type === CT_BLOG_POST) {
+        return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
+      }
+
+      if (result.content_type === CT_TAG) {
+        return { contentType: CT_TAG, linkContentType: CT_TAG };
+      }
+
+      if (result.content_type === SCT_TWEET) {
+        return { contentType: SCT_TWEET, linkContentType: SCT_TWEET };
+      }
+
+      return {
+        contentType    : result.content_type || '',
+        linkContentType: result.content_type || ''
+      };
+  }
+};
+
+const isAgenticTweetResult = result => !!result?.mdb_uid && (
+  AGENTIC_TWEET_RESULT_TYPES.has(result?.result_type) || getAgenticResultMeta(result).contentType === SCT_TWEET
+);
 
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
@@ -153,12 +207,43 @@ const SearchResults = ({ t }) => {
   const filters          = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
   const areTagsLoaded    = useSelector(tagsAreLoadedSelector);
+  const agenticTweetIds  = React.useMemo(() => {
+    if (!isAgenticSearch) {
+      return [];
+    }
+
+    const currentResults  = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
+    const previousResults = Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [];
+
+    return [...currentResults, ...previousResults]
+      .filter(isAgenticTweetResult)
+      .map(result => result.mdb_uid)
+      .filter((mdbUid, index, ids) => ids.indexOf(mdbUid) === index);
+  }, [reasoningPreviousResults, reasoningResult]);
+  const agenticTweetsById = useSelector(state => agenticTweetIds.reduce((acc, mdbUid) => {
+    const tweet = publicationsGetTwitterSelector(state, mdbUid);
+    if (tweet) {
+      acc[mdbUid] = tweet;
+    }
+
+    return acc;
+  }, {}));
+  const missingAgenticTweetIds = agenticTweetIds.filter(mdbUid => !agenticTweetsById[mdbUid]);
+  const missingAgenticTweetIdsKey = missingAgenticTweetIds.join(',');
 
   React.useEffect(() => {
     if (!reasoningResult) {
       setFollowupStatusQuery('');
     }
   }, [reasoningResult]);
+
+  React.useEffect(() => {
+    if (!isAgenticSearch || missingAgenticTweetIds.length === 0) {
+      return;
+    }
+
+    dispatch(publicationActions.fetchTweets('tweets_many', 1, { id: missingAgenticTweetIds }));
+  }, [dispatch, isAgenticSearch, missingAgenticTweetIdsKey]);
 
   React.useEffect(() => {
     if (!scrollToAgenticStatus || !wip || !agenticStatusRef.current) {
@@ -378,52 +463,6 @@ const SearchResults = ({ t }) => {
     );
   };
 
-  const getAgenticResultMeta = result => {
-    const resultType = result.result_type || '';
-
-    switch (resultType) {
-      case 'sources':
-      case 'source':
-        return { contentType: result.content_type || CT_SOURCE, linkContentType: CT_SOURCE };
-      case 'tags':
-      case 'tag':
-      case 'topics':
-      case 'topic':
-        return { contentType: result.content_type || CT_TAG, linkContentType: CT_TAG };
-      case 'posts':
-      case 'post':
-      case 'blog_posts':
-      case 'blog_post':
-        return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
-      case 'tweets':
-      case 'tweet':
-      case 'tweets_many':
-      case 'twitter':
-        return { contentType: result.content_type || SCT_TWEET, linkContentType: SCT_TWEET };
-      default:
-        if (result.content_type === 'POST') {
-          return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
-        }
-
-        if (result.content_type === CT_BLOG_POST) {
-          return { contentType: CT_BLOG_POST, linkContentType: 'POST' };
-        }
-
-        if (result.content_type === CT_TAG) {
-          return { contentType: CT_TAG, linkContentType: CT_TAG };
-        }
-
-        if (result.content_type === SCT_TWEET) {
-          return { contentType: SCT_TWEET, linkContentType: SCT_TWEET };
-        }
-
-        return {
-          contentType    : result.content_type || '',
-          linkContentType: result.content_type || ''
-        };
-    }
-  };
-
   const getAgenticLink = (result, linkContentType) => {
     const currentLink = { pathname: location.pathname, search: location.search, hash: location.hash };
 
@@ -540,6 +579,12 @@ const SearchResults = ({ t }) => {
     );
   };
 
+  const getAgenticHighlights = result => (
+    Array.isArray(result.highlights)
+      ? result.highlights.map(highlight => `${highlight}`.trim()).filter(Boolean)
+      : []
+  );
+
   const renderAgenticHit = (result, rank) => {
     const { contentType, linkContentType } = getAgenticResultMeta(result);
     const to          = getAgenticLink(result, linkContentType);
@@ -548,9 +593,7 @@ const SearchResults = ({ t }) => {
       : '';
     const programName      = result.program_name ? `${result.program_name}`.trim() : '';
     const collectionTitle  = [contentTypeLabel, programName].filter(Boolean).join(' | ');
-    const highlights       = Array.isArray(result.highlights)
-      ? result.highlights.map(highlight => `${highlight}`.trim()).filter(Boolean)
-      : [];
+    const highlights       = getAgenticHighlights(result);
 
     return <SearchResultOneItem
       key={`${result.mdb_uid}_${rank}`}
@@ -563,6 +606,64 @@ const SearchResults = ({ t }) => {
       date={result.date}
       click={() => null}
     />;
+  };
+
+  const renderAgenticTweetGroup = (tweetResults, startRank) => {
+    const tweets = tweetResults.map(result => ({
+      tweet    : agenticTweetsById[result.mdb_uid],
+      highlights: getAgenticHighlights(result),
+      result
+    }));
+
+    if (tweets.some(item => !item.tweet)) {
+      return tweetResults.map((result, offset) => renderAgenticHit(result, startRank + offset));
+    }
+
+    return (
+      <div
+        key={tweetResults.map(result => result.mdb_uid).join('_')}
+        className="agentic-search__tweet-result"
+      >
+        <Card.Group className="search__cards" itemsPerRow={3} stackable>
+          {tweets.map(({ tweet, highlights, result }) => (
+            <Card key={result.mdb_uid} className="bg_hover_grey home-twitter" raised>
+              <Card.Content>
+                <Feed className="min-height-200">
+                  <TwitterFeed snippetVersion withDivider={false} twitter={tweet} highlight={highlights[0]} />
+                </Feed>
+              </Card.Content>
+            </Card>
+          ))}
+        </Card.Group>
+      </div>
+    );
+  };
+
+  const renderAgenticResultsList = results => {
+    const nodes = [];
+
+    for (let index = 0; index < results.length; index += 1) {
+      const result = results[index];
+      if (!isAgenticTweetResult(result)) {
+        nodes.push(renderAgenticHit(result, index));
+        continue;
+      }
+
+      const tweetResults = [result];
+      while (index + 1 < results.length && isAgenticTweetResult(results[index + 1])) {
+        tweetResults.push(results[index + 1]);
+        index += 1;
+      }
+
+      const groupNode = renderAgenticTweetGroup(tweetResults, index - tweetResults.length + 1);
+      if (Array.isArray(groupNode)) {
+        nodes.push(...groupNode);
+      } else {
+        nodes.push(groupNode);
+      }
+    }
+
+    return nodes;
   };
 
   const handleReasoningFollowup = () => {
@@ -652,12 +753,12 @@ const SearchResults = ({ t }) => {
             />
           )}
           {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
-          {results.length > 0 && <div className="agentic-search__results">{results.map(renderAgenticHit)}</div>}
+          {results.length > 0 && <div className="agentic-search__results">{renderAgenticResultsList(results)}</div>}
           {renderAgenticFollowup()}
           {previousResults.length > 0 && (
             <>
               <Header as="h4" content={t('search.agentic.previousResultsTitle')} />
-              <div className="agentic-search__results">{previousResults.map((result, rank) => renderAgenticHit(result, rank))}</div>
+              <div className="agentic-search__results">{renderAgenticResultsList(previousResults)}</div>
             </>
           )}
         </Container>
