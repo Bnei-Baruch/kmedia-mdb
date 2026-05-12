@@ -22,13 +22,13 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(colors-helpers.$fullBlack, 0.5);
     padding: 4px 8px;
     font-size: 1.1em;
     line-height: 1;
 
     &:hover {
-      color: rgba(0, 0, 0, 0.8);
+      color: rgba(colors-helpers.$fullBlack, 0.8);
     }
   }
 
@@ -57,7 +57,7 @@
 
         //border-bottom: none !important;
         &:last-child {
-          border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
+          border-bottom: 1px solid rgba(colors-helpers.$border-base, .1) !important;
           margin-bottom: 1px;
         }
 

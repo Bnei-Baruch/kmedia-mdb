@@ -1,5 +1,6 @@
 @use 'variables' as *;
 @use 'responsive-helpers' as *;
+@use 'colors-helpers';
 
 $menu-derive: 1rem;
 $menu-derive-mobile: .5rem;
@@ -51,7 +52,7 @@ $menu-derive-mobile: .5rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: rgba($color: #ffffff, $alpha: .8);
+  color: rgba(colors-helpers.$white, .8);
   font-weight: bold;
   cursor: pointer;
 

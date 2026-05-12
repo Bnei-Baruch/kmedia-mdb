@@ -23,6 +23,11 @@ module.exports = {
         'blue-dark': '#134D78',
         'gray-light': '#F3F4F5',
         'blue-light': '#F4F9FB',
+        'social-facebook': '#1877f2',
+        'social-twitter': '#1da1f2',
+        'social-whatsapp': '#25d366',
+        'social-telegram': '#0088cc',
+        'social-ok': '#ee8208',
       },
       height: {
         'button-sm': '32px',

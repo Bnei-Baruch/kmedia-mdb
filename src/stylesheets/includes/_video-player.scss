@@ -96,7 +96,7 @@
 
   .avbox__playlist-header {
     color: colors-helpers.$darkWhite;
-    background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
+    background-image: linear-gradient(0deg, colors-helpers.$black, rgba(colors-helpers.$black, .85));
     padding: .5rem;
 
 

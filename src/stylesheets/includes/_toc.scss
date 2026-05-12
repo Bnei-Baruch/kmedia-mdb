@@ -149,7 +149,7 @@
     }
 
     &.toc_single_level > .title {
-      border-bottom: 1px solid rgba(0, 86, 151, 0.1);
+      border-bottom: 1px solid rgba(colors-helpers.$navy, 0.1);
       padding: 16px 0;
       cursor: pointer;
 

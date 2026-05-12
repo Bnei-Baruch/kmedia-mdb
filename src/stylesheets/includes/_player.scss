@@ -1,19 +1,19 @@
 @use "colors-helpers";
 @use "sass:color";
 
-$controls-bg: rgba(27, 28, 29, .9);
-$controls-overlay: rgba(0, 0, 0, .7);
-$controls-bg-hover: rgba(27, 28, 29, 1);
+$controls-bg: rgba(colors-helpers.$black, .9);
+$controls-overlay: rgba(colors-helpers.$fullBlack, .7);
+$controls-bg-hover: colors-helpers.$black;
 $controls-radius: 4px;
 
 //Colors
-$whatsappColor: #25d366;
+$whatsappColor: colors-helpers.$social-whatsapp;
 //$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
 $whatsappDownColor: color.adjust($whatsappColor, $lightness: -10%);
 $telegramColor: #27a6e6;
 //$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
 $telegramDownColor: color.adjust($telegramColor, $lightness: -10%);
-$odnoklassnikiColor: #EE8208;
+$odnoklassnikiColor: colors-helpers.$social-ok;
 //$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
 $odnoklassnikiDownColor: color.adjust($odnoklassnikiColor, $lightness: -10%);
 

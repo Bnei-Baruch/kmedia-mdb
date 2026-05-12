@@ -135,7 +135,7 @@
 
     .unit-tag-item {
       scroll-snap-align: start;
-      background: rgba(51, 118, 214, 0.08);
+      background: rgba(colors-helpers.$blue, 0.08);
       border-radius: 5px;
 
 
@@ -147,41 +147,41 @@
       }
 
       &:hover {
-        background: rgba(28, 93, 187, 0.08);
+        background: rgba(colors-helpers.$light-hover-btn, 0.08);
 
         a {
-          color: #1C5DBB;
+          color: colors-helpers.$light-hover-btn;
         }
       }
 
       &:active {
-        background: rgba(26, 67, 120, 0.08);
+        background: rgba(colors-helpers.$light-active-text, 0.08);
 
         a {
-          color: #1A4378;
+          color: colors-helpers.$light-active-text;
         }
       }
 
       .is-dark & {
-        background: rgba(51, 118, 214, 0.28);
+        background: rgba(colors-helpers.$blue, 0.28);
 
         a {
           color: colors-helpers.$blue;
         }
 
         &:hover {
-          background: rgba(160, 214, 255, 0.28);
+          background: rgba(colors-helpers.$dark-btn-hover, 0.28);
 
           a {
-            color: #A0D6FF;
+            color: colors-helpers.$dark-btn-hover;
           }
         }
 
         &:active {
-          background: rgba(28, 93, 187, 0.28);
+          background: rgba(colors-helpers.$light-hover-btn, 0.28);
 
           a {
-            color: #1C5DBB;
+            color: colors-helpers.$light-hover-btn;
           }
         }
       }

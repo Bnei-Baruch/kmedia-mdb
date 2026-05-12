@@ -1,64 +1,89 @@
-$border-color: rgba(34, 36, 38, .15);
-$red: #db2828;
+// --- Semantic UI palette ---
+$red:    #db2828;
 $orange: #f2711c;
 $yellow: #fbbd08;
-$olive: #b5cc18;
-$green: #21ba45;
-$teal: #00b5ad;
-$blue: #3376D6;
-$blue-semantic: #2185d0;
-// $blue: #00aeef; //bb style guide blue
+$olive:  #b5cc18;
+$green:  #21ba45;
+$teal:   #00b5ad;
+$blue:   #3376D6;
 $violet: #6435c9;
 $purple: #a333c8;
-$pink: #e03997;
-$brown: #a5673f;
-$midGrey: #828282;
-$grey: #767676;
-$black: #1b1c1d;
-$stroke-gray: #E8E8E8;
+$pink:   #e03997;
+$brown:  #a5673f;
 
+// --- Brand blues ---
+$blue-semantic:    #2185d0;
+$blue-4183:        #4183C4;
+$blue-medium:      #2C90DC;
+$navy:             #005697;
+
+// --- Neutrals ---
+$fullBlack:  #000;
+$black:      #1b1c1d;
+$text-color: #212121;
+$midGrey:    #828282;
+$grey:       #767676;
+$midWhite:   #dcddde;
+$darkWhite:  #f3f4f5;
+$offWhite:   #f9fafb;
+$white:      #fff;
+
+// --- Borders & strokes ---
+$border-base:  #222426;
+$border-color: rgba($border-base, .15);
+$stroke-gray:  #E8E8E8;
+
+// --- Highlights ---
+$highlight-yellow: #ffdb00;
+$highlight-orange: #ff8002;
+$sky-blue:         #7DCFF5;
+$cloud-blue:       #C5DDFA;
+
+// --- Social media ---
+$social-facebook: #1877f2;
+$social-twitter:  #1da1f2;
+$social-whatsapp: #25d366;
+$social-telegram: #0088cc;
+$social-ok:       #ee8208;
+
+// --- Active state ---
 $active: #c2c1c1;
 
-$light-text: #757575;
-$light-stroke: #EFECEB;
+// --- Theme: Light ---
+$light-text:        #757575;
+$light-stroke:      #EFECEB;
 $light-active-text: #1A4378;
-$light-hover-btn: #1C5DBB; 
+$light-hover-btn:   #1C5DBB;
 
-$sepia-bg: #f4ecd8;
-$sepia-text: #5B4636;
-$sepia-stroke: #c0a596;
+// --- Theme: Sepia ---
+$sepia-bg:          #f4ecd8;
+$sepia-text:        #5B4636;
+$sepia-stroke:      #c0a596;
 $sepia-active-text: #1A4378;
 
-$dark-bg: #010101;
-$dark-text: #D4D4D4;
-$dark-hover: #767676;
-$dark-btn-hover: #A0D6FF;
-$dark-stroke: rgba(242, 242, 242, .3);
+// --- Theme: Dark ---
+$dark-bg:          #010101;
+$dark-text:        #D4D4D4;
+$dark-hover:       #767676;
+$dark-btn-hover:   #A0D6FF;
+$dark-stroke:      rgba(#f2f2f2, .3);
 $dark-active-text: #1C5DBB;
 
-$text-color: #212121;
-
-// Neutrals
-$fullBlack: #000;
-$offWhite: #f9fafb;
-$darkWhite: #f3f4f5;
-$midWhite: #dcddde;
-$white: #fff;
 $text-colors: (
-        red: $red,
-        orange: $orange,
-        yellow: #b58105, // Yellow text is difficult to read
-        olive: #8abc1e, // Olive is difficult to read
-        green: #1ebc30, // Green is difficult to read
-        teal: #10a3a3, // Teal text is difficult to read
-        blue: $blue,
-        violet: $violet,
-        purple: $purple,
-        pink: $pink,
-        brown: $brown,
-        grey: $grey,
-        black: $black,
-        white: $white
+  red:    $red,
+  orange: $orange,
+  yellow: #b58105,
+  olive:  #8abc1e,
+  green:  #1ebc30,
+  teal:   #10a3a3,
+  blue:   $blue,
+  violet: $violet,
+  purple: $purple,
+  pink:   $pink,
+  brown:  $brown,
+  grey:   $grey,
+  black:  $black,
+  white:  $white,
 );
 
 @each $colorname, $colorvalue in $text-colors {

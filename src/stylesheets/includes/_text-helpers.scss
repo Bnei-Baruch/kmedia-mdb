@@ -59,12 +59,12 @@ blockquote {
 }
 
 ::highlight(selected_marker) {
-  background-color: rgba(255, 219, 0, 0.4);
+  background-color: rgba(colors-helpers.$highlight-yellow, 0.4);
 }
 
 ::highlight(selected_search) {
-  background-color: rgba(255, 128, 2, 0.8);
+  background-color: rgba(colors-helpers.$highlight-orange, 0.8);
 }
 ::highlight(found_search) {
-  background-color: rgba(255, 128, 2, 0.4);
+  background-color: rgba(colors-helpers.$highlight-orange, 0.4);
 }

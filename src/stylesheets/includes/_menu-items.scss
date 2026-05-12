@@ -20,11 +20,11 @@ aside.sidebar-nav {
     color: black;
 
     &:hover {
-      background: rgba(0, 0, 0, .03);
+      background: rgba(colors-helpers.$fullBlack, .03);
     }
 
     &.active {
-      background: rgba(0, 0, 0, .03);
+      background: rgba(colors-helpers.$fullBlack, .03);
       color: colors-helpers.$blue;
     }
   }
@@ -44,7 +44,7 @@ aside.sidebar-nav {
 .sidebar-nav__subtitle {
   display: block;
   font-size: .85714286rem;
-  color: rgba(255, 255, 255, .7);
+  color: rgba(colors-helpers.$white, .7);
   margin: .25em .25rem;
 }
 
@@ -55,15 +55,15 @@ aside.sidebar-nav {
   margin-top: .5rem;
   padding: .5em 1em;
   font-size: 1.14285714rem;
-  color: rgba(255, 255, 255, .9);
+  color: rgba(colors-helpers.$white, .9);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, .5);
+  border: 1px solid rgba(colors-helpers.$white, .5);
   border-radius: .28571429rem;
   cursor: pointer;
   text-decoration: none;
 
   &:hover {
-    background: rgba(255, 255, 255, .08);
+    background: rgba(colors-helpers.$white, .08);
     color: #fff;
   }
 }

@@ -107,7 +107,7 @@
       cursor: pointer;
 
       &:hover {
-        background: rgba(0, 0, 0, .05);
+        background: rgba(colors-helpers.$fullBlack, .05);
       }
     }
   }

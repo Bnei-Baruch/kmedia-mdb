@@ -194,7 +194,7 @@
 .collection-header {
   .social-buttons {
     position: relative;
-    background: rgba(27, 28, 29, 0.8);
+    background: rgba(colors-helpers.$black, 0.8);
     border-radius: calc(49px / 2 + .5rem);
     margin: .6rem -.3rem;
     padding: 0.25rem;
@@ -583,7 +583,7 @@
           box-shadow: none;
           background: #ebecf0;
           color: #1a4179;
-          border: 1px solid rgba(34, 36, 38, 0.15);
+          border: 1px solid colors-helpers.$border-color;
           border-radius: .28571429rem;
           box-sizing: content-box;
 
@@ -628,7 +628,7 @@
     border: 1px solid #7dcff5;
     border-left-width: 4px;
     border-radius: 4px;
-    background-color: rgba(125, 207, 245, 0.16);
+    background-color: rgba(colors-helpers.$sky-blue, 0.16);
 
     .content {
       white-space: pre-wrap;
@@ -910,7 +910,7 @@
 
   .tweet-friendly-date {
     text-align: right;
-    color: rgba(118, 118, 118, 0.75);
+    color: rgba(colors-helpers.$grey, 0.75);
     margin-top: 5px;
   }
 
@@ -1078,11 +1078,11 @@
   animation: blink-on-scroll .8s ease-in-out;
   animation-iteration-count: 5;
   animation-delay: .7s;
-  background: rgba(197, 221, 250, 0.1);
+  background: rgba(colors-helpers.$cloud-blue, 0.1);
   padding: 5px;
 
   em._h {
-    border-bottom: 1px solid rgba(65, 131, 196, .3);
+    border-bottom: 1px solid rgba(colors-helpers.$blue-4183, .3);
   }
 
   em._b {
@@ -1122,7 +1122,7 @@
     right: 0;
     width: 30%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(colors-helpers.$fullBlack, 0.6);
     z-index: 1;
     color: white;
     display: flex;
@@ -1257,7 +1257,7 @@
 
 
 .language-mobile-select {
-  border: 1px solid rgba(34, 36, 38, .15);
+  border: 1px solid colors-helpers.$border-color;
   border-radius: 0.28571429rem;
   padding: .78571429em 1em .78571429em 1em;
   font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;

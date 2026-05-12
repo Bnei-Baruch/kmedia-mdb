@@ -34,7 +34,7 @@ const ShareBarPlayer = () => {
           content="Facebook"
           trigger={
             <FacebookShareButton url={url} quote={title}>
-              <SocialBtn className="bg-[#1877f2]">f</SocialBtn>
+              <SocialBtn className="bg-social-facebook">f</SocialBtn>
             </FacebookShareButton>
           }
         />
@@ -44,7 +44,7 @@ const ShareBarPlayer = () => {
           content="Twitter"
           trigger={
             <TwitterShareButton url={url} title={title}>
-              <SocialBtn className="bg-[#1da1f2]">𝕏</SocialBtn>
+              <SocialBtn className="bg-social-twitter">𝕏</SocialBtn>
             </TwitterShareButton>
           }
         />
@@ -54,7 +54,7 @@ const ShareBarPlayer = () => {
           content="Whatsapp"
           trigger={
             <WhatsappShareButton url={url} title={title} separator=": ">
-              <SocialBtn className="whatsapp bg-[#25d366]">w</SocialBtn>
+              <SocialBtn className="whatsapp bg-social-whatsapp">w</SocialBtn>
             </WhatsappShareButton>
           }
         />
@@ -64,7 +64,7 @@ const ShareBarPlayer = () => {
           content="Telegram"
           trigger={
             <TelegramShareButton url={url} title={title}>
-              <SocialBtn className="telegram bg-[#0088cc]">t</SocialBtn>
+              <SocialBtn className="telegram bg-social-telegram">t</SocialBtn>
             </TelegramShareButton>
           }
         />
@@ -74,7 +74,7 @@ const ShareBarPlayer = () => {
           content="Odnoklassniki"
           trigger={
             <OKShareButton url={url} title={title}>
-              <SocialBtn className="odnoklassniki bg-[#ee8208]">ok</SocialBtn>
+              <SocialBtn className="odnoklassniki bg-social-ok">ok</SocialBtn>
             </OKShareButton>
           }
         />

@@ -253,7 +253,7 @@
     font-size: 16px;
 
     + .menu {
-      border-top: 1px solid rgba(34, 36, 38, .1) !important;
+      border-top: 1px solid rgba(colors-helpers.$border-base, .1) !important;
     }
 
     .item {
@@ -910,7 +910,7 @@
 
 
 .text__scan {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(colors-helpers.$fullBlack, 0.8);
   position: absolute;
   top: 0;
   right: 0;
