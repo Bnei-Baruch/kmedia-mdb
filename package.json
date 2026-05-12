@@ -37,6 +37,7 @@
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
     "e2e:lessons": "playwright test e2e/lessons/",
+    "e2e:player": "playwright test e2e/player/",
     "e2e:install": "playwright install"
   },
   "devDependencies": {
