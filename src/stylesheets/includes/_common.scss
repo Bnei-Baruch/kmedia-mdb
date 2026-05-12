@@ -315,3 +315,36 @@ img {
 .material-symbols-outlined.text-2xl {
   line-height: 1.5rem;
 }
+
+#app-loader {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: black;
+  }
+}
+
+.need_to_login {
+  height: 60VH;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.action:hover {
+  background: inherit !important;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}

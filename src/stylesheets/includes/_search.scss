@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 .media_item .media_item {
   padding: 0;
 }
@@ -38,4 +40,35 @@
 .score_debug {
   position: absolute;
   right: 300px;
+}
+
+.media_item em {
+  font-weight: bold;
+}
+
+.scroll-to-search {
+  box-shadow: 1px 1px 5px 1px #7dcff5;
+  animation: blink-on-scroll .8s ease-in-out;
+  animation-iteration-count: 5;
+  animation-delay: .7s;
+  background: rgba(colors-helpers.$cloud-blue, 0.1);
+  padding: 5px;
+
+  em._h {
+    border-bottom: 1px solid rgba(colors-helpers.$blue-4183, .3);
+  }
+
+  em._b {
+    font-weight: bold;
+  }
+}
+
+@keyframes blink-on-scroll {
+  0% {
+    box-shadow: 1px 1px 5px 1px #7dcff5;
+  }
+
+  100% {
+    box-shadow: none;
+  }
 }

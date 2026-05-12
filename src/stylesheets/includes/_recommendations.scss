@@ -1,0 +1,25 @@
+.recommend-label div {
+  color: white;
+  background-color: #005697;
+  max-width: 120px;
+  overflow: hidden;
+
+  .text {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-bottom: 0.1em;
+    white-space: nowrap;
+  }
+}
+
+.recommend-more {
+  float: right;
+}
+
+.rtl .recommend-more {
+  float: left;
+}
+
+.recommend-more-placeholder {
+  height: 1.4em;
+}

@@ -28,6 +28,12 @@
 @use 'includes/text-page';
 @use 'includes/print';
 @use 'includes/toc';
+@use 'includes/doc2html';
+@use 'includes/blog-post';
+@use 'includes/language-selector';
+@use 'includes/playlist';
+@use 'includes/recommendations';
+@use 'includes/simple-mode';
 // @import 'gallery/image-gallery';
 //////////ALL YOUR CSS IS HERE ↴
 @use 'includes/not-sorted-scss';

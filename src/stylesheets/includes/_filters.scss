@@ -444,3 +444,82 @@
     font-weight: normal;
   }
 }
+
+.filter-letters {
+  flex-direction: column !important;
+  flex-wrap: wrap !important;
+  height: 600px !important;
+  width: auto !important;
+}
+
+.filter-popup {
+  &__body {
+    max-height: 350px;
+    min-width: 300px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .highlight {
+      background-color: rgba(colors-helpers.$yellow, 0.2);
+    }
+
+    &.date-filter {
+      max-height: 450px;
+
+      .DayPickerInput {
+        display: block;
+      }
+
+      .DayPicker-Caption > div {
+        font-size: 1rem;
+      }
+    }
+
+    &.sections-filter {
+      img {
+        margin-bottom: .2em;
+        width: 50px !important;
+      }
+
+      .header {
+        flex: 1 1 auto;
+        border-radius: 4px;
+        padding: 4px 4px 8px !important;
+
+        &:hover {
+          background-image: linear-gradient(to bottom, colors-helpers.$darkWhite, rgba(colors-helpers.$darkWhite, 0));
+        }
+
+        &.active {
+          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.3), rgba(colors-helpers.$blue, 0));
+        }
+      }
+    }
+  }
+
+  .ltr {
+    .hierarchy {
+      .item {
+        &.l1 { padding-left: 1rem; }
+        &.l2 { padding-left: 2rem; }
+        &.l3 { padding-left: 3rem; }
+        &.l4 { padding-left: 4rem; }
+        &.l5 { padding-left: 5rem; }
+        &.l6 { padding-left: 6rem; }
+      }
+    }
+  }
+
+  .rtl {
+    .hierarchy {
+      .item {
+        &.l1 { padding-right: 1rem; }
+        &.l2 { padding-right: 2rem; }
+        &.l3 { padding-right: 3rem; }
+        &.l4 { padding-right: 4rem; }
+        &.l5 { padding-right: 5rem; }
+        &.l6 { padding-right: 6rem; }
+      }
+    }
+  }
+}

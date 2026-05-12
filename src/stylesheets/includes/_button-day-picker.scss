@@ -50,3 +50,16 @@
     background-color: rgba(colors-helpers.$white, 0.2);
   }
 }
+
+.to-from-label {
+  min-width: 70px;
+}
+
+.FastDayPicker-DayPicker-NavButton {
+  width: 17em;
+
+  .DayPicker-NavButton {
+    top: 0;
+    float: right;
+  }
+}

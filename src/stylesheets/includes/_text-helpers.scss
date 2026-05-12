@@ -68,3 +68,28 @@ blockquote {
 ::highlight(found_search) {
   background-color: rgba(colors-helpers.$highlight-orange, 0.4);
 }
+
+.under-line {
+  text-decoration: underline;
+}
+
+.hover-under-line:hover {
+  text-decoration: underline;
+}
+
+.weight-normal {
+  font-weight: normal !important;
+}
+
+.vertical_bottom {
+  vertical-align: bottom !important;
+}
+
+.font_black {
+  color: colors-helpers.$black !important;
+}
+
+.buttonLink {
+  font-weight: bold;
+  color: whitesmoke;
+}

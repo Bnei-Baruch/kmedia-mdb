@@ -5,4 +5,15 @@
       left: 1em;
     }
   }
+
+  .home-blog-posts {
+    .remove-indent {
+      padding-right: 0 !important;
+      padding-left: 4px !important;
+    }
+  }
+
+  .tweet-friendly-date {
+    text-align: left;
+  }
 }

@@ -1,0 +1,142 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
+.stick-calendar {
+  position: sticky;
+  top: 65px;
+}
+
+.summary-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1em;
+
+  &.adjust-height {
+    height: 2.68em;
+    align-items: center;
+  }
+
+  .controller {
+    display: flex;
+    align-items: center;
+
+    h4 {
+      margin: 0 6px 0 0;
+    }
+
+    span {
+      margin: 0 6px;
+    }
+
+    button {
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+      color: #1a4179;
+      background: transparent;
+      text-decoration: underline;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.disabled {
+        color: #b1b1b1;
+        text-decoration: none;
+        cursor: auto;
+      }
+    }
+
+    .dropdown-container {
+      width: auto;
+      line-height: 1;
+    }
+  }
+
+  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+    .controller {
+      flex-direction: column;
+      margin-top: 1rem;
+
+      &:first-of-type {
+        padding-right: 4px;
+      }
+
+      .date-container {
+        display: flex;
+
+        input {
+          background: #ebecf0;
+          color: #1a4179;
+          display: inline-block;
+          width: 90px;
+          height: 0;
+          margin: 0 .5em;
+          max-width: max-content;
+          box-sizing: content-box;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .dropdown-container {
+        width: 90px;
+
+        select {
+          padding: 2px;
+          box-shadow: none;
+          background: #ebecf0;
+          color: #1a4179;
+          border: 1px solid colors-helpers.$border-color;
+          border-radius: .28571429rem;
+          box-sizing: content-box;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.gray-header {
+  background-color: #ebecf0 !important;
+  padding: 0.2em 1em !important;
+}
+
+.type-header-top-margin {
+  margin-top: 45px;
+}
+
+.simple-mode-type-icon {
+  display: inline-block !important;
+  width: 32px;
+  margin-right: 5px;
+}
+
+.inline-button {
+  width: 80px !important;
+  margin: 5px !important;
+}
+
+.rtl {
+  .summary-container {
+    .controller:first-of-type {
+      padding-left: 4px;
+    }
+
+    h4 {
+      margin: 0 0 0 6px;
+    }
+  }
+
+  .simple-mode-type-icon {
+    margin-left: 5px;
+    margin-right: 0;
+  }
+}
