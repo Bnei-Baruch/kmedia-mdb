@@ -15,7 +15,7 @@ const SectionHeader = ({ section, submenuItems }) => {
   return (
     <div className="section-header">
       <Helmets.Basic title={title} description={subText1} />
-      <div className=" px-4 ">
+      <div className="px-4 py-2">
         <div className="flex flex-wrap">
           <div className="w-full md:w-3/4 lg:w-[62.5%]">
             <h1 className="text-blue-600">

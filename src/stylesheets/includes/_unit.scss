@@ -76,7 +76,7 @@
 
   &>.tabs {
     display: flex;
-    border-bottom: 1px solid grey-500;
+    border-bottom: 1px solid #d1d5db;
     gap: 1em;
 
     @include responsive-helpers.mobile {

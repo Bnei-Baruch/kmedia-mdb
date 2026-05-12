@@ -25,7 +25,7 @@ const DButton = ({ content, href, icon, className }) => (
     className={clsx('inline-flex items-center gap-1.5 px-3 py-1 small border border-semantic-blue text-semantic-blue rounded', className)}
   >
     {icon && <span className="material-symbols-outlined text-base">{icon === 'heart' ? 'favorite' : icon}</span>}
-    {content}
+    <span className="hidden lg:inline">{content}</span>
   </a>
 );
 

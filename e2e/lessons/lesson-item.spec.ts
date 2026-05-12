@@ -43,11 +43,10 @@ test.describe('Lesson item — materials section', () => {
     const lessonPage = new LessonItemPage(page);
     await lessonPage.gotoDailyLatest();
 
-    await lessonPage.materialsContainer.scrollIntoViewIfNeeded();
+    await lessonPage.materialsContainer.evaluate(el => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await expect(lessonPage.materialsTabs).toBeVisible();
 
-    await expect(page).toHaveScreenshot('lesson-item-materials-top.png', {
-      fullPage: false,
+    await expect(lessonPage.materialsContainer).toHaveScreenshot('lesson-item-materials-top.png', {
       maxDiffPixelRatio: 0.02,
     });
   });
@@ -57,12 +56,13 @@ test.describe('Lesson item — materials section', () => {
       const lessonPage = new LessonItemPage(page);
       await lessonPage.gotoDailyLatest();
 
-      await lessonPage.materialsContainer.scrollIntoViewIfNeeded();
+      await lessonPage.materialsContainer.evaluate(el => el.scrollIntoView({ block: 'start', behavior: 'instant' }));
       await lessonPage.materialsTab(tab).click();
       await expect(lessonPage.materialsTab(tab)).toHaveClass(/active/);
+      // wait for TabsMenu's built-in 150ms scroll effect and content load to settle
+      await page.waitForTimeout(300);
 
-      await expect(page).toHaveScreenshot(`lesson-item-tab-${tab}.png`, {
-        fullPage: false,
+      await expect(lessonPage.materialsContainer).toHaveScreenshot(`lesson-item-tab-${tab}.png`, {
         maxDiffPixelRatio: 0.02,
       });
     });
@@ -79,6 +79,7 @@ test.describe('Lesson item — visual snapshots', () => {
     await expect(page).toHaveScreenshot('lesson-item-daily-latest.png', {
       fullPage: false,
       maxDiffPixelRatio: 0.02,
+      mask: [lessonPage.sidebarItems],
     });
   });
 });

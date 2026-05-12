@@ -12,6 +12,7 @@ cc-test-reporter
 /build
 
 # misc
+.claude/
 .DS_Store
 .env
 .env.local
@@ -48,3 +49,4 @@ build.zip
 e2e/snapshots/
 /playwright-report
 /test-results
+
