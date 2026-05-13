@@ -5,9 +5,7 @@ const NotFound = ({ textKey }) => {
   const { t } = useTranslation();
 
   return (
-    <div
-      className="w-full px-4 text-center "
-    >
+    <div className="w-full p-4 text-center"    >
       {t(textKey || 'messages.not-found')}
     </div>
   );

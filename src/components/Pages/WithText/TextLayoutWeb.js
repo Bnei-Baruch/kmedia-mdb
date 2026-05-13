@@ -28,22 +28,22 @@ import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
+    toolbar = null,
+    toc = null,
+    prevNext = null,
     breadcrumb = null,
     playerPage = false,
     id
   } = props;
 
-  const ref   = useRef();
+  const ref = useRef();
 
-  const scrollDir          = useSelector(textPageGetScrollDirSelector);
-  const subject            = useSelector(textPageGetSubjectSelector);
-  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
-  const { theme }          = useSelector(textPageGetSettings);
-  const additionsMode      = useSelector(textPageGetAdditionsModeSelector);
-  const isSearch           = useSelector(textPageGetIsSearchSelector);
+  const scrollDir = useSelector(textPageGetScrollDirSelector);
+  const subject = useSelector(textPageGetSubjectSelector);
+  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const { theme } = useSelector(textPageGetSettings);
+  const additionsMode = useSelector(textPageGetAdditionsModeSelector);
+  const isSearch = useSelector(textPageGetIsSearchSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const wip = useTextSubject(id);
@@ -59,23 +59,23 @@ const TextLayoutWeb = props => {
     <div className={
       clsx('stick_toolbar no_print', {
         'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
-        'stick_toolbar_pinned'  : scrollDir === -1,
-        'stick_toolbar_fixed'   : hasSel,
-        'text_selected'         : hasSel
+        'stick_toolbar_pinned': scrollDir === -1,
+        'stick_toolbar_fixed': hasSel,
+        'text_selected': hasSel
       })
     }>
       {breadcrumb}
       {toolbar}
     </div>
   );
-  const renderSearch  = () => (
+  const renderSearch = () => (
     <div className={
       clsx('stick_toolbar no_print stick_toolbar_fixed', {
         'stick_toolbar_unpinned': scrollDir !== -1,
-        'stick_toolbar_pinned'  : scrollDir === -1
+        'stick_toolbar_pinned': scrollDir === -1
       })}>
-      <div className='mx-auto px-2 flex justify-center'>
-        <SearchOnPageBar/>
+      <div className='mx-auto px-2 flex justify-center max-w[700px] w-full'>
+        <SearchOnPageBar />
       </div>
     </div>
   );
@@ -88,17 +88,17 @@ const TextLayoutWeb = props => {
     >
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
-      <div  className='mx-auto px-2 flex justify-center'>
+      <div className='mx-auto px-2 flex justify-start max-w-[650px] w-full'>
         <TagsByUnit id={subject.id}></TagsByUnit>
-        <AudioPlayer/>
+        <AudioPlayer />
       </div>
-      <TextContentWeb playerPage={playerPage}/>
+      <TextContentWeb playerPage={playerPage} />
       {prevNext}
 
-      <NoteItemSticky/>
-      <NoteItemModal/>
-      <NoteConfirmRemove/>
-      <ScrollToTopBtn/>
+      <NoteItemSticky />
+      <NoteItemModal />
+      <NoteConfirmRemove />
+      <ScrollToTopBtn />
     </div>
   );
 };
