@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx,html}',
@@ -37,5 +39,14 @@ module.exports = {
   corePlugins: {
     preflight: true,
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addBase }) {
+      addBase({
+        'a': { color: '#4183c4', textDecoration: 'none' },
+        'a:hover': { color: '#1e70bf' },
+        'a:active': { color: '#4183c4' },
+        'a:focus': { color: '#4183c4' },
+      });
+    }),
+  ],
 }

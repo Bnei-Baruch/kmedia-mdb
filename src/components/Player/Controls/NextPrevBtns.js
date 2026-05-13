@@ -26,7 +26,7 @@ export const PrevBtn = () => {
       <WebWrapTooltip
         content={t('player.controls.prev-video')}
         trigger={
-          <Link as="div" to={to}>
+          <Link as="div" to={to} className="text-white">
             <div className="material-symbols-outlined text-4xl">fast_rewind</div>
           </Link>
         }/>
@@ -51,7 +51,7 @@ export const NextBtn = () => {
       <WebWrapTooltip
         content={t('player.controls.next-video')}
         trigger={
-          <Link as="div" to={to}>
+          <Link as="div" to={to} className="text-white">
             <div className="material-symbols-outlined text-4xl">fast_forward</div>
           </Link>
         }

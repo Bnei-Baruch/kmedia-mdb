@@ -30,14 +30,14 @@ const CopyShareUrl = () => {
         value={shareUrl}
         readOnly
       />
-      <Popover className="relative right-0 button rounded-l-none border-l-0 text-xs">
+      <Popover className="relative">
         <CopyToClipboard text={shareUrl} onCopy={handleCopied}>
-          <span className="h-full">
+          <span className="h-full right-0 button rounded-l-none border-l-0 text-xs" >
             {t('buttons.copy')}
           </span>
         </CopyToClipboard>
         {open && (
-          <PopoverPanel static>
+          <PopoverPanel static className="absolute z-10 mt-1 bg-gray-800 text-white text-xs rounded py-1 px-2" dir={uiDir}>
             {t('messages.link-copied-to-clipboard')}
           </PopoverPanel>
         )}
