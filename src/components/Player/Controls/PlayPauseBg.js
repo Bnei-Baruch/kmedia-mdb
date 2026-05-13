@@ -37,7 +37,7 @@ const PlayPauseBg = () => {
             content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
             trigger={
               <div className="controls__pause">
-                <span className="material-symbols-outlined text-2xl">{isPlay ? 'pause' : 'play_arrow'}</span>
+                <span className="material-symbols-outlined text-4xl">{isPlay ? 'pause' : 'play_arrow'}</span>
               </div>
             }
           />

@@ -613,12 +613,6 @@ video {
       background: $controls-bg;
       border-radius: $controls-radius;
       cursor: pointer;
-
-      .material-symbols-outlined {
-        font-size: 36px;
-        color: white;
-      }
-
       &:hover {
         cursor: pointer;
         background: $controls-bg-hover;
@@ -1111,13 +1105,21 @@ video {
 
 .personal_info {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   margin-top: 8px;
+  color: #767676;
 
   & > .item {
     margin: 0;
     padding: 0 0.5em;
     line-height: 26px;
+    display: flex;
+    align-items: center;
+  }
+
+  & > .item--subscribe {
+    padding: 0 0 0 0.5em;
   }
 
   .icon.heart {

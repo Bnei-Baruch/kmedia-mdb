@@ -47,10 +47,10 @@ const PlaylistHeader = () => {
       return !isMobileDevice ? (
         <>
           {t('constants.content-types.DAILY_LESSON')}
-          <small>
-            <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
+          <div className="text-xl display-iblock mx-1">
+            <span className="display-iblock mx-1">{t('values.date', { date: film_date })}</span>
             {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
-          </small>
+          </div>
         </>
       ) : t('constants.content-types.DAILY_LESSON');
     }
@@ -102,19 +102,19 @@ const PlaylistHeader = () => {
     const _mobStyles = isMobileDevice ? 'flex justify-between gap-2 items-end' : '';
 
     return (
-      <div className='avbox__playlist-header'>
+      <div className='avbox__playlist-header px-4 py-3'>
         <div className='flex flex-justify gap-4 justify-between py-2'>
-          <h2 className='my-0 bold'>{getTitle()}</h2>
+          <h2 className='my-0 text-3xl font-bold'>{getTitle()}</h2>
           {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
         </div>
         {
           subheader && (
-            <h4 className={clsx('font-normal my-0', _mobStyles)}>
+            <h4 className={clsx('font-normal', _mobStyles)}>
               {subheader}
               {isLesson && isMobileDevice && <LessonDatePickerContainer />}
             </h4>)
         }
-        {playNow && (<h3 className="my-0 text-xl bold">{playNow}</h3>)}
+        {playNow && (<h3 className="my-0 text-2xl font-bold">{playNow}</h3>)}
       </div>
     );
   };

@@ -23,10 +23,14 @@
 
   &__collections a {
     font-size: 1.46rem;
+    color: #4183c4;
   }
 
   &__header {
     margin-top: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 1.5rem;
+    line-height: 1.3;
   }
 
   .link_to_cu {
@@ -38,7 +42,6 @@
 
   .unit-info__title {
     line-height: 2.5em;
-    color: red !important;
 
     img {
       height: 2.5em;

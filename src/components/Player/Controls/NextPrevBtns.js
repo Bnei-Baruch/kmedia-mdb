@@ -27,7 +27,7 @@ export const PrevBtn = () => {
         content={t('player.controls.prev-video')}
         trigger={
           <Link as="div" to={to}>
-            <div className="material-symbols-outlined">fast_rewind</div>
+            <div className="material-symbols-outlined text-4xl">fast_rewind</div>
           </Link>
         }/>
     </div>
@@ -52,7 +52,7 @@ export const NextBtn = () => {
         content={t('player.controls.next-video')}
         trigger={
           <Link as="div" to={to}>
-            <div className="material-symbols-outlined">fast_forward</div>
+            <div className="material-symbols-outlined text-4xl">fast_forward</div>
           </Link>
         }
       />

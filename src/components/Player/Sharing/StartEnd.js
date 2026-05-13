@@ -38,7 +38,7 @@ const StartEnd = ({ action }) => {
       <div className="sharing__inputs">
         <div className="flex" onClick={handleSetStart}>
           <button
-            className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
+            className="px-2 py-1 text-xs bg-gray-300 rounded-l whitespace-nowrap"
             onClick={handleSetStart}
           >
             {t('player.share.start-position')}
@@ -54,7 +54,7 @@ const StartEnd = ({ action }) => {
         </div>
         <div className="flex" onClick={handleSetEnd}>
           <button
-            className="px-2 py-1 text-xs border border-gray-300 rounded-l whitespace-nowrap"
+            className="px-2 py-1 text-xs  bg-gray-300 rounded-l whitespace-nowrap"
             onClick={handleSetEnd}
           >
             {t('player.share.end-position')}

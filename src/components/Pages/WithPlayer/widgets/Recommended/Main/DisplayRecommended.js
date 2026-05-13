@@ -214,7 +214,7 @@ const DisplayRecommended = (
   };
   return (
     <div className="avbox__playlist-wrapper">
-      {displayTitle && <h3>{title}</h3>}
+      {displayTitle && <h3 className="text-xl font-bold py-2">{title}</h3>}
       {<RecommendedPlaylist {...props} />}
     </div>
   );

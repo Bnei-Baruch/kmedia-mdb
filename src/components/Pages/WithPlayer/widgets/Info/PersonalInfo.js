@@ -100,7 +100,7 @@ const PersonalInfo = ({ collection }) => {
         <div className="item">
           <ToPlaylistBtn />
         </div>
-        <div className="item">
+        <div className="item item--subscribe">
           <SubscribeBtn collection={collection} />
         </div>
       </div>

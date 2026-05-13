@@ -140,6 +140,99 @@ test.describe('Player — share panel', () => {
   });
 });
 
+// ─── Settings — rate control ──────────────────────────────────────────────────
+
+test.describe('Player — settings rate control', () => {
+  test('rate options are present after opening settings', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.settingsBtn.click({ force: true });
+    await expect(p.settingsPanel.locator('.settings__pane').first()).toBeVisible({ timeout: 3000 });
+    await expect(p.rateOptions.first()).toBeAttached();
+  });
+
+  test('clicking 1.25x rate makes it active', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.settingsBtn.click({ force: true });
+    await expect(p.settingsPanel.locator('.settings__pane').first()).toBeVisible({ timeout: 3000 });
+    const opt = p.rateOptions.filter({ hasText: '1.25x' });
+    await opt.click({ force: true });
+    await expect(opt).toHaveClass(/active/);
+  });
+
+  test('language selector is present in settings', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.settingsBtn.click({ force: true });
+    await expect(p.settingsPanel.locator('.settings__pane').first()).toBeVisible({ timeout: 3000 });
+    await expect(p.languageSelect).toBeAttached();
+  });
+});
+
+// ─── Sharing panel — contents ─────────────────────────────────────────────────
+
+test.describe('Player — sharing panel contents', () => {
+  test('sharing panel has start/end time inputs', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.shareBtn.click({ force: true });
+    await expect(p.sharingPanel).toBeVisible({ timeout: 3000 });
+    await expect(p.sharingTimesPanel).toBeAttached();
+  });
+
+  test('sharing panel has reset-to-full button', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.shareBtn.click({ force: true });
+    await expect(p.sharingPanel).toBeVisible({ timeout: 3000 });
+    await expect(p.sharingResetBtn).toBeAttached();
+  });
+
+  test('sharing panel has copy URL input', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.shareBtn.click({ force: true });
+    await expect(p.sharingPanel).toBeVisible({ timeout: 3000 });
+    await expect(p.sharingUrlInput).toBeAttached();
+  });
+
+  test('sharing panel has social share buttons area', async ({ page }) => {
+    const p = await setupReady(page);
+    await p.showControls();
+    await p.shareBtn.click({ force: true });
+    await expect(p.sharingPanel).toBeVisible({ timeout: 3000 });
+    await expect(p.sharingButtons).toBeAttached();
+  });
+});
+
+// ─── LabelVideo (tagging mode) ────────────────────────────────────────────────
+
+test.describe('Player — LabelVideo tagging panel', () => {
+  test('LabelVideo panel appears on tagging button click', async ({ page }) => {
+    const p = await setupReady(page);
+    await expect(p.taggingBtn).toBeAttached({ timeout: 5000 });
+    await p.taggingBtn.click();
+    await expect(p.labelVideoPanel).toBeVisible({ timeout: 3000 });
+  });
+
+  test('LabelVideo panel has start/end time inputs', async ({ page }) => {
+    const p = await setupReady(page);
+    await expect(p.taggingBtn).toBeAttached({ timeout: 5000 });
+    await p.taggingBtn.click();
+    await expect(p.labelVideoTimesPanel).toBeAttached({ timeout: 3000 });
+  });
+
+  test('LabelVideo panel closes on second tagging button click', async ({ page }) => {
+    const p = await setupReady(page);
+    await expect(p.taggingBtn).toBeAttached({ timeout: 5000 });
+    await p.taggingBtn.click();
+    await expect(p.labelVideoPanel).toBeVisible({ timeout: 3000 });
+    await p.taggingBtn.click();
+    await expect(p.labelVideoPanel).not.toBeAttached({ timeout: 3000 });
+  });
+});
+
 // ─── Visual snapshots ──────────────────────────────────────────────────────────
 
 test.describe('Player — visual snapshots', () => {

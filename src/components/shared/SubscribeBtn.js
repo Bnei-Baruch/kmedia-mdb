@@ -123,9 +123,8 @@ const SubscribeBtn = ({ collection }) => {
         </div>
       </Dialog>
       <div
-        className={`uppercase border rounded px-3 py-1 ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
+        className={`uppercase border rounded px-2 py-0.5 text-sm ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
         onClick={() => subsUnsubs(sub)}
-        style={{ fontSize: '0.9em' }}
       >
         {t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
       </div>

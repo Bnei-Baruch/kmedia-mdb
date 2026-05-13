@@ -88,6 +88,50 @@ export class PlayerPage extends LessonItemPage {
     return this.page.locator('.player-wrapper');
   }
 
+  // Settings panel sub-elements
+  get rateOptions() {
+    return this.settingsPanel.locator('.settings__option');
+  }
+
+  get activeRateOption() {
+    return this.settingsPanel.locator('.settings__option.active');
+  }
+
+  get languageSelect() {
+    return this.page.locator('.controls__language select');
+  }
+
+  // Sharing panel sub-elements
+  get sharingTimesPanel() {
+    return this.sharingPanel.locator('.sharing__times');
+  }
+
+  get sharingResetBtn() {
+    return this.sharingPanel.locator('.sharing__reset');
+  }
+
+  get sharingUrlInput() {
+    return this.sharingPanel.locator('input[readonly]').first();
+  }
+
+  get sharingButtons() {
+    return this.sharingPanel.locator('.sharing__buttons');
+  }
+
+  // TaggingBtn — opens LabelVideo (tagging mode), located in the page info section
+  get taggingBtn() {
+    return this.page.locator('.my_tag');
+  }
+
+  // LabelVideo panel — .sharing rendered when mode=tagging or mode=playlist
+  get labelVideoPanel() {
+    return this.page.locator('.sharing');
+  }
+
+  get labelVideoTimesPanel() {
+    return this.labelVideoPanel.locator('.sharing__times');
+  }
+
   // Wait until ControlsWeb/ControlsMobile has rendered
   async waitForPlayerReady() {
     await this.controls.waitFor({ state: 'attached', timeout: 15_000 });

@@ -28,7 +28,7 @@ export const SeekBackwardBtn = () => {
         content={t('player.controls.rewind', { seek })}
         trigger={
           <div onClick={handleSeekBackward}>
-            <div className="material-symbols-outlined">undo</div>
+            <div className="material-symbols-outlined text-4xl">undo</div>
           </div>
         }
       />
@@ -51,7 +51,7 @@ export const SeekForwardBtn = () => {
         content={t('player.controls.skip', { seek })}
         trigger={
           <div onClick={handleSeekForward}>
-            <div className="material-symbols-outlined">redo</div>
+            <div className="material-symbols-outlined text-4xl">redo</div>
           </div>
         }
       />

@@ -26,10 +26,10 @@ const Sharing = () => {
         <div className="sharing__reset" onClick={handleSetFull}>
           {
             isMobileDevice ?
-              <button className="px-3 py-1.5 small border border-gray-300 rounded">
+              <button className="px-3 py-1.5 small bg-gray-300 rounded">
                 <span className="material-symbols-outlined text-base">undo</span>
               </button>
-              : <button className="px-3 py-1.5 small border border-gray-300 rounded">
+              : <button className="px-3 py-1.5 small bg-gray-300 rounded">
                 {t('player.share.reset-to-full')}
               </button>
           }
