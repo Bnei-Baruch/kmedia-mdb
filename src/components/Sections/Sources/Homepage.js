@@ -7,31 +7,26 @@ import Kabbalist from './Kabbalist';
 import { sourcesGetRootsSelector, sourcesGetSourceByIdSelector } from '../../../redux/selectors';
 
 const Homepage = () => {
-  const roots         = useSelector(sourcesGetRootsSelector);
+  const roots = useSelector(sourcesGetRootsSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   return (
     <div>
-      <SectionHeader section="sources-library"/>
-      <hr className="m-0"/>
-      <div className=" px-4 ">
-        <table className="w-full border-collapse index-list sources__authors">
-          <tbody>
-            {
-              roots.map(r => {
-                const author = getSourceById(r);
+      <SectionHeader section="sources-library" />
+      <div className="flex flex-col p-4">
+        {
+          roots.map(r => {
+            const author = getSourceById(r);
 
-                return !isEmpty(author.children) &&
-                  <Kabbalist
-                    key={author.id}
-                    author={author}
-                    getSourceById={getSourceById}
-                    portraitIdx={r}
-                  />;
-              })
-            }
-          </tbody>
-        </table>
+            return !isEmpty(author.children) &&
+              <Kabbalist
+                key={author.id}
+                author={author}
+                getSourceById={getSourceById}
+                portraitIdx={r}
+              />;
+          })
+        }
       </div>
     </div>
   );

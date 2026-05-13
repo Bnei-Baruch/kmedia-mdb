@@ -36,39 +36,37 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
   const handleClick = () => dispatch(actions.setTocIsActive(true));
 
   return (
-    <tr className={clsx('align-top', { author: true, 'author--image': !!portrait })}>
-      <td className="w-px pr-4">
+    <div className={clsx('flex items-start border-b border-gray-300 py-4 last:border-0', { author: true, 'author--image': !!portrait })}>
+      <div className="flex-none pr-4">
         {portrait ? <img src={portrait} alt={fullName} /> : null}
-      </td>
-      <td>
-        <div>
-          <div className="sources__list">
-            <h4>
-              {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
-            </h4>
-            <div>
-              <ul className="list-disc pl-5">
-                {
-                  volumes
-                    ? volumes.map(x => {
-                      const { id: _id, name, description } = getSourceById(x);
-                      return (
-                        <li key={_id} onClick={handleClick}>
-                          <NavLink to={`/sources/${_id}`}>
-                            {name}
-                            {description ? ` - ${description}` : ''}
-                          </NavLink>
-                        </li>
-                      );
-                    }
-                    ) : null
-                }
-              </ul>
-            </div>
+      </div>
+      <div className="flex-1">
+        <div className="sources__list">
+          <h4 className="text-lg font-bold mb-2">
+            {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
+          </h4>
+          <div>
+            <ul className="list-disc pl-5 columns-1 md:columns-2">
+              {
+                volumes
+                  ? volumes.map(x => {
+                    const { id: _id, name, description } = getSourceById(x);
+                    return (
+                      <li key={_id} onClick={handleClick}>
+                        <NavLink to={`/sources/${_id}`}>
+                          {name}
+                          {description ? ` - ${description}` : ''}
+                        </NavLink>
+                      </li>
+                    );
+                  }
+                  ) : null
+              }
+            </ul>
           </div>
         </div>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 

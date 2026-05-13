@@ -23,17 +23,12 @@
 
 
 blockquote {
-  border: 2px solid colors-helpers.$midWhite;
-  border-width: 0 0 0 2px;
-  margin: 2em 0 2em 2em;
-  padding: 0 0 0 1em;
-
   p {
     font-size: 1.15em;
     line-height: 1.5;
   }
 
-  > em {
+  >em {
     color: colors-helpers.$grey;
   }
 
@@ -50,6 +45,7 @@ blockquote {
 ::highlight(selected_search) {
   background-color: rgba(colors-helpers.$highlight-orange, 0.8);
 }
+
 ::highlight(found_search) {
   background-color: rgba(colors-helpers.$highlight-orange, 0.4);
 }
@@ -69,4 +65,3 @@ blockquote {
 .vertical_bottom {
   vertical-align: bottom !important;
 }
-

@@ -46,6 +46,14 @@ module.exports = {
         'a:hover': { color: '#1e70bf' },
         'a:active': { color: '#4183c4' },
         'a:focus': { color: '#4183c4' },
+        'blockquote': {
+          display: 'block',
+          borderLeftWidth: '2px',
+          borderLeftStyle: 'solid',
+          borderLeftColor: '#dcddde',
+          margin: '2em 0 2em 2em',
+          padding: '0 0 0 1em',
+        },
       });
     }),
   ],

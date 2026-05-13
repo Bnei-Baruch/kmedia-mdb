@@ -56,7 +56,7 @@ const LibraryPerson = () => {
   }
 
   return (
-    <div className=" px-4 ">
+    <div className="px-4 library-person">
       <div>
         <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(data.content) }}/>
       </div>
