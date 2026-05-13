@@ -203,8 +203,7 @@
 }
 
 
-.cut_and_download_btn,
-.embed-share-button {
+.cut_and_download_btn {
   padding: 0 !important;
   margin: 0 1px !important;
   position: relative;
@@ -218,19 +217,3 @@
 
 }
 
-.cut_and_download_modal {
-  text-align: center;
-  padding: 3em 1em;
-
-  &>.header {
-    padding-bottom: 1em;
-  }
-
-  &>.container {
-    padding-top: 2em;
-  }
-
-  .button {
-    margin: 0 1em;
-  }
-}

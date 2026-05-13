@@ -1132,43 +1132,6 @@ video {
   width: 5px;
 }
 
-.mediaplayer__onscreen-controls {
-  .player-button.player-error-message {
-    background: white;
-    border: 2px solid red;
-    padding: 7px;
-    border-radius: 50px;
-  }
-}
-
-.mediaplayer__unmuteButton {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-}
-
-.mediaplayer__unmuteButton.rtl {
-  left: inherit;
-  right: 5px;
-}
-
-.mediaplayer__embedUnmuteButton {
-  z-index: 10000;
-  position: absolute;
-  top: 20px;
-  left: 5px;
-}
-
-.mediaplayer__embedUnmuteButton.rtl {
-  left: inherit;
-  right: 5px;
-}
-
-.mediaplayer__mobileLoader {
-  position: absolute;
-  top: 30%;
-  left: 40%;
-}
 
 .share-publication {
   margin: 0 5px;

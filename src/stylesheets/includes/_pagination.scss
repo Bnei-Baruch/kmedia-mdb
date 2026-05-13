@@ -1,11 +1,5 @@
 @use "responsive-helpers";
 
-.pagination-wrapper {
-  @include responsive-helpers.small-mobile {
-    margin-top: -1px;
-    padding: 0 !important;
-  }
-}
 
 .pagination-menu {
   font-size: 0.8rem;

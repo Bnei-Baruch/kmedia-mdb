@@ -154,7 +154,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
   };
 
   return (
-    <div className=" px-4">
+    <div>
       <div className="avbox__playlist-view">
         <ul className="list-none p-0">
           {
