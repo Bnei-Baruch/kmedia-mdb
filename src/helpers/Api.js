@@ -243,7 +243,10 @@ class Api {
     _: Date.now()
   })}`);
 
-  static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({ session_id: sessionId })}`);
+  static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({
+    session_id: sessionId,
+    _: Date.now()
+  })}`);
 
   static reasoningSearchCancel = sessionId => axios({
     method : 'post',
