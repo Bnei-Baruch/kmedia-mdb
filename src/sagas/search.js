@@ -24,6 +24,7 @@ import {
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
+  searchGetWipSelector,
   searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
   settingsGetUILangSelector
@@ -140,7 +141,10 @@ function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb) {
 }
 
 function* pollReasoningStatus(sessionId) {
-  while (true) {
+  let polling = true;
+  let finalStatus = null;
+
+  while (polling) {
     const currentStatus = yield select(searchGetReasoningStatusSelector);
     const currentSearchType = yield select(searchGetSearchTypeSelector);
     if (currentSearchType !== SEARCH_TYPES.AGENTIC || currentStatus?.session_id !== sessionId) {
@@ -148,7 +152,15 @@ function* pollReasoningStatus(sessionId) {
     }
 
     if (currentStatus?.session_id === sessionId && reasoningStatusCanceled(currentStatus)) {
-      return currentStatus;
+      finalStatus = currentStatus;
+      polling = false;
+      continue;
+    }
+
+    if (reasoningStatusTerminal(currentStatus)) {
+      finalStatus = currentStatus;
+      polling = false;
+      continue;
     }
 
     const status = yield call(fetchReasoningStatus, sessionId);
@@ -159,14 +171,26 @@ function* pollReasoningStatus(sessionId) {
         return null;
       }
 
+      if (reasoningStatusTerminal(nextStatus)) {
+        finalStatus = nextStatus;
+        polling = false;
+        continue;
+      }
+
       yield put(actions.reasoningStatusUpdate(status));
       if (reasoningStatusTerminal(status)) {
-        return status;
+        finalStatus = status;
+        polling = false;
+        continue;
       }
     }
 
-    yield call(delay, statusPollIntervalMs);
+    if (polling) {
+      yield call(delay, statusPollIntervalMs);
+    }
   }
+
+  return finalStatus;
 }
 
 function* fetchReasoningResult(sessionId, query) {
@@ -199,6 +223,12 @@ function* fetchReasoningResult(sessionId, query) {
 function* finishReasoningSession(sessionId, query) {
   const finalStatus = yield call(pollReasoningStatus, sessionId);
   if (!finalStatus || reasoningStatusCanceled(finalStatus)) {
+    return;
+  }
+
+  const currentResult = yield select(searchGetReasoningResultSelector);
+  const wip = yield select(searchGetWipSelector);
+  if (!wip && currentResult?.session_id === sessionId) {
     return;
   }
 
