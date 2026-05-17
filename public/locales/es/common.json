@@ -294,6 +294,7 @@
     "types": {
       "regular": "Búsqueda normal",
       "agentic": "Búsqueda con agente",
+      "agenticRapid": "Búsqueda con agente (rápida)",
       "beta": "Beta",
       "agenticBeta": "La búsqueda con agente está en beta."
     },
@@ -340,6 +341,7 @@
           "Revisando los hallazgos y reforzando la dirección principal..."
         ],
         "verifying": "Verificando la calidad de los resultados...",
+        "finalizing": "Finalizando los resultados...",
         "done": "Búsqueda completada",
         "error": "No pudimos completar la búsqueda",
         "canceled": "Búsqueda detenida",

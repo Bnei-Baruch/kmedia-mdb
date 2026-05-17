@@ -292,6 +292,7 @@
     "types": {
       "regular": "Normale Suche",
       "agentic": "Agenten-Suche",
+      "agenticRapid": "Agenten-Suche (schnell)",
       "beta": "Beta",
       "agenticBeta": "Die Agenten-Suche befindet sich in der Beta-Version."
     },
@@ -338,6 +339,7 @@
           "Die Erkenntnisse werden geprüft und die Hauptrichtung gestärkt..."
         ],
         "verifying": "Die Qualität der Ergebnisse wird überprüft...",
+        "finalizing": "Die Ergebnisse werden fertiggestellt...",
         "done": "Suche abgeschlossen",
         "error": "Die Suche konnte nicht abgeschlossen werden",
         "canceled": "Suche gestoppt",

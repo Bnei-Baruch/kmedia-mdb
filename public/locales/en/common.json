@@ -296,6 +296,7 @@
     "types": {
       "regular": "Regular Search",
       "agentic": "Agentic Search",
+      "agenticRapid": "Agentic Search (Rapid)",
       "beta": "Beta",
       "agenticBeta": "Agentic Search is in beta."
     },
@@ -342,6 +343,7 @@
           "Reviewing the findings and strengthening the main direction..."
         ],
         "verifying": "Verifying the quality of the results...",
+        "finalizing": "Finalizing the results...",
         "done": "Search completed",
         "error": "We could not complete the search",
         "canceled": "Search stopped",

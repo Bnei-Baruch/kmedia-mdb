@@ -295,6 +295,7 @@
     "types": {
       "regular": "Běžné vyhledávání",
       "agentic": "Agentní vyhledávání",
+      "agenticRapid": "Agentní vyhledávání (rychlé)",
       "beta": "Beta",
       "agenticBeta": "Agentní vyhledávání je v beta verzi."
     },
@@ -341,6 +342,7 @@
           "Procházíme zjištění a posilujeme hlavní směr..."
         ],
         "verifying": "Ověřujeme kvalitu výsledků...",
+        "finalizing": "Dokončujeme výsledky...",
         "done": "Vyhledávání dokončeno",
         "error": "Vyhledávání se nepodařilo dokončit",
         "canceled": "Vyhledávání bylo zastaveno",

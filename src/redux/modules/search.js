@@ -4,8 +4,48 @@ import { actions as ssrActions } from './ssr';
 
 export const SEARCH_TYPES = {
   REGULAR: 'regular',
-  AGENTIC: 'agentic'
+  AGENTIC: 'agentic',
+  AGENTIC_RAPID: 'agentic_rapid'
 };
+
+export const isAgenticSearchType = searchType => (
+  searchType === SEARCH_TYPES.AGENTIC || searchType === SEARCH_TYPES.AGENTIC_RAPID
+);
+
+const createReasoningSearchState = () => ({
+  result: null,
+  previousResults: [],
+  status: null,
+  requestKind: null,
+  wip: false
+});
+
+const getReasoningSearchType = searchType => (
+  isAgenticSearchType(searchType) ? searchType : SEARCH_TYPES.AGENTIC
+);
+
+const getReasoningSearchState = state => (
+  state.reasoningByType?.[getReasoningSearchType(state.searchType)] || createReasoningSearchState()
+);
+
+const getReasoningSearchStateForPayload = (state, payload) => {
+  const searchType = getReasoningSearchType(payload?.searchType || state.searchType);
+  if (!state.reasoningByType) {
+    state.reasoningByType = {};
+  }
+
+  if (!state.reasoningByType[searchType]) {
+    state.reasoningByType[searchType] = createReasoningSearchState();
+  }
+
+  return state.reasoningByType[searchType];
+};
+
+const getSearchFailurePayload = payload => (
+  payload && Object.prototype.hasOwnProperty.call(payload, 'error')
+    ? payload
+    : { error: payload }
+);
 
 const dedupePreviousAgenticResults = results => {
   const seen = new Set();
@@ -26,10 +66,11 @@ const initialState = {
   prevQuery: '',
   prevFilterParams: '',
   queryResult: {},
-  reasoningResult: null,
-  reasoningPreviousResults: [],
-  reasoningStatus: null,
-  reasoningRequestKind: null,
+  searchRequest: null,
+  reasoningByType: {
+    [SEARCH_TYPES.AGENTIC]: createReasoningSearchState(),
+    [SEARCH_TYPES.AGENTIC_RAPID]: createReasoningSearchState()
+  },
   searchType: SEARCH_TYPES.REGULAR,
   pageNo: 1,
   sortBy: 'relevance',
@@ -57,28 +98,31 @@ const searchSlice = createSlice({
     },
     search: () => void ({}),
     reasoningSearchStart: (state, { payload } = {}) => {
-      state.wip             = true;
-      state.error           = null;
+      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+      reasoningState.wip   = true;
+      state.error          = null;
       if (!payload?.keepResult) {
-        state.reasoningResult          = null;
-        state.reasoningPreviousResults = [];
+        reasoningState.result          = null;
+        reasoningState.previousResults = [];
       }
 
-      state.reasoningRequestKind = payload?.requestKind || 'initial';
-      state.reasoningStatus = {
+      reasoningState.requestKind = payload?.requestKind || 'initial';
+      reasoningState.status = {
         session_id: payload?.sessionId,
         state     : 'pending',
         phase     : 'pending',
-        done      : false
+        done      : false,
+        query     : payload?.query
       };
     },
     reasoningFollowup: () => void ({}),
-    reasoningCancel: state => {
-      state.wip             = false;
-      state.error           = null;
-      state.reasoningRequestKind = null;
-      state.reasoningStatus = {
-        session_id: state.reasoningStatus?.session_id,
+    reasoningCancel: (state, { payload } = {}) => {
+      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+      reasoningState.wip         = false;
+      state.error                = null;
+      reasoningState.requestKind = null;
+      reasoningState.status = {
+        session_id: reasoningState.status?.session_id,
         state     : 'canceled',
         phase     : 'canceled',
         done      : true
@@ -89,30 +133,32 @@ const searchSlice = createSlice({
       state.wip              = false;
       state.error            = null;
       state.queryResult      = payload.searchResults;
+      state.searchRequest    = payload.searchRequest || null;
       state.prevFilterParams = payload.filterParams;
       state.prevQuery        = payload.query;
       state.pageNo           = payload.pageNo;
     },
     reasoningSearchSuccess: (state, { payload }) => {
+      const reasoningState = getReasoningSearchStateForPayload(state, payload);
       const nextResults = Array.isArray(payload.searchResults?.results) ? payload.searchResults.results : [];
-      if (state.reasoningRequestKind === 'followup') {
+      if (reasoningState.requestKind === 'followup') {
         const nextResultIds = new Set(nextResults.map(result => result?.mdb_uid).filter(Boolean));
-        const currentResults = Array.isArray(state.reasoningResult?.results) ? state.reasoningResult.results : [];
+        const currentResults = Array.isArray(reasoningState.result?.results) ? reasoningState.result.results : [];
 
-        state.reasoningPreviousResults = dedupePreviousAgenticResults([
+        reasoningState.previousResults = dedupePreviousAgenticResults([
           ...currentResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid)),
-          ...state.reasoningPreviousResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid))
+          ...reasoningState.previousResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid))
         ]);
       } else {
-        state.reasoningPreviousResults = [];
+        reasoningState.previousResults = [];
       }
 
-      state.wip             = false;
-      state.error           = null;
-      state.reasoningResult = payload.searchResults;
-      state.reasoningRequestKind = null;
-      state.reasoningStatus = {
-        session_id: payload.searchResults.session_id || state.reasoningStatus?.session_id,
+      reasoningState.wip         = false;
+      state.error                = null;
+      reasoningState.result      = payload.searchResults;
+      reasoningState.requestKind = null;
+      reasoningState.status = {
+        session_id: payload.searchResults.session_id || reasoningState.status?.session_id,
         state     : 'completed',
         phase     : 'done',
         done      : true
@@ -121,22 +167,37 @@ const searchSlice = createSlice({
       state.pageNo          = 1;
     },
     reasoningStatusUpdate: (state, { payload }) => {
-      state.reasoningStatus = payload;
-      if (payload?.state === 'canceled' || payload?.phase === 'canceled') {
-        state.wip = false;
-        state.reasoningRequestKind = null;
+      const { searchType, ...status } = payload || {};
+      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+      reasoningState.status = {
+        ...status,
+        query: status.query || reasoningState.status?.query
+      };
+      if (status?.state === 'canceled' || status?.phase === 'canceled') {
+        reasoningState.wip = false;
+        reasoningState.requestKind = null;
       }
     },
     searchFailure: (state, { payload }) => {
-      state.wip                = false;
-      state.reasoningRequestKind = null;
-      state.error              = payload;
+      const failure = getSearchFailurePayload(payload);
+      if (isAgenticSearchType(failure.searchType)) {
+        const reasoningState = getReasoningSearchStateForPayload(state, failure);
+        reasoningState.wip = false;
+        reasoningState.requestKind = null;
+        if (state.searchType === failure.searchType) {
+          state.error = null;
+        }
+        return;
+      }
+
+      state.wip   = false;
+      state.error = failure.error;
     },
     hydrateUrl: () => ({}),
     setPage: (state, { payload }) => void (state.pageNo = payload),
     setSortBy: (state, { payload }) => void (state.sortBy = payload),
     setSearchType: (state, { payload }) => {
-      state.searchType = payload === SEARCH_TYPES.AGENTIC ? SEARCH_TYPES.AGENTIC : SEARCH_TYPES.REGULAR;
+      state.searchType = isAgenticSearchType(payload) ? payload : SEARCH_TYPES.REGULAR;
       state.pageNo     = 1;
     },
     updateQuery: (state, { payload }) => {
@@ -162,13 +223,13 @@ const searchSlice = createSlice({
     getQuery           : state => state.q,
     getPrevQuery       : state => state.prevQuery,
     getQueryResult     : state => state.queryResult,
-    getReasoningPreviousResults: state => state.reasoningPreviousResults,
-    getReasoningResult : state => state.reasoningResult,
-    getReasoningStatus : state => state.reasoningStatus,
+    getReasoningPreviousResults: state => getReasoningSearchState(state).previousResults,
+    getReasoningResult : state => getReasoningSearchState(state).result,
+    getReasoningStatus : state => getReasoningSearchState(state).status,
     getSearchType      : state => state.searchType,
     getSortBy          : state => state.sortBy,
     getSuggestions     : state => state.suggestions,
-    getWip             : state => state.wip
+    getWip             : state => isAgenticSearchType(state.searchType) ? getReasoningSearchState(state).wip : state.wip
   }
 });
 

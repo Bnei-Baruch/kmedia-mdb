@@ -25,7 +25,7 @@ import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
-import { actions, SEARCH_TYPES } from '../../redux/modules/search';
+import { actions, isAgenticSearchType, SEARCH_TYPES } from '../../redux/modules/search';
 import { actions as publicationActions } from '../../redux/modules/publications';
 
 import { filtersTransformer } from '../../filters';
@@ -73,7 +73,7 @@ import {
 } from '../../redux/selectors';
 import Link from '../Language/MultiLanguageLink';
 
-const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'done', 'error'];
+const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'finalizing', 'done', 'error'];
 const AGENTIC_TWEET_RESULT_TYPES = new Set(['twitter', 'tweet', 'tweets', 'tweets_many']);
 
 const getAgenticResultMeta = result => {
@@ -182,7 +182,7 @@ const SearchResults = ({ t }) => {
   const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
   const searchType    = useSelector(searchGetSearchTypeSelector);
   const searchResults = queryResult.search_result;
-  const isAgenticSearch = searchType === SEARCH_TYPES.AGENTIC;
+  const isAgenticSearch = isAgenticSearchType(searchType);
 
   const cMap    = useSelector(state => cMapFromState(state, searchResults));
   const cuMap   = useSelector(state => cuMapFromState(state, searchResults));
@@ -219,7 +219,7 @@ const SearchResults = ({ t }) => {
       .filter(isAgenticTweetResult)
       .map(result => result.mdb_uid)
       .filter((mdbUid, index, ids) => ids.indexOf(mdbUid) === index);
-  }, [reasoningPreviousResults, reasoningResult]);
+  }, [isAgenticSearch, reasoningPreviousResults, reasoningResult]);
   const agenticTweetsById = useSelector(state => agenticTweetIds.reduce((acc, mdbUid) => {
     const tweet = publicationsGetTwitterSelector(state, mdbUid);
     if (tweet) {
@@ -288,10 +288,16 @@ const SearchResults = ({ t }) => {
           {t('search.types.regular')}
         </Button>
         <Button
-          active={isAgenticSearch}
+          active={searchType === SEARCH_TYPES.AGENTIC}
           onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC)}
         >
           {t('search.types.agentic')}
+        </Button>
+        <Button
+          active={searchType === SEARCH_TYPES.AGENTIC_RAPID}
+          onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC_RAPID)}
+        >
+          {t('search.types.agenticRapid')}
         </Button>
       </Button.Group>
       <Label basic color="blue" className="margin-left-8 margin-right-8">
@@ -854,7 +860,7 @@ const SearchResults = ({ t }) => {
   const query = getQuery(location).q || '';
   const deb   = isDebMode(location);
 
-  const wipErr = WipErr({ wip: !isAgenticSearch && (wip || !areSourcesLoaded || !areTagsLoaded), err, t });
+  const wipErr = WipErr({ wip: !isAgenticSearch && (wip || !areSourcesLoaded || !areTagsLoaded), err: isAgenticSearch ? null : err, t });
   if (wipErr) {
     return renderSearchFrame(
       <>

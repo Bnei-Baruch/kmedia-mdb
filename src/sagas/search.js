@@ -3,7 +3,7 @@ import { all, call, put, select, spawn, takeEvery, takeLatest } from 'redux-saga
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
-import { actions, SEARCH_TYPES, selectors, types } from '../redux/modules/search';
+import { actions, isAgenticSearchType, SEARCH_TYPES, selectors, types } from '../redux/modules/search';
 import { types as settingsTypes } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
@@ -21,10 +21,10 @@ import {
   searchGetPrevFilterParamsSelector,
   searchGetPrevQuerySelector,
   searchGetQuerySelector,
+  searchGetQueryResultSelector,
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
-  searchGetWipSelector,
   searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
   settingsGetUILangSelector
@@ -41,10 +41,26 @@ const reasoningStatusCompleted = status => !!status && (status.done || status.st
 const reasoningStatusFailed = status => !!status && (status.state === 'failed' || status.phase === 'error');
 const reasoningStatusCanceled = status => !!status && (status.state === 'canceled' || status.phase === 'canceled');
 const reasoningStatusTerminal = status => reasoningStatusCompleted(status) || reasoningStatusFailed(status) || reasoningStatusCanceled(status);
+const reasoningSearchIsRapid = searchType => searchType === SEARCH_TYPES.AGENTIC_RAPID;
+const reasoningStatusForType = (state, searchType) => state.search.reasoningByType?.[searchType]?.status;
+const reasoningResultForType = (state, searchType) => state.search.reasoningByType?.[searchType]?.result;
+const reasoningWipForType = (state, searchType) => !!state.search.reasoningByType?.[searchType]?.wip;
 const isConnectionRefused = err => err?.code === 'ERR_CONNECTION_REFUSED' || err?.message?.includes('ERR_CONNECTION_REFUSED');
 const responseStatus = value => value?.http_status || value?.status || value?.response?.status;
 const isNotFound = value => responseStatus(value) === 404;
 const combineFollowupQuery = (originalQuery, followupQuery) => [originalQuery, followupQuery].filter(Boolean).join('; ');
+const sameSearchQuery = (a, b) => (a || '').trim() === (b || '').trim();
+const arrayEquals = (a, b) => (
+  Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value, index) => value === b[index])
+);
+const sameRegularSearchRequest = (a, b) => !!a && !!b
+  && a.q === b.q
+  && a.sortBy === b.sortBy
+  && a.ui_language === b.ui_language
+  && arrayEquals(a.content_languages, b.content_languages)
+  && a.deb === b.deb
+  && a.pageNo === b.pageNo
+  && a.pageSize === b.pageSize;
 
 const reasoningErrorMessage = err => {
   if (isConnectionRefused(err)) {
@@ -102,12 +118,13 @@ function* fetchReasoningStatus(sessionId) {
   }
 }
 
-function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb) {
+function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb, isRapid) {
   let cacheData = null;
   try {
     const cacheResponse = yield call(Api.reasoningSearchCache, {
       q          : originalQuery,
-      ui_language: uiLang
+      ui_language: uiLang,
+      is_rapid   : isRapid
     });
     cacheData = cacheResponse?.data;
   } catch (_) {
@@ -122,7 +139,8 @@ function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb) {
         q          : followupQuery,
         session_id : cacheData.session_id,
         ui_language: uiLang,
-        deb        : isDebEnabled(deb)
+        deb        : isDebEnabled(deb),
+        is_rapid   : isRapid
       }
     };
   }
@@ -135,19 +153,19 @@ function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb) {
     request   : {
       q          : fallbackQuery,
       ui_language: uiLang,
-      deb        : isDebEnabled(deb)
+      deb        : isDebEnabled(deb),
+      is_rapid   : isRapid
     }
   };
 }
 
-function* pollReasoningStatus(sessionId) {
+function* pollReasoningStatus(sessionId, searchType) {
   let polling = true;
   let finalStatus = null;
 
   while (polling) {
-    const currentStatus = yield select(searchGetReasoningStatusSelector);
-    const currentSearchType = yield select(searchGetSearchTypeSelector);
-    if (currentSearchType !== SEARCH_TYPES.AGENTIC || currentStatus?.session_id !== sessionId) {
+    const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+    if (!isAgenticSearchType(searchType) || currentStatus?.session_id !== sessionId) {
       return null;
     }
 
@@ -165,9 +183,8 @@ function* pollReasoningStatus(sessionId) {
 
     const status = yield call(fetchReasoningStatus, sessionId);
     if (status) {
-      const nextStatus = yield select(searchGetReasoningStatusSelector);
-      const nextSearchType = yield select(searchGetSearchTypeSelector);
-      if (nextSearchType !== SEARCH_TYPES.AGENTIC || nextStatus?.session_id !== sessionId) {
+      const nextStatus = yield select(state => reasoningStatusForType(state, searchType));
+      if (nextStatus?.session_id !== sessionId) {
         return null;
       }
 
@@ -177,7 +194,7 @@ function* pollReasoningStatus(sessionId) {
         continue;
       }
 
-      yield put(actions.reasoningStatusUpdate(status));
+      yield put(actions.reasoningStatusUpdate({ ...status, searchType }));
       if (reasoningStatusTerminal(status)) {
         finalStatus = status;
         polling = false;
@@ -193,10 +210,9 @@ function* pollReasoningStatus(sessionId) {
   return finalStatus;
 }
 
-function* fetchReasoningResult(sessionId, query) {
-  const currentStatus = yield select(searchGetReasoningStatusSelector);
-  const currentSearchType = yield select(searchGetSearchTypeSelector);
-  if (currentSearchType !== SEARCH_TYPES.AGENTIC || currentStatus?.session_id !== sessionId) {
+function* fetchReasoningResult(sessionId, query, searchType) {
+  const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+  if (!isAgenticSearchType(searchType) || currentStatus?.session_id !== sessionId) {
     return;
   }
 
@@ -208,26 +224,26 @@ function* fetchReasoningResult(sessionId, query) {
     );
   }
 
-  const nextStatus = yield select(searchGetReasoningStatusSelector);
-  const nextSearchType = yield select(searchGetSearchTypeSelector);
-  if (nextSearchType !== SEARCH_TYPES.AGENTIC || nextStatus?.session_id !== sessionId) {
+  const nextStatus = yield select(state => reasoningStatusForType(state, searchType));
+  if (nextStatus?.session_id !== sessionId) {
     return;
   }
 
   yield put(actions.reasoningSearchSuccess({
     searchResults: resultResponse.data,
-    query
+    query,
+    searchType
   }));
 }
 
-function* finishReasoningSession(sessionId, query) {
-  const finalStatus = yield call(pollReasoningStatus, sessionId);
+function* finishReasoningSession(sessionId, query, searchType) {
+  const finalStatus = yield call(pollReasoningStatus, sessionId, searchType);
   if (!finalStatus || reasoningStatusCanceled(finalStatus)) {
     return;
   }
 
-  const currentResult = yield select(searchGetReasoningResultSelector);
-  const wip = yield select(searchGetWipSelector);
+  const currentResult = yield select(state => reasoningResultForType(state, searchType));
+  const wip = yield select(state => reasoningWipForType(state, searchType));
   if (!wip && currentResult?.session_id === sessionId) {
     return;
   }
@@ -236,23 +252,23 @@ function* finishReasoningSession(sessionId, query) {
     throw buildReasoningError(finalStatus?.message || 'Reasoning search failed');
   }
 
-  yield call(fetchReasoningResult, sessionId, query);
+  yield call(fetchReasoningResult, sessionId, query, searchType);
 }
 
-function* runReasoningSession(sessionId, query) {
+function* runReasoningSession(sessionId, query, searchType) {
   try {
-    yield call(finishReasoningSession, sessionId, query);
+    yield call(finishReasoningSession, sessionId, query, searchType);
   } catch (err) {
-    const currentStatus = yield select(searchGetReasoningStatusSelector);
-    const currentSearchType = yield select(searchGetSearchTypeSelector);
-    if (currentSearchType === SEARCH_TYPES.AGENTIC && currentStatus?.session_id === sessionId) {
-      yield put(actions.reasoningStatusUpdate(failedReasoningStatus(sessionId, reasoningErrorMessage(err))));
-      yield put(actions.searchFailure(err));
+    const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+    if (isAgenticSearchType(searchType) && currentStatus?.session_id === sessionId) {
+      yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err)), searchType }));
+      yield put(actions.searchFailure({ error: err, searchType }));
     }
   }
 }
 
 function* cancelReasoningSearch() {
+  const searchType = yield select(searchGetSearchTypeSelector);
   const status    = yield select(searchGetReasoningStatusSelector);
   const sessionId = status?.session_id;
   if (!sessionId) {
@@ -270,12 +286,13 @@ function* cancelReasoningSearch() {
 
     yield* urlUpdateQuery(query => Object.assign(query, { session_id: null }));
   } catch (err) {
-    yield put(actions.reasoningStatusUpdate(failedReasoningStatus(sessionId, reasoningErrorMessage(err))));
-    yield put(actions.searchFailure(err));
+    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err)), searchType }));
+    yield put(actions.searchFailure({ error: err, searchType }));
   }
 }
 
 function* finishReasoningSearchNow() {
+  const searchType = yield select(searchGetSearchTypeSelector);
   const status    = yield select(searchGetReasoningStatusSelector);
   const sessionId = status?.session_id;
   if (!sessionId) {
@@ -293,10 +310,10 @@ function* finishReasoningSearchNow() {
 
     const reasoningResult = yield select(searchGetReasoningResultSelector);
     const query = reasoningResult?.query || (yield select(searchGetQuerySelector));
-    yield call(fetchReasoningResult, sessionId, query);
+    yield call(fetchReasoningResult, sessionId, query, searchType);
   } catch (err) {
-    yield put(actions.reasoningStatusUpdate(failedReasoningStatus(sessionId, reasoningErrorMessage(err), responseStatus(err))));
-    yield put(actions.searchFailure(err));
+    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err), responseStatus(err)), searchType }));
+    yield put(actions.searchFailure({ error: err, searchType }));
   }
 }
 
@@ -350,6 +367,7 @@ export function* search(action) {
     const uiLang     = yield select(settingsGetUILangSelector);
     const isFollowup = action && action.type === types['search/reasoningFollowup'];
     const isExplicitSearch = action && action.type === types['search/search'];
+    const isSearchTypeChange = action && action.type === types['search/setSearchType'];
     const urlQuery   = yield* getQuery();
 
     // Redirect from home page.
@@ -358,12 +376,12 @@ export function* search(action) {
       yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
     }
 
-    if (searchType === SEARCH_TYPES.AGENTIC) {
+    if (isAgenticSearchType(searchType)) {
       const previousReasoningResult = yield select(searchGetReasoningResultSelector);
       const previousReasoningStatus = yield select(searchGetReasoningStatusSelector);
       const sessionIdFromPrevious   = previousReasoningResult?.session_id;
       const runningSessionId        = !reasoningStatusTerminal(previousReasoningStatus) ? previousReasoningStatus?.session_id : null;
-      const restoreSessionId        = !isExplicitSearch && !isFollowup ? urlQuery.session_id : null;
+      const restoreSessionId        = !isExplicitSearch && !isFollowup && urlQuery.search_type === searchType ? urlQuery.session_id : null;
       const originalQuery           = previousReasoningResult?.query || query?.trim();
       const q                       = isFollowup ? action.payload?.query?.trim() : query?.trim();
       let request                   = {
@@ -371,11 +389,22 @@ export function* search(action) {
         session_id : isFollowup ? sessionIdFromPrevious : undefined,
         cancel_session_id: !isFollowup && !restoreSessionId ? runningSessionId : undefined,
         ui_language: uiLang,
-        deb        : isDebEnabled(deb)
+        deb        : isDebEnabled(deb),
+        is_rapid   : reasoningSearchIsRapid(searchType)
       };
       let resultQuery               = isFollowup ? originalQuery : query;
       if (!q) {
         yield put(actions.searchFailure(null));
+        return;
+      }
+
+      if (
+        isSearchTypeChange
+        && (
+          sameSearchQuery(previousReasoningResult?.query, query)
+          || sameSearchQuery(previousReasoningStatus?.query, query)
+        )
+      ) {
         return;
       }
 
@@ -384,14 +413,20 @@ export function* search(action) {
       }
 
       if (restoreSessionId) {
-        yield put(actions.reasoningSearchStart({ keepResult: false, sessionId: restoreSessionId, requestKind: 'initial' }));
+        yield put(actions.reasoningSearchStart({
+          keepResult : false,
+          sessionId  : restoreSessionId,
+          requestKind: 'initial',
+          searchType,
+          query      : resultQuery
+        }));
         const status = yield call(fetchReasoningStatus, restoreSessionId);
         // URL sessions can expire on the backend. A 404 should silently restart the search.
         if (status && !isNotFound(status)) {
-          yield put(actions.reasoningStatusUpdate(status));
+          yield put(actions.reasoningStatusUpdate({ ...status, searchType }));
           if (reasoningStatusCompleted(status)) {
             try {
-              yield call(fetchReasoningResult, restoreSessionId, query);
+              yield call(fetchReasoningResult, restoreSessionId, query, searchType);
               return;
             } catch (err) {
               if (!isNotFound(err)) {
@@ -401,7 +436,7 @@ export function* search(action) {
           }
 
           if (!reasoningStatusFailed(status) && !reasoningStatusCanceled(status)) {
-            yield spawn(runReasoningSession, restoreSessionId, query);
+            yield spawn(runReasoningSession, restoreSessionId, query, searchType);
             return;
           }
         }
@@ -412,7 +447,9 @@ export function* search(action) {
       yield put(actions.reasoningSearchStart({
         keepResult : isFollowup,
         sessionId  : sessionIdFromPrevious,
-        requestKind: isFollowup ? 'followup' : 'initial'
+        requestKind: isFollowup ? 'followup' : 'initial',
+        searchType,
+        query      : resultQuery
       }));
 
       let startData;
@@ -425,13 +462,13 @@ export function* search(action) {
         }
 
         // Follow-up sessions can expire. Recover the original search from cache, or start over with a combined query.
-        const recovery = yield call(recoverFollowupRequest, originalQuery, q, uiLang, deb);
+        const recovery = yield call(recoverFollowupRequest, originalQuery, q, uiLang, deb, reasoningSearchIsRapid(searchType));
         const { keepResult, request: recoveryRequest, resultQuery: recoveryResultQuery } = recovery;
         request = recoveryRequest;
         resultQuery = recoveryResultQuery;
         if (!keepResult) {
           yield put(actions.updateQuery({ query: resultQuery, autocomplete: false }));
-          yield put(actions.reasoningSearchStart({ keepResult: false, requestKind: 'initial' }));
+          yield put(actions.reasoningSearchStart({ keepResult: false, requestKind: 'initial', searchType, query: resultQuery }));
         }
 
         const { data } = yield call(Api.reasoningSearchStart, request);
@@ -448,10 +485,12 @@ export function* search(action) {
         session_id: sessionId,
         state     : 'pending',
         phase     : 'pending',
-        done      : false
+        done      : false,
+        query     : resultQuery,
+        searchType
       }));
 
-      yield spawn(runReasoningSession, sessionId, resultQuery);
+      yield spawn(runReasoningSession, sessionId, resultQuery, searchType);
       return;
     }
 
@@ -506,6 +545,12 @@ export function* search(action) {
       pageNo,
       pageSize: 20
     };
+
+    const queryResult = yield select(searchGetQueryResultSelector);
+    const previousSearchRequest = yield select(state => state.search.searchRequest);
+    if (isSearchTypeChange && queryResult?.search_result && sameRegularSearchRequest(previousSearchRequest, request)) {
+      return;
+    }
 
     yield put(actions.setWip());
     const { data } = yield call(Api.search, request);
@@ -590,16 +635,19 @@ export function* search(action) {
     yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
   } catch (err) {
     const failedSearchType = yield select(searchGetSearchTypeSelector);
-    if (failedSearchType === SEARCH_TYPES.AGENTIC) {
+    if (isAgenticSearchType(failedSearchType)) {
       yield put(actions.reasoningStatusUpdate({
         state  : 'failed',
         phase  : 'error',
         done   : true,
-        message: reasoningErrorMessage(err)
+        message: reasoningErrorMessage(err),
+        searchType: failedSearchType
       }));
     }
 
-    yield put(actions.searchFailure(err));
+    yield put(actions.searchFailure(
+      isAgenticSearchType(failedSearchType) ? { error: err, searchType: failedSearchType } : err
+    ));
   }
 }
 
@@ -612,7 +660,7 @@ export function* hydrateUrl() {
   const reduxPageNo     = yield select(searchGetPageNoSelector);
   const reduxDeb        = yield select(searchGetDebSelector);
   const reduxSearchType = yield select(searchGetSearchTypeSelector);
-  const searchType      = type === SEARCH_TYPES.AGENTIC ? SEARCH_TYPES.AGENTIC : SEARCH_TYPES.REGULAR;
+  const searchType      = isAgenticSearchType(type) ? type : SEARCH_TYPES.REGULAR;
   const isDeb           = isDebEnabled(deb);
 
   if (q) {
@@ -661,11 +709,16 @@ function* updateSortByInQuery(action) {
 }
 
 function* updateSearchTypeInQuery(action) {
-  const searchType = action.payload === SEARCH_TYPES.AGENTIC ? SEARCH_TYPES.AGENTIC : null;
+  const searchType = isAgenticSearchType(action.payload) ? action.payload : null;
+  let status = null;
+  if (searchType) {
+    status = yield select(state => reasoningStatusForType(state, searchType));
+  }
+
   yield* urlUpdateQuery(query => Object.assign(query, {
     search_type: searchType,
     page       : null,
-    session_id : searchType ? query.session_id : null
+    session_id : searchType ? status?.session_id || null : null
   }));
 }
 

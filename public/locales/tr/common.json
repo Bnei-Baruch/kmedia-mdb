@@ -295,6 +295,7 @@
     "types": {
       "regular": "Normal arama",
       "agentic": "Ajanlı arama",
+      "agenticRapid": "Ajanlı arama (hızlı)",
       "beta": "Beta",
       "agenticBeta": "Ajanlı arama beta aşamasındadır."
     },
@@ -341,6 +342,7 @@
           "Bulgular gözden geçiriliyor ve ana yön güçlendiriliyor..."
         ],
         "verifying": "Sonuçların kalitesi doğrulanıyor...",
+        "finalizing": "Sonuçlar hazırlanıyor...",
         "done": "Arama tamamlandı",
         "error": "Aramayı tamamlayamadık",
         "canceled": "Arama durduruldu",
