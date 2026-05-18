@@ -118,37 +118,28 @@ const DateFilter = ({ namespace }) => {
   const iconName      = isLanguageRtl(uiLang) ? 'arrow_left' : 'arrow_right';
   const renderContent = () => (
     <div className="filter-popup__wrapper border rounded bg-white p-4">
-      {
-        datePresets.map((x, i) =>
-          (
-            <div key={`${FN_DATE_FILTER}_${i}`}>
-              <div className="date-filter-presets">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={preset === x}
-                    value={x}
-                    onChange={handleDatePresetsChange}
-                  />
-                  {t(`filters.date-filter.presets.${x}`)}
-                </label>
-                {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
-              </div>
-            </div>
-          )
-        )
-      }
-      <ul className="date-filter">
-        <li>
-          <div
-            className="cursor-pointer flex items-center"
-            onClick={toggleDay}
-          >
+      <div className="flex flex-col gap-2">
+        {datePresets.map((x, i) => (
+          <div key={`${FN_DATE_FILTER}_${i}`} className="flex items-center justify-between">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={preset === x}
+                value={x}
+                onChange={handleDatePresetsChange}
+              />
+              {t(`filters.date-filter.presets.${x}`)}
+            </label>
+            {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="text-sm text-gray-500">{`(${stats[i]})`}</span>}
+          </div>
+        ))}
+        <div>
+          <div className="cursor-pointer flex items-center gap-1" onClick={toggleDay}>
             {t('filters.date-filter.presets.CUSTOM_DAY')}
-            <span className="material-symbols-outlined text-blue-500">{iconName}</span>
+            <span className="material-symbols-outlined text-blue-500 text-sm">{iconName}</span>
           </div>
           {showDay && (
-            <div>
+            <div className="mt-2">
               <FastDayPicker
                 label={null}
                 value={from}
@@ -157,17 +148,14 @@ const DateFilter = ({ namespace }) => {
               />
             </div>
           )}
-        </li>
-        <li>
-          <div
-            className="cursor-pointer flex items-center"
-            onClick={toggleRange}
-          >
+        </div>
+        <div>
+          <div className="cursor-pointer flex items-center gap-1" onClick={toggleRange}>
             {t('filters.date-filter.presets.CUSTOM_RANGE')}
-            <span className="material-symbols-outlined text-blue-500">{iconName}</span>
+            <span className="material-symbols-outlined text-blue-500 text-sm">{iconName}</span>
           </div>
           {showRange && (
-            <div>
+            <div className="mt-2">
               <FastDayPicker
                 label={t('filters.date-filter.start')}
                 value={from}
@@ -183,8 +171,8 @@ const DateFilter = ({ namespace }) => {
               />
             </div>
           )}
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   );
   return (

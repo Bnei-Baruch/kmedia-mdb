@@ -19,11 +19,11 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
     return (
       <div
         {...rest}
-        className={`text_toolbar_btn_with_text ${extraClass || ''}`}
+        className={clsx('flex flex-col items-center gap-1 text-gray-600', extraClass)}
         disabled={disabled}
       >
         {icon}
-        <span className="title">
+        <span className="block text-xs font-semibold leading-5">
           {t(`page-with-text.buttons.mobile.${textKey}`)}
         </span>
       </div>
