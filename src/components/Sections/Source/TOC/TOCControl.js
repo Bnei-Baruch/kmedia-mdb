@@ -11,7 +11,7 @@ const TocControl = ({ textKey }) => {
     <div className="toc_control">
       <TocToggleBtn withText={false} textKey={textKey} />
       <button
-        className="toc_close clear_button border border-gray-300 rounded bg-white hover:bg-gray-50 p-1"
+        className="toc_close p-1"
         onClick={handleClose}
       >
         <span className="material-symbols-outlined">close</span>

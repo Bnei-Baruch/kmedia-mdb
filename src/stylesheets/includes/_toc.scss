@@ -5,7 +5,7 @@
 
 .toc {
   background: colors-helpers.$white;
-  padding: 1em;
+  padding: .5em 1em 1em;
   position: fixed;
   height: calc(100VH - variables.$main-menu-height - variables.$breadcrumb-height);
   bottom: 0;
@@ -127,7 +127,6 @@
     }
 
     .active.content {
-      padding: 0;
       margin-right: 10px;
 
       .ltr & {

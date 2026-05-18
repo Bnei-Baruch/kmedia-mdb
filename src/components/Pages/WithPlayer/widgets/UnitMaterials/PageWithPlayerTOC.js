@@ -22,22 +22,22 @@ const PageWithPlayerTOC = ({ cus, onClick, textKey }) => {
   return (
     <div className={clsx('toc no_print', { 'toc_active': tocIsActive })}>
       <TOCControl textKey={textKey}/>
-      <ul className="list-none p-0">
+      <div className="p-0">
         {
           cus.map(cu => (
-            <li
+            <div
               key={cu.id}
               onClick={() => handleClick(cu.id)}
-              className="player_page_source_toc_item toc_single_level accordion"
+              className="player_page_source_toc_item toc_single_level"
             >
               <div className={clsx('title', { 'active': cu.id === id })}>
                 {cu.name}
               </div>
-            </li>
+            </div>
           )
           )
         }
-      </ul>
+      </div>
     </div>
   );
 };

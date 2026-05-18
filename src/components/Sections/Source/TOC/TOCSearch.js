@@ -21,12 +21,12 @@ const TocSearch = () => {
 
   return (
     <div className="toc_filter">
-      <div className="relative w-full">
+      <div className="relative w-full top-search">
         {!match && (
-          <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 small pointer-events-none">search</span>
+          <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">search</span>
         )}
         <input
-          className="toc_search w-full text-xs border border-gray-300 rounded px-2 py-1"
+          className="toc_search w-full text-xs border border-gray-300 rounded px-2 py-2"
           placeholder={`${t('buttons.search')}...`}
           value={match}
           onChange={handleChange}

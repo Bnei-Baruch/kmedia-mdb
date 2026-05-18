@@ -38,7 +38,7 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
     return (
       <button
         {...triggerProps}
-        className={clsx('clear_button border border-gray-300 rounded bg-white hover:bg-gray-50 p-1', { 'bg-gray-100': tocIsActive })}
+        className={clsx('bg-white p-1', { 'bg-gray-100': tocIsActive })}
       >
         {iconEl}
         {triggerProps.content}
@@ -48,7 +48,7 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
 
   return (
     <button
-      className={clsx('toc_trigger clear_button border border-gray-300 rounded bg-white hover:bg-gray-50 p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobileDevice })}
+      className={clsx('toc_trigger  bg-white p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobileDevice })}
       onClick={handleTocIsActive}
     >
       <span className="material-symbols-outlined">view_list</span>

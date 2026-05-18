@@ -55,40 +55,48 @@ const Layout = ({ playerContainer }) => {
   }
 
   const toggleSidebar = () => setSidebarActive(!sidebarActive);
-  const sideBarIcon = sidebarActive ? <Icon icon={faXmark} className="sidebar-icon" /> : <Icon icon={faBars} className="sidebar-icon" />;
+  const sideBarIcon = sidebarActive
+    ? <Icon icon={faXmark} className="text-[1.8rem] leading-none" />
+    : <Icon icon={faBars} className="text-[1.8rem] leading-none" />;
+
   return (
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
       <GAPageView location={location} />
       <div className="headroom-z-index-802">
         <HeadroomWraper>
-          <div className="layout__header">
-            <div className="layout__topbar">
-              <div ref={toggleSidebarBtnRef}>
+          <div className="left-0 right-0 top-0 z-[2000]">
+            <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
+              <div ref={toggleSidebarBtnRef} className={clsx({ 'min-[1490px]:!hidden': !isFullscreen })}>
                 <a
-                  className="layout__sidebar-toggle"
+                  className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
                   onClick={toggleSidebar}
                 >
                   {sideBarIcon}
                 </a>
               </div>
-              <Link className="logo" to="/">
+              <Link
+                className="flex-initial min-w-0 min-[1490px]:min-w-[300px] px-3 leading-4 gap-2 flex items-center text-white no-underline hover:text-white"
+                to="/"
+              >
                 <Logo width="42px" height="80px" />
-                <div className="logo__titles">
+                <div className="flex flex-col leading-4 justify-center">
                   {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
-                    <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
+                    <div className="text-white text-[1.4rem] font-bold tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-[1.2rem]">
+                      {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
+                    </div>
                   )}
-                  <h1>{t('nav.top.header')}</h1>
+                  <h1 className="text-white m-0 font-normal text-xl max-md:text-base">{t('nav.top.header')}</h1>
                 </div>
               </Link>
-              <div className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
+              <div className={isMobileDevice ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>
                 {isNotHome && <OmniBox />}
               </div>
-              <div className="layout__header-buttons">
+              <div className="flex items-center flex-nowrap justify-between gap-4 shrink-0">
                 <HandleLanguages />
                 {
                   isNotHome && isMobileDevice &&
                   <div ref={toggleSearchBtnRef}>
-                    <a className="layout__mobile-search-toggle text-white">
+                    <a className="flex items-center justify-center cursor-pointer text-white">
                       <Icon icon={faSearch} className="no-margin" onClick={openHeaderSearch} />
                     </a>
                   </div>
@@ -111,7 +119,7 @@ const Layout = ({ playerContainer }) => {
           {
             isShowSearch && (
               <div ref={headerSearchRef}>
-                <div className="header_search">
+                <div className="!bg-brand-blue border-none shadow-none py-4 px-6 text-white">
                   <OmniBox />
                 </div>
               </div>
@@ -126,19 +134,25 @@ const Layout = ({ playerContainer }) => {
         <div className="layout__sidebar-header">
           <div ref={closeSidebarBtnRef}>
             <a
-              className="layout__sidebar-toggle"
+              className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
               onClick={closeSidebar}
             >
               {sideBarIcon}
             </a>
           </div>
-          <Link className="logo mobile-hidden" to="/" onClick={closeSidebar}>
+          <Link
+            className="flex-initial min-w-0 p-4 leading-4 gap-2 flex items-center text-white no-underline hover:text-white max-md:hidden"
+            to="/"
+            onClick={closeSidebar}
+          >
             <Logo width="2.5em" height="2.5em" />
-            <div className="logo__titles">
+            <div className="ms-4 flex flex-col leading-4 justify-center">
               {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
-                <div className="logo__subtitle">{i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}</div>
+                <div className="text-white text-[1.4rem] font-black tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-[1.2rem]">
+                  {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
+                </div>
               )}
-              <h1>{t('nav.top.header')}</h1>
+              <h1 className="text-white m-0 font-normal text-2xl">{t('nav.top.header')}</h1>
             </div>
           </Link>
         </div>

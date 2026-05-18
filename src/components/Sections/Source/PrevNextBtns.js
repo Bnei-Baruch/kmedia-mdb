@@ -21,10 +21,10 @@ import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 const PrevNextBtns = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { id }        = useSelector(textPageGetSubjectSelector);
-  const { isPdf }     = useSelector(textPageGetFileSelector);
+  const { id } = useSelector(textPageGetSubjectSelector);
+  const { isPdf } = useSelector(textPageGetFileSelector);
   const additionsMode = useSelector(textPageGetAdditionsModeSelector);
-  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   if (isTaas(id) && isPdf) {
@@ -32,7 +32,7 @@ const PrevNextBtns = () => {
   }
 
   const fullPath = getFullPath(id, getPathByID);
-  const len      = fullPath.length;
+  const len = fullPath.length;
   if (len < 2) {
     return null;
   }
@@ -43,36 +43,38 @@ const PrevNextBtns = () => {
   }
 
   const { children } = fullPath[len - 2];
-  const prevId       = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
-  const nextId       = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
+  const prevId = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
+  const nextId = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
 
   return (
-    <div className='mx-auto px-2 max-w-10'>
-      {prevId && <PrevBtn id={prevId}/>}
-      <span/>
-      {nextId && <NextBtn id={nextId}/>}
+    <div className='mx-auto text__content-wrapper mb-2'>
+      <div className='text__content flex justify-between w-full'>
+        {prevId && <PrevBtn id={prevId} />}
+        <span />
+        {nextId && <NextBtn id={nextId} />}
+      </div>
     </div>
   );
 };
 
 const PrevBtn = ({ id }) => {
-  const { t }              = useTranslation();
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = uiDir === 'ltr' ? 'chevron_left' : 'chevron_right';
+  const icon = uiDir === 'ltr' ? 'chevron_left' : 'chevron_right';
 
   const source = getSourceById(id);
 
-  const arrowSide           = uiDir === 'ltr' ? 'left' : 'right';
+  const arrowSide = uiDir === 'ltr' ? 'left' : 'right';
   const btnContentClassName = `btn-content prev ${arrowSide}`;
 
   return (
     <Link
       to={`sources/${id}`}
       title={source.name}
-      className="prev-next-btn inline-flex items-center border border-gray-300 rounded px-3 py-1.5 bg-white hover:bg-gray-50"
+      className="prev-next-btn inline-flex items-center border border-gray-300 rounded p-1.5 bg-white hover:bg-gray-50"
     >
       <div className={btnContentClassName}>
         <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
@@ -83,15 +85,15 @@ const PrevBtn = ({ id }) => {
 };
 
 const NextBtn = ({ id }) => {
-  const { t }              = useTranslation();
+  const { t } = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = uiDir !== 'ltr' ? 'chevron_left' : 'chevron_right';
+  const icon = uiDir !== 'ltr' ? 'chevron_left' : 'chevron_right';
 
-  const source              = getSourceById(id);
-  const arrowSide           = uiDir === 'ltr' ? 'right' : 'left';
+  const source = getSourceById(id);
+  const arrowSide = uiDir === 'ltr' ? 'right' : 'left';
   const btnContentClassName = `btn-content next ${arrowSide}`;
 
   return (

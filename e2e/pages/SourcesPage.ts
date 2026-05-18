@@ -2,7 +2,7 @@ import { Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 // A known Baal HaSulam source that exists in production data
-export const KNOWN_SOURCE_ID = 'qMUUn22b'; // BS_SHAMATI
+export const KNOWN_SOURCE_ID = 'hFeGidcS';
 
 export class SourcesPage extends BasePage {
   constructor(page: Page) {
@@ -27,15 +27,15 @@ export class SourcesPage extends BasePage {
   }
 
   get authorsTable() {
-    return this.page.locator('table.index-list');
+    return this.page.locator('div.index-list');
   }
 
   get authorRows() {
-    return this.page.locator('table.index-list tr');
+    return this.page.locator('div.index-list .author');
   }
 
   get authorSourceLinks() {
-    return this.page.locator('table.index-list a[href*="/sources/"]');
+    return this.page.locator('div.index-list a[href*="/sources/"]');
   }
 
   // Source route selectors

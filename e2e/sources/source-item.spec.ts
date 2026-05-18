@@ -5,7 +5,6 @@ test.describe('Source route', () => {
   test('loads text layout', async ({ page }) => {
     const sourcesPage = new SourcesPage(page);
     await sourcesPage.gotoSource();
-
     await expect(sourcesPage.textLayout).toBeVisible();
   });
 
@@ -20,6 +19,7 @@ test.describe('Source route', () => {
     const sourcesPage = new SourcesPage(page);
     await sourcesPage.gotoSource();
 
+    await page.pause()
     await expect(sourcesPage.breadcrumb).toBeVisible();
   });
 
@@ -42,6 +42,13 @@ test.describe('Source route', () => {
     });
 
     await expect(sourcesPage.textLayout).toBeVisible();
+  });
+
+  test('URL contains language prefix', async ({ page }) => {
+    const sourcesPage = new SourcesPage(page);
+    await sourcesPage.gotoSource();
+
+    await expect(page).toHaveURL(/\/(en|he)\/sources\//);
   });
 
   test('no JS errors on page load', async ({ page }) => {

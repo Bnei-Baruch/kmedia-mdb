@@ -157,20 +157,20 @@ const SimpleAccordion = ({ panels = [], defaultActiveIndex, onTitleClick, classN
           : contentEl;
 
         return (
-          <div key={panel.key || index}>
+          <>
             <div
-              className={clsx('title cursor-pointer', { active: isActive })}
+              className={clsx('title cursor-pointer py-2', { active: isActive })}
               onClick={e => handleClick(e, index, panel)}
             >
               {titleIcon}
               <span>{titleContent}</span>
             </div>
             {isActive && (
-              <div className="content active">
+              <div className="content active py-2">
                 {bodyContent}
               </div>
             )}
-          </div>
+          </>
         );
       })}
     </div>
@@ -228,7 +228,7 @@ const TOC = () => {
       <div
         id={titleKey(id)}
         key={titleKey(id)}
-        className={clsx('title cursor-pointer', { active: id === activeId })}
+        className={clsx('title cursor-pointer py-2', { active: id === activeId })}
         onClick={e => selectSourceById(id, e)}
       >
         {realTitle}
