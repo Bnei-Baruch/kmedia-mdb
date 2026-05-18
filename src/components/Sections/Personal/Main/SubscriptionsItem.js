@@ -82,7 +82,7 @@ export const SubscriptionsItem = ({ item, t }) => {
         <p className="small text-gray-500">{`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`}</p>
       </div>
       <div className="border-t p-4 text-center">
-        <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+        <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
           <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>

@@ -73,7 +73,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
           <button className="clear_button border-none bg-transparent" onClick={toggleEditName}>
             <span className="material-symbols-outlined text-2xl">edit</span>
           </button>
-          <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+          <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
             <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
             <div className="fixed inset-0 flex items-center justify-center p-4">
               <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>

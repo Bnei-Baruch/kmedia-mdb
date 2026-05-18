@@ -7,7 +7,7 @@ import { settingsGetUIDirSelector } from '../../redux/selectors';
 const AlertModal = ({ message, open, onClose }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
   return (
-    <Dialog open={!!open} onClose={onClose} className="relative z-50">
+    <Dialog open={!!open} onClose={onClose} className="relative">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="relative bg-white rounded-lg p-6 max-w-sm w-full shadow-xl" dir={uiDir}>

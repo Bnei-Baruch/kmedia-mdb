@@ -101,10 +101,10 @@ class ScoreDebug extends Component {
             <span className="material-symbols-outlined text-yellow-500 text-3xl">warning</span>
           </span>
         )}
-        <Dialog open={open} onClose={() => this.setState({ open: false })} className="relative z-50">
+        <Dialog open={open} onClose={() => this.setState({ open: false })} className="relative">
           <div className="fixed inset-0 bg-white/75" aria-hidden="true" />
           <div className="fixed inset-0 flex items-center justify-center p-4">
-            <DialogPanel className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto shadow-xl text-left">
+            <DialogPanel className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-auto shadow-xl text-left">
               <h2>{name}</h2>
               {this.reduceExplanation(explanation, treeOpen, 0)}
             </DialogPanel>

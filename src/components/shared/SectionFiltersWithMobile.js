@@ -29,9 +29,9 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   );
 
   const renderMobile = () => (
-    <div className="px-4">
+    <div className="px-2 pt-4">
       <FiltersHydrator namespace={namespace} />
-      <div className=" px-4">
+      <div>
         <button
           className="border border-blue-500 text-blue-500 rounded px-3 py-2 hover:bg-blue-50 inline-flex items-center gap-1"
           onClick={toggleFilters}
@@ -41,10 +41,10 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
         </button>
       </div>
       {children}
-      <Dialog open={openFilters} onClose={toggleFilters} className="relative z-50" dir={dir}>
+      <Dialog open={openFilters} onClose={toggleFilters} className="relative" dir={dir}>
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className={`bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col ${dir}`}>
+          <DialogPanel className={`bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col ${dir}`}>
             <div className="filters-aside-wrapper p-4 overflow-y-auto flex-1">
               {filters}
             </div>

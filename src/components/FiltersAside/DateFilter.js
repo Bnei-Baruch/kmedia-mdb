@@ -121,7 +121,7 @@ const DateFilter = ({ namespace }) => {
       {
         datePresets.map((x, i) =>
           (
-            <li key={`${FN_DATE_FILTER}_${i}`}>
+            <div key={`${FN_DATE_FILTER}_${i}`}>
               <div className="date-filter-presets">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -134,7 +134,7 @@ const DateFilter = ({ namespace }) => {
                 </label>
                 {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
               </div>
-            </li>
+            </div>
           )
         )
       }

@@ -24,7 +24,7 @@ const AddScanBookmarkBtn = () => {
         icon="bookmark"
         textKey="add-bookmark"
       />
-      <Dialog open={open} onClose={handleClose} className="relative z-50">
+      <Dialog open={open} onClose={handleClose} className="relative">
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
           <Dialog.Panel className="bookmark_modal mx-auto max-w-sm rounded bg-white p-6" dir={dir}>

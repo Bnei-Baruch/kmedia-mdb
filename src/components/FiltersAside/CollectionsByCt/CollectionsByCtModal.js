@@ -70,7 +70,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
     <Dialog
       open={true}
       onClose={handleClose}
-      className={clsx('filters_aside_tree_modal relative z-50', { [uiDir]: true })}
+      className={clsx('filters_aside_tree_modal relative', { [uiDir]: true })}
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center" dir={uiDir}>

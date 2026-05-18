@@ -69,7 +69,7 @@ const Actions = ({ bookmark }) => {
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
-      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
@@ -117,7 +117,7 @@ const Actions = ({ bookmark }) => {
           </div>
         )}
       </div>
-      <Dialog open={!!openEdit} onClose={() => handleCloseEdit()} className="relative z-50">
+      <Dialog open={!!openEdit} onClose={() => handleCloseEdit()} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="mx-auto max-w-sm rounded bg-white bookmark_modal" dir={uiDir}>

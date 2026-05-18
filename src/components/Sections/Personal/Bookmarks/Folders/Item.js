@@ -107,7 +107,7 @@ const FolderItem = ({ folder, selectedId, selectFolder }) => {
               <span className="material-symbols-outlined text-base">delete</span>
             </button>
 
-            <Dialog open={!!confirm} onClose={toggleConfirm} className="relative z-50">
+            <Dialog open={!!confirm} onClose={toggleConfirm} className="relative">
               <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
               <div className="fixed inset-0 flex items-center justify-center p-4">
                 <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>

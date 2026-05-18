@@ -80,7 +80,7 @@ const BookmarkHeaderMobile = () => {
       </h2>
 
       {trigger}
-      <Dialog open={!!open} onClose={handleToggle} className="relative z-50">
+      <Dialog open={!!open} onClose={handleToggle} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="relative mx-auto w-full max-w-lg rounded bg-white p-6" dir={uiDir}>

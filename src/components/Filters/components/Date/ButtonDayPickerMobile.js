@@ -78,7 +78,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
       <div onClick={() => setNativePopupOpen(true)}>
         {dateButton}
       </div>
-      <Dialog open={isNativePopupOpen} onClose={() => setNativePopupOpen(false)} className="relative z-50">
+      <Dialog open={isNativePopupOpen} onClose={() => setNativePopupOpen(false)} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="bg-white rounded-lg shadow-xl p-4 w-full max-w-md" dir={uiDir}>

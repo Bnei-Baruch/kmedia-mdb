@@ -29,7 +29,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
       <Dialog
         open={true}
         onClose={handleClose}
-        className="relative z-50"
+        className="relative"
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
@@ -55,7 +55,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
       <Dialog
         open={confirm}
         onClose={handleClose}
-        className="relative z-50"
+        className="relative"
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>

@@ -99,7 +99,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
       {trigger}
-      <Dialog open={!!open} onClose={onClose} className="relative z-50 select_topic_modal" dir={dir}>
+      <Dialog open={!!open} onClose={onClose} className="relative select_topic_modal" dir={dir}>
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">

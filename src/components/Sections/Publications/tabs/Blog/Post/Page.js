@@ -30,7 +30,7 @@ export const BlogPostPage = ({ post = null, wip = false, err = null }) => {
     <div className="blog-post">
       <Helmets.NoIndex />
       <div className="section-header">
-        <div className=" px-1 ">
+        <div className="px-1 ">
           <div>
             <div>
               <h1>

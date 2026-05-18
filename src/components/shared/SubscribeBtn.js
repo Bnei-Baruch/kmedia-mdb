@@ -84,7 +84,7 @@ const SubscribeBtn = ({ collection }) => {
 
   return (
     <>
-      <Dialog open={!!isNeedLogin} onClose={() => setIsNeedLogin(false)} className="relative z-50">
+      <Dialog open={!!isNeedLogin} onClose={() => setIsNeedLogin(false)} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="relative bg-white rounded-lg p-6 max-w-lg w-full shadow-xl">
@@ -100,7 +100,7 @@ const SubscribeBtn = ({ collection }) => {
         </div>
       </Dialog>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
-      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative z-50">
+      <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="bg-white rounded-lg p-6 max-w-sm w-full shadow-xl" dir={dir}>

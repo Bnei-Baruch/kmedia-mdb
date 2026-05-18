@@ -6,7 +6,7 @@ export class BasePage {
   // baseURL in playwright.config.ts already includes the language prefix (/en or /he)
   async goto(path: string) {
     await this.page.goto(path.replace(/^\//, ''));
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForSelector('.layout');
   }
 
   get header() {

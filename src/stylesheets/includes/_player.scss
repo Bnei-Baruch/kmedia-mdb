@@ -354,6 +354,7 @@ video {
   .sharing {
     height: fit-content;
     background: #000;
+    z-index: 1;
   }
 }
 
@@ -485,22 +486,30 @@ video {
 .sharing__inputs {
   .is-mobile:not(.is-fullscreen) & {
     padding-right: 8px;
+    flex: 1 1 0;
+    min-width: 0;
+
+    > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+}
+
+.sharing__times {
+  .is-mobile:not(.is-fullscreen) & {
+    width: 100%;
   }
 }
 
 .sharing__buttons {
-  
   .is-mobile:not(.is-fullscreen) & {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    .input {
+    .sharing__url {
       flex: 1 0 100%;
-      margin: 0 0 16px;
-    }
-
-    .circular {
-      padding: 9px;
+      margin: 0 0 8px;
     }
   }
 }
@@ -1086,7 +1095,7 @@ video {
   left: 0;
   right: 0;
 
-  i {
+  .material-symbols-outlined  {
     position: absolute;
     top: 50%;
     left: 50%;

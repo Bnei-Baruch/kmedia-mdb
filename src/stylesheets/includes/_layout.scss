@@ -48,9 +48,6 @@ body {
   height: 100vh;
 
   &__sidebar {
-    @include small-mobile {
-      width: 100%;
-    }
 
     background: $white;
     bottom: 0;
@@ -63,6 +60,9 @@ body {
     width: $sidebar-width;
     z-index: 900;
 
+    @include mobile {
+      width: 100%;
+    }
     &.is-active {
       transform: none;
     }
@@ -80,6 +80,7 @@ body {
       background-color: #1A4378 !important;
 
       @include mobile {
+        width: 100%;
         gap: 0.5em;
       }
 
@@ -229,6 +230,10 @@ body {
 
 .headroom-z-index-801 .headroom {
   z-index: 801 !important;
+}
+
+[id^="headlessui-dialog-"] {
+  z-index: 1000;
 }
 
 .headroom-z-index-802 .headroom {

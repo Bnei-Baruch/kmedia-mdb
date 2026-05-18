@@ -66,7 +66,7 @@ const Layout = ({ playerContainer }) => {
         <HeadroomWraper>
           <div className="left-0 right-0 top-0 z-[2000]">
             <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
-              <div ref={toggleSidebarBtnRef} className={clsx({ 'min-[1490px]:!hidden': !isFullscreen })}>
+              <div ref={toggleSidebarBtnRef} className={clsx({ 'xxl:!hidden': !isFullscreen })}>
                 <a
                   className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
                   onClick={toggleSidebar}
@@ -75,17 +75,17 @@ const Layout = ({ playerContainer }) => {
                 </a>
               </div>
               <Link
-                className="flex-initial min-w-0 min-[1490px]:min-w-[300px] px-3 leading-4 gap-2 flex items-center text-white no-underline hover:text-white"
+                className="flex-initial min-w-0 xxl:min-w-[300px] px-3 max-md:px-1 leading-4 gap-2 flex items-center text-white no-underline hover:text-white"
                 to="/"
               >
                 <Logo width="42px" height="80px" />
                 <div className="flex flex-col leading-4 justify-center">
                   {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
-                    <div className="text-white text-[1.4rem] font-bold tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-[1.2rem]">
+                    <div className="text-white text-[1.4rem] font-bold tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-base">
                       {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
                     </div>
                   )}
-                  <h1 className="text-white m-0 font-normal text-xl max-md:text-base">{t('nav.top.header')}</h1>
+                  <h1 className="text-white m-0 font-normal text-xl max-md:text-[.9rem]">{t('nav.top.header')}</h1>
                 </div>
               </Link>
               <div className={isMobileDevice ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>

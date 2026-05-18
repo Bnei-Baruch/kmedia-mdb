@@ -23,7 +23,7 @@ const CopyShareUrl = () => {
   const shareUrl = useShareUrl();
 
   return (
-    <div className="flex flex-1 items-stretch" dir={uiDir}>
+    <div className="sharing__url flex flex-1 items-stretch" dir={uiDir}>
       <input
         className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded-l border-r-0"
         dir="ltr"

@@ -30,7 +30,7 @@ const ImageFileModal = ({ file }) => {
         className="unit-logo"
         onClick={() => setOpen(true)}
       />
-      <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+      <Dialog open={open} onClose={() => setOpen(false)} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="bg-white rounded shadow-xl max-w-3xl w-full p-4 relative" dir={uiDir}>

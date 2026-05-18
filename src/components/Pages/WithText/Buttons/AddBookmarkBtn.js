@@ -44,7 +44,7 @@ const AddBookmarkBtn = () => {
 
   return (
     <>
-      <Dialog open={confirm} onClose={handleConfirmCancel} className="relative z-50">
+      <Dialog open={confirm} onClose={handleConfirmCancel} className="relative">
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
           <Dialog.Panel className="bookmark_confirm mx-auto max-w-sm rounded bg-white p-6" dir={dir}>
@@ -81,7 +81,7 @@ const AddBookmarkBtn = () => {
         icon={<span className="material-symbols-outlined">bookmark</span>}
         onClick={handleOpen}
       />
-      <Dialog open={open} onClose={handleClose} className="relative z-50">
+      <Dialog open={open} onClose={handleClose} className="relative">
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
           <Dialog.Panel

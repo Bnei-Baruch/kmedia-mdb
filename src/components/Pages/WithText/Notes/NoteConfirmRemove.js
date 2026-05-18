@@ -26,7 +26,7 @@ const NoteConfirmRemove = () => {
   };
 
   return (
-    <Dialog open={true} onClose={handleCancel} className="relative z-50">
+    <Dialog open={true} onClose={handleCancel} className="relative">
       <div className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 flex items-center justify-center">
         <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={dir}>

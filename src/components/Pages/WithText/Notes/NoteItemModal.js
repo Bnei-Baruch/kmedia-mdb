@@ -25,7 +25,7 @@ const NoteItemSticky = () => {
     <Dialog
       open={true}
       onClose={() => {}}
-      className="relative z-50"
+      className="relative"
     >
       <div className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 flex items-center justify-center">

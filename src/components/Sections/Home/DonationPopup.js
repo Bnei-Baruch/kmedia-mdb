@@ -56,7 +56,7 @@ function DonationPopup() {
     <Dialog
       open={open}
       onClose={() => setOpen(false)}
-      className="relative z-50"
+      className="relative"
     >
       <div className="fixed inset-0 bg-white/75" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">

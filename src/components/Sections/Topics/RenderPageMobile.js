@@ -35,7 +35,7 @@ const RenderPageMobile = () => {
 
   return (
     <>
-      <Dialog open={openFilters} onClose={closeFilters} className={`relative z-50 ${uiDir}`}>
+      <Dialog open={openFilters} onClose={closeFilters} className={`relative ${uiDir}`}>
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
           <Dialog.Panel className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">

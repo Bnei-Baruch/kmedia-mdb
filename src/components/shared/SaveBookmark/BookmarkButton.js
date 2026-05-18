@@ -37,7 +37,7 @@ const BookmarkButton = ({ source, disabled }) => {
       >
         <span className="material-symbols-outlined text-base">bookmark</span>
       </button>
-      <Dialog open={!!open} onClose={handleClose} className="relative z-50" dir={dir}>
+      <Dialog open={!!open} onClose={handleClose} className="relative" dir={dir}>
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel
