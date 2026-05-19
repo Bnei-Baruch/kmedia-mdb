@@ -74,9 +74,7 @@ const TextLayoutWeb = props => {
         'stick_toolbar_unpinned': scrollDir !== -1,
         'stick_toolbar_pinned': scrollDir === -1
       })}>
-      <div className='mx-auto px-2 flex justify-center max-w[700px] w-full'>
-        <SearchOnPageBar />
-      </div>
+      <SearchOnPageBar />
     </div>
   );
 

@@ -85,10 +85,10 @@ const AddBookmarkBtn = () => {
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
           <Dialog.Panel
-            className={`bookmark_modal mx-auto rounded bg-white p-6 ${!isMobileDevice ? 'max-w-sm' : 'w-full h-full'}`}
+            className={`bookmark_modal mx-auto rounded bg-white px-6 pt-6 pb-0 ${!isMobileDevice ? 'w-[520px]' : 'w-full h-full'}`}
             dir={dir}
           >
-            <Dialog.Title className="large font-semibold">
+            <Dialog.Title className="text-2xl font-bold mb-2">
               {t('personal.bookmark.saveBookmark')}
             </Dialog.Title>
             <BookmarkForm onClose={handleClose} properties={urlProps} />

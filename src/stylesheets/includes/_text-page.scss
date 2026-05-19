@@ -637,12 +637,12 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  align-content: center;
-  line-height: 40px;
-  padding: 4px 0;
+  align-items: center;
+  padding: .5em 1em;
   font-size: 18px;
   box-shadow: 0 3px 6px colors-helpers.$light-stroke;
   border-radius: 4px;
+  gap: 1rem;
   @include theme_bg;
 
   .is-dark & {
@@ -676,11 +676,6 @@
     }
   }
 
-  & > .clear_button, & > .relative {
-    margin: 0 8px;
-  }
-
-
   .text__search_on_page_counter {
     padding: 0 8px;
     white-space: nowrap;
@@ -688,15 +683,19 @@
 
   & > .relative {
     flex-grow: 3;
+    display: flex;
+    align-items: center;
     background: colors-helpers.$white;
     border-radius: 4px;
     @include theme_color;
     @include theme_bg;
 
     input {
-      width: 100%;
+      flex: 1;
+      min-width: 0;
       &, &:active, &:focus {
         border: none;
+        outline: none;
         background: none;
         @include theme_color;
       }
@@ -704,6 +703,8 @@
   }
 
   & > .clear_button {
+    display: flex;
+    align-items: center;
     font-size: 18px;
 
     .is-web.is-dark & {

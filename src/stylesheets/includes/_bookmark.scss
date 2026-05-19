@@ -21,14 +21,6 @@
     padding: .7em 1em;
   }
 
-  .bookmark_name {
-    width: 70%;
-    margin: 0 8px;
-
-    input {
-      padding: 4px 1em;
-    }
-  }
 }
 
 .bookmark_page {
@@ -60,21 +52,6 @@
     font-size: 1.5em;
   }
 
-}
-
-.bookmark_search {
-  width: 30%;
-
-  @include responsive-helpers.mobile {
-    width: 50%;
-  }
-
-  & > input {
-    border-width: 0 0 1px 0;
-    border-radius: 0;
-    border-color: colors-helpers.$grey;
-    padding: 4px .5em;
-  }
 }
 
 .bookmark_item {

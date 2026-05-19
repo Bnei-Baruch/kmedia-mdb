@@ -115,13 +115,13 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
 
   return (
     <React.Fragment>
-      <div className=" no-padding-top p-6 pt-0">
-        <div>
-          <h4 className="display-iblock font-normal inline-block">{t('personal.bookmark.name')}</h4>
+      <div className="pt-2">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="font-normal whitespace-nowrap">{t('personal.bookmark.name')}</span>
           <input
             onChange={e => changeName(e, { value: e.target.value })}
             defaultValue={name}
-            className={`bookmark_name border rounded px-3 py-2 ${!name && !isEdit ? 'border-red-500' : 'border-gray-300'}`}
+            className={`flex-1 border rounded px-3 py-2 ${!name && !isEdit ? 'border-red-500' : 'border-gray-300'}`}
             onFocus={() => setIsEdit(true)}
             onBlur={() => setIsEdit(false)}
             autoFocus
@@ -129,14 +129,14 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
         </div>
         <h4 className="font-normal">{t('personal.bookmark.folders')}</h4>
         <div className="border border-gray-200 rounded p-4">
-          <div className="bookmark_search relative">
+          <div className="relative">
             <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
               search
             </span>
             <input
               placeholder={t('personal.bookmark.searchFolders')}
               onChange={e => handleSearchChange(e, { value: e.target.value })}
-              className="pl-8 border border-gray-300 rounded px-3 py-2 w-full"
+              className="pl-8 border-0 border-b border-gray-300 py-2 w-full focus:outline-none bg-transparent"
             />
           </div>
           <div className=" px-4 folders_list">
