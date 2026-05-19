@@ -659,7 +659,7 @@
     border: none;
     border-radius: 0;
 
-    .input {
+    .relative input {
       background: colors-helpers.$white;
     }
   }
@@ -667,16 +667,16 @@
   .is-mobile.is-dark & {
     background: #323233;
 
-    .input {
+    .relative input {
       background: #606060;
     }
 
-    .button, .button .material-symbols-outlined, .button svg {
+    .clear_button, .clear_button .material-symbols-outlined, .clear_button svg {
       color: colors-helpers.$white !important;
     }
   }
 
-  & > .button, & > .input {
+  & > .clear_button, & > .relative {
     margin: 0 8px;
   }
 
@@ -686,14 +686,15 @@
     white-space: nowrap;
   }
 
-  .input {
+  & > .relative {
     flex-grow: 3;
     background: colors-helpers.$white;
     border-radius: 4px;
     @include theme_color;
     @include theme_bg;
 
-    & > input {
+    input {
+      width: 100%;
       &, &:active, &:focus {
         border: none;
         background: none;
@@ -702,7 +703,7 @@
     }
   }
 
-  & > .button {
+  & > .clear_button {
     font-size: 18px;
 
     .is-web.is-dark & {
