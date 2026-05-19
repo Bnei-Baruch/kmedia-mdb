@@ -13,7 +13,7 @@ const Homepage = () => {
   return (
     <div>
       <SectionHeader section="sources-library" />
-      <div className="flex flex-col p-4">
+      <div data-testid="sources-index" className="flex flex-col p-4">
         {
           roots.map(r => {
             const author = getSourceById(r);

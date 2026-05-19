@@ -18,7 +18,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const toggleFilters = () => setOpenFilters(!openFilters);
 
   const render = () => (
-    <div className="flex gap-4 divide-x">
+    <div className="flex gap-4">
       <div className="w-1/4 filters-aside-wrapper">
         {filters}
       </div>

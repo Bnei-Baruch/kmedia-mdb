@@ -7,11 +7,12 @@ module.exports = {
   ],
   theme: {
     screens: {
-      sm: '320px',
+      sm: '640px',
       md: '768px',
-      lg: '992px',
-      xl: '1200px',
-      xxl: '1490px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+      '3xl': '1920px',
     },
     extend: {
       colors: {

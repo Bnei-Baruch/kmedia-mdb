@@ -85,7 +85,7 @@
 }
 
 
-@media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+@media only screen and (max-width: responsive-helpers.$screen-md) {
   .search-omnibox {
     .searchButton {
       margin-right: 5px;
@@ -105,7 +105,7 @@
     }
   }
 
-  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+  @media only screen and (max-width: responsive-helpers.$screen-md) {
     .search-omnibox {
       .searchButton {
         margin-right: 0px;

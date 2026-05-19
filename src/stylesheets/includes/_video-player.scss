@@ -60,7 +60,7 @@
         transition: height 1s;
       }
 
-      @media screen and (min-width: responsive-helpers.$tabletBreakpoint) {
+      @media screen and (min-width: responsive-helpers.$screen-md) {
         &--edit-mode {
           height: 310px;
         }

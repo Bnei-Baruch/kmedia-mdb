@@ -55,7 +55,7 @@
     }
   }
 
-  @media only screen and (max-width: responsive-helpers.$tabletBreakpoint) {
+  @media only screen and (max-width: responsive-helpers.$screen-md) {
     .controller {
       flex-direction: column;
       margin-top: 1rem;

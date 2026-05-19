@@ -13,7 +13,7 @@
       padding: 0.3em 0.5em;
     }
 
-    @media (max-width: responsive-helpers.$mobileBreakpoint) {
+    @media (max-width: responsive-helpers.$screen-sm) {
       width: auto;
       right: 150px!important;
       bottom: .5em;
@@ -32,7 +32,7 @@
   border: 1px solid colors-helpers.$midGrey;
   border-radius: 5px 5px 0 0;
 
-  @media (max-width: responsive-helpers.$mobileBreakpoint) {
+  @media (max-width: responsive-helpers.$screen-sm) {
     width: auto;
     left: 0!important;
     right: 0!important;

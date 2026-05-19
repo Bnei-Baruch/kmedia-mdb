@@ -27,15 +27,15 @@ export class SourcesPage extends BasePage {
   }
 
   get authorsTable() {
-    return this.page.locator('div.index-list');
+    return this.page.getByTestId('sources-index');
   }
 
   get authorRows() {
-    return this.page.locator('div.index-list .author');
+    return this.page.getByTestId('sources-index').locator('.author');
   }
 
   get authorSourceLinks() {
-    return this.page.locator('div.index-list a[href*="/sources/"]');
+    return this.page.getByTestId('sources-index').locator('a[href*="/sources/"]');
   }
 
   // Source route selectors

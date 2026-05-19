@@ -18,7 +18,7 @@ const SectionHeader = ({ section, submenuItems }) => {
       <div className="px-4 py-2">
         <div className="flex flex-wrap">
           <div className="w-full md:w-3/4 lg:w-[62.5%]">
-            <h1 className="text-blue-600">
+            <h1 className="text-4xl lg:text-5xl font-normal text-blue-600">
               <span className="section-header__title">
                 {title}
               </span>
