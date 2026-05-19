@@ -122,7 +122,7 @@ body {
 }
 
 
-@media only screen and (min-width: $largeMonitorBreakpoint) {
+@media only screen and (min-width: $screen-2xl) {
   .layout:not(.is_fullscreen) {
     .layout__sidebar {
       top: $main-menu-height;

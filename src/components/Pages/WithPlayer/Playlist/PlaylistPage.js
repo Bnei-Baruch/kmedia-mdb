@@ -41,7 +41,7 @@ const PlaylistPage = ({ playerContainer }) => {
       </div>
       {
         !isMobileDevice && (
-          <div className="max-w-[36%] max-md:hidden">
+          <div className="max-w-[360px] max-md:hidden md:w-full xl:w-auto xl:max-w-[480px] 2xl:max-w-[540px]">
             {isReady && <PlaylistItems />}
             <div className="my-4" />
             {isReady && <Recommended cuId={cuId} filterOutUnits={[]} />}

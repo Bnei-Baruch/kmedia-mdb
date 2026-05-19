@@ -301,6 +301,17 @@
       padding: 0 1em 1em;
       overflow: hidden;
 
+      @include responsive-helpers.mobile {
+        left: 152px;
+      }
+
+      &.rtl {
+        @include responsive-helpers.mobile {
+          right: 152px;
+          left: 0;
+        }
+      }
+
       .cu_item_name {
         -webkit-line-clamp: 2;
         line-clamp: 2;
