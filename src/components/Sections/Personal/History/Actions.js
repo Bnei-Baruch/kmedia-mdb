@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+
+import { useClickOutside } from '../../../shared/useClickOutside';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
@@ -31,16 +33,7 @@ const Actions = ({ history }) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = e => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        handleClose();
-      }
-    };
-
-    if (open) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open]);
+  useClickOutside(() => setOpen(false), [menuRef]);
 
   return (
     <div className="relative inline-block cu_item_dropdown" ref={menuRef}>

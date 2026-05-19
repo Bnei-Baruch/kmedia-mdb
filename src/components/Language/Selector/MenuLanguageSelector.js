@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+
+import { useClickOutside } from '../../shared/useClickOutside';
 import { useSelector } from 'react-redux';
 import { clsx } from 'clsx';
 
@@ -78,19 +80,7 @@ const MultiSelectDropdown = ({ upward, value, onChange, options }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
 
-  useEffect(() => {
-    const handler = event => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handler);
-    }
-
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isOpen]);
+  useClickOutside(() => setIsOpen(false), [ref]);
 
   const toggleValue = val => {
     if (Array.isArray(value)) {

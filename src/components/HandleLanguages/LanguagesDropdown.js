@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+
+import { useClickOutside } from '../shared/useClickOutside';
 
 import { ALL_LANGUAGES, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
@@ -7,19 +9,7 @@ const LanguagesDropdown = ({ disabled, trigger, language, selected, asLink }) =>
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = event => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
+  useClickOutside(() => setIsOpen(false), [dropdownRef]);
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>

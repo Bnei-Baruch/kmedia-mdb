@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+
+import { useClickOutside } from '../../../../shared/useClickOutside';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
@@ -55,16 +57,7 @@ const Actions = ({ bookmark }) => {
     setConfirm(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = e => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        handleClose();
-      }
-    };
-
-    if (open) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open]);
+  useClickOutside(() => setOpen(false), [menuRef]);
 
   return (
     <>

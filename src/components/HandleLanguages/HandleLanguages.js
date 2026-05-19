@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+
+import { useClickOutside } from '../shared/useClickOutside';
 import { useDispatch, useSelector } from 'react-redux';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
@@ -39,19 +41,7 @@ const HandleLanguages = () => {
 
   console.log('HandleLanguages render', contentLanguages, urlLang, origUILang, uiDir, leftRight, showAllContent);
 
-  useEffect(() => {
-    const handler = event => {
-      if (uiLangRef.current && !uiLangRef.current.contains(event.target)) {
-        setUiLangOpen(false);
-      }
-    };
-
-    if (uiLangOpen) {
-      document.addEventListener('mousedown', handler);
-    }
-
-    return () => document.removeEventListener('mousedown', handler);
-  }, [uiLangOpen]);
+  useClickOutside(() => setUiLangOpen(false), [uiLangRef]);
 
   const uiLanguageSelected = language => {
     updateHtmlLang(language);

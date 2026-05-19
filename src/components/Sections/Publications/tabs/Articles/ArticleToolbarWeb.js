@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+
+import { useClickOutside } from '../../../../shared/useClickOutside';
 
 import AddCommentBtn from '../../../../Pages/WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -20,14 +22,7 @@ const ArticleToolbarWeb = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  useEffect(() => {
-    const handler = e => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
-    };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+  useClickOutside(() => setMenuOpen(false), [menuRef]);
 
   return (
     <div className="text_toolbar">
