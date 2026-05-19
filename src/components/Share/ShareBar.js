@@ -28,7 +28,7 @@ const ShareBar = ({ url }) => {
   const title    = t('player.share.title');
 
   return (
-    <div className="social-buttons">
+    <div className="social-buttons justify-between">
       <FacebookShareButton url={url} quote={title}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>

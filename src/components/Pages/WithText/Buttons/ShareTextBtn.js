@@ -63,7 +63,7 @@ const ShareTextBtn = () => {
           icon={<span className="material-symbols-outlined">share</span>}
         />
       </Popover.Button>
-      <Popover.Panel className="absolute z-10 mt-2">
+      <Popover.Panel className="absolute z-10 mt-2 bg-white rounded shadow-lg p-4">
         <ShareBar
           url={urlWithParams}
           buttonSize={buttonSize}
