@@ -30,19 +30,19 @@ const LikutToolbarWeb = () => (
       <CopyLinkBtn />
       <div className="divider" />
       <SearchOnPageBtn />
-      <div className="computer-only">
+      <div className="hidden xl:block">
         <PrintBtn />
       </div>
-      <div className="computer-only">
+      <div className="hidden xl:block">
         <DownloadTextBtn />
       </div>
-      <div className="computer-only">
+      <div className="hidden xl:block">
         <AdditionsModeBtn />
       </div>
-      <div className="divider computer-only" />
+      <div className="divider hidden xl:block" />
       <LessonsByLikutBtn />
       <FullscreenTextBtn />
-      <Popover className="text_toolbar__dropdown">
+      <Popover className="text_toolbar__dropdown xl:hidden">
         <Popover.Button as="div">
           <MoreOptionsBtn />
         </Popover.Button>

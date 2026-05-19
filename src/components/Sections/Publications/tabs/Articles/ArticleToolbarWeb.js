@@ -37,23 +37,23 @@ const ArticleToolbarWeb = () => {
         <CopyLinkBtn />
         <div className="divider" />
         <SearchOnPageBtn />
-        <div className="computer-only">
+        <div className="hidden xl:block">
           <PrintBtn />
         </div>
-        <div className="computer-only">
+        <div className="hidden xl:block">
           <DownloadTextBtn />
         </div>
-        <div className="computer-only">
+        <div className="hidden xl:block">
           <AdditionsModeBtn />
         </div>
-        <div className="divider computer-only" />
+        <div className="divider hidden xl:block" />
 
-        <div className="computer-only">
+        <div className="hidden xl:block">
           <LinkToLessonsBtn />
         </div>
-        <div className="divider computer-only" />
+        <div className="divider hidden xl:block" />
         <FullscreenTextBtn />
-        <div className="text_toolbar__dropdown" ref={menuRef}>
+        <div className="text_toolbar__dropdown xl:hidden" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn />
           </div>

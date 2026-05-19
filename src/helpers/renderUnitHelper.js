@@ -65,7 +65,7 @@ export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
 
 export const renderUnitDescription = unit =>
   unit?.description &&
-  <div className="index__description mobile-hidden">
+  <div className="index__description hidden md:block">
     {ellipsize(unit.description)}
   </div>
 

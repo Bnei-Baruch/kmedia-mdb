@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 
+import { useClickOutside } from '../../../../../shared/useClickOutside';
 import { ToolbarMenuContext } from '../../../../WithText/Buttons/ToolbarBtnTooltip';
 import AddCommentBtn from '../../../../WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
@@ -15,42 +16,50 @@ import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = ({ hasToc }) => (
-  <div className="text_toolbar">
-    {hasToc && <TocToggleBtn/>}
-    <div className="text_toolbar__buttons">
-      <TextSettings/>
-      <LanguageTextBtn/>
-      <div className="divider"/>
-      <TagTextBtn/>
-      <AddBookmarkBtn/>
-      <AddCommentBtn/>
-      <ShareTextBtn/>
-      <CopyLinkBtn/>
-      <div className="divider"/>
-      <SearchOnPageBtn/>
-      <div className="computer-only">
-        <DownloadTextBtn/>
-      </div>
-      <div className="computer-only">
-        <PrintBtn/>
-      </div>
-      <div className="computer-only">
-        <AdditionsModeBtn/>
-      </div>
-      <details className="text_toolbar__dropdown">
-        <summary className="list-none cursor-pointer">
-          <MoreOptionsBtn/>
-        </summary>
-        <ToolbarMenuContext.Provider value={true}>
-          <div className="menu">
-            <div className="item"><DownloadTextBtn/></div>
-            <div className="item"><AdditionsModeBtn/></div>
+const SourceTabToolbarWeb = ({ hasToc }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  useClickOutside(() => setMenuOpen(false), [menuRef]);
+
+  return (
+    <div className="text_toolbar">
+      {hasToc && <TocToggleBtn/>}
+      <div className="text_toolbar__buttons">
+        <TextSettings/>
+        <LanguageTextBtn/>
+        <div className="divider"/>
+        <TagTextBtn/>
+        <AddBookmarkBtn/>
+        <AddCommentBtn/>
+        <ShareTextBtn/>
+        <CopyLinkBtn/>
+        <div className="divider"/>
+        <SearchOnPageBtn/>
+        <div className="hidden xl:block">
+          <DownloadTextBtn/>
+        </div>
+        <div className="hidden xl:block">
+          <PrintBtn/>
+        </div>
+        <div className="hidden xl:block">
+          <AdditionsModeBtn/>
+        </div>
+        <div className="text_toolbar__dropdown xl:hidden" ref={menuRef}>
+          <div onClick={() => setMenuOpen(v => !v)}>
+            <MoreOptionsBtn/>
           </div>
-        </ToolbarMenuContext.Provider>
-      </details>
+          {menuOpen && (
+            <ToolbarMenuContext.Provider value={true}>
+              <div className="menu">
+                <div className="item"><DownloadTextBtn/></div>
+                <div className="item"><AdditionsModeBtn/></div>
+              </div>
+            </ToolbarMenuContext.Provider>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default SourceTabToolbarWeb;

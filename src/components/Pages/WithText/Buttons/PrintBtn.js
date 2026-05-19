@@ -11,7 +11,7 @@ const PrintBtn = () => {
       textKey="print"
       icon={<span className="material-symbols-outlined">print</span>}
       onClick={handlePrint}
-      className="computer-only"
+      className="hidden xl:block"
     />
   );
 };
