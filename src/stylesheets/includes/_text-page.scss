@@ -463,33 +463,57 @@
   }
 
   &__dropdown {
-    display: none;
-    @include responsive-helpers.tablet-mobile {
-      display: block;
-    }
+    display: inline-block;
+    position: relative;
 
     & > .menu {
-      border: none;
+      position: absolute;
+      right: 0;
+      z-index: 10;
+      margin-top: 4px;
+      border-radius: 4px;
+      border: 1px solid;
       box-shadow: 0 4px 18px 0 #00000033;
+      white-space: nowrap;
+      min-width: 180px;
       @include theme_bg;
+      @include theme_stroke;
 
       .is-dark & {
         box-shadow: 0 4px 18px 0 #FFFFFF50;
       }
 
-      &:after {
-        @include theme_bg;
-      }
-
       & > .item {
-        border-bottom: 1px solid red;
+        padding: 12px 20px;
+        border-bottom: 1px solid;
+        cursor: pointer;
         @include theme_stroke;
 
-        .button {
-          width: 100%;
-          margin: 0;
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.04);
+          .is-dark & {
+            background: rgba(255, 255, 255, 0.04);
+          }
         }
       }
+    }
+  }
+
+  &__item_btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    @include theme_color;
+
+    .material-symbols-outlined, svg {
+      @include theme_color;
+      font-size: 22px;
     }
   }
 }

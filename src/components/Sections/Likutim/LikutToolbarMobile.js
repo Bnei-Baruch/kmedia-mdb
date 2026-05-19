@@ -10,6 +10,7 @@ import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import LessonsByLikutBtn from './LessonsByLikutBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
 const LikutToolbarMobile = () => (
   <div className="text_toolbar">
@@ -18,24 +19,18 @@ const LikutToolbarMobile = () => (
       <TextSettings />
       <SearchOnPageBtn />
       <LessonsByLikutBtn />
-      <Popover className="relative text_toolbar__dropdown">
+      <Popover className="text_toolbar__dropdown">
         <Popover.Button as="div">
           <MoreOptionsBtn />
         </Popover.Button>
-        <Popover.Panel className="absolute right-0 z-10 bg-white shadow-lg rounded border">
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <AddBookmarkBtn />
-          </div>
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <DownloadTextBtn />
-          </div>
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <ShareTextModalBtn />
-          </div>
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <CopyLinkBtn />
-          </div>
-        </Popover.Panel>
+        <ToolbarMenuContext.Provider value={true}>
+          <Popover.Panel className="menu">
+            <div className="item"><AddBookmarkBtn /></div>
+            <div className="item"><DownloadTextBtn /></div>
+            <div className="item"><ShareTextModalBtn /></div>
+            <div className="item"><CopyLinkBtn /></div>
+          </Popover.Panel>
+        </ToolbarMenuContext.Provider>
       </Popover>
     </div>
   </div>

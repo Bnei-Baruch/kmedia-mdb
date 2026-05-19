@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, createContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -7,14 +7,26 @@ import { settingsGetUIDirSelector, textPageGetFileSelector } from '../../../../r
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import clsx from 'clsx';
 
+export const ToolbarMenuContext = createContext(false);
+
 const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, active, content, ...rest }) => {
   const { t } = useTranslation();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const inMenu             = useContext(ToolbarMenuContext);
   const dir                = useSelector(settingsGetUIDirSelector);
   const noFile             = !useSelector(textPageGetFileSelector);
 
   disabled = disabled ?? noFile;
+  if (inMenu) {
+    return (
+      <div {...rest} className={clsx('text_toolbar__item_btn', extraClass)}>
+        {icon}
+        <span>{t(`page-with-text.buttons.mobile.${textKey}`)}</span>
+      </div>
+    );
+  }
+
   if (isMobileDevice) {
     return (
       <div

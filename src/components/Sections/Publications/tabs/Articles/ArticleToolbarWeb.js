@@ -14,6 +14,7 @@ import LinkToLessonsBtn from '../../../../Pages/WithText/Buttons/LinkToLessonsBt
 import FullscreenTextBtn from '../../../../Pages/WithText/Buttons/FullscreenTextBtn';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
+import { ToolbarMenuContext } from '../../../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
 const ArticleToolbarWeb = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -57,16 +58,18 @@ const ArticleToolbarWeb = () => {
         </div>
         <div className="divider computer-only" />
         <FullscreenTextBtn />
-        <div className="text_toolbar__dropdown relative" ref={menuRef}>
+        <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn />
           </div>
           {menuOpen && (
-            <div className="absolute right-0 z-10 mt-1 min-w-max bg-white rounded shadow-lg border">
-              <div className="p-2"><DownloadTextBtn /></div>
-              <div className="p-2"><AdditionsModeBtn /></div>
-              <div className="p-2"><LinkToLessonsBtn /></div>
-            </div>
+            <ToolbarMenuContext.Provider value={true}>
+              <div className="menu">
+                <div className="item"><DownloadTextBtn /></div>
+                <div className="item"><AdditionsModeBtn /></div>
+                <div className="item"><LinkToLessonsBtn /></div>
+              </div>
+            </ToolbarMenuContext.Provider>
           )}
         </div>
       </div>

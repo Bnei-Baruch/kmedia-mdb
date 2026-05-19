@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popover } from '@headlessui/react';
 
+import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 import AddCommentBtn from '../../Pages/WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
@@ -41,18 +42,16 @@ const LikutToolbarWeb = () => (
       <div className="divider computer-only" />
       <LessonsByLikutBtn />
       <FullscreenTextBtn />
-      <Popover className="relative text_toolbar__dropdown">
+      <Popover className="text_toolbar__dropdown">
         <Popover.Button as="div">
           <MoreOptionsBtn />
         </Popover.Button>
-        <Popover.Panel className="absolute right-0 z-10 bg-white shadow-lg rounded border">
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <DownloadTextBtn />
-          </div>
-          <div className="px-4 py-2 hover:bg-gray-100">
-            <AdditionsModeBtn />
-          </div>
-        </Popover.Panel>
+        <ToolbarMenuContext.Provider value={true}>
+          <Popover.Panel className="menu">
+            <div className="item"><DownloadTextBtn /></div>
+            <div className="item"><AdditionsModeBtn /></div>
+          </Popover.Panel>
+        </ToolbarMenuContext.Provider>
       </Popover>
     </div>
   </div>

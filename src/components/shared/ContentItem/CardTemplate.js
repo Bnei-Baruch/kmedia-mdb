@@ -17,7 +17,7 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
-      <UnitLogo collectionId={ccu.id} circular height={80} width={80} />
+      <UnitLogo collectionId={ccu.id} className="circular" height={80} width={80} />
       <Popover className="cu_item_popover">
         <PopoverButton as="div">
           <h4>{ccu.name || NO_NAME}</h4>
@@ -59,12 +59,12 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
 };
 
 CardTemplate.propTypes = {
-  unit       : shapes.ContentUnit.isRequired,
-  link       : PropTypes.object.isRequired,
+  unit: shapes.ContentUnit.isRequired,
+  link: PropTypes.object.isRequired,
   withCCUInfo: PropTypes.bool,
-  ccu        : shapes.Collection,
+  ccu: shapes.Collection,
   description: PropTypes.array,
-  children   : PropTypes.any
+  children: PropTypes.any
 };
 
 export default CardTemplate;

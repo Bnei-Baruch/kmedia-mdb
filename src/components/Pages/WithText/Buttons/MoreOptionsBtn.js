@@ -5,7 +5,7 @@ import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 const MoreOptionsBtn = () => (
   <ToolbarBtnTooltip
     textKey="more-buttons"
-    circular
+    className="circular"
     icon={<span className="material-symbols-outlined">more_vert</span>}
   />
 );

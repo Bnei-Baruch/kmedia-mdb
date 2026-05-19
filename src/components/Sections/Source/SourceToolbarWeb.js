@@ -16,6 +16,7 @@ import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
 const SourceToolbarWeb = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,17 +64,19 @@ const SourceToolbarWeb = () => {
         </div>
         <div className="divider computer-only"/>
         <FullscreenTextBtn/>
-        <div className="text_toolbar__dropdown relative" ref={menuRef}>
+        <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn/>
           </div>
           {menuOpen && (
-            <div className="absolute right-0 z-10 mt-1 min-w-max bg-white rounded shadow-lg border">
-              <div className="p-2"><DownloadTextBtn/></div>
-              <div className="p-2"><AdditionsModeBtn/></div>
-              <div className="p-2"><ToggleScanBtn/></div>
-              <div className="p-2"><LinkToLessonsBtn/></div>
-            </div>
+            <ToolbarMenuContext.Provider value={true}>
+              <div className="menu">
+                <div className="item"><DownloadTextBtn/></div>
+                <div className="item"><AdditionsModeBtn/></div>
+                <div className="item"><ToggleScanBtn/></div>
+                <div className="item"><LinkToLessonsBtn/></div>
+              </div>
+            </ToolbarMenuContext.Provider>
           )}
         </div>
       </div>

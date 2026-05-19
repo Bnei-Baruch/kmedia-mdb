@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ToolbarMenuContext } from '../../../../WithText/Buttons/ToolbarBtnTooltip';
 import AddCommentBtn from '../../../../WithText/Buttons/AddCommentBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
@@ -37,18 +38,16 @@ const ArticleTabToolbarWeb = ({ hasToc }) => (
       <div className="computer-only">
         <AdditionsModeBtn />
       </div>
-      <details className="text_toolbar__dropdown relative inline-block">
+      <details className="text_toolbar__dropdown">
         <summary className="list-none cursor-pointer">
           <MoreOptionsBtn/>
         </summary>
-        <div className="absolute right-0 z-50 mt-1 bg-white rounded shadow-lg py-1">
-          <div className="px-2 py-1">
-            <DownloadTextBtn/>
+        <ToolbarMenuContext.Provider value={true}>
+          <div className="menu">
+            <div className="item"><DownloadTextBtn/></div>
+            <div className="item"><AdditionsModeBtn /></div>
           </div>
-          <div className="px-2 py-1">
-            <AdditionsModeBtn />
-          </div>
-        </div>
+        </ToolbarMenuContext.Provider>
       </details>
     </div>
   </div>
