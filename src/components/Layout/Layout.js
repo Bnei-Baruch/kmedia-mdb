@@ -66,7 +66,7 @@ const Layout = ({ playerContainer }) => {
         <HeadroomWraper>
           <div className="left-0 right-0 top-0 z-[2000]">
             <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
-              <div ref={toggleSidebarBtnRef} className={clsx({ 'xl:!hidden': !isFullscreen })}>
+              <div ref={toggleSidebarBtnRef} className={clsx({ '2xl:!hidden': !isFullscreen })}>
                 <a
                   className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
                   onClick={toggleSidebar}
@@ -140,21 +140,6 @@ const Layout = ({ playerContainer }) => {
               {sideBarIcon}
             </a>
           </div>
-          <Link
-            className="flex-initial min-w-0 p-4 leading-4 gap-2 flex items-center text-white no-underline hover:text-white max-md:hidden"
-            to="/"
-            onClick={closeSidebar}
-          >
-            <Logo width="2.5em" height="2.5em" />
-            <div className="ms-4 flex flex-col leading-4 justify-center">
-              {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
-                <div className="text-white text-[1.4rem] font-black tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-[1.2rem]">
-                  {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
-                </div>
-              )}
-              <h1 className="text-white m-0 font-normal text-2xl">{t('nav.top.header')}</h1>
-            </div>
-          </Link>
         </div>
         <div className="layout__sidebar-menu">
           <MenuItems simple onItemClick={closeSidebar} />

@@ -60,7 +60,7 @@ body {
     width: $sidebar-width;
     z-index: 900;
 
-    @include mobile {
+    @media only screen and (max-width: $screen-md) {
       width: 100%;
     }
     &.is-active {
@@ -69,24 +69,13 @@ body {
 
     .layout__sidebar-header {
       height: $main-menu-height;
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
       padding: 0 1em;
+      display: flex;
       left: 0;
       position: absolute;
       right: 0;
       top: 0;
-      background-color: #1A4378 !important;
-
-      @include mobile {
-        width: 100%;
-        gap: 0.5em;
-      }
-
-      small {
-        line-height: 1;
-      }
+      background-color: #1A4378;
     }
 
     &-menu {
@@ -249,7 +238,7 @@ body {
 .ltr {
   .layout__content {
     .headroom--pinned {
-      @include tablet-mobile {
+      @media only screen and (max-width: #{$screen-md - 1}) {
         margin-left: 0;
         width: 100%;
       }
@@ -262,7 +251,7 @@ body {
 .rtl {
   .layout__content {
     .headroom--pinned {
-      @include tablet-mobile {
+      @media only screen and (max-width: #{$screen-md - 1}) {
         margin-right: 0;
         width: 100%;
       }

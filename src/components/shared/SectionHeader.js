@@ -19,9 +19,9 @@ const SectionHeader = ({ section, submenuItems }) => {
         <div className="flex flex-wrap">
           <div className="w-full md:w-3/4 lg:w-[62.5%]">
             <h1 className="text-4xl lg:text-5xl font-normal text-blue-600">
-              <span className="section-header__title">
+              <div className="section-header__title lg:pb-4">
                 {title}
-              </span>
+              </div>
               {
                 subText1 &&
                   <div className="section-header__subtitle text-base font-normal text-gray-500">

@@ -47,7 +47,7 @@ const Filters = ({ namespace, baseParams }) => {
   return (
     <div className=" px-4 ">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <h3 className="large font-bold">{t('filters.aside-filter.filters-title')}</h3>
+      <h3 className="text-lg font-bold uppercase tracking-wide mt-4">{t('filters.aside-filter.filters-title')}</h3>
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
       <Language namespace={namespace}/>
