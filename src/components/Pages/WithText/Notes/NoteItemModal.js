@@ -33,7 +33,7 @@ const NoteItemSticky = () => {
           className="note_modal note_item mx-auto w-full max-w-2xl rounded bg-white p-6"
           dir={dir}
         >
-          <div className="note_info">
+          <div className="note_info pt-2">
             <div className="note_buttons">
               <NoteCloseBtn />
               <NoteInModalBtn />

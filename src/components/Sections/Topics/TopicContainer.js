@@ -258,7 +258,7 @@ const TopicContainer = () => {
         <div className="relative w-full">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
           <input
-            className="search-omnibox w-full large border border-gray-300 rounded pl-10 pr-3 py-2"
+            className="search-omnibox rounded-full border border-gray-300 pr-3 py-1"
             placeholder={t('sources-library.filter')}
             onChange={handleFilterChange}
             onKeyDown={handleFilterKeyDown}

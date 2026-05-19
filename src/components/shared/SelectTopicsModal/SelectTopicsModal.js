@@ -128,7 +128,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                     <div className="px-6 pb-0 pt-0">
                       <h4 className="font-normal">{t('personal.label.infoAddTag')}</h4>
                       <input
-                        className="search-omnibox border border-gray-300 rounded px-3 py-2 w-full"
+                        className="search-omnibox border border-gray-300 rounded-full px-3 py-1 w-full"
                         placeholder={t('personal.label.search')}
                         onChange={e => handleFilterChange(e, { value: e.target.value })}
                       />
@@ -152,7 +152,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
             }
             <div className="flex justify-end gap-2 p-4 border-t">
               <button
-                className="border border-gray-300 rounded px-4 py-2 hover:bg-gray-100"
+                className="border border-gray-300 rounded px-4 py-2 bg-gray-300 hover:bg-gray-400"
                 onClick={handleCancel}
               >
                 {t('buttons.cancel')}
