@@ -28,7 +28,7 @@ const TextListTemplate = ({ cuID }) => {
         <SectionLogo name={icon} height="60" width="60"/>
       </div>
       <div className="text_item__content">
-        <Link to={to} className="large font-bold">{name}</Link>
+        <Link to={to} className="text-lg font-bold">{name}</Link>
         <div className="description is_single">
           <span>{t('values.date', { date: film_date })}</span>
         </div>
