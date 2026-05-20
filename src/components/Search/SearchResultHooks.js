@@ -57,7 +57,7 @@ const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
 
 const SearchHeader = ({ as: Tag = 'h3', content, children, className = '', ...rest }) => (
-  <Tag className={`large font-bold ${className}`} {...rest}>{content || children}</Tag>
+  <Tag className={`text-lg font-bold ${className}`} {...rest}>{content || children}</Tag>
 );
 
 const SearchContainer = ({ content, children, ...rest }) => (
@@ -523,7 +523,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
     <div className="media_item list-none">
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className="large font-bold flex items-end gap-1">
+          <div className="text-lg font-bold flex items-end gap-1">
             <span className="inline-block align-bottom">{logo}</span>
             &nbsp;
             <span>{t(`constants.content-types.${CT_LESSONS_SERIES}`)}</span>
