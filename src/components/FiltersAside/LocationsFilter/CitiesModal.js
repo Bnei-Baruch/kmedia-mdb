@@ -23,29 +23,25 @@ const CitiesModal = ({ country, namespace, open, onClose }) => {
     <Dialog
       open={open}
       onClose={onClose}
-      className="relative"
+      className={clsx('relative', { [uiDir]: true })}
+      dir={uiDir}
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel
-          className={clsx('relative bg-white rounded shadow-lg max-w-3xl w-full', { [uiDir]: true })}
-          dir={uiDir}
-        >
-          <div className="flex items-center justify-start p-4 border-b">
+        <Dialog.Panel className="relative bg-white rounded-lg shadow-xl w-full max-w-screen-xl">
+          <div className="p-4 flex justify-start items-center">
             <h3 className="font-bold text-xl">{getTitle(country, t)}</h3>
           </div>
-          <div className="overflow-y-auto p-4">
-            <div className="grid grid-cols-3">
+          <div className="p-4 overflow-y-auto max-h-[60vh]">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-x-6">
               {items.map(item => (
-                <div className="tree_item_modal_content" key={item}>
-                  <CityItem namespace={namespace} id={item} country={country}/>
-                </div>
+                <CityItem namespace={namespace} id={item} country={country} key={item}/>
               ))}
             </div>
           </div>
-          <div className="flex justify-end p-4 border-t">
+          <div className="p-4 border-t flex justify-end">
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               onClick={onClose}
             >
               {t('buttons.close')}

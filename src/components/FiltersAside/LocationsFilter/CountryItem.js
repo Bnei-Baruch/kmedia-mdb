@@ -46,9 +46,11 @@ const CountryItem = ({ namespace, loc }) => {
 
   const toggleOpen = () => setOpen(!open);
 
+  const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
+
   return (
     <>
-      <div key={id} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <div key={id} className={`pt-1/2 ${stat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
         <div className="flex items-baseline gap-2 w-full">
           <input
             ref={checkboxRef}
@@ -62,13 +64,12 @@ const CountryItem = ({ namespace, loc }) => {
             <span className="tree_item_title">
               {desc}
             </span>
-            <button
-              className="clear_button no-shadow text-blue-600 shrink-0"
+            <span
+              className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl shrink-0 leading-none"
               onClick={toggleOpen}
-              disabled={stat === 0}
             >
-              <span className="material-symbols-outlined leading-none">{`chevron_${leftRight}`}</span>
-            </button>
+              {arrowIcon}
+            </span>
           </div>
           <span className="stat">{`(${stat})`}</span>
         </div>

@@ -32,7 +32,7 @@ const CityItem = ({ namespace, id, country }) => {
   };
 
   return (
-    <li key={getTitle(id, t)} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+    <div key={getTitle(id, t)} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
       <div className="flex items-baseline gap-2 w-full">
         <input
           type="checkbox"
@@ -45,7 +45,7 @@ const CityItem = ({ namespace, id, country }) => {
         </span>
         <span className="stat">{`(${stat})`}</span>
       </div>
-    </li>
+    </div>
   );
 };
 
