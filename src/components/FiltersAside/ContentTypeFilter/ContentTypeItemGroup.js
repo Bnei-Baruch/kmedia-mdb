@@ -44,29 +44,26 @@ const ContentTypeItemGroup = ({ namespace, group }) => {
   };
 
   return (
-    <>
-      {
-        items.length > 0 && (
-          <li key={key} className="filters-aside-ct">
-            <div className="bold-font">
-              <label className="flex items-center gap-2">
-                <input
-                  ref={checkboxRef}
-                  type="checkbox"
-                  checked={isSelAll}
-                  onChange={handleSelect}
-                  disabled={stats === 0}
-                />
-                {t(`nav.sidebar.${key}`)}
-              </label>
-            </div>
-            <ul>
-              {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id}/>)}
-            </ul>
-          </li>
-        )
-      }
-    </>
+    <div className={stats === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <div className="filters-aside-ct">
+        <div className="filters-aside-ct__group">
+          <label className="filters-aside-ct__label cursor-pointer">
+            <input
+              ref={checkboxRef}
+              type="checkbox"
+              checked={isSelAll}
+              onChange={handleSelect}
+              disabled={stats === 0}
+            />
+            <span className="font-bold">{t(`nav.sidebar.${key}`)}</span>
+          </label>
+        </div>
+        <span className="stat">{`(${stats})`}</span>
+      </div>
+      <div className="pl-4">
+        {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id}/>)}
+      </div>
+    </div>
   );
 };
 
