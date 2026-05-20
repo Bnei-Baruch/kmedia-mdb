@@ -9,12 +9,6 @@ import { isEmpty } from '../../../helpers/utils';
 import TagSourceItem from './TagSourceItem';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const ITEMS_PER_ROW = 3;
-const buildRowArr = n => {
-  const abs = n % ITEMS_PER_ROW;
-  const len = ((n - abs) / ITEMS_PER_ROW) + ((abs === 0) ? 0 : 1);
-  return Array(len).fill(0);
-};
 
 const TagSourceItemModal = props => {
   const
@@ -56,52 +50,36 @@ const TagSourceItemModal = props => {
 
   if (isEmpty(children)) return null;
 
-  const renderRow = (x, i) => (
-    <tr key={i} className="align-top">
-      {children.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
-    </tr>
-  );
-
-  const renderItem = (item, i) => {
-    if (!item) return <td key={i} />;
-
-    return (
-      <td
-        className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
-        key={i}
-      >
-        <TagSourceItem {...props} id={item.id} deep={-1} />
-      </td>
-    );
-  };
-
-  const rows = buildRowArr(children.length);
-
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      className={clsx('filters_aside_tree_modal relative', { [uiDir]: true })}
+      className={clsx('relative', { [uiDir]: true })}
       dir={uiDir}
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="relative bg-white rounded-lg shadow-xl w-full max-w-4xl">
-          <div className="no-border p-4 border-b">
-            <div>{parent[field]}</div>
+        <Dialog.Panel className="relative bg-white rounded-lg shadow-xl w-full max-w-screen-xl">
+          <div className="p-4 flex justify-start items-center gap-4">
+            <h3 className='font-bold text-xl'>{parent[field]}</h3>
             <input
-              className="search-input w-full border border-gray-300 rounded px-3 py-2 mt-2"
+              className="w-full max-w-[180px] border border-gray-300 rounded-lg px-3 py-1 mt-2 text-sm"
               placeholder={t('sources-library.filter')}
               onChange={handleSetQuery}
               defaultValue={query}
             />
           </div>
           <div className="p-4 overflow-y-auto max-h-[60vh]">
-            <table className="w-full border-collapse">
-              <tbody>
-                {rows.map(renderRow)}
-              </tbody>
-            </table>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-x-6">
+              {children.map(item => (
+                <div
+                  className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
+                  key={item.id}
+                >
+                  <TagSourceItem {...props} id={item.id} deep={-1} />
+                </div>
+              ))}
+            </div>
           </div>
           <div className="p-4 border-t flex justify-end">
             <button

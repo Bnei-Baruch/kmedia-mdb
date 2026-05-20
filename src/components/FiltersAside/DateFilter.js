@@ -117,8 +117,8 @@ const DateFilter = ({ namespace }) => {
 
   const iconName      = isLanguageRtl(uiLang) ? 'arrow_left' : 'arrow_right';
   const renderContent = () => (
-    <div className="filter-popup__wrapper border rounded bg-white p-4">
-      <div className="flex flex-col gap-2">
+    <div className="filter-popup__wrapper">
+      <div className="flex flex-col">
         {datePresets.map((x, i) => (
           <div key={`${FN_DATE_FILTER}_${i}`} className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
