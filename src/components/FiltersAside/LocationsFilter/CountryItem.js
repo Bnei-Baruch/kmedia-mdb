@@ -49,24 +49,27 @@ const CountryItem = ({ namespace, loc }) => {
   return (
     <>
       <div key={id} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
-        <div className="tree_item_content">
+        <div className="flex items-baseline gap-2 w-full">
           <input
             ref={checkboxRef}
             type="checkbox"
+            className="shrink-0"
             checked={selected.includes(id)}
             onChange={e => handleSelect(e, { checked: e.target.checked })}
             disabled={stat === 0}
           />
-          <span className="tree_item_title">
-            {desc}
-          </span>
-          <button
-            className="clear_button no-shadow text-blue-600"
-            onClick={toggleOpen}
-            disabled={stat === 0}
-          >
-            <span className="material-symbols-outlined">{`chevron_${leftRight}`}</span>
-          </button>
+          <div className="flex items-start gap-1 flex-1">
+            <span className="tree_item_title">
+              {desc}
+            </span>
+            <button
+              className="clear_button no-shadow text-blue-600 shrink-0"
+              onClick={toggleOpen}
+              disabled={stat === 0}
+            >
+              <span className="material-symbols-outlined leading-none">{`chevron_${leftRight}`}</span>
+            </button>
+          </div>
           <span className="stat">{`(${stat})`}</span>
         </div>
       </div>

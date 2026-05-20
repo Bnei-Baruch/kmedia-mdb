@@ -23,18 +23,16 @@ const PartOfDayItem = ({ namespace, dayPart }) => {
   };
 
   return (
-    <li key={FN_COLLECTION_MULTI} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
-      <div className="tree_item_content">
-        <input
-          type="checkbox"
-          checked={!!selected?.find(x => x === dayPart)}
-          onChange={handleSelect}
-          disabled={stat === 0}
-        />
-        <span className="tree_item_title">{t(`lessons.list.nameByNum_${dayPart}`)}</span>
-        <span className="stat">{`(${stat})`}</span>
-      </div>
-    </li>
+    <div key={FN_COLLECTION_MULTI} className={`flex items-baseline gap-2 w-full${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+      <input
+        type="checkbox"
+        checked={!!selected?.find(x => x === dayPart)}
+        onChange={handleSelect}
+        disabled={stat === 0}
+      />
+      <span className="tree_item_title flex-1">{t(`lessons.list.nameByNum_${dayPart}`)}</span>
+      <span className="stat">{`(${stat})`}</span>
+    </div>
   );
 };
 

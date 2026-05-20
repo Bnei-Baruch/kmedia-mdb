@@ -24,18 +24,18 @@ const PersonItem = ({ namespace, id }) => {
 
   return (
     <div key={`${FN_PERSON}_${id}`} className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
-      <span className="stat float-right">
-        {`(${stat})`}
-      </span>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={selected.includes(id)}
-          onChange={handleSelect}
-          disabled={stat === 0}
-        />
-        {person?.name}
-      </label>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            type="checkbox"
+            checked={selected.includes(id)}
+            onChange={handleSelect}
+            disabled={stat === 0}
+          />
+          {person?.name}
+        </label>
+      </div>
+      <span className="stat">{`(${stat})`}</span>
     </div>
   );
 };

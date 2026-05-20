@@ -50,20 +50,17 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center" dir={uiDir}>
-        <DialogPanel className="w-full max-h-[90vh] mx-4 bg-white rounded-lg flex flex-col shadow-xl">
-          <div className="no-border nowrap flex items-center justify-between gap-4 p-4 border-b">
-            <DialogTitle className="large font-semibold whitespace-nowrap">
+        <DialogPanel className="relative w-full max-h-[90vh] mx-4 bg-white rounded-lg flex flex-col shadow-xl">
+          <div className="flex items-center justify-start gap-4 p-4 border-b">
+            <DialogTitle className="font-bold text-xl whitespace-nowrap">
               {t(`filters.content-types.${ct}`)}
             </DialogTitle>
             <input
-              className="border border-blue-500 rounded-lg px-3 py-1.5 flex-1 text-sm"
+              className="w-full max-w-[180px] border border-gray-300 rounded-lg px-3 py-1 text-sm"
               placeholder={t('sources-library.filter')}
               onChange={handleSetQuery}
               defaultValue={query}
             />
-            <button onClick={handleClose} className="shrink-0">
-              <span className="material-symbols-outlined">cancel</span>
-            </button>
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             <div className="grid grid-cols-5">
@@ -82,6 +79,12 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
               {t('buttons.close')}
             </button>
           </div>
+          <button
+            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            onClick={handleClose}
+          >
+            <span className="material-symbols-outlined">cancel</span>
+          </button>
         </DialogPanel>
       </div>
     </Dialog>

@@ -33,14 +33,14 @@ const CityItem = ({ namespace, id, country }) => {
 
   return (
     <li key={getTitle(id, t)} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
-      <div className="tree_item_content">
+      <div className="flex items-baseline gap-2 w-full">
         <input
           type="checkbox"
           checked={!!selected.find(x => x === id || x === country)}
           onChange={e => handleSelect(e, { checked: e.target.checked })}
           disabled={stat === 0}
         />
-        <span className="tree_item_title">
+        <span className="tree_item_title flex-1">
           {getTitle(id, t)}
         </span>
         <span className="stat">{`(${stat})`}</span>

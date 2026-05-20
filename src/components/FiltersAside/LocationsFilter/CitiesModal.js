@@ -28,14 +28,11 @@ const CitiesModal = ({ country, namespace, open, onClose }) => {
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
-          className={clsx('bg-white rounded shadow-lg max-w-3xl w-full', { [uiDir]: true })}
+          className={clsx('relative bg-white rounded shadow-lg max-w-3xl w-full', { [uiDir]: true })}
           dir={uiDir}
         >
-          <div className="no-border nowrap flex items-center justify-between p-4 border-b">
-            <span className="font-bold large">{getTitle(country, t)}</span>
-            <button onClick={onClose} className="p-1">
-              <span className="material-symbols-outlined">cancel</span>
-            </button>
+          <div className="flex items-center justify-start p-4 border-b">
+            <h3 className="font-bold text-xl">{getTitle(country, t)}</h3>
           </div>
           <div className="overflow-y-auto p-4">
             <div className="grid grid-cols-3">
@@ -54,6 +51,12 @@ const CitiesModal = ({ country, namespace, open, onClose }) => {
               {t('buttons.close')}
             </button>
           </div>
+          <button
+            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            onClick={onClose}
+          >
+            <span className="material-symbols-outlined">cancel</span>
+          </button>
         </Dialog.Panel>
       </div>
     </Dialog>

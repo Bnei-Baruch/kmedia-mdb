@@ -30,17 +30,19 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false }) => {
   };
 
   return (
-    <div className={`filters-aside-ct flex items-center justify-between ${stat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
-      <label className="flex items-center justify-between no-wrap gap-2">
-        <input
-          ref={checkboxRef}
-          type="checkbox"
-          checked={selected.includes(id)}
-          onChange={handleSelect}
-          disabled={stat === 0}
-        />
-        {t(`filters.content-types.${id}`)}
-      </label>
+    <div className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            ref={checkboxRef}
+            type="checkbox"
+            checked={selected.includes(id)}
+            onChange={handleSelect}
+            disabled={stat === 0}
+          />
+          {t(`filters.content-types.${id}`)}
+        </label>
+      </div>
       <span className="stat">
         {`(${stat})`}
       </span>

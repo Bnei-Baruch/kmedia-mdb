@@ -73,7 +73,7 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <div className=" px-4 ">
+    <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
       <h3 className="text-lg font-bold uppercase tracking-wide mt-4">{t('filters.aside-filter.filters-title')}</h3>
       <ContentTypeFilter namespace={namespace}/>
@@ -84,7 +84,7 @@ const Filters = ({ namespace, baseParams }) => {
       <OriginalLanguageFilter namespace={namespace}/>
       <DateFilter namespace={namespace}/>
       <MediaTypeFilter namespace={namespace}/>
-    </div>
+    </>
   );
 };
 

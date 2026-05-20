@@ -89,25 +89,27 @@ const TagSourceItem = props => {
 
   return (
     <div key={`${filterName}_${id}`} className={`pt-1/2 ${finalStat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
-      <div className="flex items-center justify-between no-wrap gap-2">
+      <div className="flex items-baseline no-wrap gap-2">
         <input
           ref={checkboxRef}
           type="checkbox"
+          className="shrink-0"
           checked={isSelected}
           onChange={handleSelect}
           disabled={finalStat === 0}
         />
-        <span
-          className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
-          {item[isTag ? 'label' : 'name']}
-        </span>
-        {
-          (deep === 0) && (childrenIDs.length > 0) && (
-            <span className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl" onClick={toggleOpen}>
-              {arrowIcon}
-            </span>
-          )
-        }
+        <div className="flex items-start gap-1 flex-1">
+          <span className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
+            {item[isTag ? 'label' : 'name']}
+          </span>
+          {
+            (deep === 0) && (childrenIDs.length > 0) && (
+              <span className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl shrink-0 leading-none" onClick={toggleOpen}>
+                {arrowIcon}
+              </span>
+            )
+          }
+        </div>
         <span className="stat">{`(${finalStat})`}</span>
       </div>
       {

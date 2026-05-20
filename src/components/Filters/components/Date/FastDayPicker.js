@@ -154,7 +154,7 @@ class FastDayPicker extends Component {
       return (
         <div>
           <div className="flex">
-            <span className="inline-flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
+            <span className="inline-flex items-center self-stretch px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
               {label}
             </span>
             <input
@@ -183,7 +183,7 @@ class FastDayPicker extends Component {
       <div className="relative">
         <div className="flex w-full items-center">
           {label && (
-            <span className="inline-flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
+            <span className="inline-flex items-center self-stretch px-2 bg-gray-100 border border-r-0 border-gray-300 rounded-l small min-w-14">
               {label}
             </span>
           )}
@@ -204,7 +204,7 @@ class FastDayPicker extends Component {
         {isOpen && (
           <>
             <div className="fixed inset-0 z-40" onClick={this.closePopup}/>
-            <div className="absolute z-50 mt-1 bg-white border border-gray-300 rounded shadow-lg p-2">
+            <div className="absolute z-50 bottom-full mb-1 bg-white border border-gray-300 rounded shadow-lg p-2">
               <div dir={getLanguageDirection(language)}>
                 <DayPicker
                   locale={locale}

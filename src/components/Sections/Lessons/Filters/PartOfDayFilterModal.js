@@ -50,22 +50,24 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
   const caretIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
   return (
     <>
-      <div key={`${FN_COLLECTION_MULTI}_${ct}`} className={`filters-aside-ct flex items-center justify-between ${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
-        <label className="flex items-center justify-between no-wrap gap-2">
-          <input
-            type="checkbox"
-            ref={el => {
-              if (el) el.indeterminate = !selectedCT.includes(ct) && !isEmpty(selectedDayPart);
-            }}
-            checked={selectedCT.includes(ct)}
-            onChange={handleSelectCt}
-            disabled={stat === 0}
-          />
-          {t(`filters.content-types.${CT_DAILY_LESSON}`)}
-        </label>
-        <span className="material-symbols-outlined text-blue-500 cursor-pointer text-2xl" onClick={toggleOpen}>
-          {caretIcon}
-        </span>
+      <div key={`${FN_COLLECTION_MULTI}_${ct}`} className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+        <div className="filters-aside-ct__group">
+          <label className="filters-aside-ct__label">
+            <input
+              type="checkbox"
+              ref={el => {
+                if (el) el.indeterminate = !selectedCT.includes(ct) && !isEmpty(selectedDayPart);
+              }}
+              checked={selectedCT.includes(ct)}
+              onChange={handleSelectCt}
+              disabled={stat === 0}
+            />
+            {t(`filters.content-types.${CT_DAILY_LESSON}`)}
+          </label>
+          <span className="filters-aside-ct__caret material-symbols-outlined text-blue-500" onClick={toggleOpen}>
+            {caretIcon}
+          </span>
+        </div>
         <span className="stat">
           {`(${stat})`}
         </span>
@@ -73,27 +75,30 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
       <Dialog
         open={open}
         onClose={toggleOpen}
-        className={clsx('filters_aside_tree_modal relative', { [uiDir]: true })}
+        className={clsx('relative', { [uiDir]: true })}
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
-          <DialogPanel className="w-full max-w-3xl bg-white rounded-lg shadow-xl">
-            <div className="flex items-center justify-between px-4 py-3 border-b-0 no-border">
-              <DialogTitle className="whitespace-nowrap">
+          <DialogPanel className="relative w-full max-w-3xl bg-white rounded-lg shadow-xl">
+            <div className="flex items-center justify-start px-4 py-3 border-b">
+              <DialogTitle className="font-bold text-xl whitespace-nowrap">
                 {t(`filters.content-types.${ct}`)}
               </DialogTitle>
-              <button onClick={toggleOpen} className="text-gray-400 hover:text-gray-600">
-                <span className="material-symbols-outlined">cancel</span>
-              </button>
             </div>
             <div className="overflow-y-auto px-4 py-3 max-h-[60vh]">
               {itemsDayPart?.map(dayPart => <PartOfDayItem namespace={namespace} dayPart={dayPart} key={dayPart}/>)}
             </div>
             <div className="flex justify-end px-4 py-3">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={toggleOpen}>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={toggleOpen}>
                 {t('buttons.close')}
               </button>
             </div>
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              onClick={toggleOpen}
+            >
+              <span className="material-symbols-outlined">cancel</span>
+            </button>
           </DialogPanel>
         </div>
       </Dialog>

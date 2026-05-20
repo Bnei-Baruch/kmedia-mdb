@@ -24,19 +24,19 @@ const MediaTypeItem = ({ namespace, id }) => {
   };
 
   return (
-    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
-      <span className="stat float-right">
-        {`(${stat})`}
-      </span>
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={selected.includes(id)}
-          onChange={e => handleSelect(e, { checked: e.target.checked })}
-          disabled={stat === 0}
-        />
-        {t(`filters.media-types.${id}`)}
-      </label>
+    <div className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            type="checkbox"
+            checked={selected.includes(id)}
+            onChange={e => handleSelect(e, { checked: e.target.checked })}
+            disabled={stat === 0}
+          />
+          {t(`filters.media-types.${id}`)}
+        </label>
+      </div>
+      <span className="stat">{`(${stat})`}</span>
     </div>
   );
 };

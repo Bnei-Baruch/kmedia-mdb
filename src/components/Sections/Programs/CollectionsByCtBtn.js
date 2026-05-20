@@ -53,24 +53,26 @@ const CollectionsByCtBtn = ({ namespace, ct }) => {
   const isSelected = selectedCT.includes(ct);
   const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
   return (
-    <div className={`tree_item_content${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
-      <div className="tree_item_content filters-aside-ct flex items-center justify-between no-wrap gap-2">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            ref={el => {
-              if (el) el.indeterminate = !isEmpty(selectedCollections) && !isSelected;
-            }}
-            checked={isSelected}
-            onChange={handleSelect}
-            disabled={stat === 0}
-            value={ct}
-          />
-          {t(`filters.content-types.${ct}`)}
-        </label>
-        <span className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl" onClick={() => setOpen(true)}>
-          {arrowIcon}
-        </span>
+    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+      <div className="filters-aside-ct">
+        <div className="filters-aside-ct__group">
+          <label className="filters-aside-ct__label">
+            <input
+              type="checkbox"
+              ref={el => {
+                if (el) el.indeterminate = !isEmpty(selectedCollections) && !isSelected;
+              }}
+              checked={isSelected}
+              onChange={handleSelect}
+              disabled={stat === 0}
+              value={ct}
+            />
+            {t(`filters.content-types.${ct}`)}
+          </label>
+          <span className="filters-aside-ct__caret material-symbols-outlined text-blue-600" onClick={() => setOpen(true)}>
+            {arrowIcon}
+          </span>
+        </div>
         <span className="stat">{`(${stat})`}</span>
       </div>
       {open && <CollectionsByCtModal onClose={handleClose} namespace={namespace} ct={cCtByUnitCt[ct]} />}

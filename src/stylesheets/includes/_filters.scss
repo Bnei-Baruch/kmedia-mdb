@@ -223,21 +223,9 @@
 
 //aside filters styles
 .filters-aside-wrapper {
-  padding: 0 1em;
   background-color: colors-helpers.$offWhite;
-
-  @include responsive-helpers.tablet {
-    padding: 0 1em !important;
-  }
-
-  @include responsive-helpers.mobile {
-    padding: 0;
-
-    &>div {
-      background: none;
-      padding: 0 !important;
-    }
-  }
+  padding: 0 1rem;
+  min-width: 200px;
 }
 
 .filter_aside {
@@ -295,60 +283,8 @@
   }
 }
 
-.filters_aside_tree_modal {
-  text-align: end;
-  width: auto;
-
-  &>.header {
-    display: flex;
-    align-items: center;
-
-    text-align: start;
-    margin: 0;
-    padding-top: 0;
-  }
-
-  &>.content {
-    text-align: start;
-    padding-bottom: 2.5em;
-  }
-
-  &>.icon {
-    margin: 0.5em 0.5em 0;
-    cursor: pointer;
-  }
-
-  .stat {
-    margin-right: 0.5em;
-    text-align: right;
-    flex: 1;
-
-    .rtl & {
-      margin-left: 0.5em;
-      margin-right: 0;
-      text-align: left;
-    }
-  }
-}
-
-.tree_item_modal_content {
-  .item .list {
-    margin: 0 0 0 0.5em;
-
-    .rtl & {
-      margin: 0 0.5em 0;
-    }
-
-    .item {
-      padding-bottom: 0;
-    }
-  }
-}
-
-.filters_aside_tree_modal,
 .filter_aside {
   .search-input {
-    max-width: 180px;
     width: 100%;
     margin-bottom: 1em;
 
@@ -363,7 +299,6 @@
     padding-left: 1em;
     margin-left: auto;
     text-align: right;
-    flex: 1;
 
     .rtl & {
       padding-left: 0;
@@ -438,7 +373,28 @@
 
 .filters-aside-ct {
   font-weight: bold;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 
+  &__group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  &__label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  &__caret {
+    flex-shrink: 0;
+    line-height: 1;
+    cursor: pointer;
+  }
 
   .filters-aside-ct {
     font-weight: normal;

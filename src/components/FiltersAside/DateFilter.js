@@ -136,7 +136,7 @@ const DateFilter = ({ namespace }) => {
         <div>
           <div className="cursor-pointer flex items-center gap-1" onClick={toggleDay}>
             {t('filters.date-filter.presets.CUSTOM_DAY')}
-            <span className="material-symbols-outlined text-blue-500 text-sm">{iconName}</span>
+            <span className="material-symbols-outlined text-blue-500 text-2xl">{iconName}</span>
           </div>
           {showDay && (
             <div className="mt-2">
@@ -152,17 +152,16 @@ const DateFilter = ({ namespace }) => {
         <div>
           <div className="cursor-pointer flex items-center gap-1" onClick={toggleRange}>
             {t('filters.date-filter.presets.CUSTOM_RANGE')}
-            <span className="material-symbols-outlined text-blue-500 text-sm">{iconName}</span>
+            <span className="material-symbols-outlined text-blue-500 text-2xl">{iconName}</span>
           </div>
           {showRange && (
-            <div className="mt-2">
+            <div className="mt-2 flex flex-col gap-2">
               <FastDayPicker
                 label={t('filters.date-filter.start')}
                 value={from}
                 language={uiLang}
                 onDayChange={handleFromInputChange}
               />
-              <br/>
               <FastDayPicker
                 label={t('filters.date-filter.end')}
                 value={to}
