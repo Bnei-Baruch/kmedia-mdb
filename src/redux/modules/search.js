@@ -161,7 +161,8 @@ const searchSlice = createSlice({
         session_id: payload.searchResults.session_id || reasoningState.status?.session_id,
         state     : 'completed',
         phase     : 'done',
-        done      : true
+        done      : true,
+        query     : payload.query || reasoningState.status?.query
       };
       state.prevQuery       = payload.query;
       state.pageNo          = 1;
