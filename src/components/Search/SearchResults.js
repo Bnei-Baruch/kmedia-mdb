@@ -183,6 +183,7 @@ const SearchResults = ({ t }) => {
   const searchType    = useSelector(searchGetSearchTypeSelector);
   const searchResults = queryResult.search_result;
   const isAgenticSearch = isAgenticSearchType(searchType);
+  const isRapidAgenticSearch = searchType === SEARCH_TYPES.AGENTIC_RAPID;
 
   const cMap    = useSelector(state => cMapFromState(state, searchResults));
   const cuMap   = useSelector(state => cuMapFromState(state, searchResults));
@@ -190,6 +191,31 @@ const SearchResults = ({ t }) => {
 
   const wip = useSelector(searchGetWipSelector);
   const err = useSelector(searchGetErrorSelector);
+  const storedAgenticResults = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
+  const rapidAgenticResults  = Array.isArray(reasoningStatus?.rapid_results) ? reasoningStatus.rapid_results : [];
+  const storedPreviousAgenticResults = Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [];
+  const isShowingRapidAgenticResults = (
+    isRapidAgenticSearch
+    && reasoningStatus?.rapid_results_available
+    && rapidAgenticResults.length > 0
+  );
+
+  // Rapid search can stream provisional results from /status before the final /result snapshot is ready.
+  const currentAgenticResults = isShowingRapidAgenticResults ? rapidAgenticResults : storedAgenticResults;
+  const currentAgenticResultIds = new Set(currentAgenticResults.map(result => result?.mdb_uid).filter(Boolean));
+  const previousAgenticResultsPool = isShowingRapidAgenticResults
+    ? [...storedAgenticResults, ...storedPreviousAgenticResults]
+    : storedPreviousAgenticResults;
+  const seenPreviousAgenticResultIds = new Set();
+  const visiblePreviousAgenticResults = previousAgenticResultsPool.filter(result => {
+    const mdbUid = result?.mdb_uid;
+    if (!mdbUid || currentAgenticResultIds.has(mdbUid) || seenPreviousAgenticResultIds.has(mdbUid)) {
+      return false;
+    }
+
+    seenPreviousAgenticResultIds.add(mdbUid);
+    return true;
+  });
 
   const pageNo   = useSelector(searchGetPageNoSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -212,14 +238,11 @@ const SearchResults = ({ t }) => {
       return [];
     }
 
-    const currentResults  = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
-    const previousResults = Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [];
-
-    return [...currentResults, ...previousResults]
+    return [...currentAgenticResults, ...visiblePreviousAgenticResults]
       .filter(isAgenticTweetResult)
       .map(result => result.mdb_uid)
       .filter((mdbUid, index, ids) => ids.indexOf(mdbUid) === index);
-  }, [isAgenticSearch, reasoningPreviousResults, reasoningResult]);
+  }, [currentAgenticResults, isAgenticSearch, visiblePreviousAgenticResults]);
   const agenticTweetsById = useSelector(state => agenticTweetIds.reduce((acc, mdbUid) => {
     const tweet = publicationsGetTwitterSelector(state, mdbUid);
     if (tweet) {
@@ -388,7 +411,7 @@ const SearchResults = ({ t }) => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
     const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
     const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
-    const canFinishNow = canCancel && reasoningStatus?.has_draft_results;
+    const canFinishNow = canCancel && !isRapidAgenticSearch && reasoningStatus?.has_draft_results;
     const statusMessage  = hasErrorStatus && reasoningStatus?.message;
     const statusLines = getAgenticStatusLines(reasoningStatus);
 
@@ -729,17 +752,16 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticResults = query => {
-    const results               = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
-    const resultQuery           = reasoningResult?.query || query;
-    const currentResultIds      = new Set(results.map(result => result?.mdb_uid).filter(Boolean));
-    const previousResults       = (Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [])
-      .filter(result => result?.mdb_uid && !currentResultIds.has(result.mdb_uid));
     const agenticResultRenderKey = [
-      reasoningResult?.session_id || 'no-session',
+      reasoningStatus?.session_id || reasoningResult?.session_id || 'no-session',
       reasoningResult?.followups_remaining ?? 'no-followups',
-      results.map(result => result?.mdb_uid).filter(Boolean).join(','),
-      previousResults.map(result => result?.mdb_uid).filter(Boolean).join(',')
+      currentAgenticResults.map(result => result?.mdb_uid).filter(Boolean).join(','),
+      visiblePreviousAgenticResults.map(result => result?.mdb_uid).filter(Boolean).join(',')
     ].join('|');
+    const resultQuery = (
+      (isShowingRapidAgenticResults ? reasoningStatus?.query : reasoningResult?.query)
+      || query
+    );
 
     return renderSearchFrame(
       <>
@@ -751,20 +773,22 @@ const SearchResults = ({ t }) => {
             {' '}
             {t('search.agentic.warning')}
           </div>
-          {reasoningResult?.summary && (
+          {!isShowingRapidAgenticResults && reasoningResult?.summary && (
             <Message
               info
               header={t('search.agentic.summary')}
               content={reasoningResult.summary}
             />
           )}
-          {results.length === 0 && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
-          {results.length > 0 && <div className="agentic-search__results">{renderAgenticResultsList(results)}</div>}
+          {currentAgenticResults.length === 0 && !wip && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
+          {currentAgenticResults.length > 0 && (
+            <div className="agentic-search__results">{renderAgenticResultsList(currentAgenticResults)}</div>
+          )}
           {renderAgenticFollowup()}
-          {previousResults.length > 0 && (
+          {visiblePreviousAgenticResults.length > 0 && (
             <>
               <Header as="h4" content={t('search.agentic.previousResultsTitle')} />
-              <div className="agentic-search__results">{renderAgenticResultsList(previousResults)}</div>
+              <div className="agentic-search__results">{renderAgenticResultsList(visiblePreviousAgenticResults)}</div>
             </>
           )}
         </Container>
@@ -875,7 +899,7 @@ const SearchResults = ({ t }) => {
   }
 
   if (isAgenticSearch) {
-    if (!reasoningResult) {
+    if (!reasoningResult && !isShowingRapidAgenticResults) {
       return renderSearchFrame(renderAgenticStatus());
     }
 

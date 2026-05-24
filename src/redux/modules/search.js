@@ -122,6 +122,7 @@ const searchSlice = createSlice({
       state.error                = null;
       reasoningState.requestKind = null;
       reasoningState.status = {
+        ...reasoningState.status,
         session_id: reasoningState.status?.session_id,
         state     : 'canceled',
         phase     : 'canceled',
