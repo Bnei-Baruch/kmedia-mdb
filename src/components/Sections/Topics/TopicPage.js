@@ -50,8 +50,8 @@ const TopicPage = () => {
   if (!getPathByID) {
     const tag = getTags ? getTags[id] : null;
     return (
-      <div className=" px-4 ">
-        <h3>
+      <div className="px-4">
+        <h3 className="text-2xl font-bold py-4 text-black">
           {t('nav.sidebar.topic')}
           {' "'}
           {tag ? tag.label : id}

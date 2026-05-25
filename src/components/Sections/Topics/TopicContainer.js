@@ -171,7 +171,7 @@ const TopicContainer = () => {
                   ? isNotEmptyArray(filteredById[cId].children)
                     ? 'subTopic'
                     : ''
-                  : 'hide-topic'}>
+                  : 'hidden'}>
                   {renderSubTopic(filteredById[cId])}
                 </li>
               ))
@@ -180,10 +180,10 @@ const TopicContainer = () => {
         {
           showExpandButton &&
           <button
-            className={`topics__button border border-gray-300 rounded px-2 py-1 text-xs bg-white hover:bg-gray-50 inline-flex items-center gap-1 ${showExpandButton ? '' : 'hide-button'}`}
+            className="inline-flex items-center gap-1 mt-1 text-sm text-gray-500 hover:text-gray-700"
             onClick={() => handleShowMoreClick(id)}
           >
-            <span className="material-symbols-outlined text-xs">{expanded ? 'remove' : 'add'}</span>
+            <span className="material-symbols-outlined font-bold text-xl text-sky-500">{expanded ? 'remove' : 'add'}</span>
             {t(`topics.show-${expanded ? 'less' : 'more'}`)}
           </button>
         }
@@ -254,19 +254,19 @@ const TopicContainer = () => {
     <>
       <SectionHeader section="topics"/>
       <hr className="m-0"/>
-      <div className=" px-4 ">
-        <div className="relative w-full">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+      <div className="p-4">
+        <div className="relative max-w-md mx-auto">
+          <span className="material-symbols-outlined absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
           <input
-            className="search-omnibox rounded-full border border-gray-300 pr-3 py-1"
+            className="search-omnibox rounded-full border border-gray-300 ps-3 pe-10 py-1"
             placeholder={t('sources-library.filter')}
             onChange={handleFilterChange}
             onKeyDown={handleFilterKeyDown}
           />
         </div>
       </div>
-      <div className=" px-4 ">
-        <div className="grid grid-cols-3 gap-4">
+      <div className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredRoots.map(r => renderBranch(r))}
         </div>
       </div>

@@ -13,8 +13,8 @@ const TextList = () => {
   const items = ids?.filter(x => !!x.isText) || [];
 
   return (
-    <div className=" px-4  topics_texts">
-      <h3>{`${t('topics.texts-title')} (${textTotal})`}</h3>
+    <div className="px-4  topics_texts">
+      <h3 className="text-xl font-bold py-4 text-black">{`${t('topics.texts-title')} (${textTotal})`}</h3>
       {
         items?.map(({ cuID, lID }, i) => (<TextListTemplate cuID={cuID} lID={lID} key={i}/>))
       }

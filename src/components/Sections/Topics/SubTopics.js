@@ -19,7 +19,7 @@ const getItemsRecursive = (rootID, getById, base) => {
   if (base?.length === 0) return [];
 
   const root = getById(rootID);
-  if (!root.children || root.children.length === 0) {
+  if (!root || !root.children || root.children.length === 0) {
     return base.includes(rootID) ? [rootID] : null;
   }
 
@@ -54,7 +54,7 @@ const SubTopics = ({ namespace, rootID }) => {
 
   const handleSetQuery = e => setQuery(e.target.value);
 
-  const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
+  const children = rootID ? root?.children?.filter(r => items.includes(r)) : roots;
 
   if (!(children?.length > 0))
     return null;
@@ -78,10 +78,10 @@ const SubTopics = ({ namespace, rootID }) => {
         children.length > MAX_SHOWED_ITEMS && (
           <>
             <button
-              className="clear_button border border-blue-500 text-blue-500 rounded px-3 py-1.5 bg-white hover:bg-blue-50 inline-flex items-center gap-1"
+              className="clear_button text-blue-500 inline-flex items-center gap-1"
               onClick={toggleOpen}
             >
-              <span className="material-symbols-outlined small">add</span>
+              <span className="material-symbols-outlined">add</span>
               {t('topics.show-more')}
             </button>
             <TagSourceItemModal

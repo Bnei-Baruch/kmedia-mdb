@@ -21,36 +21,29 @@ const RenderPage = () => {
 
   const tagPath = getPathByID(id);
 
-  const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
+  const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection).filter(Boolean);
   const breadCrumbIcon     = leftRight === 'right' ? 'chevron_right' : 'chevron_left';
   const baseParams         = useMemo(() => ({ tag: id }), [id]);
 
   return (
     <>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-      <div className="w-full px-4  topics">
-        <nav>
-          <ol className="flex flex-wrap items-center text-2xl">
-            {breadCrumbSections.map((section, i) => (
-              <React.Fragment key={section.key}>
-                {i > 0 && (
-                  <li className="mx-1">
-                    <span className="material-symbols-outlined text-base">{breadCrumbIcon}</span>
-                  </li>
-                )}
-                <li>
-                  {section.active
-                    ? <span className="font-bold">{section.content}</span>
-                    : <Link to={section.to}>{section.content}</Link>
-                  }
-                </li>
-              </React.Fragment>
-            ))}
-          </ol>
+      <div className="w-full topics">
+        <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-1 text-xl font-bold p-4 border-b border-gray-200">
+          {breadCrumbSections.map((section, i) => (
+            <React.Fragment key={section.key}>
+              {i > 0 && (
+                <span className="material-symbols-outlined text-2xl text-gray-400 font-bold" aria-hidden="true">{breadCrumbIcon}</span>
+              )}
+              {section.active
+                ? <span className="font-bold" aria-current="page">{section.content}</span>
+                : <Link to={section.to}>{section.content}</Link>
+              }
+            </React.Fragment>
+          ))}
         </nav>
-        <hr />
-        <div className="grid grid-cols-[1fr_3fr] divide-x">
-          <div className="filters-aside-wrapper px-1">
+        <div className="grid grid-cols-[1fr_3fr]">
+          <div className="filters-aside-wrapper px-1 border-e">
             <Filters
               namespace={`topics_${id}`}
               baseParams={baseParams}
