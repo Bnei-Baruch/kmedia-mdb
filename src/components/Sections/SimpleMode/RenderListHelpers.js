@@ -257,28 +257,26 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
       }
 
       return (
-        <li key={unit.id} className="unit-header">
-          <div>
-            {title}
-            {files.length > 0 ? (
-              files.map(f => <ul className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</ul>)
-            ) : (
-              <ul className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
-                <li key={`${unit.id}-no-files`} className="no-files">
-                  <SectionLogo name="info" />
-                  <div className="margin-right-8 margin-left-8">
-                    <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
-                    <br />
-                    {t('simple-mode.try-different-language')}
-                    <button className="choose-language-button" onClick={helpChooseLang}>
-                      {t('simple-mode.language-click')}
-                    </button>
-                  </div>
-                </li>
-              </ul>
-            )}
-          </div>
-        </li>
+        <div key={unit.id} className="unit-header">
+          <h4 className='text-xl font-bold'>{title}</h4>
+          {files.length > 0 ? (
+            files.map(f => <div className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</div>)
+          ) : (
+            <div className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
+              <li key={`${unit.id}-no-files`} className="no-files">
+                <SectionLogo name="info" />
+                <div className="margin-right-8 margin-left-8">
+                  <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
+                  <br />
+                  {t('simple-mode.try-different-language')}
+                  <button className="choose-language-button" onClick={helpChooseLang}>
+                    {t('simple-mode.language-click')}
+                  </button>
+                </div>
+              </li>
+            </div>
+          )}
+        </div>
       );
     });
 
@@ -291,16 +289,14 @@ export const renderCollection = (collection, contentLanguages, t, helpChooseLang
   const units = renderUnits(collection.content_units, contentLanguages, t, helpChooseLang, chroniclesAppend);
 
   return (
-    <div className="rounded shadow border w-full" key={id}>
+    <div className="rounded shadow border w-full my-4" key={id}>
       <div className={`p-4 ${number ? 'gray-header' : ''}`}>
-        <div className="font-bold large unit-header">
-          <Link to={canonicalLink(collection)}>
-            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
-          </Link>
-        </div>
+        <Link to={canonicalLink(collection)} className="font-bold text-xl unit-header" >
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
+        </Link>
       </div>
       <div className="p-4 border-t">
-        <ul>{units}</ul>
+        {units}
       </div>
     </div>
   );
@@ -324,18 +320,18 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
   const icon = matchIconToType(title.toLowerCase());
 
   return (
-    <div key={title}>
+    <div key={title} className="my-4">
       {items.length ? (
         <div className="type-header-top-margin">
-          <h2>
-            <div className="simple-mode-type-icon inline-block">
+          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <div className="simple-mode-type-icon">
               <SectionLogo name={icon} />
             </div>
             {t(`nav.sidebar.${title.toLowerCase()}`)}
           </h2>
           <div className="rounded shadow border w-full">
             <div className="p-4">
-              <ul className="large">{items}</ul>
+              <div className="large">{items}</div>
             </div>
           </div>
         </div>

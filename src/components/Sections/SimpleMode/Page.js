@@ -26,7 +26,7 @@ const getNavBarElement = (props, uiLang, onDayClick) => {
   const { month, localeUtils } = props;
   return (
     <div className="DayPicker-Month">
-      <Navbar {...props} className="FastDayPicker-DayPicker-NavButton"/>
+      <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
       <YearMonthForm
         date={month}
         uiLang={uiLang}
@@ -73,7 +73,7 @@ const openNativeDatePicker = (nativeDateInput, isAndroid) => {
 };
 
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
-const ToDay            = today().toDate();
+const ToDay = today().toDate();
 
 const SimpleModePage = (
   {
@@ -84,22 +84,22 @@ const SimpleModePage = (
     onDayClick
   }
 ) => {
-  const { t }  = useTranslation();
+  const { t } = useTranslation();
   const uiLang = useSelector(settingsGetUILangSelector);
 
   const [isClient, setIsClient] = useState(false);
-  const [data, setData]         = useState({
-    selected              : ToDay,
+  const [data, setData] = useState({
+    selected: ToDay,
     selectedDate,
-    selectedToString      : moment(ToDay).format('YYYY-MM-DD'),
+    selectedToString: moment(ToDay).format('YYYY-MM-DD'),
     selectedInLocaleFormat: moment(ToDay).format(LocaleDateFormat),
-    dateFormat            : 'MMM DD, YYYY',
-    DayPickerModifiers    : {
+    dateFormat: 'MMM DD, YYYY',
+    DayPickerModifiers: {
       selected: selectedDate
     }
   });
 
-  const nativeDateInput                = useRef(null);
+  const nativeDateInput = useRef(null);
   const { isMobile, isAndroid } = useContext(DeviceInfoContext);
 
   useEffect(() => {
@@ -112,10 +112,10 @@ const SimpleModePage = (
       setData({
         selected,
         selectedDate,
-        selectedToString      : moment(selected).format('YYYY-MM-DD'),
+        selectedToString: moment(selected).format('YYYY-MM-DD'),
         selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
-        dateFormat            : uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
-        DayPickerModifiers    : {
+        dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
+        DayPickerModifiers: {
           selected: selectedDate
         }
       });
@@ -142,53 +142,53 @@ const SimpleModePage = (
         captionElement={() => null}
         navbarElement={props => getNavBarElement(props, uiLang, onDayClick)}
       />
-      <button className="inline-button" onClick={() => onDayClick(new Date())}>{t('simple-mode.today-button')}</button>
+      <div className="p-4">
+        <button className="bg-gray-300 rounded-md py-2 px-4 min-w-10" onClick={() => onDayClick(new Date())}>
+          {t('simple-mode.today-button')}
+        </button>
+      </div>
     </div>;
 
   return (
     <div>
-      <SectionHeader section="simple-mode"/>
-      <hr className="m-0" />
-      <div className=" px-4 py-4">
-        <div className="flex flex-wrap">
-          <div className="w-full lg:w-3/4">
-            <div className="summary-container">
-              <div className="controller">
-                <h4>{t('simple-mode.date')}</h4>
-                <div className="date-container">
-                  <button type="button"
-                    onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                  {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid)}
-                  <button
-                    type="button"
-                    disabled={isToday(selectedDate)}
-                    className={isToday(selectedDate) ? 'disabled' : ''}
-                    onClick={() => changeDay(1, selectedDate, onDayClick)}>{t('simple-mode.next')}</button>
-                </div>
-              </div>
-              <div className="controller">
-                <h4>
-                  {t('simple-mode.media-language')}
-                  {' (one of) '}
-                </h4>
-                <MenuLanguageSelector
-                  languages={ALL_LANGUAGES}
-                  selected={filesLanguages}
-                  onLanguageChange={onLanguageChange}
-                />
+      <SectionHeader section="simple-mode" />
+      <div className="p-4 flex gap-4">
+        <div className="w-full lg:flex-1">
+          <div className="summary-container">
+            <div className="controller">
+              <h4 className='font-bold'>{t('simple-mode.date')}</h4>
+              <div className="date-container">
+                <button type="button"
+                  onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
+                {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid)}
+                <button
+                  type="button"
+                  disabled={isToday(selectedDate)}
+                  className={isToday(selectedDate) ? 'disabled' : ''}
+                  onClick={() => changeDay(1, selectedDate, onDayClick)}>{t('simple-mode.next')}</button>
               </div>
             </div>
-            <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate}/>
+            <div className="controller">
+              <h4 className='font-bold'>
+                {t('simple-mode.media-language')}
+                {' (one of) '}
+              </h4>
+              <MenuLanguageSelector
+                languages={ALL_LANGUAGES}
+                selected={filesLanguages}
+                onLanguageChange={onLanguageChange}
+                multiSelect={true}
+              />
+            </div>
           </div>
-          <div className="hidden md:block w-full lg:w-1/4">
-            <div className="stick-calendar">
-              <div className="summary-container adjust-height">
-                <div className="controller">
-                  <h4>{t('simple-mode.choose-date')}</h4>
-                </div>
-              </div>
-              {renderDatePicker()}
+          <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate} />
+        </div>
+        <div className="hidden md:block w-full lg:w-auto">
+          <div className="stick-calendar">
+            <div className="summary-container adjust-height">
+              <h4 className="controller font-bold">{t('simple-mode.choose-date')}</h4>
             </div>
+            {renderDatePicker()}
           </div>
         </div>
       </div>
@@ -197,10 +197,10 @@ const SimpleModePage = (
 };
 
 SimpleModePage.propTypes = {
-  selectedDate    : PropTypes.objectOf(Date),
-  filesLanguages  : PropTypes.arrayOf(PropTypes.string).isRequired,
-  renderUnit      : PropTypes.func.isRequired,
-  onDayClick      : PropTypes.func.isRequired,
+  selectedDate: PropTypes.objectOf(Date),
+  filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  renderUnit: PropTypes.func.isRequired,
+  onDayClick: PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
 };
 

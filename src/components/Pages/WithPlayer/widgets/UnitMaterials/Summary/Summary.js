@@ -53,7 +53,6 @@ const Summary = ({ id }) => {
           languages={summaryLanguages}
           selected={finalLanguage}
           onLanguageChange={handleLanguageChanged}
-          multiSelect={false}
         />
       }
       {

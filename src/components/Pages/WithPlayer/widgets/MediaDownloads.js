@@ -278,7 +278,6 @@ class MediaDownloads extends Component {
                 languages={availableLanguages}
                 selected={selectedLanguage}
                 onLanguageChange={this.handleChangeLanguage}
-                multiSelect={false}
               />
             </div>
           </div>

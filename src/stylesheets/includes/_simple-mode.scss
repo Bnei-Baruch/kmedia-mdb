@@ -9,7 +9,7 @@
 .summary-container {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 1em;
 
@@ -24,10 +24,13 @@
 
     h4 {
       margin: 0 6px 0 0;
+      white-space: nowrap;
     }
 
-    span {
-      margin: 0 6px;
+    .date-container {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
     }
 
     button {
@@ -105,8 +108,8 @@
 }
 
 .gray-header {
-  background-color: #ebecf0 !important;
-  padding: 0.2em 1em !important;
+  background-color: #ebecf0;
+  padding: 0.2em 1em;
 }
 
 .type-header-top-margin {

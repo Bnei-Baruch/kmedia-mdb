@@ -27,7 +27,6 @@ const PlayerLanguages = () => {
         languages={languages}
         selected={language}
         onLanguageChange={handleSelect}
-        multiSelect={false}
         upward={true}
       />
     </div>

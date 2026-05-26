@@ -60,7 +60,6 @@ const Sketches = ({ unit }) => {
               languages={languages}
               selected={language}
               onLanguageChange={handleLanguageChanged}
-              multiSelect={false}
             />
           </div>
         )
