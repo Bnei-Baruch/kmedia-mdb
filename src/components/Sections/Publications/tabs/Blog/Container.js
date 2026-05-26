@@ -1,69 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from '@reduxjs/toolkit';
-import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
+import { usePrevious } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/publications';
-import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
-import * as shapes from '../../../../shapes';
+import { getPageFromLocation } from '../../../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../../../shared/SectionFiltersWithMobile';
+import {
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetPageSizeSelector,
+} from '../../../../../redux/selectors';
+import Filters from '../../Filters';
 import Page from './Page';
-import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
-class BlogContainer extends withPagination {
-  static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    items: PropTypes.arrayOf(shapes.BlogPost),
-    wip: shapes.WIP,
-    err: shapes.Error,
-    pageNo: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    isFiltersHydrated: PropTypes.bool,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
-    resetNamespace: PropTypes.func.isRequired
-  };
+const BlogContainer = ({ namespace }) => {
+  const items    = useSelector(state => selectors.getBlogPosts(state.publications));
+  const total    = useSelector(state => selectors.getBlogTotal(state.publications));
+  const wip      = useSelector(state => selectors.getBlogWip(state.publications));
+  const err      = useSelector(state => selectors.getBlogError(state.publications));
+  const pageSize = useSelector(settingsGetPageSizeSelector);
 
-  static defaultProps = {
-    items: [],
-    wip: false,
-    err: null,
-    isFiltersHydrated: false,
-  };
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const selected         = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
+  const prevSel          = usePrevious(selected);
 
-  constructor(props) {
-    super(props);
-    this.handlePageChanged     = this.handlePageChanged.bind(this);
-    this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
-    this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
-  }
+  const dispatch = useDispatch();
+  const setPage  = useCallback(n => dispatch(actions.setPage(namespace, n)), [dispatch, namespace]);
 
-  componenDidUpdate(nextProps) {
-    // clear all filters when location's search is cleared by Menu click
-    if (nextProps.location.search !== this.props.location.search) {
-      if (!nextProps.location.search) {
-        nextProps.resetNamespace(nextProps.namespace);
-        this.handleFiltersChanged();
-      } else {
-        const pageNo = getPageFromLocation(nextProps.location);
-        if (pageNo !== nextProps.pageNo) {
-          this.setPage(nextProps, pageNo);
-        }
-      }
-    }
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
-    super.componenDidUpdate(nextProps);
-  }
-
-  // Map all content languages to proper blogs.
-  extraFetchParams({ contentLanguages }) {
-    const blogs = contentLanguages.map(language => {
-      switch (language) {
+  const blogs = useMemo(() => {
+    const b = contentLanguages.map(lang => {
+      switch (lang) {
         case LANG_HEBREW:
           return 'laitman-co-il';
         case LANG_UKRAINIAN:
@@ -73,39 +45,24 @@ class BlogContainer extends withPagination {
           return 'laitman-es';
         case LANG_ENGLISH:
           return 'laitman-com';
-
         default:
           return null;
       }
-    }).filter(blog => !!blog);
-    if (!blogs.length) {
-      blogs.push('laitman-com');
+    }).filter(Boolean);
+    if (!b.length) b.push('laitman-com');
+    return b;
+  }, [contentLanguages]);
+
+  useEffect(() => {
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchBlogList(namespace, pageNo, { blog: blogs, pageSize }));
     }
+  }, [contentLanguages, dispatch, pageNo, selected, pageSize, blogs, namespace, prevSel, setPage]);
 
-    return { blog: blogs };
-  }
-
-  handlePageChanged(pageNo) {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
-    }
-
-    this.setPage(this.props, pageNo);
-  }
-
-  handleFiltersChanged() {
-    this.handlePageChanged(1);
-  }
-
-  handleFiltersHydrated(location) {
-    const p = getPageFromLocation(location);
-    this.handlePageChanged(p);
-  }
-
-  render() {
-    const { items, wip, err, pageNo, total, pageSize, namespace, location } = this.props;
-
-    return (
+  return (
+    <SectionFiltersWithMobile namespace={namespace} filters={<Filters namespace={namespace} />}>
       <Page
         namespace={namespace}
         items={items}
@@ -114,31 +71,10 @@ class BlogContainer extends withPagination {
         pageNo={pageNo}
         total={total}
         pageSize={pageSize}
-        onPageChange={this.handlePageChanged}
-        onFiltersChanged={this.handleFiltersChanged}
-        onFiltersHydrated={() => this.handleFiltersHydrated(location)}
+        onPageChange={setPage}
       />
-    );
-  }
-}
+    </SectionFiltersWithMobile>
+  );
+};
 
-export const mapState = (state, ownProps) => ({
-  items: selectors.getBlogPosts(state.publications),
-  total: selectors.getBlogTotal(state.publications),
-  wip: selectors.getBlogWip(state.publications),
-  err: selectors.getBlogError(state.publications),
-  pageNo: selectors.getBlogPageNo(state.publications),
-  pageSize: settings.getPageSize(state.settings),
-  contentLanguages: settingsGetContentLanguagesSelector(state),
-  isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
-});
-
-export const mapDispatch = dispatch => (
-  bindActionCreators({
-    fetchList: actions.fetchBlogList,
-    setPage: actions.setPage,
-    resetNamespace: filtersActions.resetNamespace,
-  }, dispatch)
-);
-
-export default connect(mapState, mapDispatch)(BlogContainer);
+export default BlogContainer;

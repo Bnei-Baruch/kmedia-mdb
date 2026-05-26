@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
@@ -88,6 +89,7 @@ const filters = {
 };
 
 const UnitListPage = props => {
+  const { t } = useTranslation();
   const
     {
       namespace,
@@ -97,7 +99,6 @@ const UnitListPage = props => {
       pageNo,
       total,
       pageSize,
-      t,
       onPageChange,
       onFiltersChanged,
       onFiltersHydrated,

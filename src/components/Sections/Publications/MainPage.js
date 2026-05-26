@@ -1,9 +1,9 @@
 import React from 'react';
 import MainTabPage from '../../shared/MainTabPage';
-import Articles from './tabs/Articles/List';
+import Articles from './tabs/Articles/MainPage';
 import Blog from './tabs/Blog/Container';
 import Twitter from './tabs/Twitter/Container';
-import AudioBlog from './tabs/AudioBlog/Container';
+import AudioBlog from './tabs/AudioBlog/MainPage';
 
 export const tabs = [
   'blog',

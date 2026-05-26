@@ -1,70 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from '@reduxjs/toolkit';
-import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
+import { usePrevious } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/publications';
-import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
-import * as shapes from '../../../../shapes';
+import { getPageFromLocation } from '../../../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../../../shared/SectionFiltersWithMobile';
+import {
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetPageSizeSelector,
+} from '../../../../../redux/selectors';
+import Filters from '../../Filters';
 import Page from './Page';
-import { withRouter } from '../../../../../helpers/withRouterPatch';
-import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
-class TwitterContainer extends withPagination {
-  static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    items: PropTypes.arrayOf(shapes.Tweet),
-    wip: shapes.WIP,
-    err: shapes.Error,
-    pageNo: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    isFiltersHydrated: PropTypes.bool,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
-    resetNamespace: PropTypes.func.isRequired
-  };
+const TwitterContainer = ({ namespace }) => {
+  const items    = useSelector(state => selectors.getTweets(state.publications));
+  const total    = useSelector(state => selectors.getTweetsTotal(state.publications));
+  const wip      = useSelector(state => selectors.getTweetsWip(state.publications));
+  const err      = useSelector(state => selectors.getTweetsError(state.publications));
+  const pageSize = useSelector(settingsGetPageSizeSelector);
 
-  static defaultProps = {
-    items: [],
-    wip: false,
-    err: null,
-    isFiltersHydrated: false,
-  };
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const selected         = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
+  const prevSel          = usePrevious(selected);
 
-  constructor(props) {
-    super(props);
-    this.handlePageChanged     = this.handlePageChanged.bind(this);
-    this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
-    this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
-  }
+  const dispatch = useDispatch();
+  const setPage  = useCallback(n => dispatch(actions.setPage(namespace, n)), [dispatch, namespace]);
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    // clear all filters when location's search is cleared by Menu click
-    if (nextProps.location.search !== this.props.location.search) {
-      if (!nextProps.location.search) {
-        nextProps.resetNamespace(nextProps.namespace);
-        this.handleFiltersChanged();
-      } else {
-        const pageNo = getPageFromLocation(nextProps.location);
-        if (pageNo !== nextProps.pageNo) {
-          this.setPage(nextProps, pageNo);
-        }
-      }
-    }
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
-    super.UNSAFE_componentWillReceiveProps(nextProps);
-  }
-
-  // Map all content languages to proper Twitter usernames.
-  extraFetchParams({ contentLanguages }) {
-    const usernames = contentLanguages.map(language => {
-      switch (language) {
+  const usernames = useMemo(() => {
+    const u = contentLanguages.map(lang => {
+      switch (lang) {
         case LANG_HEBREW:
           return 'laitman_co_il';
         case LANG_UKRAINIAN:
@@ -74,39 +45,24 @@ class TwitterContainer extends withPagination {
           return 'laitman_es';
         case LANG_ENGLISH:
           return 'laitman';
-
         default:
           return null;
       }
-    }).filter(username => !!username);
-    if (!usernames.length) {
-      usernames.push('laitman');
+    }).filter(Boolean);
+    if (!u.length) u.push('laitman');
+    return u;
+  }, [contentLanguages]);
+
+  useEffect(() => {
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchTweets(namespace, pageNo, { username: usernames, pageSize }));
     }
+  }, [contentLanguages, dispatch, pageNo, selected, pageSize, usernames, namespace, prevSel, setPage]);
 
-    return { username: usernames };
-  }
-
-  handlePageChanged(pageNo) {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
-    }
-
-    this.setPage(this.props, pageNo);
-  }
-
-  handleFiltersChanged() {
-    this.handlePageChanged(1);
-  }
-
-  handleFiltersHydrated(location) {
-    const p = getPageFromLocation(location);
-    this.handlePageChanged(p);
-  }
-
-  render() {
-    const { items, wip, err, pageNo, total, pageSize, namespace, location } = this.props;
-
-    return (
+  return (
+    <SectionFiltersWithMobile namespace={namespace} filters={<Filters namespace={namespace} />}>
       <Page
         namespace={namespace}
         items={items}
@@ -115,31 +71,10 @@ class TwitterContainer extends withPagination {
         pageNo={pageNo}
         total={total}
         pageSize={pageSize}
-        onPageChange={this.handlePageChanged}
-        onFiltersChanged={this.handleFiltersChanged}
-        onFiltersHydrated={() => this.handleFiltersHydrated(location)}
+        onPageChange={setPage}
       />
-    );
-  }
-}
+    </SectionFiltersWithMobile>
+  );
+};
 
-export const mapState = (state, ownProps) => ({
-  items: selectors.getTweets(state.publications),
-  total: selectors.getTweetsTotal(state.publications),
-  wip: selectors.getTweetsWip(state.publications),
-  err: selectors.getTweetsError(state.publications),
-  pageNo: selectors.getTweetsPageNo(state.publications),
-  pageSize: settings.getPageSize(state.settings),
-  contentLanguages: settingsGetContentLanguagesSelector(state),
-  isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
-});
-
-export const mapDispatch = dispatch => (
-  bindActionCreators({
-    fetchList: actions.fetchTweets,
-    setPage: actions.setPage,
-    resetNamespace: filtersActions.resetNamespace,
-  }, dispatch)
-);
-
-export default withRouter(connect(mapState, mapDispatch)(TwitterContainer));
+export default TwitterContainer;

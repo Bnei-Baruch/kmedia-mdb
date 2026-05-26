@@ -1,5 +1,6 @@
 export { default as LabelIcon } from "./LabelIcon";
 export { default as AdditionsMode } from "./AdditionsMode";
+export { default as AudioBlog } from "./AudioBlog";
 export { default as Dailylessons } from "./Dailylessons";
 export { default as Download } from "./Download";
 export { default as Events } from "./Events";

@@ -6,6 +6,7 @@ import EventsIcon from '../images/icons/Events';
 import InfoIcon from '../images/icons/Info';
 import LabelIcon from '../images/icons/LabelIcon';
 import LecturesIcon from '../images/icons/Lectures';
+import AudioBlogIcon from '../images/icons/AudioBlog';
 import LikutimIcon from '../images/icons/Likutim';
 import ProgramsIcon from '../images/icons/Programs';
 import PublicationsIcon from '../images/icons/Publications';
@@ -32,6 +33,7 @@ const sectionLogo = {
   downloads: DownloadIcon,
   info: InfoIcon,
   'simple-mode': SimpleModeIcon,
+  audio: AudioBlogIcon,
   likutim: LikutimIcon,
   topics: TopicsIcon,
   label: LabelIcon
