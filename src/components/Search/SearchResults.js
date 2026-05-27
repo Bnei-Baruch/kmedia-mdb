@@ -751,6 +751,77 @@ const SearchResults = ({ t }) => {
     );
   };
 
+  const getRapidSummaryFallback = results => {
+    if (
+      !isRapidAgenticSearch
+      || wip
+      || isShowingRapidAgenticResults
+      || reasoningStatus?.state !== 'completed'
+      || reasoningResult?.summary
+    ) {
+      return null;
+    }
+
+    const relevanceCounts = (Array.isArray(results) ? results : []).reduce((acc, result) => {
+      switch (result?.relevance) {
+        case 'highly_relevant':
+          acc.highlyRelevant += 1;
+          break;
+        case 'relevant':
+          acc.relevant += 1;
+          break;
+        case 'can_be_relevant':
+          acc.possible += 1;
+          break;
+        default:
+          break;
+      }
+
+      return acc;
+    }, { highlyRelevant: 0, relevant: 0, possible: 0 });
+
+    const findings = [
+      relevanceCounts.highlyRelevant > 0
+        ? t('search.agentic.summaryFallback.highlyRelevant', { count: relevanceCounts.highlyRelevant })
+        : null,
+      relevanceCounts.relevant > 0
+        ? t('search.agentic.summaryFallback.relevant', { count: relevanceCounts.relevant })
+        : null,
+      relevanceCounts.possible > 0
+        ? t('search.agentic.summaryFallback.possible', { count: relevanceCounts.possible })
+        : null
+    ].filter(Boolean);
+
+    if (findings.length === 0) {
+      return null;
+    }
+
+    if (relevanceCounts.highlyRelevant === 0 && relevanceCounts.relevant === 0 && relevanceCounts.possible > 0) {
+      return {
+        header : t('search.agentic.summaryFallback.title'),
+        content: t('search.agentic.summaryFallback.messagePossibleOnly', {
+          count        : relevanceCounts.possible,
+          improveSearch: t('search.agentic.followupTitle')
+        })
+      };
+    }
+
+    let findingsText = findings[0];
+    if (findings.length === 2) {
+      findingsText = `${findings[0]} ${t('search.agentic.summaryFallback.and')} ${findings[1]}`;
+    } else if (findings.length === 3) {
+      findingsText = `${findings[0]}, ${findings[1]}, ${t('search.agentic.summaryFallback.and')} ${findings[2]}`;
+    }
+
+    return {
+      header : t('search.agentic.summaryFallback.title'),
+      content: t('search.agentic.summaryFallback.message', {
+        findingsText,
+        improveSearch: t('search.agentic.followupTitle')
+      })
+    };
+  };
+
   const renderAgenticResults = query => {
     const agenticResultRenderKey = [
       reasoningStatus?.session_id || reasoningResult?.session_id || 'no-session',
@@ -762,6 +833,9 @@ const SearchResults = ({ t }) => {
       (isShowingRapidAgenticResults ? reasoningStatus?.query : reasoningResult?.query)
       || query
     );
+    const summaryMessage = reasoningResult?.summary
+      ? { header: t('search.agentic.summary'), content: reasoningResult.summary }
+      : getRapidSummaryFallback(currentAgenticResults);
 
     return renderSearchFrame(
       <>
@@ -773,11 +847,11 @@ const SearchResults = ({ t }) => {
             {' '}
             {t('search.agentic.warning')}
           </div>
-          {!isShowingRapidAgenticResults && reasoningResult?.summary && (
+          {!isShowingRapidAgenticResults && summaryMessage && (
             <Message
               info
-              header={t('search.agentic.summary')}
-              content={reasoningResult.summary}
+              header={summaryMessage.header}
+              content={summaryMessage.content}
             />
           )}
           {currentAgenticResults.length === 0 && !wip && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}

@@ -301,6 +301,15 @@
       "warningTitle": "Descrizioni ed etichette generate da AI",
       "warning": "Le descrizioni e le etichette in questa pagina di ricerca possono essere generate da AI e contenere errori o imprecisioni.",
       "summary": "Sintesi AI",
+      "summaryFallback": {
+        "title": "Sintesi",
+        "message": "Abbiamo trovato alcune buone corrispondenze: {{findingsText}}. Puoi usare {{improveSearch}} qui sotto per ottenere risultati piu mirati.",
+        "messagePossibleOnly": "Siamo riusciti a trovare {{count}} possibili risultati che possono aiutare. Puoi consultarli oppure usare {{improveSearch}} qui sotto per concentrare meglio la ricerca.",
+        "and": "e",
+        "highlyRelevant": "{{count}} risultati particolarmente precisi",
+        "relevant": "{{count}} risultati pertinenti",
+        "possible": "{{count}} risultati aggiuntivi che possono essere utili"
+      },
       "reason": "Perché questo risultato",
       "highlights": "Evidenziazioni",
       "no-results": "La ricerca agentica non ha trovato risultati per \"{{query}}\".",

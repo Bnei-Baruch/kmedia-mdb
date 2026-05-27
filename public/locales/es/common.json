@@ -302,6 +302,15 @@
       "warningTitle": "Descripciones y etiquetas generadas por AI",
       "warning": "Las descripciones y etiquetas de esta página de búsqueda pueden haber sido generadas por AI y contener errores o imprecisiones.",
       "summary": "Resumen de AI",
+      "summaryFallback": {
+        "title": "Resumen",
+        "message": "Encontramos algunas coincidencias buenas: {{findingsText}}. Puedes usar {{improveSearch}} abajo para obtener resultados más enfocados.",
+        "messagePossibleOnly": "Logramos encontrar {{count}} resultados posibles que pueden ayudar. Puedes revisarlos o usar {{improveSearch}} abajo para enfocar la búsqueda.",
+        "and": "y",
+        "highlyRelevant": "{{count}} resultados especialmente precisos",
+        "relevant": "{{count}} resultados relevantes",
+        "possible": "{{count}} resultados adicionales que pueden ayudar"
+      },
       "reason": "Por qué este resultado",
       "highlights": "Fragmentos destacados",
       "no-results": "La búsqueda con agente no encontró resultados para \"{{query}}\".",

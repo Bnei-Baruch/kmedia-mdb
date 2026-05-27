@@ -304,6 +304,15 @@
       "warningTitle": "AI-generated descriptions and labels",
       "warning": "Descriptions and labels on this search page may be AI-generated and may contain mistakes or inaccuracies.",
       "summary": "AI summary",
+      "summaryFallback": {
+        "title": "Summary",
+        "message": "We found some good matches: {{findingsText}}. You can use {{improveSearch}} below to get more focused results.",
+        "messagePossibleOnly": "We were able to find {{count}} possible results that may help. You can check them or use {{improveSearch}} below to focus the search.",
+        "and": "and",
+        "highlyRelevant": "{{count}} highly accurate results",
+        "relevant": "{{count}} relevant results",
+        "possible": "{{count}} additional results that may help"
+      },
       "reason": "Why this result",
       "highlights": "Highlights",
       "no-results": "Agentic Search found no results for \"{{query}}\".",

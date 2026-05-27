@@ -300,6 +300,15 @@
       "warningTitle": "AI-generierte Beschreibungen und Labels",
       "warning": "Beschreibungen und Labels auf dieser Suchseite können von AI generiert sein und Fehler oder Ungenauigkeiten enthalten.",
       "summary": "AI-Zusammenfassung",
+      "summaryFallback": {
+        "title": "Zusammenfassung",
+        "message": "Wir haben einige gute Treffer gefunden: {{findingsText}}. Mit {{improveSearch}} unten kannst du gezieltere Ergebnisse bekommen.",
+        "messagePossibleOnly": "Wir konnten {{count}} mögliche Ergebnisse finden, die hilfreich sein könnten. Du kannst sie prüfen oder unten {{improveSearch}} nutzen, um die Suche gezielter zu machen.",
+        "and": "und",
+        "highlyRelevant": "{{count}} besonders genaue Ergebnisse",
+        "relevant": "{{count}} relevante Ergebnisse",
+        "possible": "{{count}} weitere Ergebnisse, die hilfreich sein könnten"
+      },
       "reason": "Warum dieses Ergebnis",
       "highlights": "Hervorhebungen",
       "no-results": "Die Agenten-Suche hat keine Ergebnisse für \"{{query}}\" gefunden.",

@@ -303,6 +303,15 @@
       "warningTitle": "AI tarafından oluşturulan açıklamalar ve etiketler",
       "warning": "Bu arama sayfasındaki açıklamalar ve etiketler AI tarafından oluşturulmuş olabilir ve hata veya yanlışlık içerebilir.",
       "summary": "AI özeti",
+      "summaryFallback": {
+        "title": "Özet",
+        "message": "Bazi iyi eslesmeler bulduk: {{findingsText}}. Daha odakli sonuçlara ulaşmak için aşağıdaki {{improveSearch}} alanını kullanabilirsiniz.",
+        "messagePossibleOnly": "{{count}} olasi sonuç bulmayi basardik; bunlar yardimci olabilir. Bunlari inceleyebilir ya da aramayi odaklamak için aşağıdaki {{improveSearch}} alanini kullanabilirsiniz.",
+        "and": "ve",
+        "highlyRelevant": "{{count}} özellikle isabetli sonuç",
+        "relevant": "{{count}} ilgili sonuç",
+        "possible": "{{count}} yardimci olabilecek ek sonuç"
+      },
       "reason": "Bu sonucun nedeni",
       "highlights": "Öne çıkanlar",
       "no-results": "Ajanlı arama \"{{query}}\" için sonuç bulamadı.",

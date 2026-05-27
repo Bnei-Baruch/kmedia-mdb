@@ -301,6 +301,15 @@
       "warningTitle": "Descrições e rótulos gerados por AI",
       "warning": "As descrições e os rótulos nesta página de pesquisa podem ser gerados por AI e conter erros ou imprecisões.",
       "summary": "Resumo de AI",
+      "summaryFallback": {
+        "title": "Resumo",
+        "message": "Encontramos algumas boas correspondencias: {{findingsText}}. Voce pode usar {{improveSearch}} abaixo para chegar a resultados mais focados.",
+        "messagePossibleOnly": "Conseguimos encontrar {{count}} resultados possiveis que podem ajudar. Voce pode verifica-los ou usar {{improveSearch}} abaixo para focar a busca.",
+        "and": "e",
+        "highlyRelevant": "{{count}} resultados especialmente precisos",
+        "relevant": "{{count}} resultados relevantes",
+        "possible": "{{count}} resultados adicionais que podem ajudar"
+      },
       "reason": "Por que este resultado",
       "highlights": "Destaques",
       "no-results": "A busca com agente não encontrou resultados para \"{{query}}\".",

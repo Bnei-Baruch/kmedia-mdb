@@ -303,6 +303,15 @@
       "warningTitle": "Popisy a štítky generované AI",
       "warning": "Popisy a štítky na této stránce vyhledávání mohou být generované AI a mohou obsahovat chyby nebo nepřesnosti.",
       "summary": "Shrnutí AI",
+      "summaryFallback": {
+        "title": "Shrnutí",
+        "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",
+        "messagePossibleOnly": "Podařilo se nám najít {{count}} možných výsledků, které mohou pomoci. Můžete je projít nebo pomocí {{improveSearch}} níže vyhledávání lépe zaměřit.",
+        "and": "a",
+        "highlyRelevant": "{{count}} mimořádně přesných výsledků",
+        "relevant": "{{count}} relevantních výsledků",
+        "possible": "{{count}} dalších výsledků, které mohou pomoci"
+      },
       "reason": "Proč tento výsledek",
       "highlights": "Zvýraznění",
       "no-results": "Agentní vyhledávání nenašlo žádné výsledky pro \"{{query}}\".",
