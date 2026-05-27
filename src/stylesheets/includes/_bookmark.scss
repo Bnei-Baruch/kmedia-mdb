@@ -9,6 +9,9 @@
 
   .folders_list {
     height: 20VH;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
   }
 
   .header {

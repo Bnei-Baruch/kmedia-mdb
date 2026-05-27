@@ -13,11 +13,11 @@ import { bookmarkFilterGetByKeySelector, myGetItemByKeySelector } from '../../..
 
 const BookmarkHeader = () => {
   const { t } = useTranslation();
-  const query     = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
+  const query = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
   const folder_id = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
 
   const { key: fKey } = getMyItemKey(MY_NAMESPACE_FOLDERS, { id: folder_id });
-  const folder        = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_FOLDERS, fKey));
+  const folder = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_FOLDERS, fKey));
 
   const dispatch = useDispatch();
 
@@ -25,16 +25,13 @@ const BookmarkHeader = () => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
   return (
-    <div className="flex flex-wrap items-end">
-      <div className="w-full md:w-1/4"/>
-      <div className="w-full md:w-[31.25%]">
-        <h2 className="my_header">
-          <span className="material-symbols-outlined display-iblock">bookmark</span>
-          {t('personal.bookmark.title')}
-        </h2>
-      </div>
+    <div className="flex flex-wrap w-full gap-2 justify-between px-4 py-2">
+      <h2 className="my_header ms-[350px]">
+        <span className="material-symbols-outlined">bookmark</span>
+        {t('personal.bookmark.title')}
+      </h2>
 
-      <div className="w-full md:w-[43.75%] text-right">
+      <div>
         <div className="relative bookmark_search inline-block">
           <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
           <input

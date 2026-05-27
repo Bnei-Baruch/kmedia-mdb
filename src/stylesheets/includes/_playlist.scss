@@ -39,16 +39,16 @@
   }
 }
 
-.homepage__thumbnails .my_header {
-  margin-right: 1.5em;
-  margin-left: 1.5em;
+.my_header {
+  font-size: 1.5rem;
+  font-family: Lato ,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  align-items: center;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
 
-  @include responsive-helpers.mobile {
-    margin-right: 0;
-    margin-left: 0;
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+    margin-right: 8px;
+    margin-inline-end: .5em;
   }
 }
 

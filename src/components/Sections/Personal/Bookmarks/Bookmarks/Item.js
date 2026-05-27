@@ -48,7 +48,7 @@ const BookmarksItem = ({ bookmark }) => {
     citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
-    <li className="bookmark_item flex items-start gap-3 border-b py-3">
+    <div className="bookmark_item flex items-start gap-3 border-b py-3">
       <div className="flex-shrink-0">
         <Link to={to}>
           <div className="inline-block align-middle">
@@ -74,7 +74,7 @@ const BookmarksItem = ({ bookmark }) => {
       <div className="flex-shrink-0 self-start">
         <Actions bookmark={bookmark}/>
       </div>
-    </li>
+    </div>
   );
 };
 

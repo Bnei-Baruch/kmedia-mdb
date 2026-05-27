@@ -24,14 +24,14 @@ import {
 
 const BookmarkList = () => {
   const { t } = useTranslation();
-  let items         = useSelector(state => myGetListSelector(state, MY_NAMESPACE_BOOKMARKS));
-  const wip         = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_BOOKMARKS));
-  const err         = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_BOOKMARKS));
-  const folder_id   = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
+  let items = useSelector(state => myGetListSelector(state, MY_NAMESPACE_BOOKMARKS));
+  const wip = useSelector(state => myGetWipSelector(state, MY_NAMESPACE_BOOKMARKS));
+  const err = useSelector(state => myGetErrSelector(state, MY_NAMESPACE_BOOKMARKS));
+  const folder_id = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
   const getPathByID = useSelector(sourcesGetPathByIDSelector);
-  const query       = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
-  const denormCU    = useSelector(mdbNestedGetDenormContentUnitSelector);
-  const uiLang      = useSelector(settingsGetUILangSelector);
+  const query = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_QUERY));
+  const denormCU = useSelector(mdbNestedGetDenormContentUnitSelector);
+  const uiLang = useSelector(settingsGetUILangSelector);
 
   const dispatch = useDispatch();
 
@@ -53,13 +53,13 @@ const BookmarkList = () => {
 
     if (name && name.includes(query))
       return true;
-    const cu    = denormCU(source_uid);
+    const cu = denormCU(source_uid);
     const title = buildTitleByUnit(cu, t, getPathByID);
     return title.includes(query);
   };
 
   if (items.length === 0 && !folder_id) {
-    return <h2 className="text-center">{t('personal.bookmark.haveNo')}</h2>;
+    return <h2 className="text-center w-full p-4">{t('personal.bookmark.haveNo')}</h2>;
   }
 
   if (query) {
@@ -67,11 +67,11 @@ const BookmarkList = () => {
   }
 
   return (
-    <ul className="divide-y">
+    <>
       {
-        items.map(x => <BookmarksItem bookmark={x} key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}/>)
+        items.map(x => <BookmarksItem bookmark={x} key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`} />)
       }
-    </ul>
+    </>
   );
 };
 

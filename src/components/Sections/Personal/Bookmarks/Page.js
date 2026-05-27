@@ -15,22 +15,15 @@ const Page = () => {
   if (needToLogin) return needToLogin;
 
   return (
-    <div className={clsx('w-full bookmark_page', {
-      '': !isMobileDevice,
-      'no-padding': isMobileDevice
-    })}
+    <div className={clsx('bookmark_page', { 'p-4': !isMobileDevice })}
     >
-      {isMobileDevice && <BookmarkHeaderMobile/>}
-      <div className={clsx('flex flex-wrap', { 'no-margin': isMobileDevice })}>
-        {!isMobileDevice && <BookmarkHeader/>}
-        <div className="flex flex-wrap w-full">
-          {!isMobileDevice && <FolderList/>}
-          <div
-            className={clsx('w-full md:w-3/4', { 'no-margin no-padding': isMobileDevice })}
-          >
-            <div className={clsx({ 'border rounded p-4 shadow-sm': !isMobileDevice })}>
-              <BookmarkList/>
-            </div>
+      {isMobileDevice && <BookmarkHeaderMobile />}
+      <div className="flex flex-wrap gap-4">
+        {!isMobileDevice && <BookmarkHeader />}
+        <div className="flex flex-1 gap-4">
+          {!isMobileDevice && <div className="w-full md:w-[350px] border rounded p-4 shadow-lg"><FolderList /></div>}
+          <div className="border rounded p-4 shadow-lg flex-1">
+            <BookmarkList />
           </div>
         </div>
       </div>

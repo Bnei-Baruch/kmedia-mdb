@@ -12,8 +12,8 @@ import { bookmarkFilterGetByKeySelector, myGetListSelector } from '../../../../.
 
 const FolderList = ({ close }) => {
   const { t } = useTranslation();
-  const [editFolder, setEditFolder]         = useState(false);
-  const [query, setQuery]                   = useState();
+  const [editFolder, setEditFolder] = useState(false);
+  const [query, setQuery] = useState();
   const [selectedMobile, setSelectedMobile] = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -61,11 +61,11 @@ const FolderList = ({ close }) => {
   };
 
   const renderHeader = () => (
-    <div className="flex items-center folders ">
+    <div className="flex flex-wrap w-full gap-2 justify-between border-b items-center pb-2">
       <div className="w-[43.75%]">
         <h3>{t('personal.bookmark.folders')}</h3>
       </div>
-      <div className="w-[56.25%]">
+      <div className="flex-1">
         <div className="relative bookmark_search">
           <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
           <input
@@ -122,36 +122,23 @@ const FolderList = ({ close }) => {
   );
 
   return (
-    <div className="w-full md:w-1/4">
-      <div className={clsx({ 'no-padding': isMobileDevice, 'border rounded p-4 shadow-sm': !isMobileDevice })}>
-        {renderHeader()}
-        <div className=" px-4 folders_list ">
-          <div className="no-padding">
-            <FolderItem
-              folder={{ id: 'all', name: t('personal.bookmark.allFolders') }}
-              key={'all'}
-              selectedId={selectedId}
-              selectFolder={selectFolder}
-            />
-            {renderEdit()}
-            {
-              items.map(f =>
-                (
-                  <FolderItem
-                    folder={f}
-                    key={f.id}
-                    selectedId={selectedId}
-                    selectFolder={selectFolder}
-                  />
-                )
-              )
-            }
-          </div>
-        </div>
-        <hr className="my-4"/>
-        {renderActions()}
+    <>
+      {renderHeader()}
+      <div className="px-4 folders_list">
+        <FolderItem
+          folder={{ id: 'all', name: t('personal.bookmark.allFolders') }}
+          key={'all'}
+          selectedId={selectedId}
+          selectFolder={selectFolder}
+        />
+        {renderEdit()}
+        {
+          items.map(f => (<FolderItem folder={f} key={f.id} selectedId={selectedId} selectFolder={selectFolder} />))
+        }
       </div>
-    </div>
+      <hr className="my-4" />
+      {renderActions()}
+    </>
   );
 };
 
