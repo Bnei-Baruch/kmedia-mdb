@@ -175,6 +175,7 @@
     "copy": "Copy",
     "view-all": "View All",
     "save": "Save",
+    "retry": "Retry",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -308,6 +309,8 @@
         "title": "Summary",
         "message": "We found some good matches: {{findingsText}}. You can use {{improveSearch}} below to get more focused results.",
         "messagePossibleOnly": "We were able to find {{count}} possible results that may help. You can check them or use {{improveSearch}} below to focus the search.",
+        "noResults": "We could not find suitable results in the available content. The search may not be related to the sources in the system, or it may help to phrase it more precisely.",
+        "temporaryError": "We could not complete the search because of a temporary issue. You can try again in a moment.",
         "and": "and",
         "highlyRelevant": "{{count}} highly accurate results",
         "relevant": "{{count}} relevant results",

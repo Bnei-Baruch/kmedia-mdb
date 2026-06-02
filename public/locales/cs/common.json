@@ -174,6 +174,7 @@
     "copy": "Kopírovat",
     "view-all": "View All",
     "save": "Save",
+    "retry": "Zkusit znovu",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -307,6 +308,8 @@
         "title": "Shrnutí",
         "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",
         "messagePossibleOnly": "Podařilo se nám najít {{count}} možných výsledků, které mohou pomoci. Můžete je projít nebo pomocí {{improveSearch}} níže vyhledávání lépe zaměřit.",
+        "noResults": "V dostupném obsahu jsme nenašli vhodné výsledky. Je možné, že hledání nesouvisí se zdroji v systému, nebo pomůže formulovat ho přesněji.",
+        "temporaryError": "Vyhledávání se nepodařilo dokončit kvůli dočasnému problému. Za chvíli to můžete zkusit znovu.",
         "and": "a",
         "highlyRelevant": "{{count}} mimořádně přesných výsledků",
         "relevant": "{{count}} relevantních výsledků",

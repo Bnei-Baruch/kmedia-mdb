@@ -410,22 +410,25 @@ const SearchResults = ({ t }) => {
   const renderAgenticStatus = () => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
     const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
+    const hasEmptyErrorStatus = !wip && !hasCanceledStatus && !!reasoningResult && !reasoningResult?.no_results && currentAgenticResults.length === 0;
+    const hasTemporaryErrorStatus = hasErrorStatus || hasEmptyErrorStatus;
     const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
     const canFinishNow = canCancel && !isRapidAgenticSearch && reasoningStatus?.has_draft_results;
-    const statusMessage  = hasErrorStatus && reasoningStatus?.message;
+    const canRetry = hasTemporaryErrorStatus;
+    const statusMessage  = hasTemporaryErrorStatus ? t('search.agentic.summaryFallback.temporaryError') : null;
     const statusLines = getAgenticStatusLines(reasoningStatus);
 
-    if (!isAgenticSearch || (!wip && !hasErrorStatus && !hasCanceledStatus)) {
+    if (!isAgenticSearch || (!wip && !hasTemporaryErrorStatus && !hasCanceledStatus)) {
       return null;
     }
 
     return (
       <div ref={agenticStatusRef} className="agentic-search__status-anchor">
         <Container className="padded">
-          <Message error={hasErrorStatus} info={!hasErrorStatus} icon className="agentic-search__status-message">
+          <Message warning={hasTemporaryErrorStatus} info={!hasTemporaryErrorStatus} icon className="agentic-search__status-message">
             <div className="agentic-search__status-visual" aria-hidden="true">
-              {hasErrorStatus ? (
-                <Icon name="warning sign" className="agentic-search__status-error-icon" />
+              {hasTemporaryErrorStatus ? (
+                <Icon name="clock outline" className="agentic-search__status-error-icon" />
               ) : hasCanceledStatus ? (
                 <Icon name="stop circle outline" className="agentic-search__status-canceled-icon" />
               ) : (
@@ -440,8 +443,18 @@ const SearchResults = ({ t }) => {
                 <Message.Header>
                   {hasCanceledStatus ? getAgenticStatusText(reasoningStatus) : t('search.agentic.statusTitle')}
                 </Message.Header>
-                {(canFinishNow || canCancel) && (
+                {(canFinishNow || canCancel || canRetry) && (
                   <div className="agentic-search__status-actions">
+                    {canRetry && (
+                      <Button
+                        basic
+                        compact
+                        size="mini"
+                        icon="redo"
+                        content={t('buttons.retry')}
+                        onClick={() => dispatch(actions.search())}
+                      />
+                    )}
                     {canFinishNow && (
                       <Button
                         basic
@@ -465,7 +478,7 @@ const SearchResults = ({ t }) => {
                   </div>
                 )}
               </div>
-              {!hasCanceledStatus && (
+              {!hasCanceledStatus && !hasTemporaryErrorStatus && (
                 <div className="agentic-search__status-lines">
                   {statusLines.map(line => (
                     <div key={line.key} className="agentic-search__status-line">
@@ -751,13 +764,23 @@ const SearchResults = ({ t }) => {
     );
   };
 
-  const getRapidSummaryFallback = results => {
+  const getAgenticSummaryMessage = (results, resultQuery) => {
+    if (reasoningResult?.summary) {
+      return { header: t('search.agentic.summary'), content: reasoningResult.summary };
+    }
+
+    if (reasoningResult?.no_results) {
+      return {
+        header : t('search.agentic.summaryFallback.title'),
+        content: t('search.agentic.summaryFallback.noResults', { query: resultQuery })
+      };
+    }
+
     if (
       !isRapidAgenticSearch
       || wip
       || isShowingRapidAgenticResults
       || reasoningStatus?.state !== 'completed'
-      || reasoningResult?.summary
     ) {
       return null;
     }
@@ -823,6 +846,7 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticResults = query => {
+    const shouldHideAgenticResults = !!reasoningResult?.no_results;
     const agenticResultRenderKey = [
       reasoningStatus?.session_id || reasoningResult?.session_id || 'no-session',
       reasoningResult?.followups_remaining ?? 'no-followups',
@@ -833,9 +857,7 @@ const SearchResults = ({ t }) => {
       (isShowingRapidAgenticResults ? reasoningStatus?.query : reasoningResult?.query)
       || query
     );
-    const summaryMessage = reasoningResult?.summary
-      ? { header: t('search.agentic.summary'), content: reasoningResult.summary }
-      : getRapidSummaryFallback(currentAgenticResults);
+    const summaryMessage = getAgenticSummaryMessage(currentAgenticResults, resultQuery);
 
     return renderSearchFrame(
       <>
@@ -854,12 +876,14 @@ const SearchResults = ({ t }) => {
               content={summaryMessage.content}
             />
           )}
-          {currentAgenticResults.length === 0 && !wip && <div>{t('search.agentic.no-results', { query: resultQuery })}</div>}
-          {currentAgenticResults.length > 0 && (
+          {currentAgenticResults.length === 0 && !wip && !summaryMessage && (
+            <div>{t('search.agentic.no-results', { query: resultQuery })}</div>
+          )}
+          {!shouldHideAgenticResults && currentAgenticResults.length > 0 && (
             <div className="agentic-search__results">{renderAgenticResultsList(currentAgenticResults)}</div>
           )}
           {renderAgenticFollowup()}
-          {visiblePreviousAgenticResults.length > 0 && (
+          {!shouldHideAgenticResults && visiblePreviousAgenticResults.length > 0 && (
             <>
               <Header as="h4" content={t('search.agentic.previousResultsTitle')} />
               <div className="agentic-search__results">{renderAgenticResultsList(visiblePreviousAgenticResults)}</div>
@@ -973,7 +997,7 @@ const SearchResults = ({ t }) => {
   }
 
   if (isAgenticSearch) {
-    if (!reasoningResult && !isShowingRapidAgenticResults) {
+    if (!reasoningResult && !isShowingRapidAgenticResults && reasoningStatus?.state !== 'failed' && reasoningStatus?.phase !== 'error') {
       return renderSearchFrame(renderAgenticStatus());
     }
 
