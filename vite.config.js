@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       tailwindcss(),
       react({
+        include: /\.(js|jsx|ts|tsx)$/,
         babel: {
           plugins: [
             "babel-plugin-lodash",
@@ -42,6 +43,12 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "build",
       sourcemap: true,
+      rollupOptions: {
+        input: {
+          main: "index.html",
+          anon: "index-anon.html",
+        },
+      },
     },
     esbuild: {
       loader: "jsx",
@@ -49,6 +56,7 @@ export default defineConfig(({ mode }) => {
       exclude: [],
     },
     optimizeDeps: {
+      entries: ["index.html", "index-anon.html"],
       esbuildOptions: {
         loader: {
           ".js": "jsx",

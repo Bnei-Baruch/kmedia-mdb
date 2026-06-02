@@ -71,9 +71,9 @@ if (window.__botKCInfo) {
   buildApp();
 } else {
   // Authenticated user: exchange KC auth code for token before hydrating.
-  initKC().then(kcInfo => {
-    buildApp(kcInfo).then(store => {
+  initKC()
+    .then(kcInfo => buildApp(kcInfo).then(store => {
       store.dispatch(authActions.updateToken(kcInfo?.token ?? null));
-    });
-  });
+    }))
+    .catch(() => buildApp());
 }

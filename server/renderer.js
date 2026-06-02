@@ -28,7 +28,8 @@ export async function render(req) {
   }
 
   const cookies = cookieParse(req.headers.cookie || '');
-  if (cookies.authorised || req.query.authorised) {
+  const isKcCallback = req.query.code && req.query.session_state;
+  if (cookies.authorised || req.query.authorised || isKcCallback) {
     logger.info(NAMESPACE, 'auth render', url);
     return { html: await renderSSR(req), skipTransform: false };
   }

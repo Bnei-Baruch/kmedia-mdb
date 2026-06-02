@@ -86,12 +86,7 @@ export const logout = async () => {
 };
 
 export const initKC = async () => {
-  try {
-    await healthCheckKC();
-
-  } catch {
-    return { user: null };
-  }
+  await healthCheckKC();
 
   const kc = await getKeycloak();
   if (!kc.init) {
