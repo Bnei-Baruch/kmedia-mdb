@@ -1,6 +1,6 @@
-const KC_API_URL   = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
-const KC_REALM     = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
-const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
+const KC_API_URL   = import.meta.env?.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
+const KC_REALM     = import.meta.env?.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
+const KC_CLIENT_ID = import.meta.env?.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
 
 export const KC_API_WITH_REALM = `${KC_API_URL}/realms/${KC_REALM}`;
 
@@ -185,7 +185,8 @@ const healthCheckKC = async () => {
       return resp;
     })
     .catch(err => {
-      console.log(err.response.data);
+      console.error('KC health check failed:', err.message || err);
+      throw err;
     });
   if (!health.ok) {
     throw Error('keycloak server is down');

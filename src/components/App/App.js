@@ -14,6 +14,7 @@ import {
 import { ChroniclesActions } from '../../helpers/clientChronicles';
 import StyleShadowDOM from '../../pkg/StyleShadowDOM';
 import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
+import '../../stylesheets/tailwind.css';
 import '../../stylesheets/Kmedia.scss';
 import Layout from '../Layout/Layout';
 import PlayerContainer from '../Player/PlayerContainer';

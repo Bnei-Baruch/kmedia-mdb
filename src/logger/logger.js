@@ -2,7 +2,7 @@
 
 const isServer = typeof window === 'undefined';
 
-const filterByNameSpace = nameSpace => (nameSpace === 'renderer');
+const filterByNameSpace = nameSpace => true;//(nameSpace === 'renderer');
 
 const logger = {
   log: (nameSpace, ...args) => {
