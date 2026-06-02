@@ -50,3 +50,7 @@ e2e/snapshots/
 /playwright-report
 /test-results
 
+# Playwright MCP temp files (screenshots, snapshots, console logs)
+.playwright-mcp/
+/tmp/
+
