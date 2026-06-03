@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import 'react-day-picker/lib/style.css';
+import 'react-day-picker/style.css';
 import { today } from '../../../../helpers/date';
 
 export const TODAY        = 'TODAY';

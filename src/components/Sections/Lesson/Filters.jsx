@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/modules/filtersAside';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';

@@ -2,17 +2,14 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component, createRef } from 'react';
 import { clsx } from 'clsx';
-import Navbar from 'react-day-picker/build/Navbar';
-import 'react-day-picker/lib/style.css';
-import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
 import scrollIntoView from 'scroll-into-view';
 import { noop } from '../../../../helpers/utils';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import YearMonthForm from './YearMonthForm';
 
-import DayPicker from 'react-day-picker';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 class FastDayPicker extends Component {
@@ -56,18 +53,15 @@ class FastDayPicker extends Component {
   }
 
   static formatDateValue(date, language) {
+    if (!date) return '';
     const locale = getLanguageLocaleWORegion(language);
-    return date ? formatDate(date, 'l', locale) : '';
+    return moment(date).locale(locale).format('l');
   }
-
-  handleYearMonthChange = month => {
-    this.setState({ month });
-  };
 
   handleDayPickerRef = () => {
     if (this.myRef) {
       scrollIntoView(this.myRef, {
-        time       : 150, // half a second
+        time       : 150,
         validTarget: target => target !== window,
       });
     }
@@ -78,10 +72,7 @@ class FastDayPicker extends Component {
   };
 
   handleNativeDateInputChange = event => {
-    if (!event) {
-      return;
-    }
-
+    if (!event) return;
     this.props.onDayChange(event.target.valueAsDate);
   };
 
@@ -94,31 +85,12 @@ class FastDayPicker extends Component {
     this.nativeDateInput.focus();
   };
 
-  getNavBarElement = (props, language) => {
-    const { month, localeUtils } = props;
-    return (
-      <div>
-        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton"/>
-        <YearMonthForm
-          date={month}
-          language={language}
-          localeUtils={localeUtils}
-          onChange={this.handleYearMonthChange}
-          className="float-left"
-        />
-        <div className="clear"/>
-      </div>
-    );
-  };
-
   openPopup = () => this.setState({ isOpen: true });
 
   closePopup = () => this.setState({ isOpen: false });
 
   onPopupDayChange = date => {
-    if (date > today().add(1, 'days').toDate()) {
-      return;
-    }
+    if (!date || date > today().add(1, 'days').toDate()) return;
 
     const { onDayChange, language } = this.props;
     this.setState({ stringValue: FastDayPicker.formatDateValue(date, language) });
@@ -150,7 +122,7 @@ class FastDayPicker extends Component {
     if (isMobileDevice) {
       const selected               = value || today().toDate();
       const selectedToString       = moment(selected).format('YYYY-MM-DD');
-      const selectedInLocaleFormat = moment(selected).format(this.localeDateFormat);
+      const selectedInLocaleFormat = moment(selected).locale(locale).format(this.localeDateFormat);
       return (
         <div>
           <div className="flex">
@@ -190,7 +162,7 @@ class FastDayPicker extends Component {
           <div className="relative flex-1">
             <input
               className={clsx('w-full border border-gray-300 px-3 py-1 small pr-8', label ? 'rounded-r' : 'rounded')}
-              placeholder={`${formatDate(new Date(), 'l', locale)}`}
+              placeholder={moment(new Date()).locale(locale).format('l')}
               value={stringValue}
               onChange={this.handleDateInputChange}
               onKeyDown={this.handleKeyDown}
@@ -207,16 +179,13 @@ class FastDayPicker extends Component {
             <div className="absolute z-50 bottom-full mb-1 bg-white border border-gray-300 rounded shadow-lg p-2">
               <div dir={getLanguageDirection(language)}>
                 <DayPicker
-                  locale={locale}
-                  localeUtils={MomentLocaleUtils}
-                  disabledDays={{ after: new Date() }}
-                  captionElement={() => null}
-                  navbarElement={props => this.getNavBarElement(props, language)}
-                  month={month}
-                  toMonth={today().toDate()}
-                  ref={this.handleDayPickerRef}
-                  onDayChange={this.onPopupDayChange}
-                  onDayClick={this.onPopupDayChange}
+                  mode="single"
+                  captionLayout="dropdown"
+                  disabled={{ after: new Date() }}
+                  month={month || value || undefined}
+                  endMonth={today().toDate()}
+                  selected={value}
+                  onSelect={this.onPopupDayChange}
                 />
               </div>
             </div>

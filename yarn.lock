@@ -12913,7 +12913,7 @@ __metadata:
     react-fast-compare: "npm:^3.2.2"
     react-ga: "npm:^3.3.1"
     react-headroom: "npm:^3.2.1"
-    react-helmet-async: "npm:^3.0.0"
+    react-helmet-async: "npm:2.0.5"
     react-i18next: "npm:^17.0.8"
     react-image-gallery: "npm:^2.1.2"
     react-pdf: "npm:^10.4.1"
@@ -15976,16 +15976,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "react-helmet-async@npm:3.0.0"
+"react-helmet-async@npm:2.0.5":
+  version: 2.0.5
+  resolution: "react-helmet-async@npm:2.0.5"
   dependencies:
     invariant: "npm:^2.2.4"
     react-fast-compare: "npm:^3.2.2"
     shallowequal: "npm:^1.1.0"
   peerDependencies:
-    react: ^16.6.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/bdbb2c1823ae20895aa1b854943d863bb7c5dd1b7888f7da9dd2fa9d02e2ccb9ebf68c7dd17edb39ad85ca714c009ee19ea82b03a2f1b79f7995657cd4bba825
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/f390ea8bf13c2681850e5f8eb5b73d8613f407c245a5fd23e9db9b2cc14a3700dd1ce992d3966632886d1d613083294c2aeee009193f49dfa7d145d9f13ea2b0
   languageName: node
   linkType: hard
 

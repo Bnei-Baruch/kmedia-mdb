@@ -3,7 +3,7 @@ import crawlers from 'crawler-user-agents';
 import fs from 'fs';
 import path from 'path';
 import { KC_BOT_USER_NAME } from '../src/helpers/consts';
-import { renderSSR } from './rendererUtils';
+import { renderSSR, renderSSRStream } from './rendererUtils';
 import logger from '../src/logger/logger';
 
 const NAMESPACE = 'renderer';
@@ -36,4 +36,32 @@ export async function render(req) {
 
   logger.info(NAMESPACE, 'anon render', url);
   return { html: htmlDataAnon, skipTransform: true };
+}
+
+export default async function serverRender(req, res, next) {
+  const url = req.originalUrl;
+  try {
+    if (isBot(req) || req.query.embed) {
+      logger.info(NAMESPACE, 'bot/embed render', url);
+      const html = await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } });
+      return res.send(html);
+    }
+
+    const cookies = cookieParse(req.headers.cookie || '');
+    const isKcCallback = req.query.code && req.query.session_state;
+    if (cookies.authorised || req.query.authorised || isKcCallback) {
+      logger.info(NAMESPACE, 'auth stream render', url);
+      return await renderSSRStream(req, res);
+    }
+
+    logger.info(NAMESPACE, 'anon render', url);
+    res.send(htmlDataAnon);
+  } catch (err) {
+    if (res.headersSent) {
+      logger.error(NAMESPACE, 'stream error after headers sent', err);
+      res.end();
+    } else {
+      next(err);
+    }
+  }
 }

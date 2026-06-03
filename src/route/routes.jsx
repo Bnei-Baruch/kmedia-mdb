@@ -1,15 +1,4 @@
-import React from 'react';
-import {
-  PlaylistCollectionPage,
-  PlaylistItemPageEvent,
-  PlaylistItemPageLesson,
-  PlaylistItemPageProgram,
-  PlaylistItemPageSeries,
-  PlaylistItemPageVirtual
-} from '../components/Pages/WithPlayer/PlaylistPageDispecher';
-import SourceContainer from '../components/Sections/Source/SourceContainer';
-import LibraryHomepage from '../components/Sections/Sources/Homepage';
-import LibraryPerson from '../components/Sections/Sources/LibraryPerson';
+import React, { lazy } from 'react';
 import {
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
@@ -17,36 +6,48 @@ import {
   MY_NAMESPACE_REACTIONS,
   PAGE_NS_PROGRAMS
 } from '../helpers/consts';
-import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
-import SearchResults from './../components/Search/SearchResults';
-import Events from './../components/Sections/Events/MainPage';
-import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
-import Help from './../components/Sections/Help/Help';
-import HomePage from './../components/Sections/Home/Container';
-import LessonCollection from './../components/Sections/Lesson/LessonPage';
-import Lessons from './../components/Sections/Lessons/MainPage';
-import Likut from './../components/Sections/Likutim/Likut';
-import LikutimMain from './../components/Sections/Likutim/MainPage';
-import Music from './../components/Sections/Music/Music';
-import BookmarksPage from './../components/Sections/Personal/Bookmarks/Page';
-import HistoryPage from './../components/Sections/Personal/History/Page';
-import Main from './../components/Sections/Personal/Main/Page';
-import PlaylistPage from './../components/Sections/Personal/Playlist/Page';
-import ReactionPage from './../components/Sections/Personal/Reaction/Page';
-import Program from './../components/Sections/Program/ProgramPage';
-import Programs from './../components/Sections/Programs/MainPage';
-import Publications from './../components/Sections/Publications/MainPage';
-import ArticleCollection from './../components/Sections/Publications/tabs/Articles/Collection';
-import ArticlePage from './../components/Sections/Publications/tabs/Articles/Unit';
-import BlogPost from './../components/Sections/Publications/tabs/Blog/Post/Container';
-import SimpleModeContainer from './../components/Sections/SimpleMode/Container';
-import Sketches from './../components/Sections/Sketches/MainPage';
-import Topics from './../components/Sections/Topics/TopicContainer';
-import Topic from './../components/Sections/Topics/TopicPage';
-
-import AboutPage from '../components/Sections/About/AboutPage';
-import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 import * as ssrDataLoaders from './routesSSRData';
+
+const d = path => mod => ({ default: mod[path] });
+
+const PlaylistCollectionPage  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistCollectionPage')));
+const PlaylistItemPageEvent   = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageEvent')));
+const PlaylistItemPageLesson  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageLesson')));
+const PlaylistItemPageProgram = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageProgram')));
+const PlaylistItemPageSeries  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageSeries')));
+const PlaylistItemPageVirtual = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageVirtual')));
+
+const SourceContainer     = lazy(() => import('../components/Sections/Source/SourceContainer'));
+const LibraryHomepage     = lazy(() => import('../components/Sections/Sources/Homepage'));
+const LibraryPerson       = lazy(() => import('../components/Sections/Sources/LibraryPerson'));
+const PlaylistLastDaily   = lazy(() => import('../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily'));
+const SearchResults       = lazy(() => import('../components/Search/SearchResults'));
+const Events              = lazy(() => import('../components/Sections/Events/MainPage'));
+const ExcerptContainer    = lazy(() => import('../components/Sections/Excerpt/ExcerptContainer'));
+const Help                = lazy(() => import('../components/Sections/Help/Help'));
+const HomePage            = lazy(() => import('../components/Sections/Home/Container'));
+const LessonCollection    = lazy(() => import('../components/Sections/Lesson/LessonPage'));
+const Lessons             = lazy(() => import('../components/Sections/Lessons/MainPage'));
+const Likut               = lazy(() => import('../components/Sections/Likutim/Likut'));
+const LikutimMain         = lazy(() => import('../components/Sections/Likutim/MainPage'));
+const Music               = lazy(() => import('../components/Sections/Music/Music'));
+const BookmarksPage       = lazy(() => import('../components/Sections/Personal/Bookmarks/Page'));
+const HistoryPage         = lazy(() => import('../components/Sections/Personal/History/Page'));
+const Main                = lazy(() => import('../components/Sections/Personal/Main/Page'));
+const PlaylistPage        = lazy(() => import('../components/Sections/Personal/Playlist/Page'));
+const ReactionPage        = lazy(() => import('../components/Sections/Personal/Reaction/Page'));
+const Program             = lazy(() => import('../components/Sections/Program/ProgramPage'));
+const Programs            = lazy(() => import('../components/Sections/Programs/MainPage'));
+const Publications        = lazy(() => import('../components/Sections/Publications/MainPage'));
+const ArticleCollection   = lazy(() => import('../components/Sections/Publications/tabs/Articles/Collection'));
+const ArticlePage         = lazy(() => import('../components/Sections/Publications/tabs/Articles/Unit'));
+const BlogPost            = lazy(() => import('../components/Sections/Publications/tabs/Blog/Post/Container'));
+const SimpleModeContainer = lazy(() => import('../components/Sections/SimpleMode/Container'));
+const Sketches            = lazy(() => import('../components/Sections/Sketches/MainPage'));
+const Topics              = lazy(() => import('../components/Sections/Topics/TopicContainer'));
+const Topic               = lazy(() => import('../components/Sections/Topics/TopicPage'));
+const AboutPage           = lazy(() => import('../components/Sections/About/AboutPage'));
+const PlaylistMy          = lazy(() => import('../components/Pages/WithPlayer/PlaylistMy/Container'));
 
 const buildRoutes = playerContainer => ([
   { path: '', component: <HomePage/>, ssrData: ssrDataLoaders.home },

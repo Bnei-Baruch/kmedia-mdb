@@ -16,5 +16,6 @@
 
 **i18n:** i18next, locale files in `public/locales/`
 
+**Tasks contexts: **
 @.claude/tailwind-migration.md
 @.claude/upgrade_dep.md

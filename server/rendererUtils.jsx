@@ -4,9 +4,10 @@ import { createMemoryHistory } from 'history';
 import pick from 'lodash/pick';
 import moment from 'moment/moment';
 import path from 'path';
+import { PassThrough } from 'stream';
 import qs from 'qs';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToPipeableStream } from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
 import serialize from 'serialize-javascript';
 import * as pkgUaParserJs from 'ua-parser-js';
@@ -43,6 +44,40 @@ export const NAMESPACE = 'serverRender';
 export const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const _Empty = () => null;
+
+function renderToBuffer(element) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    const writable = new PassThrough();
+    writable.on('data', chunk => chunks.push(chunk));
+    writable.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    writable.on('error', reject);
+
+    const { pipe } = renderToPipeableStream(element, {
+      onAllReady() { pipe(writable); },
+      onError: reject,
+    });
+  });
+}
+
+function pipeToResponse(element, res, suffix) {
+  return new Promise((resolve, reject) => {
+    const pt = new PassThrough();
+    pt.on('data', chunk => res.write(chunk));
+    pt.on('end', () => {
+      res.write(suffix);
+      res.end();
+      resolve();
+    });
+    pt.on('error', reject);
+
+    const { pipe } = renderToPipeableStream(element, {
+      onShellReady() { pipe(pt); },
+      onShellError: reject,
+      onError(error) { logger.error(NAMESPACE, 'stream render error', error); },
+    });
+  });
+}
 
 export const htmlData = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
 
@@ -145,11 +180,11 @@ export async function renderSSR(req, extraInitialState = {}) {
   const deviceInfo = prepareDeviceInfo(req);
   const helmetContext = {};
 
-  logger.info(NAMESPACE, 'renderToString start');
-  const markup = ReactDOMServer.renderToString(
+  logger.info(NAMESPACE, 'renderToPipeableStream start');
+  const markup = await renderToBuffer(
     <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />
   );
-  logger.info(NAMESPACE, 'renderToString end', helmetContext);
+  logger.info(NAMESPACE, 'renderToPipeableStream end', helmetContext);
 
   const { helmet } = helmetContext;
   const direction = getLanguageDirection(uiLang);
@@ -189,6 +224,127 @@ export async function renderSSR(req, extraInitialState = {}) {
 
   logger.log(NAMESPACE, 'rendered html');
   return html;
+}
+
+// Streaming SSR: sends <head> (CSS) immediately, fetches data, then streams body.
+// Used for authenticated users. Bots still use blocking renderSSR.
+export async function renderSSRStream(req, res, extraInitialState = {}) {
+  const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+  const direction = getLanguageDirection(uiLang);
+
+  // Phase 1: flush <head> so the browser starts loading CSS immediately
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
+
+  const headCloseIdx = htmlData.indexOf('</head>');
+  const headHtml =
+    htmlData
+      .slice(0, headCloseIdx)
+      .replace('<html lang="en">', `<html lang="${uiLang}" dir="${direction}">`)
+    + canonicalLink(req, uiLang)
+    + alternateLinks(req, uiLang)
+    + ogUrl(req, uiLang)
+    + '</head>';
+
+  res.write(headHtml);
+  res.write('<body>');
+
+  // Phase 2: init i18n + store + fetch data (CSS loading in browser in parallel)
+  let i18nServer;
+  try {
+    i18nServer = await initializeI18nBackend(uiLang);
+  } catch (error) {
+    logger.error(NAMESPACE, 'Error initializing i18n backend', error);
+    throw error;
+  }
+
+  const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
+  const cookies = cookieParse(req.headers.cookie || '');
+
+  const cookieUILang = cookies[COOKIE_UI_LANG] || uiLang;
+  let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
+  if (typeof cookieContentLanguages === 'string' || cookieContentLanguages instanceof String) {
+    cookieContentLanguages = cookieContentLanguages.split(',');
+  }
+
+  const initialState = {
+    settings: {
+      ...settingsInitialState,
+      showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false,
+    },
+    ...extraInitialState,
+  };
+  if (uiLang !== cookieUILang) {
+    onSetUrlLanguage(initialState.settings, uiLang);
+  }
+
+  const store = createStore(initialState, history);
+  logger.info(NAMESPACE, 'dispatching languages change', cookieUILang, cookieContentLanguages);
+  store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
+  store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
+  store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
+
+  const routes = buildRoutes(_Empty).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
+  const reqPath = req.originalUrl.split('?')[0];
+  const branch = matchRoutes(routes, reqPath) || [];
+
+  logger.info(NAMESPACE, 'prepare RTK queries');
+  const promises = branch.map(b => getPromises(store, req.originalUrl, b));
+  const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
+  rtkPromises.forEach(promise => promises.push(promise));
+
+  try {
+    await Promise.all(promises);
+    logger.info(NAMESPACE, 'RTK queries prepared');
+  } catch (error) {
+    logger.error(NAMESPACE, 'SSR promises error', error);
+    throw error;
+  }
+
+  try {
+    await store.rootSagaPromise;
+    logger.info(NAMESPACE, 'root saga prepared');
+  } catch (error) {
+    logger.error(NAMESPACE, 'Root saga error', error);
+    throw error;
+  }
+
+  // Phase 3: serialize store + i18n for client hydration
+  const i18nData = serialize({
+    initialLanguage: i18nServer.language,
+    initialI18nStore: pick(i18nServer.services.resourceStore.data, [
+      i18nServer.language,
+      i18nServer.options.fallbackLng,
+    ]),
+  });
+
+  store.dispatch(ssr.prepare());
+  const storeData = store.getState();
+  const storeDataStr = serialize(storeData);
+  logger.log(NAMESPACE, 'redux data before stream', storeData.auth);
+
+  const deviceInfo = prepareDeviceInfo(req);
+  const helmetContext = {};
+
+  const suffix =
+    `</div>` +
+    `<script>` +
+    `window.__botKCInfo=${false};` +
+    `window.__data=${storeDataStr};` +
+    `window.__i18n=${i18nData};` +
+    `</script>` +
+    `</body></html>`;
+
+  // Phase 4: stream React body into the open response
+  logger.info(NAMESPACE, 'renderToPipeableStream stream start');
+  res.write(`<div id="root" class="${direction}" style="direction: ${direction}">`);
+
+  return pipeToResponse(
+    <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />,
+    res,
+    suffix
+  );
 }
 
 // see https://yoast.com/rel-canonical/

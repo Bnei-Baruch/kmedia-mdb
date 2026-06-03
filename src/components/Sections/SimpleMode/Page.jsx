@@ -1,9 +1,8 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import DayPicker from 'react-day-picker';
-import Navbar from 'react-day-picker/build/Navbar';
-import MomentLocaleUtils from 'react-day-picker/moment';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -12,7 +11,6 @@ import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import { isToday } from '../../../helpers/utils';
 import { settingsGetUILangSelector } from '../../../redux/selectors';
-import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import SectionHeader from '../../shared/SectionHeader';
 import SimpleModeList from './SimpleModeList';
@@ -22,21 +20,6 @@ const changeDay = (amount, selectedDate, onDayClick) => {
   onDayClick(newDate);
 };
 
-const getNavBarElement = (props, uiLang, onDayClick) => {
-  const { month, localeUtils } = props;
-  return (
-    <div className="DayPicker-Month">
-      <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
-      <YearMonthForm
-        date={month}
-        uiLang={uiLang}
-        localeUtils={localeUtils}
-        onChange={onDayClick}
-        className="float-left"
-      />
-    </div>
-  );
-};
 
 const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid) =>
   isMobile
@@ -132,15 +115,13 @@ const SimpleModePage = (
     isClient &&
     <div className="rounded shadow border overflow-hidden">
       <DayPicker
-        locale={uiLang}
-        modifiers={data.DayPickerModifiers}
-        localeUtils={MomentLocaleUtils}
-        selectedDays={selectedDate}
+        mode="single"
+        captionLayout="dropdown"
+        selected={selectedDate}
         month={selectedDate}
-        disabledDays={{ after: new Date() }}
-        onDayClick={onDayClick}
-        captionElement={() => null}
-        navbarElement={props => getNavBarElement(props, uiLang, onDayClick)}
+        endMonth={today().toDate()}
+        disabled={{ after: new Date() }}
+        onSelect={onDayClick}
       />
       <div className="p-4">
         <button className="bg-gray-300 rounded-md py-2 px-4 min-w-10" onClick={() => onDayClick(new Date())}>

@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": "/src",
       },
+      extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
     },
     server: {
       open: true,
@@ -52,8 +53,7 @@ export default defineConfig(({ mode }) => {
     },
     esbuild: {
       loader: "jsx",
-      include: /.*\.js$/,
-      exclude: [],
+      include: /src\/.*\.js$/,
     },
     optimizeDeps: {
       entries: ["index.html", "index-anon.html"],

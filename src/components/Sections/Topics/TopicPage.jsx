@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { actions } from '../../../redux/modules/tags';
 import { actions as listsActions } from '../../../redux/modules/lists';
 import Pagination from '../../Pagination/Pagination';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import RenderPage from './RenderPage';
 import RenderPageMobile from './RenderPageMobile';

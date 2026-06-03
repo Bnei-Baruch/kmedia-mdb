@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import { withTranslation } from 'react-i18next';
 import { noop } from '../../../../helpers/utils';
 
-import 'react-day-picker/lib/style.css';
+import 'react-day-picker/style.css';
 import FastDayPicker from './FastDayPicker';
 import { CUSTOM_DAY, CUSTOM_RANGE, datePresets, isValidDateRange, presetToRange, rangeToPreset, TODAY } from './helper';
 

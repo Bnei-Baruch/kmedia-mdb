@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import 'react-day-picker/lib/style.css';
+import 'react-day-picker/style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { FN_DATE_FILTER } from '../../helpers/consts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';

@@ -1,33 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'react-day-picker/lib/style.css';
 
 const getYears = () => {
   const fromYear = 1970;
   const toYear   = new Date().getFullYear();
-  const years = [];
-
+  const years    = [];
   for (let i = toYear; i >= fromYear; i -= 1) {
-    years.push({ text: i, value: i });
+    years.push(i);
   }
 
   return years;
 };
 
-const YearMonthForm = ({ date, onChange, localeUtils, uiLang, className }) => {
+const getMonths = locale => Array.from({ length: 12 }, (_, i) =>
+  new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(2024, i))
+);
+
+const YearMonthForm = ({ date, onChange, locale, className }) => {
   const month = date.getMonth();
-  const year = date.getFullYear();
+  const year  = date.getFullYear();
 
-  const handleMonthChange = e => {
-    onChange(new Date(year, Number(e.target.value)));
-  };
+  const handleMonthChange = e => onChange(new Date(year, Number(e.target.value)));
+  const handleYearChange  = e => onChange(new Date(Number(e.target.value), month));
 
-  const handleYearChange = e => {
-    onChange(new Date(Number(e.target.value), month));
-  };
-
-  const months = localeUtils.getMonths(uiLang);
-  const years = getYears();
+  const months = getMonths(locale);
+  const years  = getYears();
 
   return (
     <span className={className}>
@@ -40,26 +37,25 @@ const YearMonthForm = ({ date, onChange, localeUtils, uiLang, className }) => {
           <option key={i} value={i}>{mon}</option>
         ))}
       </select>
-        &nbsp;&nbsp;
+      &nbsp;&nbsp;
       <select
         className="inline-block small border-none bg-transparent cursor-pointer"
         value={year}
         onChange={handleYearChange}
       >
         {years.map(y => (
-          <option key={y.value} value={y.value}>{y.text}</option>
+          <option key={y} value={y}>{y}</option>
         ))}
       </select>
     </span>
   );
-}
+};
 
 YearMonthForm.propTypes = {
-  date: PropTypes.any.isRequired,
-  localeUtils: PropTypes.any.isRequired,
-  onChange: PropTypes.func.isRequired,
-  uiLang: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  date     : PropTypes.instanceOf(Date).isRequired,
+  onChange : PropTypes.func.isRequired,
+  locale   : PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default YearMonthForm;
