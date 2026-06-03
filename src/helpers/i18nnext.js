@@ -42,10 +42,10 @@ export const options = {
 // Client side.
 export const initializeI18nClient = async () => {
   // eslint-disable-next-line import/no-named-as-default-member
-  const i18n = i18next.createInstance();
+  const instance = i18next.createInstance();
 
   // ИСПОЛЬЗУЕМ HttpBackend ЗДЕСЬ
-  await i18n.use(HttpBackend).init({
+  await instance.use(HttpBackend).init({
     ...options,
     lng: 'en',
     preload: ['en', 'he', 'ru', 'es'],
@@ -55,15 +55,17 @@ export const initializeI18nClient = async () => {
     initImmediate: false,
   });
 
-  return i18n;
+  i18n = instance;
+  return instance;
 };
 
 
-export const initializeI18n = async resources => {
+export const initializeI18n = async (resources, lng) => {
   // eslint-disable-next-line import/no-named-as-default-member
   await i18next.init({
     ...options,
     resources,
+    ...(lng ? { lng } : {}),
     initImmediate: false,
   });
   i18n = i18next;
@@ -85,4 +87,4 @@ export const initializeI18nBackend = async uiLang => {
   return i18n;
 };
 
-export default i18n;
+export { i18n as default };

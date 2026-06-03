@@ -42,7 +42,7 @@ async function buildApp(kcInfo = null) {
   const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
   moment.locale(initialLanguage === LANG_UKRAINIAN ? 'uk' : initialLanguage);
 
-  const i18n = await initializeI18n(initialI18nStore);
+  const i18n = await initializeI18n(initialI18nStore, initialLanguage);
   const deviceInfo = new UAParser().getResult();
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);
