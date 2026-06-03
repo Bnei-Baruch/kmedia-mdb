@@ -8,7 +8,7 @@ import { DeviceInfoContext, ClientChroniclesContext } from '../../../helpers/app
 import { initialState as settingsInitialState } from '../../../redux/modules/settings';
 import SimpleModeContainer from './Container';
 
-jest.mock('./Page', () => ({ selectedDate, filesLanguages, onDayClick, onLanguageChange }) => (
+vi.mock('./Page', () => ({ selectedDate, filesLanguages, onDayClick, onLanguageChange }) => (
   <div data-testid="simple-mode-page">
     <span data-testid="selected-date">{selectedDate?.toISOString?.()}</span>
     <span data-testid="files-languages">{filesLanguages?.join(',')}</span>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import 'jest-enzyme';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Promoted from './Promoted';

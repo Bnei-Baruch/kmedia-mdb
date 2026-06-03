@@ -130,11 +130,12 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   // collections
   switch (entity.content_type) {
     case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
+    case CT_SPECIAL_LESSON: {
       const cuId = getCuByCcuSkipPreparation(entity);
       if (!cuId)
         return { pathname: `/lessons/daily/c/${entity.id}`, search: `ap=0` };
       return { pathname: `/lessons/cu/${cuId}`, search: `c=${entity.id}` };
+    }
     case CT_VIRTUAL_LESSONS:
       return { pathname: `/lessons/virtual/c/${entity.id}`, search: '' };
     case CT_LECTURE_SERIES:

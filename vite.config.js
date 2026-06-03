@@ -29,21 +29,6 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       react({
         include: /\.(js|jsx|ts|tsx)$/,
-        babel: {
-          plugins: [
-            "babel-plugin-lodash",
-            [
-              "babel-plugin-module-resolver",
-              {
-                root: ["./src"],
-                alias: { "@": "./src" },
-              },
-            ],
-          ],
-          presets: [
-            ["@babel/preset-env", { targets: { node: "current" }, modules: false }]
-          ],
-        },
       }),
       svgr(),
       criticalCss(),
@@ -88,5 +73,11 @@ export default defineConfig(({ mode }) => {
       global: "window",
     },
     envPrefix: "REACT_APP_", // keep old env var names
+    test: {
+      globals: true,
+      environment: "jsdom",
+      setupFiles: ["./src/setupTests.js"],
+      include: ["src/**/*.{test,spec}.{js,jsx}"],
+    },
   };
 });

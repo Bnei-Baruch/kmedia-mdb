@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { settingsGetUrlLangSelector } from '../../redux/selectors';
 
-/* eslint-disable react/display-name */
+
 const LanguagesBtn = React.forwardRef((props, ref) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);

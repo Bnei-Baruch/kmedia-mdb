@@ -1,22 +1,10 @@
-import babelParser from '@babel/eslint-parser';
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import { FlatCompat } from '@eslint/eslintrc';
+import { fixupPluginRules } from '@eslint/compat';
 import js from '@eslint/js';
 import _import from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
 
 function stripWhitespaceGlobals(globalsObject) {
   return Object.fromEntries(Object.entries(globalsObject).filter(([key]) => key.trim() === key));
@@ -29,18 +17,12 @@ export default defineConfig([
   globalIgnores(['src/images/*', '**/*.test.*']),
   {
     files: ['src/**/*.{js,jsx,mjs,cjs}', 'server/**/*.{js,jsx,mjs,cjs}'],
-    extends: fixupConfigRules(
-      compat.extends(
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-        'plugin:import/recommended'
-      )
-    ),
-
+    extends: [
+      js.configs.recommended,
+      react.configs.flat['jsx-runtime'],
+    ],
     plugins: {
-      react: fixupPluginRules(react),
-      'react-hooks': fixupPluginRules(reactHooks),
+      'react-hooks': reactHooks,
       import: fixupPluginRules(_import),
     },
 
@@ -51,19 +33,12 @@ export default defineConfig([
         socket: true,
       },
 
-      parser: babelParser,
       ecmaVersion: 2022,
       sourceType: 'module',
 
       parserOptions: {
-        requireConfigFile: false,
-
         ecmaFeatures: {
           jsx: true,
-        },
-
-        babelOptions: {
-          presets: ['@babel/preset-react'],
         },
       },
     },
@@ -72,9 +47,17 @@ export default defineConfig([
       react: {
         version: 'detect',
       },
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+          moduleDirectory: ['node_modules', 'src'],
+        },
+      },
     },
 
     rules: {
+      ..._import.configs.recommended.rules,
+      'import/no-unresolved': ['error', { ignore: ['\\.css$', '\\.svg\\?'] }],
       'arrow-body-style': 'warn',
       'array-bracket-spacing': 'warn',
       'arrow-parens': ['warn', 'as-needed'],
@@ -177,8 +160,6 @@ export default defineConfig([
       'template-curly-spacing': ['off'],
       'react/prop-types': 'off',
       'react/no-children-prop': 'off',
-      'no-case-declarations': 'off',
-      'react/react-in-jsx-scope': 'off',
     },
 
     ignores: ['**/*.test.*', '**/*.spec.*', '**/__tests__/**'],

@@ -19,15 +19,6 @@ export default defineConfig(({ mode }) => {
       svgr(),
       react({
         include: /\.(js|jsx|ts|tsx)$/,
-        babel: {
-          plugins: [
-            "babel-plugin-lodash",
-            ["babel-plugin-module-resolver", { root: ["./src"], alias: { "@": "./src" } }],
-          ],
-          presets: [
-            ["@babel/preset-env", { targets: { node: "current" }, modules: false }],
-          ],
-        },
       }),
     ],
     resolve: {

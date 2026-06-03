@@ -8,25 +8,21 @@ import { actions } from '../redux/modules/settings';
 import { settingsGetUILangSelector, settingsGetUrlLangSelector } from '../redux/selectors';
 
 
-
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
   const location = useLocation();
   const uiLang = useSelector(settingsGetUILangSelector);
   const origUrlLang = useSelector(settingsGetUrlLangSelector);
 
-  if (urlLang && !LANG_UI_LANGUAGES.includes(urlLang)) {
-    return <Navigate to={`/${origUrlLang}${location.pathname}`} replace />;
-  }
-
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
-      if (urlLang === uiLang && origUrlLang !== "") {
+      if (urlLang === uiLang && origUrlLang !== '') {
         // Clear URL language it is the same as UI language.
         updateHtmlLang(uiLang);
-        dispatch(actions.setURLLanguage(""));
+        dispatch(actions.setURLLanguage(''));
       } else if (origUrlLang !== urlLang && urlLang !== uiLang) {
         // Set URL language.
         updateHtmlLang(urlLang);

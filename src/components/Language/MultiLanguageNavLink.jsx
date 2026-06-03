@@ -6,7 +6,7 @@ import { getToWithLanguage } from '../../helpers/url';
 /**
  * Use this component instead of react-router-dom's NavLink to keep the current language in the destination route
  */
-/* eslint-disable react/display-name */
+
 const NavLink = React.forwardRef(
   (
     {
