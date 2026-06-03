@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +14,7 @@ const TopicBranch = ({ leafs, selected, setSelected }) => {
 
   const handleChange = (checked, id) => {
     if (checked) {
-      setSelected([id, ...selected || []]);
+      setSelected([id, ...(selected || [])]);
     } else {
       setSelected(selected.filter(x => x !== id));
     }

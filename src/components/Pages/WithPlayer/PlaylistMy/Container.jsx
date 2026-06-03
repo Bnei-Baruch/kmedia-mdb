@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Page from './Page';
 import { useTranslation } from 'react-i18next';
 import useBuildMyPlaylist from './useBuildMyPlaylist';

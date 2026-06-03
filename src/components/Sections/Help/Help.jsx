@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../../helpers/consts';

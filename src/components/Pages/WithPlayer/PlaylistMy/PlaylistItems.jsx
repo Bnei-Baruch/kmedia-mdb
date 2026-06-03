@@ -1,4 +1,3 @@
-import React from 'react';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector } from 'react-redux';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';

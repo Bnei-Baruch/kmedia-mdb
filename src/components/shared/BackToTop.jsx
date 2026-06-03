@@ -1,5 +1,5 @@
 /* This component __HAVE__ to be __BEFORE__ content */
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 const BackToTop = ({ isRTL }) => {

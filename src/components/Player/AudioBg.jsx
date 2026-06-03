@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { MT_AUDIO } from '../../helpers/consts';
 import { playerGetFileSelector } from '../../redux/selectors';

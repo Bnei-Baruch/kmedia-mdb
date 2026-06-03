@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';

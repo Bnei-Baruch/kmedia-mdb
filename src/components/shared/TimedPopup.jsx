@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Popover, PopoverPanel } from '@headlessui/react';
 import { isLanguageRtl } from '../../helpers/i18n-utils';

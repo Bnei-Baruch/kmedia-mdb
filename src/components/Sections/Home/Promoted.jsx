@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Link from '../../Language/MultiLanguageLink';
 import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';

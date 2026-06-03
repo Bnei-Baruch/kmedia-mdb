@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import TocToggleBtn from './TocToggleBtn';

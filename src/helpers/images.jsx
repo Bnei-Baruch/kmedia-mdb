@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   AudioBlog as AudioBlogIcon,
   Dailylessons as DailyLessonsIcon,

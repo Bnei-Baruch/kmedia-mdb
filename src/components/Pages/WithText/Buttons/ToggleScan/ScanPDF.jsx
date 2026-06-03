@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../../../helpers/url';
 import { Document, Page, pdfjs } from 'react-pdf';

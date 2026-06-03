@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 import { useClickOutside } from '../../../../shared/useClickOutside';
 import { useTranslation } from 'react-i18next';

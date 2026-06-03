@@ -1,4 +1,3 @@
-import React from 'react';
 import MainTabPage from '../../shared/MainTabPage';
 import Articles from './tabs/Articles/MainPage';
 import Blog from './tabs/Blog/Container';

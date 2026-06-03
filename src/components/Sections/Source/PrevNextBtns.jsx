@@ -1,29 +1,22 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { clsx } from 'clsx';
-
 import { isTaas } from '../../shared/PDF/helper';
 import { getFullPath, fixPrevNextZoharTaas } from './helper';
 import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
 import {
   textPageGetSubjectSelector,
-  textPageGetAdditionsModeSelector,
   sourcesGetPathByIDSelector,
   settingsGetUIDirSelector,
   sourcesGetSourceByIdSelector,
   textPageGetFileSelector
 } from '../../../redux/selectors';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const PrevNextBtns = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-
   const { id } = useSelector(textPageGetSubjectSelector);
   const { isPdf } = useSelector(textPageGetFileSelector);
-  const additionsMode = useSelector(textPageGetAdditionsModeSelector);
   const getPathByID = useSelector(sourcesGetPathByIDSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 

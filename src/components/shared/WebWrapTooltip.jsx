@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { cloneElement, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
@@ -9,7 +9,7 @@ const WebWrapTooltip = ({ trigger, content }) => {
   if (isMobileDevice)
     return trigger;
 
-  return React.cloneElement(trigger, {
+  return cloneElement(trigger, {
     onMouseEnter: () => setShow(true),
     onMouseLeave: () => setShow(false),
     children: (

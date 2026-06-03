@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { formatDuration } from '../../../helpers/utils';
 import { saveTimeOnLocalstorage } from './helper';

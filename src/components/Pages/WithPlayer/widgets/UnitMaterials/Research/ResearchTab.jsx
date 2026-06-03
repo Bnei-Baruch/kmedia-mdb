@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import ResearchTabToolbarWeb from './ResearchTabToolbarWeb';

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ScanZoomContext } from './ScanZoomContext';
 import ScanBtnTpl from './ScanBtnTpl';
 

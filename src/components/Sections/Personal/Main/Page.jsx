@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { actions } from '../../../../redux/modules/my';
 import {
   MY_NAMESPACE_HISTORY,

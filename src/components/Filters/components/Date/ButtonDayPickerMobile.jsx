@@ -3,7 +3,7 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { clsx } from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 

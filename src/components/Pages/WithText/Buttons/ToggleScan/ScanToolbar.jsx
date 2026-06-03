@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AddScanBookmarkBtn from './AddScanBookmarkBtn';
 import DownloadScanBtn from './DownloadScanBtn';
 import ScanZoom from './ScanZoom';

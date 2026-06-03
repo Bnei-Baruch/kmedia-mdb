@@ -1,6 +1,6 @@
-import React, { useSyncExternalStore } from 'react';
+import { lazy, Suspense, useSyncExternalStore } from 'react';
 
-const PlayerContainerClient = React.lazy(() => import('./PlayerContainerClient'));
+const PlayerContainerClient = lazy(() => import('./PlayerContainerClient'));
 
 export default function PlayerContainer(props) {
   const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
@@ -10,8 +10,8 @@ export default function PlayerContainer(props) {
   }
 
   return (
-    <React.Suspense fallback={null}>
+    <Suspense fallback={null}>
       <PlayerContainerClient {...props} />
-    </React.Suspense>
+    </Suspense>
   );
 }

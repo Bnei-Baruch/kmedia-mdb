@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/player';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
-import React from 'react';
 import { PlaylistAdd as PlaylistAddIcon } from '../../../../../images/icons';
 import { playerGetOverModeSelector } from '../../../../../redux/selectors';
 

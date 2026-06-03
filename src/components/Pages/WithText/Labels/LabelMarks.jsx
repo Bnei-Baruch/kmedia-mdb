@@ -1,4 +1,3 @@
-import React from 'react';
 import LabelMark from './LabelMark';
 
 const LabelMarks = ({ labels, offsets }) => (

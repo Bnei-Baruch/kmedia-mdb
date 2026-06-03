@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const UnitProgress = ({ unit, playTime }) => {
   if (!unit || !playTime) return null;
 

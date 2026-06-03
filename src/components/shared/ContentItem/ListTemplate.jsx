@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 

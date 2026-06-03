@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 

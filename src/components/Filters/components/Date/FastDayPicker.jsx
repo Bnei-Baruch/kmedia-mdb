@@ -1,6 +1,6 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { Component, createRef } from 'react';
+import { Component, createRef } from 'react';
 import { clsx } from 'clsx';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
@@ -41,4 +41,4 @@ MusicList.propTypes = {
 
 const areEqual = (prevProps, nextProps) => isEqual(prevProps.items, nextProps.items);
 
-export default React.memo(MusicList, areEqual);
+export default memo(MusicList, areEqual);

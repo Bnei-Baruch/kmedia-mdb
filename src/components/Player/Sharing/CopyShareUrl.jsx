@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Popover, PopoverPanel } from '@headlessui/react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';

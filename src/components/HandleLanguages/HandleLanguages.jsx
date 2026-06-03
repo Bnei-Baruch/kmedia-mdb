@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useClickOutside } from '../shared/useClickOutside';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import moment from 'moment/moment';
 import NoteEditBtn from './Buttons/NoteEditBtn';

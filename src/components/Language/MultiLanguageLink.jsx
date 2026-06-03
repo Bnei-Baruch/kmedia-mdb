@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as BaseLink } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { getToWithLanguage } from '../../helpers/url';

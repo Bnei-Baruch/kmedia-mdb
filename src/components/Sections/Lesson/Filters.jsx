@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/modules/filtersAside';
 import isEqual from 'lodash/isEqual';

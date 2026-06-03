@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import moment from 'moment';
 
 import { getVideoRes } from '../../../helpers/consts';
@@ -53,7 +53,7 @@ const areEqual = (prevProps, nextProps) =>
   ((!prevProps.unit && !nextProps.unit) || prevProps.unit.id === nextProps.unit.id)
   && prevProps.language === nextProps.language;
 
-const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
+const AVUnitMemo = memo(AVUnitWithDep, areEqual);
 
 const AVUnit = ({ id }) => {
   const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));

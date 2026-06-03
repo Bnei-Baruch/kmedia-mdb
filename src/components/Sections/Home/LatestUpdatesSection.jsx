@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import * as consts from '../../../helpers/consts';
@@ -142,4 +142,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return isEqual(prevIds, nextIds);
 };
 
-export default React.memo(LatestUpdatesSection, arePropsEqual);
+export default memo(LatestUpdatesSection, arePropsEqual);

@@ -1,12 +1,12 @@
 
-import React, { useContext } from 'react';
+import { forwardRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { settingsGetUrlLangSelector } from '../../redux/selectors';
 
 
-const LanguagesBtn = React.forwardRef((props, ref) => {
+const LanguagesBtn = forwardRef((props, ref) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t } = useTranslation();

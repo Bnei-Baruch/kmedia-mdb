@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { useSelector } from 'react-redux';
 

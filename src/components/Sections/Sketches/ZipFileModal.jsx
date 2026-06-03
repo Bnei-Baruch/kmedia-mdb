@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Dialog } from '@headlessui/react';
 import ImageGallery from 'react-image-gallery';

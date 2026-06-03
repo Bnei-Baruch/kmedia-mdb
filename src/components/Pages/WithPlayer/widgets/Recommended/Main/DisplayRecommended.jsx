@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import { memo, useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
@@ -234,4 +234,4 @@ const areEqual = (prevProps, nextProps) =>
     prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id)
   );
 
-export default React.memo(DisplayRecommended, areEqual);
+export default memo(DisplayRecommended, areEqual);

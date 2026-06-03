@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import {

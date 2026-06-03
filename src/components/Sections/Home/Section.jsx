@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import * as shapes from '../../shapes';
 
 const Section = ({ title, children, className }) =>

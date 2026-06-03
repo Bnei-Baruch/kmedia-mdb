@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FN_COLLECTION_MULTI, FN_PART_OF_DAY } from '../../../../helpers/consts';

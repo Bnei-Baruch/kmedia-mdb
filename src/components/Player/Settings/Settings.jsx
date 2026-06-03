@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
@@ -10,7 +10,7 @@ import CloseBtn from '../Controls/CloseBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import SubsControl from './SubsControl';
 import { playerGetOverModeSelector } from '../../../redux/selectors';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 const Settings = () => {
   const { t } = useTranslation();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FN_FREE_TEXT } from '../../helpers/consts';
 import { actions } from '../../redux/modules/filters';

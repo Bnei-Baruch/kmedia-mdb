@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import TagSourceItem from './TagSourceItem';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { sourcesGetPathByIDSelector, tagsGetPathByIDSelector, sourcesGetRootsSelector, tagsGetRootsSelector } from '../../../redux/selectors';

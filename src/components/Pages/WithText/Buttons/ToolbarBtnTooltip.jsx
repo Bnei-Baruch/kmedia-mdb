@@ -1,11 +1,11 @@
-import React, { useContext, createContext } from 'react';
+import { useContext, createContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import { settingsGetUIDirSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 export const ToolbarMenuContext = createContext(false);
 

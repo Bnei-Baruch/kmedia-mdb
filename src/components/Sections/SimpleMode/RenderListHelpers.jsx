@@ -1,5 +1,4 @@
 import groupBy from 'lodash/groupBy';
-import React from 'react';
 
 import {
   CT_ARTICLE,

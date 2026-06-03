@@ -9,9 +9,8 @@ import 'moment/locale/it';
 import 'moment/locale/ru';
 import 'moment/locale/tr';
 import 'moment/locale/uk';
-import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
-import ReactGA from 'react-ga';
+import { initialize as gaInitialize } from 'react-ga';
 import { UAParser } from 'ua-parser-js';
 import { CreateAbTesting } from '../../helpers/ab-testing';
 import ClientChronicles from '../../helpers/clientChronicles';
@@ -28,7 +27,7 @@ const NAMESPACE = 'app-client';
 
 
 async function buildApp(kcInfo = null) {
-  ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
+  gaInitialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
   const initialState = window.__data ? { ...window.__data } : {};
   if (kcInfo) {

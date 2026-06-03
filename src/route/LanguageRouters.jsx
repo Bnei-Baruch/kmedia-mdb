@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 import { LANG_UI_LANGUAGES } from '../helpers/consts';
 import { updateHtmlLang } from '../helpers/language';
@@ -10,7 +10,6 @@ import { settingsGetUILangSelector, settingsGetUrlLangSelector } from '../redux/
 
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
-  const location = useLocation();
   const uiLang = useSelector(settingsGetUILangSelector);
   const origUrlLang = useSelector(settingsGetUrlLangSelector);
 

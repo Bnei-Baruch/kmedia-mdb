@@ -1,4 +1,3 @@
-import React from 'react';
 import * as shapes from '../../shapes';
 import LatestDailyLesson from './LatestDailyLesson';
 import LatestLessonBanner from './LatestLessonBanner';

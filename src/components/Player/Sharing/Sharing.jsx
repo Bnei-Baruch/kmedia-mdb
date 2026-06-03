@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import ShareBarPlayer from './ShareBarPlayer';
 import StartEnd from './StartEnd';
 import CopyShareUrl from './CopyShareUrl';

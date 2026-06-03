@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 import {
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,

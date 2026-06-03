@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { clsx } from 'clsx';
+import { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 

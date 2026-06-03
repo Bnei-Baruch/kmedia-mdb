@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { timeToPercent } from './helper';

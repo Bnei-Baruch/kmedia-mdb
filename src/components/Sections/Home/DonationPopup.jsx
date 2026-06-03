@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { clsx } from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
@@ -46,7 +45,7 @@ function DonationPopup() {
   const uiDir            = useSelector(settingsGetUIDirSelector);
   const isRTL            = isLanguageRtl(uiLang);
 
-  const [open, setOpen]    = React.useState(shouldOpen());
+  const [open, setOpen]    = useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(contentLanguages);

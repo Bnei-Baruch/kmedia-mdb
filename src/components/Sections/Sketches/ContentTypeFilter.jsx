@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';

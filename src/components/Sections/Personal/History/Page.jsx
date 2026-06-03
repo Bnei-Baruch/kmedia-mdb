@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import { Fragment, useCallback, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { clsx } from 'clsx';
@@ -80,10 +80,10 @@ const Page = ({ location }) => {
       </ContentItemContainer>
     );
     return (
-      <React.Fragment key={i}>
+      <Fragment key={i}>
         {newDay}
         {item}
-      </React.Fragment>
+      </Fragment>
     );
   };
 

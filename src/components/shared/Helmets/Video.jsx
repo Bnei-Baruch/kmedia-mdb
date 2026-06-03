@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { isEmpty } from '../../../helpers/utils';
 import { Helmet } from './helmetESM';
 

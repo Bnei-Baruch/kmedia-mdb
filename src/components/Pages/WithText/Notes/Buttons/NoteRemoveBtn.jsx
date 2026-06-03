@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
 

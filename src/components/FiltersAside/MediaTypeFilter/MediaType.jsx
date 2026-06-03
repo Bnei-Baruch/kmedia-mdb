@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';
 import FilterHeader from '../FilterHeader';

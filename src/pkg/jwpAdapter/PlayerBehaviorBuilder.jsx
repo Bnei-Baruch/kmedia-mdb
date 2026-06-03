@@ -1,4 +1,3 @@
-import React from 'react';
 import BehaviorStartPlay from './BehaviorStartPlay';
 import BehaviorStartStopSlice from './BehaviorStartStopSlice';
 import BehaviorStartStopSliceMy from './BehaviorStartStopSliceMy';

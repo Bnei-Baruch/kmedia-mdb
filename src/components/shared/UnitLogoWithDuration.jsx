@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';

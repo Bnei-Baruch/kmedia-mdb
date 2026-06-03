@@ -1,6 +1,6 @@
-import React, { useSyncExternalStore } from 'react';
+import { lazy, Suspense, useSyncExternalStore } from 'react';
 
-const PdfClient = React.lazy(() => import('./pdfClient'));
+const PdfClient = lazy(() => import('./pdfClient'));
 
 export default function PDF(props) {
   const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
@@ -10,8 +10,8 @@ export default function PDF(props) {
   }
 
   return (
-    <React.Suspense fallback={null}>
+    <Suspense fallback={null}>
       <PdfClient {...props} />
-    </React.Suspense>
+    </Suspense>
   );
 }

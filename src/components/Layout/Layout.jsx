@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import React, { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import { faBars, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';

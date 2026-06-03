@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -142,4 +142,4 @@ const arePropsEqual = (prevProps, nextProps) =>
   isEqual(prevProps.latestBlogPosts, nextProps.latestBlogPosts) &&
   isEqual(prevProps.latestTweets, nextProps.latestTweets);
 
-export default React.memo(HomePage, arePropsEqual);
+export default memo(HomePage, arePropsEqual);

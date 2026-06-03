@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE, CT_PUBLIC_EVENTS } from '../../../helpers/consts';
 import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';

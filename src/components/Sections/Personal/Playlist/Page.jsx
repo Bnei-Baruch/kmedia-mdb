@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,7 +55,7 @@ const Page = () => {
 
   const pathname = `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
   const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
-  const items = [...playlist.items || []];
+  const items = [...(playlist.items || [])];
   items.sort((a, b) => b.position - a.position);
 
   const removeItem = piID => dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id, ids: [piID], changeItems: true }));

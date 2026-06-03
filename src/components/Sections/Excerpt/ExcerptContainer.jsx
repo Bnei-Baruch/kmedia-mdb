@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import excerpts from './excerpts';
 import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';

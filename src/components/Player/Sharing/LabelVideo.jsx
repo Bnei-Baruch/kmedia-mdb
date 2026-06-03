@@ -1,4 +1,3 @@
-import React from 'react';
 import StartEnd from './StartEnd';
 import { useSelector } from 'react-redux';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';

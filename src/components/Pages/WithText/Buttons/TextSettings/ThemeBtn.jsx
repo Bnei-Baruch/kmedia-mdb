@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/textPage';
 import { textPageGetSettings } from '../../../../../redux/selectors';

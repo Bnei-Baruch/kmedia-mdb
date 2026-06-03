@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Popover, PopoverPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 

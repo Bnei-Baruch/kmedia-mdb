@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ import FilterLabels from '../../../../FiltersAside/FilterLabels';
 import Pagination from '../../../../Pagination/Pagination';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../../../Pagination/withPagination';
-import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import SectionFiltersWithMobile from '../../../../shared/SectionFiltersWithMobile';
 import { getWipErr } from '../../../../shared/WipErr/WipErr';
 import {

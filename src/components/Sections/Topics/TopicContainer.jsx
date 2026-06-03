@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import debounce from 'lodash/debounce';
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';

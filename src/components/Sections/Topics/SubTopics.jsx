@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';

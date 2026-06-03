@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import Link from '../Language/MultiLanguageLink';
 import { isEmpty } from '../../helpers/utils';
 import { useSelector } from 'react-redux';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Article from './Article';

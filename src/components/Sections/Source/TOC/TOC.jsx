@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { isValidElement, useState, useEffect, useContext } from 'react';
 
 import { getEscapedRegExp, isEmpty, noop } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
@@ -148,11 +148,11 @@ const SimpleAccordion = ({ panels = [], defaultActiveIndex, onTitleClick, classN
         const titleEl = panel.title;
         const contentEl = panel.content;
 
-        const isObj = titleEl && typeof titleEl === 'object' && !React.isValidElement(titleEl) && titleEl.content !== undefined;
+        const isObj = titleEl && typeof titleEl === 'object' && !isValidElement(titleEl) && titleEl.content !== undefined;
         const titleContent = isObj ? titleEl.content : titleEl;
         const titleIcon = isObj ? titleEl.icon : null;
 
-        const bodyContent = contentEl && typeof contentEl === 'object' && !React.isValidElement(contentEl) && contentEl.content !== undefined
+        const bodyContent = contentEl && typeof contentEl === 'object' && !isValidElement(contentEl) && contentEl.content !== undefined
           ? contentEl.content
           : contentEl;
 

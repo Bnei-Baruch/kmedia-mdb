@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useInterval } from '../../../helpers/timer';
 import { useSelector } from 'react-redux';
 import Promoted from './Promoted';

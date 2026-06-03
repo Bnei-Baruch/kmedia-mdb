@@ -1,4 +1,3 @@
-import React from 'react';
 import { FN_CONTENT_TYPE, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import CollectionsByCtBtn from './CollectionsByCtBtn';

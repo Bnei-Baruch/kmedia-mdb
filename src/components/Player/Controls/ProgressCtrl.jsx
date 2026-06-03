@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useState, useEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
 import { ScanZoomContext } from './ScanZoomContext';
 
 
-const ScanPDF = React.lazy(() =>
+const ScanPDF = lazy(() =>
   Promise.all([import('./ScanPDF'), new Promise(resolve => setTimeout(resolve, 300))])
 );
 
@@ -39,9 +39,9 @@ const ToggleScanBtn = () => {
       />
       {open &&
         createPortal(
-          <React.Suspense fallback={null}>
+          <Suspense fallback={null}>
             <ScanPDF />
-          </React.Suspense>,
+          </Suspense>,
           window.document.getElementById('text_layout')
         )}
     </ScanZoomContext.Provider>

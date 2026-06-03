@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   COLLECTION_DAILY_LESSONS,
   EVENT_TYPES,

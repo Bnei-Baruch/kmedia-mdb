@@ -1,6 +1,6 @@
-import React from 'react';
+import { createContext } from 'react';
 
-export const DeviceInfoContext = React.createContext({});
-export const SessionInfoContext = React.createContext({});
-export const ClientChroniclesContext = React.createContext({});
-export const AbTestingContext = React.createContext({});
+export const DeviceInfoContext = createContext({});
+export const SessionInfoContext = createContext({});
+export const ClientChroniclesContext = createContext({});
+export const AbTestingContext = createContext({});

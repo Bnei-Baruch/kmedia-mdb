@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import countBy from 'lodash/countBy';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';

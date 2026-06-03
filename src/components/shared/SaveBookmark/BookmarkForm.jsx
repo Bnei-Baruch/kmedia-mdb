@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../redux/modules/my';
@@ -76,7 +76,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
 
   const handleChange = (checked, id) => {
     if (checked) {
-      setSelected([id, ...selected || []]);
+      setSelected([id, ...(selected || [])]);
     } else {
       setSelected(selected.filter(x => x !== id));
     }
@@ -114,7 +114,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
   );
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div className="pt-2">
         <div className="flex items-center gap-3 mb-3">
           <span className="font-normal whitespace-nowrap">{t('personal.bookmark.name')}</span>
@@ -195,7 +195,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
           </div>
         </div>
       }
-    </React.Fragment>
+    </Fragment>
   );
 };
 

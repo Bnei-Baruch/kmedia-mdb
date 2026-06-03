@@ -1,4 +1,3 @@
-import React from 'react';
 import CopyWithPopupBtn from '../../../../shared/CopyWithPopupBtn';
 
 const NoteCopyBtn = ({ text }) => (

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Popover } from '@headlessui/react';
 import { useParams } from 'react-router-dom';

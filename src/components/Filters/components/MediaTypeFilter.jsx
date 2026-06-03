@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MT_VIDEO, MT_AUDIO, MT_IMAGE, MT_TEXT } from '../../../helpers/consts';
 import FlatListFilter from './FlatListFilter';
 

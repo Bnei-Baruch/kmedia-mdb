@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import Collection from '../../../../Pages/Collection/Container';
 

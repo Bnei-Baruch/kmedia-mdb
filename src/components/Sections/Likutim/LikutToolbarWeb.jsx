@@ -1,4 +1,3 @@
-import React from 'react';
 import { Popover } from '@headlessui/react';
 
 import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';

@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import { useRef } from 'react';
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
@@ -18,13 +18,10 @@ import {
   textPageGetSubjectSelector,
   textPageGetUrlInfoSelector,
   textPageGetScrollDirSelector,
-  textPageGetAdditionsModeSelector,
   textPageGetIsSearchSelector
 } from '../../../redux/selectors';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useFetchNotes } from './Notes/useFetchNotes';
-import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const TextLayoutWeb = props => {
   const {
@@ -42,9 +39,7 @@ const TextLayoutWeb = props => {
   const subject = useSelector(textPageGetSubjectSelector);
   const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
   const { theme } = useSelector(textPageGetSettings);
-  const additionsMode = useSelector(textPageGetAdditionsModeSelector);
   const isSearch = useSelector(textPageGetIsSearchSelector);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const wip = useTextSubject(id);
   useInitTextSettings();

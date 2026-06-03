@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { noop } from '../../../../helpers/utils';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { NO_NAME } from './consts';
 import { CollectionsBreakdown } from './mdb';
 import { canonicalLink } from './links';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import { settingsGetUIDirSelector } from '../../../../../../redux/selectors';

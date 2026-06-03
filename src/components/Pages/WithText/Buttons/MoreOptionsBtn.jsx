@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const MoreOptionsBtn = () => (

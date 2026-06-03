@@ -1,6 +1,6 @@
 import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { I18nextProvider } from 'react-i18next';
