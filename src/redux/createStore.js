@@ -40,11 +40,7 @@ import trim from './modules/trim';
 const isProduction = process.env.NODE_ENV === 'production';
 const verboseDebug = false;
 
-const sagaMiddleware = createSagaMiddleware(
-  verboseDebug ? { sagaMonitor: sagaMonitor(), logger: console.log } : {}
-);
-
-const setupMiddleware = history => getDefaultMiddleware => {
+const setupMiddleware = (history, sagaMiddleware) => getDefaultMiddleware => {
   const middleware = getDefaultMiddleware({
     serializableCheck : false,
     immutableCheck    : false,
@@ -99,10 +95,13 @@ const setupReducers = history => ({
 
 export function createStore(preloadedState, history) {
   console.log('configureStore, apply middleware');
+  const sagaMiddleware = createSagaMiddleware(
+    verboseDebug ? { sagaMonitor: sagaMonitor(), logger: console.log } : {}
+  );
   const store = configureStore({
     preloadedState,
     reducer   : setupReducers(history),
-    middleware: setupMiddleware(history),
+    middleware: setupMiddleware(history, sagaMiddleware),
     // Turn off devtools in prod, or pass options in dev
     devTools: !isProduction
   });

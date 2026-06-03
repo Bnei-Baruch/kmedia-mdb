@@ -72,7 +72,6 @@ const settingsSlice = createSlice({
     getShowAllContent  : state => state.showAllContent,
     getPageSize        : state => state.pageSize,
     getContentLanguages: (state, skipFlags) => {
-      console.log('getContentLanguages', state.urlLanguage, state.showAllContent, state.contentLanguages, skipFlags);
       if (state.urlLanguage.length && !skipFlags) {
         return state.urlLanguage;
       }
