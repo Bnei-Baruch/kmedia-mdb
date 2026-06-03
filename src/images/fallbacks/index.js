@@ -1,6 +1,6 @@
-export { default as DailylessonsFallback } from "./DailylessonsFallback";
-export { default as EventsFallback } from "./EventsFallback";
-export { default as LecturesFallback } from "./LecturesFallback";
-export { default as ProgramsFallback } from "./ProgramsFallback";
-export { default as PublicationsFallback } from "./PublicationsFallback";
-export { default as SourcesFallback } from "./SourcesFallback";
+export { default as DailylessonsFallback } from "./dailylessons-fallback.svg?react";
+export { default as EventsFallback } from "./events-fallback.svg?react";
+export { default as LecturesFallback } from "./lectures-fallback.svg?react";
+export { default as ProgramsFallback } from "./programs-fallback.svg?react";
+export { default as PublicationsFallback } from "./publications-fallback.svg?react";
+export { default as SourcesFallback } from "./sources-fallback.svg?react";

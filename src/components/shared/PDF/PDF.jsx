@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 
 const PdfClient = React.lazy(() => import('./pdfClient'));
 
 export default function PDF(props) {
-  if (typeof window === 'undefined') {
-    // SSR output
+  const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
+
+  if (!isClient) {
     return props?.file ? <a href={props.file}>Download PDF</a> : null;
   }
 

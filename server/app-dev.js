@@ -5,8 +5,8 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 //import compression from 'compression';
 //import { resourceMonitorMiddleware } from 'express-watcher';
-import * as middleware from './middleware';
-import serverRender from './renderer';
+import * as middleware from './middleware.js';
+import serverRender from './renderer.js';
 
 const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
 const CRA_CLIENT_HOST = process.env.CRA_CLIENT_HOST || 'localhost';

@@ -6,7 +6,7 @@ import { Dialog } from '@headlessui/react';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
 import { useSelector } from 'react-redux';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 

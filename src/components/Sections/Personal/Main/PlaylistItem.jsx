@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
 import { getMyItemKey } from '../../../../helpers/my';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 

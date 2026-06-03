@@ -2,14 +2,15 @@ import { parse as cookieParse } from 'cookie';
 import crawlers from 'crawler-user-agents';
 import fs from 'fs';
 import path from 'path';
-import { KC_BOT_USER_NAME } from '../src/helpers/consts';
-import { renderSSR, renderSSRStream } from './rendererUtils';
-import logger from '../src/logger/logger';
+import { KC_BOT_USER_NAME } from '../src/helpers/consts.js';
+import { renderSSR, renderSSRStream } from './rendererUtils.jsx';
+import logger from '../src/logger/logger.js';
 
 const NAMESPACE = 'renderer';
 const ADDITIONAL_BOTS = ['Google-InspectionTool', 'Storebot-Google', 'GoogleOther'];
 
-const htmlDataAnon = fs.readFileSync(path.resolve(process.cwd(), 'index-anon.html'), 'utf8');
+const htmlDir = process.env.NODE_ENV === 'production' ? 'build' : '.';
+const htmlDataAnon = fs.readFileSync(path.resolve(process.cwd(), htmlDir, 'index-anon.html'), 'utf8');
 
 function isBot(req) {
   const ua = req.headers['user-agent'] || '';

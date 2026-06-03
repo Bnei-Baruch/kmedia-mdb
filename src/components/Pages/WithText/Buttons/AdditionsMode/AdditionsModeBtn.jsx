@@ -2,7 +2,7 @@ import React from 'react';
 import { Popover } from '@headlessui/react';
 
 import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
-import AdditionsMode from '../../../../../images/icons/AdditionsMode';
+import { AdditionsMode } from '../../../../../images/icons';
 import AdditionsModeItems from './AdditionsModeItems';
 
 const AdditionsModeBtn = () => (

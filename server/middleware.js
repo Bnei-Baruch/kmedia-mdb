@@ -1,6 +1,9 @@
 import { createId } from '@paralleldrive/cuid2';
-import { getUILangFromPath } from '../src/helpers/url';
+import { getUILangFromPath } from '../src/helpers/url.js';
+import logger from '../src/logger/logger.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+logger.info('Base URL:', BASE_URL);
 
 export function logErrors(err, req, res, next) {
   if (err && err.stack) {
@@ -86,8 +89,8 @@ export function noLanguageRedirect(req, res, next) {
   const { redirect, language } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
 
   if (redirect) {
-
     const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
+    logger.info('Redirecting to url with language', newUrl);
     return res.redirect(307, newUrl);
   }
 

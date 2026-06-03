@@ -11,8 +11,7 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
 import Link from '../../../Language/MultiLanguageLink';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
-import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
+import { PlaylistPlay as PlaylistPlayIcon, Subscriptions as SubscriptionsIcon } from '../../../../images/icons';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const iconByNamespace = {

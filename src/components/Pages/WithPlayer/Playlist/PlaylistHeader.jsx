@@ -7,7 +7,7 @@ import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { cuPartNameByCCUType, canonicalCollection } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
 import {
   mdbGetDenormCollectionSelector,

@@ -1,9 +1,9 @@
 import { parse as cookieParse } from 'cookie';
 import qs from 'qs';
 
-import omit from 'lodash/omit';
-import { KC_SEARCH_KEYS, KC_SEARCH_KEY_SESSION } from '../pkg/ksAdapter/adapter';
-import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
+import omit from 'lodash/omit.js';
+import { KC_SEARCH_KEYS, KC_SEARCH_KEY_SESSION } from '../pkg/ksAdapter/adapter.js';
+import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts.js';
 
 export const parse = str => qs.parse(str);
 

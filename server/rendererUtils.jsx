@@ -79,7 +79,8 @@ function pipeToResponse(element, res, suffix) {
   });
 }
 
-export const htmlData = fs.readFileSync(path.resolve(process.cwd(), 'index.html'), 'utf8');
+const htmlDir = process.env.NODE_ENV === 'production' ? 'build' : '.';
+export const htmlData = fs.readFileSync(path.resolve(process.cwd(), htmlDir, 'index.html'), 'utf8');
 
 export const getPromises = (store, originalUrl, { route, params }) => {
   logger.log(NAMESPACE, 'libraryPage source was found', route.ssrData?.name);
@@ -136,13 +137,11 @@ export async function renderSSR(req, extraInitialState = {}) {
   const initialState = {
     settings: {
       ...settingsInitialState,
+      urlLanguage: [uiLang],
       showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false,
     },
     ...extraInitialState,
   };
-  if (uiLang !== cookieUILang) {
-    onSetUrlLanguage(initialState.settings, uiLang);
-  }
 
   const store = createStore(initialState, history);
 

@@ -8,7 +8,7 @@ import {
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
-import Tagging from '../../../../images/icons/Tagging';
+import { Tagging } from '../../../../images/icons';
 
 const TagTextBtn = () => {
   const { select, search } = useSelector(textPageGetUrlInfoSelector);

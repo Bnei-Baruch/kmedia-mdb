@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Dialog } from '@headlessui/react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
 import Link from '../../../Language/MultiLanguageLink';
 import { useSelector } from 'react-redux';
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';

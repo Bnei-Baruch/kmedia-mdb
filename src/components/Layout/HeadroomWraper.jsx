@@ -1,9 +1,10 @@
 import Headroom from 'react-headroom';
-import logger from '../../logger/logger';
+import { useSyncExternalStore } from 'react';
 
 const HeadroomWraper = ({ children }) => {
+  const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
 
-  if (typeof window === 'undefined') {
+  if (!isClient) {
     return <div>{children}</div>;
   }
 

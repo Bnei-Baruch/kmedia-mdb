@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useMatch } from 'react-router-dom';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getEmbedFromQuery } from '../../helpers/player';
-import Logo from '../../images/icons/Logo';
+import { Logo } from '../../images/icons';
 import { textPageGetIsFullscreenSelector } from '../../redux/selectors';
 import KmediaRouters from '../../route/KmediaRouters';
 import HandleLanguages from '../HandleLanguages/HandleLanguages';

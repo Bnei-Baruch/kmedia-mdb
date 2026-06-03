@@ -1,19 +1,26 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+
 import { LANG_UI_LANGUAGES } from '../helpers/consts';
-import { settingsGetUrlLangSelector } from '../redux/selectors';
+import { updateHtmlLang } from '../helpers/language';
+import { actions } from '../redux/modules/settings';
+import { settingsGetUILangSelector, settingsGetUrlLangSelector } from '../redux/selectors';
+
+
 
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
   const location = useLocation();
+  const uiLang = useSelector(settingsGetUILangSelector);
   const origUrlLang = useSelector(settingsGetUrlLangSelector);
 
   if (urlLang && !LANG_UI_LANGUAGES.includes(urlLang)) {
     return <Navigate to={`/${origUrlLang}${location.pathname}`} replace />;
   }
 
-  /*
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
       if (urlLang === uiLang && origUrlLang !== "") {
@@ -27,7 +34,6 @@ const LanguageRouter = () => {
       }
     }
   }, [origUrlLang, urlLang, uiLang, dispatch]);
-  */
 
   return <Outlet />;
 };

@@ -1,27 +1,30 @@
 import React from 'react';
 
-import DailyLessonsIcon from '../images/icons/Dailylessons';
-import DownloadIcon from '../images/icons/Download';
-import EventsIcon from '../images/icons/Events';
-import InfoIcon from '../images/icons/Info';
-import LabelIcon from '../images/icons/LabelIcon';
-import LecturesIcon from '../images/icons/Lectures';
-import AudioBlogIcon from '../images/icons/AudioBlog';
-import LikutimIcon from '../images/icons/Likutim';
-import ProgramsIcon from '../images/icons/Programs';
-import PublicationsIcon from '../images/icons/Publications';
-import SimpleModeIcon from '../images/icons/SimpleMode';
-import SourcesIcon from '../images/icons/Sources';
-import TopicsIcon from '../images/icons/Topics';
+import {
+  AudioBlog as AudioBlogIcon,
+  Dailylessons as DailyLessonsIcon,
+  Download as DownloadIcon,
+  Events as EventsIcon,
+  Info as InfoIcon,
+  LabelIcon,
+  Lectures as LecturesIcon,
+  Likutim as LikutimIcon,
+  Programs as ProgramsIcon,
+  Publications as PublicationsIcon,
+  SimpleMode as SimpleModeIcon,
+  Sources as SourcesIcon,
+  Topics as TopicsIcon,
+} from '../images/icons';
 
-import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
-import EventsFallbackIcon from '../images/fallbacks/EventsFallback';
-import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
-import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
-import SourcesFallbackIcon from '../images/fallbacks/SourcesFallback';
-
-import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
-import ImagePlaceholder from '../images/Image';
+import {
+  DailylessonsFallback as DailyLessonsFallbackIcon,
+  EventsFallback as EventsFallbackIcon,
+  LecturesFallback as LecturesFallbackIcon,
+  ProgramsFallback as ProgramsFallbackIcon,
+  PublicationsFallback as PublicationsFallbackIcon,
+  SourcesFallback as SourcesFallbackIcon,
+} from '../images/fallbacks';
+import ImagePlaceholder from '../images/image.svg?react';
 
 const sectionLogo = {
   lessons: DailyLessonsIcon,

@@ -1,5 +1,5 @@
-import { Requests } from '../src/helpers/Api';
-import { canonicalLink } from '../src/helpers/links';
+import { Requests } from '../src/helpers/Api.js';
+import { canonicalLink } from '../src/helpers/links.js';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

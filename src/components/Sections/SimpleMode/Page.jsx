@@ -1,6 +1,6 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +70,7 @@ const SimpleModePage = (
   const { t } = useTranslation();
   const uiLang = useSelector(settingsGetUILangSelector);
 
-  const [isClient, setIsClient] = useState(false);
+  const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
   const [data, setData] = useState({
     selected: ToDay,
     selectedDate,
@@ -86,24 +86,18 @@ const SimpleModePage = (
   const { isMobile, isAndroid } = useContext(DeviceInfoContext);
 
   useEffect(() => {
-    setIsClient(typeof window !== 'undefined');
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      const selected = selectedDate || today().toDate();
-      setData({
-        selected,
-        selectedDate,
-        selectedToString: moment(selected).format('YYYY-MM-DD'),
-        selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
-        dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
-        DayPickerModifiers: {
-          selected: selectedDate
-        }
-      });
-    }
-  }, [selectedDate, uiLang, isClient]);
+    const selected = selectedDate || today().toDate();
+    setData({
+      selected,
+      selectedDate,
+      selectedToString: moment(selected).format('YYYY-MM-DD'),
+      selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
+      dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
+      DayPickerModifiers: {
+        selected: selectedDate
+      }
+    });
+  }, [selectedDate, uiLang]);
 
   const handleNativeDateInputChange = event => {
     if (event && event.target.value !== '') {
