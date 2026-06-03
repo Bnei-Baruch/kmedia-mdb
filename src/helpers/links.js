@@ -136,6 +136,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
         return { pathname: `/lessons/daily/c/${entity.id}`, search: `ap=0` };
       return { pathname: `/lessons/cu/${cuId}`, search: `c=${entity.id}` };
     }
+
     case CT_VIRTUAL_LESSONS:
       return { pathname: `/lessons/virtual/c/${entity.id}`, search: '' };
     case CT_LECTURE_SERIES:
