@@ -18,6 +18,7 @@
     "build:scripts": "vite build && yarn build:ssr",
     "test": "react-scripts test --verbose --watchAll",
     "lint": "yarn run eslint src",
+    "lint:fix": "yarn run eslint src --fix",
     "prepare": "husky install",
     "preview": "vite preview",
     "e2e": "playwright test",
