@@ -304,6 +304,11 @@
       "warningTitle": "Popisy a štítky generované AI",
       "warning": "Popisy a štítky na této stránce vyhledávání mohou být generované AI a mohou obsahovat chyby nebo nepřesnosti.",
       "summary": "Shrnutí AI",
+      "rapidResultsLive": {
+        "title": "Předběžné výsledky",
+        "badge": "Aktualizuje se",
+        "message": "Tyto výsledky se ještě mohou změnit, zatímco vyhledávání pokračuje. Konečné výsledky se zobrazí po dokončení vyhledávání."
+      },
       "summaryFallback": {
         "title": "Shrnutí",
         "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",

@@ -302,6 +302,11 @@
       "warningTitle": "Descrições e rótulos gerados por AI",
       "warning": "As descrições e os rótulos nesta página de pesquisa podem ser gerados por AI e conter erros ou imprecisões.",
       "summary": "Resumo de AI",
+      "rapidResultsLive": {
+        "title": "Resultados preliminares",
+        "badge": "Atualizando",
+        "message": "Esses resultados ainda podem mudar enquanto a busca continua. Os resultados finais aparecerão quando a busca for concluída."
+      },
       "summaryFallback": {
         "title": "Resumo",
         "message": "Encontramos algumas boas correspondencias: {{findingsText}}. Voce pode usar {{improveSearch}} abaixo para chegar a resultados mais focados.",

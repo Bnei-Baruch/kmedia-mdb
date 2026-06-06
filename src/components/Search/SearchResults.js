@@ -876,6 +876,7 @@ const SearchResults = ({ t }) => {
 
   const renderAgenticResults = query => {
     const shouldHideAgenticResults = !!reasoningResult?.no_results;
+    const showRapidResultsBanner = isShowingRapidAgenticResults && wip && reasoningStatus?.state !== 'completed';
     const agenticResultRenderKey = [
       reasoningStatus?.session_id || reasoningResult?.session_id || 'no-session',
       reasoningResult?.followups_remaining ?? 'no-followups',
@@ -904,6 +905,17 @@ const SearchResults = ({ t }) => {
               header={summaryMessage.header}
               content={summaryMessage.content}
             />
+          )}
+          {showRapidResultsBanner && (
+            <div className="margin-bottom-8">
+              <Header as="h4" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span>{t('search.agentic.rapidResultsLive.title')}</span>
+                <Icon name="circle notched" loading color="blue" />
+              </Header>
+              <div className="description">
+                {t('search.agentic.rapidResultsLive.message')}
+              </div>
+            </div>
           )}
           {currentAgenticResults.length === 0 && !wip && !summaryMessage && (
             <div>{t('search.agentic.no-results', { query: resultQuery })}</div>

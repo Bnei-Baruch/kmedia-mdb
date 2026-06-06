@@ -301,6 +301,11 @@
       "warningTitle": "AI-generierte Beschreibungen und Labels",
       "warning": "Beschreibungen und Labels auf dieser Suchseite können von AI generiert sein und Fehler oder Ungenauigkeiten enthalten.",
       "summary": "AI-Zusammenfassung",
+      "rapidResultsLive": {
+        "title": "Vorläufige Ergebnisse",
+        "badge": "Wird aktualisiert",
+        "message": "Diese Ergebnisse können sich noch ändern, solange die Suche weiterläuft. Die endgültigen Ergebnisse erscheinen, sobald die Suche abgeschlossen ist."
+      },
       "summaryFallback": {
         "title": "Zusammenfassung",
         "message": "Wir haben einige gute Treffer gefunden: {{findingsText}}. Mit {{improveSearch}} unten kannst du gezieltere Ergebnisse bekommen.",

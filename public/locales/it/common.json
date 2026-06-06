@@ -302,6 +302,11 @@
       "warningTitle": "Descrizioni ed etichette generate da AI",
       "warning": "Le descrizioni e le etichette in questa pagina di ricerca possono essere generate da AI e contenere errori o imprecisioni.",
       "summary": "Sintesi AI",
+      "rapidResultsLive": {
+        "title": "Risultati preliminari",
+        "badge": "Aggiornamento in corso",
+        "message": "Questi risultati possono ancora cambiare mentre la ricerca continua. I risultati finali appariranno quando la ricerca sarà completata."
+      },
       "summaryFallback": {
         "title": "Sintesi",
         "message": "Abbiamo trovato alcune buone corrispondenze: {{findingsText}}. Puoi usare {{improveSearch}} qui sotto per ottenere risultati piu mirati.",

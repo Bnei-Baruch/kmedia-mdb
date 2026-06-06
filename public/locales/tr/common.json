@@ -304,6 +304,11 @@
       "warningTitle": "AI tarafından oluşturulan açıklamalar ve etiketler",
       "warning": "Bu arama sayfasındaki açıklamalar ve etiketler AI tarafından oluşturulmuş olabilir ve hata veya yanlışlık içerebilir.",
       "summary": "AI özeti",
+      "rapidResultsLive": {
+        "title": "Geçici sonuçlar",
+        "badge": "Güncelleniyor",
+        "message": "Arama devam ederken bu sonuçlar hâlâ değişebilir. Nihai sonuçlar arama tamamlandığında görünecek."
+      },
       "summaryFallback": {
         "title": "Özet",
         "message": "Bazi iyi eslesmeler bulduk: {{findingsText}}. Daha odakli sonuçlara ulaşmak için aşağıdaki {{improveSearch}} alanını kullanabilirsiniz.",
