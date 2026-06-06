@@ -22,7 +22,7 @@ import {
   BLOGS
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { getQuery, isDebMode, stringify } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
 import { actions, isAgenticSearchType, SEARCH_TYPES } from '../../redux/modules/search';
@@ -71,6 +71,7 @@ import {
   searchGetErrorSelector,
   searchGetWipSelector
 } from '../../redux/selectors';
+import { buildHighlightSearchQuery } from './highlightLink';
 import Link from '../Language/MultiLanguageLink';
 
 const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'finalizing', 'done', 'error'];
@@ -529,6 +530,13 @@ const SearchResults = ({ t }) => {
     return currentLink;
   };
 
+  // Match the regular-search behavior: only result types that land on searchable text content get highlight deep links.
+  const supportsAgenticHighlightLinks = linkContentType => (
+    linkContentType === CT_SOURCE
+    || IsUnitContentType(linkContentType)
+    || IsCollectionContentType(linkContentType)
+  );
+
   const renderAgenticIcon = (type, label, to) => {
     const icon = type === CT_TAG ? 'topics' : type === SCT_TWEET ? 'publications' : iconByContentTypeMap.get(type) || 'help';
     const content = (
@@ -588,7 +596,28 @@ const SearchResults = ({ t }) => {
     return nodes;
   };
 
-  const renderAgenticContent = (result, highlights) => {
+  const renderAgenticHighlightLink = (highlight, index, to, linkContentType) => {
+    if (!to || !supportsAgenticHighlightLinks(linkContentType)) {
+      return renderAgenticHighlight(highlight);
+    }
+
+    const search = buildHighlightSearchQuery(highlight);
+    if (!search) {
+      return renderAgenticHighlight(highlight);
+    }
+
+    return (
+      <Link
+        key={`agenticHighlightLink_${index}`}
+        className="hover-under-line"
+        to={{ ...to, search: [to.search, stringify(search)].filter(Boolean).join('&') }}
+      >
+        {renderAgenticHighlight(highlight)}
+      </Link>
+    );
+  };
+
+  const renderAgenticContent = (result, highlights, to, linkContentType) => {
     if (!result.description && !result.reason && highlights.length === 0) {
       return null;
     }
@@ -604,7 +633,7 @@ const SearchResults = ({ t }) => {
             {highlights.slice(0, 3).map((highlight, i) => (
               <React.Fragment key={i}>
                 {i > 0 && ' | '}
-                {renderAgenticHighlight(highlight)}
+                {renderAgenticHighlightLink(highlight, i, to, linkContentType)}
               </React.Fragment>
             ))}
           </div>
@@ -643,7 +672,7 @@ const SearchResults = ({ t }) => {
       title={result.title || result.mdb_uid}
       link={to}
       logo={renderAgenticLogo(result, contentType, contentTypeLabel, to)}
-      content={renderAgenticContent(result, highlights)}
+      content={renderAgenticContent(result, highlights, to, linkContentType)}
       collectionTitle={collectionTitle}
       date={result.date}
       click={() => null}

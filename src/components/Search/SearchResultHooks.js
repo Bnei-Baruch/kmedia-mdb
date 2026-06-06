@@ -32,6 +32,7 @@ import {
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
 import { stringify } from '../../helpers/url';
+import { buildHighlightSearchQuery } from './highlightLink';
 import Link from '../Language/MultiLanguageLink';
 import TooltipIfNeed from '../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
@@ -56,8 +57,7 @@ import {
   settingsGetLeftRightByDirSelector
 } from '../../redux/selectors';
 
-const PATH_SEPARATOR                 = ' > ';
-const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
+const PATH_SEPARATOR = ' > ';
 
 const titleFromHighlight = (highlight, defVal) => {
   let prop = ['title', 'title_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
@@ -88,8 +88,6 @@ const snippetFromHighlight = (highlight, props) => {
   return <span dangerouslySetInnerHTML={{ __html }} />;
 };
 
-const clearStringForLink = str => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
-
 const getMediaLanguage = filters => {
   if (!filters) {
     return null;
@@ -105,13 +103,10 @@ const getMediaLanguage = filters => {
 };
 
 const highlightWrapToLink = (__html, index, to) => {
-  const searchArr = clearStringForLink(__html).split(' ');
-
-  const search = {
-    srchstart: searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
-    srchend: searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
-    highlightAll: true
-  };
+  const search = buildHighlightSearchQuery(__html);
+  if (!search) {
+    return <span key={`highlightLink_${index}`} dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />;
+  }
 
   return (<Link
     key={`highlightLink_${index}`}
@@ -686,4 +681,3 @@ export const SearchResultTweets = ({ source }) => {
     </List.Item>
   );
 };
-
