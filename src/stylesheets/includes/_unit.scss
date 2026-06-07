@@ -36,8 +36,8 @@
   .link_to_cu {
     padding: 4px 8px;
     margin-top: 8px !important;
-    margin-right: 4px !important;
-    margin-left: 0 !important;
+    margin-inline-end: 4px !important;
+    margin-inline-start: 0 !important;
   }
 
   .unit-info__title {
@@ -46,47 +46,12 @@
     img {
       height: 2.5em;
       width: 2.5em;
-      float: left;
-      margin-right: .5em;
+      float: inline-start;
+      margin-inline-end: .5em;
     }
   }
 
 
-}
-
-.rtl {
-  .unit-info {
-    .link_to_cu {
-      margin-right: 0 !important;
-      margin-left: 4px !important;
-    }
-
-    .unit-info__title {
-      img {
-        float: right;
-        margin-left: .5em;
-      }
-    }
-  }
-
-  .horizontal-list {
-    display: flex;
-
-    .media-file-button {
-      margin-left: 8px;
-      margin-right: 0;
-
-      .file-list-icon {
-        margin-left: 0;
-        margin-right: 5px;
-      }
-    }
-
-    .no-files {
-      padding: 10px 16px 10px 24px !important;
-      border-width: 1px 4px 1px 1px;
-    }
-  }
 }
 
 .unit-materials {
@@ -257,9 +222,11 @@
     font-size: 14px;
     font-weight: normal;
     color: #333333;
-    padding: 10px 24px 10px 16px !important;
+    padding-block: 10px !important;
+    padding-inline-start: 16px !important;
+    padding-inline-end: 24px !important;
     border: 1px solid #7dcff5;
-    border-left-width: 4px;
+    border-inline-start-width: 4px;
     border-radius: 4px;
     background-color: rgba(colors-helpers.$sky-blue, 0.16);
 
@@ -288,7 +255,7 @@
 
   .media-file-button {
     height: 24px;
-    margin-right: 8px;
+    margin-inline-end: 8px;
     text-decoration: none;
     display: flex !important;
     padding: 0 8px !important;
@@ -303,7 +270,7 @@
 
     .file-list-icon {
       width: 12px;
-      margin-left: 5px;
+      margin-inline-start: 5px;
     }
 
     a {

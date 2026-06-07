@@ -296,17 +296,9 @@
 
   .stat {
     opacity: 0.4;
-    padding-left: 1em;
-    margin-left: auto;
-    text-align: right;
-
-    .rtl & {
-      padding-left: 0;
-      padding-right: 1em;
-      margin-left: 0;
-      margin-right: auto;
-      text-align: left;
-    }
+    padding-inline-start: 1em;
+    margin-inline-start: auto;
+    text-align: end;
   }
 }
 
@@ -316,22 +308,14 @@
   width: 100%;
 
   .tree_item_title {
-    margin-left: 8px;
-
-    .rtl & {
-      margin-left: 0;
-      margin-right: 8px;
-    }
+    margin-inline-start: 8px;
   }
 
   &>.icon {
-    margin: 0 auto 0 0;
+    margin: 0;
+    margin-inline-end: auto;
     font-size: 1.2em;
     line-height: 1em;
-
-    .rtl & {
-      margin: 0 0 0 auto;
-    }
   }
 }
 
@@ -352,14 +336,10 @@
     .icon {
       padding: 0;
       opacity: 0.4;
-      margin: 0 0 0 0.5em;
+      margin: 0;
+      margin-inline-start: 0.5em;
       height: auto;
       width: auto;
-
-      .rtl & {
-        margin-left: 0;
-        margin-right: 0.5em;
-      }
     }
   }
 }
@@ -447,29 +427,14 @@
     }
   }
 
-  .ltr {
-    .hierarchy {
-      .item {
-        &.l1 { padding-left: 1rem; }
-        &.l2 { padding-left: 2rem; }
-        &.l3 { padding-left: 3rem; }
-        &.l4 { padding-left: 4rem; }
-        &.l5 { padding-left: 5rem; }
-        &.l6 { padding-left: 6rem; }
-      }
-    }
-  }
-
-  .rtl {
-    .hierarchy {
-      .item {
-        &.l1 { padding-right: 1rem; }
-        &.l2 { padding-right: 2rem; }
-        &.l3 { padding-right: 3rem; }
-        &.l4 { padding-right: 4rem; }
-        &.l5 { padding-right: 5rem; }
-        &.l6 { padding-right: 6rem; }
-      }
+  .hierarchy {
+    .item {
+      &.l1 { padding-inline-start: 1rem; }
+      &.l2 { padding-inline-start: 2rem; }
+      &.l3 { padding-inline-start: 3rem; }
+      &.l4 { padding-inline-start: 4rem; }
+      &.l5 { padding-inline-start: 5rem; }
+      &.l6 { padding-inline-start: 6rem; }
     }
   }
 }

@@ -1,31 +1,10 @@
 @use "colors-helpers";
 @use "responsive-helpers";
 
-.ltr .trimmed_files {
-  right: 2em;
-  left: auto;
-
-  &.minimized {
-    width: calc(600px - 200px);
-    right: 200px;
-
-    & > .segment {
-      padding: 0.3em 0.5em;
-    }
-
-    @media (max-width: responsive-helpers.$screen-sm) {
-      width: auto;
-      right: 150px!important;
-      bottom: .5em;
-    }
-  }
-}
-
 .trimmed_files {
   position: fixed;
   bottom: 0;
-  left: 2em;
-  right: auto;
+  inset-inline-end: 2em;
   width: 600px;
   background: colors-helpers.$white;
   z-index: 1900;
@@ -34,8 +13,22 @@
 
   @media (max-width: responsive-helpers.$screen-sm) {
     width: auto;
-    left: 0!important;
-    right: 0!important;
+    inset-inline: 0 !important;
+  }
+
+  &.minimized {
+    width: calc(600px - 200px);
+    inset-inline-end: 200px;
+
+    & > .segment {
+      padding: 0.3em 0.5em;
+    }
+
+    @media (max-width: responsive-helpers.$screen-sm) {
+      width: auto;
+      inset-inline-end: 150px !important;
+      bottom: .5em;
+    }
   }
 
   & > .segment {

@@ -192,9 +192,9 @@ body {
     font-size: .92857143rem !important;
 
     i {
-      margin-left: 6px !important;
-      margin-right: 0 !important;
-      float: right;
+      margin-inline-start: 6px !important;
+      margin-inline-end: 0 !important;
+      float: inline-end;
     }
   }
 
@@ -204,16 +204,6 @@ body {
 
   .popupHeader {
     height: 2em;
-  }
-}
-
-.donationPopup.rtl {
-  .donate-button {
-    i {
-      margin-left: 0 !important;
-      margin-right: 6px !important;
-      float: left !important;
-    }
   }
 }
 
@@ -235,29 +225,13 @@ body {
   }
 }
 
-.ltr {
-  .layout__content {
-    .headroom--pinned {
-      @media only screen and (max-width: #{$screen-md - 1}) {
-        margin-left: 0;
-        width: 100%;
-      }
-
-      margin-left: $sidebar-width;
+.layout__content {
+  .headroom--pinned {
+    @media only screen and (max-width: #{$screen-md - 1}) {
+      margin-inline-start: 0;
+      width: 100%;
     }
-  }
-}
 
-.rtl {
-  .layout__content {
-    .headroom--pinned {
-      @media only screen and (max-width: #{$screen-md - 1}) {
-        margin-right: 0;
-        width: 100%;
-      }
-
-      margin-right: $sidebar-width;
-      margin-left: 0;
-    }
+    margin-inline-start: $sidebar-width;
   }
 }

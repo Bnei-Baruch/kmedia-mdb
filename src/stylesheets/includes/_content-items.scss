@@ -71,35 +71,16 @@
     padding: 0 0.5em;
     font-size: .9em;
     line-height: 1em;
-    border-left: 1px colors-helpers.$midGrey solid;
-    border-right: 1px colors-helpers.$midGrey solid;
-  }
-}
+    border-inline-start: 1px colors-helpers.$midGrey solid;
 
+    &:first-child {
+      border-inline-start: 0;
+      padding-inline-start: 0;
+    }
 
-.ltr>.cu_info_description>span {
-  border-right-width: 0;
-
-  &:first-child {
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
-}
-
-.rtl>.cu_info_description>span {
-  border-left-width: 0;
-
-  &:first-child {
-    padding-right: 0;
-    border-right: 0;
-  }
-
-  &:last-child {
-    padding-left: 0;
+    &:last-child {
+      padding-inline-end: 0;
+    }
   }
 }
 
@@ -302,14 +283,7 @@
       overflow: hidden;
 
       @include responsive-helpers.mobile {
-        left: 152px;
-      }
-
-      &.rtl {
-        @include responsive-helpers.mobile {
-          right: 152px;
-          left: 0;
-        }
+        inset-inline-start: 152px;
       }
 
       .cu_item_name {
@@ -364,26 +338,16 @@
 
   .cu_item_duration {
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     z-index: 2;
     top: 0;
   }
 
-  .cu_item_duration.rtl {
-    right: 0;
-    left: auto;
-  }
-
   .cu_item_label {
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     z-index: 2;
     bottom: 0;
-  }
-
-  .cu_item_label.rtl {
-    right: 0;
-    left: auto;
   }
 
   .cu_item_img {
@@ -405,24 +369,12 @@
       position: absolute;
       padding: 0;
       top: 1em;
-      left: 173px;
-      right: 0;
+      inset-inline-start: 173px;
+      inset-inline-end: 0;
       width: auto;
 
       &.with_actions {
-        right: 20px
-      }
-    }
-
-
-    &.rtl {
-      @include responsive-helpers.mobile {
-        right: 173px;
-        left: 0;
-
-        &.with_actions {
-          left: 20px
-        }
+        inset-inline-end: 20px;
       }
     }
   }
@@ -471,11 +423,12 @@
 
 .cu_item_actions {
   position: absolute !important;
-  right: -1em;
+  inset-inline-end: -1em;
   top: 20%;
 
   .cu_item_dropdown {
-    padding: 1em 0 1em 1em;
+    padding: 1em 0;
+    padding-inline-start: 1em;
 
     .my_playlist_add {
       width: 100%;
@@ -485,16 +438,6 @@
     &>.icon {
       color: colors-helpers.$midGrey;
     }
-  }
-}
-
-.rtl .cu_item_actions {
-  right: auto;
-  left: -1em;
-
-  .cu_item_dropdown {
-    padding-right: 1em;
-    padding-left: 0;
   }
 }
 
@@ -511,14 +454,8 @@
   }
 
   &>.image {
-    margin-right: .5em;
+    margin-inline-end: .5em;
     width: auto;
-
-
-    .rtl & {
-      margin-left: .5em;
-      margin-right: 0;
-    }
 
     svg {
       min-width: 50px;
@@ -547,26 +484,16 @@
       color: colors-helpers.$black;
       padding: 0 .5em;
       line-height: .9em;
-      border-right: 1px solid colors-helpers.$midGrey;
+      border-inline-end: 1px solid colors-helpers.$midGrey;
       display: inline-block;
       font-size: .8em;
 
       &:first-child {
-        padding-left: 0;
-
-        .rtl & {
-          border-right: none;
-          padding-right: 0;
-          padding-left: .5em;
-        }
-      }
-
-      .ltr &:last-child {
-        border-left: none;
+        padding-inline-start: 0;
       }
 
       &:last-child {
-        border-right: none;
+        border-inline-end: none;
       }
 
       @include responsive-helpers.mobile {
@@ -596,25 +523,15 @@
       opacity: 0.9;
       padding: 0 4px;
       margin: 2px 0;
-      border-right: 1px solid colors-helpers.$midGrey;
+      border-inline-end: 1px solid colors-helpers.$midGrey;
       display: inline-block;
 
       &:first-child {
-        padding-left: 0;
-
-        .rtl & {
-          border-right: none;
-          padding-right: 0;
-          padding-left: 4px;
-        }
+        padding-inline-start: 0;
       }
 
       &:last-child {
-        border-right: none;
-
-        .rtl & {
-          border-right: 1px solid colors-helpers.$midGrey;
-        }
+        border-inline-end: none;
       }
     }
 
@@ -652,17 +569,12 @@
 
 
     position: absolute;
-    left: 0;
+    inset-inline-end: 0;
     z-index: 2;
     top: 0;
 
     @include responsive-helpers.mobile {
       margin: 4px;
-    }
-
-    .ltr & {
-      right: 0;
-      left: auto;
     }
   }
 }

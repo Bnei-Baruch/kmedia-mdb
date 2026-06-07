@@ -172,12 +172,7 @@
     bottom: 18px;
     padding: 11.5px 12.5px;
     box-shadow: 0px 4px 4px 0px #00000026;
-    left: 18px;
-
-    .rtl & {
-      left: auto;
-      right: 18px;
-    }
+    inset-inline-start: 18px;
   }
 
   .text_mobile_padding {

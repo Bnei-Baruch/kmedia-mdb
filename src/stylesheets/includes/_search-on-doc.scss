@@ -1,30 +1,11 @@
 @use "colors-helpers";
 
-.ltr .search-on-doc--bar-position.pinned {
-  left: auto;
-  right: -50px;
-}
-
-
-.ltr .unit-materials .search-on-doc--bar-position.pinned {
-  right: -25px;
-  left: auto;
-}
-
 .unit-materials .search-on-doc--bar-position.pinned {
-
-  right: auto;
-  left: -25px;
-}
-
-.ltr .likutim .search-on-doc--bar-position.pinned {
-  right: -50px;
-  left: auto;
+  inset-inline-end: -25px;
 }
 
 .likutim .search-on-doc--bar-position.pinned {
-  right: auto;
-  left: -50px;
+  inset-inline-end: -50px;
 }
 
 .search-on-doc- {
@@ -59,8 +40,7 @@
 
     &.pinned {
       width: max-content;
-      left: -50px;
-      right: auto;
+      inset-inline-end: -50px;
       padding: 2px;
       border-radius: 8px;
       border: 1px solid colors-helpers.$blue;

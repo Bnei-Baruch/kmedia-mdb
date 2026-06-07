@@ -127,24 +127,12 @@
     }
 
     .active.content {
-      margin-right: 10px;
-
-      .ltr & {
-        margin-right: 0;
-        margin-left: 10px;
-      }
+      margin-inline-start: 10px;
     }
 
     &.toc_last_level {
-      border-right: 2px solid #2185D0;
-      padding-right: 2em;
-
-      .ltr & {
-        border-right: none;
-        padding-right: 0;
-        border-left: 2px solid #2185D0;
-        padding-left: 2em;
-      }
+      border-inline-start: 2px solid #2185D0;
+      padding-inline-start: 2em;
     }
 
     &.toc_single_level > .title {

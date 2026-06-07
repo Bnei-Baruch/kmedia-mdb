@@ -119,7 +119,7 @@
 .simple-mode-type-icon {
   display: inline-block !important;
   width: 32px;
-  margin-right: 5px;
+  margin-inline-end: 5px;
 }
 
 .inline-button {
@@ -136,10 +136,5 @@
     h4 {
       margin: 0 0 0 6px;
     }
-  }
-
-  .simple-mode-type-icon {
-    margin-left: 5px;
-    margin-right: 0;
   }
 }

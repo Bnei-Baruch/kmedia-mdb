@@ -13,11 +13,7 @@
 }
 
 .recommend-more {
-  float: right;
-}
-
-.rtl .recommend-more {
-  float: left;
+  float: inline-end;
 }
 
 .recommend-more-placeholder {

@@ -9,13 +9,7 @@
   flex-wrap: nowrap;
   justify-content: end;
 
-  .rtl & {
-    padding-left: 5px;
-  }
-
-  .ltr & {
-    padding-right: 5px;
-  }
+  padding-inline-end: 5px;
 
   .note_marks {
     width: 40px;
@@ -75,23 +69,12 @@
   //box-shadow: 0 4px 20px 0 lighten($black, 10%);
   position: absolute;
   top: 0;
-  left: auto;
-  right: -380px;
+  inset-inline-end: -380px;
   z-index: 1;
 
-  .rtl & {
-    right: auto;
-    left: -370px;
-  }
-
   &.note_list_out {
-    right: auto;
-    left: -380px;
-
-    .rtl & {
-      left: auto;
-      right: -380px;
-    }
+    inset-inline-start: -380px;
+    inset-inline-end: auto;
   }
 }
 

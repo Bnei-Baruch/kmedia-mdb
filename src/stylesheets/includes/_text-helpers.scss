@@ -1,6 +1,5 @@
 @use "sass:math";
 
-@use 'rtl/text-helpers';
 @use "colors-helpers";
 @use "variables";
 
@@ -23,6 +22,13 @@
 
 
 blockquote {
+  border-inline-start-width: 2px;
+  border-inline-end-width: 0;
+  margin-inline-start: 2em;
+  margin-inline-end: 0;
+  padding-inline-start: 1em;
+  padding-inline-end: 0;
+
   p {
     font-size: 1.15em;
     line-height: 1.5;
