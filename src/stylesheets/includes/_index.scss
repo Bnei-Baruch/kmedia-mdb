@@ -17,8 +17,6 @@
   }
 }
 
-@include meta.load-css('rtl/index');
-//
 .collection-header,
 .section-header {
   background: colors-helpers.$darkWhite;
