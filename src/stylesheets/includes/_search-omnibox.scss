@@ -88,29 +88,9 @@
 @media only screen and (max-width: responsive-helpers.$screen-md) {
   .search-omnibox {
     .searchButton {
-      margin-right: 5px;
+      margin-inline-end: 5px;
       padding-left: 15px;
       padding-right: 0;
-    }
-  }
-}
-
-.rtl {
-  .search-omnibox {
-    .searchButton {
-      border-radius: 0 0.25rem 0.25rem 0;
-      margin-right: 0;
-      margin-left: 45px;
-      padding-right: 15px;
-    }
-  }
-
-  @media only screen and (max-width: responsive-helpers.$screen-md) {
-    .search-omnibox {
-      .searchButton {
-        margin-right: 0px;
-        margin-left: 5px;
-      }
     }
   }
 }

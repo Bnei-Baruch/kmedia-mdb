@@ -328,11 +328,6 @@
     cursor: pointer;
     border: 1px solid colors-helpers.$grey;
 
-    .rtl & {
-      padding-right: 0.5em;
-      padding-left: 2px;
-    }
-
     .icon {
       padding: 0;
       opacity: 0.4;
