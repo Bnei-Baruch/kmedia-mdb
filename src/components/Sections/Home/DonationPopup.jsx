@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
@@ -9,6 +9,7 @@ import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME
 import { getQuery } from '../../../helpers/url';
 import bannerImg from '../../../images/DonationBanner.jpg';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
+
 import {
   settingsGetContentLanguagesSelector,
   authGetUserSelector,
@@ -18,18 +19,21 @@ import {
 
 function DonationPopup() {
   const { t } = useTranslation();
-  const user       = useSelector(authGetUserSelector);
+  const user = useSelector(authGetUserSelector);
+  const isClient = useSyncExternalStore(() => () => { }, () => true, () => false);
+
+
   const shouldOpen = () => {
-    if (user?.name === KC_BOT_USER_NAME) return false;
+    if (user?.name === KC_BOT_USER_NAME || !isClient) return false;
     const query = getQuery(location);
     if (query.showPopup)
       return true;
-    const d         = new Date();
+    const d = new Date();
     const firstWeek = d.getDate();
-    const theDay    = d.getDay();
+    const theDay = d.getDay();
     if (firstWeek <= 7 && (theDay === 0 || theDay === 6)) {
       const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
-      const popupCount    = parseInt(localStorage.getItem(popupCountKey) ?? 0);
+      const popupCount = parseInt(localStorage.getItem(popupCountKey) ?? 0);
       if (popupCount > 1)
         return false;
       localStorage.setItem(popupCountKey, (popupCount + 1).toString());
@@ -39,17 +43,17 @@ function DonationPopup() {
     return false;
   };
 
-  const location         = useLocation();
+  const location = useLocation();
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
-  const uiLang           = useSelector(settingsGetUILangSelector);
-  const uiDir            = useSelector(settingsGetUIDirSelector);
-  const isRTL            = isLanguageRtl(uiLang);
+  const uiLang = useSelector(settingsGetUILangSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const isRTL = isLanguageRtl(uiLang);
 
-  const [open, setOpen]    = useState(shouldOpen());
+  const [open, setOpen] = useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(contentLanguages);
-  const link                  = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
+  const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
 
   return (
     <Dialog

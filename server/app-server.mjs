@@ -27,7 +27,7 @@ async function createServer() {
   }
 
   app.use('/locales', express.static(path.resolve(__dirname, '..', 'public', 'locales')));
-  app.use('/favicon', express.static(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
+  app.use('/:lang?/favicon', express.static(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
   app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
 
   app.use(noLanguageRedirect);

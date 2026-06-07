@@ -6,7 +6,7 @@ import { wholeSimpleMode } from '../../redux/api/simpleMode';
 import { actions } from '../../redux/modules/settings';
 import { settingsGetContentLanguagesSelector, settingsGetUrlLangSelector } from '../../redux/selectors';
 
-const LanguageItem = (idx, language, disabled) => {
+const LanguageItem = ({idx, language, disabled}) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
   const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
   const dispatch = useDispatch();
