@@ -211,14 +211,13 @@ export async function renderSSR(req, extraInitialState = {}) {
   `;
 
   const html = htmlData
-    .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
-    .replace(/lang="en"/, `lang="${uiLang}"`)
+    .replace(/<html lang="en" translate="no">/, `<html lang="${uiLang}" dir="${direction}" translate="no" ${helmet.htmlAttributes.toString()}>`)
     .replace(/<title>.*<\/title>/, helmet.title.toString())
     .replace(
       /<\/head>/,
       `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`
     )
-    .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
+    .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()}>`)
     .replace(/<div id="root"><\/div>/, rootDiv);
 
   logger.log(NAMESPACE, 'rendered html');

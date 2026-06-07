@@ -65,7 +65,7 @@ const HandleLanguages = () => {
       <PopoverButton as={LanguagesBtn} />
       <PopoverPanel
         anchor={anchor}
-        className="z-50 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black/5 p-4 min-w-[280px]"
+        className="z-1899 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black/5 p-4 min-w-[150px] overflow-visible!"
         style={popupStyle}
       >
         {urlLang && (

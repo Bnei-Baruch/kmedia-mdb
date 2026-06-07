@@ -24,7 +24,7 @@ const LanguagesDropdown = ({ disabled, trigger, language, selected, asLink }) =>
         )}
       </div>
       {isOpen && (
-        <div className="absolute z-20 bg-white border rounded shadow-lg max-h-60 overflow-y-auto min-w-[150px]">
+        <div className="absolute z-20 bg-white border rounded shadow-lg max-h-60 overflow-y-auto min-w-37.5">
           {ALL_LANGUAGES.map(lang => {
             const isActive = lang === language;
             const className = `block px-4 py-2 hover:bg-gray-100 cursor-pointer small ${isActive ? 'bg-blue-50 font-bold' : ''}`;

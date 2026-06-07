@@ -34,6 +34,8 @@
 .language-ui {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .content-languages-title {
