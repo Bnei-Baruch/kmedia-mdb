@@ -85,7 +85,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
   if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
     children = items?.length > 0 ? <div className=" px-4 ">{children}</div> : null;
   } else {
-    children = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 cu_items">{children}</div>;
+    children = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6  cu_items">{children}</div>;
   }
 
   return <ItemTemplate namespace={namespace} children={children} withSeeAll={withSeeAll} />;

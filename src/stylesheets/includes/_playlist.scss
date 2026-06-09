@@ -36,9 +36,12 @@
 
 .my_header {
   font-size: 1.5rem;
-  font-family: Lato ,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   align-items: center;
   display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1em 0 .5em;
 
   .material-symbols-outlined {
     font-size: 1.5rem;
@@ -69,7 +72,8 @@
   width: 28px;
 }
 
-.my_playlist_add, .my_tag {
+.my_playlist_add,
+.my_tag {
   display: flex;
   flex-flow: nowrap;
   align-items: center;

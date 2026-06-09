@@ -25,29 +25,29 @@ const ItemTemplate = ({ children, namespace, withSeeAll = false }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
 
   const seeAll = withSeeAll ? (
-    <div className="text-right">
-      <Link to={`/personal/${namespace}`}>{t('search.showAll')}</Link>
-    </div>
+    <Link to={`/personal/${namespace}`} className="text-lg text-gray-500">
+      {t('search.showAll')}
+    </Link>
   ) : null;
 
   let marginClass = null;
   let icon = null;
   if ([MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS].includes(namespace)) {
     icon = iconByNamespace[namespace];
-    marginClass = uiDir === 'rtl' ? ' margin-right-8' : ' margin-left-8';
+    marginClass = 'ms-2';
   } else {
     icon = <span className="material-symbols-outlined">{iconByNamespace[namespace]}</span>;
   }
 
   return (
-    <div className="homepage__thumbnails avbox no-background">
-      <div className="w-full ">
+    <div className="homepage__thumbnails p-4">
+      <div className="w-full">
         <h2 className="my_header">
-          <span className="display-iblock">
+          <span className="flex items-center flex-nowrap">
             {icon}
-            <span className={`display-iblock${marginClass}`}>{t(`personal.${namespace}`)}</span>
+            <span className={`${marginClass}`}>{t(`personal.${namespace}`)}</span>
           </span>
-          <span className="display-iblock small text-gray-500">{seeAll}</span>
+          {seeAll}
         </h2>
         {
           children.length === 0 ?

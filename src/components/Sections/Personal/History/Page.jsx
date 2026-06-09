@@ -71,7 +71,7 @@ const Page = ({ location }) => {
     const mx = moment(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (<h3>{t('values.date', { date: x.timestamp })}</h3>);
+      newDay = (<h3 className="text-xl font-bold p-b-1">{t('values.date', { date: x.timestamp })}</h3>);
     }
 
     const item = (
@@ -88,33 +88,27 @@ const Page = ({ location }) => {
   };
 
   return (
-    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobileDevice })}>
-      <div className="flex flex-wrap w-full">
-        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
-          <div className=" px-4 ">
-            <div className="summary-container align_items_center">
-              <h2 className="my_header">
-                <span className="material-symbols-outlined display-iblock">history</span>
-                {t('personal.history')}
-              </h2>
-            </div>
-          </div>
-          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
-          {
-            items?.length > 0 ? (
-              <div className="px-4 ">
-                {items.map(renderItem)}
-              </div>
-            ) : null
-          }
-          <Pagination
-            pageNo={pageNo}
-            pageSize={PAGE_SIZE}
-            total={total}
-            onChange={setPage}
-          />
+    <div className={'w-full md:p-4'}>
+      <h2 className="my_header">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="material-symbols-outlined display-iblock">history</span>
+          {t('personal.history')}
         </div>
-      </div>
+      </h2>
+      <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+      {
+        items?.length > 0 ? (
+          <div className="px-4 ">
+            {items.map(renderItem)}
+          </div>
+        ) : null
+      }
+      <Pagination
+        pageNo={pageNo}
+        pageSize={PAGE_SIZE}
+        total={total}
+        onChange={setPage}
+      />
     </div>
   );
 };

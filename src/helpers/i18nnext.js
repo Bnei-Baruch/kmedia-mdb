@@ -1,10 +1,8 @@
 import i18next from 'i18next';
-
-import i18nextBackend from 'i18next-fs-backend';
-import HttpBackend from 'i18next-http-backend';
-import path from 'node:path';
-
 import moment from 'moment';
+// SSR: Node.js require() correctly binds these to the moment singleton.
+// Browser: static imports don't register (CJS UMD falls back to window.moment which is
+// unset at module-load time). app-client.jsx handles browser locale loading via dynamic imports.
 import 'moment/locale/cs';
 import 'moment/locale/de';
 import 'moment/locale/es';
@@ -15,6 +13,7 @@ import 'moment/locale/tr';
 import 'moment/locale/uk';
 
 import { DEFAULT_UI_LANGUAGE } from './consts';
+
 let i18n;
 export const options = {
   load: 'languageOnly',
@@ -28,9 +27,6 @@ export const options = {
 
   interpolation: {
     escapeValue: false, // Not needed for react!
-    format: (value, format) =>
-      // Our beloved backend is using UTC so we do it here as well
-      moment.utc(value).format(format),
   },
 
   react: {
@@ -39,28 +35,22 @@ export const options = {
   },
 };
 
-// Client side.
-export const initializeI18nClient = async () => {
-  // eslint-disable-next-line import/no-named-as-default-member
-  const instance = i18next.createInstance();
-
-  // ИСПОЛЬЗУЕМ HttpBackend ЗДЕСЬ
-  await instance.use(HttpBackend).init({
-    ...options,
-    lng: 'en',
-    preload: ['en', 'he', 'ru', 'es'],
-    backend: {
-      loadPath: 'http://localhost:3000/locales/{{lng}}/{{ns}}.json',
-    },
-    initImmediate: false,
+// i18next v26 overwrites interpolation.format with its Formatter; register moment
+// formats after init so {{date, ll}} / {{date, l}} keep working.
+// Only lowercase variants — the Formatter lowercases all names, so 'LL' would
+// overwrite 'll' if both were registered.
+// momentLib defaults to this file's import (SSR); client passes its own pre-bundled
+// instance so both share the same module reference (Vite creates separate instances
+// for files that import node: builtins like this one).
+export const registerMomentFormats = (instance, momentLib = moment) => {
+  ['l', 'll', 'lll', 'llll'].forEach(fmt => {
+    instance.services.formatter.add(fmt, (value, lng) =>
+      momentLib.utc(value).locale(lng || DEFAULT_UI_LANGUAGE).format(fmt)
+    );
   });
-
-  i18n = instance;
-  return instance;
 };
 
-
-export const initializeI18n = async (resources, lng) => {
+export const initializeI18n = async (resources, lng, momentLib) => {
   // eslint-disable-next-line import/no-named-as-default-member
   await i18next.init({
     ...options,
@@ -68,23 +58,9 @@ export const initializeI18n = async (resources, lng) => {
     ...(lng ? { lng } : {}),
     initImmediate: false,
   });
+  registerMomentFormats(i18next, momentLib);
   i18n = i18next;
   return i18next;
-};
-
-export const initializeI18nBackend = async uiLang => {
-  console.log('initializeI18nBackend', uiLang);
-  // eslint-disable-next-line import/no-named-as-default-member
-  i18n = i18next.createInstance();
-  await i18n.use(i18nextBackend).init({
-    ...options,
-    preload: ['en', 'he', 'ru', 'es'], // preload all languages
-    backend: {
-      loadPath: path.resolve(process.cwd(), 'public/locales/{{lng}}/{{ns}}.json'),
-    },
-    lng: uiLang,
-  });
-  return i18n;
 };
 
 export { i18n as default };

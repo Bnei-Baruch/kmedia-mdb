@@ -6,13 +6,11 @@ import { NO_NAME } from '../../../helpers/consts';
 import { formatDuration } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
-import { settingsGetUIDirSelector } from '../../../redux/selectors';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../Logo/UnitLogo';
 import { UnitProgress } from './UnitProgress';
 
 const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, playTime }) => {
-  const dir = useSelector(settingsGetUIDirSelector);
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
@@ -49,7 +47,7 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
       <div className="cu_item_body">
         <div>{trimText(unit.name)}</div>
       </div>
-      <div className={`cu_info_description ${dir}`}>
+      <div className={`cu_info_description`}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
       </div>
       {children ? <div className="cu_item_footer">{children}</div> : null}

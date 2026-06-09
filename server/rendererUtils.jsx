@@ -14,7 +14,9 @@ import * as pkgUaParserJs from 'ua-parser-js';
 import { URL } from 'url';
 import { AppServer } from '../src/components/App/AppServer';
 import logger from '../src/logger/logger';
-import { initializeI18nBackend } from '../src/helpers/i18nnext';
+import i18next from 'i18next';
+import i18nextBackend from 'i18next-fs-backend';
+import { options, registerMomentFormats } from '../src/helpers/i18nnext';
 import {
   COOKIE_CONTENT_LANGS,
   COOKIE_SHOW_ALL_CONTENT,
@@ -39,6 +41,20 @@ import { actions as ssr } from '../src/redux/modules/ssr';
 import buildRoutes from '../src/route/routes';
 
 const { UAParser } = pkgUaParserJs;
+
+const initializeI18nBackend = async uiLang => {
+  const i18n = i18next.createInstance();
+  await i18n.use(i18nextBackend).init({
+    ...options,
+    preload: ['en', 'he', 'ru', 'es'],
+    backend: {
+      loadPath: path.resolve(process.cwd(), 'public/locales/{{lng}}/{{ns}}.json'),
+    },
+    lng: uiLang,
+  });
+  registerMomentFormats(i18n);
+  return i18n;
+};
 
 export const NAMESPACE = 'serverRender';
 export const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -228,7 +244,9 @@ export async function renderSSR(req, extraInitialState = {}) {
 // Used for authenticated users. Bots still use blocking renderSSR.
 export async function renderSSRStream(req, res, extraInitialState = {}) {
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  console.log('[rendererUtils stream] before moment.locale(), locales:', moment.locales(), 'setting to:', uiLang);
   moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+  console.log('[rendererUtils stream] after moment.locale(), global locale:', moment.locale());
   const direction = getLanguageDirection(uiLang);
 
   // Phase 1: flush <head> so the browser starts loading CSS immediately
