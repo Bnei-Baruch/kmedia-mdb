@@ -99,7 +99,7 @@ const OmniBox = ({ isHomePage = false }) => {
 
   return (
     <Combobox value={query ?? ''} onChange={handleResultSelect}  className={clsx('mx-auto', { 'max-w-[800px]': !isHomePage })}>
-      <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage})}>
+      <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage })}>
         <div className={clsx('flex items-stretch w-full')}>
           <ComboboxInput
             className={clsx('flex-1 bg-white px-4 py-2 text-black outline-none w-full border border-gray-300 rounded-4xl', { 'rounded-e-none': isHomePage })}
