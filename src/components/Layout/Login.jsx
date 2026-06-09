@@ -25,8 +25,7 @@ const Login = () => {
       </PopoverButton>
       <PopoverPanel
         anchor="bottom end"
-        className="auth-popup z-50 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 p-3"
-        style={{ direction: uiDir }}
+        className="z-1899 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black/5 p-4 w-48"
       >
         <div className="font-semibold small mb-2">{user?.name}</div>
         <hr className="border-gray-200 mb-2" />
