@@ -4,17 +4,15 @@ import LatestLessonBanner from './LatestLessonBanner';
 
 const HomeBanners = ({ latestLesson = null }) => (
   <div className="homepage__featured homepage__section">
-    <div className=" px-4 flex flex-wrap justify-between">
-      <div className="flex flex-wrap justify-between w-full">
-        {
-          latestLesson
-            && <div className="w-[49%]">
-              <LatestDailyLesson collection={latestLesson} />
-            </div>
-        }
-        <div className="w-[49%]">
-          <LatestLessonBanner />
+    <div className="flex flex-wrap justify-between w-full">
+      {
+        latestLesson
+        && <div className="w-[49%]">
+          <LatestDailyLesson collection={latestLesson} />
         </div>
+      }
+      <div className="w-[49%]">
+        <LatestLessonBanner />
       </div>
     </div>
   </div>

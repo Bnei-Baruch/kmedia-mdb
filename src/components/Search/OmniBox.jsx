@@ -98,11 +98,11 @@ const OmniBox = ({ isHomePage = false }) => {
   };
 
   return (
-    <Combobox value={query ?? ''} onChange={handleResultSelect}>
-      <div className={clsx('relative w-full search-omnibox', { homepage: isHomePage })}>
-        <div className="flex items-center w-full bg-transparent">
+    <Combobox value={query ?? ''} onChange={handleResultSelect}  className={clsx('mx-auto', { 'max-w-[800px]': !isHomePage })}>
+      <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage})}>
+        <div className={clsx('flex items-stretch w-full')}>
           <ComboboxInput
-            className="flex-1 px-4 py-2 text-black outline-none w-full border border-gray-300 rounded-l rounded-r-none max-w-none"
+            className={clsx('flex-1 bg-white px-4 py-2 text-black outline-none w-full border border-gray-300 rounded-4xl', { 'rounded-e-none': isHomePage })}
             placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
             onChange={inputChange}
             onKeyDown={keyDown}
@@ -113,11 +113,15 @@ const OmniBox = ({ isHomePage = false }) => {
           />
           {isHomePage ? (
             <>
-              <button type="button" onClick={doSearch} className={clsx('ui button rounded-l-none')}>
+              <button
+                type="button"
+                onClick={doSearch}
+                className="flex items-center gap-2 px-4 py-2 font-bold bg-gray-100 hover:bg-gray-200 border border-gray-300 border-s-0 rounded-e text-sm text-gray-500 whitespace-nowrap cursor-pointer me-4"
+              >
                 {wip ? (
-                  <Icon icon={faSpinner} className="animate-spin mr-2" />
+                  <Icon icon={faSpinner} className="animate-spin" />
                 ) : (
-                  <Icon icon={faSearch} className={clsx(isMobileDevice ? 'large' : 'mr-2')} />
+                  <Icon icon={faSearch} />
                 )}
                 {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
               </button>

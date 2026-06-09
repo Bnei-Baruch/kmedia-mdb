@@ -202,7 +202,7 @@ export async function renderSSR(req, extraInitialState = {}) {
   logger.log(NAMESPACE, 'redux data before return', storeData.auth);
 
   const rootDiv = `
-    <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+    <div id="root">${markup}</div>
     <script>
       window.__botKCInfo = ${storeData.auth?.user?.name === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
       window.__data = ${storeDataStr};

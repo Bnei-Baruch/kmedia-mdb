@@ -12,7 +12,9 @@
   }
 
   &__section {
-
+    max-width: 1200px;
+    margin: 0 auto;
+    
     &__iconsrow {
       .iconsTitleRow {
         .iconsTitle {
@@ -71,10 +73,6 @@
     background: #1A4378;
     margin-top: 0;
     padding-bottom: 4rem;
-  }
-
-  &__title {
-    margin-bottom: .4em;
   }
 
   &__website-sections {

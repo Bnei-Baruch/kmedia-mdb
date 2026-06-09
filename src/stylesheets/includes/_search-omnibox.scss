@@ -1,79 +1,20 @@
 @use 'colors-helpers';
-@use 'responsive-helpers';
 
-.search-omnibox {
-  width: 100%;
-  margin: 0 auto;
+.omnibox-inline-search {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(colors-helpers.$fullBlack, 0.5);
+  padding: 4px 8px;
+  font-size: 1.1em;
+  line-height: 1;
 
-  input {
-    border: 1px solid #7dcff5;
-    border-radius: 20px;
-  }
-
-  &.homepage input {
-    border-radius: 20px 0 0 20px;
-  }
-
-  .omnibox-inline-search {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: rgba(colors-helpers.$fullBlack, 0.5);
-    padding: 4px 8px;
-    font-size: 1.1em;
-    line-height: 1;
-
-    &:hover {
-      color: rgba(colors-helpers.$fullBlack, 0.8);
-    }
-  }
-
-  // main omnibox size
-  .input {
-    width: 100%;
-  }
-
-  > .results {
-
-    &.visible {
-      /* Limit suggest box height and allow scrolling if more then ~10. */
-      max-height: 500px;
-      overflow-y: scroll;
-    }
-
-    // this falls sub-pixel apart from the category name table-cell,
-    // it doesn't look good. so we cancel it
-    > .category {
-      > .name {
-        border-bottom: none !important;
-      }
-
-      .result {
-        background-color: colors-helpers.$white;
-
-        //border-bottom: none !important;
-        &:last-child {
-          border-bottom: 1px solid rgba(colors-helpers.$border-base, .1) !important;
-          margin-bottom: 1px;
-        }
-
-        &:hover {
-          //background-color: rgba($blue, .075) !important;
-          background-image: linear-gradient(to bottom, rgba(colors-helpers.$blue, 0.125), rgba(colors-helpers.$blue, 0)) !important;
-        }
-      }
-
-      &:last-child {
-        .result:last-child {
-          border-bottom: none !important;
-          margin-bottom: 1px;
-        }
-      }
-    }
+  &:hover {
+    color: rgba(colors-helpers.$fullBlack, 0.8);
   }
 }
 
@@ -81,16 +22,5 @@
   .title {
     direction: rtl;
     display: inline-block;
-  }
-}
-
-
-@media only screen and (max-width: responsive-helpers.$screen-md) {
-  .search-omnibox {
-    .searchButton {
-      margin-inline-end: 5px;
-      padding-left: 15px;
-      padding-right: 0;
-    }
   }
 }

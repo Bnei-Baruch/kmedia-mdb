@@ -1,19 +1,17 @@
-import { clsx } from 'clsx';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
 import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
+import ActiveSections from './ActiveSections';
 import HomeBanners from './HomeBanners';
 import LatestUpdatesSection from './LatestUpdatesSection';
 import SearchBar from './SearchBar';
 import Section from './Section';
-import Topic from './Topic';
 
 const renderBlogPosts = (latestBlogPosts, uiLang, t) =>
   latestBlogPosts.length && (
@@ -58,54 +56,10 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, uiLang, t) => (
   </div>
 );
 
-const renderActiveSections = (t, isMobileDevice) => {
-  const iconSize = isMobileDevice ? 50 : 100;
-  const fontSize = isMobileDevice ? 'small' : 'large';
-  const map = x => (
-    <div
-      key={x.name}
-      className={clsx('w-1/4 text-center flex items-stretch justify-center', !isMobileDevice && x.className)}
-    >
-      <Topic
-        title={t(`nav.sidebar.${x.name}`)}
-        src={x.name}
-        href={`/${x.name}`}
-        width={iconSize}
-        height={iconSize}
-        fontSize={fontSize}
-      />
-    </div>
-  );
-
-  const sections = [
-    { name: 'lessons', className: 'topIcon' },
-    { name: 'programs', className: 'topIcon' },
-    { name: 'topics', className: 'topIcon' },
-    { name: 'sources', className: 'topIcon' },
-    { name: 'events', className: '' },
-    { name: 'likutim', className: '' },
-    { name: 'publications', className: '' },
-    { name: 'simple-mode', className: '' },
-  ];
-
-  return sections.map(map);
-};
-
-const renderActiveSectionsGrid = (t, isMobileDevice) => (
-  <div className="homepage__website-sections homepage__section">
-    <div className="">
-      <Section title={t('home.sections')}>
-        <div className="homepage__iconsrow flex flex-wrap justify-center">
-          <div className="activeSectionsIcons flex flex-wrap w-full">{renderActiveSections(t, isMobileDevice)}</div>
-        </div>
-      </Section>
-    </div>
-  </div>
-);
 
 const renderSearchBar = location => (
-  <div className="homepage__header homepage__section">
-    <div className=" px-4">
+  <div className="homepage__header">
+    <div className="px-4 max-w-[1200px] mx-auto">
       <SearchBar location={location} />
     </div>
   </div>
@@ -113,7 +67,6 @@ const renderSearchBar = location => (
 
 const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPosts = [], latestTweets = [] }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
   const location = useLocation();
 
   return (
@@ -121,7 +74,7 @@ const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPos
       <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
       {renderSearchBar(location)}
       <HomeBanners latestLesson={latestLesson} />
-      {renderActiveSectionsGrid(t, isMobileDevice)}
+      <ActiveSections />
       <LatestUpdatesSection latestItems={latestItems} t={t} />
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, uiLang, t)}
     </div>

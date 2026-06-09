@@ -1,6 +1,5 @@
 import { clsx } from 'clsx';
-import { useContext, useRef, useState } from 'react';
-import { useSyncExternalStore } from 'react';
+import { useContext, useRef, useState, useSyncExternalStore } from 'react';
 import Headroom from 'react-headroom';
 
 import { faBars, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -42,7 +41,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
     : <Icon icon={faBars} className="text-[1.8rem] leading-none" />;
 
   const content = (
-    <div className="left-0 right-0 top-0 z-[2000]">
+    <>
       <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
         <div ref={toggleSidebarBtnRef} className={clsx({ '2xl:!hidden': !isFullscreen })}>
           <a
@@ -102,7 +101,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
           </div>
         )
       }
-    </div>
+    </>
   );
 
   if (!isClient) {
