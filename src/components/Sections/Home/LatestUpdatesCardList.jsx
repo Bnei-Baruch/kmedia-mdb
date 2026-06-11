@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import moment from 'moment';
+import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,7 @@ const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4
       if (!itemsByCT[entry.ct]) return [];
       const entryItems = [...itemsByCT[entry.ct]];
       return entry.daysBack
-        ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack)
+        ? entryItems.filter(item => dayjs().diff(dayjs(item.film_date), 'days') < entry.daysBack)
         : entryItems;
     };
 

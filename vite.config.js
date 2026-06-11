@@ -62,20 +62,6 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       entries: ["index.html", "index-anon.html"],
-      // Locale files must be pre-bundled together with moment so they all share
-      // the same module instance. Without this, locale imports register on the
-      // original node_modules/moment.js while the app reads from the pre-bundled
-      // chunk — two separate instances, so locales appear unregistered.
-      include: [
-        "moment/locale/cs",
-        "moment/locale/de",
-        "moment/locale/es",
-        "moment/locale/he",
-        "moment/locale/it",
-        "moment/locale/ru",
-        "moment/locale/tr",
-        "moment/locale/uk",
-      ],
       esbuildOptions: {
         loader: {
           ".js": "jsx",

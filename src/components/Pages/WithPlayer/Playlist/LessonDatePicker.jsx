@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { actions as mdbActions } from '../../../../redux/modules/mdb';
 import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
@@ -47,7 +47,7 @@ const LessonDatePicker = () => {
   }
 
   const fetchNextCO = date => {
-    const filmDate = moment.utc(date);
+    const filmDate = dayjs.utc(date);
     dispatch(mdbActions.fetchDatepickerCO({
       start_date: filmDate.format(DATE_FORMAT),
       end_date  : filmDate.format(DATE_FORMAT)

@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import moment from 'moment';
+import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { memo, useContext } from 'react';
 
@@ -39,7 +39,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
     itemsByCT[consts.CT_DAILY_LESSON] = itemsByCT[consts.CT_DAILY_LESSON].sort((a, b) => {
       if (a.film_date !== b.film_date) {
-        return moment(a).diff(moment(b), 'days');
+        return dayjs(a.film_date).diff(dayjs(b.film_date), 'day');
       }
 
       return a.number - b.number;

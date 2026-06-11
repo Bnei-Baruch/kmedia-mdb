@@ -10,8 +10,8 @@ export const timeToPercent = (sec, duration) => {
 
 export const startEndFromQuery = location => {
   const q     = getQuery(location);
-  const start = q.sstart ? fromHumanReadableTime(q.sstart).asSeconds() : 0;
-  const end   = q.send ? fromHumanReadableTime(q.send).asSeconds() : Infinity;
+  const start = q.sstart ? fromHumanReadableTime(q.sstart) : 0;
+  const end   = q.send ? fromHumanReadableTime(q.send) : Infinity;
   if (start > end)
     return { start: end, end: start };
   return { start, end };

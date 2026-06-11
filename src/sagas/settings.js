@@ -1,7 +1,6 @@
-import moment from 'moment';
+import { setDayjsLocale } from '../helpers/dayjs';
 import { put, select, takeLatest } from 'redux-saga/effects';
 
-import { LANG_UKRAINIAN } from '../helpers/consts';
 import { changeDirection, getCurrentDirection, getLanguageDirection } from '../helpers/i18n-utils';
 import i18n from '../helpers/i18nnext';
 import { actions as mbdActions } from '../redux/modules/mdb';
@@ -30,9 +29,7 @@ function* setLanguages(action) {
     });
   }
 
-  // Change global moment.js locale
-  const newUILangUKFix = newUILang === LANG_UKRAINIAN ? 'uk' : newUILang;
-  moment.locale(newUILangUKFix);
+  setDayjsLocale(newUILang);
 
   // Change page direction and fetch css
   changeDirectionIfNeeded(newUILang);

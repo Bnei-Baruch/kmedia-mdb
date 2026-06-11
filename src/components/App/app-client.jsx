@@ -1,12 +1,12 @@
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { createBrowserHistory } from 'history';
-import moment from 'moment';
+import { setDayjsLocale } from '../../helpers/dayjs';
 import { hydrateRoot } from 'react-dom/client';
 import { initialize as gaInitialize } from 'react-ga';
 import { UAParser } from 'ua-parser-js';
 import { CreateAbTesting } from '../../helpers/ab-testing';
 import ClientChronicles from '../../helpers/clientChronicles';
-import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN } from '../../helpers/consts';
+import { DEFAULT_UI_LANGUAGE } from '../../helpers/consts';
 import { initializeI18n } from '../../helpers/i18nnext';
 import { initKC } from '../../pkg/ksAdapter/adapter';
 import logger from '../../logger/logger';
@@ -19,21 +19,6 @@ const NAMESPACE = 'app-client';
 
 
 async function buildApp(kcInfo = null) {
-  // Locale CJS files use the UMD global fallback (window.moment) in browser ESM context.
-  // Expose the pre-bundled moment instance so dynamic imports bind to the right object.
-  window.moment = moment;
-  await Promise.all([
-    import('moment/locale/cs'),
-    import('moment/locale/de'),
-    import('moment/locale/es'),
-    import('moment/locale/he'),
-    import('moment/locale/it'),
-    import('moment/locale/ru'),
-    import('moment/locale/tr'),
-    import('moment/locale/uk'),
-  ]);
-  window.moment = undefined;
-  console.log('[app-client] after locale imports, moment.locales():', moment.locales());
 
   gaInitialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
@@ -48,11 +33,9 @@ async function buildApp(kcInfo = null) {
   store.dispatch(ssr.hydrate());
 
   const { initialLanguage, initialI18nStore } = window.__i18n || { initialLanguage: DEFAULT_UI_LANGUAGE, initialI18nStore: {} };
-  console.log('[app-client] before moment.locale(), setting to:', initialLanguage);
-  moment.locale(initialLanguage === LANG_UKRAINIAN ? 'uk' : initialLanguage);
-  console.log('[app-client] after moment.locale(), global locale:', moment.locale(), 'all locales:', moment.locales());
+  setDayjsLocale(initialLanguage);
 
-  const i18n = await initializeI18n(initialI18nStore, initialLanguage, moment);
+  const i18n = await initializeI18n(initialI18nStore, initialLanguage);
   const deviceInfo = new UAParser().getResult();
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);

@@ -1,9 +1,9 @@
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { clsx } from 'clsx';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import PropTypes from 'prop-types';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -22,7 +22,8 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
   const [isNativePopupOpen, setNativePopupOpen] = useState(false);
 
   const nativeDateInputRef = useRef();
-  const localeDateFormat = useMemo(() => moment.localeData().longDateFormat('L'), []);
+  // Read on every render so it tracks the global dayjs locale set on language change.
+  const localeDateFormat = dayjs().localeData().longDateFormat('L');
 
   const openNativeDatePicker = useCallback(() => {
     if (isAndroid) {
@@ -46,7 +47,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
   }, [selectedDate, value, onDayChange]);
 
   const selected = selectedDate || value;
-  const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
+  const selectedToString = selected ? dayjs(selected).format('YYYY-MM-DD') : '';
 
   const dateButton = (
     <div
@@ -72,7 +73,7 @@ const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, w
     return dateButton;
   }
 
-  const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
+  const selectedInLocaleFormat = dayjs(selected).format(localeDateFormat);
   return (
     <>
       <div onClick={() => setNativePopupOpen(true)}>

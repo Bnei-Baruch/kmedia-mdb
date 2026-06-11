@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../redux/modules/my';
@@ -38,9 +38,9 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   useEffect(() => {
     if (item) {
-      let start = moment(item.updated_at || item.created_at);
-      const now = moment(Date.now());
-      const end = moment(Date.now()).add(1, 'd');
+      let start = dayjs(item.updated_at || item.created_at);
+      const now = dayjs(Date.now());
+      const end = dayjs(Date.now()).add(1, 'd');
       if (start.isSame(now, 'day')) {
         start = end;
       }

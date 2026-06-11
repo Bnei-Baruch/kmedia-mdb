@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
-import moment from 'moment/moment';
+import dayjs from '../../../../helpers/dayjs';
 import { useSelector } from 'react-redux';
 
 import NoteEditBtn from './Buttons/NoteEditBtn';
@@ -40,7 +40,7 @@ const NoteItemSticky = () => {
               <NoteCopyBtn text={note.content} />
               <NoteRemoveBtn />
             </div>
-            <span>{moment.utc(note.created_at).format('YYYY-MM-DD')}</span>
+            <span>{dayjs.utc(note.created_at).format('YYYY-MM-DD')}</span>
           </div>
           <NoteContent />
         </Dialog.Panel>

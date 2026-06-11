@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../helpers/dayjs';
 
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
@@ -61,5 +61,5 @@ export const getSavedTime = (cuId, ht) => {
     return ht.data?.current_time || 0;
   }
 
-  return moment(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data?.current_time || 0;
+  return dayjs(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data?.current_time || 0;
 };

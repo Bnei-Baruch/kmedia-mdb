@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import moment from 'moment/moment';
+import dayjs from '../../helpers/dayjs';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
@@ -30,11 +30,11 @@ const TrimBtn = () => {
 
   const handleCut = () => {
     if (start === end) return;
-    const sstart = moment
+    const sstart = dayjs
       .utc(start * 1000)
       .format(start < 60 * 60 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
 
-    const send   = moment
+    const send   = dayjs
       .utc(end * 1000)
       .format(end < 60 * 60 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
     const params = { sstart, send, uid: file.id };

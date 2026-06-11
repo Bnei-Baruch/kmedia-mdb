@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../../helpers/dayjs';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ const SimpleModeContainer = () => {
   const [selectedDate, setSelectedDate] = useState(() => {
     const query = getQuery(location);
     const qdate = query?.date;
-    return qdate && moment(qdate).isValid() ? moment(qdate, 'YYYY-MM-DD').toDate() : new Date();
+    return qdate && dayjs(qdate).isValid() ? dayjs(qdate, 'YYYY-MM-DD').toDate() : new Date();
   });
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const SimpleModeContainer = () => {
       return;
     }
 
-    const currentDate = moment(selDate).format('YYYY-MM-DD');
+    const currentDate = dayjs(selDate).format('YYYY-MM-DD');
 
     updateQuery(navigate, location, query => ({
       ...query,

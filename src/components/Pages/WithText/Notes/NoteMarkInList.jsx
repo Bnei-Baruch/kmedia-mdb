@@ -1,5 +1,5 @@
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
-import moment from 'moment/moment';
+import dayjs from '../../../../helpers/dayjs';
 import NoteEditBtn from './Buttons/NoteEditBtn';
 import NoteRemoveBtn from './Buttons/NoteRemoveBtn';
 import { useDispatch } from 'react-redux';
@@ -23,7 +23,7 @@ const NoteMarkInList = ({ note }) => {
           <NoteRemoveBtn />
         </div>
 
-        <span>{moment.utc(note.created_at).format('YYYY-MM-DD')}</span>
+        <span>{dayjs.utc(note.created_at).format('YYYY-MM-DD')}</span>
       </div>
       <div className="note_content note_content_short" dir={dir}>
         {note.content}

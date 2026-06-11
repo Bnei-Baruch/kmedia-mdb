@@ -2,7 +2,7 @@ import { parse as cookieParse } from 'cookie';
 import fs from 'fs';
 import { createMemoryHistory } from 'history';
 import pick from 'lodash/pick';
-import moment from 'moment/moment';
+import { setDayjsLocale } from '../src/helpers/dayjs';
 import path from 'path';
 import { PassThrough } from 'stream';
 import qs from 'qs';
@@ -16,14 +16,13 @@ import { AppServer } from '../src/components/App/AppServer';
 import logger from '../src/logger/logger';
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-fs-backend';
-import { options, registerMomentFormats } from '../src/helpers/i18nnext';
+import { options, registerDateFormats } from '../src/helpers/i18nnext';
 import {
   COOKIE_CONTENT_LANGS,
   COOKIE_SHOW_ALL_CONTENT,
   COOKIE_UI_LANG,
   KC_BOT_USER_NAME,
   LANG_UI_LANGUAGES,
-  LANG_UKRAINIAN,
 } from '../src/helpers/consts';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
@@ -52,7 +51,7 @@ const initializeI18nBackend = async uiLang => {
     },
     lng: uiLang,
   });
-  registerMomentFormats(i18n);
+  registerDateFormats(i18n);
   return i18n;
 };
 
@@ -131,7 +130,7 @@ export const prepareDeviceInfo = req => {
 export async function renderSSR(req, extraInitialState = {}) {
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
 
-  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+  setDayjsLocale(uiLang);
 
   let i18nServer;
   try {
@@ -244,9 +243,7 @@ export async function renderSSR(req, extraInitialState = {}) {
 // Used for authenticated users. Bots still use blocking renderSSR.
 export async function renderSSRStream(req, res, extraInitialState = {}) {
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
-  console.log('[rendererUtils stream] before moment.locale(), locales:', moment.locales(), 'setting to:', uiLang);
-  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
-  console.log('[rendererUtils stream] after moment.locale(), global locale:', moment.locale());
+  setDayjsLocale(uiLang);
   const direction = getLanguageDirection(uiLang);
 
   // Phase 1: flush <head> so the browser starts loading CSS immediately

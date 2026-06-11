@@ -1,6 +1,6 @@
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
-import moment from 'moment';
+import dayjs from '../../helpers/dayjs';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -94,7 +94,7 @@ const OmniBox = ({ isHomePage = false }) => {
   };
 
   const handleFromInputChange = value => {
-    navigate(`/${uiLang}/simple-mode?date=${moment(value).format('YYYY-MM-DD')}`);
+    navigate(`/${uiLang}/simple-mode?date=${dayjs(value).format('YYYY-MM-DD')}`);
   };
 
   return (

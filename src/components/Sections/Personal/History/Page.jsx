@@ -2,7 +2,7 @@ import { Fragment, useCallback, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { clsx } from 'clsx';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 
 import { actions } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -67,8 +67,8 @@ const Page = ({ location }) => {
 
   const renderItem = (x, i) => {
     let newDay = null;
-    const mp = i !== 0 && moment(items[i - 1].timestamp);
-    const mx = moment(x.timestamp);
+    const mp = i !== 0 && dayjs(items[i - 1].timestamp);
+    const mx = dayjs(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
       newDay = (<h3 className="text-xl font-bold p-b-1">{t('values.date', { date: x.timestamp })}</h3>);

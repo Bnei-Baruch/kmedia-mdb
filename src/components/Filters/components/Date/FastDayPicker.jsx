@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { Component, createRef } from 'react';
 import { clsx } from 'clsx';
@@ -40,8 +40,14 @@ class FastDayPicker extends Component {
     stringValue: '',
   };
 
-  localeDateFormat      = moment.localeData().longDateFormat('L');
-  localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
+  // Getters so the format tracks the global dayjs locale set on language change.
+  get localeDateFormat() {
+    return dayjs().localeData().longDateFormat('L');
+  }
+
+  get localeDateFormatShort() {
+    return this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { value } = state;
@@ -55,7 +61,7 @@ class FastDayPicker extends Component {
   static formatDateValue(date, language) {
     if (!date) return '';
     const locale = getLanguageLocaleWORegion(language);
-    return moment(date).locale(locale).format('l');
+    return dayjs(date).locale(locale).format('l');
   }
 
   handleDayPickerRef = () => {
@@ -101,7 +107,7 @@ class FastDayPicker extends Component {
   handleDateInputChange = event => {
     const { onDayChange } = this.props;
     const val             = event.target.value;
-    const day             = moment(val, this.localeDateFormatShort, true);
+    const day             = dayjs(val, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
     } else {
@@ -121,8 +127,8 @@ class FastDayPicker extends Component {
 
     if (isMobileDevice) {
       const selected               = value || today().toDate();
-      const selectedToString       = moment(selected).format('YYYY-MM-DD');
-      const selectedInLocaleFormat = moment(selected).locale(locale).format(this.localeDateFormat);
+      const selectedToString       = dayjs(selected).format('YYYY-MM-DD');
+      const selectedInLocaleFormat = dayjs(selected).locale(locale).format(this.localeDateFormat);
       return (
         <div>
           <div className="flex">
@@ -162,7 +168,7 @@ class FastDayPicker extends Component {
           <div className="relative flex-1">
             <input
               className={clsx('w-full border border-gray-300 px-3 py-1 small pr-8', label ? 'rounded-r' : 'rounded')}
-              placeholder={moment(new Date()).locale(locale).format('l')}
+              placeholder={dayjs(new Date()).locale(locale).format('l')}
               value={stringValue}
               onChange={this.handleDateInputChange}
               onKeyDown={this.handleKeyDown}

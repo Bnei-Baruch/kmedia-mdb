@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../../../../../helpers/dayjs';
 
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
@@ -19,7 +19,7 @@ export const BlogPostPage = ({ post = null, wip = false, err = null }) => {
 
   const language = getBlogLanguage(post.blog);
   const { url, title, content, created_at: ts } = post;
-  const mts = moment(ts);
+  const mts = dayjs(ts);
   const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
 
   const isRtl = isLanguageRtl(language);

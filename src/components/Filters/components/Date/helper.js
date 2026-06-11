@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 
 import 'react-day-picker/style.css';
 import { today } from '../../../../helpers/date';
@@ -32,8 +32,8 @@ export const presetToRange = {
 };
 
 export const rangeToPreset = (from, to) => {
-  const mFrom = moment(from);
-  const mTo   = moment(to);
+  const mFrom = dayjs(from);
+  const mTo   = dayjs(to);
   const mNow  = today();
 
   if (mFrom.isSame(mTo, 'day')) {
@@ -41,12 +41,12 @@ export const rangeToPreset = (from, to) => {
       return TODAY;
     }
 
-    if (mTo.isSame(moment(mNow).subtract(1, 'days'), 'day')) {
+    if (mTo.isSame(mNow.subtract(1, 'days'), 'day')) {
       return YESTERDAY;
     }
-  } else if (moment(mTo).subtract(6, 'days').isSame(mFrom, 'day')) {
+  } else if (mTo.subtract(6, 'days').isSame(mFrom, 'day')) {
     return LAST_7_DAYS;
-  } else if (moment(mTo).subtract(29, 'days').isSame(mFrom, 'day') && mTo.isSame(mNow, 'day')) {
+  } else if (mTo.subtract(29, 'days').isSame(mFrom, 'day') && mTo.isSame(mNow, 'day')) {
     return LAST_30_DAYS;
   }
 
@@ -58,8 +58,8 @@ export const rangeToPreset = (from, to) => {
 };
 
 export const isValidDateRange = (from, to) => {
-  const mFrom = moment(from);
-  const mTo   = moment(to);
+  const mFrom = dayjs(from);
+  const mTo   = dayjs(to);
 
   return mFrom.isValid()
     && mTo.isValid()

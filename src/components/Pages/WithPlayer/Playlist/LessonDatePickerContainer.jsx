@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
 import { actions as mdbActions } from '../../../../redux/modules/mdb';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import { useLocation } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
 } from '../../../../redux/selectors';
 
 const getStartEndByFilmDate = d => {
-  const filmDate = moment.utc(d);
+  const filmDate = dayjs.utc(d);
   return (
     {
       start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),

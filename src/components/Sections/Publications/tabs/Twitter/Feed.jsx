@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from '../../../../../helpers/dayjs';
 
 import { isEmpty } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
@@ -121,7 +121,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
   const position = isRtl ? 'right' : 'left';
 
   const { username, twitter_id: tID, created_at: ts, raw } = twitter;
-  const mts                                                = moment(ts);
+  const mts                                                = dayjs(ts);
   const screenName                                         = screenNames[username];
 
   const url = snippetVersion

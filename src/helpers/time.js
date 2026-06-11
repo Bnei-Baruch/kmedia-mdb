@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const formatTime = current => {
   if (!current) return '00:00';
 
@@ -34,18 +32,15 @@ export const toHumanReadableTime = current => {
   return result;
 };
 
+// Parses '1h2m3s'-style strings into total seconds.
 export const fromHumanReadableTime = str => {
   let h = str.match(/(\d+)h/i);
   let m = str.match(/(\d+)m/i);
   let s = str.match(/(\d+)s/i);
 
-  h = (h === null) ? 0 : h[1];
-  m = (m === null) ? 0 : m[1];
-  s = (s === null) ? 0 : s[1];
+  h = (h === null) ? 0 : Number(h[1]);
+  m = (m === null) ? 0 : Number(m[1]);
+  s = (s === null) ? 0 : Number(s[1]);
 
-  return moment.duration({
-    hours: h,
-    minutes: m,
-    seconds: s,
-  });
+  return (h * 3600) + (m * 60) + s;
 };

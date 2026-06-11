@@ -1,6 +1,6 @@
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
-import moment from 'moment';
+import dayjs from './dayjs';
 import { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -114,7 +114,7 @@ export const formatError = error => {
  * @param fmt {String} default is 'hh:mm:ss'
  */
 export const formatDuration = (duration, fmt) => {
-  const d = moment.duration(duration, 'seconds');
+  const d = dayjs.duration(duration, 'seconds');
   const hours = Math.floor(d.asHours());
   const minutes = d.minutes().toString().padStart(2, '0');
   const seconds = d.seconds().toString().padStart(2, '0');
@@ -232,7 +232,7 @@ export const canonicalCollectionImpl = unit => {
     const { start_date: start, end_date: end } = events[0];
     const { film_date: filmDate }              = unit;
     if (start && end && filmDate) {
-      return (moment(filmDate).isBetween(start, end, 'day', '[]')) ? events[0] : lessons[0];
+      return (dayjs(filmDate).isBetween(start, end, 'day', '[]')) ? events[0] : lessons[0];
     }
   }
 
@@ -389,7 +389,7 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
+export const isToday = selectedDate => dayjs().isSame(dayjs(selectedDate), 'date');
 
 export const noop = () => {};
 

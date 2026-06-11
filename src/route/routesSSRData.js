@@ -1,5 +1,5 @@
 import uniq from 'lodash/uniq';
-import moment from 'moment';
+import dayjs from '../helpers/dayjs';
 import {
   getSummaryLanguages,
   showSummaryTab,
@@ -283,9 +283,9 @@ export const simpleMode = (store, match) => {
 
   const query = getQuery(match.parsedURL);
   const date =
-    query.date && moment(query.date).isValid()
-      ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-      : moment().format('YYYY-MM-DD');
+    query.date && dayjs(query.date).isValid()
+      ? dayjs(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      : dayjs().format('YYYY-MM-DD');
 
   store.dispatch(simpleModeApi.endpoints.simpleMode.initiate({ date, uiLanguage: uiLang, contentLanguages }));
   return Promise.resolve(null);

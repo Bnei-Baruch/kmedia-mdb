@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { DayPicker } from 'react-day-picker';
@@ -16,7 +16,7 @@ import SectionHeader from '../../shared/SectionHeader';
 import SimpleModeList from './SimpleModeList';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
-  const newDate = moment(selectedDate).add(amount, 'd').toDate();
+  const newDate = dayjs(selectedDate).add(amount, 'd').toDate();
   onDayClick(newDate);
 };
 
@@ -45,7 +45,7 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
         />
       </div>
     )
-    : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
+    : <span>{dayjs(data.selectedDate).format(data.dateFormat)}</span>;
 
 const openNativeDatePicker = (nativeDateInput, isAndroid) => {
   if (isAndroid) {
@@ -55,7 +55,8 @@ const openNativeDatePicker = (nativeDateInput, isAndroid) => {
   }
 };
 
-const LocaleDateFormat = moment.localeData().longDateFormat('L');
+// Read at call time (not module load) so it tracks the global dayjs locale.
+const getLocaleDateFormat = () => dayjs.localeData().longDateFormat('L');
 const ToDay = today().toDate();
 
 const SimpleModePage = (
@@ -74,8 +75,8 @@ const SimpleModePage = (
   const [data, setData] = useState({
     selected: ToDay,
     selectedDate,
-    selectedToString: moment(ToDay).format('YYYY-MM-DD'),
-    selectedInLocaleFormat: moment(ToDay).format(LocaleDateFormat),
+    selectedToString: dayjs(ToDay).format('YYYY-MM-DD'),
+    selectedInLocaleFormat: dayjs(ToDay).format(getLocaleDateFormat()),
     dateFormat: 'MMM DD, YYYY',
     DayPickerModifiers: {
       selected: selectedDate
@@ -90,8 +91,8 @@ const SimpleModePage = (
     setData({
       selected,
       selectedDate,
-      selectedToString: moment(selected).format('YYYY-MM-DD'),
-      selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
+      selectedToString: dayjs(selected).format('YYYY-MM-DD'),
+      selectedInLocaleFormat: dayjs(selected).format(getLocaleDateFormat()),
       dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
       DayPickerModifiers: {
         selected: selectedDate

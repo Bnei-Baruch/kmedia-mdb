@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import moment from 'moment';
+import dayjs from '../../../helpers/dayjs';
 
 import { getVideoRes } from '../../../helpers/consts';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
@@ -21,7 +21,7 @@ const AVUnitWithDep = ({ unit }) => {
     }
   }
 
-  const videoDate = moment.utc(unit.film_date).toDate();
+  const videoDate = dayjs.utc(unit.film_date).toDate();
 
   const videoFiles = unit.files
     .filter(file => (file.type === 'video' && contentLanguages.includes(file.language)))

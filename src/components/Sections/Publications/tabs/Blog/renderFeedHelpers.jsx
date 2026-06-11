@@ -1,10 +1,10 @@
-import moment from 'moment';
+import dayjs from '../../../../../helpers/dayjs';
 
 import Link from '../../../../Language/MultiLanguageLink';
 
 export const renderBlogItemForHomepage = (item, uiLang, t) => {
   const { url, title, content, created_at: ts } = item;
-  const mts = moment(ts);
+  const mts = dayjs(ts);
   const internalUrl = `/${uiLang}/publications/blog/${item.blog}/${item.wp_id}`;
   const dir = item.blog.includes('il') ? 'rtl' : 'ltr';
 
@@ -25,7 +25,7 @@ export const renderBlogItemForHomepage = (item, uiLang, t) => {
 
 export const renderBlogItemForPublications = (item, uiLang) => {
   const { url, title, content, created_at: ts } = item;
-  const mts = moment(ts);
+  const mts = dayjs(ts);
   const dir = item.blog.includes('il') ? 'rtl' : 'ltr';
 
   const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${uiLang}/publications/blog/`);
