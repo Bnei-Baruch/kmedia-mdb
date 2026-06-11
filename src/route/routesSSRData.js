@@ -222,14 +222,14 @@ export const cuListPage =
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
   if (cID) ns = `${ns}_${cID}`;
-  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done.then(() => {
+  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).toPromise().then(() => {
     cuListPage(ns, cID)(store, match);
   });
 };
 
 export const playlistCollectionPage = (store, match) => {
   const { id: cID, cuId } = match.params;
-  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done.then(() => {
+  return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).toPromise().then(() => {
     const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
     if (!cuId && !c?.cuIDs) {
       // This can happen when collection is empty (unit is not secure or published).
@@ -243,7 +243,7 @@ export const playlistCollectionPage = (store, match) => {
 };
 
 export const latestLesson = store =>
-  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done.then(() => {
+  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).toPromise().then(() => {
     const state = store.getState();
     const cID = mdbGetLastLessonIdSelector(state);
     const [c] = mdbGetCollectionByIdSelector(state, [cID]);
@@ -260,7 +260,7 @@ export const musicPage = (store, match) => {
 export const eventsPage = store => {
   // CollectionList
   store.dispatch(filtersActions.hydrateFilters(PAGE_NS_EVENTS));
-  return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
+  return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).toPromise();
 };
 
 export const lessonsPage = (store, match) => {
@@ -303,8 +303,8 @@ export const lessonsCollectionPage = (store, match) => {
 
 export const searchPage = store =>
   Promise.all([
-    store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
-    store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done,
+    store.sagaMiddleWare.run(searchSagas.hydrateUrl).toPromise(),
+    store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).toPromise(),
   ]).then(() => store.dispatch(searchActions.search()));
 
 function firstLeafId(sourceId, state) {
@@ -373,7 +373,8 @@ export const likutPage = async (store, match) => {
 
   return store.sagaMiddleWare
     .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id, sourceLanguage))
-    .done.then(() => {
+    .toPromise()
+    .then(() => {
       const state = store.getState();
       const file = textPageGetFileSelector(state) || {};
       store.dispatch(assetsActions.doc2html(file.id));
@@ -410,8 +411,8 @@ export const tweetsListPage = (store, match) => {
 export const topicsPage = (store, match) => {
   const tagID = match.params.id;
   return Promise.all([
-    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
-    // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).toPromise(),
+    // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).toPromise()
   ]);
 };
 
@@ -473,7 +474,7 @@ export const publicationsPage = (store, match) => {
 
 export const articleCUPage = (store, match) => {
   const cuID = match.params.id;
-  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done.then(() => {
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).toPromise().then(() => {
     const state = store.getState();
 
     let language = null;
@@ -504,5 +505,5 @@ export const articleCUPage = (store, match) => {
 
 export const blogPostPage = (store, match) => {
   const { blog, id } = match.params;
-  return store.sagaMiddleWare.run(publicationsSagas.fetchBlogPost, publicationsActions.fetchBlogPost(blog, id)).done;
+  return store.sagaMiddleWare.run(publicationsSagas.fetchBlogPost, publicationsActions.fetchBlogPost(blog, id)).toPromise();
 };
