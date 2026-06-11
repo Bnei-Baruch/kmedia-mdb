@@ -28,7 +28,7 @@ export const options = {
 // formats after init so {{date, ll}} / {{date, l}} keep working.
 // Only lowercase variants — the Formatter lowercases all names, so 'LL' would
 // overwrite 'll' if both were registered.
-export const registerDateFormats = (instance) => {
+export const registerDateFormats = instance => {
   ['l', 'll', 'lll', 'llll'].forEach(fmt => {
     instance.services.formatter.add(fmt, (value, lng) =>
       dayjs.utc(value).locale(lng || DEFAULT_UI_LANGUAGE).format(fmt)
