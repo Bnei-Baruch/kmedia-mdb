@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import logger from '../src/logger/logger.js';
-import { noLanguageRedirect } from './middleware.js';
+import { favicon, noLanguageRedirect } from './middleware.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NAMESPACE = 'app-server';
@@ -27,7 +27,7 @@ async function createServer() {
   }
 
   app.use('/locales', express.static(path.resolve(__dirname, '..', 'public', 'locales')));
-  app.use(['/favicon', '/:lang/favicon'], express.static(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
+  app.use(favicon);
   app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
 
   app.use(noLanguageRedirect);

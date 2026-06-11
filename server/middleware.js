@@ -1,7 +1,19 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { createId } from '@paralleldrive/cuid2';
 import { getUILangFromPath } from '../src/helpers/url.js';
 import logger from '../src/logger/logger.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+const FAVICON_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'public', 'favicon.ico');
+
+export function favicon(req, res, next) {
+  if (req.path.endsWith('/favicon.ico')) {
+    return res.sendFile(FAVICON_PATH);
+  }
+
+  return next();
+}
 
 logger.info('Base URL:', BASE_URL);
 
