@@ -55,8 +55,8 @@ const FolderItem = ({ folder, selectedId, selectFolder }) => {
   const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id, key }));
 
   return (
-    <div className={clsx('flex flex_nowrap items-center gap-2 justify-between', { 'active': isSelect })} key={id}>
-      <div className="flex-1 flex items-center text-gray-500" onClick={handleSelectFolder}      >
+    <div className={clsx('group flex flex_nowrap items-center gap-2 justify-between rounded px-2 py-2', { 'bg-gray-100': isSelect })} key={id}>
+      <div className="flex-1 flex items-center gap-2 text-gray-500 cursor-pointer" onClick={handleSelectFolder}>
         {!edit && <span className="material-symbols-outlined me-2">folder_open</span>}
         {
           !edit ? folder.name : (
@@ -73,21 +73,21 @@ const FolderItem = ({ folder, selectedId, selectFolder }) => {
       </div>
       {
         isAll ? null : (
-          <div className={clsx('flex gap-1 flex-nowrap items-center', { 'folder_actions': !edit })}>
+          <div className={clsx('flex gap-1 flex-nowrap items-center', { 'invisible group-hover:visible': !edit })}>
             {
               edit ?
                 (
-                  <button className="rounded border border-gray-300 px-2 py-1" onClick={handleUpdateFolder}                  >
+                  <button className="cursor-pointer rounded px-2 py-1" onClick={handleUpdateFolder}>
                     <span className="material-symbols-outlined text-base">check</span>
                   </button>
                 ) :
                 (
-                  <button className="rounded border border-gray-300 px-2 py-1" onClick={handleEditFolder}                  >
+                  <button className="cursor-pointer rounded px-2 py-1" onClick={handleEditFolder}>
                     <span className="material-symbols-outlined text-base">edit</span>
                   </button>
                 )
             }
-            <button className="rounded border border-gray-300 px-2 py-1" onClick={toggleConfirm}            >
+            <button className="cursor-pointer rounded px-2 py-1" onClick={toggleConfirm}>
               <span className="material-symbols-outlined text-base">delete</span>
             </button>
 

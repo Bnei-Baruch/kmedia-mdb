@@ -21,8 +21,8 @@ const Page = () => {
       <div className="flex flex-wrap gap-4">
         {!isMobileDevice && <BookmarkHeader />}
         <div className="flex flex-1 gap-4">
-          {!isMobileDevice && <div className="w-full md:w-[350px] border rounded p-4 shadow-lg"><FolderList /></div>}
-          <div className="border rounded p-4 shadow-lg flex-1">
+          {!isMobileDevice && <div className="w-full md:w-[350px] rounded p-4 shadow-lg"><FolderList /></div>}
+          <div className="rounded p-4 shadow-lg flex-1">
             <BookmarkList />
           </div>
         </div>

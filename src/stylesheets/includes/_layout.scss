@@ -50,7 +50,7 @@ body {
 
     background: $white;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     overflow: hidden;
     position: fixed;
     top: 0;
@@ -58,6 +58,10 @@ body {
     transition: transform .3s;
     width: $sidebar-width;
     z-index: 900;
+
+    [dir='rtl'] & {
+      transform: translate(100%, 0);
+    }
 
     @media only screen and (max-width: $screen-md) {
       width: 100%;
@@ -78,7 +82,7 @@ body {
     }
 
     &-menu {
-      border-right: 1px solid $border-color;
+      border-inline-end: 1px solid $border-color;
       bottom: 0;
       left: 0;
       overflow: auto;
@@ -103,9 +107,9 @@ body {
   &__secondary-header {
     background: $white;
     border-bottom: 1px solid $border-color;
-    left: 0;
+    inset-inline-start: 0;
     min-height: $secondary-header-height;
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 
@@ -126,11 +130,11 @@ body {
     }
 
     .layout__main {
-      margin-left: $sidebar-width;
+      margin-inline-start: $sidebar-width;
     }
 
     .layout__secondary-header {
-      left: $sidebar-width;
+      inset-inline-start: $sidebar-width;
     }
   }
 }

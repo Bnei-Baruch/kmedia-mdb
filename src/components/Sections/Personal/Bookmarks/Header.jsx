@@ -24,17 +24,17 @@ const BookmarkHeader = () => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
   return (
-    <div className="flex flex-wrap w-full gap-2 justify-between px-4 py-2">
-      <h2 className="my_header ms-[350px]">
+    <div className="flex w-full items-center gap-2 justify-between px-4 py-2 ms-[350px]">
+      <h2 className="my_header !w-auto">
         <span className="material-symbols-outlined">bookmark</span>
         {t('personal.bookmark.title')}
       </h2>
 
       <div>
-        <div className="relative bookmark_search inline-block">
-          <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+        <div className="bookmark_search flex items-center gap-2 border-b border-gray-300">
+          <span className="material-symbols-outlined text-gray-400">search</span>
           <input
-            className="rounded border border-gray-300 py-2 pl-8 pr-3"
+            className="border-0 bg-transparent py-2 pe-3 focus:outline-none"
             placeholder={placeholder}
             defaultValue={query}
             onChange={e => handleSearch(e.target.value)}
