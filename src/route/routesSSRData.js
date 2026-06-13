@@ -288,7 +288,7 @@ export const lessonsCollectionPage = (store, match) => {
 export const searchPage = store => (Promise.all([
   store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
   store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
-]).then(() => store.dispatch(searchActions.search())));
+]).then(() => store.dispatch(searchActions.search({ hydrated: true }))));
 
 function firstLeafId(sourceId, state) {
   const source = sourcesGetSourceByIdSelector(state)(sourceId);

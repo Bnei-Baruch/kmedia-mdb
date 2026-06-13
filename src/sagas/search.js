@@ -62,6 +62,8 @@ const sameRegularSearchRequest = (a, b) => !!a && !!b
   && a.pageNo === b.pageNo
   && a.pageSize === b.pageSize;
 
+const isSearchPath = pathname => /(^|\/)search\/?$/.test(pathname || '');
+
 const reasoningErrorMessage = err => {
   if (isConnectionRefused(err)) {
     return connectionRefusedMessage;
@@ -366,7 +368,7 @@ export function* search(action) {
     const deb        = yield select(searchGetDebSelector);
     const uiLang     = yield select(settingsGetUILangSelector);
     const isFollowup = action && action.type === types['search/reasoningFollowup'];
-    const isExplicitSearch = action && action.type === types['search/search'];
+    const isExplicitSearch = action && action.type === types['search/search'] && !action.payload?.hydrated;
     const isSearchTypeChange = action && action.type === types['search/setSearchType'];
     const urlQuery   = yield* getQuery();
 
@@ -652,39 +654,51 @@ export function* search(action) {
 }
 
 // Propagate URL search params to redux.
-export function* hydrateUrl() {
+export function* hydrateUrl(action) {
+  const router                                              = yield select(state => state.router);
   const urlQuery                                            = yield* getQuery();
   const { q, page = '1', deb = false, search_type: type } = urlQuery;
 
-  const reduxQuery      = yield select(searchGetQuerySelector);
-  const reduxPageNo     = yield select(searchGetPageNoSelector);
-  const reduxDeb        = yield select(searchGetDebSelector);
-  const reduxSearchType = yield select(searchGetSearchTypeSelector);
   const searchType      = isAgenticSearchType(type) ? type : SEARCH_TYPES.REGULAR;
   const isDeb           = isDebEnabled(deb);
+  const pageNo          = parseInt(page, 10);
+  const payload         = {
+    pageNo: Number.isNaN(pageNo) ? 1 : pageNo,
+    deb: isDeb,
+    searchType
+  };
 
   if (q) {
-    if (q !== reduxQuery) {
-      yield put(actions.updateQuery({ query: q, autocomplete: false }));
-    }
+    payload.query = q;
+  }
 
-    if (urlQuery.sort_by) {
-      yield put(actions.setSortBy(urlQuery.sort_by));
-    }
+  if (urlQuery.sort_by) {
+    payload.sortBy = urlQuery.sort_by;
+  }
 
-    const pageNo = parseInt(page, 10);
-    if (reduxPageNo !== pageNo) {
-      yield put(actions.setPage(pageNo));
+  yield put(actions.hydrateUrlSuccess(payload));
+
+  if (!action?.payload?.searchAfterHydrate || !q || !isSearchPath(router.location?.pathname)) {
+    return;
+  }
+
+  if (isAgenticSearchType(searchType)) {
+    const result = yield select(state => reasoningResultForType(state, searchType));
+    const status = yield select(state => reasoningStatusForType(state, searchType));
+    const wip = yield select(state => reasoningWipForType(state, searchType));
+    if (sameSearchQuery(result?.query, q) || (wip && sameSearchQuery(status?.query, q))) {
+      return;
+    }
+  } else {
+    const queryResult = yield select(searchGetQueryResultSelector);
+    const previousSearchRequest = yield select(state => state.search.searchRequest);
+    const previousQuery = yield select(searchGetPrevQuerySelector);
+    if (queryResult?.search_result && (previousSearchRequest?.q === q || previousQuery === q)) {
+      return;
     }
   }
 
-  if (isDeb !== reduxDeb) {
-    yield put(actions.setDeb(isDeb));
-  }
-
-  if (searchType !== reduxSearchType) {
-    yield put(actions.setSearchType(searchType));
-  }
+  yield put(actions.search({ hydrated: true }));
 }
 
 // Update URL from query.

@@ -52,7 +52,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   }, [suggestions, uiLang]);
 
   useEffect(() => {
-    dispatch(actions.hydrateUrl());
+    dispatch(actions.hydrateUrl({ searchAfterHydrate: true }));
   }, [dispatch]);
 
   const doSearch = () => {

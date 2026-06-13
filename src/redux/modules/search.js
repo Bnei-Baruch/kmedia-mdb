@@ -196,6 +196,19 @@ const searchSlice = createSlice({
       state.error = failure.error;
     },
     hydrateUrl: () => ({}),
+    hydrateUrlSuccess: (state, { payload }) => {
+      if (Object.prototype.hasOwnProperty.call(payload, 'query')) {
+        state.q = payload.query;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(payload, 'sortBy')) {
+        state.sortBy = payload.sortBy;
+      }
+
+      state.pageNo     = payload.pageNo;
+      state.deb        = payload.deb;
+      state.searchType = isAgenticSearchType(payload.searchType) ? payload.searchType : SEARCH_TYPES.REGULAR;
+    },
     setPage: (state, { payload }) => void (state.pageNo = payload),
     setSortBy: (state, { payload }) => void (state.sortBy = payload),
     setSearchType: (state, { payload }) => {
