@@ -14,6 +14,7 @@ import { actions as publicationActions } from '../../redux/modules/publications'
 import {
   CT_ARTICLE,
   CT_BLOG_POST,
+  CT_SOURCE,
   CT_LESSONS_SERIES,
   CT_VIDEO_PROGRAM,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE,
@@ -31,8 +32,7 @@ import {
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
-import { stringify } from '../../helpers/url';
-import { buildHighlightSearchQuery } from './highlightLink';
+import { buildHighlightLinkTarget } from './highlightLink';
 import Link from '../Language/MultiLanguageLink';
 import TooltipIfNeed from '../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
@@ -102,9 +102,9 @@ const getMediaLanguage = filters => {
   return mediaLanguage;
 };
 
-const highlightWrapToLink = (__html, index, to) => {
-  const search = buildHighlightSearchQuery(__html);
-  if (!search) {
+const highlightWrapToLink = (__html, index, to, contentType) => {
+  const highlightTo = buildHighlightLinkTarget(to, __html, contentType);
+  if (!highlightTo) {
     return <span key={`highlightLink_${index}`} dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />;
   }
 
@@ -112,30 +112,30 @@ const highlightWrapToLink = (__html, index, to) => {
     key={`highlightLink_${index}`}
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
-    to={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
+    to={highlightTo}>
     <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
   </Link>);
 };
 
-const snippetFromHighlightWithLink = (to, highlight, props) => {
+const snippetFromHighlightWithLink = (to, highlight, props, contentType) => {
   const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
   if (!prop) {
     return null;
   }
 
-  const __html = highlight[prop].map((h, i) => highlightWrapToLink(h, i, to));
+  const __html = highlight[prop].map((h, i) => highlightWrapToLink(h, i, to, contentType));
   return <span>{__html}</span>;
 };
 
-const renderSnippet = (to, highlight, defaultDescription, t) => {
+const renderSnippet = (to, highlight, defaultDescription, t, contentType) => {
   const description = snippetFromHighlight(highlight, ['description', 'description_language']);
   if (description) {
     return (<div><strong>{t('search.result.description')} : {' '}</strong>{description}</div>);
   }
 
   const content = to ?
-    snippetFromHighlightWithLink(to, highlight, ['content', 'content_language']) :
+    snippetFromHighlightWithLink(to, highlight, ['content', 'content_language'], contentType) :
     snippetFromHighlight(highlight, ['content', 'content_language']);
   if (content) {
     return (<div><strong>{t('search.result.transcript')} : {' '}</strong>{content}</div>);
@@ -187,7 +187,7 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
     title: titleFromHighlight(highlight, cu.name),
     link: to,
     logo,
-    content: hideContent ? '' : renderSnippet(to, highlight, cu.description, t),
+    content: hideContent ? '' : renderSnippet(to, highlight, cu.description, t, cu.content_type),
     part: onlyViewsAndDate ? undefined : Number(ccu.ccuNames?.[cu.id]),
     // Does not work for articles (should load canonical collection with cuIDs => after redirect into and back the count is correct)
     // parts: ccu?.cuIDs?.length,
@@ -248,7 +248,7 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
     title: titleFromHighlight(highlight, c.name),
     link: to,
     logo,
-    content: renderSnippet(to, highlight, c.description, t),
+    content: renderSnippet(to, highlight, c.description, t, c.content_type),
     parts: c.content_units.length,
     views,
     t,
@@ -274,7 +274,7 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType('sources', t, to),
-    content: renderSnippet(to, highlight, null /* No default description */, t),
+    content: renderSnippet(to, highlight, null /* No default description */, t, CT_SOURCE),
     views,
     t,
     click: searchResultClick(chronicles, dispatch, clickData)

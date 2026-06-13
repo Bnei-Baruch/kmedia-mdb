@@ -22,7 +22,7 @@ import {
   BLOGS
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import { getQuery, isDebMode, stringify } from '../../helpers/url';
+import { getQuery, isDebMode } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
 import { actions, isAgenticSearchType, SEARCH_TYPES } from '../../redux/modules/search';
@@ -71,7 +71,7 @@ import {
   searchGetErrorSelector,
   searchGetWipSelector
 } from '../../redux/selectors';
-import { buildHighlightSearchQuery } from './highlightLink';
+import { buildHighlightLinkTarget } from './highlightLink';
 import Link from '../Language/MultiLanguageLink';
 
 const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'finalizing', 'done', 'error'];
@@ -571,38 +571,42 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticHighlight = highlight => {
+    const text = highlight?.text || '';
     const nodes = [];
     const regex = /<em\b[^>]*>([\s\S]*?)<\/em>/gi;
     let lastIndex = 0;
     let match;
 
-    while ((match = regex.exec(highlight)) !== null) {
+    while ((match = regex.exec(text)) !== null) {
       const [, emphasizedText] = match;
       const { index } = match;
       const { lastIndex: nextLastIndex } = regex;
 
       if (index > lastIndex) {
-        nodes.push(highlight.slice(lastIndex, index));
+        nodes.push(text.slice(lastIndex, index));
       }
 
       nodes.push(<span key={nodes.length} className="agentic-search__highlight-emphasis">{emphasizedText}</span>);
       lastIndex = nextLastIndex;
     }
 
-    if (lastIndex < highlight.length) {
-      nodes.push(highlight.slice(lastIndex));
+    if (lastIndex < text.length) {
+      nodes.push(text.slice(lastIndex));
     }
 
     return nodes;
   };
 
+  // Agentic highlight deep links should mirror the backend source: only transcript/source content snippets are clickable.
+  const isAgenticHighlightLinkable = highlight => ['content', 'content.language', 'content_language'].includes(highlight?.field);
+
   const renderAgenticHighlightLink = (highlight, index, to, linkContentType) => {
-    if (!to || !supportsAgenticHighlightLinks(linkContentType)) {
+    if (!to || !supportsAgenticHighlightLinks(linkContentType) || !isAgenticHighlightLinkable(highlight)) {
       return renderAgenticHighlight(highlight);
     }
 
-    const search = buildHighlightSearchQuery(highlight);
-    if (!search) {
+    const highlightTo = buildHighlightLinkTarget(to, highlight.text, linkContentType);
+    if (!highlightTo) {
       return renderAgenticHighlight(highlight);
     }
 
@@ -610,7 +614,7 @@ const SearchResults = ({ t }) => {
       <Link
         key={`agenticHighlightLink_${index}`}
         className="hover-under-line"
-        to={{ ...to, search: [to.search, stringify(search)].filter(Boolean).join('&') }}
+        to={highlightTo}
       >
         {renderAgenticHighlight(highlight)}
       </Link>
@@ -652,7 +656,22 @@ const SearchResults = ({ t }) => {
 
   const getAgenticHighlights = result => (
     Array.isArray(result.highlights)
-      ? result.highlights.map(highlight => `${highlight}`.trim()).filter(Boolean)
+      ? result.highlights.reduce((acc, highlight) => {
+        if (typeof highlight === 'string') {
+          const text = highlight.trim();
+          if (text) {
+            acc.push({ field: '', text });
+          }
+          return acc;
+        }
+
+        const text = `${highlight?.text || ''}`.trim();
+        if (text) {
+          acc.push({ field: highlight?.field || '', text });
+        }
+
+        return acc;
+      }, [])
       : []
   );
 
@@ -700,7 +719,7 @@ const SearchResults = ({ t }) => {
             <Card key={result.mdb_uid} className="bg_hover_grey home-twitter" raised>
               <Card.Content>
                 <Feed className="min-height-200">
-                  <TwitterFeed snippetVersion withDivider={false} twitter={tweet} highlight={highlights[0]} />
+                  <TwitterFeed snippetVersion withDivider={false} twitter={tweet} highlight={highlights[0]?.text} />
                 </Feed>
               </Card.Content>
             </Card>

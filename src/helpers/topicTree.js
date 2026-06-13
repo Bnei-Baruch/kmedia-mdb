@@ -18,7 +18,8 @@ export const getTree = (roots, getTagById, cuStats, match, t) => {
 };
 
 const buildNode = (id, getTagById, cuStats, match = '') => {
-  const { label, children: leafs } = getTagById(id);
+  const tag = getTagById(id) || {};
+  const { label, children: leafs } = tag;
 
   const children = leafs ? leafs.map(x => buildNode(x, getTagById, cuStats, match)) : [];
   const regExp   = getEscapedRegExp(match);
