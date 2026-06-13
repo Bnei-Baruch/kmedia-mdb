@@ -22,7 +22,7 @@ import {
   BLOGS
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { getQuery, isDebMode, stringify } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
 import { actions, isAgenticSearchType, SEARCH_TYPES } from '../../redux/modules/search';
@@ -63,6 +63,7 @@ import {
   filtersGetFiltersSelector,
   searchGetPageNoSelector,
   settingsGetPageSizeSelector,
+  settingsGetUILangSelector,
   searchGetQueryResultSelector,
   searchGetReasoningPreviousResultsSelector,
   searchGetReasoningResultSelector,
@@ -220,6 +221,7 @@ const SearchResults = ({ t }) => {
 
   const pageNo   = useSelector(searchGetPageNoSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
+  const uiLang   = useSelector(settingsGetUILangSelector);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -610,11 +612,22 @@ const SearchResults = ({ t }) => {
       return renderAgenticHighlight(highlight);
     }
 
+    const languageQuery = linkContentType === CT_SOURCE
+      ? { source_language: uiLang }
+      : (IsUnitContentType(linkContentType) || IsCollectionContentType(linkContentType))
+        ? { language: uiLang }
+        : {};
+
+    const highlightToInUILanguage = {
+      ...highlightTo,
+      search: [highlightTo.search, stringify(languageQuery)].filter(Boolean).join('&')
+    };
+
     return (
       <Link
         key={`agenticHighlightLink_${index}`}
         className="hover-under-line"
-        to={highlightTo}
+        to={highlightToInUILanguage}
       >
         {renderAgenticHighlight(highlight)}
       </Link>
