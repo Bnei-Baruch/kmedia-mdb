@@ -16,7 +16,7 @@ import { getFullPath } from './helper';
 
 const SourceContainer = () => {
   const { id }             = useParams();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const navigate           = useNavigate();
 
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
@@ -43,7 +43,7 @@ const SourceContainer = () => {
       description={parent?.description}
     />
     {
-      isMobileDevice ? (
+      isMobile ? (
         <TextLayoutMobile
           id={childId}
           toc={toc}

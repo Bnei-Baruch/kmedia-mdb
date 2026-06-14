@@ -12,12 +12,12 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
   const { t }    = useTranslation();
   const dispatch = useDispatch();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
 
   const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
-  if (isMobileDevice) {
+  if (isMobile) {
     const triggerProps = {
       className: 'clear_button',
       onClick  : handleTocIsActive,
@@ -48,7 +48,7 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
 
   return (
     <button
-      className={clsx('toc_trigger  bg-white p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobileDevice })}
+      className={clsx('toc_trigger  bg-white p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobile })}
       onClick={handleTocIsActive}
     >
       <span className="material-symbols-outlined">view_list</span>

@@ -15,7 +15,7 @@ import { isEmpty } from '../../../../../../helpers/utils';
 import PageWithPlayerTOC from '../PageWithPlayerTOC';
 
 const ArticleTab = ({ id }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const cus    = Object.values(pageCu.derived_units).filter(x => x.content_type === CT_ARTICLE);
@@ -34,7 +34,7 @@ const ArticleTab = ({ id }) => {
   return (
     <div className="player_page_tab">
       {
-        isMobileDevice ? (
+        isMobile ? (
           <TextLayoutMobile
             toolbar={<ArticleTabToolbarMobile hasToc={cus.length > 1}/>}
             playerPage={true}

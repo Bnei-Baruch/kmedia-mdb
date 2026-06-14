@@ -25,10 +25,10 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
   const { t, i18n }    = useTranslation();
   const location       = useLocation();
   const isNotHome      = !useMatch('/:lang');
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const isFullscreen   = useSelector(textPageGetIsFullscreenSelector);
 
-  const [isShowSearch, setIsShowSearch] = useState(isMobileDevice && location.pathname.endsWith('search'));
+  const [isShowSearch, setIsShowSearch] = useState(isMobile && location.pathname.endsWith('search'));
 
   const openHeaderSearch  = () => setIsShowSearch(true);
   const closeHeaderSearch = () => setIsShowSearch(false);
@@ -65,13 +65,13 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
             <h1 className="text-white m-0 font-normal text-xl max-md:text-[.9rem] whitespace-nowrap">{t('nav.top.header')}</h1>
           </div>
         </Link>
-        <div className={isMobileDevice ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>
+        <div className={isMobile ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>
           {isNotHome && <OmniBox />}
         </div>
         <div className="flex items-center flex-nowrap justify-between gap-4 shrink-0">
           <HandleLanguages />
           {
-            isNotHome && isMobileDevice &&
+            isNotHome && isMobile &&
             <div ref={toggleSearchBtnRef}>
               <a className="flex items-center justify-center cursor-pointer text-white">
                 <Icon icon={faSearch} className="no-margin" onClick={openHeaderSearch} />
@@ -79,7 +79,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
             </div>
           }
           {
-            !isMobileDevice && (
+            !isMobile && (
               <div>
                 <DonateNow />
                 <VirtualHomeButton />

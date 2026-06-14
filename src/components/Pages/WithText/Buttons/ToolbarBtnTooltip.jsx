@@ -12,7 +12,7 @@ export const ToolbarMenuContext = createContext(false);
 const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, active, content, ...rest }) => {
   const { t } = useTranslation();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const inMenu             = useContext(ToolbarMenuContext);
   const dir                = useSelector(settingsGetUIDirSelector);
   const noFile             = !useSelector(textPageGetFileSelector);
@@ -27,7 +27,7 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
     );
   }
 
-  if (isMobileDevice) {
+  if (isMobile) {
     return (
       <div
         {...rest}

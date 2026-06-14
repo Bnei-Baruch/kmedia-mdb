@@ -15,7 +15,7 @@ import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
 const ShareTextModalBtn = () => {
   const { t }                         = useTranslation();
-  const { isMobileDevice }            = useContext(DeviceInfoContext);
+  const { isMobile }            = useContext(DeviceInfoContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCopyOpen, setIsCopyOpen]   = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
@@ -53,7 +53,7 @@ const ShareTextModalBtn = () => {
     setIsPopupOpen(true);
   };
 
-  const buttonSize = isMobileDevice ? 'tiny' : 'small';
+  const buttonSize = isMobile ? 'tiny' : 'small';
   return (
     <>
       <ToolbarBtnTooltip

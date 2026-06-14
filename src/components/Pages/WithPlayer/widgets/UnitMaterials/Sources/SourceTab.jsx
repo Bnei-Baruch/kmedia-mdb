@@ -14,7 +14,7 @@ import NotFound from '../../../../../shared/NotFound';
 import PageWithPlayerTOC from '../PageWithPlayerTOC';
 
 const SourceTab = ({ id }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const getSourceById = useSelector(state => sourcesGetSourceByIdSelector(state));
@@ -40,7 +40,7 @@ const SourceTab = ({ id }) => {
   return (
     <div className="player_page_tab">
       {
-        isMobileDevice ? (
+        isMobile ? (
           <TextLayoutMobile
             id={subjectId}
             toc={toc}

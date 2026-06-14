@@ -12,7 +12,7 @@ import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistMyPage = ({ playerContainer }) => {
   const { isReady } = useSelector(playlistGetInfoSelector);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { cuId } = useSelector(playlistGetInfoSelector);
   if (!isReady)
     return getWipErr(!isReady, null);
@@ -29,7 +29,7 @@ const PlaylistMyPage = ({ playerContainer }) => {
         </div>
       </div>
       {
-        !isMobileDevice && (
+        !isMobile && (
           <div className="w-[36%]">
             <PlaylistItems />
             <div className="my-4" />

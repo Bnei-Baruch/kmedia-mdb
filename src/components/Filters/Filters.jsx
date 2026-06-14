@@ -88,7 +88,7 @@ class Filters extends Component {
   renderFilters = store => {
     const { filters, namespace, t, filtersData, uiDir, uiLang } = this.props;
     const { activeFilter }                                      = this.state;
-    const { isMobileDevice }                                    = this.context;
+    const { isMobile }                                    = this.context;
 
     const popupStyle = {
       direction: uiDir
@@ -106,7 +106,7 @@ class Filters extends Component {
         : t('filters.all');
 
       const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-      const cn  = clsx('filter-popup', { mobile: isMobileDevice });
+      const cn  = clsx('filter-popup', { mobile: isMobile });
 
       return (
         <div className="relative" key={name}>

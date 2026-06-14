@@ -11,7 +11,7 @@ import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import { transcriptionFileFilter } from './helper';
 
 const TranscriptionTab = ({ id }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const linkMemo = useMemo(() => ({ pathname: null, search: { activeTab: 'transcription' } }), []);
   useInitTextUrl(linkMemo);
@@ -27,7 +27,7 @@ const TranscriptionTab = ({ id }) => {
   return (
     <div className="player_page_tab">
       {
-        isMobileDevice ? (
+        isMobile ? (
           <TextLayoutMobile id={id} toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
         ) : (
           <TextLayoutWeb id={id} toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />

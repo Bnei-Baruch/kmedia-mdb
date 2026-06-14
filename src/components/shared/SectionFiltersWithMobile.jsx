@@ -11,7 +11,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const [openFilters, setOpenFilters] = useState(false);
   const { t } = useTranslation();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const dir = useSelector(settingsGetUIDirSelector);
 
@@ -62,7 +62,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
     </div>
   );
 
-  return isMobileDevice ? renderMobile() : render();
+  return isMobile ? renderMobile() : render();
 };
 
 export default SectionFiltersWithMobile;

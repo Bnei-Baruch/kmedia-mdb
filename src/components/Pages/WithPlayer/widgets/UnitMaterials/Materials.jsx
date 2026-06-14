@@ -47,7 +47,7 @@ const derivedTextUnits = unit => {
 
 const Materials = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
   const { id: paramsId }              = useParams();
@@ -90,7 +90,7 @@ const Materials = () => {
     });
   }
 
-  if (isMobileDevice) {
+  if (isMobile) {
     const item = isSingleMedia
       ? {
         name     : 'recommended',

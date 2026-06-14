@@ -12,7 +12,7 @@ import LatestUpdate from './LatestUpdate';
 
 const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4 }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const [pageNo, setPageNo] = useState(0);
   const [pageStart, setPageStart] = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
@@ -106,22 +106,22 @@ const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cts]);
 
-  const gridCols = isMobileDevice ? 'grid-cols-1' : 'grid-cols-4';
+  const gridCols = isMobile ? 'grid-cols-1' : 'grid-cols-4';
 
   const cardsRow = (
     <div
       className={clsx('relative grid gap-4', gridCols, {
-        latestUpdatesCardGroup: !isMobileDevice,
-        latestUpdatesCardGroupMobile: isMobileDevice,
+        latestUpdatesCardGroup: !isMobile,
+        latestUpdatesCardGroupMobile: isMobile,
       })}
     >
       {getPageCardArray()}
-      {!isMobileDevice && renderScrollLeft()}
-      {!isMobileDevice && renderScrollRight()}
+      {!isMobile && renderScrollLeft()}
+      {!isMobile && renderScrollRight()}
     </div>
   );
 
-  const swipCards = !isMobileDevice ? <div {...swipeHandlers}>{cardsRow}</div> : cardsRow;
+  const swipCards = !isMobile ? <div {...swipeHandlers}>{cardsRow}</div> : cardsRow;
 
   return (
     <>

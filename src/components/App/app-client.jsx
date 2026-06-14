@@ -3,7 +3,7 @@ import { createBrowserHistory } from 'history';
 import { setDayjsLocale } from '../../helpers/dayjs';
 import { hydrateRoot } from 'react-dom/client';
 import { initialize as gaInitialize } from 'react-ga';
-import { UAParser } from 'ua-parser-js';
+import { getDeviceInfo } from '../../helpers/deviceInfo';
 import { CreateAbTesting } from '../../helpers/ab-testing';
 import ClientChronicles from '../../helpers/clientChronicles';
 import { DEFAULT_UI_LANGUAGE } from '../../helpers/consts';
@@ -36,7 +36,9 @@ async function buildApp(kcInfo = null) {
   setDayjsLocale(initialLanguage);
 
   const i18n = await initializeI18n(initialI18nStore, initialLanguage);
-  const deviceInfo = new UAParser().getResult();
+  const deviceInfo = getDeviceInfo();
+  logger.log(NAMESPACE, 'buildApp', { deviceInfo, initialLanguage });
+
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);
   clientChronicles.setAbTesting(abTesting);

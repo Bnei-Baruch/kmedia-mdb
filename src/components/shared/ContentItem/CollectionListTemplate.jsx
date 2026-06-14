@@ -24,15 +24,15 @@ const CollectionListTemplate = ({ cID, size = 'big' }) => {
     }
   }, [cID, c, dispatch]);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   if (!c) return null;
 
-  const width       = isMobileDevice ? 165 : imageWidthBySize[size];
+  const width       = isMobile ? 165 : imageWidthBySize[size];
   const description = [fromToLocalized(c.start_date, c.end_date)];
   const cuId        = c.cuIDs[0];
 
-  const Tag = size === 'big' || isMobileDevice ? 'h5' : 'h3';
+  const Tag = size === 'big' || isMobile ? 'h5' : 'h3';
 
   return (
     <Link

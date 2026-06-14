@@ -31,7 +31,7 @@ const Page = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { key } = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
   const uiLang = useSelector(settingsGetUILangSelector);
   const playlist = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_PLAYLISTS, key));
@@ -54,7 +54,7 @@ const Page = () => {
   if (!playlist) return null;
 
   const pathname = `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
-  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
+  const computerWidth = isMobile ? 'w-full' : 'w-full md:w-[62.5%]';
   const items = [...(playlist.items || [])];
   items.sort((a, b) => b.position - a.position);
 
@@ -125,7 +125,7 @@ const Page = () => {
   return (
     <div className="flex flex-wrap avbox no-background">
       <div className="flex flex-wrap w-full">
-        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
+        <div className={clsx(computerWidth, { 'is-fitted': isMobile })}>
           <PlaylistHeaderContainer playlist={playlist} />
           <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
           {
@@ -137,7 +137,7 @@ const Page = () => {
           }
         </div>
         {
-          !isMobileDevice && <div className="sm:hidden w-[36%]" />
+          !isMobile && <div className="sm:hidden w-[36%]" />
         }
       </div>
     </div>

@@ -254,7 +254,7 @@ class MediaDownloads extends Component {
   render() {
     const { t, publisherById, unit, displayDivider }     = this.props;
     const { selectedLanguage, availableLanguages, groups, derivedGroups } = this.state;
-    const { isMobileDevice }                             = this.context;
+    const { isMobile }                             = this.context;
 
     const byType = groups.get(selectedLanguage) || new Map();
 
@@ -270,10 +270,10 @@ class MediaDownloads extends Component {
       <div className="p-4 ">
         {availableLanguages.length > 1 ?
           <div className='flex flex-wrap mb-4'>
-            {!isMobileDevice &&
+            {!isMobile &&
               <div className="w-3/4">
               </div>}
-            <div className={classNames(isMobileDevice ? 'w-full' : 'w-1/4', 'text-right')}>
+            <div className={classNames(isMobile ? 'w-full' : 'w-1/4', 'text-right')}>
               <MenuLanguageSelector
                 languages={availableLanguages}
                 selected={selectedLanguage}

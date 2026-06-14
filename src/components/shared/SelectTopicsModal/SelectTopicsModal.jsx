@@ -24,7 +24,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const roots      = useSelector(tagsGetDisplayRootsSelector);
   const getTagById = useSelector(tagsGetTagByIdSelector);
@@ -138,7 +138,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                         tree?.children && (
                           <div
                             className="grid gap-4"
-                            style={{ gridTemplateColumns: `repeat(${isMobileDevice ? 1 : tree.children.length}, 1fr)` }}
+                            style={{ gridTemplateColumns: `repeat(${isMobile ? 1 : tree.children.length}, 1fr)` }}
                           >
                             {
                               tree.children.map(renderColumn)

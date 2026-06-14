@@ -7,9 +7,9 @@ import ButtonDayPickerDesktop from './ButtonDayPickerDesktop';
 import ButtonDayPickerMobile from './ButtonDayPickerMobile';
 
 const ButtonDayPicker = ({ value = null, label = '', onDayChange = noop, withLabel }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
-  return isMobileDevice
+  return isMobile
     ? <ButtonDayPickerMobile value={value} label={label} onDayChange={onDayChange} withLabel={withLabel} />
     : <ButtonDayPickerDesktop value={value} label={label} onDayChange={onDayChange} />;
 };

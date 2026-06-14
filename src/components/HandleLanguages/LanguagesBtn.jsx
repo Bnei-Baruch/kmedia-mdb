@@ -8,12 +8,12 @@ import { settingsGetUrlLangSelector } from '../../redux/selectors';
 
 const LanguagesBtn = forwardRef((props, ref) => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { t } = useTranslation();
 
   return (
     <div ref={ref} {...props}>
-      {isMobileDevice ? (
+      {isMobile ? (
         <span className="material-symbols-outlined text-3xl no-margin">language</span>
       ) : (
         <div className="language-trigger">

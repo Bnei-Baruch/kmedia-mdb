@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const WebWrapTooltip = ({ trigger, content }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const [show, setShow] = useState(false);
 
-  if (isMobileDevice)
+  if (isMobile)
     return trigger;
 
   return cloneElement(trigger, {

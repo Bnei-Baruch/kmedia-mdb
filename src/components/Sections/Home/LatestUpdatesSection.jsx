@@ -33,7 +33,7 @@ const itemsByContentType = list =>
     }, {});
 
 const LatestUpdatesSection = ({ latestItems = [], t }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const itemsByCT = itemsByContentType(latestItems);
 
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
@@ -58,7 +58,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   // row #4: CT_ARTICLE x 4
   // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
-  const itemsPerRow = isMobileDevice ? 1 : 4;
+  const itemsPerRow = isMobile ? 1 : 4;
 
   return (
     <div className="homepage__thumbnails homepage__section">
@@ -71,7 +71,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
               itemsByCT={itemsByCT}
               maxItems={20}
               itemsPerRow={itemsPerRow}
-              stackable={!isMobileDevice}
+              stackable={!isMobile}
               cts={[
                 { ct: consts.CT_DAILY_LESSON, itemsPerPage: 2 },
                 { ct: consts.CT_WOMEN_LESSON, daysBack: 30 },
@@ -86,7 +86,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
               itemsByCT={itemsByCT}
               maxItems={20}
               itemsPerRow={itemsPerRow}
-              stackable={!isMobileDevice}
+              stackable={!isMobile}
               cts={[{ ct: consts.CT_VIDEO_PROGRAM_CHAPTER }]}
             />
 
@@ -96,7 +96,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
               itemsByCT={itemsByCT}
               maxItems={20}
               itemsPerRow={itemsPerRow}
-              stackable={!isMobileDevice}
+              stackable={!isMobile}
               cts={[{ ct: consts.CT_CLIP }]}
             />
 
@@ -106,7 +106,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
               itemsByCT={itemsByCT}
               maxItems={20}
               itemsPerRow={itemsPerRow}
-              stackable={!isMobileDevice}
+              stackable={!isMobile}
               cts={[{ ct: consts.CT_ARTICLE }]}
             />
 
@@ -116,7 +116,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
               itemsByCT={itemsByCT}
               maxItems={20}
               itemsPerRow={itemsPerRow}
-              stackable={!isMobileDevice}
+              stackable={!isMobile}
               cts={[
                 { ct: consts.CT_CONGRESS },
                 { ct: consts.CT_FRIENDS_GATHERING },

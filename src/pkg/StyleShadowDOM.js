@@ -4,12 +4,12 @@ import { settingsGetUIDirSelector } from '../redux/selectors';
 import { DeviceInfoContext } from '../helpers/app-contexts';
 
 const StyleShadowDOM = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiDir              = useSelector(settingsGetUIDirSelector);
   const isLtr              = uiDir === 'ltr';
 
   useEffect(() => {
-    if (isMobileDevice) {
+    if (isMobile) {
       const host   = document.getElementsByTagName('us-button');
       const shadow = host?.[0]?.shadowRoot;
 
@@ -19,7 +19,7 @@ const StyleShadowDOM = () => {
       sheet.replaceSync(`#appRoot ${_style} `);
       shadow?.adoptedStyleSheets.push(sheet);
     }
-  }, [isLtr, isMobileDevice]);
+  }, [isLtr, isMobile]);
   return null;
 };
 

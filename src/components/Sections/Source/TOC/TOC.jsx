@@ -187,7 +187,7 @@ const TOC = () => {
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
   const { id }             = useSelector(textPageGetSubjectSelector);
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);
@@ -204,11 +204,11 @@ const TOC = () => {
   }, [id, tocIsActive]);
 
   useEffect(() => {
-    if (!isMobileDevice) return noop;
+    if (!isMobile) return noop;
     const handleResize = () => setTocScrollHeight(window.visualViewport?.height - 130);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isMobileDevice]);
+  }, [isMobile]);
 
   if (activeIndex === -1) {
     return null;
@@ -337,7 +337,7 @@ const TOC = () => {
   const path               = fullPath.slice(1);
   const { toc, className } = getToc(rootId, path, true);
 
-  const tocScrollStyle = tocScrollHeight && isMobileDevice ? { 'height': tocScrollHeight } : {};
+  const tocScrollStyle = tocScrollHeight && isMobile ? { 'height': tocScrollHeight } : {};
   return (
     <div className={
       clsx('toc no_print',
@@ -351,7 +351,7 @@ const TOC = () => {
     }>
       <TOCControl />
       {
-        !isMobileDevice && <TOCSearch />
+        !isMobile && <TOCSearch />
       }
       <div className="toc_scroll" style={tocScrollStyle}>
         <div className="toc_scroll_align">
@@ -365,7 +365,7 @@ const TOC = () => {
       </div>
 
       {
-        isMobileDevice && <TOCSearch />
+        isMobile && <TOCSearch />
       }
     </div>
   );

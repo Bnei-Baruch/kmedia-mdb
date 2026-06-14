@@ -19,8 +19,8 @@ const SECTIONS = [
 
 const ActiveSections = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const iconSize = isMobileDevice ? 50 : 100;
+  const { isMobile } = useContext(DeviceInfoContext);
+  const iconSize = isMobile ? 50 : 100;
 
   return (
     <div className="homepage__website-sections homepage__section">
@@ -30,7 +30,7 @@ const ActiveSections = () => {
             {SECTIONS.map(x => (
               <div
                 key={x.name}
-                className={clsx('w-1/4 flex items-stretch justify-center', !isMobileDevice && x.className)}
+                className={clsx('w-1/4 flex items-stretch justify-center', !isMobile && x.className)}
               >
                 <Link to={`/${x.name}`} className="flex flex-col items-center text-center">
                   <SectionLogo name={x.name} width={iconSize} height={iconSize} />

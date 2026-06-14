@@ -1,21 +1,35 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import express from 'express';
 import { createId } from '@paralleldrive/cuid2';
 import { getUILangFromPath } from '../src/helpers/url.js';
 import logger from '../src/logger/logger.js';
+const NAMESPACE = 'app-server';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const FAVICON_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'public', 'favicon.ico');
+const PUBLIC_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
+const serveStatic = express.static(PUBLIC_DIR);
 
-export function favicon(req, res, next) {
-  if (req.path.endsWith('/favicon.ico')) {
-    return res.sendFile(FAVICON_PATH);
-  }
-
-  return next();
+// Single static handler for everything in /public (favicon, manifest, robots,
+// locales, assets, themes...). Strips an optional /:lang prefix so language-
+// prefixed asset URLs (e.g. /en/manifest.json) resolve to the same file.
+export function staticFiles(req, res, next) {
+  const original = req.url;
+  req.url = original.replace(/^\/[a-z]{2}(?=\/)/, '');
+  serveStatic(req, res, err => {
+    req.url = original;
+    next(err);
+  });
 }
 
-logger.info('Base URL:', BASE_URL);
+// Asset-like requests that fell through the static handlers, and probes like
+// /.well-known/*, are not navigable pages: they must skip the language redirect
+// and SSR. Left unhandled, Express answers them with its own 404.
+const STATIC_EXT_RE = /\.(?:json|js|mjs|css|map|ico|png|jpe?g|gif|svg|webp|avif|woff2?|ttf|eot|txt|xml|pdf|webmanifest)$/i;
+
+export const isNonPage = reqPath => reqPath.includes('/.well-known/') || STATIC_EXT_RE.test(reqPath);
+
+logger.info(NAMESPACE, 'Base URL:', BASE_URL);
 
 export function logErrors(err, req, res, next) {
   if (err && err.stack) {
@@ -98,11 +112,15 @@ export function duration(req, res, next) {
 }
 
 export function noLanguageRedirect(req, res, next) {
+  if (isNonPage(req.path)) {
+    return next();
+  }
+
   const { redirect, language } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
 
   if (redirect) {
     const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
-    logger.info('Redirecting to url with language', newUrl);
+    logger.info(NAMESPACE, 'redirect to language url', newUrl);
     return res.redirect(307, newUrl);
   }
 

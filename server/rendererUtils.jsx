@@ -10,7 +10,6 @@ import React from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
 import serialize from 'serialize-javascript';
-import * as pkgUaParserJs from 'ua-parser-js';
 import { URL } from 'url';
 import { AppServer } from '../src/components/App/AppServer';
 import logger from '../src/logger/logger';
@@ -24,6 +23,7 @@ import {
   KC_BOT_USER_NAME,
   LANG_UI_LANGUAGES,
 } from '../src/helpers/consts';
+import { getDeviceInfo } from '../src/helpers/deviceInfo';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
@@ -38,8 +38,6 @@ import {
 } from '../src/redux/modules/settings';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import buildRoutes from '../src/route/routes';
-
-const { UAParser } = pkgUaParserJs;
 
 const initializeI18nBackend = async uiLang => {
   const i18n = i18next.createInstance();
@@ -111,19 +109,7 @@ export const getPromises = (store, originalUrl, { route, params }) => {
     : Promise.resolve(null);
 };
 
-export const prepareDeviceInfo = req => {
-  const ua = new UAParser(req.get('user-agent'));
-  const device = ua.getDevice();
-  const os = ua.getOS();
-  return {
-    isIOS: os.is('iOS'),
-    isAndroid: os.is('Android'),
-    deviceType: device?.type || 'desktop',
-    browserName: ua.getBrowser().name,
-    isMobile: device.is('mobile'),
-    isIPhone: device.is('iPhone') || device.is('iPhone Simulator'),
-  };
-};
+export const prepareDeviceInfo = req => getDeviceInfo(req.get('user-agent'));
 
 // Full SSR pipeline shared by bot and auth renderers.
 // extraInitialState is merged into the Redux initial state (e.g. { auth: { user: { name: KC_BOT_USER_NAME } } }).
@@ -198,7 +184,6 @@ export async function renderSSR(req, extraInitialState = {}) {
   const markup = await renderToBuffer(
     <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />
   );
-  logger.info(NAMESPACE, 'renderToPipeableStream end', helmetContext);
 
   const { helmet } = helmetContext;
   const direction = getLanguageDirection(uiLang);

@@ -16,7 +16,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
   const [name, setName]             = useState();
   const [confirm, setConfirm]       = useState();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiDir              = useSelector(settingsGetUIDirSelector);
 
   const handleChangeName = e => setName(e.target.value);
@@ -62,7 +62,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
   return (
     <div className=" px-4  background_grey">
       <div className="summary-container align_items_center">
-        <h2 className={`my_header ${isMobileDevice ? '' : ''}`}>
+        <h2 className={`my_header ${isMobile ? '' : ''}`}>
           <PlaylistPlayIcon className="playlist_icon"/>
           {nameTag}
           <span className="display-iblock margin-right-8 margin-left-8 small text-gray-500">

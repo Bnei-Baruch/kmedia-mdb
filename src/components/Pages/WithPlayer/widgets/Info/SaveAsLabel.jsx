@@ -12,7 +12,7 @@ import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 const SaveAsLabel = ({ label, setModalMode }) => {
   const [confirm, setConfirm] = useState(false);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiDir              = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
-          <Dialog.Panel className={`bg-white rounded-lg shadow-xl ${!isMobileDevice ? 'max-w-sm' : 'max-w-full'} w-full bookmark_modal`}>
+          <Dialog.Panel className={`bg-white rounded-lg shadow-xl ${!isMobile ? 'max-w-sm' : 'max-w-full'} w-full bookmark_modal`}>
             <div className="p-4 border-b font-bold">
               {t('personal.bookmark.saveBookmark')}
             </div>

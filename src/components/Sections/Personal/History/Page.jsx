@@ -30,7 +30,7 @@ export const PAGE_SIZE = 20;
 
 const Page = ({ location }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageNo = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
   const total = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_HISTORY));
@@ -63,7 +63,7 @@ const Page = ({ location }) => {
   const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
-  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
+  const computerWidth = isMobile ? 'w-full' : 'w-full md:w-[62.5%]';
 
   const renderItem = (x, i) => {
     let newDay = null;

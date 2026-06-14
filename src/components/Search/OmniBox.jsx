@@ -33,12 +33,12 @@ const OmniBox = ({ isHomePage = false }) => {
   const wip = useSelector(searchGetAutocompleteWipSelector);
   const uiLang = useSelector(settingsGetUILangSelector);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const chronicles = useContext(ClientChroniclesContext);
 
   const [autocompleteResults, setAutocompleteResults] = useState([]);
   const [autocompleteId, setAutocompleteId] = useState('');
-  const [inputFocused, setInputFocused] = useState(!isMobileDevice);
+  const [inputFocused, setInputFocused] = useState(!isMobile);
   const [userInteracted, setUserInteracted] = useState(false);
 
   const dispatch = useDispatch();
@@ -123,7 +123,7 @@ const OmniBox = ({ isHomePage = false }) => {
                 ) : (
                   <Icon icon={faSearch} />
                 )}
-                {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
+                {!isMobile ? t('buttons.search').toUpperCase() : null}
               </button>
               <ButtonDayPicker
                 label={t('filters.date-filter.presets.CUSTOM_DAY')}

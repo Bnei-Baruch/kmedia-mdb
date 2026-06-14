@@ -425,7 +425,7 @@ export const SearchResultManyItems = (
     click
   }
 ) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
   const wipError = getWipErr(wip || items.some(item => !item), err);
@@ -433,7 +433,7 @@ export const SearchResultManyItems = (
   return (
     <div className="media_item list-none">
       <div>
-        <div className={clsx(' px-4 ', { 'padding_r_l_0': !isMobileDevice })}>
+        <div className={clsx(' px-4 ', { 'padding_r_l_0': !isMobile })}>
           <h2 className="flex items-end gap-1">
             <span className="inline-block align-bottom">{logo}</span>
             &nbsp;
@@ -556,13 +556,13 @@ export const SearchResultTweets = ({ source }) => {
   const err                = useSelector(publicationsGetTweetsErrorSelector);
   const wipError           = getWipErr(wip, err);
   const items              = useSelector(state => twitterMapFromState(state, source));
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);
   const uiDir              = useSelector(settingsGetUIDirSelector);
   const leftRight          = useSelector(settingsGetLeftRightByDirSelector);
 
   const [pageNo, setPageNo] = useState(0);
-  const pageSize            = isMobileDevice ? 1 : 3;
+  const pageSize            = isMobile ? 1 : 3;
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -658,7 +658,7 @@ export const SearchResultTweets = ({ source }) => {
         {wipError}
         {!wipError && (
           <div {...swipeHandlers} >
-            <div className={`${isMobileDevice ? 'mt-1' : null} search__cards grid grid-cols-1 sm:grid-cols-3 gap-4`}>
+            <div className={`${isMobile ? 'mt-1' : null} search__cards grid grid-cols-1 sm:grid-cols-3 gap-4`}>
               {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(renderItem)}
             </div>
           </div>

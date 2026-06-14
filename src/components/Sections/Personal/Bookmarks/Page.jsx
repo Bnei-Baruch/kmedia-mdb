@@ -9,19 +9,19 @@ import BookmarkHeader from './Header';
 import BookmarkHeaderMobile from './HeaderMobile';
 
 const Page = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const needToLogin = NeedToLogin();
   if (needToLogin) return needToLogin;
 
   return (
-    <div className={clsx('bookmark_page', { 'p-4': !isMobileDevice })}
+    <div className={clsx('bookmark_page', { 'p-4': !isMobile })}
     >
-      {isMobileDevice && <BookmarkHeaderMobile />}
+      {isMobile && <BookmarkHeaderMobile />}
       <div className="flex flex-wrap gap-4">
-        {!isMobileDevice && <BookmarkHeader />}
+        {!isMobile && <BookmarkHeader />}
         <div className="flex flex-1 gap-4">
-          {!isMobileDevice && <div className="w-full md:w-[350px] rounded p-4 shadow-lg"><FolderList /></div>}
+          {!isMobile && <div className="w-full md:w-[350px] rounded p-4 shadow-lg"><FolderList /></div>}
           <div className="rounded p-4 shadow-lg flex-1">
             <BookmarkList />
           </div>

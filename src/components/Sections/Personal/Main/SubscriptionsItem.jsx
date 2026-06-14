@@ -20,7 +20,7 @@ import {
 export const SubscriptionsItem = ({ item, t }) => {
   const [confirm, setConfirm] = useState();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
 
@@ -59,11 +59,11 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   let logo, title, to;
   if (item.collection_uid) {
-    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700}/>;
+    logo  = <UnitLogo collectionId={collection?.id} width={isMobile ? 300 : 700}/>;
     title = collection?.name;
     to    = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700}/>;
+    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobile ? 300 : 700}/>;
     title = t(`constants.content-types.${item.content_type}`);
     to    = { pathname: `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}` };
   }

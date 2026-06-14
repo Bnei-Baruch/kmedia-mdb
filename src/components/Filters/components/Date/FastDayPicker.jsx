@@ -83,12 +83,7 @@ class FastDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    if (this.context.isAndroid) {
-      this.nativeDateInput.click();
-      return;
-    }
-
-    this.nativeDateInput.focus();
+    this.nativeDateInput?.showPicker?.();
   };
 
   openPopup = () => this.setState({ isOpen: true });
@@ -123,9 +118,9 @@ class FastDayPicker extends Component {
     const { language, value, label }     = this.props;
     const { month, isOpen, stringValue } = this.state;
     const locale                         = getLanguageLocaleWORegion(language);
-    const { isMobileDevice }             = this.context;
+    const { isMobile }             = this.context;
 
-    if (isMobileDevice) {
+    if (isMobile) {
       const selected               = value || today().toDate();
       const selectedToString       = dayjs(selected).format('YYYY-MM-DD');
       const selectedInLocaleFormat = dayjs(selected).locale(locale).format(this.localeDateFormat);

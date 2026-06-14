@@ -13,7 +13,7 @@ import LikutToolbarMobile from './LikutToolbarMobile';
 import LikutToolbarWeb from './LikutToolbarWeb';
 
 const LikutContainer = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const { id } = useParams();
   const { t }  = useTranslation();
@@ -26,7 +26,7 @@ const LikutContainer = () => {
     <>
       <Helmets.Basic title={`${t('likutim.item-header')} ${cu?.name}`} />
       {
-        isMobileDevice
+        isMobile
           ? <TextLayoutMobile toolbar={<LikutToolbarMobile />} />
           : <TextLayoutWeb toolbar={<LikutToolbarWeb />} />
       }

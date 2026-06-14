@@ -26,7 +26,7 @@ import {
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiLang = useSelector(settingsGetUILangSelector);
   const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
     case MY_NAMESPACE_REACTIONS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
+        return <ContentItem id={x.subject_uid} key={key} asList={isMobile} />;
       });
       break;
     case MY_NAMESPACE_HISTORY:
@@ -59,7 +59,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
             id={x.content_unit_uid}
             key={key}
             playTime={x.data.current_time}
-            asList={isMobileDevice}
+            asList={isMobile}
           />;
         })
       );
@@ -67,7 +67,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
     case MY_NAMESPACE_PLAYLISTS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice} />;
+        return <PlaylistItem item={x} key={key} t={t} asList={isMobile} />;
       });
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
@@ -82,7 +82,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, namespace, withSeeAll }) => 
       break;
   }
 
-  if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
+  if (isMobile && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
     children = items?.length > 0 ? <div className=" px-4 ">{children}</div> : null;
   } else {
     children = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6  cu_items">{children}</div>;

@@ -13,7 +13,7 @@ import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
 const ShareTextBtn = () => {
   const { t }              = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const [isCopyOpen, setIsCopyOpen] = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
@@ -51,7 +51,7 @@ const ShareTextBtn = () => {
     setUrlWithParams(_url.toString());
   };
 
-  const buttonSize = isMobileDevice ? 'tiny' : 'small';
+  const buttonSize = isMobile ? 'tiny' : 'small';
 
   return (
     <Popover className="share-bar relative">

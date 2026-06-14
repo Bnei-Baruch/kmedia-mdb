@@ -12,7 +12,7 @@ import { getMyItemKey } from '../../../../helpers/my';
 import { settingsGetUILangSelector } from '../../../../redux/selectors';
 
 const PlaylistHeaderContainer = ({ playlist }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const navigate           = useNavigate();
   const dispatch           = useDispatch();
   const uiLang             = useSelector(settingsGetUILangSelector);
@@ -32,7 +32,7 @@ const PlaylistHeaderContainer = ({ playlist }) => {
     save,
     playlist
   };
-  return isMobileDevice ? <PlaylistHeaderMobile {...props} /> : <PlaylistHeader {...props} />;
+  return isMobile ? <PlaylistHeaderMobile {...props} /> : <PlaylistHeader {...props} />;
 };
 
 PlaylistHeaderContainer.propTypes = {

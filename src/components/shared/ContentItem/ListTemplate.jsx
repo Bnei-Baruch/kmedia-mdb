@@ -37,7 +37,7 @@ const ListTemplate = (
   const itemRef = useRef(null);
 
   const dir                = useSelector(settingsGetUIDirSelector);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);
   const cuInfoRef                         = useRef();
@@ -65,7 +65,7 @@ const ListTemplate = (
       </div>
     ) : null;
 
-  const Tag = size === 'big' || isMobileDevice ? 'h5' : 'h3';
+  const Tag = size === 'big' || isMobile ? 'h5' : 'h3';
 
   const renderCUInfo = () => {
     const _name   = name || unit?.name || source?.name || tag?.label;
@@ -96,7 +96,7 @@ const ListTemplate = (
     );
   };
 
-  const width = isMobileDevice ? 165 : imageWidthBySize[size];
+  const width = isMobile ? 165 : imageWidthBySize[size];
 
   return (
     <Link

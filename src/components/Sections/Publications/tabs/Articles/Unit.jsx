@@ -61,7 +61,7 @@ const ArticlePage = () => {
   const { t }    = useTranslation();
 
   const chronicles         = useContext(ClientChroniclesContext);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
   const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -88,7 +88,7 @@ const ArticlePage = () => {
   }
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
-  const toolbar          = isMobileDevice ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
+  const toolbar          = isMobile ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
   const { embed }        = getEmbedFromQuery(location);
 
   return !embed
@@ -101,7 +101,7 @@ const ArticlePage = () => {
               {renderHeader(unit, t, uiDir)}
               <div className="p-4">
                 {
-                  isMobileDevice ? (
+                  isMobile ? (
                     <TextLayoutMobile toolbar={toolbar} playerPage={true} />
                   ) : (
                     <TextLayoutWeb toolbar={toolbar} playerPage={true} />

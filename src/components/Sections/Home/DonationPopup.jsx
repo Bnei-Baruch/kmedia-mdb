@@ -50,7 +50,7 @@ function DonationPopup() {
   const isRTL = isLanguageRtl(uiLang);
 
   const [open, setOpen] = useState(shouldOpen());
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(contentLanguages);
   const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
@@ -80,15 +80,15 @@ function DonationPopup() {
               &times;
             </button>
           </div>
-          {isMobileDevice ? <DialogTitle className="popupHeader" /> : null}
+          {isMobile ? <DialogTitle className="popupHeader" /> : null}
           <div className="overflow-y-auto max-h-[70vh] p-6">
-            <div className={clsx('flex gap-6', isMobileDevice ? 'flex-col' : 'flex-row')}>
-              <div className={isMobileDevice ? 'w-full' : 'w-1/2'}>
+            <div className={clsx('flex gap-6', isMobile ? 'flex-col' : 'flex-row')}>
+              <div className={isMobile ? 'w-full' : 'w-1/2'}>
                 <a href={link} target="_blank" rel="noopener noreferrer">
                   <img src={bannerImg} alt="" className="w-full h-auto" />
                 </a>
               </div>
-              <div className={isMobileDevice ? 'w-full' : 'w-1/2'}>
+              <div className={isMobile ? 'w-full' : 'w-1/2'}>
                 <div dangerouslySetInnerHTML={{ __html: t('home.donate-modal') }} />
               </div>
             </div>

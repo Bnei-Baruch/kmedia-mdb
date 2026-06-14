@@ -19,7 +19,7 @@ const MenuLanguageSelector = (
   }
 ) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const onChange = selected => {
     onLanguageChange(selected);
@@ -27,7 +27,7 @@ const MenuLanguageSelector = (
 
   const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
   const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
-  const dividerArray = !isMobileDevice || multiSelect ? [{
+  const dividerArray = !isMobile || multiSelect ? [{
     value: 'divider',
     className: 'language-selection-divider disabled'
   }] : [];
@@ -37,7 +37,7 @@ const MenuLanguageSelector = (
 
   const value = multiSelect ? (isAny ? ['any'] : selected) : selected;
 
-  if (isMobileDevice && !multiSelect) {
+  if (isMobile && !multiSelect) {
     return (
       <select
         className="px-2 py-1 border rounded w-full text-sm text-black"

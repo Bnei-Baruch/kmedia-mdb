@@ -11,7 +11,7 @@ import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const SingleMediaPage = ({ playerContainer }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const location = useLocation();
 
   const { embed } = getEmbedFromQuery(location);
@@ -36,7 +36,7 @@ const SingleMediaPage = ({ playerContainer }) => {
           </div>
         </div>
         {
-          !isMobileDevice && (
+          !isMobile && (
             <div className="w-[36%]">
               <Recommended cuId={cuId} />
             </div>

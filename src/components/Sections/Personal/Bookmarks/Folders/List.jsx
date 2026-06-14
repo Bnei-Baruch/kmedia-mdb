@@ -15,7 +15,7 @@ const FolderList = ({ close }) => {
   const [query, setQuery] = useState();
   const [selectedMobile, setSelectedMobile] = useState();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const items = useSelector(state => myGetListSelector(state, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
 
@@ -27,10 +27,10 @@ const FolderList = ({ close }) => {
   }, [dispatch]);
 
   let selectedId = useSelector(state => bookmarkFilterGetByKeySelector(state, MY_BOOKMARK_FILTER_FOLDER_ID));
-  if (isMobileDevice) selectedId = selectedMobile;
+  if (isMobile) selectedId = selectedMobile;
 
   const selectFolder = id => {
-    if (isMobileDevice)
+    if (isMobile)
       setSelectedMobile(id);
     else
       dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_ID, id));
@@ -108,7 +108,7 @@ const FolderList = ({ close }) => {
         {t('personal.bookmark.newFolder')}
       </button>
       {
-        isMobileDevice && (
+        isMobile && (
           <button
             className="float-right rounded bg-blue-500 px-4 py-2 text-white"
             onClick={handleClose}

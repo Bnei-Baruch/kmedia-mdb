@@ -16,7 +16,7 @@ const BookmarkButton = ({ source, disabled }) => {
   const [alertMsg, setAlertMsg] = useState();
   const needToLogin             = NeedToLogin();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const dir                = useSelector(settingsGetUIDirSelector);
 
   const handleOpen  = () => setOpen(true);
@@ -41,7 +41,7 @@ const BookmarkButton = ({ source, disabled }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel
-            className={`bg-white rounded-lg shadow-xl bookmark_modal ${!isMobileDevice ? 'max-w-sm w-full' : 'w-full h-full'}`}
+            className={`bg-white rounded-lg shadow-xl bookmark_modal ${!isMobile ? 'max-w-sm w-full' : 'w-full h-full'}`}
           >
             <div className="px-6 py-4 border-b font-bold large">
               {t('personal.bookmark.saveBookmark')}

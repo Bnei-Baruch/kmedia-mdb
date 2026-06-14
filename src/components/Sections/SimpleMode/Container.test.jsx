@@ -22,7 +22,7 @@ const makeStore = (contentLanguages = ['en']) =>
     reducer: { settings: (state = { ...settingsInitialState, contentLanguages }, action) => state },
   });
 
-const deviceInfo = { browserName: 'Chrome', isMobile: false, isAndroid: false };
+const deviceInfo = { browserName: 'Chrome', isMobile: false };
 
 const renderContainer = (initialEntry = '/', storeOverride = null) => {
   const store = storeOverride ?? makeStore();

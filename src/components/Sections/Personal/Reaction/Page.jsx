@@ -29,7 +29,7 @@ import {
 const PAGE_SIZE = 20;
 const Page      = ({ location }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageNo           = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_REACTIONS));
   const total            = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_REACTIONS));
@@ -62,12 +62,12 @@ const Page      = ({ location }) => {
   const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
-  const computerWidth = isMobileDevice ? 'w-full' : 'w-full md:w-[62.5%]';
+  const computerWidth = isMobile ? 'w-full' : 'w-full md:w-[62.5%]';
 
   return (
-    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobileDevice })}>
+    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobile })}>
       <div className="flex flex-wrap w-full">
-        <div className={clsx(computerWidth, { 'is-fitted': isMobileDevice })}>
+        <div className={clsx(computerWidth, { 'is-fitted': isMobile })}>
           <div className=" px-4 ">
             <div className="summary-container align_items_center">
               <h2 className="my_header">
@@ -107,7 +107,7 @@ const Page      = ({ location }) => {
           />
         </div>
         {
-          !isMobileDevice && <div className="w-full md:w-[36%]"/>
+          !isMobile && <div className="w-full md:w-[36%]"/>
         }
       </div>
     </div>

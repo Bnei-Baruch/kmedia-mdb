@@ -21,7 +21,7 @@ const changeDay = (amount, selectedDate, onDayClick) => {
 };
 
 
-const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid) =>
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile) =>
   isMobile
     ? (
       <div>
@@ -30,7 +30,7 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
             type="text"
             readOnly
             value={data.selectedInLocaleFormat}
-            onClick={() => openNativeDatePicker(nativeDateInput, isAndroid)}
+            onClick={() => openNativeDatePicker(nativeDateInput)}
           />
         </div>
         <input
@@ -47,12 +47,8 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
     )
     : <span>{dayjs(data.selectedDate).format(data.dateFormat)}</span>;
 
-const openNativeDatePicker = (nativeDateInput, isAndroid) => {
-  if (isAndroid) {
-    nativeDateInput.current.click();
-  } else {
-    nativeDateInput.current.focus();
-  }
+const openNativeDatePicker = nativeDateInput => {
+  nativeDateInput.current?.showPicker?.();
 };
 
 // Read at call time (not module load) so it tracks the global dayjs locale.
@@ -84,7 +80,7 @@ const SimpleModePage = (
   });
 
   const nativeDateInput = useRef(null);
-  const { isMobile, isAndroid } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   useEffect(() => {
     const selected = selectedDate || today().toDate();
@@ -136,7 +132,7 @@ const SimpleModePage = (
               <div className="date-container">
                 <button type="button"
                   onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile, isAndroid)}
+                {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile)}
                 <button
                   type="button"
                   disabled={isToday(selectedDate)}

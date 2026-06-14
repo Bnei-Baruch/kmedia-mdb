@@ -11,7 +11,7 @@ import { settingsGetUIDirSelector, settingsGetUILangSelector, authGetUserSelecto
 
 const Login = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);
   const uiDir              = useSelector(settingsGetUIDirSelector);
   const user               = useSelector(authGetUserSelector);
@@ -54,10 +54,10 @@ const Login = () => {
     <a
       href="#"
       onClick={login}
-      className={`inline-flex items-center gap-1.5 border border-semantic-blue text-semantic-blue rounded hover:bg-semantic-blue hover:text-white transition-colors ${isMobileDevice ? 'auth-button w-8 h-8 justify-center rounded-full p-0' : 'donate-button px-3 py-1.5 small'}`}
+      className={`inline-flex items-center gap-1.5 border border-semantic-blue text-semantic-blue rounded hover:bg-semantic-blue hover:text-white transition-colors ${isMobile ? 'auth-button w-8 h-8 justify-center rounded-full p-0' : 'donate-button px-3 py-1.5 small'}`}
     >
       <span className="material-symbols-outlined text-base">account_circle</span>
-      {isMobileDevice ? null : t('personal.login')}
+      {isMobile ? null : t('personal.login')}
     </a>
   );
 

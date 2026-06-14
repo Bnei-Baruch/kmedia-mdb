@@ -41,7 +41,7 @@ const CLASSES_BY_MODE = {
 
 export const PlayerContext = createContext(null);
 const PlayerContainer      = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const fullscreenRef = useRef();
 
@@ -106,7 +106,7 @@ const PlayerContainer      = () => {
   const playerComponent = <Player/>;
   const classes         = [
     mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
-    isMobileDevice ? 'is-mobile' : 'is-web',
+    isMobile ? 'is-mobile' : 'is-web',
     { 'is-fullscreen': isFullScreen, 'is-video': !isAudio }
 
   ];
@@ -117,7 +117,7 @@ const PlayerContainer      = () => {
       <UpdateLocation/>
       <div className={clsx(...classes)}>
         {
-          isMobileDevice ? (
+          isMobile ? (
             <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef}/>
           ) : (
             <>

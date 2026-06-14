@@ -24,7 +24,7 @@ import {
 const TopicPage = () => {
   const { id } = useParams();
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const getPathByID = useSelector(tagsGetPathByIDSelector);
   const getTags = useSelector(tagsGetTagsSelector);
@@ -64,7 +64,7 @@ const TopicPage = () => {
 
   return (
     <>
-      {isMobileDevice ? <RenderPageMobile /> : <RenderPage />}
+      {isMobile ? <RenderPageMobile /> : <RenderPage />}
       <hr className="m-0" />
       {
         total > 0 &&

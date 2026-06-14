@@ -45,7 +45,7 @@ const TagItemContainerHook = (
 ) => {
 
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const tag = useSelector(tagsGetTagByIdSelector)(id);
   const views = useSelector(state => recommendedGetViewsSelector(state, id));
 
@@ -55,7 +55,7 @@ const TagItemContainerHook = (
   }
 
   const description = [];
-  if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
+  if (!noViews && !(isMobile && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const props = {
     tag,
@@ -63,7 +63,7 @@ const TagItemContainerHook = (
     withCUInfo: false,
     withCCUInfo: withInfo,
     description,
-    size: !isMobileDevice ? size : '',
+    size: !isMobile ? size : '',
     selected,
     label
   };
@@ -83,7 +83,7 @@ const SourceItemContainerHook = (
     withInfo = undefined
   }
 ) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const { t } = useTranslation();
   const source = useSelector(state => sourcesGetSourceByIdSelector(state))(id);
@@ -95,7 +95,7 @@ const SourceItemContainerHook = (
   }
 
   const description = [];
-  if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
+  if (!noViews && !(isMobile && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const props = {
     source,
@@ -103,7 +103,7 @@ const SourceItemContainerHook = (
     withCUInfo: false,
     withCCUInfo: withInfo,
     description,
-    size: !isMobileDevice ? size : '',
+    size: !isMobile ? size : '',
     selected,
     label
   };
@@ -131,7 +131,7 @@ const ContentItemContainer = (
   }
 ) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const views = useSelector(state => recommendedGetViewsSelector(state, id));
   const ccu = useSelector(state => mdbGetDenormCollectionSelector(state, ccuId)) || canonicalCollection(unit);
@@ -170,7 +170,7 @@ const ContentItemContainer = (
   if (unit.film_date)
     description.push(t('values.date', { date: unit.film_date }));
 
-  if (!noViews && !(isMobileDevice && asList) && views > 0)
+  if (!noViews && !(isMobile && asList) && views > 0)
     description.push(t('pages.unit.info.views', { views }));
 
   link = link || canonicalLink(unit, null, ccu);
@@ -189,7 +189,7 @@ const ContentItemContainer = (
     description,
     children,
     playTime,
-    size: !isMobileDevice ? size : '',
+    size: !isMobile ? size : '',
     selected,
     label,
     name,

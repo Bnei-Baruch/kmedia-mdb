@@ -18,7 +18,7 @@ const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
 let timer;
 
 const PlaylistItems               = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
   const { cId, cuId, isReady } = useSelector(playlistGetInfoSelector);
@@ -34,7 +34,7 @@ const PlaylistItems               = () => {
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
     timer = setTimeout(() => {
-      const h   = isMobileDevice ? PLAYLIST_ITEM_HEIGHT_MOBILE : PLAYLIST_ITEM_HEIGHT;
+      const h   = isMobile ? PLAYLIST_ITEM_HEIGHT_MOBILE : PLAYLIST_ITEM_HEIGHT;
       const idx = from + Math.max(0, Math.round(e.target.scrollTop / h));
       dispatch(actions.showImages(idx));
     }, 150);
@@ -43,7 +43,7 @@ const PlaylistItems               = () => {
   return (
     <div id="avbox_playlist" className="avbox__playlist-view" onScroll={handleScroll}>
       {
-        !isMobileDevice && (
+        !isMobile && (
           <h3 className="avbox__playlist-header text-2xl font-bold px-4 py-2">
             {title || t(`playlist.title-by-type.${content_type}`)}
           </h3>

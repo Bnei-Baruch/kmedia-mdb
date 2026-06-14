@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import logger from '../src/logger/logger.js';
-import { favicon, noLanguageRedirect } from './middleware.js';
+import { isNonPage, noLanguageRedirect, staticFiles } from './middleware.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NAMESPACE = 'app-server';
@@ -26,15 +26,17 @@ async function createServer() {
     app.use(vite.middlewares);
   }
 
-  app.use('/locales', express.static(path.resolve(__dirname, '..', 'public', 'locales')));
-  app.use(favicon);
-  app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
+  app.use(staticFiles);
 
   app.use(noLanguageRedirect);
 
   app.use(async (req, res, next) => {
+    if (isNonPage(req.path)) {
+      return next();
+    }
+
     const url = req.originalUrl;
-    logger.log(NAMESPACE, 'request received', url);
+    logger.log(NAMESPACE, 'request received', url, '| UA:', req.get('user-agent'));
 
     try {
       const { render } = isProd

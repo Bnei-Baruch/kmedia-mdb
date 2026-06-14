@@ -23,7 +23,7 @@ const SocialBtn = ({ className, children }) => (
 
 const ShareBarPlayer = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const title = t('player.share.title');
   const url = useShareUrl();
 
@@ -92,7 +92,7 @@ const ShareBarPlayer = () => {
         />
       </div>
       {
-        !isMobileDevice && (
+        !isMobile && (
           <>
             <div className="bg-white text-gray-600 rounded-full flex items-center justify-center px-2 cursor-pointer">
               <WebWrapTooltip

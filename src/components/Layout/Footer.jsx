@@ -8,7 +8,7 @@ import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 const Footer = () => {
   const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
   const year               = new Date().getFullYear();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
   const getBottomText = () => (
@@ -37,7 +37,7 @@ const Footer = () => {
 
           <a
             href={getRSSLinkByLangs(contentLanguages)}
-            className={`inline-flex items-center px-2 py-1 border border-brand-orange text-brand-orange rounded text-xs hover:bg-brand-orange hover:text-white transition-colors ${isMobileDevice ? 'order-first' : ''}`}
+            className={`inline-flex items-center px-2 py-1 border border-brand-orange text-brand-orange rounded text-xs hover:bg-brand-orange hover:text-white transition-colors ${isMobile ? 'order-first' : ''}`}
           >
             <span className="material-symbols-outlined small">rss_feed</span>
           </a>

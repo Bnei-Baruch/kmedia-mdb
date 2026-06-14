@@ -52,7 +52,7 @@ const PrevNextBtns = () => {
 
 const PrevBtn = ({ id }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
@@ -71,7 +71,7 @@ const PrevBtn = ({ id }) => {
     >
       <div className={btnContentClassName}>
         <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
-        {isMobileDevice ? ('') : (<span>{t('buttons.previous-article')}</span>)}
+        {isMobile ? ('') : (<span>{t('buttons.previous-article')}</span>)}
       </div>
     </Link>
   );
@@ -79,7 +79,7 @@ const PrevBtn = ({ id }) => {
 
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
@@ -96,7 +96,7 @@ const NextBtn = ({ id }) => {
       className="prev-next-btn inline-flex items-center border border-gray-300 rounded px-3 py-1.5 bg-white hover:bg-gray-50"
     >
       <div className={btnContentClassName}>
-        {isMobileDevice ? ('') : (<span>{t('buttons.next-article')}</span>)}
+        {isMobile ? ('') : (<span>{t('buttons.next-article')}</span>)}
         <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
       </div>
     </Link>

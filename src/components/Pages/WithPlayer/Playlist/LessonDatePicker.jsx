@@ -19,7 +19,7 @@ import {
 
 const LessonDatePicker = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const navigate = useNavigate();
   const uiLang   = useSelector(settingsGetUILangSelector);
@@ -56,7 +56,7 @@ const LessonDatePicker = () => {
 
   return (
     <ButtonDayPicker
-      label={isMobileDevice ? collection.film_date : t('values.date', { date: collection.film_date })}
+      label={isMobile ? collection.film_date : t('values.date', { date: collection.film_date })}
       uiLang={uiLang}
       onDayChange={fetchNextCO}
       value={new Date(collection.film_date)}

@@ -14,7 +14,7 @@ import ScanBtnTpl from './ScanBtnTpl';
 let timeout;
 const ShareScanBtn = () => {
   const { t }              = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const [isCopyOpen, setIsCopyOpen] = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
@@ -41,7 +41,7 @@ const ShareScanBtn = () => {
     }
   };
 
-  const buttonSize = isMobileDevice ? 'tiny' : 'small';
+  const buttonSize = isMobile ? 'tiny' : 'small';
 
   return (
     <Popover className="share-bar relative">

@@ -13,7 +13,7 @@ import {
 const BreadcrumbTextPage = () => {
   const { t } = useTranslation();
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const subject            = useSelector(textPageGetSubjectSelector);
   const fullPath           = useSelector(sourcesGetPathByIDSelector)(subject.id);
   const uiLang             = useSelector(settingsGetUILangSelector);
@@ -33,7 +33,7 @@ const BreadcrumbTextPage = () => {
       </Link>
       {divider}
       <div>
-        {isMobileDevice ? '...' : fullPath.map(x => x.name).join('/')}
+        {isMobile ? '...' : fullPath.map(x => x.name).join('/')}
       </div>
       {divider}
       <div>

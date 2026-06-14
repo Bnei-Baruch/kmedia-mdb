@@ -12,7 +12,7 @@ import { playerGetOverModeSelector } from '../../../redux/selectors';
 const Sharing = () => {
   const mode               = useSelector(playerGetOverModeSelector);
   const { t }              = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const Sharing = () => {
       <StartEnd action={
         <div className="sharing__reset" onClick={handleSetFull}>
           {
-            isMobileDevice ?
+            isMobile ?
               <button className="px-3 py-1.5 small bg-gray-300 rounded">
                 <span className="material-symbols-outlined text-base">undo</span>
               </button>

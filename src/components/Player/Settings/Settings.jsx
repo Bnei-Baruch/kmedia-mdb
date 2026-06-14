@@ -14,7 +14,7 @@ import { clsx } from 'clsx';
 
 const Settings = () => {
   const { t } = useTranslation();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const mode = useSelector(playerGetOverModeSelector);
 
@@ -22,8 +22,8 @@ const Settings = () => {
     <div className="settings">
       {
         mode !== PLAYER_OVER_MODES.languages && (
-          <div className={clsx('settings__pane', { 'w-full': isMobileDevice })} >
-            {!isMobileDevice && <MediaTypeControl />}
+          <div className={clsx('settings__pane', { 'w-full': isMobile })} >
+            {!isMobile && <MediaTypeControl />}
             <SubsControl />
             <RateControl />
             <QualityControl />
@@ -34,7 +34,7 @@ const Settings = () => {
           </div>
         )
       }
-      {isMobileDevice && <CloseBtn className="settings__close" />}
+      {isMobile && <CloseBtn className="settings__close" />}
       <div className="settings__pane"></div>
     </div>
   );

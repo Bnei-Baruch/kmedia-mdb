@@ -13,7 +13,7 @@ import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 
 const ResearchTab = ({ id }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_RESEARCH_MATERIAL);
@@ -28,7 +28,7 @@ const ResearchTab = ({ id }) => {
   return (
     <div className="player_page_tab">
       {
-        isMobileDevice ? (
+        isMobile ? (
           <TextLayoutMobile toolbar={<ResearchTabToolbarMobile />} playerPage={true} id={cu.id} />
         ) : (
           <TextLayoutWeb toolbar={<ResearchTabToolbarWeb />} playerPage={true} id={cu.id} />

@@ -13,7 +13,7 @@ const DownloadTrimItem = ({ item, pos }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const { link, download, name } = item;
-  const { isMobileDevice }       = useContext(DeviceInfoContext);
+  const { isMobile }       = useContext(DeviceInfoContext);
 
   const handleCopy = () => {
     setOpen(true);
@@ -22,10 +22,10 @@ const DownloadTrimItem = ({ item, pos }) => {
 
   return (
     <div className="flex" key={`file_${pos}`}>
-      <div className={isMobileDevice ? 'flex-[11]' : 'flex-[13]'}>
+      <div className={isMobile ? 'flex-[11]' : 'flex-[13]'}>
         {`${pos}. ${name}`}
       </div>
-      <div className={`${isMobileDevice ? 'flex-[5]' : 'flex-[3]'} text-right`}>
+      <div className={`${isMobile ? 'flex-[5]' : 'flex-[3]'} text-right`}>
         <Popover className="relative inline-block">
           <PopoverButton
             as="div"

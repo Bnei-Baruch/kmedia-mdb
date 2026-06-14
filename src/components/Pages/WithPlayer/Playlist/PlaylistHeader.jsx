@@ -17,7 +17,7 @@ import {
 } from '../../../../redux/selectors';
 
 const PlaylistHeader = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const { t } = useTranslation();
 
   const { cId, cuId, name } = useSelector(playlistGetInfoSelector);
@@ -44,7 +44,7 @@ const PlaylistHeader = () => {
       );
 
     if (isLesson) {
-      return !isMobileDevice ? (
+      return !isMobile ? (
         <>
           {t('constants.content-types.DAILY_LESSON')}
           <div className="text-xl display-iblock mx-1">
@@ -75,7 +75,7 @@ const PlaylistHeader = () => {
   const getTitleByCO = () => {
     let subheader;
     if (isLesson) {
-      subheader = isMobileDevice && `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+      subheader = isMobile && `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
@@ -83,7 +83,7 @@ const PlaylistHeader = () => {
     }
 
     let playNow;
-    if (!isMobileDevice) {
+    if (!isMobile) {
       const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
       if (isLesson) {
         playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })} ${unit.name}` : unit.name;
@@ -99,19 +99,19 @@ const PlaylistHeader = () => {
       }
     }
 
-    const _mobStyles = isMobileDevice ? 'flex justify-between gap-2 items-end' : '';
+    const _mobStyles = isMobile ? 'flex justify-between gap-2 items-end' : '';
 
     return (
       <div className='avbox__playlist-header px-4 py-3'>
         <div className='flex flex-justify gap-4 justify-between py-2'>
           <h2 className='my-0 text-3xl font-bold'>{getTitle()}</h2>
-          {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
+          {isLesson && !isMobile && <LessonDatePickerContainer />}
         </div>
         {
           subheader && (
             <h4 className={clsx('font-normal', _mobStyles)}>
               {subheader}
-              {isLesson && isMobileDevice && <LessonDatePickerContainer />}
+              {isLesson && isMobile && <LessonDatePickerContainer />}
             </h4>)
         }
         {playNow && (<h3 className="my-0 text-2xl font-bold">{playNow}</h3>)}

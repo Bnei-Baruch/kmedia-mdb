@@ -1,6 +1,6 @@
 
 
-const isServer = typeof window === 'undefined';
+const isServer = true// typeof window === 'undefined';
 
 const filterByNameSpace = () => true;//(nameSpace === 'renderer');
 

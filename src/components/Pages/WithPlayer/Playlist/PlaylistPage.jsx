@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistPage = ({ playerContainer }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const location = useLocation();
   const { isReady } = useSelector(playlistGetInfoSelector);
   const { cuId } = useSelector(playlistGetInfoSelector);
@@ -39,7 +39,7 @@ const PlaylistPage = ({ playerContainer }) => {
         </div>
       </div>
       {
-        !isMobileDevice && (
+        !isMobile && (
           <div className="max-w-[360px] max-md:hidden md:w-full xl:w-auto xl:max-w-[480px] 2xl:max-w-[540px]">
             {isReady && <PlaylistItems />}
             <div className="my-4" />
