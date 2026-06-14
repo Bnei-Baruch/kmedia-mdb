@@ -13,6 +13,13 @@
   font-size: 16px;
 }
 
+// react-day-picker v10 theming. (The old .DayPicker-* rules below target v7
+// class names that no longer exist after the v7 → v10 upgrade.)
+.rdp-root {
+  --rdp-accent-color: #{colors-helpers.$blue};
+  --rdp-today-color: #{colors-helpers.$blue};
+}
+
 .DayPicker-Day {
   outline: none !important;
   min-width: 2.5em;
