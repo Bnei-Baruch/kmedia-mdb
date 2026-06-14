@@ -138,7 +138,7 @@ const HelpPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {
             c.map((x, i) => (
-              <div key={x} className="rounded shadow border overflow-hidden">
+              <div key={x} className="card rounded shadow border overflow-hidden">
                 <div className="p-4">
                   <div className="font-bold large">{txts[i].title[uiLang]}</div>
                 </div>
