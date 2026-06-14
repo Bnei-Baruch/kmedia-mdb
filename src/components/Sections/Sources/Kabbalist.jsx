@@ -37,7 +37,7 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
 
   return (
     <div className={clsx('flex items-start border-b border-gray-300 py-4 last:border-0', { author: true, 'author--image': !!portrait })}>
-      <div className="flex-none pr-4">
+      <div className="flex-none pe-4">
         {portrait ? <img src={portrait} alt={fullName} /> : null}
       </div>
       <div className="flex-1">
@@ -46,7 +46,7 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
             {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
           </h4>
           <div>
-            <ul className="list-disc pl-5 columns-1 md:columns-2">
+            <ul className="list-disc ps-5 columns-1 md:columns-2">
               {
                 volumes
                   ? volumes.map(x => {

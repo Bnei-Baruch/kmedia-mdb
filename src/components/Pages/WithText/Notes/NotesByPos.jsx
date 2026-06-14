@@ -41,7 +41,7 @@ const NotesByPos = ({ pos, ids }) => {
         onClick={handleToggle}
       >
         <span className="material-symbols-outlined">mode_comment</span>
-        <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+        <span className="absolute -top-2 -end-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
           {ids.length}
         </span>
       </button>

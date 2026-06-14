@@ -402,7 +402,7 @@
 
     .divider {
       display: block;
-      border-left: 1px solid colors-helpers.$stroke-gray;
+      border-inline-start: 1px solid colors-helpers.$stroke-gray;
       align-self: center;
       height: 24px;
       margin: 0 6px;
@@ -463,7 +463,7 @@
 
     & > .menu {
       position: absolute;
-      right: 0;
+      inset-inline-end: 0;
       z-index: 10;
       margin-top: 4px;
       border-radius: 4px;

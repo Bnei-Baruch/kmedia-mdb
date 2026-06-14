@@ -73,7 +73,7 @@ const LabelMark = ({ label, offset }) => {
               <SectionLogo name="topics" width="25" height="25" />
             </Popover.Button>
             <Popover.Panel
-              className="label_mark_popup absolute left-full top-0 z-10 ml-2 rounded bg-gray-900 text-white p-3"
+              className="label_mark_popup absolute start-full top-0 z-10 ms-2 rounded bg-gray-900 text-white p-3"
               dir={dir}
             >
               <div className="font-semibold">{name}</div>

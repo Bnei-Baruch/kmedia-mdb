@@ -175,8 +175,9 @@
 
 .library-person{
 .inline-img {
-  float: left;
-  margin: 0 1.5em 1em 0;
+  float: inline-start;
+  margin-inline-end: 1.5em;
+  margin-block-end: 1em;
 }
 
   .readble-width {

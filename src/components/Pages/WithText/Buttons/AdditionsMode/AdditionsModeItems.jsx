@@ -37,7 +37,7 @@ const AdditionsModeItems = () => {
           .map(([key, val]) => (
             <button
               onClick={() => handleSet(val)}
-              className={`flex items-center justify-between px-4 py-2 text-left ${mode === val ? 'bg-blue-50 font-semibold' : ''}`}
+              className={`flex items-center justify-between px-4 py-2 text-start ${mode === val ? 'bg-blue-50 font-semibold' : ''}`}
               key={key}
             >
               {t(`page-with-text.buttons.web.additions.${key}`)}
