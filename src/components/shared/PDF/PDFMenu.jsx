@@ -75,7 +75,7 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
         <span className="material-symbols-outlined">{`chevron_${isLtr ? 'left' : 'right'}`}</span>
         <span>{t('simple-mode.prev')}</span>
       </button>
-      <div className="input_wrapper">
+      <div className="pdf_input_wrapper">
         <input
           value={inputValue}
           onChange={handleChange}
