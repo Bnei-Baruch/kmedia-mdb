@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../../../helpers/url';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
+import '../../../../shared/PDF/pdfWorker';
 import { ErrorSplash, LoadingSplash } from '../../../../shared/Splash/Splash';
 import { physicalFile } from '../../../../../helpers/utils';
 import { useSelector } from 'react-redux';
@@ -48,7 +49,6 @@ const ScanPDF = () => {
 
   const onDocumentLoadSuccess         = ({ numPages: _numPages }) => setNumPages(_numPages);
   const _file                         = physicalFile(file);
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   let iconBack, iconForward;
   if (uiDir === 'ltr') {
     iconBack    = 'arrow_back';
@@ -93,9 +93,8 @@ const ScanPDF = () => {
                 <Page
                   width={width}
                   pageNumber={(inputValue)}
-                  renderAnnotations={false}
+                  renderAnnotationLayer={false}
                   renderTextLayer={false}
-                  renderMode="svg"
                 />
               )
             }

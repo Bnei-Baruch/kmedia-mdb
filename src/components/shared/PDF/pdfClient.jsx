@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 
+import './pdfWorker';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
@@ -11,9 +12,6 @@ import { textPageGetSettings } from '../../../redux/selectors';
 import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
 import PDFMenu from './PDFMenu';
 import { goOtherTassPart } from './helper';
-
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDFClient = ({ pdfFile, startsFrom, isTaas = true }) => {
   const [width, setWidth]       = useState();
@@ -90,9 +88,8 @@ const PDFClient = ({ pdfFile, startsFrom, isTaas = true }) => {
                   onLoadError={onDocumentLoadError}
                   width={width}
                   pageNumber={(pageNumber + (-startsFrom) + 1)}
-                  renderAnnotations={false}
+                  renderAnnotationLayer={false}
                   renderTextLayer={false}
-                  renderMode="svg"
                 />
               )
             }
