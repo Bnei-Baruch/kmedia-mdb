@@ -259,7 +259,7 @@ const Recommended = ({ filterOutUnits = [], displayTitle = true, cuId }) => {
   if (!isEmpty(recommendedProps)) {
     return (
       <>
-        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} key={p.id} />)}
+        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} key={p.feedName} />)}
       </>
     );
   }

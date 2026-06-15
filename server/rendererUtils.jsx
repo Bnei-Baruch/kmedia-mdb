@@ -236,8 +236,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   res.setHeader('Transfer-Encoding', 'chunked');
 
   const headCloseIdx = htmlData.indexOf('</head>');
-  const headHtml =
-    htmlData
+  const headHtml = htmlData
       .slice(0, headCloseIdx)
       .replace('<html lang="en">', `<html lang="${uiLang}" dir="${direction}">`)
     + canonicalLink(req, uiLang)
