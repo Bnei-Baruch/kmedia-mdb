@@ -176,23 +176,34 @@
   }
 }
 
-.cu_item_popover {
-  position: relative;
-
-  h4 {
-    margin: 0;
-  }
-}
-
-.cu_item_popover_panel {
+// Hover tooltip with the full (unclamped) cu_item_info content. Shown via
+// `group-hover` on .cu_item_info, only rendered when the inline text is cut off.
+.cu_item_list .cu_item_tooltip {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
+  width: max-content;
+  max-width: 90%;
+  white-space: normal;
   background-color: white;
   border: 1px solid #e5e7eb;
   border-radius: 0.25rem;
   box-shadow: 0 10px 15px -3px rgba(colors-helpers.$fullBlack, 0.1), 0 4px 6px -4px rgba(colors-helpers.$fullBlack, 0.1);
   padding: 0.5rem;
   font-size: 0.875em;
+
+  .cu_item_tooltip_name {
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+    color: colors-helpers.$black;
+  }
+
+  .cu_item_tooltip_desc > span {
+    display: inline-block;
+    padding-inline-end: 0.5em;
+  }
 }
 
 .cu_item_subtext {

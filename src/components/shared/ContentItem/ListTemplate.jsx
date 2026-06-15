@@ -1,7 +1,6 @@
 import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -39,14 +38,22 @@ const ListTemplate = (
   const dir                = useSelector(settingsGetUIDirSelector);
   const { isMobile } = useContext(DeviceInfoContext);
 
-  const [isNeedTooltip, setIsNeedTooltip] = useState(null);
+  const [isNeedTooltip, setIsNeedTooltip] = useState(false);
   const cuInfoRef                         = useRef();
+  const descRef                           = useRef();
 
+  const _name = name || unit?.name || source?.name || tag?.label;
+
+  // Show the tooltip only when the inline content is actually cut off: the name
+  // is line-clamped (vertical overflow) or the description ellipsizes (horizontal).
   useEffect(() => {
-    if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
-      setIsNeedTooltip(true);
-    }
-  }, [cuInfoRef]);
+    const nameEl = cuInfoRef.current;
+    const descEl = descRef.current;
+    const truncated =
+      !!(nameEl && nameEl.scrollHeight > nameEl.clientHeight) ||
+      !!(descEl && descEl.scrollWidth > descEl.clientWidth);
+    setIsNeedTooltip(truncated);
+  }, [_name, description, size, isMobile]);
 
   useEffect(() => {
     if (selected && itemRef.current) {
@@ -67,34 +74,11 @@ const ListTemplate = (
 
   const Tag = size === 'big' || isMobile ? 'h5' : 'h3';
 
-  const renderCUInfo = () => {
-    const _name   = name || unit?.name || source?.name || tag?.label;
-    const content = (
-      <Tag
-        ref={cuInfoRef}
-        className="cu_item_name"
-      >
-        {_name}
-      </Tag>
-    );
-
-    if (!isNeedTooltip)
-      return content;
-
-    return (
-      <Popover className="cu_item_popover">
-        <PopoverButton as="div">
-          {content}
-        </PopoverButton>
-        <PopoverPanel
-          className="cu_item_popover_panel"
-          dir={dir}
-        >
-          {_name}
-        </PopoverPanel>
-      </Popover>
-    );
-  };
+  const renderCUInfo = () => (
+    <Tag ref={cuInfoRef} className="cu_item_name">
+      {_name}
+    </Tag>
+  );
 
   const width = isMobile ? 165 : imageWidthBySize[size];
 
@@ -104,7 +88,7 @@ const ListTemplate = (
       id={unit?.id}
       to={link}
       key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
-      className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
+      className={clsx('cu_item cu_item_list no-thumbnail group', { [size]: !!size, selected })}
     >
       <div>
         {label ? <div className="cu_item_label">{label}</div> : null}
@@ -117,10 +101,19 @@ const ListTemplate = (
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
         {withCUInfo && renderCUInfo()}
         {info}
-        <div className={`cu_info_description ${dir} text_ellipsis`}>
+        <div ref={descRef} className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
+      {isNeedTooltip && (
+        <div className="cu_item_tooltip hidden group-hover:block" dir={dir}>
+          {withCUInfo && <Tag className="cu_item_tooltip_name">{_name}</Tag>}
+          {info}
+          <div className="cu_item_tooltip_desc">
+            {description.map((d, i) => (<span key={i}>{d}</span>))}
+          </div>
+        </div>
+      )}
       {
         children ? (
           <div className="cu_item_actions">

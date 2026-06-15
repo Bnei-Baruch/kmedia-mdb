@@ -2,7 +2,10 @@
 
 const isServer = true// typeof window === 'undefined';
 
-const filterByNameSpace = () => true;//(nameSpace === 'renderer');
+const filterByNameSpace = ns => (
+  ns !== 'Api_Requests' &&
+  ns !== 'mdb_sagas'
+);
 
 const logger = {
   log: (nameSpace, ...args) => {
