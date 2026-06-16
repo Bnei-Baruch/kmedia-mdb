@@ -227,7 +227,7 @@ class MediaDownloads extends Component {
             href={url}
             target="_blank"
             rel="noreferrer"
-            className="inline-block px-2 py-0.5 bg-orange-500 text-white rounded text-xs hover:text-white"
+            className="inline-block px-2 py-0.5 bg-orange-500 text-white! rounded text-xs hover:text-white"
             onClick={() => chroniclesAppend('download', { url, uid: file.id })}
           >
             {ext.toUpperCase()}
