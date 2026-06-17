@@ -1,39 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { actions as ssrActions } from './ssr';
 
 const likutimSlice = createSlice({
-  name        : 'likutim',
+  name: 'likutim',
   initialState: {
-    wip    : false,
-    err    : null,
-    likutim: []
+    wip: {},
+    err: {},
+    byKey: {}
   },
 
-  reducers     : {
-    fetchLikutim       : state => void (state.wip = true),
-    fetchLikutimSuccess: (state, { payload }) => {
-      state.wip     = false;
-      state.err     = null;
-      state.likutim = payload.content_units;
+  reducers: {
+    fetchByTag: (state, { payload }) => {
+      state.err[payload] = null;
+      state.wip[payload] = true;
     },
-    fetchLikutimFailure: (state, { payload }) => {
-      state.wip     = false;
-      state.err     = payload;
-      state.likutim = [];
+
+    fetchByTagSuccess: (state, { payload }) => {
+      const { content_units, key } = payload;
+      for (const cu of content_units) {
+        cu.tags.forEach(id => {
+          if (!key.includes(id)) return;
+          const ids = state.byKey[key] ? state.byKey[key] : [];
+          if (ids.includes(cu.id)) return;
+          state.byKey[key] = [...ids, cu.id];
+        });
+      }
+
+      state.wip[key] = false;
+    },
+    fetchByTagFailure: (state, { payload }) => {
+      const { err, key } = payload;
+      state.err[key]     = err;
+      state.wip[key]     = false;
     }
   },
-  extraReducers: builder => {
-    builder.addCase(ssrActions.prepare, state => {
-      if (state.err) {
-        state.err = state.err.toString();
-      }
-    });
-  },
-
   selectors: {
-    getWip    : state => state.wip,
-    getError  : state => state.err,
-    getLikutim: state => state.likutim
+    getWip: (state, key) => state.wip[key],
+    getError: (state, key) => state.err[key],
+    getByTag: state => key => state.byKey[key]
   }
 });
 
