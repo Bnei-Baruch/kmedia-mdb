@@ -308,6 +308,11 @@
         "badge": "Actualizando",
         "message": "Estos resultados aún pueden cambiar mientras la búsqueda continúa. Los resultados finales aparecerán cuando la búsqueda termine."
       },
+      "loginRequired": {
+        "title": "Inicia sesión para usar la búsqueda con agente",
+        "message": "Inicia sesión o regístrate para obtener resultados más relevantes con el agente de IA.",
+        "button": "Iniciar sesión / Registrarse"
+      },
       "summaryFallback": {
         "title": "Resumen",
         "message": "Encontramos algunas coincidencias buenas: {{findingsText}}. Puedes usar {{improveSearch}} abajo para obtener resultados más enfocados.",

@@ -307,6 +307,11 @@
         "badge": "Aggiornamento in corso",
         "message": "Questi risultati possono ancora cambiare mentre la ricerca continua. I risultati finali appariranno quando la ricerca sarà completata."
       },
+      "loginRequired": {
+        "title": "Accedi per usare la ricerca agentica",
+        "message": "Accedi o registrati per ottenere risultati più pertinenti con l'agente AI.",
+        "button": "Accedi / Registrati"
+      },
       "summaryFallback": {
         "title": "Sintesi",
         "message": "Abbiamo trovato alcune buone corrispondenze: {{findingsText}}. Puoi usare {{improveSearch}} qui sotto per ottenere risultati piu mirati.",

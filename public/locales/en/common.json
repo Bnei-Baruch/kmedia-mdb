@@ -310,6 +310,11 @@
         "badge": "Updating",
         "message": "These results may still change while the search continues. Final results will appear once the search is complete."
       },
+      "loginRequired": {
+        "title": "Sign in to use Agentic Search",
+        "message": "Log in or register to get more relevant results with the AI agent.",
+        "button": "Log in / Register"
+      },
       "summaryFallback": {
         "title": "Summary",
         "message": "We found some good matches: {{findingsText}}. You can use {{improveSearch}} below to get more focused results.",

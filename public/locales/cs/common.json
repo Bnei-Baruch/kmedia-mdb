@@ -309,6 +309,11 @@
         "badge": "Aktualizuje se",
         "message": "Tyto výsledky se ještě mohou změnit, zatímco vyhledávání pokračuje. Konečné výsledky se zobrazí po dokončení vyhledávání."
       },
+      "loginRequired": {
+        "title": "Přihlaste se, abyste mohli používat agentní vyhledávání",
+        "message": "Přihlaste se nebo se zaregistrujte, abyste s AI agentem získali relevantnější výsledky.",
+        "button": "Přihlásit / Registrovat"
+      },
       "summaryFallback": {
         "title": "Shrnutí",
         "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",

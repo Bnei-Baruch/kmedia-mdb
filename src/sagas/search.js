@@ -27,7 +27,8 @@ import {
   searchGetSearchTypeSelector,
   searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
-  settingsGetUILangSelector
+  settingsGetUILangSelector,
+  authGetUserSelector
 } from '../redux/selectors';
 
 // TODO: Use debounce after redux-saga updated.
@@ -379,6 +380,12 @@ export function* search(action) {
     }
 
     if (isAgenticSearchType(searchType)) {
+      const user = yield select(authGetUserSelector);
+      if (!user) {
+        yield put(actions.searchFailure({ error: null, searchType }));
+        return;
+      }
+
       const previousReasoningResult = yield select(searchGetReasoningResultSelector);
       const previousReasoningStatus = yield select(searchGetReasoningStatusSelector);
       const sessionIdFromPrevious   = previousReasoningResult?.session_id;
@@ -683,6 +690,11 @@ export function* hydrateUrl(action) {
   }
 
   if (isAgenticSearchType(searchType)) {
+    const user = yield select(authGetUserSelector);
+    if (!user) {
+      return;
+    }
+
     const result = yield select(state => reasoningResultForType(state, searchType));
     const status = yield select(state => reasoningStatusForType(state, searchType));
     const wip = yield select(state => reasoningWipForType(state, searchType));

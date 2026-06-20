@@ -309,6 +309,11 @@
         "badge": "Güncelleniyor",
         "message": "Arama devam ederken bu sonuçlar hâlâ değişebilir. Nihai sonuçlar arama tamamlandığında görünecek."
       },
+      "loginRequired": {
+        "title": "Ajanlı aramayı kullanmak için giriş yapın",
+        "message": "AI ajanıyla daha alakalı sonuçlar almak için giriş yapın veya kayıt olun.",
+        "button": "Giriş / Kayıt"
+      },
       "summaryFallback": {
         "title": "Özet",
         "message": "Bazi iyi eslesmeler bulduk: {{findingsText}}. Daha odakli sonuçlara ulaşmak için aşağıdaki {{improveSearch}} alanını kullanabilirsiniz.",

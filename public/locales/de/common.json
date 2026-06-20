@@ -306,6 +306,11 @@
         "badge": "Wird aktualisiert",
         "message": "Diese Ergebnisse können sich noch ändern, solange die Suche weiterläuft. Die endgültigen Ergebnisse erscheinen, sobald die Suche abgeschlossen ist."
       },
+      "loginRequired": {
+        "title": "Melde dich an, um die Agenten-Suche zu nutzen",
+        "message": "Melde dich an oder registriere dich, um mit dem KI-Agenten relevantere Ergebnisse zu erhalten.",
+        "button": "Anmelden / Registrieren"
+      },
       "summaryFallback": {
         "title": "Zusammenfassung",
         "message": "Wir haben einige gute Treffer gefunden: {{findingsText}}. Mit {{improveSearch}} unten kannst du gezieltere Ergebnisse bekommen.",

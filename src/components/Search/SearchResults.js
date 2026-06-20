@@ -70,10 +70,12 @@ import {
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
   searchGetErrorSelector,
-  searchGetWipSelector
+  searchGetWipSelector,
+  authGetUserSelector
 } from '../../redux/selectors';
 import { buildHighlightLinkTarget } from './highlightLink';
 import Link from '../Language/MultiLanguageLink';
+import { login } from '../../pkg/ksAdapter/adapter';
 
 const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'finalizing', 'done', 'error'];
 const AGENTIC_TWEET_RESULT_TYPES = new Set(['twitter', 'tweet', 'tweets', 'tweets_many']);
@@ -183,9 +185,11 @@ const SearchResults = ({ t }) => {
   const reasoningResult = useSelector(searchGetReasoningResultSelector);
   const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
   const searchType    = useSelector(searchGetSearchTypeSelector);
+  const user          = useSelector(authGetUserSelector);
   const searchResults = queryResult.search_result;
   const isAgenticSearch = isAgenticSearchType(searchType);
   const isRapidAgenticSearch = searchType === SEARCH_TYPES.AGENTIC_RAPID;
+  const canUseAgenticSearch = !!user;
 
   const cMap    = useSelector(state => cMapFromState(state, searchResults));
   const cuMap   = useSelector(state => cuMapFromState(state, searchResults));
@@ -229,6 +233,9 @@ const SearchResults = ({ t }) => {
   const [followupQuery, setFollowupQuery] = React.useState('');
   const [followupStatusQuery, setFollowupStatusQuery] = React.useState('');
   const [scrollToAgenticStatus, setScrollToAgenticStatus] = React.useState(false);
+  const [blockedAgenticSearchType, setBlockedAgenticSearchType] = React.useState(null);
+  const visibleSearchType = blockedAgenticSearchType || searchType;
+  const shouldShowAgenticLoginPrompt = !canUseAgenticSearch && isAgenticSearchType(visibleSearchType);
 
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
@@ -258,6 +265,12 @@ const SearchResults = ({ t }) => {
   const missingAgenticTweetIdsKey = missingAgenticTweetIds.join(',');
 
   React.useEffect(() => {
+    if (canUseAgenticSearch && blockedAgenticSearchType) {
+      setBlockedAgenticSearchType(null);
+    }
+  }, [blockedAgenticSearchType, canUseAgenticSearch]);
+
+  React.useEffect(() => {
     if (!reasoningResult) {
       setFollowupStatusQuery('');
     }
@@ -285,6 +298,13 @@ const SearchResults = ({ t }) => {
   };
 
   const handleSearchTypeChange = nextSearchType => {
+    if (isAgenticSearchType(nextSearchType) && !canUseAgenticSearch) {
+      setBlockedAgenticSearchType(nextSearchType);
+      return;
+    }
+
+    setBlockedAgenticSearchType(null);
+
     if (nextSearchType !== searchType) {
       dispatch(actions.setSearchType(nextSearchType));
     }
@@ -308,19 +328,19 @@ const SearchResults = ({ t }) => {
     <Container className="padded" textAlign="right">
       <Button.Group size="small">
         <Button
-          active={searchType === SEARCH_TYPES.REGULAR}
+          active={visibleSearchType === SEARCH_TYPES.REGULAR}
           onClick={() => handleSearchTypeChange(SEARCH_TYPES.REGULAR)}
         >
           {t('search.types.regular')}
         </Button>
         <Button
-          active={searchType === SEARCH_TYPES.AGENTIC}
+          active={visibleSearchType === SEARCH_TYPES.AGENTIC}
           onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC)}
         >
           {t('search.types.agentic')}
         </Button>
         <Button
-          active={searchType === SEARCH_TYPES.AGENTIC_RAPID}
+          active={visibleSearchType === SEARCH_TYPES.AGENTIC_RAPID}
           onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC_RAPID)}
         >
           {t('search.types.agenticRapid')}
@@ -329,11 +349,30 @@ const SearchResults = ({ t }) => {
       <Label basic color="blue" className="margin-left-8 margin-right-8">
         {t('search.types.beta')}
       </Label>
-      {isAgenticSearch && (
+      {isAgenticSearchType(visibleSearchType) && (
         <Container className="description padding-top-8" textAlign="right">
           {t('search.types.agenticBeta')}
         </Container>
       )}
+    </Container>
+  );
+
+  const renderAgenticLoginPrompt = () => (
+    <Container className="padded">
+      <Message info icon>
+        <Icon name="user circle outline" />
+        <Message.Content>
+          <Message.Header>{t('search.agentic.loginRequired.title')}</Message.Header>
+          <p>{t('search.agentic.loginRequired.message')}</p>
+          <Button
+            basic
+            color="blue"
+            icon="user circle outline"
+            content={t('search.agentic.loginRequired.button')}
+            onClick={login}
+          />
+        </Message.Content>
+      </Message>
     </Container>
   );
 
@@ -1054,6 +1093,10 @@ const SearchResults = ({ t }) => {
   // Query from URL (not changed until pressed Enter)
   const query = getQuery(location).q || '';
   const deb   = isDebMode(location);
+
+  if (shouldShowAgenticLoginPrompt) {
+    return renderSearchFrame(renderAgenticLoginPrompt());
+  }
 
   const wipErr = WipErr({ wip: !isAgenticSearch && (wip || !areSourcesLoaded || !areTagsLoaded), err: isAgenticSearch ? null : err, t });
   if (wipErr) {
