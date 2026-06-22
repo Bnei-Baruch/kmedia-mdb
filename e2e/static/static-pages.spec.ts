@@ -32,13 +32,13 @@ test.describe('About page', () => {
     const base = new BasePage(page);
     await base.goto('/about');
 
-    await expect(page.locator('.readble-width').first()).toBeAttached();
+    await expect(page.locator('.readble-width, .readable-width').first()).toBeAttached();
   });
 
   test('about matches snapshot', async ({ page }) => {
     const base = new BasePage(page);
     await base.goto('/about');
-    await expect(page.locator('.readble-width').first()).toBeAttached();
+    await expect(page.locator('.readble-width, .readable-width').first()).toBeAttached();
 
     await expect(page).toHaveScreenshot('about.png', {
       fullPage: false,
@@ -52,13 +52,13 @@ test.describe('Person page', () => {
     const base = new BasePage(page);
     await base.goto(`/persons/${KNOWN_PERSON_ID}`);
 
-    await expect(page.locator('.library-person, .readble-width').first()).toBeVisible();
+    await expect(page.locator('.library-person, .readble-width, .readable-width').first()).toBeVisible();
   });
 
   test('person matches snapshot', async ({ page }) => {
     const base = new BasePage(page);
     await base.goto(`/persons/${KNOWN_PERSON_ID}`);
-    await expect(page.locator('.library-person, .readble-width').first()).toBeVisible();
+    await expect(page.locator('.library-person, .readble-width, .readable-width').first()).toBeVisible();
 
     await expect(page).toHaveScreenshot('person.png', {
       fullPage: false,

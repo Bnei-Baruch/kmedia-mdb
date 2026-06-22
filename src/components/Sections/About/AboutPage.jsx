@@ -30,7 +30,7 @@ const AboutPage = () => {
     <div className=" px-4 ">
       <div className="flex flex-wrap">
         <div className="w-full">
-          <div className="readble-width" dangerouslySetInnerHTML={{ __html: data.content }}/>
+          <div className="readable-width" dangerouslySetInnerHTML={{ __html: data.content }}/>
         </div>
       </div>
     </div>

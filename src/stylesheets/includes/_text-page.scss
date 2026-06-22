@@ -100,7 +100,7 @@
     padding: 1.5em 0 0;
 
     .text__content {
-      max-width: variables.$max-readble-width;
+      max-width: variables.$max-readable-width;
       word-break: break-word;
 
       &.text_pdf {
@@ -386,7 +386,7 @@
 
 
   &__buttons {
-    max-width: variables.$max-readble-width;
+    max-width: variables.$max-readable-width;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -630,7 +630,7 @@
 }
 
 .text__search_on_page {
-  max-width: variables.$max-readble-width;
+  max-width: variables.$max-readable-width;
   margin: 0 auto;
   display: flex;
   flex-wrap: nowrap;
@@ -956,7 +956,7 @@
     }
 
     .text__scan_pdf {
-      width: variables.$max-readble-width;
+      width: variables.$max-readable-width;
     }
   }
 

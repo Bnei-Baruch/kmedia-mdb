@@ -15,9 +15,58 @@
   font-weight: bold;
 }
 
-.readble-width {
-  max-width: variables.$max-readble-width;
-  // margin: 0 auto;
+.readable-width {
+  max-width: variables.$max-readable-width;
+  margin: 0 auto;
+  padding: 1em 0;
+
+  // Tailwind Preflight resets headings/lists; restore typography for raw CMS
+  // HTML rendered here via dangerouslySetInnerHTML (About, LibraryPerson).
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.28571429em;
+    margin: 1.4em 0 0.6em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.71428571em; }
+  h3 { font-size: 1.28571429em; }
+  h4 { font-size: 1.07142857em; }
+  h5 { font-size: 1em; }
+
+  p {
+    margin-bottom: 1.2em;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 1.2em;
+    padding-inline-start: 2em;
+  }
+
+  ul { list-style: disc; }
+  ol { list-style: decimal; }
+
+  li {
+    margin-bottom: 0.4em;
+  }
+
+  a {
+    color: colors-helpers.$blue;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 
