@@ -109,27 +109,24 @@ $transparent: rgba(colors-helpers.$fullBlack, 0) !default;
   white-space: nowrap;
 }
 
+// react-image-gallery v2 lays slides out in a horizontal flex track rather
+// than absolutely positioning them, so the track must be a flex container.
+.image-gallery-slides-container {
+  display: flex;
+}
+
 .image-gallery-slide {
   background: colors-helpers.$white;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
+  flex: 0 0 100%;
+  min-width: 0;
+  position: relative;
 
-  &.image-gallery-center {
-    position: relative;
-  }
-
+  // In v2 `.image-gallery-image` is the <img> itself. Size it by width and cap
+  // the height so portrait images letterbox instead of collapsing to 0.
   .image-gallery-image {
-    display: flex;
-    flex: 1 1 auto;
-  }
-
-  img {
-    height: 100%;
+    display: block;
+    margin: 0 auto;
+    max-height: calc(100vh - 80px);
     object-fit: contain;
     width: 100%;
   }
