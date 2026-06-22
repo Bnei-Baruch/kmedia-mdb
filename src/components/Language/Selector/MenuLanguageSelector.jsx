@@ -101,7 +101,7 @@ const MultiSelectDropdown = ({ upward, value, onChange, options }) => {
   return (
     <div className="relative" ref={ref}>
       <div
-        className="border rounded px-2 py-1 flex items-center gap-1 min-w-[200px] w-full text-left cursor-pointer"
+        className="border border-gray-300 rounded px-2 py-1 flex items-center gap-1 min-w-50 w-full text-left cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex flex-1 flex-wrap gap-1">

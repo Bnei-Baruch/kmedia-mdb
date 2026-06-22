@@ -18,6 +18,13 @@
 .rdp-root {
   --rdp-accent-color: #{colors-helpers.$blue};
   --rdp-today-color: #{colors-helpers.$blue};
+  // Fill the selected day with a background instead of the default border.
+  --rdp-selected-border: none;
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: #{colors-helpers.$blue-bright};
+  color: #{colors-helpers.$white};
 }
 
 .DayPicker-Day {

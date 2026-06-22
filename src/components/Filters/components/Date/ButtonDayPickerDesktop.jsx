@@ -7,7 +7,7 @@ import 'react-day-picker/style.css';
 import { useSelector } from 'react-redux';
 
 import { today } from '../../../../helpers/date';
-import { getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
+import { getDayPickerLocale } from '../../../../helpers/dayPickerLocale';
 import { noop } from '../../../../helpers/utils';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import Icon from '../../../Icon';
@@ -17,7 +17,7 @@ const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }
   const uiDir  = useSelector(state => settings.getUIDir(state.settings));
 
   const [month, setMonth] = useState(value);
-  const locale = getLanguageLocaleWORegion(uiLang);
+  const locale = getDayPickerLocale(uiLang);
 
   useEffect(() => setMonth(value), [value]);
 

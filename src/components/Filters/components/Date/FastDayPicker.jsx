@@ -8,6 +8,7 @@ import scrollIntoView from 'scroll-into-view';
 import { noop } from '../../../../helpers/utils';
 
 import { today } from '../../../../helpers/date';
+import { getDayPickerLocale } from '../../../../helpers/dayPickerLocale';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -182,6 +183,7 @@ class FastDayPicker extends Component {
                 <DayPicker
                   mode="single"
                   captionLayout="dropdown"
+                  locale={getDayPickerLocale(language)}
                   disabled={{ after: new Date() }}
                   month={month || value || undefined}
                   endMonth={today().toDate()}

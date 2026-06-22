@@ -200,10 +200,11 @@
 
 .horizontal-list {
   display: flex;
-  padding-bottom: 16px !important;
+  padding-bottom: 1em;
   border-bottom: 1px solid #ebecf0;
-  text-decoration: none !important;
   overflow-x: auto;
+  align-items: center;
+  gap: 1em;
 
   &.remove-bottom-border {
     border: 0;
@@ -254,11 +255,10 @@
   }
 
   .media-file-button {
-    height: 24px;
     margin-inline-end: 8px;
     text-decoration: none;
-    display: flex !important;
-    padding: 0 8px !important;
+    display: flex;
+    padding: 2px 8px;
     justify-content: center;
     align-items: center;
     border: 1px solid #e0e0e0;

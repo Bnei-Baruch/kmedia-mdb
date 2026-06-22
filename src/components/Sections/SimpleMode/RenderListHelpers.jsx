@@ -80,24 +80,20 @@ const renderHorizontalFilesList = (language, files, contentType, t, chroniclesAp
     const url = downloadLink(file);
     const label = labelTextByFile(file, contentType, t);
     return (
-      <li key={`${file.id}_${file.type}_${file.video_size}_${file.language}`} className="media-file-button">
-        <div>
-          <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })}>
-            {label} ({file.language})
-            <div className="file-list-icon inline-block">
-              <SectionLogo name="downloads" />
-            </div>
-          </a>
+      <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })} className="media-file-button">
+        {label} ({file.language})
+        <div className="file-list-icon inline-block">
+          <SectionLogo name="downloads" />
         </div>
-      </li>
+      </a>
     );
   });
 
   html.unshift(
-    <li key={`language`} className="list-first-item">
+    <div key={`language`} className="list-first-item">
       {LANGUAGES[language].name}:&#8194;
       <nbsp />
-    </li>
+    </div>
   );
 
   return html;
@@ -259,12 +255,12 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         <div key={unit.id} className="unit-header">
           <h4 className='text-xl font-bold'>{title}</h4>
           {files.length > 0 ? (
-            files.map(f => <div className={`horizontal-list remove-bottom-border`} key={f.id}>{f}</div>)
+            files.map(f => <div className="horizontal-list remove-bottom-border" key={f.id}>{f}</div>)
           ) : (
             <div className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
-              <li key={`${unit.id}-no-files`} className="no-files">
+              <div key={`${unit.id}-no-files`} className="no-files">
                 <SectionLogo name="info" />
-                <div className="margin-right-8 margin-left-8">
+                <div className="mx-2">
                   <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                   <br />
                   {t('simple-mode.try-different-language')}
@@ -272,7 +268,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
                     {t('simple-mode.language-click')}
                   </button>
                 </div>
-              </li>
+              </div>
             </div>
           )}
         </div>
@@ -288,13 +284,13 @@ export const renderCollection = (collection, contentLanguages, t, helpChooseLang
   const units = renderUnits(collection.content_units, contentLanguages, t, helpChooseLang, chroniclesAppend);
 
   return (
-    <div className="rounded shadow border w-full my-4" key={id}>
+    <div className="rounded shadow border border-gray-300 w-full my-4" key={id}>
       <div className={`p-4 ${number ? 'gray-header' : ''}`}>
         <Link to={canonicalLink(collection)} className="font-bold text-xl unit-header" >
           {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
         </Link>
       </div>
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-gray-300">
         {units}
       </div>
     </div>
@@ -328,7 +324,7 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
             </div>
             {t(`nav.sidebar.${title.toLowerCase()}`)}
           </h2>
-          <div className="rounded shadow border w-full">
+          <div className="rounded shadow border w-full border-gray-300">
             <div className="p-4">
               <div className="large">{items}</div>
             </div>

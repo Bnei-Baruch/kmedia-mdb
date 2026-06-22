@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
+import { getDayPickerLocale } from '../../../helpers/dayPickerLocale';
 import { isToday } from '../../../helpers/utils';
 import { settingsGetUILangSelector } from '../../../redux/selectors';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
@@ -66,6 +67,7 @@ const SimpleModePage = (
 ) => {
   const { t } = useTranslation();
   const uiLang = useSelector(settingsGetUILangSelector);
+  const locale = getDayPickerLocale(uiLang);
 
   const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
   const [data, setData] = useState({
@@ -104,17 +106,18 @@ const SimpleModePage = (
 
   const renderDatePicker = () =>
     isClient &&
-    <div className="rounded shadow border overflow-hidden">
+    <div className="rounded shadow border border-gray-300 overflow-hidden px-3">
       <DayPicker
         mode="single"
         captionLayout="dropdown"
+        locale={locale}
         selected={selectedDate}
         month={selectedDate}
         endMonth={today().toDate()}
         disabled={{ after: new Date() }}
         onSelect={onDayClick}
       />
-      <div className="p-4">
+      <div className="py-4">
         <button className="bg-gray-300 rounded-md py-2 px-4 min-w-10" onClick={() => onDayClick(new Date())}>
           {t('simple-mode.today-button')}
         </button>
