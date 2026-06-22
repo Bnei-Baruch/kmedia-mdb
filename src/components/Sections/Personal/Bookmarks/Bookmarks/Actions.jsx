@@ -92,7 +92,7 @@ const Actions = ({ bookmark }) => {
           <span className="material-symbols-outlined text-2xl text-gray-400 mt-1">more_vert</span>
         </button>
         {open && (
-          <div className="absolute right-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
+          <div className="absolute inset-e-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
             <button
               className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
               onClick={handleOpenEdit}

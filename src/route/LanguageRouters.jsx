@@ -10,7 +10,7 @@ import { settingsGetUILangSelector, settingsGetUrlLangSelector } from '../redux/
 
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
-  const uiLang = useSelector(settingsGetUILangSelector);
+  const uiLang = useSelector(state => settingsGetUILangSelector(state, true /* skipUrl: compare URL against the saved preference, not the effective lang */));
   const origUrlLang = useSelector(settingsGetUrlLangSelector);
 
   const dispatch = useDispatch();
@@ -18,6 +18,8 @@ const LanguageRouter = () => {
 
   useEffect(() => {
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
+
+      console.log('LanguageRouter: urlLang', urlLang, 'uiLang', uiLang, 'origUrlLang', origUrlLang);
       if (urlLang === uiLang && origUrlLang !== '') {
         // Clear URL language it is the same as UI language.
         updateHtmlLang(uiLang);

@@ -65,14 +65,14 @@ const FolderList = ({ close }) => {
         <h3>{t('personal.bookmark.folders')}</h3>
       </div>
       <div className="flex-1">
-        <div className="relative bookmark_search">
-          <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+        <div className="bookmark_search flex w-full items-center gap-2 rounded border border-gray-300 pe-2">
           <input
-            className="w-full rounded border border-gray-300 py-2 pl-8 pr-3"
+            className="flex-1 border-0 bg-transparent py-2 ps-3 focus:outline-none"
             placeholder={t('personal.bookmark.searchFolders')}
             onChange={searchChange}
             defaultValue={query}
           />
+          <span className="material-symbols-outlined text-gray-400">search</span>
         </div>
       </div>
     </div>

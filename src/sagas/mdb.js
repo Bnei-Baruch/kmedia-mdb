@@ -179,16 +179,19 @@ export function* fetchSQData() {
   try {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    console.log('[fetchSQData] start', { uiLang, contentLanguages });
     const { data }         = yield call(Api.sqdata, {
       ui_language      : uiLang,
       content_languages: contentLanguages
     });
+    console.log('[fetchSQData] success', { sources: data?.sources?.length, tags: data?.tags?.length, publishers: data?.publishers?.length, persons: data?.persons?.length });
     yield put(sources.receiveSources({ sources: data.sources, uiLang }));
     yield put(tags.receiveTags(data.tags));
     yield put(publications.receivePublishers(data.publishers));
     yield put(mdbActions.receivePersons(data.persons));
     yield put(mdbActions.fetchSQDataSuccess());
   } catch (err) {
+    console.log('[fetchSQData] FAILED', err?.message || err);
     yield put(mdbActions.fetchSQDataFailure(err));
   }
 }

@@ -102,7 +102,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
       <Dialog open={!!open} onClose={onClose} className="relative select_topic_modal" dir={dir}>
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+          <DialogPanel className="bg-white rounded-lg shadow-xl w-full max-h-[90vh] flex flex-col">
             <div className="px-6 py-4 border-b font-bold large no-border">
               {t('personal.label.header')}
             </div>
@@ -114,26 +114,26 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                   <>
                     <div className="px-6 py-4 pt-0">
                       <div className={`label_name flex w-full items-center ${selected.length > 0 && !name ? 'border-red-500' : ''}`}>
-                        <span className="inline-flex items-center px-3 py-2 small no-border">
+                        <span className="inline-flex items-center pe-3 py-2">
                           {t('personal.label.name')}
                         </span>
                         <input
                           defaultValue={name}
                           onChange={e => handleSetName(e, { value: e.target.value })}
-                          className="flex-1 border border-gray-300 rounded px-3 py-2"
+                          className="flex-1 border border-blue-300 rounded px-1 ps-3 py-1"
                           autoFocus
                         />
                       </div>
                     </div>
                     <div className="px-6 pb-0 pt-0">
-                      <h4 className="font-normal">{t('personal.label.infoAddTag')}</h4>
+                      <h4 className="inline-block me-2">{t('personal.label.infoAddTag')}</h4>
                       <input
-                        className="search-omnibox border border-gray-300 rounded-full px-3 py-1 w-full"
+                        className="search-omnibox border border-blue-300 rounded-full px-1 ps-3 py-1 mt-1 w-full"
                         placeholder={t('personal.label.search')}
                         onChange={e => handleFilterChange(e, { value: e.target.value })}
                       />
                     </div>
-                    <div className="label_topic_grid px-6 py-4 overflow-y-auto flex-1">
+                    <div className="label_topic_grid px-2 py-4 overflow-y-auto flex-1">
                       {
                         tree?.children && (
                           <div

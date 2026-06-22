@@ -232,7 +232,10 @@
 }
 
 .sources-settings {
-  padding: 0 !important;
+  background: colors-helpers.$white;
+  border: 1px solid colors-helpers.$stroke-gray;
+  border-radius: 4px;
+  box-shadow: 0 4px 18px 0 colors-helpers.$light-stroke;
 
   .icon {
     margin: 0 !important;

@@ -44,7 +44,7 @@ const Layout = ({ playerContainer }) => {
   return (
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
       <GAPageView location={location} />
-      <div className="headroom-z-index-802">
+      <div className="headroom-z-index-802 print:hidden">
         <SiteHeader
           toggleSidebarBtnRef={toggleSidebarBtnRef}
           toggleSidebar={toggleSidebar}

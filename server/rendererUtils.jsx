@@ -37,6 +37,7 @@ import {
   initialState as settingsInitialState,
 } from '../src/redux/modules/settings';
 import { actions as ssr } from '../src/redux/modules/ssr';
+import { fetchSQData } from '../src/sagas/mdb';
 import buildRoutes from '../src/route/routes';
 
 const initializeI18nBackend = async uiLang => {
@@ -160,6 +161,8 @@ export async function renderSSR(req, extraInitialState = {}) {
   const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
   logger.log(NAMESPACE, 'promises %d, RTK promises %d', promises.length, rtkPromises.length);
   rtkPromises.forEach(promise => promises.push(promise));
+  // Global sources/tags/publishers/persons — awaited so it lands in window.__data.
+  promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
 
   try {
     await Promise.all(promises);
@@ -290,6 +293,8 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   const promises = branch.map(b => getPromises(store, req.originalUrl, b));
   const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
   rtkPromises.forEach(promise => promises.push(promise));
+  // Global sources/tags/publishers/persons — awaited so it lands in window.__data.
+  promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
 
   try {
     await Promise.all(promises);

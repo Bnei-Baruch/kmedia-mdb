@@ -40,7 +40,7 @@ const Actions = ({ cuId, reaction }) => {
         <span className="material-symbols-outlined">more_vert</span>
       </button>
       {open && (
-        <div className="absolute right-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
+        <div className="absolute end-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
           <div className="px-4 py-2">
             <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose}/>
           </div>

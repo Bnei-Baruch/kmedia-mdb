@@ -21,6 +21,8 @@ function* setLanguages(action) {
   const newUILang =
     (action.type === types['settings/setURLLanguage'] ? action.payload : action.payload.uiLang) || uiLang;
 
+  console.log('[settings/setLanguages]', { type: action.type, payload: action.payload, effectiveUiLang: uiLang, newUILang });
+
   if (typeof window !== 'undefined') {
     i18n.changeLanguage(newUILang, err => {
       if (err) {
@@ -34,8 +36,12 @@ function* setLanguages(action) {
   // Change page direction and fetch css
   changeDirectionIfNeeded(newUILang);
 
-  // Reload sources tags and more to match required languages.
-  yield put(mbdActions.fetchSQData());
+  // Reload sources/tags to match the new language. On SSR this is run + awaited
+  // explicitly in rendererUtils (so it lands in window.__data); only the client
+  // needs the watcher here — avoids a duplicate fetchSQData during SSR.
+  if (typeof window !== 'undefined') {
+    yield put(mbdActions.fetchSQData());
+  }
 }
 
 function* watchSetLanguages() {

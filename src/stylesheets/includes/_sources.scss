@@ -173,24 +173,25 @@
   }
 }
 
-.library-person{
-.inline-img {
-  float: inline-start;
-  margin-inline-end: 1.5em;
-  margin-block-end: 1em;
-}
+.library-person {
+  .inline-img {
+    float: inline-start;
+    margin-inline-end: 1.5em;
+    margin-block-end: 1em;
+  }
 
   .readble-width {
     margin: 0 auto;
   }
+
   .header {
-    font-size: 2rem;
-    margin: 1em 0;
-    border-bottom: 1px solid colors-helpers.$stroke-gray;
-    padding: 1em 0;
+    margin: .5em 0;
+    display: inline-block;
+    font-size: 1.25rem;
   }
- p {
-   margin: 0 0 1em;
+
+  p {
+    margin: 0 0 1em;
     line-height: 1.5em;
   }
 }
@@ -325,10 +326,10 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 1em;
-  
+
   @at-root .is-mobile & {
     justify-content: center;
     gap: 5px;
   }
-  
+
 }

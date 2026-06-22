@@ -98,7 +98,7 @@ const ListTemplate = (
             <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg} />}
         </div>
       </div>
-      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
+      <div className={clsx('cu_item_info', { 'with_actions': !!children })}>
         {withCUInfo && renderCUInfo()}
         {info}
         <div ref={descRef} className={`cu_info_description ${dir} text_ellipsis`}>

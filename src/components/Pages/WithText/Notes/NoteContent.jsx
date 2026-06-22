@@ -7,7 +7,7 @@ import NoteSaveBtn from './Buttons/NoteSaveBtn';
 import { myNotesGetSelectedSelector, myNotesGetStatusSelector } from '../../../../redux/selectors';
 
 const NoteContent = () => {
-  const note   = useSelector(myNotesGetSelectedSelector);
+  const note = useSelector(myNotesGetSelectedSelector);
   const status = useSelector(myNotesGetStatusSelector);
 
   const dispatch = useDispatch();
@@ -25,7 +25,11 @@ const NoteContent = () => {
         !isEdit ? note.content :
           (
             <>
-              <textarea value={note.content} onChange={handleChange} className="w-full resize-y border rounded p-2" />
+              <textarea
+                value={note.content}
+                onChange={handleChange}
+                className="w-full resize-y border rounded p-2 bg-white"
+              />
               <div className="note_edit_btns">
                 <NoteCancelBtn />
                 <NoteSaveBtn />
