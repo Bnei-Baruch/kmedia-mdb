@@ -9,7 +9,7 @@ ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
 # FROM bneibaruch/kmedia_base:30 AS build
-FROM node:latest AS build
+FROM node:24 AS build
 
 LABEL maintainer="edoshor@gmail.com"
 
@@ -43,9 +43,9 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-RUN corepack enable && \
-    yarn install --immutable && \
-    yarn build
+# node:* images no longer ship yarn/corepack — run the committed Yarn release directly
+RUN node .yarn/releases/yarn-4.16.0.cjs install --immutable && \
+    node .yarn/releases/yarn-4.16.0.cjs build
 
 FROM node:24-slim
 
