@@ -87,8 +87,9 @@ async function createServer() {
   app.use(logErrors);
   app.use(errorHandler);
 
-  app.listen(3000, () => {
-    logger.info(NAMESPACE, 'server listening on http://localhost:3000');
+  const PORT = process.env.SERVER_PORT || 3001;
+  app.listen(PORT, () => {
+    logger.info(NAMESPACE, `server listening on http://localhost:${PORT}`);
   });
 }
 
