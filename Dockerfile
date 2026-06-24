@@ -43,7 +43,8 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-RUN yarn install --immutable && \
+RUN corepack enable && \
+    yarn install --immutable && \
     yarn build
 
 FROM node:24-slim
