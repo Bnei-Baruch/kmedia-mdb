@@ -44,9 +44,7 @@ ENV REACT_APP_ENV=production \
 COPY . .
 
 RUN yarn install --immutable && \
-    yarn build:svgs && \
-    yarn build:scripts && \
-    yarn build:css
+    yarn build
 
 FROM node:24-slim
 
@@ -79,6 +77,6 @@ ENV NODE_ENV=production \
     REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url} \
     REACT_KC_API_URL=${kc_api_url}
 
-EXPOSE 3001
+EXPOSE 3000
 ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]
 

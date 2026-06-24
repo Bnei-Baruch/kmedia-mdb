@@ -3,7 +3,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import logger from '../src/logger/logger.js';
-import { isNonPage, noLanguageRedirect, staticFiles } from './middleware.js';
+import {
+  isNonPage,
+  noLanguageRedirect,
+  staticFiles,
+  duration,
+  logErrors,
+  errorHandler,
+} from './middleware.js';
+import { securityHeaders } from './security.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NAMESPACE = 'app-server';
@@ -13,10 +21,13 @@ async function createServer() {
   const app = express();
   let vite;
 
+  app.use(duration);
+
   if (isProd) {
     const { default: compression } = await import('compression');
     app.use(compression());
-    app.use(express.static(path.resolve(__dirname, '..', 'build'), { index: false }));
+    app.use(securityHeaders);
+    app.use(express.static(path.resolve(__dirname, '..', 'build'), { index: false, maxAge: '30d' }));
   } else {
     const { createServer: createViteServer } = await import('vite');
     vite = await createViteServer({
@@ -27,6 +38,23 @@ async function createServer() {
   }
 
   app.use(staticFiles);
+
+  // health check for load balancers / orchestrators
+  app.get('/health_check', (req, res) => {
+    res.status(200).send({ status: 'ok' });
+  });
+
+  // legacy kmedia URLs -> 301 redirects to canonical links (before language redirect)
+  // loaded through Vite (dev) / SSR build (prod) so its src/ imports resolve
+  const { kmediaContainer, kmediaSearch } = isProd
+    ? await import(path.resolve(__dirname, '..', 'build/server/kmedia.js'))
+    : await vite.ssrLoadModule('/server/kmedia.js');
+
+  app.use('/ui/:cnID', kmediaContainer);
+  app.use('/:lang/ui/:cnID', kmediaContainer);
+  app.use('/index.php', kmediaContainer);
+  app.use('/ui', kmediaSearch);
+  app.use('/:lang/ui', kmediaSearch);
 
   app.use(noLanguageRedirect);
 
@@ -55,6 +83,9 @@ async function createServer() {
       next(e);
     }
   });
+
+  app.use(logErrors);
+  app.use(errorHandler);
 
   app.listen(3000, () => {
     logger.info(NAMESPACE, 'server listening on http://localhost:3000');

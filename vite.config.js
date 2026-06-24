@@ -11,7 +11,10 @@ function criticalCss() {
     apply: "build",
     enforce: "post",
     async closeBundle() {
-      const beasties = new Beasties({ path: "build", preload: "swap", pruneSource: false });
+      // preload:false keeps the full stylesheet as a plain <link rel="stylesheet">
+      // (critical CSS still inlined). The "swap" strategy injects an inline
+      // onload handler, which the strict CSP (script-src-attr 'none') blocks.
+      const beasties = new Beasties({ path: "build", preload: false, pruneSource: false });
       for (const file of ["index.html", "index-anon.html"]) {
         const filePath = `build/${file}`;
         if (!fs.existsSync(filePath)) continue;

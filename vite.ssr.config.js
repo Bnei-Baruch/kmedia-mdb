@@ -27,8 +27,12 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: "build/server",
-      ssr: "server/renderer.js",
+      ssr: true,
       rollupOptions: {
+        input: {
+          renderer: "server/renderer.js",
+          kmedia: "server/kmedia.js",
+        },
         output: {
           entryFileNames: "[name].js",
         },
