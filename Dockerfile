@@ -43,9 +43,10 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-# node:* images no longer ship yarn/corepack — run the committed Yarn release directly
-RUN node .yarn/releases/yarn-4.16.0.cjs install --immutable && \
-    node .yarn/releases/yarn-4.16.0.cjs build
+# node:24's bundled yarn reads yarnPath in .yarnrc.yml and delegates to the
+# committed .yarn/releases/yarn-4.16.0.cjs (no network, no corepack download)
+RUN yarn install --immutable && \
+    yarn build
 
 FROM node:24-slim
 
