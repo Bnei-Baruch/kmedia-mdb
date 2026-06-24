@@ -35,9 +35,8 @@ mdb.dump.*.sql
 node_modules/
 .pnp.*
 
-# do not ignore main theme
-!src/**/semantic.min.css
-!src/**/semantic.rtl.min.css
+# Tailwind 4 source CSS (entry + @theme tokens) — processed by @tailwindcss/vite, must be committed
+!src/stylesheets/tailwind.css
 .eslintcache
 
 build.zip
