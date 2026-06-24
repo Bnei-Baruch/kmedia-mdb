@@ -51,6 +51,10 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: "build",
+      // nginx reserves /assets/ for media (served from a separate volume);
+      // emit the frontend bundle under /static/ like the pre-Vite build so
+      // it is served from /sites/archive-frontend/static/ via `location /static/`.
+      assetsDir: "static",
       sourcemap: true,
       rollupOptions: {
         input: {
