@@ -59,6 +59,22 @@ export const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const _Empty = () => null;
 
+// Lightweight per-request SSR phase timer. Logs an absolute start timestamp plus per-phase
+// deltas (and a running total) so we can see which stage — i18n init, data fetch, React
+// render — dominates SSR latency on staging/prod.
+const createSSRTimer = label => {
+  const start = Date.now();
+  let last = start;
+  logger.info(NAMESPACE, `[timing] ${new Date(start).toISOString()} START ${label}`);
+  return {
+    mark: step => {
+      const now = Date.now();
+      logger.info(NAMESPACE, `[timing] ${label} | ${step}: +${now - last}ms (total ${now - start}ms)`);
+      last = now;
+    },
+  };
+};
+
 function renderToBuffer(element) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -115,6 +131,7 @@ export const prepareDeviceInfo = req => getDeviceInfo(req.get('user-agent'));
 // Full SSR pipeline shared by bot and auth renderers.
 // extraInitialState is merged into the Redux initial state (e.g. { auth: { user: { name: KC_BOT_USER_NAME } } }).
 export async function renderSSR(req, extraInitialState = {}) {
+  const t = createSSRTimer(`renderSSR ${req.originalUrl}`);
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
 
   setDayjsLocale(uiLang);
@@ -126,6 +143,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Error initializing i18n backend', error);
     throw error;
   }
+  t.mark('i18n init');
 
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
   const cookies = cookieParse(req.headers.cookie || '');
@@ -151,6 +169,7 @@ export async function renderSSR(req, extraInitialState = {}) {
   store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
   store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
   store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
+  t.mark('store + lang dispatch');
 
   const routes = buildRoutes(_Empty).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
   const reqPath = req.originalUrl.split('?')[0];
@@ -163,6 +182,7 @@ export async function renderSSR(req, extraInitialState = {}) {
   rtkPromises.forEach(promise => promises.push(promise));
   // Global sources/tags/publishers/persons — awaited so it lands in window.__data.
   promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
+  t.mark(`dispatch data fetches (${promises.length})`);
 
   try {
     await Promise.all(promises);
@@ -171,6 +191,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     logger.error(NAMESPACE, 'SSR promises error', error);
     throw error;
   }
+  t.mark('await data fetches');
 
   try {
     await store.rootSagaPromise;
@@ -179,6 +200,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Root saga error', error);
     throw error;
   }
+  t.mark('root saga');
 
   const deviceInfo = prepareDeviceInfo(req);
   const helmetContext = {};
@@ -187,6 +209,7 @@ export async function renderSSR(req, extraInitialState = {}) {
   const markup = await renderToBuffer(
     <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />
   );
+  t.mark('react render (renderToBuffer)');
 
   const { helmet } = helmetContext;
   const direction = getLanguageDirection(uiLang);
@@ -223,6 +246,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()}>`)
     .replace(/<div id="root"><\/div>/, rootDiv);
 
+  t.mark('html assembly + serialize');
   logger.log(NAMESPACE, 'rendered html');
   return html;
 }
@@ -230,6 +254,7 @@ export async function renderSSR(req, extraInitialState = {}) {
 // Streaming SSR: sends <head> (CSS) immediately, fetches data, then streams body.
 // Used for authenticated users. Bots still use blocking renderSSR.
 export async function renderSSRStream(req, res, extraInitialState = {}) {
+  const t = createSSRTimer(`renderSSRStream ${req.originalUrl}`);
   const { language: uiLang } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
   setDayjsLocale(uiLang);
   const direction = getLanguageDirection(uiLang);
@@ -249,6 +274,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
 
   res.write(headHtml);
   res.write('<body>');
+  t.mark('head flushed');
 
   // Phase 2: init i18n + store + fetch data (CSS loading in browser in parallel)
   let i18nServer;
@@ -258,6 +284,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Error initializing i18n backend', error);
     throw error;
   }
+  t.mark('i18n init');
 
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
   const cookies = cookieParse(req.headers.cookie || '');
@@ -284,6 +311,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
   store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
   store.dispatch(backendApi.util.invalidateTags([wholeSimpleMode, wholeMusic]));
+  t.mark('store + lang dispatch');
 
   const routes = buildRoutes(_Empty).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
   const reqPath = req.originalUrl.split('?')[0];
@@ -295,6 +323,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   rtkPromises.forEach(promise => promises.push(promise));
   // Global sources/tags/publishers/persons — awaited so it lands in window.__data.
   promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
+  t.mark(`dispatch data fetches (${promises.length})`);
 
   try {
     await Promise.all(promises);
@@ -303,6 +332,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     logger.error(NAMESPACE, 'SSR promises error', error);
     throw error;
   }
+  t.mark('await data fetches');
 
   try {
     await store.rootSagaPromise;
@@ -311,6 +341,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Root saga error', error);
     throw error;
   }
+  t.mark('root saga');
 
   // Phase 3: serialize store + i18n for client hydration
   const i18nData = serialize({
@@ -339,6 +370,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     `</body></html>`;
 
   // Phase 4: stream React body into the open response
+  t.mark('serialize + pre-stream');
   logger.info(NAMESPACE, 'renderToPipeableStream stream start');
   res.write(`<div id="root" class="${direction}" style="direction: ${direction}">`);
 
@@ -346,7 +378,10 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     <AppServer i18n={i18nServer} store={store} history={history} deviceInfo={deviceInfo} helmetContext={helmetContext} />,
     res,
     suffix
-  );
+  ).then(result => {
+    t.mark('react stream complete');
+    return result;
+  });
 }
 
 // see https://yoast.com/rel-canonical/
