@@ -410,13 +410,10 @@ video {
   }
 }
 
-// Tailwind text-* utilities are layered (v4) and lose to the unlayered Google
-// Fonts `.material-symbols-outlined { font-size: 24px }`, so size the seek
-// icons with a plain (unlayered) rule.
 .controls__rewind,
-.controls__forward {
+.controls__forward, .controls__prev, .controls__next, .controls__pause {
   .material-symbols-outlined {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
   }
 }
 
