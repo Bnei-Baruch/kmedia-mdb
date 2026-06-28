@@ -38,8 +38,8 @@ const Layout = ({ playerContainer }) => {
 
   const toggleSidebar = () => setSidebarActive(!sidebarActive);
   const sideBarIcon = sidebarActive
-    ? <Icon icon={faXmark} className="text-[1.8rem] leading-none" />
-    : <Icon icon={faBars} className="text-[1.8rem] leading-none" />;
+    ? <Icon icon={faXmark} className="text-2xl font-bold leading-none text-white" />
+    : <Icon icon={faBars} className="text-2xl font-bold leading-none text-white" />;
 
   return (
     <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
@@ -58,7 +58,7 @@ const Layout = ({ playerContainer }) => {
         <div className="layout__sidebar-header">
           <div ref={closeSidebarBtnRef}>
             <a
-              className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
+              className="flex items-center justify-start cursor-pointer max-xl:h-20"
               onClick={closeSidebar}
             >
               {sideBarIcon}

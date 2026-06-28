@@ -37,15 +37,15 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
   const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
 
   const sideBarIcon = sidebarActive
-    ? <Icon icon={faXmark} className="text-[1.8rem] leading-none" />
-    : <Icon icon={faBars} className="text-[1.8rem] leading-none" />;
+    ? <Icon icon={faXmark} className="text-2xl font-bold leading-none text-white" />
+    : <Icon icon={faBars} className="text-2xl font-bold leading-none text-white" />;
 
   const content = (
     <>
       <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
         <div ref={toggleSidebarBtnRef} className={clsx({ '2xl:!hidden': !isFullscreen })}>
           <a
-            className="flex items-center justify-start text-white/80 font-bold cursor-pointer max-xl:h-20"
+            className="flex items-center justify-start font-bold cursor-pointer max-xl:h-20"
             onClick={toggleSidebar}
           >
             {sideBarIcon}

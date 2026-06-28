@@ -48,10 +48,10 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
   ));
 
   const personal = !loggedIn ? (
-    <div key="personal" className="sidebar-nav__personal">
-      <h3 className="sidebar-nav__title">
+    <div key="personal" className="sidebar-nav__personal p-2">
+      <h3 className="text-xl">
         {t('nav.sidebar.personal')}
-        <span className="sidebar-nav__subtitle">{t('personal.needToLogin')}</span>
+        <span className="text-lg">{t('personal.needToLogin')}</span>
       </h3>
       <a
         className="sidebar-nav__login"
@@ -99,7 +99,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
         >
           {t('nav.sidebar.old-site')}
         </a>
-        <div className="sidebar-nav__donate">
+        <div className="flex items-center justify-start gap-4 mt-4 px-4">
           <DonateNow />
           <VirtualHomeButton />
         </div>
