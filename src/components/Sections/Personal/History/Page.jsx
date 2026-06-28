@@ -1,11 +1,9 @@
-import { Fragment, useCallback, useContext, useEffect } from 'react';
+import { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { clsx } from 'clsx';
 import dayjs from '../../../../helpers/dayjs';
 
 import { actions } from '../../../../redux/modules/my';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { getWipErr } from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
@@ -30,7 +28,6 @@ export const PAGE_SIZE = 20;
 
 const Page = ({ location }) => {
   const { t } = useTranslation();
-  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageNo = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_HISTORY));
   const total = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_HISTORY));
@@ -62,8 +59,6 @@ const Page = ({ location }) => {
 
   const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
-
-  const computerWidth = isMobile ? 'w-full' : 'w-full md:w-[62.5%]';
 
   const renderItem = (x, i) => {
     let newDay = null;

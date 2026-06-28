@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../shapes';
@@ -11,7 +10,6 @@ import {
 } from '../../../../helpers/consts';
 import Link from '../../../Language/MultiLanguageLink';
 import { PlaylistPlay as PlaylistPlayIcon, Subscriptions as SubscriptionsIcon } from '../../../../images/icons';
-import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const iconByNamespace = {
   [MY_NAMESPACE_REACTIONS]: 'favorite_border',
@@ -22,7 +20,6 @@ const iconByNamespace = {
 
 const ItemTemplate = ({ children, namespace, withSeeAll = false }) => {
   const { t } = useTranslation();
-  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const seeAll = withSeeAll ? (
     <Link to={`/personal/${namespace}`} className="text-lg text-gray-500">

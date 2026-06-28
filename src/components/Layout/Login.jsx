@@ -7,16 +7,15 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Link from '../Language/MultiLanguageLink';
 import { login, logout, KC_API_WITH_REALM } from '../../pkg/ksAdapter/adapter';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
-import { settingsGetUIDirSelector, settingsGetUILangSelector, authGetUserSelector } from '../../redux/selectors';
+import { settingsGetUILangSelector, authGetUserSelector } from '../../redux/selectors';
 
 const Login = () => {
   const { t } = useTranslation();
   const { isMobile } = useContext(DeviceInfoContext);
-  const uiLang             = useSelector(settingsGetUILangSelector);
-  const uiDir              = useSelector(settingsGetUIDirSelector);
-  const user               = useSelector(authGetUserSelector);
-  const nameLetter         = !!user && !!user.name ? user.name[0].toUpperCase() : '';
-  const loggedIn           = useIsLoggedIn();
+  const uiLang = useSelector(settingsGetUILangSelector);
+  const user = useSelector(authGetUserSelector);
+  const nameLetter = !!user && !!user.name ? user.name[0].toUpperCase() : '';
+  const loggedIn = useIsLoggedIn();
 
   const renderAccount = () => (
     <Popover className="relative">

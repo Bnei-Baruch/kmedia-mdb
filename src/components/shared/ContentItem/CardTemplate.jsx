@@ -1,6 +1,5 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { formatDuration } from '../../../helpers/utils';
