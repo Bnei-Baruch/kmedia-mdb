@@ -56,9 +56,9 @@ const Layout = ({ playerContainer }) => {
         className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
       >
         <div className="layout__sidebar-header">
-          <div ref={closeSidebarBtnRef}>
+          <div ref={closeSidebarBtnRef} className="flex items-center justify-start">
             <a
-              className="flex items-center justify-start cursor-pointer max-xl:h-20"
+              className="cursor-pointer"
               onClick={closeSidebar}
             >
               {sideBarIcon}

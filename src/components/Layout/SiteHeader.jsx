@@ -42,10 +42,10 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
 
   const content = (
     <>
-      <div className="h-20 flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
+      <div className="flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
         <div ref={toggleSidebarBtnRef} className={clsx({ '2xl:!hidden': !isFullscreen })}>
           <a
-            className="flex items-center justify-start font-bold cursor-pointer max-xl:h-20"
+            className="flex items-center justify-start font-bold cursor-pointer"
             onClick={toggleSidebar}
           >
             {sideBarIcon}
