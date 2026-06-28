@@ -162,7 +162,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
                 : null
             }
           </div>
-          <div className="mt-1" style={{ textAlign: position, direction: isRtl ? 'rtl' : 'ltr' }}>
+          <div className="mt-1 wrap-break-word" style={{ textAlign: position, direction: isRtl ? 'rtl' : 'ltr' }}>
             <div dangerouslySetInnerHTML={{ __html: prepare(raw, highlight) }} />
             {
               snippetVersion
