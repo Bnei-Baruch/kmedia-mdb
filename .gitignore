@@ -53,3 +53,4 @@ e2e/snapshots/
 .playwright-mcp/
 /tmp/
 
+*.log
