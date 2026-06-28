@@ -7,11 +7,11 @@ const HomeBanners = ({ latestLesson = null }) => (
     <div className="flex flex-wrap justify-between w-full">
       {
         latestLesson
-        && <div className="w-[49%]">
+        && <div className="w-full lg:w-[49%]">
           <LatestDailyLesson collection={latestLesson} />
         </div>
       }
-      <div className="w-[49%]">
+      <div className="w-full lg:w-[49%]">
         <LatestLessonBanner />
       </div>
     </div>
