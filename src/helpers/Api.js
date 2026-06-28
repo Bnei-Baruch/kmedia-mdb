@@ -50,9 +50,9 @@ export class Requests {
     try {
       logger.log(NAMESPACE, 'Requests.get', path);
       return await axios.get(backendUrl(path));
-    } catch ({ response }) {
-      logger.log(NAMESPACE, 'Requests.get error', response);
-      return response;
+    } catch (err) {
+      logger.error(NAMESPACE, `Requests.get failed for ${backendUrl(path)}: ${err?.message}`);
+      return err?.response;
     }
   };
 

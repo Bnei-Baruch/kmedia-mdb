@@ -180,10 +180,16 @@ export function* fetchSQData() {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     console.log('[fetchSQData] start', { uiLang, contentLanguages });
-    const { data }         = yield call(Api.sqdata, {
+    const res              = yield call(Api.sqdata, {
       ui_language      : uiLang,
       content_languages: contentLanguages
     });
+
+    if (!res?.data) {
+      throw new Error(`sqdata returned no data (ui_language=${uiLang}, content_languages=${contentLanguages})`);
+    }
+
+    const { data }         = res;
     console.log('[fetchSQData] success', { sources: data?.sources?.length, tags: data?.tags?.length, publishers: data?.publishers?.length, persons: data?.persons?.length });
     yield put(sources.receiveSources({ sources: data.sources, uiLang }));
     yield put(tags.receiveTags(data.tags));
