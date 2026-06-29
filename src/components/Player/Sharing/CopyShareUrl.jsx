@@ -25,14 +25,14 @@ const CopyShareUrl = () => {
   return (
     <div className="sharing__url flex flex-1 items-stretch" dir={uiDir}>
       <input
-        className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded-l border-r-0"
+        className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded-l border-r-0 focus:outline-none bg-gray-100"
         dir="ltr"
         value={shareUrl}
         readOnly
       />
-      <Popover className="relative">
+      <Popover className="relative  right-0 button rounded-l-none! border-l-0 text-xs !flex items-center">
         <CopyToClipboard text={shareUrl} onCopy={handleCopied}>
-          <span className="h-full right-0 button rounded-l-none border-l-0 text-xs" >
+          <span>
             {t('buttons.copy')}
           </span>
         </CopyToClipboard>

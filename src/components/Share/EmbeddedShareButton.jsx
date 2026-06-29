@@ -32,14 +32,12 @@ const EmbeddedShareButton = ({ url = '' }) => {
   };
 
   return (
-    <Popover className="relative inline-block">
-      <PopoverButton as="div">
+    <Popover className="relative inline-block  rounded-full p-2 bg-white">
+      <PopoverButton className="custom_share_button">
         <CopyToClipboard text={getEmbed(url)} onCopy={handleCopied}>
-          <button className="custom_share_button rounded-full py-2 px-3 bg-gray-300">
-            <span className="custom_share_button">
-              <Icon icon={faCode} />
-            </span>
-          </button>
+          <div className="custom_share_button">
+            <Icon icon={faCode} />
+          </div>
         </CopyToClipboard>
       </PopoverButton>
       {open && (

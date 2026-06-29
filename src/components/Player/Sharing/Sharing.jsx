@@ -29,7 +29,7 @@ const Sharing = () => {
               <button className="px-3 py-1.5 small bg-gray-300 rounded">
                 <span className="material-symbols-outlined text-base">undo</span>
               </button>
-              : <button className="px-3 py-1.5 small bg-gray-300 rounded">
+              : <button className="px-3 py-1.5 small bg-gray-300 rounded cursor-pointer">
                 {t('player.share.reset-to-full')}
               </button>
           }

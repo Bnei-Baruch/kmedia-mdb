@@ -104,11 +104,7 @@ const ShareBarPlayer = () => {
             <div className="bg-white text-gray-600 rounded-full flex items-center justify-center cursor-pointer relative">
               <WebWrapTooltip
                 content={t('player.share.embedded')}
-                trigger={
-                  <div>
-                    <EmbeddedShareButton url={url} />
-                  </div>
-                }
+                trigger={<EmbeddedShareButton url={url} />}
               />
             </div>
           </>
