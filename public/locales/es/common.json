@@ -887,7 +887,10 @@
         "download": "Descargar",
         "more-buttons": "Más",
         "toc": "Contenido",
-        "copy-link": "Enlace"
+        "copy-link": "Enlace",
+        "additions": {
+          "review": "Revisar etiquetado y comentarios"
+        }
       }
     }
   }

@@ -981,7 +981,10 @@
         "download": "הורדה",
         "more-buttons": "עוד",
         "toc": "תוכן",
-        "copy-link": "קישור"
+        "copy-link": "קישור",
+        "additions": {
+          "review": "סקירת תיוגים והערות"
+        }
       }
     }
   }

@@ -21,11 +21,11 @@ const DownloadTrimItem = ({ item, pos }) => {
   };
 
   return (
-    <div className="flex" key={`file_${pos}`}>
+    <div className="flex py-3" key={`file_${pos}`}>
       <div className={isMobile ? 'flex-[11]' : 'flex-[13]'}>
         {`${pos}. ${name}`}
       </div>
-      <div className={`${isMobile ? 'flex-[5]' : 'flex-[3]'} text-right`}>
+      <div className={`${isMobile ? 'flex-[5]' : 'flex-[3]'} flex items-center justify-end gap-2`}>
         <Popover className="relative inline-block">
           <PopoverButton
             as="div"

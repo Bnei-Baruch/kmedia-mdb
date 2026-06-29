@@ -997,7 +997,10 @@
         "download": "Скачать",
         "more-buttons": "Ещё",
         "toc": "Контент",
-        "copy-link": "Ссылка"
+        "copy-link": "Ссылка",
+        "additions": {
+          "review": "Просмотр тегов и комментариев"
+        }
       }
     }
   }

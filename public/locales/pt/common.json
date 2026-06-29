@@ -891,7 +891,10 @@
         "download": "Download",
         "more-buttons": "Mais",
         "toc": "Conteúdo",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Rever rotulagem e comentários"
+        }
       }
     }
   }

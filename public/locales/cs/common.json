@@ -899,7 +899,10 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Obsah",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Review labeling and comments"
+        }
       }
     }
   }

@@ -888,7 +888,10 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Review labeling and comments"
+        }
       }
     }
   }

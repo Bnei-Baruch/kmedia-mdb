@@ -10,7 +10,7 @@ import { trimGetListSelector, trimGetWipsSelector } from '../../redux/selectors'
 
 const DownloadTrim = () => {
   const { t } = useTranslation();
-  const [open, setOpen]   = useState(true);
+  const [open, setOpen] = useState(true);
   const [isMin, setIsMin] = useState(false);
 
   const list = useSelector(trimGetListSelector);
@@ -29,7 +29,7 @@ const DownloadTrim = () => {
       <div className="flex" key={`wip_${i}`}>
         <div className="flex-[9] flex items-center">
           {`${i}. ${t('messages.trimmed-content-wip')} `}
-          <Splash isLoading icon="circle notch" color="blue" width="20" text=""/>
+          <Splash isLoading icon="circle notch" color="blue" width="20" text="" />
         </div>
         <div className="flex-[7]">
         </div>
@@ -39,35 +39,35 @@ const DownloadTrim = () => {
 
   return (
     <div className={clsx('trimmed_files', { 'minimized': isMin })}>
-      <div className="top clearfix border rounded p-4">
-        <button
-          className="float-right p-1 text-gray-400 hover:text-gray-200"
-          onClick={() => setOpen(false)}
-        >
-          <Icon icon={faXmark} />
-        </button>
-        <button
-          className="float-right p-1 text-gray-400 hover:text-gray-200"
-          onClick={() => setIsMin(!isMin)}
-        >
-          <Icon icon={isMin ? faChevronUp : faChevronDown} />
-        </button>
-        <h3 className="float-left text-white">
+      <div className="segment flex items-center justify-between">
+        <h3 className="m-0 text-white">
           {wips.length > 0 ? t('messages.trimmed-title-wip') : t('messages.trimmed-title')}
         </h3>
+        <div className="flex items-center gap-1">
+          <button
+            className="p-1 text-white/70 hover:text-white"
+            onClick={() => setIsMin(!isMin)}
+          >
+            <Icon icon={isMin ? faChevronUp : faChevronDown} />
+          </button>
+          <button
+            className="p-1 text-white/70 hover:text-white"
+            onClick={() => setOpen(false)}
+          >
+            <Icon icon={faXmark} />
+          </button>
+        </div>
       </div>
       {
         !isMin && (
           <>
-            <div className=" px-4  content">
-              <div>
-                {
-                  list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item}/>)
-                }
-                {
-                  wips.map(renderWip)
-                }
-              </div>
+            <div className="p-4 content">
+              {
+                list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item} />)
+              }
+              {
+                wips.map(renderWip)
+              }
             </div>
             <div className=" px-4 ">{t('messages.trim-expiration')}</div>
             <hr className="invisible my-4" />
