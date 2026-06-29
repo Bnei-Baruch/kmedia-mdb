@@ -69,10 +69,10 @@ const ShareForm = ({ collection }) => {
   return (
     <>
       <button
-        className="inline-flex items-center px-2 py-1 text-xs font-bold text-white bg-blue-600 rounded hover:bg-blue-700"
+        className="inline-flex items-center px-2 py-1 font-bold text-white bg-blue-600 rounded hover:bg-blue-700"
         onClick={() => setShare(!share)}
       >
-        <span className="material-symbols-outlined small">share</span>
+        <span className="material-symbols-outlined text-md">share</span>
       </button>
       {
         share && <RenderShare collection={collection} callback={() => setShare(false)} t={t} />

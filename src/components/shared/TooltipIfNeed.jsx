@@ -35,7 +35,7 @@ const TooltipIfNeed = props => {
 
   const content = (
     <div ref={ref}>
-      <Component {...compProps} className="line_clamp_2_lines">
+      <Component {...compProps} className="line_clamp_2_lines text-sm pt-1">
         {childContent}
       </Component>
     </div>
