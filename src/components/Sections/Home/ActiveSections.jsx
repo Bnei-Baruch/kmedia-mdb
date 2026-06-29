@@ -34,7 +34,7 @@ const ActiveSections = () => {
               >
                 <Link to={`/${x.name}`} className="flex flex-col items-center text-center">
                   <SectionLogo name={x.name} width={iconSize} height={iconSize} />
-                  <div className="font-bold text-xl lg:text-2xl">{t(`nav.sidebar.${x.name}`)}</div>
+                  <div className="font-bold text-md lg:text-2xl">{t(`nav.sidebar.${x.name}`)}</div>
                 </Link>
               </div>
             ))}

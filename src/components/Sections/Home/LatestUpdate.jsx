@@ -74,7 +74,7 @@ const LatestUpdate = ({ item, t, label }) => {
   return (
     <Link to={to} className="cu_item flex flex-col rounded-md shadow-md hover:shadow-lg transition-shadow bg-white overflow-hidden">
       <div className="cu_item_img">
-        <UnitLogo unitId={id} width={250} fallbackImg={canonicalSection}/>
+        <UnitLogo unitId={id} width={300} fallbackImg={canonicalSection}/>
       </div>
       <div className="p-3 flex-1">
         <div className="font-bold">{title}</div>

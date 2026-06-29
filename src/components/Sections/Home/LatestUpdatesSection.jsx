@@ -64,7 +64,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
     <div className="homepage__thumbnails homepage__section">
       <div className="">
         <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'}>
-          <div className="homepage__section__latestUpdates">
+          <div className="homepage__section__latestUpdates p-4 md:px-4">
             <LatestUpdatesCardList
               t={t}
               title={t(`events.collection.playlist.lessons`)}

@@ -28,27 +28,27 @@ const runTimeout = dispatch => {
 };
 
 const CLASSES_BY_MODE = {
-  [PLAYER_OVER_MODES.settings] : 'is-settings',
+  [PLAYER_OVER_MODES.settings]: 'is-settings',
   [PLAYER_OVER_MODES.languages]: 'is-settings is-language',
-  [PLAYER_OVER_MODES.share]    : 'is-sharing',
-  [PLAYER_OVER_MODES.tagging]  : 'is-sharing is-tagging',
-  [PLAYER_OVER_MODES.playlist] : 'is-sharing is-tagging',
-  [PLAYER_OVER_MODES.active]   : 'is-active',
-  [PLAYER_OVER_MODES.dragKnob] : 'is-active',
+  [PLAYER_OVER_MODES.share]: 'is-sharing',
+  [PLAYER_OVER_MODES.tagging]: 'is-sharing is-tagging',
+  [PLAYER_OVER_MODES.playlist]: 'is-sharing is-tagging',
+  [PLAYER_OVER_MODES.active]: 'is-active',
+  [PLAYER_OVER_MODES.dragKnob]: 'is-active',
   [PLAYER_OVER_MODES.firstTime]: 'is-active is-first-time',
-  [PLAYER_OVER_MODES.none]     : ''
+  [PLAYER_OVER_MODES.none]: ''
 };
 
 export const PlayerContext = createContext(null);
-const PlayerContainer      = () => {
+const PlayerContainer = () => {
   const { isMobile } = useContext(DeviceInfoContext);
 
   const fullscreenRef = useRef();
 
-  const mode         = useSelector(playerGetOverModeSelector);
+  const mode = useSelector(playerGetOverModeSelector);
   const isFullScreen = useSelector(playerIsFullScreenSelector);
-  const { type }     = useSelector(playerGetFileSelector) || false;
-  const isAudio      = type === MT_AUDIO;
+  const { type } = useSelector(playerGetFileSelector) || false;
+  const isAudio = type === MT_AUDIO;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);
@@ -92,19 +92,24 @@ const PlayerContainer      = () => {
 
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+      return;
     }
 
     if (mode !== PLAYER_OVER_MODES.active) return;
 
-    if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
+    const tappedControl =
+      e.target.closest?.('.controls__bar, .controls__progress, [class*="controls__"]') ||
+      e.target.tagName === 'LABEL';
+
+    if (tappedControl) {
       runTimeout(dispatch);
     } else {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
     }
   };
 
-  const playerComponent = <Player/>;
-  const classes         = [
+  const playerComponent = <Player />;
+  const classes = [
     mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
     isMobile ? 'is-mobile' : 'is-web',
     { 'is-fullscreen': isFullScreen, 'is-video': !isAudio }
@@ -113,16 +118,16 @@ const PlayerContainer      = () => {
 
   const content = (
     <div className="player" dir="ltr" ref={fullscreenRef}>
-      <AppendChronicle/>
-      <UpdateLocation/>
+      <AppendChronicle />
+      <UpdateLocation />
       <div className={clsx(...classes)}>
         {
           isMobile ? (
-            <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef}/>
+            <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef} />
           ) : (
             <>
               {playerComponent}
-              <PlayerToolsWeb fullscreenRef={fullscreenRef}/>
+              <PlayerToolsWeb fullscreenRef={fullscreenRef} />
             </>
           )
         }
