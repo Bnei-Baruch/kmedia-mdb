@@ -32,29 +32,29 @@ const AddPlaylistForm = ({ close }) => {
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
       <li key="playlist_form" className="flex items-center gap-2 py-1">
-        <div className="flex gap-1 float-right">
+        <div className="flex-1">
+          <input
+            className="w-full border rounded px-2 py-1 border-gray-300"
+            type="text"
+            maxLength={30}
+            onChange={handleNameChange}
+            placeholder={t('personal.newPlaylistName')}
+          />
+        </div>
+        <div className="flex gap-1">
           <button
-            className="bg-green-600 text-white px-2 py-1 rounded"
+            className="bg-green-600 text-white px-2 py-1 rounded text-xl disabled:opacity-30"
             onClick={handleSaveNewPlaylist}
             disabled={!name}
           >
             <span className="material-symbols-outlined small">check</span>
           </button>
           <button
-            className="px-2 py-1 rounded border"
+            className="px-2 py-1 rounded text-xl bg-gray-300"
             onClick={close}
           >
             <span className="material-symbols-outlined small">close</span>
           </button>
-        </div>
-        <div className="flex-1">
-          <input
-            className="w-full border rounded px-2 py-1"
-            type="text"
-            maxLength={30}
-            onChange={handleNameChange}
-            placeholder={t('personal.newPlaylistName')}
-          />
         </div>
       </li>
     </>

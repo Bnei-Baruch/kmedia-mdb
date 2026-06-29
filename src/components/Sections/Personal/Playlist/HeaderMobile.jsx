@@ -58,7 +58,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist }) => {
   ) : <span className="vertical_bottom">{playlist.name}</span>;
 
   return (
-    <div className=" px-4  background_grey">
+    <div className="px-4 background_grey">
       <h2 className="my_header my_playlist_header">
         <PlaylistPlayIcon className="playlist_icon"/>
         {nameTag}

@@ -241,7 +241,7 @@
     border: 0;
   }
 
-  &>div {
+  & > div {
     position: relative;
   }
 
@@ -431,10 +431,9 @@
   }
 }
 
-.cu_item_actions {
+& > .cu_item_actions {
   position: absolute;
-  inset-inline-end: -1em;
-  top: 20%;
+  inset-inline-end: 0;
 
   .cu_item_dropdown {
     padding: 1em 0;

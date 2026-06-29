@@ -54,11 +54,10 @@
   display: none;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 
   @include responsive-helpers.mobile {
     display: flex;
-    margin-top: -15px;
   }
 }
 

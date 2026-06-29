@@ -34,16 +34,16 @@ const SaveAsLabel = ({ label, setModalMode }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
           <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-sm w-full bookmark_confirm">
-            <div className="p-4 border-b font-bold">
+            <div className="p-4 font-bold text-xl text-gray-500" >
               {t('personal.addToPlaylistSuccessful', { name: '' })}
             </div>
             <div className="p-4">
               {t('personal.label.contentCreate')}
             </div>
-            <div className="flex justify-end gap-2 p-4 border-t">
+            <div className="flex justify-end gap-2 p-4">
               <TagVideoLabelBtn label={label} onClose={handleClose}/>
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="px-4 py-1 bg-blue-600 text-white rounded"
                 onClick={handleClose}
               >
                 {t('personal.label.ending')}
@@ -60,12 +60,12 @@ const SaveAsLabel = ({ label, setModalMode }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
           <Dialog.Panel className={`bg-white rounded-lg shadow-xl ${!isMobile ? 'max-w-sm' : 'max-w-full'} w-full bookmark_modal`}>
-            <div className="p-4 border-b font-bold">
+            <div className="p-4 border-b border-gray-500 font-bold">
               {t('personal.bookmark.saveBookmark')}
             </div>
             <div className="p-4">
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded small"
+                className="px-4 py-1 bg-blue-600 text-white rounded small"
                 onClick={handleClose}
               >
                 {t('buttons.save')}

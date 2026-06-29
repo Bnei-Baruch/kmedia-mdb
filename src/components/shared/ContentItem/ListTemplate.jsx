@@ -35,12 +35,12 @@ const ListTemplate = (
 ) => {
   const itemRef = useRef(null);
 
-  const dir                = useSelector(settingsGetUIDirSelector);
+  const dir = useSelector(settingsGetUIDirSelector);
   const { isMobile } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(false);
-  const cuInfoRef                         = useRef();
-  const descRef                           = useRef();
+  const cuInfoRef = useRef();
+  const descRef = useRef();
 
   const _name = name || unit?.name || source?.name || tag?.label;
 
@@ -105,7 +105,7 @@ const ListTemplate = (
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
-      {isNeedTooltip && (
+      {isNeedTooltip && !isMobile && (
         <div className="cu_item_tooltip hidden group-hover:block" dir={dir}>
           {withCUInfo && <Tag className="cu_item_tooltip_name">{_name}</Tag>}
           {info}
@@ -126,14 +126,14 @@ const ListTemplate = (
 };
 
 ListTemplate.propTypes = {
-  unit       : shapes.ContentUnit,
-  source     : shapes.Source,
-  tag        : shapes.Topic,
-  link       : PropTypes.any.isRequired,
+  unit: shapes.ContentUnit,
+  source: shapes.Source,
+  tag: shapes.Topic,
+  link: PropTypes.any.isRequired,
   withCCUInfo: PropTypes.bool,
-  ccu        : shapes.Collection,
+  ccu: shapes.Collection,
   description: PropTypes.array,
-  position   : PropTypes.number
+  position: PropTypes.number
 };
 
 export default ListTemplate;

@@ -85,17 +85,17 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
-          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-sm w-full relative">
+          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full relative">
             <button
               className="absolute top-2 right-2"
               onClick={handleCancel}
             >
               <span className="material-symbols-outlined">close</span>
             </button>
-            <div className="p-4 border-b font-bold">{t('personal.addToPlaylist')}</div>
+            <div className="p-4 border-b border-gray-300 font-bold">{t('personal.addToPlaylist')}</div>
             <div className="p-4">
               <input
-                className="w-full border rounded px-2 py-1 small autocomplete"
+                className="w-full border border-gray-300 rounded px-2 py-1 small autocomplete"
                 placeholder={t('buttons.name')}
                 onChange={handleNameChange}
                 value={name}
@@ -118,16 +118,16 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
             </div>
             {
               !isNew && (
-                <div className="flex justify-end gap-2 p-4 border-t">
+                <div className="flex justify-end gap-2 p-4 border-t border-gray-300">
                   <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded uppercase"
+                    className="px-4 py-1 bg-blue-600 text-white rounded uppercase disabled:opacity-50"
                     onClick={handleSave}
                     disabled={!selected.length}
                   >
                     {t('buttons.save')}
                   </button>
                   <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                    className="px-4 py-1 bg-blue-600 text-white rounded"
                     onClick={handleCancel}
                   >
                     {t('buttons.cancel')}

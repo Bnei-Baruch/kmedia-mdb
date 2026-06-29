@@ -1,11 +1,9 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { clsx } from 'clsx';
 
 import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { getWipErr } from '../../../shared/WipErr/WipErr';
@@ -29,7 +27,6 @@ import {
 const PAGE_SIZE = 20;
 const Page      = ({ location }) => {
   const { t } = useTranslation();
-  const { isMobile } = useContext(DeviceInfoContext);
 
   const pageNo           = useSelector(state => myGetPageNoSelector(state, MY_NAMESPACE_REACTIONS));
   const total            = useSelector(state => myGetTotalSelector(state, MY_NAMESPACE_REACTIONS));
@@ -62,55 +59,52 @@ const Page      = ({ location }) => {
   const wipErr = getWipErr(wip, err);
   if (wipErr) return wipErr;
 
-  const computerWidth = isMobile ? 'w-full' : 'w-full md:w-[62.5%]';
-
   return (
-    <div className={clsx('flex flex-wrap avbox no-background', { 'p-4': !isMobile })}>
-      <div className="flex flex-wrap w-full">
-        <div className={clsx(computerWidth, { 'is-fitted': isMobile })}>
-          <div className=" px-4 ">
-            <div className="summary-container align_items_center">
-              <h2 className="my_header">
-                <span className="material-symbols-outlined display-iblock">favorite_border</span>
-                {t('personal.reactions')}
-                <span className="display-iblock margin-right-8 margin-left-8 small text-gray-500">
-                  {`${total} ${t('personal.videosOnList')}`}
-                </span>
-              </h2>
-              <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_REACTIONS}`}>
-                <button className="clear_button inline-flex items-center border-none bg-transparent">
-                  <span className="material-symbols-outlined text-3xl margin-left-8 margin-right-8">play_circle</span>
-                  {t('personal.playAll')}
-                </button>
-              </Link>
-            </div>
+    <>
+      <div className="px-4 bg-gray-100">
+        <div className="summary-container gap-4">
+          <div className="gap-2 flex items-center py-4">
+            <span className="material-symbols-outlined">favorite_border</span>
+            <h2 className="my_header !p-0">
+              {t('personal.reactions')}
+              <span className="text-gray-500 text-lg font-normal ms-2">
+                {`${total} ${t('personal.videosOnList')}`}
+              </span>
+            </h2>
           </div>
-          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
-          {
-            items?.length > 0 ? (
-              <div className="px-4 ">
-                {items.map((x, i) =>
-                  (
-                    <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
-                      <ReactionActions cuId={x.subject_uid} reaction={x}/>
-                    </ContentItemContainer>
-                  )
-                )}
-              </div>
-            ) : null
-          }
-          <Pagination
-            pageNo={pageNo}
-            pageSize={PAGE_SIZE}
-            total={total}
-            onChange={setPage}
-          />
         </div>
         {
-          !isMobile && <div className="w-full md:w-[36%]"/>
+          (total > 0) && (
+            <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_REACTIONS}`}>
+              <button className="clear_button inline-flex items-center border-none bg-transparent">
+                <span className="material-symbols-outlined text-3xl margin-left-8 margin-right-8">play_circle</span>
+                {t('personal.playAll')}
+              </button>
+            </Link>
+          )
         }
       </div>
-    </div>
+      <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler}/>
+      {
+        items?.length > 0 ? (
+          <div className="p-4">
+            {items.map((x, i) =>
+              (
+                <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
+                  <ReactionActions cuId={x.subject_uid} reaction={x}/>
+                </ContentItemContainer>
+              )
+            )}
+          </div>
+        ) : null
+      }
+      <Pagination
+        pageNo={pageNo}
+        pageSize={PAGE_SIZE}
+        total={total}
+        onChange={setPage}
+      />
+    </>
   );
 };
 

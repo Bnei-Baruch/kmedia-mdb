@@ -13,11 +13,11 @@ import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
   const { t } = useTranslation();
   const [isEditName, setIsEditName] = useState();
-  const [name, setName]             = useState();
-  const [confirm, setConfirm]       = useState();
+  const [name, setName] = useState();
+  const [confirm, setConfirm] = useState();
 
   const { isMobile } = useContext(DeviceInfoContext);
-  const uiDir              = useSelector(settingsGetUIDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const handleChangeName = e => setName(e.target.value);
 
@@ -35,70 +35,69 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const nameTag = isEditName ? (
-    <>
-      <input
-        type="text"
-        value={name}
-        onChange={handleChangeName}
-        maxLength={30}
-        className="rounded border border-gray-300 px-3 py-2"
-      />
-      <button
-        className="margin-right-8 margin-left-8 rounded bg-blue-500 px-4 py-2 text-white uppercase"
-        onClick={handleSave}
-      >
-        {t('buttons.save')}
-      </button>
-      <button
-        className="rounded border border-gray-300 px-4 py-2"
-        onClick={toggleEditName}
-      >
-        {t('buttons.cancel')}
-      </button>
-    </>
-  ) : playlist.name;
-
   return (
-    <div className=" px-4  background_grey">
-      <div className="summary-container align_items_center">
-        <h2 className={`my_header ${isMobile ? '' : ''}`}>
-          <PlaylistPlayIcon className="playlist_icon"/>
-          {nameTag}
-          <span className="display-iblock margin-right-8 margin-left-8 small text-gray-500">
-            {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
-          </span>
-        </h2>
-        <div>
-          <button className="clear_button border-none bg-transparent" onClick={toggleEditName}>
-            <span className="material-symbols-outlined text-2xl">edit</span>
-          </button>
-          <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
-            <div className="fixed inset-0 flex items-center justify-center p-4">
-              <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
-                <p>{t('personal.confirmRemovePlaylist', { name: playlist.name })}</p>
-                <div className="mt-4 flex justify-end gap-2">
-                  <button
-                    className="rounded border border-gray-300 px-4 py-2 small"
-                    onClick={handleConfirmCancel}
-                  >
-                    {t('buttons.cancel')}
-                  </button>
-                  <button
-                    className="rounded bg-blue-500 px-4 py-2 small text-white"
-                    onClick={confirmSuccess}
-                  >
-                    {t('buttons.apply')}
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </div>
-          </Dialog>
-          <button className="clear_button border-none bg-transparent" onClick={remove}>
-            <span className="material-symbols-outlined text-2xl">delete</span>
-          </button>
+    <div className="px-4 bg-gray-100">
+      <div className="summary-container gap-4">
+        <div className="gap-2 flex items-center py-4">
+          <PlaylistPlayIcon className="playlist_icon" />
+          {isEditName && (
+            <>
+              <input
+                type="text"
+                value={name}
+                onChange={handleChangeName}
+                maxLength={30}
+                className="rounded border border-gray-300 px-3 py-2"
+              />
+              <button
+                className="button px-4 py-2 text-white uppercase"
+                onClick={handleSave}
+              >
+                {t('buttons.save')}
+              </button>
+              <button
+                className="rounded border border-gray-300 px-4 py-2"
+                onClick={toggleEditName}
+              >
+                {t('buttons.cancel')}
+              </button>
+            </>
+          )}
+          <h2 className="my_header !p-0">
+            {!isEditName ? playlist.name : ''}
+            <span className="text-gray-500 text-lg font-normal ms-2">
+              {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
+            </span>
+          </h2>
         </div>
+        <button className="clear_button border-none bg-transparent" onClick={toggleEditName}>
+          <span className="material-symbols-outlined text-2xl">edit</span>
+        </button>
+        <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
+              <p>{t('personal.confirmRemovePlaylist', { name: playlist.name })}</p>
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  className="rounded border border-gray-300 px-4 py-2 small"
+                  onClick={handleConfirmCancel}
+                >
+                  {t('buttons.cancel')}
+                </button>
+                <button
+                  className="rounded bg-blue-500 px-4 py-2 small text-white"
+                  onClick={confirmSuccess}
+                >
+                  {t('buttons.apply')}
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+        <button className="clear_button border-none bg-transparent" onClick={remove}>
+          <span className="material-symbols-outlined text-2xl">delete</span>
+        </button>
       </div>
       {
         (playlist.total_items > 0) && (<Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
@@ -113,9 +112,9 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
 };
 
 PlaylistHeader.propTypes = {
-  playlist      : PropTypes.object.isRequired,
+  playlist: PropTypes.object.isRequired,
   confirmSuccess: PropTypes.func,
-  save          : PropTypes.func
+  save: PropTypes.func
 };
 
 export default PlaylistHeader;
