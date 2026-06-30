@@ -7,7 +7,7 @@ const TocControl = ({ textKey }) => {
   const handleClose = () => dispatch(actions.setTocIsActive());
 
   return (
-    <div className="toc_control">
+    <div className="toc_control max-sm:justify-end">
       <TocToggleBtn withText={false} textKey={textKey} />
       <button
         className="toc_close p-1"

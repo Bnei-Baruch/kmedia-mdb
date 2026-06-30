@@ -22,7 +22,7 @@ const TextSettings = () => {
               icon={<span className="material-symbols-outlined">text_fields</span>}
             />
           </Popover.Button>
-          <Popover.Panel className="sources-settings absolute z-10 mt-2">
+          <Popover.Panel className="sources-settings absolute z-10 mt-2 max-sm:bottom-[4em] max-sm:left-[-5em]">
             <div className="flex">
               <ZoomSizeBtns />
             </div>
