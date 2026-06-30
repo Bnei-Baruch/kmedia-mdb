@@ -20,7 +20,7 @@ const PlaylistHeader = () => {
   const { isMobile } = useContext(DeviceInfoContext);
   const { t } = useTranslation();
 
-  const { cId, cuId, name } = useSelector(playlistGetInfoSelector);
+  const { cId, cuId, name, isMy } = useSelector(playlistGetInfoSelector);
   const { id: paramsId } = useParams();
   const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
   const c = canonicalCollection(unit);
@@ -105,13 +105,13 @@ const PlaylistHeader = () => {
       <div className='avbox__playlist-header px-4 py-3'>
         <div className='flex flex-justify gap-4 justify-between py-2'>
           <h2 className='my-0 text-3xl font-bold'>{getTitle()}</h2>
-          {isLesson && !isMobile && <LessonDatePickerContainer />}
+          {isLesson && !isMobile && !isMy && <LessonDatePickerContainer />}
         </div>
         {
           subheader && (
             <h4 className={clsx('font-normal', _mobStyles)}>
               {subheader}
-              {isLesson && isMobile && <LessonDatePickerContainer />}
+              {isLesson && isMobile && !isMy && <LessonDatePickerContainer />}
             </h4>)
         }
         {playNow && (<h3 className="my-0 text-2xl font-bold">{playNow}</h3>)}

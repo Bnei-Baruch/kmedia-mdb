@@ -53,7 +53,7 @@ const LessonDatePickerContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, cId, cWindow, wipMap.cWindow, curIndex]);
 
-  if (!isReady) {
+  if (!isReady || !cId) {
     return null;
   }
 
