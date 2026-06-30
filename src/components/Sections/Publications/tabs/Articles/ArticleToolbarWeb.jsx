@@ -53,7 +53,7 @@ const ArticleToolbarWeb = () => {
         </div>
         <div className="divider hidden xl:block" />
         <FullscreenTextBtn />
-        <div className="text_toolbar__dropdown xl:hidden" ref={menuRef}>
+        <div className="text_toolbar__dropdown xl:hidden!" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn />
           </div>

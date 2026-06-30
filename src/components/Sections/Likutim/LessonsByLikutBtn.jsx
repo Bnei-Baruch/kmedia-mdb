@@ -36,7 +36,7 @@ const LessonsByLikutBtn = () => {
       <Popover.Panel className="absolute z-10 bg-white shadow-lg rounded border">
         {
           lessons.map(u =>
-            <div key={u.id} className="px-4 py-2 hover:bg-gray-100">
+            <div key={u.id} className="px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
               <Link to={canonicalLink(u)}>
                 {t('values.date', { date: u.film_date })}
               </Link>

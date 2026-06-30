@@ -112,7 +112,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                   <div className="p-6"><NeedToLogin /></div>
                 ) : (
                   <>
-                    <div className="px-6 py-4 pt-0">
+                    <div className="p-4 pt-0">
                       <div className={`label_name flex w-full items-center ${selected.length > 0 && !name ? 'border-red-500' : ''}`}>
                         <span className="inline-flex items-center pe-3 py-2">
                           {t('personal.label.name')}
@@ -125,7 +125,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                         />
                       </div>
                     </div>
-                    <div className="px-6 pb-0 pt-0">
+                    <div className="p-4 pb-0 pt-0">
                       <h4 className="inline-block me-2">{t('personal.label.infoAddTag')}</h4>
                       <input
                         className="search-omnibox border border-blue-300 rounded-full px-1 ps-3 py-1 mt-1 w-full"

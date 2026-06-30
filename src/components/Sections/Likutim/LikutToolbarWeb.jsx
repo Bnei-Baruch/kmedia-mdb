@@ -41,7 +41,7 @@ const LikutToolbarWeb = () => (
       <div className="divider hidden xl:block" />
       <LessonsByLikutBtn />
       <FullscreenTextBtn />
-      <Popover className="text_toolbar__dropdown xl:hidden">
+      <Popover className="text_toolbar__dropdown xl:hidden!">
         <Popover.Button as="div">
           <MoreOptionsBtn />
         </Popover.Button>

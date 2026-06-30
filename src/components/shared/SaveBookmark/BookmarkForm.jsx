@@ -8,18 +8,18 @@ import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import { myGetListSelector, myGetItemByKeySelector, textPageGetSubjectSelector } from '../../../redux/selectors';
 
 const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
-  const { t }                       = useTranslation();
-  const [name, setName]             = useState();
-  const [selected, setSelected]     = useState(null);
+  const { t } = useTranslation();
+  const [name, setName] = useState();
+  const [selected, setSelected] = useState(null);
   const [editFolder, setEditFolder] = useState(false);
-  const [query, setQuery]           = useState();
-  const [isEdit, setIsEdit]         = useState();
+  const [query, setQuery] = useState();
+  const [isEdit, setIsEdit] = useState();
 
-  const subject  = useSelector(textPageGetSubjectSelector);
-  const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const subject = useSelector(textPageGetSubjectSelector);
+  const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
   const bookmark = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_BOOKMARKS, key));
-  const items    = useSelector(state => myGetListSelector(state, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
-  const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
+  const items = useSelector(state => myGetListSelector(state, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
+  const saved = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
 
@@ -169,9 +169,9 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
         </div>
       </div>
       {!editFolder &&
-        <div className="flex justify-between p-4 border-t">
+        <div className="flex justify-between py-4 border-t">
           <button
-            className="border border-blue-500 text-blue-500 rounded px-4 py-2 hover:bg-blue-50"
+            className="border border-blue-500 text-blue-500 rounded max-sm:text-xs px-4 py-2 hover:bg-blue-50"
             onClick={handleNewFolder}
             disabled={editFolder}
           >
@@ -179,14 +179,14 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
           </button>
           <div className="flex gap-2">
             <button
-              className="bg-gray-500 text-white rounded px-4 py-2 hover:bg-gray-600 margin-left-8 margin-right-8"
+              className="bg-gray-500 text-white rounded max-sm:text-xs px-4 py-2 hover:bg-gray-600"
               onClick={onClose}
               disabled={editFolder}
             >
               {t('buttons.cancel')}
             </button>
             <button
-              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
+              className="bg-blue-500 text-white rounded max-sm:text-xs px-4 py-2 hover:bg-blue-600"
               onClick={handleSave}
               disabled={!name || editFolder}
             >

@@ -43,12 +43,12 @@ const BookmarkButton = ({ source, disabled }) => {
           <DialogPanel
             className={`bg-white rounded-lg shadow-xl bookmark_modal ${!isMobile ? 'max-w-sm w-full' : 'w-full h-full'}`}
           >
-            <div className="px-6 py-4 border-b font-bold large">
+            <div className="p-4 border-b font-bold">
               {t('personal.bookmark.saveBookmark')}
             </div>
             {
               !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> :
-                <div className="p-6">{needToLogin}</div>
+                <div className="p-4">{needToLogin}</div>
             }
           </DialogPanel>
         </div>

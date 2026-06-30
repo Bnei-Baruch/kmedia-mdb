@@ -9,7 +9,7 @@ import { clsx } from 'clsx';
 
 export const ToolbarMenuContext = createContext(false);
 
-const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, active, content, ...rest }) => {
+const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, active, content, as: As = 'div', ...rest }) => {
   const { t } = useTranslation();
 
   const { isMobile } = useContext(DeviceInfoContext);
@@ -20,38 +20,39 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
   disabled = disabled ?? noFile;
   if (inMenu) {
     return (
-      <div {...rest} className={clsx('text_toolbar__item_btn', extraClass)}>
+      <As
+        {...rest}
+        className={clsx('text_toolbar__item_btn', extraClass, { 'opacity-30 pointer-events-none cursor-default': disabled })}
+      >
         {icon}
         <span>{t(`page-with-text.buttons.mobile.${textKey}`)}</span>
-      </div>
+      </As>
     );
   }
 
   if (isMobile) {
     return (
-      <div
+      <As
         {...rest}
-        className={clsx('flex flex-col items-center gap-1 text-gray-600', extraClass)}
-        disabled={disabled}
+        className={clsx('flex flex-col items-center gap-1 text-gray-600', extraClass, { 'opacity-30 pointer-events-none cursor-default': disabled })}
       >
         {icon}
         <span className="block text-xs font-semibold leading-5">
           {t(`page-with-text.buttons.mobile.${textKey}`)}
         </span>
-      </div>
+      </As>
     );
   }
 
   return (
     <div className="relative inline-block group">
-      <div
+      <As
         {...rest}
         className={clsx('button', extraClass, { active, disabled })}
-        disabled={disabled}
       >
         {icon}
         {content}
-      </div>
+      </As>
       {!disabled && (
         <div
           className="absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block rounded bg-gray-800 px-2 py-1 text-xs text-white whitespace-nowrap z-10 pointer-events-none"
@@ -66,5 +67,6 @@ const ToolbarBtnTooltip = ({ textKey, disabled, icon, className: extraClass, act
 
 ToolbarBtnTooltip.propTypes = {
   textKey: PropTypes.string.isRequired,
+  as: PropTypes.elementType,
 };
 export default ToolbarBtnTooltip;

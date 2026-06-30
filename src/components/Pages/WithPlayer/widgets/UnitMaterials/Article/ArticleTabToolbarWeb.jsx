@@ -44,7 +44,7 @@ const ArticleTabToolbarWeb = ({ hasToc }) => {
         <div className="hidden xl:block">
           <AdditionsModeBtn />
         </div>
-        <div className="text_toolbar__dropdown xl:hidden" ref={menuRef}>
+        <div className="text_toolbar__dropdown xl:hidden!" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn/>
           </div>
