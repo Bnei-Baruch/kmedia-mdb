@@ -29,7 +29,7 @@ const SingleMediaPage = ({ playerContainer }) => {
             {playerContainer}
           </div>
           <div>
-            <div className="max-md:px-4">
+            <div className="md:px-4">
               <Info />
               <Materials />
             </div>

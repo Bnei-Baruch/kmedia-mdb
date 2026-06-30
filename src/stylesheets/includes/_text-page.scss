@@ -6,11 +6,13 @@
   color: colors-helpers.$light-text;
   fill: colors-helpers.$light-text;
   stroke: colors-helpers.$light-text;
+
   .is-dark & {
     color: colors-helpers.$dark-text;
     fill: colors-helpers.$dark-text;
     stroke: colors-helpers.$dark-text;
   }
+
   .is-sepia & {
     color: colors-helpers.$sepia-text;
     fill: colors-helpers.$sepia-text;
@@ -22,11 +24,13 @@
   color: colors-helpers.$light-active-text;
   fill: colors-helpers.$light-active-text;
   stroke: colors-helpers.$light-active-text;
+
   .is-dark & {
     color: colors-helpers.$dark-active-text;
     fill: colors-helpers.$dark-active-text;
     stroke: colors-helpers.$dark-active-text;
   }
+
   .is-sepia & {
     color: colors-helpers.$sepia-active-text;
     fill: colors-helpers.$sepia-active-text;
@@ -36,9 +40,11 @@
 
 @mixin theme_bg() {
   background: colors-helpers.$white;
+
   .is-dark & {
     background: colors-helpers.$dark-bg;
   }
+
   .is-sepia & {
     background: colors-helpers.$sepia-bg;
   }
@@ -46,9 +52,11 @@
 
 @mixin theme_stroke() {
   border-color: colors-helpers.$light-stroke;
+
   .is-dark & {
     border-color: colors-helpers.$dark-stroke;
   }
+
   .is-sepia & {
     border-color: colors-helpers.$sepia-stroke;
   }
@@ -56,7 +64,9 @@
 
 @mixin theme_btn() {
   @include theme_color;
-  .material-symbols-outlined, svg {
+
+  .material-symbols-outlined,
+  svg {
     @include theme_color
   }
 
@@ -69,12 +79,15 @@
     background: none;
     @include theme_color_active;
 
-    &:focus, &:active, &:hover {
+    &:focus,
+    &:active,
+    &:hover {
       background: none;
       @include theme_color_active;
     }
 
-    .material-symbols-outlined, svg {
+    .material-symbols-outlined,
+    svg {
       @include theme_color_active
     }
   }
@@ -149,7 +162,8 @@
     background: colors-helpers.$dark-bg;
     color: colors-helpers.$dark-text;
 
-    .toc_trigger, .toc_trigger:hover {
+    .toc_trigger,
+    .toc_trigger:hover {
       color: colors-helpers.$dark-text !important;
     }
   }
@@ -158,7 +172,8 @@
     background: colors-helpers.$sepia-bg;
     color: colors-helpers.$sepia-text;
 
-    .toc_trigger, .toc_trigger:hover {
+    .toc_trigger,
+    .toc_trigger:hover {
       color: colors-helpers.$sepia-text !important;
     }
   }
@@ -250,7 +265,7 @@
     white-space: nowrap;
     font-size: 16px;
 
-    + .menu {
+    +.menu {
       border-top: 1px solid rgba(colors-helpers.$border-base, .1) !important;
     }
 
@@ -307,7 +322,8 @@
   h5 {
     font-size: 1em;
   }
-  img{
+
+  img {
     max-width: 100%;
   }
 }
@@ -395,6 +411,7 @@
     padding: 0 16px;
     flex-grow: 3;
     flex-basis: max-content;
+
     @include responsive-helpers.mobile {
       padding: 0;
     }
@@ -448,7 +465,8 @@
         }
       }
 
-      .text_selected &.text_mark_on_select_btn .material-symbols-outlined, .text_selected &.text_mark_on_select_btn svg {
+      .text_selected &.text_mark_on_select_btn .material-symbols-outlined,
+      .text_selected &.text_mark_on_select_btn svg {
         color: colors-helpers.$blue;
         fill: colors-helpers.$blue;
         stroke: colors-helpers.$blue;
@@ -464,7 +482,7 @@
     display: inline-block;
     position: relative;
 
-    & > .menu {
+    &>.menu {
       position: absolute;
       inset-inline-end: 0;
       z-index: 10;
@@ -477,11 +495,15 @@
       @include theme_bg;
       @include theme_stroke;
 
+      @include responsive-helpers.mobile {
+        bottom: 2em;
+      }
+
       .is-dark & {
         box-shadow: 0 4px 18px 0 #FFFFFF50;
       }
 
-      & > .item {
+      &>.item {
         padding: 12px 20px;
         border-bottom: 1px solid;
         cursor: pointer;
@@ -493,6 +515,7 @@
 
         &:hover {
           background: rgba(0, 0, 0, 0.04);
+
           .is-dark & {
             background: rgba(255, 255, 255, 0.04);
           }
@@ -509,7 +532,8 @@
     font-weight: 600;
     @include theme_color;
 
-    .material-symbols-outlined, svg {
+    .material-symbols-outlined,
+    svg {
       @include theme_color;
       font-size: 22px;
     }
@@ -536,7 +560,7 @@
     padding-left: 0;
   }
 
-  & > div:last-child {
+  &>div:last-child {
     color: colors-helpers.$text-color;
     font-weight: bold;
     text-overflow: ellipsis;
@@ -669,7 +693,9 @@
       background: #606060;
     }
 
-    .clear_button, .clear_button .material-symbols-outlined, .clear_button svg {
+    .clear_button,
+    .clear_button .material-symbols-outlined,
+    .clear_button svg {
       color: colors-helpers.$white !important;
     }
   }
@@ -679,7 +705,7 @@
     white-space: nowrap;
   }
 
-  & > .relative {
+  &>.relative {
     flex-grow: 3;
     display: flex;
     align-items: center;
@@ -691,7 +717,10 @@
     input {
       flex: 1;
       min-width: 0;
-      &, &:active, &:focus {
+
+      &,
+      &:active,
+      &:focus {
         border: none;
         outline: none;
         background: none;
@@ -700,7 +729,7 @@
     }
   }
 
-  & > .clear_button {
+  &>.clear_button {
     display: flex;
     align-items: center;
     font-size: 18px;
@@ -785,7 +814,7 @@
   overflow: auto;
   margin: 14px 0;
 
-  & > .item {
+  &>.item {
     padding: 1.5em 1em;
     border-bottom: 1px solid colors-helpers.$light-stroke;
     font-size: 16px;
@@ -819,7 +848,7 @@
     border-color: colors-helpers.$dark-stroke;
   }
 
-  & > button {
+  &>button {
     display: flex;
     align-items: center;
     font-size: 16px;
@@ -833,7 +862,10 @@
       }
     }
 
-    &, &:hover, &:active, &:focus {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
       color: colors-helpers.$blue !important;
       background: none !important;
     }
@@ -845,7 +877,9 @@
 }
 
 .pdf_input_wrapper {
-  &, .pdf_pagination & {
+
+  &,
+  .pdf_pagination & {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -857,7 +891,7 @@
       border-color: colors-helpers.$blue;
     }
 
-    & > input {
+    &>input {
       background: transparent;
       border: none;
       outline: none;
@@ -876,12 +910,13 @@
         }
       }
 
-      &, &::placeholder {
+      &,
+      &::placeholder {
         @include theme_color
       }
     }
 
-    & > span, & > input {
+    &>span, &>input {
       display: block;
       font-size: 16px;
       line-height: 36px;
@@ -911,7 +946,8 @@
     align-items: center;
     justify-content: space-between;
 
-    &:hover, &.active:hover {
+    &:hover,
+    &.active:hover {
       background: none;
     }
 
@@ -948,7 +984,7 @@
     justify-content: space-between;
     padding-top: 2em;
 
-    & > .text__scan_prev_next {
+    &>.text__scan_prev_next {
       transform: translate(0, 40VH);
       margin: 0 1em;
     }

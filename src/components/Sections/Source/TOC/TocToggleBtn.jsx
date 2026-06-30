@@ -9,22 +9,23 @@ import ToolbarBtnTooltip from '../../../Pages/WithText/Buttons/ToolbarBtnTooltip
 import { textPageGetTocIsActiveSelector } from '../../../../redux/selectors';
 
 const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
-  const { t }    = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { isMobile } = useContext(DeviceInfoContext);
-  const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
+  const tocIsActive = useSelector(textPageGetTocIsActiveSelector);
 
   const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
+  const iconEl = <span className="material-symbols-outlined">view_list</span>;
   if (isMobile) {
     const triggerProps = {
       className: 'clear_button',
-      onClick  : handleTocIsActive,
-      content  : withText ? '' : <span className="title">{t(`page-with-text.buttons.web.${textKey}`)}</span>,
+      onClick: handleTocIsActive,
+      icon: iconEl,
+      content: withText ? '' : <span className="title">{t(`page-with-text.buttons.web.${textKey}`)}</span>,
     };
 
-    const iconEl = <span className="material-symbols-outlined">view_list</span>;
 
     if (withText) {
       return (
@@ -38,7 +39,7 @@ const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
     return (
       <button
         {...triggerProps}
-        className={clsx('bg-white p-1', { 'bg-gray-100': tocIsActive })}
+        className={clsx('bg-white p-1 max-sm:hidden', { 'bg-gray-100': tocIsActive })}
       >
         {iconEl}
         {triggerProps.content}
