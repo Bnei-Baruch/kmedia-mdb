@@ -24,7 +24,7 @@ export const TaggingBtn = () => {
       onClick={handleOpen}
     >
       <SectionLogo name="topics" color="grey" width="20" height="20"/>
-      <span>{t('personal.label.tagging')}</span>
+      <span className="!hidden sm:!inline">{t('personal.label.tagging')}</span>
     </div>
   );
 };
