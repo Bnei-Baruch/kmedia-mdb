@@ -23,7 +23,7 @@ const Login = () => {
         {nameLetter}
       </PopoverButton>
       <PopoverPanel
-        anchor="bottom end"
+        anchor="bottom"
         className="z-1899 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black/5 p-4 w-48"
       >
         <div className="font-semibold small mb-2">{user?.name}</div>

@@ -7,7 +7,7 @@ import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
 import { textPageGetFileSelector } from '../../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 
-const TextSettings = () => {
+const TextSettings = ({ popPos = 'bottom' }) => {
   const noFile = !useSelector(textPageGetFileSelector);
 
   return (
@@ -22,7 +22,10 @@ const TextSettings = () => {
               icon={<span className="material-symbols-outlined">text_fields</span>}
             />
           </Popover.Button>
-          <Popover.Panel className="sources-settings absolute z-10 mt-2 max-sm:bottom-[4em] max-sm:left-[-5em]">
+          <Popover.Panel
+            className="sources-settings z-10"
+            anchor={popPos}
+          >
             <div className="flex">
               <ZoomSizeBtns />
             </div>

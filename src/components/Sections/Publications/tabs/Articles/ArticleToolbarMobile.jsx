@@ -22,16 +22,16 @@ const ArticleToolbarMobile = () => {
     <div className="text_toolbar">
       <div className="text_toolbar__buttons">
         <LanguageTextBtn />
-        <TextSettings />
+        <TextSettings popPos='top' />
         <SearchOnPageBtn />
         <AddBookmarkBtn />
         <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
-            <MoreOptionsBtn />
+            <MoreOptionsBtn/>
           </div>
           {menuOpen && (
             <ToolbarMenuContext.Provider value={true}>
-              <div className="menu">
+              <div className="menu bottom-15! top-auto!">
                 <div className="item"><DownloadTextBtn /></div>
                 <div className="item"><ShareTextBtn /></div>
                 <div className="item"><CopyLinkBtn /></div>

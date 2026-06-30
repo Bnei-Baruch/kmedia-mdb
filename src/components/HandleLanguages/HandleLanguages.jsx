@@ -58,13 +58,11 @@ const HandleLanguages = () => {
 
   const setShowAllContent = () => dispatch(actions.setShowAllContent(!showAllContent));
 
-  const anchor = leftRight === 'right' ? 'bottom end' : 'bottom start';
-
   return (
     <Popover className="relative" id="handleLanguagesPopup">
       <PopoverButton as={LanguagesBtn} />
       <PopoverPanel
-        anchor={anchor}
+        anchor="bottom"
         className="z-1899 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black/5 p-4 min-w-[150px] overflow-visible!"
         style={popupStyle}
       >

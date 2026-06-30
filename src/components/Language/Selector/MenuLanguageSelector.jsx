@@ -40,7 +40,7 @@ const MenuLanguageSelector = (
   if (isMobile && !multiSelect) {
     return (
       <select
-        className="px-2 py-1 border rounded w-full text-sm text-black"
+        className="px-2 py-1 border rounded w-full text-sm text-black bg-gray-300"
         style={{ direction: uiDir }}
         value={value}
         onChange={event => onChange(event.target.value)}>

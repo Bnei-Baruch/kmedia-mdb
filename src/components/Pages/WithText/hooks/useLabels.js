@@ -23,9 +23,9 @@ export const useLabels = () => {
     .filter(l => additionsMode !== TEXT_PAGE_ADDITIONS_MODS.showMy || l.author === userName)
     .filter(l => (l.properties?.srchstart || l.properties?.srchend))
     .filter(l => l.properties?.language === language)
-    .map(l => ({ type: 'label', ...l }))
+    .map(l => ({ type: 'label', ...l })) || []
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [byId, ids, additionsMode, userName]) || [];
+  , [byId, ids, additionsMode, userName]);
 
   const offsets = buildOffsets(labels);
 

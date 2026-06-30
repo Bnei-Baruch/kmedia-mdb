@@ -4,16 +4,14 @@ import { useInitTextUrl } from './hooks/useInitTextUrl';
 import TextContentMobile from './Content/TextContentMobile';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import { clsx } from 'clsx';
-import SearchOnPageBar from './SearchOnPageBar';
+import StickyToolbarMobile, { StickyBreadcrumbMobile } from './StickyToolbarMobile';
 import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { getWipErr } from '../../shared/WipErr/WipErr';
 import {
   textPageGetSettings,
-  textPageGetScrollDirSelector,
   textPageGetSubjectSelector,
-  textPageGetIsSearchSelector,
   settingsGetUILangSelector
 } from '../../../redux/selectors';
 import TagsByUnit from '../../shared/TagsByUnit';
@@ -33,9 +31,7 @@ const TextLayoutMobile = props => {
   const ref = useRef();
 
   const { theme } = useSelector(textPageGetSettings);
-  const scrollDir = useSelector(textPageGetScrollDirSelector);
   const subject = useSelector(textPageGetSubjectSelector);
-  const isSearch = useSelector(textPageGetIsSearchSelector);
   const uiLang = useSelector(settingsGetUILangSelector);
   const isLongTranslation = LANGUAGE_LONG_TRANSLATION.includes(uiLang);
 
@@ -47,27 +43,6 @@ const TextLayoutMobile = props => {
   const wipErr = getWipErr(wip, null);
   if (wipErr) return wipErr;
 
-  const renderToolbar = () => (
-    <div
-      className={
-        clsx('stick_toolbar no_print', {
-          'stick_toolbar_unpinned': scrollDir === 1,
-          'stick_toolbar_pinned': scrollDir === -1,
-          'stick_toolbar_on_end': scrollDir === 2,
-          'stick_bottom': !playerPage,
-          'stick_toolbar_long_translation': isLongTranslation,
-        })
-      }>
-      {toolbar}
-    </div>
-  );
-
-  const renderSearch = () => (
-    <div className={'stick_toolbar no_print stick_toolbar_fixed stick_bottom'}>
-      <SearchOnPageBar />
-    </div>
-  );
-
   return (
     <div
       ref={ref}
@@ -76,26 +51,16 @@ const TextLayoutMobile = props => {
         { 'stick_toolbar_long_translation': isLongTranslation }
       )}
     >
-      {(playerPage && !isSearch) && renderToolbar()}
+      <StickyToolbarMobile toolbar={toolbar} playerPage={playerPage} slot="top" />
       <div className="text_mobile_padding">
         <ScrollToTopBtn />
-        <div
-          className={
-            clsx('stick_toolbar no_print', {
-              'stick_toolbar_unpinned': scrollDir === 1,
-              'stick_toolbar_pinned': scrollDir === -1,
-              'stick_toolbar_on_end': scrollDir === 2,
-            })
-          }>
-          {breadcrumb}
-        </div>
+        <StickyBreadcrumbMobile breadcrumb={breadcrumb} />
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
         <TextContentMobile playerPage={playerPage} />
         {prevNext}
       </div>
-      {isSearch && renderSearch()}
-      {(!playerPage && !isSearch) && renderToolbar()}
+      <StickyToolbarMobile toolbar={toolbar} playerPage={playerPage} slot="bottom" />
       {toc}
     </div>
   );

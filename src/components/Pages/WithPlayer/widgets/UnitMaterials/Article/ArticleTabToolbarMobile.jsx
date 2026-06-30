@@ -20,21 +20,21 @@ const ArticleTabToolbarMobile = ({ hasToc }) => {
   return (
     <div className="text_toolbar">
       <div className="text_toolbar__buttons">
-        {hasToc && <TocToggleBtn/>}
-        <LanguageTextBtn/>
-        <TextSettings/>
-        <SearchOnPageBtn/>
-        <AddBookmarkBtn/>
+        {hasToc && <TocToggleBtn />}
+        <LanguageTextBtn />
+        <TextSettings />
+        <SearchOnPageBtn />
+        <AddBookmarkBtn />
         <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
-            <MoreOptionsBtn/>
+            <MoreOptionsBtn />
           </div>
           {menuOpen && (
             <ToolbarMenuContext.Provider value={true}>
               <div className="menu">
-                <div className="item"><DownloadTextBtn/></div>
-                <div className="item"><ShareTextModalBtn/></div>
-                <div className="item"><CopyLinkBtn/></div>
+                <div className="item"><DownloadTextBtn /></div>
+                <div className="item"><ShareTextModalBtn /></div>
+                <div className="item"><CopyLinkBtn /></div>
               </div>
             </ToolbarMenuContext.Provider>
           )}

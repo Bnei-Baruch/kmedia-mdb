@@ -18,7 +18,7 @@ const ArticleTab = ({ id }) => {
   const { isMobile } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
-  const cus    = Object.values(pageCu.derived_units).filter(x => x.content_type === CT_ARTICLE);
+  const cus = Object.values(pageCu.derived_units).filter(x => x.content_type === CT_ARTICLE);
 
   const [selectedId, setSelectedId] = useState(cus[0]?.id);
 
@@ -29,14 +29,15 @@ const ArticleTab = ({ id }) => {
   useInitTextUrl(linkMemo);
   const handleSelectCu = useCallback(id => setSelectedId(id), [setSelectedId]);
 
-  if (isEmpty(cus)) return <NotFound textKey="materials.articles.no-content"/>;
+  if (isEmpty(cus)) return <NotFound textKey="materials.articles.no-content" />;
+
 
   return (
     <div className="player_page_tab">
       {
         isMobile ? (
           <TextLayoutMobile
-            toolbar={<ArticleTabToolbarMobile hasToc={cus.length > 1}/>}
+            toolbar={<ArticleTabToolbarMobile hasToc={cus.length > 1} />}
             playerPage={true}
             id={selectedId}
             toc={
@@ -48,7 +49,7 @@ const ArticleTab = ({ id }) => {
           />
         ) : (
           <TextLayoutWeb
-            toolbar={<ArticleTabToolbarWeb hasToc={cus.length > 1}/>}
+            toolbar={<ArticleTabToolbarWeb hasToc={cus.length > 1} />}
             playerPage={true}
             id={selectedId}
             toc={

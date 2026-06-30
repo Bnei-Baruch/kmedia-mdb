@@ -496,7 +496,7 @@
       @include theme_stroke;
 
       @include responsive-helpers.mobile {
-        bottom: 2em;
+        top: 2em;
       }
 
       .is-dark & {

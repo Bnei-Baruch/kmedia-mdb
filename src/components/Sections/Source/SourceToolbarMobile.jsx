@@ -25,7 +25,7 @@ const SourceToolbarMobile = () => {
       <div className="text_toolbar__buttons">
         <TocToggleBtn />
         <LanguageTextBtn />
-        <TextSettings />
+        <TextSettings popPos='top' />
         <SearchOnPageBtn />
         <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
@@ -33,7 +33,7 @@ const SourceToolbarMobile = () => {
           </div>
           {menuOpen && (
             <ToolbarMenuContext.Provider value={true}>
-              <div className="menu">
+              <div className="menu bottom-15! top-auto!">
                 <div className="item"><AddBookmarkBtn /></div>
                 <div className="item"><LinkToLessonsBtn /></div>
                 <div className="item"><DownloadTextBtn /></div>

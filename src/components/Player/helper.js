@@ -10,15 +10,15 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
   if (isEmpty(item) || !info.isReady || (!item.files && !item.file)) return {};
 
   const { mediaType, language, quality } = info;
-  const { subtitles }                    = item;
+  const { subtitles } = item;
   if (item?.isHLS) {
     const src = `${item.file.src}?no_video=${mediaType === MT_AUDIO}`;
     return { ...item.file, src, type: mediaType, image: item.preImageUrl, subtitles };
   }
 
   lang = lang || language;
-  mt   = mt || mediaType;
-  q    = q || quality;
+  mt = mt || mediaType;
+  q = q || quality;
 
   const { filesByLang, qualityByLang, mtByLang } = item;
 
@@ -40,13 +40,15 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
-  const f     = byLang.find(f => f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q));
+  const f = byLang.find(f => f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q));
   const image = f.type === MT_VIDEO ? item.preImageUrl : null;
 
   return { ...f, image, subtitles };
 };
 
 export const getSavedTime = (cuId, ht) => {
+  if (typeof window === 'undefined') return 0
+
   const json = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`);
   let lt;
   try {

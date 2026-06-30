@@ -15,15 +15,15 @@ const LikutToolbarMobile = () => (
   <div className="text_toolbar">
     <div className="text_toolbar__buttons">
       <LanguageTextBtn />
-      <TextSettings />
+      <TextSettings popPos='top' />
       <SearchOnPageBtn />
       <LessonsByLikutBtn />
       <Popover className="text_toolbar__dropdown">
         <Popover.Button as="div">
-          <MoreOptionsBtn />
+          <MoreOptionsBtn popPos="top" />
         </Popover.Button>
         <ToolbarMenuContext.Provider value={true}>
-          <Popover.Panel className="menu">
+          <Popover.Panel className="menu bottom-15! top-auto!">
             <div className="item"><AddBookmarkBtn /></div>
             <div className="item"><DownloadTextBtn /></div>
             <div className="item"><ShareTextModalBtn /></div>

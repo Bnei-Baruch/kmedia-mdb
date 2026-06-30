@@ -1,24 +1,21 @@
 import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
-import { clsx } from 'clsx';
-import { useSelector } from 'react-redux';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import NoteItemSticky from './Notes/NoteItemSticky';
 import NoteConfirmRemove from './Notes/NoteConfirmRemove';
 import NoteItemModal from './Notes/NoteItemModal';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
-import SearchOnPageBar from './SearchOnPageBar';
+import StickyToolbar from './StickyToolbar';
 import { getWipErr } from '../../shared/WipErr/WipErr';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import {
   textPageGetSettings,
-  textPageGetSubjectSelector,
-  textPageGetUrlInfoSelector,
-  textPageGetScrollDirSelector,
-  textPageGetIsSearchSelector
+  textPageGetSubjectSelector
 } from '../../../redux/selectors';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { useFetchNotes } from './Notes/useFetchNotes';
@@ -35,11 +32,8 @@ const TextLayoutWeb = props => {
 
   const ref = useRef();
 
-  const scrollDir = useSelector(textPageGetScrollDirSelector);
   const subject = useSelector(textPageGetSubjectSelector);
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
   const { theme } = useSelector(textPageGetSettings);
-  const isSearch = useSelector(textPageGetIsSearchSelector);
 
   const wip = useTextSubject(id);
   useInitTextSettings();
@@ -50,29 +44,6 @@ const TextLayoutWeb = props => {
   const wipErr = getWipErr(wip, null);
   if (wipErr) return wipErr;
 
-  const renderToolbar = () => (
-    <div className={
-      clsx('stick_toolbar no_print', {
-        'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
-        'stick_toolbar_pinned': scrollDir === -1,
-        'stick_toolbar_fixed': hasSel,
-        'text_selected': hasSel
-      })
-    }>
-      {breadcrumb}
-      {toolbar}
-    </div>
-  );
-  const renderSearch = () => (
-    <div className={
-      clsx('stick_toolbar no_print stick_toolbar_fixed', {
-        'stick_toolbar_unpinned': scrollDir !== -1,
-        'stick_toolbar_pinned': scrollDir === -1
-      })}>
-      <SearchOnPageBar />
-    </div>
-  );
-
   return (
     <div
       className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`}
@@ -80,7 +51,7 @@ const TextLayoutWeb = props => {
       id="text_layout"
     >
       {toc}
-      {!isSearch ? renderToolbar() : renderSearch()}
+      <StickyToolbar breadcrumb={breadcrumb} toolbar={toolbar} />
       <div className='mx-auto px-2 flex justify-start max-w-[650px] w-full'>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />

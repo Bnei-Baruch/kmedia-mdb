@@ -10,7 +10,9 @@ import { textPageGetFileSelector, assetsGetDoc2htmlByIdSelector } from '../../..
 import { useNotes } from '../Notes/useNotes';
 import { SCROLL_SEARCH_ID } from '../../../../helpers/consts';
 
-const ContentHtml = ({ labels = [] }) => {
+const EMPTY_LABELS = [];
+
+const ContentHtml = ({ labels = EMPTY_LABELS }) => {
   const ref = useRef();
 
   const { language, id } = useSelector(textPageGetFileSelector);

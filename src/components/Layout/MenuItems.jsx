@@ -99,7 +99,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
         >
           {t('nav.sidebar.old-site')}
         </a>
-        <div className="flex items-center justify-start gap-4 mt-4 px-4">
+        <div className="gap-4 mt-4 px-4 flex flex-col">
           <DonateNow />
           <VirtualHomeButton />
         </div>

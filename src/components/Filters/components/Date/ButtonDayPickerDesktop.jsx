@@ -14,7 +14,7 @@ import Icon from '../../../Icon';
 
 const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }) => {
   const uiLang = useSelector(state => settings.getUILang(state.settings));
-  const uiDir  = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const [month, setMonth] = useState(value);
   const locale = getDayPickerLocale(uiLang);
@@ -33,7 +33,11 @@ const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }
         <Icon icon={faCalendarDays} className="text-gray-600 " />
         {label}
       </PopoverButton>
-      <PopoverPanel className="absolute z-50 mt-1 bg-white text-gray-900 border border-gray-200 rounded shadow-lg p-4" dir={uiDir}>
+      <PopoverPanel
+        className="z-50 bg-white text-gray-900 border border-gray-200 rounded shadow-lg p-4"
+        dir={uiDir}
+        anchor="top"
+      >
         {({ close }) => (
           <DayPicker
             mode="single"
@@ -53,8 +57,8 @@ const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }
 };
 
 ButtonDayPickerDesktop.propTypes = {
-  value      : PropTypes.instanceOf(Date),
-  label      : PropTypes.string,
+  value: PropTypes.instanceOf(Date),
+  label: PropTypes.string,
   onDayChange: PropTypes.func,
 };
 
