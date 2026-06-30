@@ -6,6 +6,7 @@
   -webkit-tap-highlight-color: transparent;
   color: colors-helpers.$black;
 
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -177,8 +178,6 @@
   }
 }
 
-// Hover tooltip with the full (unclamped) cu_item_info content. Shown via
-// `group-hover` on .cu_item_info, only rendered when the inline text is cut off.
 .cu_item_list .cu_item_tooltip {
   position: absolute;
   top: 50%;
@@ -201,7 +200,7 @@
     color: colors-helpers.$black;
   }
 
-  .cu_item_tooltip_desc > span {
+  .cu_item_tooltip_desc>span {
     display: inline-block;
     padding-inline-end: 0.5em;
   }
@@ -233,15 +232,17 @@
 .cu_item_list {
   border-bottom: 1px solid colors-helpers.$midWhite;
   display: flex;
+  gap: 1em;
   justify-content: start;
   margin: 0 0 1px;
   position: relative;
+  align-items: stretch;
 
   &:last-child {
     border: 0;
   }
 
-  & > div {
+  &>div {
     position: relative;
   }
 
@@ -262,12 +263,6 @@
     cursor: pointer;
   }
 
-  &.big {
-    .cu_info_description {
-      left: 2em;
-      right: 2em;
-    }
-  }
 
   &.small {
     padding: 0.7em;
@@ -280,21 +275,12 @@
       color: colors-helpers.$black;
     }
 
-    .cu_info_description {
-      bottom: -5px;
-    }
-
     .cu_item_duration {
       margin: 0;
     }
 
     .cu_item_info {
-      padding: 0 1em 1em;
       overflow: hidden;
-
-      @include responsive-helpers.mobile {
-        inset-inline-start: 152px;
-      }
 
       .cu_item_name {
         -webkit-line-clamp: 2;
@@ -318,6 +304,10 @@
 
     .cu_item_name {
       margin-bottom: .5em;
+    }
+
+    .cu_item_info {
+      padding: 1em 0;
     }
   }
 
@@ -371,47 +361,30 @@
   }
 
   .cu_item_info {
-    padding: 1em 2em 0;
-    position: relative;
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     @include responsive-helpers.mobile {
-      position: absolute;
       padding: 0;
-      top: 1em;
-      inset-inline-start: 173px;
-      inset-inline-end: 0;
-      width: auto;
-
-      &.with_actions {
-        inset-inline-end: 20px;
-      }
     }
   }
 
   .cu_info_description {
     margin: 0;
-    height: 1.1em;
-    position: absolute;
-    bottom: 1em;
     opacity: 0.43;
     color: colors-helpers.$black;
-    right: 1em;
-    left: 1em;
-    width: max-content;
-    min-height: 1.5em;
-
-    @include responsive-helpers.mobile {
-      top: 78px;
-      bottom: auto;
-      left: 0;
-      right: 0;
-      width: 100%;
-    }
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .cu_item_name {
-    margin: 1em 0 2.5em;
+    margin: 0 0 .25em;
     color: colors-helpers.$black;
     display: inline-block;
 
@@ -429,23 +402,23 @@
       line-height: 1rem;
     }
   }
-}
 
-& > .cu_item_actions {
-  position: absolute;
-  inset-inline-end: 0;
+  &>.cu_item_actions {
+    flex: 0 0 auto;
+    align-self: center;
 
-  .cu_item_dropdown {
-    padding: 1em 0;
-    padding-inline-start: 1em;
+    .cu_item_dropdown {
+      padding: 1em 0;
+      padding-inline-start: 1em;
 
-    .my_playlist_add {
-      width: 100%;
-      text-align: start;
-    }
+      .my_playlist_add {
+        width: 100%;
+        text-align: start;
+      }
 
-    &>.icon {
-      color: colors-helpers.$midGrey;
+      &>.icon {
+        color: colors-helpers.$midGrey;
+      }
     }
   }
 }

@@ -51,7 +51,7 @@ const ListTemplate = (
     const descEl = descRef.current;
     const truncated =
       !!(nameEl && nameEl.scrollHeight > nameEl.clientHeight) ||
-      !!(descEl && descEl.scrollWidth > descEl.clientWidth);
+      !!(descEl && descEl.scrollHeight > descEl.clientHeight);
     setIsNeedTooltip(truncated);
   }, [_name, description, size, isMobile]);
 
@@ -94,14 +94,14 @@ const ListTemplate = (
         {label ? <div className="cu_item_label">{label}</div> : null}
         <UnitProgress unit={unit} playTime={playTime} />
         <div className="cu_item_img" style={{ width }}>
-          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg} /> :
-            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg} />}
+          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg}  force16x9={true} /> :
+            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg}  force16x9={true} />}
         </div>
       </div>
       <div className={clsx('cu_item_info', { 'with_actions': !!children })}>
         {withCUInfo && renderCUInfo()}
         {info}
-        <div ref={descRef} className={`cu_info_description ${dir} text_ellipsis`}>
+        <div ref={descRef} className={`cu_info_description ${dir}`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>

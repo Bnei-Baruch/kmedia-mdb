@@ -16,7 +16,7 @@ const PlaylistItems = () => {
   const itemById    = useSelector(playlistGetItemByIdSelector);
 
   return (
-    <div id="avbox_playlist" className="avbox__playlist-view">
+    <div id="avbox_playlist" className="avbox__playlist-view p-4 max-h-[40rem]">
       {
         items.map(({ id: _id, showImg }) => {
           const selected                       = _id === id;
