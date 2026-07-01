@@ -90,10 +90,10 @@ const PersonalInfo = ({ collection }) => {
         </div>
         <div className="item">
           <div
-            className="cursor-pointer"
+            className="cursor-pointer flex items-center gap-1"
             onClick={() => toggleReaction(reaction)}
           >
-            <span className="material-symbols-outlined margin-right-4 margin-left-4">{reaction ? 'favorite' : 'favorite_border'}</span>
+            <span className="material-symbols-outlined">{reaction ? 'favorite' : 'favorite_border'}</span>
             <span>{reactionsCount}</span>
           </div>
         </div>

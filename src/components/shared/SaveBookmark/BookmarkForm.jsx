@@ -101,7 +101,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
   const handleSearchChange = (e, { value }) => setQuery(value.toLowerCase());
 
   const renderFolder = f => (
-    <li key={f.id}>
+    <div key={f.id}>
       <label className="flex items-center gap-2 cursor-pointer">
         <input
           type="checkbox"
@@ -110,7 +110,7 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
         />
         {f.name}
       </label>
-    </li>
+    </div>
   );
 
   return (

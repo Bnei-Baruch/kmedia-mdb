@@ -20,7 +20,7 @@ export const TaggingBtn = () => {
 
   return (
     <div
-      className="my_tag cursor-pointer"
+      className="my_tag cursor-pointer gap-1"
       onClick={handleOpen}
     >
       <SectionLogo name="topics" color="grey" width="20" height="20"/>

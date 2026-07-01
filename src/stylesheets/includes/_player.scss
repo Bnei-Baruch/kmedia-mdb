@@ -1005,6 +1005,9 @@ video {
 }
 
 .settings {
+  .controls__language select {
+    background: colors-helpers.$white;
+  }
   .is-web.is-settings & {
     display: flex;
   }

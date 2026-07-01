@@ -52,7 +52,7 @@ const TextLayoutWeb = props => {
     >
       {toc}
       <StickyToolbar breadcrumb={breadcrumb} toolbar={toolbar} />
-      <div className='mx-auto px-2 flex justify-start max-w-[650px] w-full'>
+      <div className='mx-auto px-2 max-w-[650px] w-full'>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
       </div>

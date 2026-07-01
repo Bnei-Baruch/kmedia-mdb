@@ -71,7 +71,7 @@ const FilterLabels = ({ namespace }) => {
 
   const renderItem = (name, val, key) => (
     <span
-      className="inline-flex items-center rounded-full border px-1 text-xs label font-bold"
+      className="inline-flex items-center rounded-full border px-1 text-xs label font-bold gap-1"
       key={key}
     >
       {titleByFilterType(name, val)}

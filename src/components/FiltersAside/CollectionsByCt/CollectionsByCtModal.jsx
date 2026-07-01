@@ -51,7 +51,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center" dir={uiDir}>
         <DialogPanel className="relative w-full max-h-[90vh] mx-4 bg-white rounded-lg flex flex-col shadow-xl">
-          <div className="flex items-center justify-start gap-4 p-4 border-b">
+          <div className="flex items-center justify-start gap-4 p-4 pt-8 border-b border-gray-200">
             <DialogTitle className="font-bold text-xl whitespace-nowrap">
               {t(`filters.content-types.${ct}`)}
             </DialogTitle>
@@ -71,7 +71,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
               ))}
             </div>
           </div>
-          <div className="flex justify-end p-4 border-t">
+          <div className="flex justify-end p-4 border-t border-gray-200">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               onClick={handleClose}

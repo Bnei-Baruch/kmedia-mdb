@@ -8,7 +8,7 @@ const AdditionsModeBtn = () => (
   <Popover className="relative">
     {({ open }) => (
       <>
-        <Popover.Button as="div">
+        <Popover.Button>
           <ToolbarBtnTooltip
             textKey={'additions.review'}
             active={open}

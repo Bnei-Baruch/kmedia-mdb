@@ -45,7 +45,7 @@ const TagsByUnit = ({ id }) => {
   const scrollRight = () => nodeRef.current.scrollLeft -= 300;
 
   return (
-    <div className="unit-tags-bar">
+    <div className="unit-tags-bar print:hidden!">
       <div className="unit-tags-title">{t('messages.unit-tags')}:</div>
       {
         showArrow > 0 && (

@@ -23,21 +23,21 @@ const CopyShareUrl = () => {
   const shareUrl = useShareUrl();
 
   return (
-    <div className="sharing__url flex flex-1 items-stretch" dir={uiDir}>
+    <div className="sharing__url flex flex-1 items-stretch" dir="ltr">
       <input
         className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded-l border-r-0 focus:outline-none bg-gray-100"
         dir="ltr"
         value={shareUrl}
         readOnly
       />
-      <Popover className="relative  right-0 button rounded-l-none! border-l-0 text-xs !flex items-center">
+      <Popover className="relative button rounded-l-none! border-l-0 text-xs flex! items-center">
         <CopyToClipboard text={shareUrl} onCopy={handleCopied}>
           <span>
             {t('buttons.copy')}
           </span>
         </CopyToClipboard>
         {open && (
-          <PopoverPanel static className="absolute z-10 mt-1 bg-gray-800 text-white text-xs rounded py-1 px-2" dir={uiDir}>
+          <PopoverPanel static className="z-10 mt-1 bg-gray-800 text-white text-xs rounded py-1 px-2" dir={uiDir}>
             {t('messages.link-copied-to-clipboard')}
           </PopoverPanel>
         )}
