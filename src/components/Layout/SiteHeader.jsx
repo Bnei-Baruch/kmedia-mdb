@@ -80,10 +80,10 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
           }
           {
             !isMobile && (
-              <div>
+              <>
                 <DonateNow />
                 <VirtualHomeButton />
-              </div>
+              </>
             )
           }
           <div>

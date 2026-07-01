@@ -92,7 +92,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
             >
               <span className="material-symbols-outlined">close</span>
             </button>
-            <div className="p-4 border-b border-gray-300 font-bold">{t('personal.addToPlaylist')}</div>
+            <div className="p-4 pt-6 border-b border-gray-300 font-bold">{t('personal.addToPlaylist')}</div>
             <div className="p-4">
               <input
                 className="w-full border border-gray-300 rounded px-2 py-1 small autocomplete"

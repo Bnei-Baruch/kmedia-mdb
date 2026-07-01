@@ -149,8 +149,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 9999px;
   border: 1px solid #2185d0;
   color: gray;
@@ -162,6 +162,11 @@ body {
 
   &:hover {
     color: black;
+  }
+
+  @include mobile  { 
+    width: 24px;
+    height: 24px;
   }
 }
 

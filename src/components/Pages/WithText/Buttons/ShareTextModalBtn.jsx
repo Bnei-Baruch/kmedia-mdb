@@ -14,10 +14,10 @@ import { POPOVER_CONFIRMATION_TIMEOUT } from '../../../../helpers/consts';
 
 
 const ShareTextModalBtn = () => {
-  const { t }                         = useTranslation();
-  const { isMobile }            = useContext(DeviceInfoContext);
+  const { t } = useTranslation();
+  const { isMobile } = useContext(DeviceInfoContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isCopyOpen, setIsCopyOpen]   = useStateWithCallback(false, isCopyOpen => {
+  const [isCopyOpen, setIsCopyOpen] = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
       timeout = setTimeout(() => setIsCopyOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
     }
@@ -68,13 +68,13 @@ const ShareTextModalBtn = () => {
       >
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className="mx-auto max-w-md rounded bg-white p-6">
+          <Dialog.Panel className="mx-auto max-w-md rounded bg-white px-1 py-4 w-[95%]">
             <ShareBar
               url={urlWithParams}
               buttonSize={buttonSize}
               messageTitle={t('sources-library.share-title')}
             />
-            <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2">
+            <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2" dir="ltr">
               {urlWithParams}
             </div>
             <div className="relative inline-block mt-2">
@@ -84,7 +84,7 @@ const ShareTextModalBtn = () => {
                 </button>
               </CopyToClipboard>
               {isCopyOpen && (
-                <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 rounded bg-gray-800 px-3 py-1 small text-white whitespace-nowrap">
+                <div className="absolute z-10 bottom-full right-1/2 mb-2 rounded bg-gray-800 px-3 py-1 small text-white whitespace-nowrap">
                   {t('messages.link-copied-to-clipboard')}
                 </div>
               )}
