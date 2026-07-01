@@ -12,7 +12,7 @@ const LanguagesBtn = forwardRef((props, ref) => {
   const { t } = useTranslation();
 
   return (
-    <div ref={ref} {...props}>
+    <div ref={ref} {...props} className='flex items-center'>
       {isMobile ? (
         <span className="material-symbols-outlined text-3xl no-margin">language</span>
       ) : (

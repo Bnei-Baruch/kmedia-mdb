@@ -72,7 +72,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
           <HandleLanguages />
           {
             isNotHome && isMobile &&
-            <div ref={toggleSearchBtnRef}>
+            <div ref={toggleSearchBtnRef} className='flex items-center'>
               <a className="flex items-center justify-center cursor-pointer text-white">
                 <Icon icon={faSearch} className="no-margin" onClick={openHeaderSearch} />
               </a>
