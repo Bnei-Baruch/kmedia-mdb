@@ -453,6 +453,43 @@ export function* search(action) {
         yield* urlUpdateQuery(query => Object.assign(query, { session_id: null }));
       }
 
+      if (!isFollowup && reasoningSearchIsRapid(searchType)) {
+        let cacheData = null;
+        try {
+          const cacheResponse = yield call(Api.reasoningSearchCache, {
+            q,
+            ui_language: uiLang,
+            is_rapid   : true
+          });
+          cacheData = cacheResponse?.data;
+        } catch (_) {
+          cacheData = null;
+        }
+
+        const cacheSessionId = cacheData?.cache_hit ? cacheData.session_id : null;
+        if (cacheSessionId) {
+          if (runningSessionId && runningSessionId !== cacheSessionId) {
+            try {
+              yield call(Api.reasoningSearchCancel, runningSessionId);
+            } catch (_) {
+              // Cached result is still valid even if best-effort cancellation fails.
+            }
+          }
+
+          yield put(actions.reasoningSearchStart({
+            keepResult : false,
+            sessionId  : cacheSessionId,
+            requestKind: 'initial',
+            searchType,
+            query      : resultQuery
+          }));
+
+          yield* urlUpdateQuery(query => Object.assign(query, { session_id: cacheSessionId }));
+          yield call(fetchReasoningResult, cacheSessionId, query, searchType);
+          return;
+        }
+      }
+
       yield put(actions.reasoningSearchStart({
         keepResult : isFollowup,
         sessionId  : sessionIdFromPrevious,
