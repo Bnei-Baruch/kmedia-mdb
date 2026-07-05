@@ -1,7 +1,6 @@
 import { Fragment, useContext, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
@@ -13,40 +12,13 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpe
 import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
 import ArticleToolbarMobile from './ArticleToolbarMobile';
 import ArticleToolbarWeb from './ArticleToolbarWeb';
+import ArticleHeader from './ArticleHeader';
 import {
   mdbGetDenormContentUnitSelector,
   mdbGetErrorsSelector,
-  settingsGetUIDirSelector,
   mdbGetWipFn
 } from '../../../../../redux/selectors';
 import TextLayoutMobile from '../../../../Pages/WithText/TextLayoutMobile';
-
-const renderHeader = (unit, t) => {
-  const subText2 = t('publications.header.subtext2');
-
-  return (
-    <div className="section-header">
-      <div className="px-1">
-        <h1 >
-          {unit.name}
-          {
-            unit.description &&
-            <div className="text-base font-normal text-gray-500">{unit.description}</div>
-          }
-          {
-            subText2 &&
-            <div className="text-base font-normal text-gray-500 section-header__subtitle2">
-              {subText2}
-            </div>
-          }
-        </h1>
-        <h4 className="text-gray-500 display-inline">
-          {t('values.date', { date: unit.film_date })}
-        </h4>
-      </div>
-    </div>
-  );
-};
 
 const renderHelmet = unit => (
   <Fragment>
@@ -58,12 +30,10 @@ const renderHelmet = unit => (
 const ArticlePage = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { t } = useTranslation();
 
   const chronicles = useContext(ClientChroniclesContext);
   const { isMobile } = useContext(DeviceInfoContext);
 
-  const uiDir = useSelector(settingsGetUIDirSelector);
   const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const wip = useSelector(mdbGetWipFn).units[id];
   const err = useSelector(mdbGetErrorsSelector).units[id];
@@ -97,7 +67,7 @@ const ArticlePage = () => {
         {renderHelmet(unit)}
         <div className="flex flex-wrap">
           <div className="flex-1 md:w-[64%]">
-            {renderHeader(unit, t, uiDir)}
+            <ArticleHeader unit={unit} />
             <div className="py-4">
               {
                 isMobile ? (
@@ -115,7 +85,7 @@ const ArticlePage = () => {
         </div>
       </>
     ) : (
-      renderHeader(unit, t, uiDir)
+      <ArticleHeader unit={unit} />
     );
 };
 
