@@ -8,7 +8,7 @@ import { FN_DATE_FILTER } from '../../helpers/consts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { actions } from '../../redux/modules/filters';
 import { filtersAsideGetMultipleStatsSelector, filtersGetFilterByNameSelector, settingsGetUILangSelector } from '../../redux/selectors';
-import FastDayPicker from '../Filters/components/Date/FastDayPicker';
+import FastDayPicker from './Date/FastDayPicker';
 import {
   CUSTOM_DAY,
   CUSTOM_RANGE,
@@ -17,7 +17,7 @@ import {
   presetToRange,
   rangeToPreset,
   TODAY
-} from '../Filters/components/Date/helper';
+} from './Date/helper';
 import FilterHeader from './FilterHeader';
 
 const ENABLED_STATS_NAMESPACE = ['search'];

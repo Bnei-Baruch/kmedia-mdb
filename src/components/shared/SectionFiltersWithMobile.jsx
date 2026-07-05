@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Dialog, DialogPanel } from '@headlessui/react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import FiltersHydrator from '../Filters/FiltersHydrator';
+import FiltersHydrator from '../FiltersAside/FiltersHydrator';
 import { settingsGetUIDirSelector } from '../../redux/selectors';
 
 const SectionFiltersWithMobile = ({ filters, children, namespace }) => {

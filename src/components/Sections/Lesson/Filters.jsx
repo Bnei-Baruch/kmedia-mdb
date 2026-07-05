@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../../FiltersAside/DateFilter';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';

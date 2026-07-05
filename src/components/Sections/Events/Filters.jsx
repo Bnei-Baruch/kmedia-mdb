@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 
 import { actions } from '../../../redux/modules/filtersAside';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import Locations from '../../FiltersAside/LocationsFilter/Locations';

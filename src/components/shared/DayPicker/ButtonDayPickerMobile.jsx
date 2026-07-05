@@ -1,12 +1,12 @@
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { clsx } from 'clsx';
-import dayjs from '../../../../helpers/dayjs';
+import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { useCallback, useRef, useState } from 'react';
 
-import { today } from '../../../../helpers/date';
-import { noop } from '../../../../helpers/utils';
-import Icon from '../../../Icon';
+import { today } from '../../../helpers/date';
+import { noop } from '../../../helpers/utils';
+import Icon from '../../Icon';
 
 const ButtonDayPickerMobile = ({ value = null, label = '', onDayChange = noop, withLabel }) => {
   const [selectedDate, setSelectedDate] = useState(null);

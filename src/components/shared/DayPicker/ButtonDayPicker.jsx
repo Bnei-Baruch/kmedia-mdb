@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { noop } from '../../../../helpers/utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { noop } from '../../../helpers/utils';
 import ButtonDayPickerDesktop from './ButtonDayPickerDesktop';
 import ButtonDayPickerMobile from './ButtonDayPickerMobile';
 

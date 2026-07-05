@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import dayjs from '../../../../helpers/dayjs';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { actions as mdbActions } from '../../../../redux/modules/mdb';
-import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
+import ButtonDayPicker from '../../../shared/DayPicker/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { isEmpty } from '../../../../helpers/utils';

@@ -1,7 +1,7 @@
-import dayjs from '../../../../helpers/dayjs';
+import dayjs from '../../../helpers/dayjs';
 
 import 'react-day-picker/style.css';
-import { today } from '../../../../helpers/date';
+import { today } from '../../../helpers/date';
 
 export const TODAY        = 'TODAY';
 export const YESTERDAY    = 'YESTERDAY';

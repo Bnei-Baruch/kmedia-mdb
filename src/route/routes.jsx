@@ -40,7 +40,7 @@ const Program             = lazy(() => import('../components/Sections/Program/Pr
 const Programs            = lazy(() => import('../components/Sections/Programs/MainPage'));
 const Publications        = lazy(() => import('../components/Sections/Publications/MainPage'));
 const ArticleCollection   = lazy(() => import('../components/Sections/Publications/tabs/Articles/Collection'));
-const ArticlePage         = lazy(() => import('../components/Sections/Publications/tabs/Articles/Unit'));
+const ArticlePage         = lazy(() => import('../components/Sections/Publications/tabs/Articles/ArticlePage'));
 const BlogPost            = lazy(() => import('../components/Sections/Publications/tabs/Blog/Post/Container'));
 const SimpleModeContainer = lazy(() => import('../components/Sections/SimpleMode/Container'));
 const Sketches            = lazy(() => import('../components/Sections/Sketches/MainPage'));

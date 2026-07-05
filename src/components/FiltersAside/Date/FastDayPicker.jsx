@@ -1,17 +1,17 @@
-import dayjs from '../../../../helpers/dayjs';
+import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
 import { Component, createRef } from 'react';
 import { clsx } from 'clsx';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import scrollIntoView from 'scroll-into-view';
-import { noop } from '../../../../helpers/utils';
+import { noop } from '../../../helpers/utils';
 
-import { today } from '../../../../helpers/date';
-import { getDayPickerLocale } from '../../../../helpers/dayPickerLocale';
-import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
+import { today } from '../../../helpers/date';
+import { getDayPickerLocale } from '../../../helpers/dayPickerLocale';
+import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../helpers/i18n-utils';
 
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class FastDayPicker extends Component {
   static contextType = DeviceInfoContext;

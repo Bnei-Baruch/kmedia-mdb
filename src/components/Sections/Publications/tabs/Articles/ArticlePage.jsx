@@ -26,8 +26,8 @@ const renderHeader = (unit, t) => {
 
   return (
     <div className="section-header">
-      <div className=" px-1 ">
-        <h1>
+      <div className="px-1">
+        <h1 >
           {unit.name}
           {
             unit.description &&
@@ -56,17 +56,17 @@ const renderHelmet = unit => (
 );
 
 const ArticlePage = () => {
-  const { id }   = useParams();
+  const { id } = useParams();
   const location = useLocation();
-  const { t }    = useTranslation();
+  const { t } = useTranslation();
 
-  const chronicles         = useContext(ClientChroniclesContext);
+  const chronicles = useContext(ClientChroniclesContext);
   const { isMobile } = useContext(DeviceInfoContext);
 
   const uiDir = useSelector(settingsGetUIDirSelector);
-  const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
-  const wip   = useSelector(mdbGetWipFn).units[id];
-  const err   = useSelector(mdbGetErrorsSelector).units[id];
+  const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const wip = useSelector(mdbGetWipFn).units[id];
+  const err = useSelector(mdbGetErrorsSelector).units[id];
 
   const dispatch = useDispatch();
 
@@ -88,31 +88,29 @@ const ArticlePage = () => {
   }
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
-  const toolbar          = isMobile ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
-  const { embed }        = getEmbedFromQuery(location);
+  const toolbar = isMobile ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
+  const { embed } = getEmbedFromQuery(location);
 
   return !embed
     ? (
       <>
         {renderHelmet(unit)}
-        <div className=" px-4">
-          <div className="flex flex-wrap p-4">
-            <div className="w-full md:w-[62.5%]">
-              {renderHeader(unit, t, uiDir)}
-              <div className="p-4">
-                {
-                  isMobile ? (
-                    <TextLayoutMobile toolbar={toolbar} playerPage={true} />
-                  ) : (
-                    <TextLayoutWeb toolbar={toolbar} playerPage={true} />
-                  )
-                }
-                <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
-              </div>
+        <div className="flex flex-wrap">
+          <div className="flex-1 md:w-[64%]">
+            {renderHeader(unit, t, uiDir)}
+            <div className="py-4">
+              {
+                isMobile ? (
+                  <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+                ) : (
+                  <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+                )
+              }
+              <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
             </div>
-            <div className="w-full md:w-[36%]">
-              <Recommended cuId={unit.id} />
-            </div>
+          </div>
+          <div className="w-full md:w-[36%]">
+            <Recommended cuId={unit.id} />
           </div>
         </div>
       </>

@@ -5,7 +5,7 @@ import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS 
 
 import { actions } from '../../../redux/modules/filtersAside';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';

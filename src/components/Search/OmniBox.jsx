@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { SuggestionsHelper } from '../../helpers/search';
-import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
+import ButtonDayPicker from '../shared/DayPicker/ButtonDayPicker';
 
 import { clsx } from 'clsx';
 import { actions } from '../../redux/modules/search';

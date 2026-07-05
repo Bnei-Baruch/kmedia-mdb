@@ -6,11 +6,11 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { useSelector } from 'react-redux';
 
-import { today } from '../../../../helpers/date';
-import { getDayPickerLocale } from '../../../../helpers/dayPickerLocale';
-import { noop } from '../../../../helpers/utils';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import Icon from '../../../Icon';
+import { today } from '../../../helpers/date';
+import { getDayPickerLocale } from '../../../helpers/dayPickerLocale';
+import { noop } from '../../../helpers/utils';
+import { selectors as settings } from '../../../redux/modules/settings';
+import Icon from '../../Icon';
 
 const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }) => {
   const uiLang = useSelector(state => settings.getUILang(state.settings));

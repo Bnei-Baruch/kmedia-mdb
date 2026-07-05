@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import DateFilter from '../../FiltersAside/DateFilter';
 
 const Filters = ({ namespace }) => {

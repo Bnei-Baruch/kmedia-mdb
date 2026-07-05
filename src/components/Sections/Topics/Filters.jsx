@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../../redux/modules/filtersAside';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';

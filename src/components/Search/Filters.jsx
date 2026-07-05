@@ -6,7 +6,7 @@ import { actions } from '../../redux/modules/filtersAside';
 import { actions as searchActions } from '../../redux/modules/search';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
-import FiltersHydrator from '../Filters/FiltersHydrator';
+import FiltersHydrator from '../FiltersAside/FiltersHydrator';
 import FilterHeader from '../FiltersAside/FilterHeader';
 import Language from '../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../FiltersAside/DateFilter';
