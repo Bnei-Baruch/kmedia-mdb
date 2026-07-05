@@ -111,6 +111,8 @@
       "sources-filter-multi": "Каббалисты",
       "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
+      "collections-filter-multi": "Коллекции",
+      "publishers-filter": "Издатели",
       "language-filter": "Язык",
       "date-filter": "Дата",
       "media-type-filter": "Медиа",

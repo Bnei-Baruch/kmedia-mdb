@@ -10,6 +10,7 @@ import {
   FN_MEDIA_TYPE,
   FN_ORIGINAL_LANGUAGES,
   FN_PERSON,
+  FN_PUBLISHER,
   FN_SOURCES_MULTI,
   FN_TOPICS,
   FN_TOPICS_MULTI,
@@ -17,7 +18,7 @@ import {
 } from '../../helpers/consts';
 import { actions } from '../../redux/modules/filters';
 import { getTitle } from './LocationsFilter/helper';
-import { filtersGetFiltersSelector, mdbGetPersonByIdSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, mdbNestedGetCollectionByIdSelector } from '../../redux/selectors';
+import { filtersGetFiltersSelector, mdbGetPersonByIdSelector, publicationsGetPublisherByIdSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, mdbNestedGetCollectionByIdSelector } from '../../redux/selectors';
 
 const FilterLabels = ({ namespace }) => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ const FilterLabels = ({ namespace }) => {
   const getTagById    = useSelector(tagsGetTagByIdSelector);
   const getCById      = useSelector(mdbNestedGetCollectionByIdSelector);
   const getPersonById = useSelector(mdbGetPersonByIdSelector);
+  const publisherById = useSelector(publicationsGetPublisherByIdSelector);
 
   const dispatch = useDispatch();
 
@@ -46,6 +48,8 @@ const FilterLabels = ({ namespace }) => {
         return getPersonById(val)?.name;
       case FN_COLLECTION_MULTI:
         return getCById(val).name;
+      case FN_PUBLISHER:
+        return publisherById[val]?.name;
       case FN_MEDIA_TYPE:
         return t(`filters.media-types.${val}`);
       case FN_ORIGINAL_LANGUAGES:

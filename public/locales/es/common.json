@@ -110,6 +110,8 @@
       "sources-filter-multi": "Cabalistas",
       "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",
+      "collections-filter-multi": "Colecciones",
+      "publishers-filter": "Editoriales",
       "language-filter": "Idioma",
       "date-filter": "Fecha",
       "media-type-filter": "Medios",

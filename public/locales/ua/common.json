@@ -110,6 +110,8 @@
       "sources-filter-multi": "Kabbalists",
       "topics-filter-multi": "Теми",
       "content-type-filter": "Section",
+      "collections-filter-multi": "Колекції",
+      "publishers-filter": "Видавці",
       "language-filter": "Language",
       "date-filter": "Date",
       "media-type-filter": "Media",

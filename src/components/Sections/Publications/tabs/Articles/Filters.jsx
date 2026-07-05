@@ -8,6 +8,10 @@ import FiltersHydrator from '../../../../Filters/FiltersHydrator';
 import DateFilter from '../../../../FiltersAside/DateFilter';
 import Language from '../../../../FiltersAside/LanguageFilter/Language';
 import TagSourceFilter from '../../../../FiltersAside/TopicsFilter/TagSourceFilter';
+import CollectionsFilter from './CollectionsFilter';
+import PublishersFilter from './PublishersFilter';
+
+
 import {
   filtersAsideGetIsReadySelector,
   filtersAsideGetWipErrSelector,
@@ -48,6 +52,8 @@ const Filters = ({ namespace, baseParams }) => {
       <h3 className="text-lg font-bold uppercase tracking-wide mt-4">
         {t('filters.aside-filter.filters-title')}
       </h3>
+      <CollectionsFilter namespace={namespace} />
+      <PublishersFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
       <Language namespace={namespace} />
       <DateFilter namespace={namespace} />

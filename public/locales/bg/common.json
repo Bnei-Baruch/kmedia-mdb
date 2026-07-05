@@ -111,6 +111,8 @@
       "sources-filter-multi": "Кабалисти",
       "topics-filter-multi": "Теми",
       "content-type-filter": "Секция",
+      "collections-filter-multi": "Колекции",
+      "publishers-filter": "Издатели",
       "language-filter": "Език",
       "date-filter": "Дата",
       "media-type-filter": "Медиа",

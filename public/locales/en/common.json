@@ -111,6 +111,8 @@
       "sources-filter-multi": "Kabbalists",
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
+      "collections-filter-multi": "Collections",
+      "publishers-filter": "Publishers",
       "language-filter": "Language",
       "date-filter": "Date",
       "media-type-filter": "Media",

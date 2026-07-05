@@ -110,6 +110,8 @@
       "sources-filter-multi": "מקובלים",
       "topics-filter-multi": "נושאים",
       "content-type-filter": "מדור",
+      "collections-filter-multi": "אוספים",
+      "publishers-filter": "מוציאים לאור",
       "language-filter": "שפה",
       "date-filter": "תאריך",
       "media-type-filter": "מדיה",
