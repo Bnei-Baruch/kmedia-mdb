@@ -55,7 +55,7 @@ const ArticlesList = () => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={NAMESPACE} />
-      {wipErr || items?.map(id => <TextListTemplate cuID={id} key={id} />)}
+      {wipErr || items?.map(id => <TextListTemplate cuID={id} key={id} withCCUInfo={true} />)}
       <hr className="m-0 border-t" />
       {total > 0 && (
         <Pagination

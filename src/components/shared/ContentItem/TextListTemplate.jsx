@@ -7,25 +7,37 @@ import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo, textPartLink } from './helper';
+
 import {
   sourcesAreLoadedSelector,
   mdbGetDenormContentUnitSelector,
   mdbGetDenormLabelSelector,
   sourcesGetPathByIDSelector
 } from '../../../redux/selectors';
+import { canonicalCollection } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 
-const TextListTemplate = ({ cuID, lID }) => {
+const TextListTemplate = ({ cuID, lID, withCCUInfo = false }) => {
   const { t } = useTranslation();
-  const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
-  const label            = useSelector(state => mdbGetDenormLabelSelector(state))(lID);
+  const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
+  const label = useSelector(state => mdbGetDenormLabelSelector(state))(lID);
   const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
-  const getPathByID      = useSelector(sourcesGetPathByIDSelector);
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
 
   if (!cu) return null;
-  const icon = label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
-  const to   = textPartLink(label?.properties, cu);
 
+  const icon = label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
+  const to = textPartLink(label?.properties, cu);
   const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);
+
+  if (withCCUInfo) {
+    const _ccu = canonicalCollection(cu);
+    const _ccu_link = canonicalLink(_ccu);
+    if (_ccu_link) {
+      description.push(<Link to={_ccu_link}>{_ccu.name}</Link>);
+    }
+  }
+
   return (
     <div
       key={cuID}
@@ -35,7 +47,7 @@ const TextListTemplate = ({ cuID, lID }) => {
         <SectionLogo name={icon} height="60" width="60" />
       </div>
       <div className="text_item__content">
-        <Link to={to} className="text_item__title">
+        <Link to={to} className="text_item__title" as="span">
           <span>{title}</span>
           {subTitle && <div className="text_item__subtitle">{subTitle}</div>}
         </Link>
@@ -49,7 +61,7 @@ const TextListTemplate = ({ cuID, lID }) => {
 
 TextListTemplate.propTypes = {
   cuID: PropTypes.string,
-  lID : PropTypes.string
+  lID: PropTypes.string
 
 };
 
