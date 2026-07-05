@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import FiltersHydrator from '../../../../Filters/FiltersHydrator';
 import DateFilter from '../../../../FiltersAside/DateFilter';
-import Language from '../../../../FiltersAside/LanguageFilter/Language';
+import Language from './LanguageFilter';
 
 const Filters = ({ namespace }) => {
   const { t } = useTranslation();
