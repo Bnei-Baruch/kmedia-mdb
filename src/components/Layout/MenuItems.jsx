@@ -93,12 +93,6 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
         {personal}
         {bookmark}
         {items}
-        <a
-          href="https://old.kabbalahmedia.info/"
-          className="sidebar-nav__link"
-        >
-          {t('nav.sidebar.old-site')}
-        </a>
         <div className="gap-4 mt-4 px-4 flex flex-col">
           <DonateNow />
           <VirtualHomeButton />
