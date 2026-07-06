@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import HttpBackend from 'i18next-http-backend';
 import dayjs from './dayjs';
 
 import { DEFAULT_UI_LANGUAGE } from './consts';
@@ -38,9 +39,13 @@ export const registerDateFormats = instance => {
 
 export const initializeI18n = async (resources, lng) => {
   // eslint-disable-next-line import/no-named-as-default-member
-  await i18next.init({
+  await i18next.use(HttpBackend).init({
     ...options,
     resources,
+    partialBundledLanguages: true,
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
     ...(lng ? { lng } : {}),
     initImmediate: false,
   });
