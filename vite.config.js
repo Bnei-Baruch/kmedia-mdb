@@ -77,7 +77,10 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       "process.env": env,
-      global: "window",
+      // Some deps (e.g. crc32) reference the Node `global`. Map it to `globalThis`
+      // (defined in both browser and Node) rather than `window`, so it works in
+      // the browser bundle without breaking dev SSR (where `window` is undefined).
+      global: "globalThis",
     },
     envPrefix: "REACT_APP_", // keep old env var names
     test: {

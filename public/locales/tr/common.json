@@ -877,7 +877,17 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Bağlantıyı kopyala"
+        "copy-link": "Bağlantıyı kopyala",
+        "auto-scroll": "Otomatik kaydırma",
+        "auto-scroll-speed": "Kaydırma hızı",
+        "auto-scroll-play": "Oynat (Space)",
+        "auto-scroll-pause": "Duraklat (Space)",
+        "auto-scroll-skip-back": "Geri (←)",
+        "auto-scroll-skip-fwd": "İleri (→)",
+        "auto-scroll-slower": "Yavaşlat (↓)",
+        "auto-scroll-faster": "Hızlandır (↑)",
+        "auto-scroll-close": "Kapat",
+        "auto-scroll-time": "{{mins}} dk kaldı"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -892,8 +902,10 @@
         "copy-link": "Link",
         "additions": {
           "review": "Review labeling and comments"
-        }
+        },
+        "auto-scroll": "Otomatik"
       }
-    }
+    },
+    "reading-time": "~{{mins}} dk okuma"
   }
 }

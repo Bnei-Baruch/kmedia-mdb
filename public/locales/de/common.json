@@ -121,10 +121,10 @@
       "sort-by-filter": "Sort by"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Kongresse",
@@ -873,7 +873,17 @@
         "more-buttons": "More",
         "toc": "Inhalt",
         "copy-link": "Link kopieren",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Automatisches Scrollen",
+        "auto-scroll-speed": "Scrollgeschwindigkeit",
+        "auto-scroll-play": "Abspielen (Space)",
+        "auto-scroll-pause": "Pause (Space)",
+        "auto-scroll-skip-back": "Rückwärts (←)",
+        "auto-scroll-skip-fwd": "Vorwärts (→)",
+        "auto-scroll-slower": "Langsamer (↓)",
+        "auto-scroll-faster": "Schneller (↑)",
+        "auto-scroll-close": "Schließen",
+        "auto-scroll-time": "{{mins}} Min. bis Ende"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -888,8 +898,10 @@
         "copy-link": "Link",
         "additions": {
           "review": "Review labeling and comments"
-        }
+        },
+        "auto-scroll": "Auto-Scroll"
       }
-    }
+    },
+    "reading-time": "~{{mins}} Min. Lesezeit"
   }
 }

@@ -5,6 +5,7 @@ import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
 export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
 export const getQualitiesFromLS   = () => {
+  if (typeof window === 'undefined') return undefined;
   const lsKey = localStorage.getItem(LOCALSTORAGE_QUALITY);
   const pair  = Object.entries(VS_NAMES).find(([, v]) => lsKey === v);
   return pair?.[0];

@@ -18,6 +18,7 @@ import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import AutoScrollBtn from '../../Pages/WithText/Buttons/AutoScrollBtn';
 import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
 const SourceToolbarWeb = () => {
@@ -59,6 +60,7 @@ const SourceToolbarWeb = () => {
         </div>
         <div className="divider hidden xl:block"/>
         <FullscreenTextBtn/>
+        <AutoScrollBtn/>
         <div className="text_toolbar__dropdown xl:hidden!" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn/>

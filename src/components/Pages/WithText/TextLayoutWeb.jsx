@@ -18,6 +18,7 @@ import {
   textPageGetSubjectSelector
 } from '../../../redux/selectors';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
+import ReadingTimeEstimate from './ReadingTimeEstimate';
 import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
@@ -55,6 +56,7 @@ const TextLayoutWeb = props => {
       <div className='mx-auto px-2 max-w-[650px] w-full'>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
+        <ReadingTimeEstimate />
       </div>
       <TextContentWeb playerPage={playerPage} />
       {prevNext}

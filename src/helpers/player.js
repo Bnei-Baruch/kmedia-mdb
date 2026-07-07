@@ -18,7 +18,8 @@ import { getQuery } from './url';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
-const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
+const restorePreferredMediaType = () =>
+  (typeof window === 'undefined' ? MT_VIDEO : localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO);
 
 export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
 

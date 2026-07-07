@@ -12,6 +12,7 @@ import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
+import AutoScrollBtn from '../../Pages/WithText/Buttons/AutoScrollBtn';
 import { ToolbarMenuContext } from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
 const SourceToolbarMobile = () => {
@@ -27,6 +28,7 @@ const SourceToolbarMobile = () => {
         <LanguageTextBtn />
         <TextSettings popPos='top' />
         <SearchOnPageBtn />
+        <AutoScrollBtn />
         <div className="text_toolbar__dropdown" ref={menuRef}>
           <div onClick={() => setMenuOpen(v => !v)}>
             <MoreOptionsBtn />

@@ -120,10 +120,10 @@
       "free-text": "Free Text"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Конгреси",
@@ -964,7 +964,17 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "copy-link": "Копіювати посилання",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Автопрокрутка",
+        "auto-scroll-speed": "Швидкість прокрутки",
+        "auto-scroll-play": "Відтворити (Space)",
+        "auto-scroll-pause": "Пауза (Space)",
+        "auto-scroll-skip-back": "Назад (←)",
+        "auto-scroll-skip-fwd": "Вперед (→)",
+        "auto-scroll-slower": "Повільніше (↓)",
+        "auto-scroll-faster": "Швидше (↑)",
+        "auto-scroll-close": "Закрити",
+        "auto-scroll-time": "{{mins}} хв. до кінця"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -979,8 +989,10 @@
         "copy-link": "Link",
         "additions": {
           "review": "Review labeling and comments"
-        }
+        },
+        "auto-scroll": "Автопрокрутка"
       }
-    }
+    },
+    "reading-time": "~{{mins}} хв. читання"
   }
 }
