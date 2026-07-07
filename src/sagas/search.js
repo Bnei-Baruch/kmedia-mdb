@@ -90,7 +90,7 @@ export function* search(action) {
         pageNo = 1;
       }
 
-      if (!!filterParams) {
+      if (filterParams) {
         for (const filter of filters) {
           const { name } = filter;
           yield put(filterActions.resetFilter('search', name));
@@ -249,7 +249,7 @@ export function* hydrateUrl() {
 }
 
 // Update URL from query.
-export function* updateUrl(action) {
+export function* updateUrl() {
   const urlQuery = yield* getQuery();
   const { q }    = urlQuery;
 

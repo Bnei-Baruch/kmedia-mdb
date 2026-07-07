@@ -1,33 +1,40 @@
-@import 'includes/colors-helpers';
-@import 'includes/responsive-helpers';
-@import 'includes/layout';
-@import 'includes/text-helpers';
-@import 'includes/common';
-@import 'includes/index';
-@import 'includes/unit';
-@import 'includes/video-player';
-@import 'includes/media-player';
-@import 'includes/player';
-@import 'includes/sources';
-@import 'includes/search';
-@import 'includes/homepage';
-@import 'includes/pagination';
-@import 'includes/filters';
-@import 'includes/topics';
-@import 'includes/bookmark';
-@import 'includes/search-on-doc';
-@import 'includes/trim';
-@import 'includes/labels';
-@import 'includes/notes';
-@import 'includes/content-items';
-@import 'gallery/image-gallery-no-icon';
-@import 'includes/text-page';
-@import 'includes/print';
-@import 'includes/toc';
+@use 'includes/colors-helpers';
+@use 'includes/responsive-helpers';
+@use 'includes/layout';
+@use 'includes/layout-header';
+@use 'includes/text-helpers';
+@use 'includes/common';
+@use 'includes/index';
+@use 'includes/unit';
+@use 'includes/video-player';
+@use 'includes/media-player';
+@use 'includes/player';
+@use 'includes/sources';
+@use 'includes/search';
+@use 'includes/search-omnibox';
+@use 'includes/button-day-picker';
+@use 'includes/homepage';
+@use 'includes/pagination';
+@use 'includes/filters';
+@use 'includes/topics';
+@use 'includes/bookmark';
+@use 'includes/search-on-doc';
+@use 'includes/trim';
+@use 'includes/labels';
+@use 'includes/notes';
+@use 'includes/content-items';
+@use 'includes/menu-items';
+@use 'gallery/image-gallery-no-icon';
+@use 'includes/text-page';
+@use 'includes/print';
+@use 'includes/toc';
+@use 'includes/doc2html';
+@use 'includes/blog-post';
+@use 'includes/language-selector';
+@use 'includes/playlist';
+@use 'includes/recommendations';
+@use 'includes/simple-mode';
 // @import 'gallery/image-gallery';
-//////////ALL YOUR CSS IS HERE ↴
-@import 'includes/not-sorted-scss';
-
 
 .debug {
   background: yellow;
@@ -64,7 +71,7 @@
 
   &__column-wrapper {
 
-    border: 1px solid $border-color;
+    border: 1px solid colors-helpers.$border-color;
     border-width: 0 1px 0 0;
     max-width: 100%;
     overflow-y: scroll;
@@ -90,7 +97,7 @@
     }
 
     .column > .header {
-      color: $grey !important;
+      color: colors-helpers.$grey !important;
       margin-bottom: 1em;
       text-transform: uppercase;
     }
@@ -99,19 +106,19 @@
       cursor: pointer;
 
       &:hover {
-        background: rgba(0, 0, 0, .05);
+        background: rgba(colors-helpers.$fullBlack, .05);
       }
     }
   }
 
-  .ui.menu {
-    border: 0 !important;
+  .menu {
+    border: 0;
     border-radius: 0;
-    box-shadow: none !important;
+    box-shadow: none;
     display: block;
 
     .item {
-      border-radius: 0 !important;
+      border-radius: 0;
     }
   }
 }

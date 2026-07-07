@@ -1,8 +1,9 @@
 import { createFilterDefinition } from './util';
+import { FN_PUBLISHER } from '../../helpers/consts';
 import { publicationsGetPublisherByIdSelector } from '../../redux/selectors';
 
 const publishersFilter = {
-  name: 'publishers-filter',
+  name: FN_PUBLISHER,
   queryKey: 'publisher',
   valueToApiParam: value => ({ publisher: value }),
   valueToTagLabel: (value, props, { getState }) => {

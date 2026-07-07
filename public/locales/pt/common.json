@@ -23,7 +23,6 @@
       "design2": "Layout",
       "project-status": "Status do Projeto",
       "help": "Ajuda",
-      "old-site": "Site Antigo",
       "podcast": "Podcast",
       "subscribe": "Inscreva-se para Atualizações",
       "bookmarks": "Favoritos",
@@ -111,6 +110,8 @@
       "sources-filter-multi": "Cabalistas",
       "topics-filter-multi": "Tópicos",
       "content-type-filter": "Seção",
+      "collections-filter-multi": "Coleções",
+      "publishers-filter": "Editoras",
       "language-filter": "Idioma",
       "date-filter": "Data",
       "media-type-filter": "Mídia",
@@ -879,7 +880,17 @@
         "more-buttons": "Mais!",
         "toc": "Índice",
         "copy-link": "Copiar Link",
-        "article-toc": "Todos Artigos"
+        "article-toc": "Todos Artigos",
+        "auto-scroll": "Rolagem automática",
+        "auto-scroll-speed": "Velocidade de rolagem",
+        "auto-scroll-play": "Reproduzir (Space)",
+        "auto-scroll-pause": "Pausar (Space)",
+        "auto-scroll-skip-back": "Recuar (←)",
+        "auto-scroll-skip-fwd": "Avançar (→)",
+        "auto-scroll-slower": "Mais devagar (↓)",
+        "auto-scroll-faster": "Mais rápido (↑)",
+        "auto-scroll-close": "Fechar",
+        "auto-scroll-time": "{{mins}} min para terminar"
       },
       "mobile": {
         "lessons": "Lições",
@@ -891,8 +902,13 @@
         "download": "Download",
         "more-buttons": "Mais",
         "toc": "Conteúdo",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Rever rotulagem e comentários"
+        },
+        "auto-scroll": "Auto-scroll"
       }
-    }
+    },
+    "reading-time": "~{{mins}} min de leitura"
   }
 }

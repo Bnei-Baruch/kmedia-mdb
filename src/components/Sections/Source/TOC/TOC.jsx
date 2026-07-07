@@ -1,0 +1,374 @@
+import { isValidElement, useState, useEffect, useContext } from 'react';
+
+import { getEscapedRegExp, isEmpty, noop } from '../../../../helpers/utils';
+import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
+import { isLanguageRtl } from '../../../../helpers/i18n-utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { properParentId, getFullPath } from '../helper';
+import { useNavigate } from 'react-router-dom';
+import TOCSearch from './TOCSearch';
+import TOCControl from './TOCControl';
+import { clsx } from 'clsx';
+import {
+  textPageGetTocIsActiveSelector,
+  textPageGetTocInfoSelector,
+  textPageGetSubjectSelector,
+  textPageGetUrlInfoSelector,
+  textPageGetScrollDirSelector,
+  settingsGetUILangSelector,
+  sourcesGetSourceByIdSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector
+} from '../../../../redux/selectors';
+import { actions } from '../../../../redux/modules/textPage';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+
+const titleKey = id => `title-${id}`;
+
+const hebrew = number => {
+  let n = 1 * number;
+  switch (n) {
+    case 16:
+      return 'טז';
+    case 15:
+      return 'טו';
+    default:
+      break;
+  }
+
+  let ret = '';
+  while (n >= 400) {
+    ret += 'ת';
+    n -= 400;
+  }
+
+  if (n >= 300) {
+    ret += 'ש';
+    n -= 300;
+  }
+
+  if (n >= 200) {
+    ret += 'ר';
+    n -= 200;
+  }
+
+  if (n >= 100) {
+    ret += 'ק';
+    n -= 100;
+  }
+
+  switch (n) {
+    case 16:
+      ret += 'טז';
+      break;
+    case 15:
+      ret += 'טו';
+      break;
+    default:
+      if (n >= 10) {
+        ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+        n %= 10;
+      }
+
+      if (n > 0) {
+        ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+      }
+
+      break;
+  }
+
+  return ret;
+};
+
+export const getIndex = (node1, node2) => {
+  if (!node1 || !node2 || !node1.children) {
+    return -1;
+  }
+
+  return node1.children.findIndex(x => x === node2.id);
+};
+
+const scrollToActive = activeId => {
+  if (activeId === undefined) {
+    return;
+  }
+
+  const element = document.getElementById(titleKey(activeId));
+  if (element === null) {
+    return;
+  }
+
+  element.scrollIntoView();
+  window.scrollTo(0, 0);
+};
+
+const handleTitleClick = (e, data) => {
+  const { id = '' } = data;
+
+  if (id.startsWith('title')) {
+    return;
+  }
+
+  e.stopPropagation();
+};
+
+const filterSources = (path, match) => {
+  if (isEmpty(match)) {
+    return path;
+  }
+
+  const escapedMatch = getEscapedRegExp(match);
+  const reg          = new RegExp(escapedMatch, 'i');
+  return path.reduce((acc, el) => {
+    if (reg.test(el.leafTitle)) {
+      const name = el.leafTitle.replace(reg, '<span class="blue text">$&</span>');
+      acc.push({ leafId: el.leafId, leafTitle: name });
+    }
+
+    return acc;
+  }, []);
+};
+
+const SimpleAccordion = ({ panels = [], defaultActiveIndex, onTitleClick, className }) => {
+  const [activeIdx, setActiveIdx] = useState(defaultActiveIndex ?? -1);
+
+  const handleClick = (e, index, panel) => {
+    if (onTitleClick) onTitleClick(e, { id: panel?.key, index });
+    setActiveIdx(prev => prev === index ? -1 : index);
+  };
+
+  return (
+    <div className={clsx('accordion', className)}>
+      {panels.map((panel, index) => {
+        if (panel.as === 'span' || !panel.content) {
+          return <div key={panel.key || index}>{panel.title}</div>;
+        }
+
+        const isActive = activeIdx === index;
+        const titleEl = panel.title;
+        const contentEl = panel.content;
+
+        const isObj = titleEl && typeof titleEl === 'object' && !isValidElement(titleEl) && titleEl.content !== undefined;
+        const titleContent = isObj ? titleEl.content : titleEl;
+        const titleIcon = isObj ? titleEl.icon : null;
+
+        const bodyContent = contentEl && typeof contentEl === 'object' && !isValidElement(contentEl) && contentEl.content !== undefined
+          ? contentEl.content
+          : contentEl;
+
+        return (
+          <>
+            <div
+              className={clsx('title cursor-pointer py-2', { active: isActive })}
+              onClick={e => handleClick(e, index, panel)}
+            >
+              {titleIcon}
+              <span>{titleContent}</span>
+            </div>
+            {isActive && (
+              <div className="content active py-2">
+                {bodyContent}
+              </div>
+            )}
+          </>
+        );
+      })}
+    </div>
+  );
+};
+
+const TOC = () => {
+  const getPathByID        = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById      = useSelector(sourcesGetSourceByIdSelector);
+  const uiLang             = useSelector(settingsGetUILangSelector);
+  const uiDir              = useSelector(settingsGetUIDirSelector);
+  const { match }          = useSelector(textPageGetTocInfoSelector);
+  const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
+  const scrollDir          = useSelector(textPageGetScrollDirSelector);
+  const { id }             = useSelector(textPageGetSubjectSelector);
+  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  const fullPath                = getFullPath(id, getPathByID);
+  const rootId                  = properParentId(fullPath);
+  const [activeId, setActiveId] = useState(fullPath[fullPath.length - 1].id);
+  const navigate                = useNavigate();
+  const dispatch                = useDispatch();
+
+  const [tocScrollHeight, setTocScrollHeight] = useState(0);
+
+  const activeIndex = getIndex(fullPath[1], fullPath[2]);
+
+  useEffect(() => {
+    tocIsActive && scrollToActive(id);
+  }, [id, tocIsActive]);
+
+  useEffect(() => {
+    if (!isMobile) return noop;
+    const handleResize = () => setTocScrollHeight(window.visualViewport?.height - 130);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile]);
+
+  if (activeIndex === -1) {
+    return null;
+  }
+
+  const isRTL = isLanguageRtl(uiLang);
+
+  const subToc = (subTree, path) => (
+    subTree.map(sourceId => (getToc(sourceId, path)?.toc))
+  );
+
+  const leaf = (id, title) => {
+    const realTitle = isEmpty(match)
+      ? title
+      : <span dangerouslySetInnerHTML={{ __html: title }} />;
+    return (
+      <div
+        id={titleKey(id)}
+        key={titleKey(id)}
+        className={clsx('title cursor-pointer py-2', { active: id === activeId })}
+        onClick={e => selectSourceById(id, e)}
+      >
+        {realTitle}
+      </div>
+    );
+  };
+
+  const getLeafTitle = (leafId, sourceId) => {
+    const { name, number, year } = getSourceById(leafId);
+
+    let leafTitle;
+    switch (sourceId) {
+      case BS_SHAMATI:
+        leafTitle = isRTL
+          ? `${hebrew(number)}. ${name}`
+          : `${number}. ${name}`;
+        break;
+      case RH_RECORDS:
+        leafTitle = `${number}. ${name}`;
+        break;
+      case RH_ARTICLES:
+        leafTitle = `${name}. ${number} (${year})`;
+        break;
+      default:
+        leafTitle = name;
+        break;
+    }
+
+    return leafTitle;
+  };
+
+  const icon   = uiDir === 'ltr' ? 'chevron_right' : 'chevron_left';
+  const getToc = (sourceId, path, firstLevel = false) => {
+    const { name: title, children } = getSourceById(sourceId);
+
+    if (isEmpty(children)) {
+      const item   = leaf(sourceId, title);
+      const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
+      return { toc: result };
+    }
+
+    const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
+    let panels;
+    let className        = '';
+    if (hasNoGrandsons) {
+      className  = 'toc_last_level';
+      const tree = children.reduce((acc, leafId) => {
+        const leafTitle = getLeafTitle(leafId, sourceId);
+
+        acc.push({ leafId, leafTitle });
+        return acc;
+      }, []);
+
+      panels = filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
+        title: leaf(leafId, leafTitle, match),
+        key: `lib-leaf-${leafId}`
+      }));
+    } else {
+      panels = subToc(children, path.slice(1)).reduce((acc, _item, index) => {
+        if (_item.key?.startsWith('lib-leaf')) {
+          acc.push(_item);
+        } else {
+          const { content, title: name } = _item;
+          acc.push({ title: name, content, key: `root-${index}-${title}` });
+        }
+
+        return acc;
+      }, []);
+    }
+
+    if (firstLevel) {
+      return { toc: panels, className: 'toc_single_level' };
+    }
+
+    const activeIndex = getIndex(path[0], path[1]);
+    const toc         = {
+      title: {
+        content: title,
+        icon: <span className="material-symbols-outlined">{icon}</span>
+      },
+      content: {
+        content: (
+          <SimpleAccordion
+            className={className}
+            panels={panels}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={handleTitleClick}
+          />
+        ),
+        key: `lib-content-${sourceId}`,
+      }
+    };
+    return { toc };
+  };
+
+  const selectSourceById = (id, e) => {
+    e.preventDefault();
+    if (document.body.clientWidth < 1201) {
+      dispatch(actions.setTocIsActive(false));
+    }
+
+    navigate(`../sources/${id}`);
+    setActiveId(id);
+  };
+
+  const path               = fullPath.slice(1);
+  const { toc, className } = getToc(rootId, path, true);
+
+  const tocScrollStyle = tocScrollHeight && isMobile ? { 'height': tocScrollHeight } : {};
+  return (
+    <div className={
+      clsx('toc no_print',
+        {
+          'toc_active': tocIsActive,
+          'toc_scroll_up': scrollDir > 0,
+          'toc_scroll_down': scrollDir === -1,
+          'toc_selected': hasSel,
+        }
+      )
+    }>
+      <TOCControl />
+      {
+        !isMobile && <TOCSearch />
+      }
+      <div className="toc_scroll" style={tocScrollStyle}>
+        <div className="toc_scroll_align">
+          <SimpleAccordion
+            panels={toc}
+            className={className}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={handleTitleClick}
+          />
+        </div>
+      </div>
+
+      {
+        isMobile && <TOCSearch />
+      }
+    </div>
+  );
+};
+
+export default TOC;

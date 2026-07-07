@@ -23,7 +23,6 @@
       "design2": "Impaginazione",
       "project-status": "Stato del progetto",
       "help": "Aiuto",
-      "old-site": "Vecchio sito",
       "podcast": "Podcast",
       "subscribe": "Iscriviti per gli aggiornamenti",
       "bookmarks": "Bookmarks",
@@ -111,6 +110,8 @@
       "sources-filter-multi": "Kabbalists",
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
+      "collections-filter-multi": "Raccolte",
+      "publishers-filter": "Editori",
       "language-filter": "Language",
       "date-filter": "Date",
       "media-type-filter": "Media",
@@ -964,7 +965,17 @@
         "more-buttons": "More",
         "toc": "Table of contents",
         "copy-link": "Copia link",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Scorrimento automatico",
+        "auto-scroll-speed": "Velocità di scorrimento",
+        "auto-scroll-play": "Riproduci (Space)",
+        "auto-scroll-pause": "Pausa (Space)",
+        "auto-scroll-skip-back": "Indietro (←)",
+        "auto-scroll-skip-fwd": "Avanti (→)",
+        "auto-scroll-slower": "Più lento (↓)",
+        "auto-scroll-faster": "Più veloce (↑)",
+        "auto-scroll-close": "Chiudi",
+        "auto-scroll-time": "{{mins}} min alla fine"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -976,8 +987,13 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Content",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Review labeling and comments"
+        },
+        "auto-scroll": "Auto-scroll"
       }
-    }
+    },
+    "reading-time": "~{{mins}} min di lettura"
   }
 }

@@ -1,19 +1,21 @@
-$controls-bg: rgba(27, 28, 29, .9);
-$controls-overlay: rgba(0, 0, 0, .7);
-$controls-bg-hover: rgba(27, 28, 29, 1);
-$controls-radius: 4px;
+@use "colors-helpers";
 @use "sass:color";
 
+$controls-bg: rgba(colors-helpers.$black, .9);
+$controls-overlay: rgba(colors-helpers.$fullBlack, .7);
+$controls-bg-hover: colors-helpers.$black;
+$controls-radius: 4px;
+
 //Colors
-$whatsappColor: #25d366;
+$whatsappColor: colors-helpers.$social-whatsapp;
 //$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
-$whatsappDownColor: darken($whatsappColor, 10%);
+$whatsappDownColor: color.adjust($whatsappColor, $lightness: -10%);
 $telegramColor: #27a6e6;
 //$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
-$telegramDownColor: darken($telegramColor, 10%);
-$odnoklassnikiColor: #EE8208;
+$telegramDownColor: color.adjust($telegramColor, $lightness: -10%);
+$odnoklassnikiColor: colors-helpers.$social-ok;
 //$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
-$odnoklassnikiDownColor: darken($odnoklassnikiColor, 10%);
+$odnoklassnikiDownColor: color.adjust($odnoklassnikiColor, $lightness: -10%);
 
 .flex-spacer {
   flex: 1 0 auto;
@@ -69,7 +71,7 @@ video {
     flex-direction: column;
     justify-content: space-between;
 
-    .icon {
+    .material-symbols-outlined {
       line-height: 40px;
       display: inline;
     }
@@ -83,7 +85,7 @@ video {
         padding: 6px 1em;
         line-height: 16px;
 
-        .icon {
+        .material-symbols-outlined {
           line-height: 16px;
         }
       }
@@ -105,70 +107,6 @@ video {
       padding: 0 12px;
       line-height: 40px;
       font-size: 11px;
-    }
-
-    &__audio {
-      padding: 0 12px;
-
-      .ui.toggle.checkbox input {
-        height: auto;
-        min-height: auto;
-        width: 36px;
-
-        &:checked {
-          & ~ label {
-            &:before {
-              background: rgba(255, 255, 255, 1) !important;
-            }
-
-            &:after {
-              background: #000;
-              left: 24px;
-
-              .rtl & {
-                right: 24px;
-                left: auto;
-
-              }
-            }
-          }
-        }
-
-        & ~ label {
-          height: auto;
-          min-height: auto;
-          color: #fff !important;
-          line-height: 16px;
-          font-size: 11px;
-          padding: 0 0 0 44px;
-
-          .rtl & {
-            padding: 0 44px 0 0;
-          }
-
-          &:before {
-            width: 36px;
-            height: 16px;
-            border: 2px solid #fff;
-            background: rgba(255, 255, 255, 0) !important;
-            transition: background .3s ease, left .3s ease;
-          }
-
-          &:after {
-            width: 8px;
-            height: 8px;
-            top: 4px;
-            left: 4px;
-            background: #fff;
-            box-shadow: none;
-
-            .rtl & {
-              right: 4px;
-              left: auto;
-            }
-          }
-        }
-      }
     }
 
     &__progress {
@@ -320,7 +258,7 @@ video {
     height: 40px;
     text-align: center;
 
-    .icon {
+    .material-symbols-outlined {
       line-height: 40px;
       display: inline;
     }
@@ -328,17 +266,13 @@ video {
 
   &__pane {
     padding: 16px;
-    overflow: hidden;
-    flex: 1 0 100%;
+    color: white;
+    gap: 1em;
 
     &:last-child {
       display: flex;
       flex-direction: column;
       align-self: stretch;
-
-      button {
-        flex: 0 0 auto;
-      }
 
       .menu {
         width: 100%;
@@ -358,7 +292,46 @@ video {
     align-items: center;
 
     + .settings__row {
-      margin-top: 8px;
+      margin-top: 1.5rem;
+      gap: 2em;
+    }
+  }
+
+  &__options {
+    display: inline-flex;
+  }
+
+  &__option {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    border: 2px solid white;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+
+    & + & {
+      border-left: none;
+    }
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &.active {
+      background: white;
+      color: black;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
   }
 
@@ -371,6 +344,7 @@ video {
 
 .player {
   user-select: none;
+  overflow-x: hidden;
 }
 
 //MOBILE STATES
@@ -381,6 +355,7 @@ video {
   .sharing {
     height: fit-content;
     background: #000;
+    z-index: 1;
   }
 }
 
@@ -433,6 +408,13 @@ video {
   .is-mobile.is-sharing & {
     background: none;
     padding: 8px;
+  }
+}
+
+.controls__rewind,
+.controls__forward, .controls__prev, .controls__next, .controls__pause {
+  .material-symbols-outlined {
+    font-size: 2.5rem;
   }
 }
 
@@ -512,6 +494,19 @@ video {
 .sharing__inputs {
   .is-mobile:not(.is-fullscreen) & {
     padding-right: 8px;
+    flex: 1 1 0;
+    min-width: 0;
+
+    > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+}
+
+.sharing__times {
+  .is-mobile:not(.is-fullscreen) & {
+    width: 100%;
   }
 }
 
@@ -520,13 +515,9 @@ video {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    .input {
+    .sharing__url {
       flex: 1 0 100%;
-      margin: 0 0 16px;
-    }
-
-    .circular {
-      padding: 9px;
+      margin: 0 0 8px;
     }
   }
 }
@@ -566,10 +557,6 @@ video {
     .button {
       padding: 0.78571429em 0.9em 0.78571429em;
     }
-  }
-
-  .rtl & > .buttons {
-    direction: rtl;
   }
 }
 
@@ -619,15 +606,16 @@ video {
     overflow: hidden;
     color: #fff;
 
-    .icon {
+    .icon,
+    .material-symbols-outlined {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
 
-      &::before {
-        color: hsla(0, 0%, 100%, .8) !important;
-      }
+    .icon::before {
+      color: hsla(0, 0%, 100%, .8) !important;
     }
 
     &__prev, &__rewind, &__forward, &__next, &__pause {
@@ -638,15 +626,13 @@ video {
       background: $controls-bg;
       border-radius: $controls-radius;
       cursor: pointer;
-
       &:hover {
         cursor: pointer;
         background: $controls-bg-hover;
 
-        .icon {
-          &:before {
-            color: hsla(0, 0%, 100%, 1) !important;
-          }
+        .icon:before,
+        .material-symbols-outlined {
+          color: hsla(0, 0%, 100%, 1) !important;
         }
       }
     }
@@ -670,70 +656,31 @@ video {
       right: 0;
       background: $controls-bg;
       display: flex;
-      padding: 10px;
-      align-items: stretch;
+      padding:  0 10px;
+      align-items: center;
 
       > * {
         flex: 0 0 34px;
         position: relative;
+        cursor: pointer;
+        align-self: stretch;
 
         &:hover {
-          .icon {
-            &:before {
-              color: hsla(0, 0%, 100%, 1) !important;
-            }
+          .icon:before,
+          .material-symbols-outlined {
+            color: hsla(0, 0%, 100%, 1) !important;
           }
         }
 
-        &.active .icon:before {
-          color: $blue !important;
+        &.active .icon:before,
+        &.active .material-symbols-outlined {
+          color: colors-helpers.$blue !important;
         }
       }
 
-      .icon {
+      .icon,
+      .material-symbols-outlined {
         line-height: 100%;
-      }
-    }
-
-    &__language {
-      .ui.dropdown {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-
-        background: #fff;
-        color: rgba(0, 0, 0, 0.8);
-        min-width: 9em;
-        white-space: nowrap;
-        font-size: .785rem;
-
-        &:focus {
-          border: white solid 1px;
-        }
-
-        &.active {
-          border: white solid 1px;
-        }
-
-        div.menu {
-          border: white solid 1px;
-
-          .item {
-            background: rgba(27, 28, 29, 0.9);
-            color: #fff;
-            font-size: .785rem;
-          }
-        }
-
-        div.menu .item.language-selection-divider {
-          background-color: #fff !important;
-        }
-
-        i {
-          top: 50%;
-          margin: unset;
-        }
-
       }
     }
 
@@ -748,10 +695,11 @@ video {
 
     &__timecode {
       flex: 0 0 auto;
-      line-height: 34px;
+      display: flex;
+      align-items: center;
       font-size: 11px;
       width: 113px;
-      text-align: center;
+      justify-content: center;
     }
 
     &__progress {
@@ -822,10 +770,6 @@ video {
         align-self: stretch;
         width: 0;
         padding: 0;
-
-        button {
-          flex: 0 0 auto;
-        }
 
         .menu {
           flex: 1 1 auto;
@@ -1048,6 +992,10 @@ video {
       display: none;
     }
   }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+    }
 }
 
 .sharing {
@@ -1057,6 +1005,9 @@ video {
 }
 
 .settings {
+  .controls__language select {
+    background: colors-helpers.$white;
+  }
   .is-web.is-settings & {
     display: flex;
   }
@@ -1151,53 +1102,12 @@ video {
   left: 0;
   right: 0;
 
-  i {
+  .material-symbols-outlined  {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-}
-
-/* Twitter */
-
-.ui.whatsapp.button {
-  background-color: $whatsappColor;
-  color: #FFFFFF;
-}
-
-.ui.whatsapp.button:hover {
-  //background-color: $whatsappHoverColor;
-}
-
-.ui.whatsapp.button:active {
-  background-color: $whatsappDownColor;
-}
-
-.ui.telegram.button {
-  background-color: $telegramColor;
-  color: #FFFFFF;
-}
-
-.ui.telegram.button:hover {
-  //background-color: $telegramHoverColor;
-}
-
-.ui.telegram.button:active {
-  background-color: $telegramDownColor;
-}
-
-.ui.odnoklassniki.button {
-  background-color: $odnoklassnikiColor;
-  color: #FFFFFF;
-}
-
-.ui.odnoklassniki.button:hover {
-  //background-color: $odnoklassnikiHoverColor;
-}
-
-.ui.odnoklassniki.button:active {
-  background-color: $odnoklassnikiDownColor;
 }
 
 .custom_share_button {
@@ -1211,16 +1121,36 @@ video {
 
 .personal_info {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   margin-top: 8px;
+  color: #767676;
 
   & > .item {
     margin: 0;
     padding: 0 0.5em;
     line-height: 26px;
+    display: flex;
+    align-items: center;
+  }
+
+  & > .item--subscribe {
+    padding: 0 0 0 0.5em;
   }
 
   .icon.heart {
     font-size: 1.3em
   }
+}
+
+.IIV::-webkit-media-controls-play-button,
+.IIV::-webkit-media-controls-start-playback-button {
+  opacity: 0;
+  pointer-events: none;
+  width: 5px;
+}
+
+
+.share-publication {
+  margin: 0 5px;
 }

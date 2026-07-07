@@ -1,0 +1,82 @@
+import { useContext, useEffect, useMemo, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { actions } from '../../../redux/modules/tags';
+import { actions as listsActions } from '../../../redux/modules/lists';
+import Pagination from '../../Pagination/Pagination';
+import isEqual from 'lodash/isEqual';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import RenderPage from './RenderPage';
+import RenderPageMobile from './RenderPageMobile';
+import { getPageFromLocation } from '../../Pagination/withPagination';
+import { PAGE_NS_TOPICS } from '../../../helpers/consts';
+import {
+  settingsGetContentLanguagesSelector,
+  filtersGetNotEmptyFiltersSelector,
+  tagsGetPathByIDSelector,
+  tagsGetTagsSelector,
+  tagsGetItemsSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
+
+const TopicPage = () => {
+  const { id } = useParams();
+  const { t } = useTranslation();
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  const getPathByID = useSelector(tagsGetPathByIDSelector);
+  const getTags = useSelector(tagsGetTagsSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const selected = useSelector(state => filtersGetNotEmptyFiltersSelector(state, `topics_${id}`), isEqual);
+
+  const { mediaTotal, textTotal } = useSelector(tagsGetItemsSelector);
+  const total = Math.max(mediaTotal, textTotal);
+
+  const dispatch = useDispatch();
+
+  const pageSize = useSelector(settingsGetPageSizeSelector);
+  const location = useLocation();
+  const pageNo = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
+  const handleSetPage = useCallback(pageNo => dispatch(listsActions.setPage(PAGE_NS_TOPICS, pageNo)), [dispatch]);
+
+  useEffect(() => {
+    const page_no = pageNo > 1 ? pageNo : 1;
+    dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
+  }, [id, contentLanguages, dispatch, pageNo, pageSize, selected]);
+
+  if (!getPathByID) {
+    const tag = getTags ? getTags[id] : null;
+    return (
+      <div className="px-4">
+        <h3 className="text-2xl font-bold py-4 text-black">
+          {t('nav.sidebar.topic')}
+          {' "'}
+          {tag ? tag.label : id}
+          {'" '}
+          {t('nav.sidebar.not-found')}
+        </h3>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {isMobile ? <RenderPageMobile /> : <RenderPage />}
+      <hr className="m-0" />
+      {
+        total > 0 &&
+        <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={handleSetPage}
+        />
+      }
+    </>
+  );
+};
+
+export default TopicPage;

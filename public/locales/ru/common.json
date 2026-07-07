@@ -24,7 +24,6 @@
       "project-status": "Статус проекта",
       "help": "Поддержка",
       "podcast": "Подкаст",
-      "old-site": "Старый сайт",
       "subscribe": "Подписаться на обновления",
       "bookmarks": "Закладки",
       "sketches": "Чертежи",
@@ -111,6 +110,8 @@
       "sources-filter-multi": "Каббалисты",
       "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
+      "collections-filter-multi": "Коллекции",
+      "publishers-filter": "Издатели",
       "language-filter": "Язык",
       "date-filter": "Дата",
       "media-type-filter": "Медиа",
@@ -985,7 +986,17 @@
         "more-buttons": "Ещё",
         "toc": "Содержание",
         "copy-link": "Копировать ссылку",
-        "article-toc": "Все статьи"
+        "article-toc": "Все статьи",
+        "auto-scroll": "Автопрокрутка",
+        "auto-scroll-speed": "Скорость прокрутки",
+        "auto-scroll-play": "Воспроизвести (Space)",
+        "auto-scroll-pause": "Пауза (Space)",
+        "auto-scroll-skip-back": "Назад (←)",
+        "auto-scroll-skip-fwd": "Вперёд (→)",
+        "auto-scroll-slower": "Медленнее (↓)",
+        "auto-scroll-faster": "Быстрее (↑)",
+        "auto-scroll-close": "Закрыть",
+        "auto-scroll-time": "{{mins}} мин. до конца"
       },
       "mobile": {
         "lessons": "Уроки",
@@ -997,8 +1008,13 @@
         "download": "Скачать",
         "more-buttons": "Ещё",
         "toc": "Контент",
-        "copy-link": "Ссылка"
+        "copy-link": "Ссылка",
+        "additions": {
+          "review": "Просмотр тегов и комментариев"
+        },
+        "auto-scroll": "Автопрокрутка"
       }
-    }
+    },
+    "reading-time": "~{{mins}} мин. чтения"
   }
 }

@@ -1,5 +1,5 @@
 import { backendApi } from './backendApi';
-import moment from 'moment/moment';
+import dayjs from '../../helpers/dayjs';
 import { Requests } from '../../helpers/Api';
 
 export const wholeSimpleMode = 'SimpleMode';
@@ -11,7 +11,7 @@ export const simpleModeApi = backendApi.injectEndpoints({
       provideTags: [wholeSimpleMode],
 
       query: ({ date, uiLanguage, contentLanguages }) => {
-        const formattedDate = moment(date).format('YYYY-MM-DD');
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
 
         return `simple?${Requests.makeParams({
           start_date       : formattedDate,

@@ -6,11 +6,11 @@ import {
   COOKIE_SHOW_ALL_CONTENT,
   COOKIE_UI_LANG,
   DEFAULT_CONTENT_LANGUAGES,
-  DEFAULT_UI_LANGUAGE,
-  DEFAULT_UI_DIR
+  DEFAULT_UI_DIR,
+  DEFAULT_UI_LANGUAGE
 } from '../../helpers/consts';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { setCookie } from '../../helpers/date';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
 
 export const initialState = {
   // Array is required for url language because we have to return
@@ -39,6 +39,7 @@ export const onSetUILanguage = (state, payload) => {
 };
 
 export const onSetContentLanguages = (state, payload) => {
+  console.log('onSetContentLanguages', payload);
   setCookie(COOKIE_CONTENT_LANGS, payload.contentLanguages);
   state.contentLanguages = payload.contentLanguages;
 };
@@ -66,7 +67,7 @@ const settingsSlice = createSlice({
 
   selectors: {
     getUrlLang         : state => (state.urlLanguage.length && state.urlLanguage[0]) || '',
-    getUIDir           : state => !!state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
+    getUIDir           : state => state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
     getUILang          : (state, skipUrl) => !state.urlLanguage.length || skipUrl ? state.uiLang : state.urlLanguage[0],
     getShowAllContent  : state => state.showAllContent,
     getPageSize        : state => state.pageSize,

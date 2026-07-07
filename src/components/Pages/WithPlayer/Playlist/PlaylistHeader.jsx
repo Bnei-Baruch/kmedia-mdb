@@ -1,0 +1,129 @@
+import { useContext } from 'react';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { clsx } from 'clsx';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { cuPartNameByCCUType, canonicalCollection } from '../../../../helpers/utils';
+import { fromToLocalized } from '../../../../helpers/date';
+import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
+import LessonDatePickerContainer from './LessonDatePickerContainer';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  sourcesGetPathByIDSelector
+} from '../../../../redux/selectors';
+
+const PlaylistHeader = () => {
+  const { isMobile } = useContext(DeviceInfoContext);
+  const { t } = useTranslation();
+
+  const { cId, cuId, name, isMy } = useSelector(playlistGetInfoSelector);
+  const { id: paramsId } = useParams();
+  const unit = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
+  const c = canonicalCollection(unit);
+  const collection = useSelector(state => mdbGetDenormCollectionSelector(state, cId || (c && c.id) || paramsId));
+  const getPath = useSelector(sourcesGetPathByIDSelector);
+
+  if (!unit) {
+    return null;
+  }
+
+  const { content_type, number, film_date, start_date, end_date, tag_id, source_id, likutim_id } = collection || false;
+  const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
+
+  const getTitle = () => {
+    if (!collection)
+      return (
+        <>
+          <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
+          {t('personal.playlist', { name })}
+        </>
+      );
+
+    if (isLesson) {
+      return !isMobile ? (
+        <>
+          {t('constants.content-types.DAILY_LESSON')}
+          <div className="text-xl display-iblock mx-1">
+            <span className="display-iblock mx-1">{t('values.date', { date: film_date })}</span>
+            {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
+          </div>
+        </>
+      ) : t('constants.content-types.DAILY_LESSON');
+    }
+
+    if (tag_id && tag_id.length > 0) {
+      return `${t('player.header.series-by-topic')} ${name}`;
+    }
+
+    if (likutim_id?.length > 0) {
+      return `${t('likutim.item-header')} ${name}`;
+    }
+
+    if (source_id && getPath) {
+      const path = getPath(source_id);
+      const nameFromPath = path[0]?.name ? `${path[0].name} - ` : '';
+      return `${t('player.header.series-by-topic')} ${nameFromPath}${name}`;
+    }
+
+    return name;
+  };
+
+  const getTitleByCO = () => {
+    let subheader;
+    if (isLesson) {
+      subheader = isMobile && `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+    } else if (film_date) {
+      subheader = t('values.date', { date: film_date });
+    } else if (start_date && end_date) {
+      subheader = fromToLocalized(start_date, end_date);
+    }
+
+    let playNow;
+    if (!isMobile) {
+      const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
+      if (isLesson) {
+        playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })} ${unit.name}` : unit.name;
+      } else if (content_type === CT_LESSONS_SERIES) {
+        playNow = <>
+          {t(cuPartNameByCCUType(content_type), { name: part })}
+          <span className="mx-1 text-sm font-normal">
+            {t('values.date', { date: unit.film_date })}
+          </span>
+        </>;
+      } else {
+        playNow = unit?.name;
+      }
+    }
+
+    const _mobStyles = isMobile ? 'flex justify-between gap-2 items-end' : '';
+
+    return (
+      <div className='avbox__playlist-header px-4 py-3'>
+        <div className='flex flex-justify gap-4 justify-between py-2'>
+          <h2 className='my-0 text-3xl font-bold'>{getTitle()}</h2>
+          {isLesson && !isMobile && !isMy && <LessonDatePickerContainer />}
+        </div>
+        {
+          subheader && (
+            <h4 className={clsx('font-normal', _mobStyles)}>
+              {subheader}
+              {isLesson && isMobile && !isMy && <LessonDatePickerContainer />}
+            </h4>)
+        }
+        {playNow && (<h3 className="my-0 text-2xl font-bold">{playNow}</h3>)}
+      </div>
+    );
+  };
+
+  return (
+    <div id="avbox_playlist">
+      {getTitleByCO()}
+    </div>
+  );
+};
+
+export default PlaylistHeader;

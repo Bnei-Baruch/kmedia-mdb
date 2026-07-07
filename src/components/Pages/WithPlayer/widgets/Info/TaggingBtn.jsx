@@ -1,0 +1,30 @@
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import { actions } from '../../../../../redux/modules/player';
+import { stopBubbling } from '../../../../../helpers/utils';
+import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
+import { SectionLogo } from '../../../../../helpers/images';
+import { playerGetOverModeSelector } from '../../../../../redux/selectors';
+
+export const TaggingBtn = () => {
+  const { t } = useTranslation();
+  const mode  = useSelector(playerGetOverModeSelector);
+
+  const dispatch = useDispatch();
+
+  const handleOpen = e => {
+    stopBubbling(e);
+    const newMode = (mode === PLAYER_OVER_MODES.tagging) ? PLAYER_OVER_MODES.none : PLAYER_OVER_MODES.tagging;
+    dispatch(actions.setOverMode(newMode));
+  };
+
+  return (
+    <div
+      className="my_tag cursor-pointer gap-1"
+      onClick={handleOpen}
+    >
+      <SectionLogo name="topics" color="grey" width="20" height="20"/>
+      <span className="!hidden sm:!inline">{t('personal.label.tagging')}</span>
+    </div>
+  );
+};

@@ -12,6 +12,7 @@ cc-test-reporter
 /build
 
 # misc
+.claude/
 .DS_Store
 .env
 .env.local
@@ -34,9 +35,8 @@ mdb.dump.*.sql
 node_modules/
 .pnp.*
 
-# do not ignore main theme
-!src/**/semantic.min.css
-!src/**/semantic.rtl.min.css
+# Tailwind 4 source CSS (entry + @theme tokens) — processed by @tailwindcss/vite, must be committed
+!src/stylesheets/tailwind.css
 .eslintcache
 
 build.zip
@@ -44,3 +44,13 @@ build.zip
 !/.yarn/releases/
 /__MACOSX
 .cursorrules
+/playwright-report
+e2e/snapshots/
+/playwright-report
+/test-results
+
+# Playwright MCP temp files (screenshots, snapshots, console logs)
+.playwright-mcp/
+/tmp/
+
+*.log

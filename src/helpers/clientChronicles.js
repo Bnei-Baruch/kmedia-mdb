@@ -109,7 +109,7 @@ export default class ClientChronicles {
       }
     }, APPENDS_FLUSH_MS);
 
-    window.addEventListener('beforeunload', event => {
+    window.addEventListener('beforeunload', () => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.
@@ -117,7 +117,7 @@ export default class ClientChronicles {
       }
 
       for (const { onBeforeUnloadClosure } of this.lastEntriesByType.values()) {
-        if (!!onBeforeUnloadClosure) {
+        if (onBeforeUnloadClosure) {
           onBeforeUnloadClosure();
         }
       }
@@ -370,7 +370,7 @@ export default class ClientChronicles {
       // 2. We delete the start event so that other events won't use it as flow-event.
       const { start }  = FLOWS_BY_END.get(eventType);
       const startEvent = this.lastEntriesByType.get(start);
-      if (!!startEvent) {
+      if (startEvent) {
         flowId = startEvent.eventId;
         this.lastEntriesByType.delete(start);
       }

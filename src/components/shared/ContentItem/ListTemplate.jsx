@@ -1,0 +1,139 @@
+import { clsx } from 'clsx';
+import PropTypes from 'prop-types';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { NO_NAME } from '../../../helpers/consts';
+
+import Link from '../../Language/MultiLanguageLink';
+import * as shapes from '../../shapes';
+import { imageWidthBySize } from './helper';
+import UnitLogoWithDuration from '../UnitLogoWithDuration';
+import UnitLogo from '../Logo/UnitLogo';
+import { UnitProgress } from './UnitProgress';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
+
+const ListTemplate = (
+  {
+    unit,
+    source,
+    tag,
+    withCUInfo,
+    withCCUInfo,
+    link,
+    ccu,
+    description,
+    children,
+    playTime,
+    size = 'big',
+    selected,
+    label,
+    name,
+    showImg
+  }
+) => {
+  const itemRef = useRef(null);
+
+  const dir = useSelector(settingsGetUIDirSelector);
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  const [isNeedTooltip, setIsNeedTooltip] = useState(false);
+  const cuInfoRef = useRef();
+  const descRef = useRef();
+
+  const _name = name || unit?.name || source?.name || tag?.label;
+
+  // Show the tooltip only when the inline content is actually cut off: the name
+  // is line-clamped (vertical overflow) or the description ellipsizes (horizontal).
+  useEffect(() => {
+    const nameEl = cuInfoRef.current;
+    const descEl = descRef.current;
+    const truncated =
+      !!(nameEl && nameEl.scrollHeight > nameEl.clientHeight) ||
+      !!(descEl && descEl.scrollHeight > descEl.clientHeight);
+    setIsNeedTooltip(truncated);
+  }, [_name, description, size, isMobile]);
+
+  useEffect(() => {
+    if (selected && itemRef.current) {
+      const { scrollX, scrollY } = window;
+      itemRef.current.scrollIntoView(true);
+      window.scrollTo(scrollX, scrollY);
+    }
+  }, [selected]);
+
+  const info = ((ccu || source || tag) && withCCUInfo)
+    ? (
+      <div className="cu_item_info_co ">
+        <span className="no-padding no-margin text_ellipsis">
+          {ccu?.name || source?.name || tag?.label || NO_NAME}
+        </span>
+      </div>
+    ) : null;
+
+  const Tag = size === 'big' || isMobile ? 'h5' : 'h3';
+
+  const renderCUInfo = () => (
+    <Tag ref={cuInfoRef} className="cu_item_name">
+      {_name}
+    </Tag>
+  );
+
+  const width = isMobile ? 165 : imageWidthBySize[size];
+
+  return (
+    <Link
+      ref={itemRef}
+      id={unit?.id}
+      to={link}
+      key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
+      className={clsx('cu_item cu_item_list no-thumbnail group', { [size]: !!size, selected })}
+    >
+      <div>
+        {label ? <div className="cu_item_label">{label}</div> : null}
+        <UnitProgress unit={unit} playTime={playTime} />
+        <div className="cu_item_img" style={{ width }}>
+          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg}  force16x9={true} /> :
+            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg}  force16x9={true} />}
+        </div>
+      </div>
+      <div className={clsx('cu_item_info', { 'with_actions': !!children })}>
+        {withCUInfo && renderCUInfo()}
+        {info}
+        <div ref={descRef} className={`cu_info_description ${dir}`}>
+          {description.map((d, i) => (<span key={i}>{d}</span>))}
+        </div>
+      </div>
+      {isNeedTooltip && !isMobile && (
+        <div className="cu_item_tooltip hidden group-hover:block" dir={dir}>
+          {withCUInfo && <Tag className="cu_item_tooltip_name">{_name}</Tag>}
+          {info}
+          <div className="cu_item_tooltip_desc">
+            {description.map((d, i) => (<span key={i}>{d}</span>))}
+          </div>
+        </div>
+      )}
+      {
+        children ? (
+          <div className="cu_item_actions">
+            {children}
+          </div>
+        ) : null
+      }
+    </Link>
+  );
+};
+
+ListTemplate.propTypes = {
+  unit: shapes.ContentUnit,
+  source: shapes.Source,
+  tag: shapes.Topic,
+  link: PropTypes.any.isRequired,
+  withCCUInfo: PropTypes.bool,
+  ccu: shapes.Collection,
+  description: PropTypes.array,
+  position: PropTypes.number
+};
+
+export default ListTemplate;

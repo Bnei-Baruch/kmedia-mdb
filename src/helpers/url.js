@@ -1,9 +1,9 @@
-import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
+import qs from 'qs';
 
-import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
-import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../pkg/ksAdapter/adapter';
-import { omit } from 'lodash/object';
+import omit from 'lodash/omit.js';
+import { KC_SEARCH_KEYS, KC_SEARCH_KEY_SESSION } from '../pkg/ksAdapter/adapter.js';
+import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts.js';
 
 export const parse = str => qs.parse(str);
 
@@ -20,24 +20,23 @@ const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
 export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
-  const parts         = pathWithSlash.split('/');
+  const parts = pathWithSlash.split('/');
 
   if (LANGUAGES[parts[1]]) {
     return {
       language: parts[1],
-      path    : ensureStartsWithSlash(parts.slice(2).join('/')) || '/'
+      path: ensureStartsWithSlash(parts.slice(2).join('/')) || '/',
     };
   }
 
   return {
-    path: pathWithSlash
+    path: pathWithSlash,
   };
 };
 
 export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
 
 export const getUILangFromPath = (path, headers, userAgent) => {
-  console.log('getUILangFromPath', path);
   let { language } = splitPathByLanguage(path);
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
@@ -50,10 +49,9 @@ export const getUILangFromPath = (path, headers, userAgent) => {
 
   // UI lang is set in cookie - redirect 302 to /:lang/...
   const cookies = cookieParse(headers.cookie || '');
-  language      = cookies[COOKIE_UI_LANG];
+  language = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
-    console.log(`language: ${language}, redirect: ${language !== DEFAULT_UI_LANGUAGE}`);
     return { language, redirect: true };
   }
 
@@ -61,10 +59,10 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   const acceptLanguage = headers['accept-language'];
   if (acceptLanguage) {
     const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
-    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
-    const headerLanguages = languages.map(lang => lang.substr(0, 2)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
+    const headerLanguages = languages
+      .map(lang => lang.substr(0, 2))
+      .filter(lang => LANG_UI_LANGUAGES.includes(lang));
     if (headerLanguages.length > 0) {
-      console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
       language = headerLanguages[0];
       return { language, redirect: true };
@@ -82,7 +80,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   }
 
   const { language: languagePrefix, path: pathSuffix } = splitPathByLanguage(path);
-  const { language: currentPathLangPrefix }            = splitPathByLanguage(location.pathname);
+  const { language: currentPathLangPrefix } = splitPathByLanguage(location.pathname);
 
   // priority: language from args > language from link path > language from current path
   const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
@@ -113,11 +111,14 @@ export const updateQuery = (navigate, location, updater) => {
     delete query.deb;
   }
 
-  navigate({
-    search: stringify(updater(query)),
-    state : location?.state ?? '',
-    hash  : location.hash
-  }, { replace: true });
+  navigate(
+    {
+      search: stringify(updater(query)),
+      state: location?.state ?? '',
+      hash: location.hash,
+    },
+    { replace: true }
+  );
 };
 
 export const isDebMode = location => getQuery(location).deb || false;
@@ -146,20 +147,19 @@ const getTo = (navigateTo, location, language, contentLanguage) => {
   // We're changing 'search' in case contentLanguage was supplied
   // DON'T COMMI: NOT CLEAR WHAT THAT IS...
   if (contentLanguage) {
-    const q           = getQuery(navigateTo);
-    q.language        = contentLanguage;
+    const q = getQuery(navigateTo);
+    q.language = contentLanguage;
     navigateTo.search = `?${stringify(q)}`;
   }
 
   return {
     ...navigateTo,
-    pathname: prefixWithLanguage(navigateTo.pathname, location, language)
+    pathname: prefixWithLanguage(navigateTo.pathname, location, language),
   };
 };
 
 export const getPathnameWithHost = pathname => {
-  if (typeof window === 'undefined')
-    return '';
+  if (typeof window === 'undefined') return '';
   const { protocol, hostname, port } = window.location;
   return `${protocol}//${hostname}${port ? `:${port}` : ''}/${pathname}`;
 };

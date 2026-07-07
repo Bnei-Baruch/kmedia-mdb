@@ -1,9 +1,13 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 .unit-info {
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin: 0 1em 1em 1em;
   }
+
   clear: both;
-  margin: 0 1em 2em 0;
+  margin: 1em;
 
   &__name {
     font-weight: normal;
@@ -19,74 +23,75 @@
 
   &__collections a {
     font-size: 1.46rem;
+    color: #4183c4;
   }
 
   &__header {
     margin-top: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 1.5rem;
+    line-height: 1.3;
   }
 
   .link_to_cu {
     padding: 4px 8px;
     margin-top: 8px !important;
-    margin-right: 4px !important;
-    margin-left: 0 !important;
+    margin-inline-end: 4px !important;
+    margin-inline-start: 0 !important;
   }
 
   .unit-info__title {
     line-height: 2.5em;
-    color: red !important;
 
     img {
       height: 2.5em;
       width: 2.5em;
-      float: left;
-      margin-right: .5em;
+      float: inline-start;
+      margin-inline-end: .5em;
     }
   }
 
 
-}
-
-.rtl {
-  .unit-info {
-    .link_to_cu {
-      margin-right: 0 !important;
-      margin-left: 4px !important;
-    }
-
-    .unit-info__title {
-      img {
-        float: right;
-        margin-left: .5em;
-      }
-    }
-  }
 }
 
 .unit-materials {
-  @include mobile {
+  @include responsive-helpers.mobile {
     padding: 0;
   }
 
-  background: $darkWhite;
+  background: colors-helpers.$darkWhite;
 
-  & > .menu {
-    @include mobile {
+  &>.tabs {
+    display: flex;
+    border-bottom: 1px solid #d1d5db;
+    gap: 1em;
+
+    @include responsive-helpers.mobile {
       overflow-x: auto;
-      overflow-y: hidden;
-      border-bottom: 0 !important;
     }
 
-    padding: 0 0 0.5em 0;
-    margin: 0;
-
     .item {
-      @include mobile {
-        flex: 2 0 auto !important;
-        padding: 1em 0.5em !important;
+      @include responsive-helpers.mobile {
+        flex: 2 0 auto;
+        padding: 1em 0.5em;
+        white-space: nowrap;
       }
 
-      padding: 1em !important;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      color: #6b7280;
+
+      &:hover {
+        color: #374151;
+        border-bottom-color: #d1d5db;
+      }
+
+      &.active {
+        border-bottom-color: #3b82f6;
+        color: #2563eb;
+      }
     }
   }
 
@@ -95,8 +100,10 @@
 .unit-tags-bar {
   display: flex;
   overflow: hidden;
+  gap: 1rem;
 
-  .unit-tags-bar_tags {
+
+  .unit-tags-bar_scroll {
     scrollbar-gutter: stable;
     overflow-y: hidden;
     overflow-x: scroll;
@@ -106,56 +113,63 @@
     &::-webkit-scrollbar {
       display: none;
     }
+  }
 
+
+  .unit-tags-bar_tags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .5rem;
 
     .unit-tag-item {
       scroll-snap-align: start;
-      padding: 8px 14px;
-      margin: 0 4px;
-      background: rgba(51, 118, 214, 0.08);
-      box-shadow: none;
-      font-weight: normal;
+      background: rgba(colors-helpers.$blue, 0.08);
+      border-radius: 5px;
+
 
       a {
-        color: $blue;
+        color: colors-helpers.$blue;
+        padding: 0 1rem;
+        font-size: .8rem;
+        line-height: 1.8rem;
       }
 
       &:hover {
-        background: rgba(28, 93, 187, 0.08);
+        background: rgba(colors-helpers.$light-hover-btn, 0.08);
 
         a {
-          color: #1C5DBB;
+          color: colors-helpers.$light-hover-btn;
         }
       }
 
       &:active {
-        background: rgba(26, 67, 120, 0.08);
+        background: rgba(colors-helpers.$light-active-text, 0.08);
 
         a {
-          color: #1A4378;
+          color: colors-helpers.$light-active-text;
         }
       }
 
       .is-dark & {
-        background: rgba(51, 118, 214, 0.28);
+        background: rgba(colors-helpers.$blue, 0.28);
 
         a {
-          color: $blue;
+          color: colors-helpers.$blue;
         }
 
         &:hover {
-          background: rgba(160, 214, 255, 0.28);
+          background: rgba(colors-helpers.$dark-btn-hover, 0.28);
 
           a {
-            color: #A0D6FF;
+            color: colors-helpers.$dark-btn-hover;
           }
         }
 
         &:active {
-          background: rgba(28, 93, 187, 0.28);
+          background: rgba(colors-helpers.$light-hover-btn, 0.28);
 
           a {
-            color: #1C5DBB;
+            color: colors-helpers.$light-hover-btn;
           }
         }
       }
@@ -166,4 +180,116 @@
     white-space: nowrap;
     line-height: 28px;
   }
+}
+
+.unit-link {
+  color: #4183c4;
+  font-weight: 300;
+  font-family: Lato ,'Helvetica Neue',Arial,Helvetica,sans-serif
+}
+
+.unit-header {
+  font-weight: 300 !important;
+  font-size: 18px;
+  margin: 12px 0 !important;
+  color: #1a4179 !important;
+
+  &.no-margin {
+    margin: 0 !important;
+  }
+}
+
+.horizontal-list {
+  display: flex;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #ebecf0;
+  overflow-x: auto;
+  align-items: center;
+  gap: 1em;
+
+  &.remove-bottom-border {
+    border: 0;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    background: transparent;
+  }
+
+  .no-files {
+    display: inline-flex !important;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333333;
+    padding-block: 10px !important;
+    padding-inline-start: 16px !important;
+    padding-inline-end: 24px !important;
+    border: 1px solid #7dcff5;
+    border-inline-start-width: 4px;
+    border-radius: 4px;
+    background-color: rgba(colors-helpers.$sky-blue, 0.16);
+
+    .content {
+      white-space: pre-wrap;
+
+      .bold-font {
+        font-weight: bold;
+      }
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .choose-language-button {
+      background: transparent !important;
+      height: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      text-decoration: underline;
+      color: #2185d0;
+    }
+  }
+
+  .media-file-button {
+    margin-inline-end: 8px;
+    text-decoration: none;
+    display: flex;
+    padding: 2px 8px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #ef702e;
+    font-size: 12px;
+    flex-shrink: 0;
+
+    .file-list-icon {
+      width: 12px;
+      margin-inline-start: 5px;
+    }
+
+    a {
+      color: #fff !important;
+      font-weight: normal !important;
+    }
+
+    &:hover,
+    &:hover .icon,
+    &:hover a {
+      color: #fff !important;
+    }
+  }
+}
+
+.duration {
+  color: colors-helpers.$midGrey;
+  font-size: 14px;
+  margin: 0 1em;
+  display: inline-block;
 }

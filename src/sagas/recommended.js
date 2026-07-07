@@ -36,7 +36,7 @@ export function* fetchRecommended(action) {
       }
     });
     const getPathById        = yield select(state => sourcesSelectors.getPathByID(state.sources));
-    const sourcesCollections = yield select(state => getSourcesCollections(sources, getPathById));
+    const sourcesCollections = yield select(() => getSourcesCollections(sources, getPathById));
 
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {

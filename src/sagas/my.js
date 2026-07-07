@@ -23,7 +23,7 @@ function* updatePageInQuery(action) {
 }
 
 export function* fetch(action) {
-  // eslint-disable-next-line prefer-const
+
   const { namespace, with_files = false, addToList = true, ...params } = action.payload;
 
   const token = yield select(state => authSelectors.getToken(state.auth));

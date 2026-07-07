@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getQuery } from '../../helpers/url';
@@ -10,7 +10,7 @@ export const getPageFromLocation = location => {
   return Number.isNaN(p) || p <= 0 ? 1 : p;
 };
 
-class withPagination extends React.Component {
+class withPagination extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     pageNo: PropTypes.number.isRequired,

@@ -1,0 +1,58 @@
+@use "colors-helpers";
+
+.language-trigger {
+  cursor: pointer;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: .25rem;
+}
+
+.language-item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+
+  & .disabled {
+    opacity: .5;
+    color: #000;
+  }
+}
+
+.language-url {
+  color: red;
+  max-width: 16em;
+}
+
+.language-not-celled {
+  padding-top: 1em !important;
+  border-bottom: 0 !important;
+  display: flex !important;
+  justify-content: center;
+}
+
+.language-ui {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.content-languages-title {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+.language-subtext {
+  font-size: 0.8em;
+  max-width: 19em;
+
+  &.disabled {
+    opacity: .5;
+    color: #000;
+  }
+}
+
+.list-first-item {
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}

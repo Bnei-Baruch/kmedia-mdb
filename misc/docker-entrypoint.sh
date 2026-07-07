@@ -15,7 +15,7 @@ cmd=${1-web}
 case $cmd in
 
 web)
-    exec node /app/server/index.js
+    exec node /app/server/app-server.mjs
     ;;
 
 *)

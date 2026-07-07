@@ -1,0 +1,94 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
+.my_playlist_item {
+  position: relative;
+
+  .over_layer {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    width: 30%;
+    height: 100%;
+    background-color: rgba(colors-helpers.$fullBlack, 0.6);
+    z-index: 1;
+    color: white;
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+
+    .header {
+      margin: 0;
+      color: white;
+    }
+  }
+
+  .unit-logo {
+    width: 100%;
+
+    @include responsive-helpers.mobile {
+      max-width: 160px;
+    }
+  }
+}
+
+.my_header {
+  font-size: 1.5rem;
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1em 0 .5em;
+
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+    margin-right: 8px;
+    margin-inline-end: .5em;
+  }
+}
+
+.my_playlist_actions {
+  display: none;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+
+  @include responsive-helpers.mobile {
+    display: flex;
+  }
+}
+
+.playlist_icon {
+  height: 40px;
+  width: 38px;
+}
+
+.playlist_add {
+  height: 25px;
+  width: 28px;
+}
+
+.my_playlist_add,
+.my_tag {
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+
+  span {
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  svg {
+    vertical-align: middle;
+  }
+}
+
+.cu_item:hover .my_playlist_actions {
+  display: flex;
+}

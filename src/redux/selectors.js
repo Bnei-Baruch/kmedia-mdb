@@ -208,7 +208,6 @@ export const assetsGetAboutSelector           = createSelector([getAssets], a =>
 export const assetsGetMergeStatusSelector     = createSelector([getAssets], a => assetsSel.getMergeStatus(a));
 export const assetsNestedGetZipByIdSelector   = createSelector([getAssets], a => assetsSel.nestedGetZipById(a));
 export const assetsGetTimeCodeSelector        = createSelector([getAssets], a => assetsSel.getTimeCode(a));
-export const assetsHasTimeCodeSelector        = createSelector([getAssets], a => assetsSel.hasTimeCode(a));
 
 // chronicles
 export const chroniclesGetEventSelector       = createSelector([getChronicles], c => chroniclesSel.getEvent(c));

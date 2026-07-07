@@ -1,33 +1,22 @@
 @use "sass:math";
-
-@import 'rtl/homepage';
+@use "sass:color";
+@use "colors-helpers";
+@use "responsive-helpers";
+@use "latest-updates-card-list";
 
 .homepage {
   flex: 1 1 auto;
 
   &__featured {
-    padding-top: 4em !important;
+    padding-top: 4em;
   }
 
   &__section {
-    @include mobile {
-      margin-bottom: 1rem;
-      margin-top: 1rem;
-    }
-    margin-bottom: 0;
-    margin-top: 0;
-
-    .ui.horizontal.divider {
-      &::before,
-      &::after {
-        background-image: linear-gradient(to right, lighten($blue, 40%), lighten($blue, 40%));
-        background-size: 100% 1px;
-      }
-    }
-
+    max-width: 1200px;
+    margin: 0 auto;
+    
     &__iconsrow {
       .iconsTitleRow {
-
         .iconsTitle {
           position: relative;
           top: 40px;
@@ -38,22 +27,16 @@
           border: 2px solid #DBECF9;
           border-radius: 9px;
           z-index: 1;
-          @include mobile {
+          @include responsive-helpers.mobile {
             font-size: 1.5em;
           }
         }
       }
     }
 
-
     &__latestUpdates {
-      background: rgba(44, 144, 220, 0.05);
+      background: rgba(colors-helpers.$blue-medium, 0.05);
       border-top: 2px solid #DBECF9;
-      padding: 0 55px;
-
-      @include mobile {
-        padding: 1em;
-      }
 
       .cardsTitle {
         width: 100%;
@@ -62,9 +45,8 @@
         font-weight: 700;
         color: #134D78;
         margin-bottom: 0.5em;
-        @include mobile {
-          font-size: 1.5em;
-          padding: 2em 0 0 0em;
+        @include responsive-helpers.mobile {
+          padding: 2em 0 0 0;
           margin-bottom: 0;
         }
       }
@@ -73,50 +55,32 @@
 
   .latestUpdateSection {
     padding-top: 1em;
-
-    .row {
-      padding-top: 0 !important;
-    }
   }
 
   .home-social-section {
-    @include mobile {
+    @include responsive-helpers.mobile {
       margin-bottom: 1rem;
     }
     margin-bottom: 4em;
   }
 
   &__header {
-    @include mobile {
+    @include responsive-helpers.mobile {
       padding-bottom: 2rem;
       padding-top: 1rem;
     }
-    // Use solid brand color, matching the top header
-    background: #1A4378 !important;
-    background-image: none !important;
-    background-attachment: scroll;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #1A4378;
     margin-top: 0;
     padding-bottom: 4rem;
-    padding-top: 2rem;
-  }
-
-  &__title {
-    @include mobile {
-      display: none;
-    }
-    margin-bottom: .4em !important;
   }
 
   &__website-sections {
-    .header {
-      color: darken($blue, 20%);
+    a {
+      color: color.adjust(colors-helpers.$blue, $lightness: -20%);
       transition: color .2s ease-out;
 
       &:hover {
-        color: $blue;
+        color: colors-helpers.$blue;
       }
     }
   }
@@ -124,7 +88,8 @@
   &__iconsrow {
     background: #F3F4F5;
     border-top: 2px solid #DBECF9;
-    padding-top: 1.5em !important;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
 
     .iconsTitleRow {
       background: #FFF;
@@ -139,37 +104,30 @@
         border: 2px solid #DBECF9;
         border-radius: 9px;
         z-index: 1;
-        @include mobile {
+        @include responsive-helpers.mobile {
           font-size: 1.5em;
         }
       }
     }
 
     .activeSectionsIcons {
-      padding-top: 1.5em !important;
+      padding-top: 1.5em;
     }
 
     img {
       margin-bottom: .2em;
       transition: transform .2s ease-out;
-      width: 50px !important;
+      width: 50px;
     }
 
-    .row .center.aligned.column {
-      align-items: stretch;
-      display: flex !important;
-      justify-content: center;
-
-      &.topIcon {
-
-        padding-bottom: 3em;
-      }
+    .topIcon {
+      padding-bottom: 3em;
     }
 
     a {
       border-radius: 4px;
       flex: 1 1 auto;
-      padding: 4px 4px 8px !important;
+      padding: 4px 4px 8px;
 
       &:hover {
         img {
@@ -177,7 +135,6 @@
         }
       }
     }
-
   }
 
   &__iconsrow.socialBackground {
@@ -185,36 +142,16 @@
     margin-left: 0;
     margin-right: 0;
   }
-
-  &__search {
-    input {
-      border-radius: 4px !important;
-      font-size: 16px;
-    }
-
-    .search-omnibox {
-      max-width: none;
-    }
-  }
-
-  &-posters {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-
-    .column {
-      padding: 0 !important;
-    }
-  }
 }
 
 .thumbnail {
-  @include mobile {
+  @include responsive-helpers.mobile {
     margin-bottom: 1rem;
-    padding-top: percentage(math.div(1, 2.5));
+    padding-top: math.percentage(math.div(1, 2.5));
   }
   height: 0;
   overflow: hidden;
-  padding-top: percentage(math.div(9, 16));
+  padding-top: math.percentage(math.div(9, 16));
   position: relative;
 
   .label {
@@ -232,7 +169,7 @@
     width: 100%;
 
     &::before {
-      background-image: linear-gradient(to top, rgba($black, .9), transparent);
+      background-image: linear-gradient(to top, rgba(colors-helpers.$black, .9), transparent);
       bottom: 0;
       content: '';
       height: 50%;
@@ -259,47 +196,158 @@
   &__header {
     bottom: .5em;
     left: .5em;
-    margin: 0 !important;
+    margin: 0;
     position: absolute;
     right: .5em;
-    text-shadow: 0 1px $black, 0 2px $black;
+    text-shadow: 0 1px colors-helpers.$black, 0 2px colors-helpers.$black;
     transition: transform .5s;
     z-index: 2;
+    font-size: 1.5em;
 
     .content,
     .sub {
-      color: $white !important;
+      color: colors-helpers.$white;
       font-weight: 400;
     }
 
     .sub {
       text-transform: uppercase;
-    }
-
-    .homepage-posters & {
-      bottom: 1em;
-      left: 1em;
-      right: 1em;
+      font-size: 0.75em;
     }
   }
 
   &__image {
-    position: absolute !important;
+    position: absolute;
     top: 0;
     z-index: 0;
   }
+}
 
-  .homepage-posters & {
-    padding-top: percentage(math.div(1.6, 1));
+.publications-twitter {
+  max-width: 550px !important;
+}
 
-    &__image {
-      background-position: center center;
-      background-size: cover;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-    }
+.tweet {
+  margin-bottom: 1.5rem !important;
+
+  &--username {
+    color: rgba(colors-helpers.$grey, .75);
+  }
+
+  &--media {
+    max-width: 100%;
+    height: auto;
   }
 }
 
+.home-social-section {
+  .titles {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 25px;
+
+    h4 {
+      margin-bottom: 0;
+      color: #134D78;
+      font-size: 1.6em;
+      margin-right: 0.2em;
+
+      @include responsive-helpers.mobile {
+        font-size: 1.5em;
+      }
+    }
+
+    a {
+      flex-grow: 0;
+    }
+  }
+
+  .read-more-bottom {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+  }
+}
+
+.home-blog-posts {
+  .blog-posts {
+    max-width: 100%;
+
+    .post:last-of-type,
+    .divider:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .remove-indent {
+    padding-left: 0 !important;
+  }
+
+  .entry {
+    position: relative;
+
+    * {
+      display: none;
+      color: #828282;
+      font-weight: 400;
+    }
+
+    *:first-of-type {
+      display: inline;
+      width: auto;
+    }
+
+    img,
+    style,
+    .bwg_container {
+      display: none !important;
+    }
+
+    .date {
+      font-weight: bold;
+      color: #000;
+    }
+  }
+
+  .read-more-link {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+}
+
+.home-twitter {
+  background-color: #F4F9FB;
+
+  .twitter-avatar {
+    border-radius: 50%;
+    width: 45px;
+    height: auto;
+  }
+
+  .tweet-title-wrapper {
+    display: flex;
+    align-items: center;
+
+    .tweet-title {
+      display: inline-flex;
+      flex-direction: column;
+    }
+  }
+
+  .tweet-friendly-date {
+    text-align: end;
+    color: rgba(colors-helpers.$grey, 0.75);
+    margin-top: 5px;
+  }
+
+  hr {
+    margin-bottom: 25px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}

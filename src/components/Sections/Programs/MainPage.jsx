@@ -1,0 +1,83 @@
+import isEqual from 'lodash/isEqual';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
+import { usePrevious } from '../../../helpers/utils';
+import { actions } from '../../../redux/modules/lists';
+
+import { actions as prepareActions } from '../../../redux/modules/preparePage';
+import FilterLabels from '../../FiltersAside/FilterLabels';
+import Pagination from '../../Pagination/Pagination';
+import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
+import SectionHeader from '../../shared/SectionHeader';
+import { getWipErr } from '../../shared/WipErr/WipErr';
+import Filters from './Filters';
+import ItemOfList from './ItemOfList';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
+
+const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
+
+const MainPage = () => {
+  const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_PROGRAMS)) || {};
+  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize                   = useSelector(settingsGetPageSizeSelector);
+  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_PROGRAMS), isEqual);
+
+  const prevSel = usePrevious(selected);
+
+  const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
+
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
+  useEffect(() => {
+    dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
+  }, [contentLanguages, dispatch]);
+
+  useEffect(() => {
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(PAGE_NS_PROGRAMS, pageNo, {
+        content_type: UNIT_PROGRAMS_TYPE,
+        pageSize,
+        withViews   : true
+      }));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentLanguages, dispatch, pageNo, selected]);
+
+  const wipErr          = getWipErr(wip, err);
+  const filterComponent = <Filters namespace={PAGE_NS_PROGRAMS} baseParams={FILTER_PARAMS}/>;
+
+  return (
+    <>
+      <SectionHeader section="programs"/>
+      <SectionFiltersWithMobile namespace={PAGE_NS_PROGRAMS} filters={filterComponent}>
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+        <FilterLabels namespace={PAGE_NS_PROGRAMS}/>
+        {
+          wipErr || items?.map((id, i) => <ItemOfList id={id} key={i}/>)
+        }
+        <hr className="m-0 border-t"/>
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={setPage}
+        />}
+      </SectionFiltersWithMobile>
+    </>
+  );
+};
+
+export default MainPage;

@@ -53,7 +53,7 @@ const searchSlice = createSlice({
     setSortBy: (state, { payload }) => void (state.sortBy = payload),
     updateQuery: (state, { payload }) => {
       state.autocompleteWip = payload.autocomplete;
-      state.q               = payload.query;
+      state.q               = payload.query ?? '';
     },
     setDeb: (state, { payload }) => void (state.deb = payload)
   },

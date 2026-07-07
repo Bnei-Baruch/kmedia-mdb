@@ -1,0 +1,61 @@
+import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { clsx } from 'clsx';
+
+import { actions } from '../../../../redux/modules/textPage';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import ToolbarBtnTooltip from '../../../Pages/WithText/Buttons/ToolbarBtnTooltip';
+import { textPageGetTocIsActiveSelector } from '../../../../redux/selectors';
+
+const TocToggleBtn = ({ withText = true, textKey = 'toc' }) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const { isMobile } = useContext(DeviceInfoContext);
+  const tocIsActive = useSelector(textPageGetTocIsActiveSelector);
+
+  const handleTocIsActive = () => dispatch(actions.setTocIsActive());
+
+  const iconEl = <span className="material-symbols-outlined">view_list</span>;
+  if (isMobile) {
+    const triggerProps = {
+      className: 'clear_button',
+      onClick: handleTocIsActive,
+      icon: iconEl,
+      content: withText ? '' : <span className="title">{t(`page-with-text.buttons.web.${textKey}`)}</span>,
+    };
+
+
+    if (withText) {
+      return (
+        <ToolbarBtnTooltip textKey={textKey} {...triggerProps}>
+          {iconEl}
+          {triggerProps.content}
+        </ToolbarBtnTooltip>
+      );
+    }
+
+    return (
+      <button
+        {...triggerProps}
+        className={clsx('bg-white p-1 max-sm:hidden', { 'bg-gray-100': tocIsActive })}
+      >
+        {iconEl}
+        {triggerProps.content}
+      </button>
+    );
+  }
+
+  return (
+    <button
+      className={clsx('toc_trigger  bg-white p-1 inline-flex items-center gap-1', { 'flex_basis_150': !isMobile })}
+      onClick={handleTocIsActive}
+    >
+      <span className="material-symbols-outlined">view_list</span>
+      <span>{t(`page-with-text.buttons.web.${textKey}`)}</span>
+    </button>
+  );
+};
+
+export default TocToggleBtn;

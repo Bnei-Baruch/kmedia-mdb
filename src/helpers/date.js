@@ -1,16 +1,16 @@
-import moment from 'moment';
+import dayjs from './dayjs';
 
 import { DATE_FORMAT } from './consts';
 
 /**
  * Prints a localized from-to date string, i.e., [25-27 of August 2017], [25-27 Августа 2017], [25-27 לאוגוסט 2017]
- * @param {moment | string} from
- * @param {moment | string} to
+ * @param {import('dayjs').Dayjs | string} from
+ * @param {import('dayjs').Dayjs | string} to
  * @return {string}
  */
 export function fromToLocalized(from, to) {
-  const mFrom = moment.utc(from, DATE_FORMAT);
-  const mTo   = moment.utc(to, DATE_FORMAT);
+  const mFrom = dayjs.utc(from, DATE_FORMAT);
+  const mTo   = dayjs.utc(to, DATE_FORMAT);
 
   const toStr     = mTo.format('DD MMMM YYYY');
   const SEPARATOR = ' - ';
@@ -42,11 +42,7 @@ export function sameDate(a, b) {
 }
 
 export function today() {
-  return moment()
-    .hours(0)
-    .minutes(0)
-    .seconds(0)
-    .milliseconds(0);
+  return dayjs().startOf('day');
 }
 
 export function setCookie(name, value) {

@@ -23,7 +23,6 @@
       "design2": "Düzen",
       "project-status": "Proje Durumu",
       "help": "Yardım",
-      "old-site": "Eski Site",
       "podcast": "Dijital ses dosyası",
       "subscribe": "Güncellemeler İçin Abone Ol",
       "bookmarks": "Bookmarks",
@@ -111,6 +110,8 @@
       "sources-filter-multi": "Kabbalists",
       "topics-filter-multi": "Konu",
       "content-type-filter": "Section",
+      "collections-filter-multi": "Koleksiyonlar",
+      "publishers-filter": "Yayıncılar",
       "language-filter": "Language",
       "date-filter": "Date",
       "media-type-filter": "Media",
@@ -876,7 +877,17 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Bağlantıyı kopyala"
+        "copy-link": "Bağlantıyı kopyala",
+        "auto-scroll": "Otomatik kaydırma",
+        "auto-scroll-speed": "Kaydırma hızı",
+        "auto-scroll-play": "Oynat (Space)",
+        "auto-scroll-pause": "Duraklat (Space)",
+        "auto-scroll-skip-back": "Geri (←)",
+        "auto-scroll-skip-fwd": "İleri (→)",
+        "auto-scroll-slower": "Yavaşlat (↓)",
+        "auto-scroll-faster": "Hızlandır (↑)",
+        "auto-scroll-close": "Kapat",
+        "auto-scroll-time": "{{mins}} dk kaldı"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -888,8 +899,13 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "additions": {
+          "review": "Review labeling and comments"
+        },
+        "auto-scroll": "Otomatik"
       }
-    }
+    },
+    "reading-time": "~{{mins}} dk okuma"
   }
 }

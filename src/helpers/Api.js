@@ -1,6 +1,9 @@
 import axios from 'axios';
-import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+import logger from '../logger/logger';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
+import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+
+const NAMESPACE = 'Api_Requests';
 
 export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
@@ -24,7 +27,7 @@ export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 const makeParams = params => (
   `${Object
     .entries(params)
-    .filter(([_, v]) => v !== undefined && v !== null)
+    .filter(([, v]) => v !== undefined && v !== null)
     .map(pair => {
       const key   = pair[0];
       const value = pair[1];
@@ -45,9 +48,11 @@ export class Requests {
 
   static get = async path => {
     try {
+      logger.log(NAMESPACE, 'Requests.get', path);
       return await axios.get(backendUrl(path));
-    } catch ({ response }) {
-      return response;
+    } catch (err) {
+      logger.error(NAMESPACE, `Requests.get failed for ${backendUrl(path)}: ${err?.message}`);
+      return err?.response;
     }
   };
 

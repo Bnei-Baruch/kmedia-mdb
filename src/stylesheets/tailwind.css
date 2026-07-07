@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom breakpoint */
+  --breakpoint-3xl: 1920px;
+
+  /* Custom colors */
+  --color-blue-600: #2185d0;
+  --color-brand-blue: #1A4378;
+  --color-brand-orange: #fc6719;
+  --color-brand-orange-hover: #e55c15;
+  --color-semantic-blue: #2185d0;
+  --color-blue-border: #DBECF9;
+  --color-blue-dark: #134D78;
+  --color-gray-light: #F3F4F5;
+  --color-blue-light: #F4F9FB;
+  --color-social-facebook: #1877f2;
+  --color-social-twitter: #1da1f2;
+  --color-social-whatsapp: #25d366;
+  --color-social-telegram: #0088cc;
+  --color-social-ok: #ee8208;
+
+  /* Custom height */
+  --height-button-sm: 32px;
+}
+
+@layer base {
+  a {
+    color: #4183c4;
+    text-decoration: none;
+  }
+  a:hover { color: #1e70bf; }
+  a:active { color: #4183c4; }
+  a:focus { color: #4183c4; }
+  blockquote {
+    display: block;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: #dcddde;
+    margin: 2em 0 2em 2em;
+    padding: 0 0 0 1em;
+  }
+}

@@ -7,7 +7,7 @@ const mediaTypeFilter = {
   valueToQuery: value => value,
   queryToValue: queryValue => queryValue,
   valueToApiParam: value => ({ media_type: value }),
-  valueToTagLabel: (value, props, { getState }) => {
+  valueToTagLabel: value => {
     if (!value) {
       return '';
     }

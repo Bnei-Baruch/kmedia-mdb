@@ -1,3 +1,5 @@
+@use "colors-helpers";
+
 
 .text__content-markers {
   min-width: 60px;
@@ -7,13 +9,7 @@
   flex-wrap: nowrap;
   justify-content: end;
 
-  .rtl & {
-    padding-left: 5px;
-  }
-
-  .ltr & {
-    padding-right: 5px;
-  }
+  padding-inline-end: 5px;
 
   .note_marks {
     width: 40px;
@@ -40,45 +36,30 @@
           padding: 4px !important;
           min-height: 22px;
           min-width: 22px;
-          border: 1px solid $light-stroke;
+          border: 1px solid colors-helpers.$light-stroke;
           font-size: 13px;
 
           .is-sepia & {
-            border-color: $sepia-stroke;
+            border-color: colors-helpers.$sepia-stroke;
           }
 
           .is-dark & {
-            border-color: $dark-stroke;
+            border-color: colors-helpers.$dark-stroke;
           }
         }
 
         .material-symbols-outlined {
-          color: $light-text;
+          color: colors-helpers.$light-text;
 
           .is-sepia & {
-            color: $sepia-text;
+            color: colors-helpers.$sepia-text;
           }
 
           .is-dark & {
-            color: $dark-text
+            color: colors-helpers.$dark-text
           }
         }
       }
-    }
-  }
-}
-
-.ui.popup.label_mark_popup {
-  opacity: 0.95;
-
-  .link_to_cu {
-    padding: 2px 3px !important;
-    font-size: smaller;
-    background: $midGrey !important;
-    color: white !important;
-
-    &:hover {
-      background-color: $sepia-bg;
     }
   }
 }
@@ -88,23 +69,12 @@
   //box-shadow: 0 4px 20px 0 lighten($black, 10%);
   position: absolute;
   top: 0;
-  left: auto;
-  right: -380px;
+  inset-inline-end: -380px;
   z-index: 1;
 
-  .rtl & {
-    right: auto;
-    left: -370px;
-  }
-
   &.note_list_out {
-    right: auto;
-    left: -380px;
-
-    .rtl & {
-      left: auto;
-      right: -380px;
-    }
+    inset-inline-start: -380px;
+    inset-inline-end: auto;
   }
 }
 
@@ -128,17 +98,13 @@
       display: flex;
       flex-wrap: nowrap;
       opacity: 0;
+      gap: .7rem;
 
       .button {
-        margin-right: 10px;
         background: none;
 
-        &:first-child {
-          margin-right: 0;
-        }
-
         .material-symbols-outlined {
-          color: rgba(0, 0, 0, 0.54) !important;
+          color: rgba(colors-helpers.$fullBlack, 0.54);
         }
       }
     }
@@ -152,13 +118,14 @@
     margin: 8px;
     font-size: 16px;
     line-height: 20px;
-    color: $black;
+    color: colors-helpers.$black;
     white-space: pre-line;
 
     &_short {
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       overflow: hidden;
     }
 
@@ -174,11 +141,7 @@
     margin-top: 1em;
     display: flex;
     justify-content: flex-end;
-
-    > .button:last-child {
-      margin-right: 0;
-      margin-left: 0;
-    }
+    gap: 1rem;
   }
 
   &.note_item_sticky {

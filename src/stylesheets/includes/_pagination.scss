@@ -1,27 +1,31 @@
-.pagination-wrapper {
-  @include small-mobile {
-    margin-top: -1px;
-    padding: 0 !important;
-  }
-}
+@use "responsive-helpers";
+
 
 .pagination-menu {
-  @include tablet {
+  font-size: 0.8rem;
+
+
+  @include responsive-helpers.tablet {
     @for $i from 5 through 6 {
-      .distance-#{$i} { display: none !important;}
+      .distance-#{$i} {
+        display: none !important;
+      }
     }
   }
 
-  @include mobile {
+  @include responsive-helpers.mobile {
     @for $i from 3 through 6 {
-      .distance-#{$i} { display: none !important;}
+      .distance-#{$i} {
+        display: none !important;
+      }
     }
   }
 
-  @include small-mobile {
-    margin: -1px -1px 0 0!important;
-    border-radius: 0!important;
+  @include responsive-helpers.small-mobile {
+    margin: -1px -1px 0 0 !important;
+    border-radius: 0 !important;
     width: 100%;
+
     .item {
       border-radius: 0 !important;
 
@@ -35,12 +39,34 @@
     }
 
     @for $i from 2 through 6 {
-      .distance-#{$i} { display: none !important;}
+      .distance-#{$i} {
+        display: none !important;
+      }
     }
+  }
 
-    .prev-page,
-    .next-page {
-      // display: none !important;
+  .pagination-menu-item {
+    padding: .5rem .8rem;
+    border: grey 1px solid;
+    border-right: none;
+    cursor: pointer;
+
+    &.active {
+      border-color: #2185d0;
+      color: #2185d0;
     }
+    &:first-child {
+      border-radius: .28571429rem 0 0 .28571429rem;
+    }
+    &:last-child{
+      border-right: grey 1px solid;
+      border-radius: 0 .28571429rem .28571429rem 0
+    }
+  }
+
+  .material-symbols-outlined {
+    font-size: .9rem;
+    line-height: .9rem;
+
   }
 }

@@ -1,0 +1,182 @@
+import dayjs from '../../../helpers/dayjs';
+import PropTypes from 'prop-types';
+import { useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { ALL_LANGUAGES } from '../../../helpers/consts';
+import { today } from '../../../helpers/date';
+import { getDayPickerLocale } from '../../../helpers/dayPickerLocale';
+import { isToday } from '../../../helpers/utils';
+import { settingsGetUILangSelector } from '../../../redux/selectors';
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import SectionHeader from '../../shared/SectionHeader';
+import SimpleModeList from './SimpleModeList';
+
+const changeDay = (amount, selectedDate, onDayClick) => {
+  const newDate = dayjs(selectedDate).add(amount, 'd').toDate();
+  onDayClick(newDate);
+};
+
+
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile) =>
+  isMobile
+    ? (
+      <div>
+        <div className="ui input">
+          <input
+            type="text"
+            readOnly
+            value={data.selectedInLocaleFormat}
+            onClick={() => openNativeDatePicker(nativeDateInput)}
+          />
+        </div>
+        <input
+          className="hide-native-date-input"
+          type="date"
+          value={data.selectedToString}
+          max={today().format('YYYY-MM-DD')}
+          step="1"
+          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+          onChange={handleNativeDateInputChange}
+          ref={nativeDateInput}
+        />
+      </div>
+    )
+    : <span>{dayjs(data.selectedDate).format(data.dateFormat)}</span>;
+
+const openNativeDatePicker = nativeDateInput => {
+  nativeDateInput.current?.showPicker?.();
+};
+
+// Read at call time (not module load) so it tracks the global dayjs locale.
+const getLocaleDateFormat = () => dayjs.localeData().longDateFormat('L');
+const ToDay = today().toDate();
+
+const SimpleModePage = (
+  {
+    selectedDate = new Date(),
+    filesLanguages,
+    onLanguageChange,
+    renderUnit,
+    onDayClick
+  }
+) => {
+  const { t } = useTranslation();
+  const uiLang = useSelector(settingsGetUILangSelector);
+  const locale = getDayPickerLocale(uiLang);
+
+  const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
+  const [data, setData] = useState({
+    selected: ToDay,
+    selectedDate,
+    selectedToString: dayjs(ToDay).format('YYYY-MM-DD'),
+    selectedInLocaleFormat: dayjs(ToDay).format(getLocaleDateFormat()),
+    dateFormat: 'MMM DD, YYYY',
+    DayPickerModifiers: {
+      selected: selectedDate
+    }
+  });
+
+  const nativeDateInput = useRef(null);
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  useEffect(() => {
+    const selected = selectedDate || today().toDate();
+    setData({
+      selected,
+      selectedDate,
+      selectedToString: dayjs(selected).format('YYYY-MM-DD'),
+      selectedInLocaleFormat: dayjs(selected).format(getLocaleDateFormat()),
+      dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
+      DayPickerModifiers: {
+        selected: selectedDate
+      }
+    });
+  }, [selectedDate, uiLang]);
+
+  const handleNativeDateInputChange = event => {
+    if (event && event.target.value !== '') {
+      onDayClick(event.target.valueAsDate);
+    }
+  };
+
+  const renderDatePicker = () =>
+    isClient &&
+    <div className="rounded shadow border border-gray-300 overflow-hidden px-3">
+      <DayPicker
+        mode="single"
+        captionLayout="dropdown"
+        locale={locale}
+        selected={selectedDate}
+        month={selectedDate}
+        endMonth={today().toDate()}
+        disabled={{ after: new Date() }}
+        onSelect={onDayClick}
+      />
+      <div className="py-4">
+        <button className="bg-gray-300 rounded-md py-2 px-4 min-w-10" onClick={() => onDayClick(new Date())}>
+          {t('simple-mode.today-button')}
+        </button>
+      </div>
+    </div>;
+
+  return (
+    <div>
+      <SectionHeader section="simple-mode" />
+      <div className="p-4 flex gap-4">
+        <div className="w-full lg:flex-1">
+          <div className="summary-container">
+            <div className="controller">
+              <h4 className='font-bold'>{t('simple-mode.date')}</h4>
+              <div className="date-container">
+                <button type="button"
+                  onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
+                {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile)}
+                <button
+                  type="button"
+                  disabled={isToday(selectedDate)}
+                  className={isToday(selectedDate) ? 'disabled' : ''}
+                  onClick={() => changeDay(1, selectedDate, onDayClick)}>{t('simple-mode.next')}</button>
+              </div>
+            </div>
+            <div className="controller">
+              <h4 className='font-bold'>
+                {t('simple-mode.media-language')}
+                {' (one of) '}
+              </h4>
+              <MenuLanguageSelector
+                languages={ALL_LANGUAGES}
+                selected={filesLanguages}
+                onLanguageChange={onLanguageChange}
+                multiSelect={true}
+              />
+            </div>
+          </div>
+          <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate} />
+        </div>
+        <div className="hidden md:block w-full lg:w-auto">
+          <div className="stick-calendar">
+            <div className="summary-container adjust-height">
+              <h4 className="controller font-bold">{t('simple-mode.choose-date')}</h4>
+            </div>
+            {renderDatePicker()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+SimpleModePage.propTypes = {
+  selectedDate: PropTypes.objectOf(Date),
+  filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  renderUnit: PropTypes.func.isRequired,
+  onDayClick: PropTypes.func.isRequired,
+  onLanguageChange: PropTypes.func.isRequired,
+};
+
+export default SimpleModePage;

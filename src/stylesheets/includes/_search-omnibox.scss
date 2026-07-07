@@ -1,0 +1,26 @@
+@use 'colors-helpers';
+
+.omnibox-inline-search {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(colors-helpers.$fullBlack, 0.5);
+  padding: 4px 8px;
+  font-size: 1.1em;
+  line-height: 1;
+
+  &:hover {
+    color: rgba(colors-helpers.$fullBlack, 0.8);
+  }
+}
+
+.search-result-rtl {
+  .title {
+    direction: rtl;
+    display: inline-block;
+  }
+}

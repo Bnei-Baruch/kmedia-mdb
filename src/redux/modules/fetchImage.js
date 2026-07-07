@@ -10,12 +10,12 @@ const imageSlice = createSlice({
       reducer: (state, { payload: { src, fallbacks = ['default'] } }) => {
         state.bySrc[src] ||= {};
         state.bySrc[src].fallbacks = fallbacks;
-        state.bySrc[src].err       = false;
+        state.bySrc[src].err       = null;
       }
     },
     fetchSuccess: (state, { payload: { src, img } }) => {
       state.bySrc[src] ||= {};
-      state.bySrc[src] = { wip: false, err: false, src: img };
+      state.bySrc[src] = { wip: false, err: null, src: img };
     },
     fetchFailure: (state, { payload: { src, err } }) => {
       state.bySrc[src] ||= {};
@@ -29,7 +29,7 @@ const imageSlice = createSlice({
   },
 
   selectors: {
-    getBySrc: (state, src) => state.bySrc[src] || false
+    getBySrc: (state, src) => state.bySrc[src] || { wip: false, err: null, src: null }
   }
 });
 
