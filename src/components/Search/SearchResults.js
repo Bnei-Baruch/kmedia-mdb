@@ -865,15 +865,15 @@ const SearchResults = ({ t }) => {
   };
 
   const getAgenticSummaryMessage = (results, resultQuery) => {
-    if (reasoningResult?.summary) {
-      return { header: t('search.agentic.summary'), content: reasoningResult.summary };
-    }
-
     if (reasoningResult?.no_results) {
       return {
         header : t('search.agentic.summaryFallback.title'),
         content: t('search.agentic.summaryFallback.noResults', { query: resultQuery })
       };
+    }
+
+    if (reasoningResult?.summary) {
+      return { header: t('search.agentic.summary'), content: reasoningResult.summary };
     }
 
     if (
