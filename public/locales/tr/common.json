@@ -303,6 +303,18 @@
     "agentic": {
       "warningTitle": "AI tarafından oluşturulan açıklamalar ve etiketler",
       "warning": "Bu arama sayfasındaki açıklamalar ve etiketler AI tarafından oluşturulmuş olabilir ve hata veya yanlışlık içerebilir.",
+      "autocompleteAsk": "Yapay zekaya sor: \"{{query}}\"",
+      "autocompleteDescription": "Yalnızca anahtar kelimelere göre değil, anlama göre arayın",
+      "advancedThinking": "Gelişmiş düşünme",
+      "searchDeeper": "Daha derin bir arama yap",
+      "searchDeeperHint": "Aynı isteği daha derin aramak için buraya tıklayın.",
+      "backToRegular": "Normal aramaya dön",
+      "nudge": {
+        "title": "Yapay zeka aramanızı iyileştirsin",
+        "message": "Yapay zeka modu tüm arşivde arama yapar ve “{{query}}” için en ilgili materyalleri bir araya getirir.",
+        "button": "Yapay zeka moduna sor",
+        "dismiss": "Kapat"
+      },
       "summary": "AI özeti",
       "rapidResultsLive": {
         "title": "Geçici sonuçlar",

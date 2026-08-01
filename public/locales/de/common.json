@@ -300,6 +300,18 @@
     "agentic": {
       "warningTitle": "AI-generierte Beschreibungen und Labels",
       "warning": "Beschreibungen und Labels auf dieser Suchseite können von AI generiert sein und Fehler oder Ungenauigkeiten enthalten.",
+      "autocompleteAsk": "KI fragen: \"{{query}}\"",
+      "autocompleteDescription": "Suchen Sie nach Bedeutung, nicht nur nach Schlüsselwörtern",
+      "advancedThinking": "Erweitertes Denken",
+      "searchDeeper": "Führen Sie eine tiefere Suche durch",
+      "searchDeeperHint": "Hier klicken, um dieselbe Anfrage gründlicher zu durchsuchen.",
+      "backToRegular": "Zurück zur regulären Suche",
+      "nudge": {
+        "title": "Lassen Sie KI Ihre Suche verbessern",
+        "message": "Der KI-Modus durchsucht das gesamte Archiv und stellt die relevantesten Inhalte zu „{{query}}“ zusammen.",
+        "button": "KI-Modus fragen",
+        "dismiss": "Schließen"
+      },
       "summary": "AI-Zusammenfassung",
       "rapidResultsLive": {
         "title": "Vorläufige Ergebnisse",

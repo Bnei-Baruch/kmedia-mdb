@@ -10,7 +10,7 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
-import { actions } from '../../redux/modules/search';
+import { actions, SEARCH_TYPES } from '../../redux/modules/search';
 import {
   searchGetAutocompleteWipSelector,
   searchGetQuerySelector,
@@ -39,12 +39,23 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const agenticQuery = (query || '').trim();
+  const agenticResult = agenticQuery ? makeResult(uiLang, {
+    key          : `agentic_${agenticQuery}`,
+    title        : t('search.agentic.autocompleteAsk', { query: agenticQuery }),
+    description  : t('search.agentic.autocompleteDescription'),
+    agenticQuery
+  }) : null;
+  const displayedAutocompleteResults = agenticResult
+    ? [agenticResult, ...autocompleteResults]
+    : autocompleteResults;
 
   useEffect(() => {
     if (suggestions) {
       const helper = new SuggestionsHelper(suggestions);
       setAutocompleteId(helper.autocompleteId);
-      setAutocompleteResults(helper.getSuggestions().map(s => (makeResult(uiLang, { key: s, title: s }))));
+      const suggestionResults = helper.getSuggestions().map(s => (makeResult(uiLang, { key: s, title: s })));
+      setAutocompleteResults(suggestionResults);
     } else {
       setAutocompleteResults([]);
       setAutocompleteId('');
@@ -83,14 +94,48 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleResultSelect = (e, data) => {
-    const { title } = data.result;
-    chronicles.autocompleteSelected(title, autocompleteId);
-    dispatch(actions.updateQuery({ query: title, autocomplete: false }));
+    const { title, agenticQuery } = data.result;
+    const isAgenticResult = !!agenticResult && (
+      agenticQuery === agenticResult.agenticQuery || title === agenticResult.title
+    );
+    const selectedQuery = isAgenticResult ? agenticResult.agenticQuery : title;
+    chronicles.autocompleteSelected(selectedQuery, autocompleteId);
+    dispatch(actions.updateQuery({ query: selectedQuery, autocomplete: false }));
+    if (isAgenticResult) {
+      dispatch(actions.setSearchType(SEARCH_TYPES.AGENTIC_RAPID));
+      dispatch(actions.search());
+      return;
+    }
+
     doSearch();
   };
 
   const handleFromInputChange = value => {
     navigate(`/${uiLang}/simple-mode?date=${moment(value).format('YYYY-MM-DD')}`);
+  };
+
+  const renderAutocompleteResult = result => {
+    if (result.agenticQuery) {
+      return (
+        <div className="search-omnibox__agentic-row">
+          <span className="search-omnibox__agentic-sparkle" aria-hidden="true">&#10022;</span>
+          <div className="search-omnibox__result-copy">
+            <div className="title">{result.title}</div>
+            <div className="description">{result.description}</div>
+          </div>
+          <Icon name="arrow right" className="search-omnibox__agentic-arrow" />
+        </div>
+      );
+    }
+
+    return (
+      <div className="content">
+        <div className="search-omnibox__result-copy">
+          <div className="title">{result.title}</div>
+          {result.description && <div className="description">{result.description}</div>}
+        </div>
+      </div>
+    );
   };
 
   const renderInput = () => isHomePage ?
@@ -131,13 +176,14 @@ const OmniBox = ({ isHomePage = false, t }) => {
     fluid
     className="search-omnibox"
     size="small"
-    results={autocompleteResults}
-    open={userInteracted && inputFocused && !!autocompleteResults.length}
+    results={displayedAutocompleteResults}
+    open={userInteracted && inputFocused && !!displayedAutocompleteResults.length}
     value={query}
     input={renderInput()}
     icon={<Icon link name="search" onClick={doSearch}/>}
     showNoResults={false}
     loading={wip}
+    resultRenderer={renderAutocompleteResult}
     onResultSelect={handleResultSelect}
   />;
 };

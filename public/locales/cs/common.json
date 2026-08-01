@@ -303,6 +303,18 @@
     "agentic": {
       "warningTitle": "Popisy a štítky generované AI",
       "warning": "Popisy a štítky na této stránce vyhledávání mohou být generované AI a mohou obsahovat chyby nebo nepřesnosti.",
+      "autocompleteAsk": "Zeptat se AI: \"{{query}}\"",
+      "autocompleteDescription": "Hledejte podle významu, nejen podle klíčových slov",
+      "advancedThinking": "Pokročilé přemýšlení",
+      "searchDeeper": "Proveďte podrobnější hledání",
+      "searchDeeperHint": "Kliknutím vyhledejte stejný dotaz podrobněji.",
+      "backToRegular": "Zpět na běžné vyhledávání",
+      "nudge": {
+        "title": "Nechte AI vylepšit vaše vyhledávání",
+        "message": "Režim AI prohledá celý archiv a spojí nejrelevantnější materiály pro „{{query}}“.",
+        "button": "Zeptat se režimu AI",
+        "dismiss": "Zavřít"
+      },
       "summary": "Shrnutí AI",
       "rapidResultsLive": {
         "title": "Předběžné výsledky",

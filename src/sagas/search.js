@@ -22,6 +22,7 @@ import {
   searchGetPrevQuerySelector,
   searchGetQuerySelector,
   searchGetQueryResultSelector,
+  searchGetReasoningPreviousSearchesSelector,
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
@@ -43,25 +44,15 @@ const reasoningStatusFailed = status => !!status && (status.state === 'failed' |
 const reasoningStatusCanceled = status => !!status && (status.state === 'canceled' || status.phase === 'canceled');
 const reasoningStatusTerminal = status => reasoningStatusCompleted(status) || reasoningStatusFailed(status) || reasoningStatusCanceled(status);
 const reasoningSearchIsRapid = searchType => searchType === SEARCH_TYPES.AGENTIC_RAPID;
-const reasoningStatusForType = (state, searchType) => state.search.reasoningByType?.[searchType]?.status;
-const reasoningResultForType = (state, searchType) => state.search.reasoningByType?.[searchType]?.result;
-const reasoningWipForType = (state, searchType) => !!state.search.reasoningByType?.[searchType]?.wip;
+const sharedReasoningState = state => state.search.reasoningByType?.[SEARCH_TYPES.AGENTIC];
+const sharedReasoningStatus = state => sharedReasoningState(state)?.status;
+const sharedReasoningResult = state => sharedReasoningState(state)?.result;
+const sharedReasoningWip = state => !!sharedReasoningState(state)?.wip;
 const isConnectionRefused = err => err?.code === 'ERR_CONNECTION_REFUSED' || err?.message?.includes('ERR_CONNECTION_REFUSED');
 const responseStatus = value => value?.http_status || value?.status || value?.response?.status;
 const isNotFound = value => responseStatus(value) === 404;
 const combineFollowupQuery = (originalQuery, followupQuery) => [originalQuery, followupQuery].filter(Boolean).join('; ');
 const sameSearchQuery = (a, b) => (a || '').trim() === (b || '').trim();
-const arrayEquals = (a, b) => (
-  Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value, index) => value === b[index])
-);
-const sameRegularSearchRequest = (a, b) => !!a && !!b
-  && a.q === b.q
-  && a.sortBy === b.sortBy
-  && a.ui_language === b.ui_language
-  && arrayEquals(a.content_languages, b.content_languages)
-  && a.deb === b.deb
-  && a.pageNo === b.pageNo
-  && a.pageSize === b.pageSize;
 
 const isSearchPath = pathname => /(^|\/)search\/?$/.test(pathname || '');
 
@@ -121,13 +112,13 @@ function* fetchReasoningStatus(sessionId) {
   }
 }
 
-function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb, isRapid) {
+export function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb, originalIsRapid, followupIsRapid) {
   let cacheData = null;
   try {
     const cacheResponse = yield call(Api.reasoningSearchCache, {
       q          : originalQuery,
       ui_language: uiLang,
-      is_rapid   : isRapid
+      is_rapid   : originalIsRapid
     });
     cacheData = cacheResponse?.data;
   } catch (_) {
@@ -137,13 +128,13 @@ function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb, isRa
   if (cacheData?.cache_hit && cacheData.session_id) {
     return {
       keepResult: true,
-      resultQuery: originalQuery,
+      resultQuery: followupQuery,
       request   : {
         q          : followupQuery,
         session_id : cacheData.session_id,
         ui_language: uiLang,
         deb        : isDebEnabled(deb),
-        is_rapid   : isRapid
+        is_rapid   : followupIsRapid
       }
     };
   }
@@ -157,7 +148,7 @@ function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, deb, isRa
       q          : fallbackQuery,
       ui_language: uiLang,
       deb        : isDebEnabled(deb),
-      is_rapid   : isRapid
+      is_rapid   : followupIsRapid
     }
   };
 }
@@ -167,7 +158,7 @@ function* pollReasoningStatus(sessionId, searchType) {
   let finalStatus = null;
 
   while (polling) {
-    const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+    const currentStatus = yield select(sharedReasoningStatus);
     if (!isAgenticSearchType(searchType) || currentStatus?.session_id !== sessionId) {
       return null;
     }
@@ -186,7 +177,7 @@ function* pollReasoningStatus(sessionId, searchType) {
 
     const status = yield call(fetchReasoningStatus, sessionId);
     if (status) {
-      const nextStatus = yield select(state => reasoningStatusForType(state, searchType));
+      const nextStatus = yield select(sharedReasoningStatus);
       if (nextStatus?.session_id !== sessionId) {
         return null;
       }
@@ -214,7 +205,7 @@ function* pollReasoningStatus(sessionId, searchType) {
 }
 
 function* fetchReasoningResult(sessionId, query, searchType) {
-  const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+  const currentStatus = yield select(sharedReasoningStatus);
   if (!isAgenticSearchType(searchType) || currentStatus?.session_id !== sessionId) {
     return;
   }
@@ -227,7 +218,7 @@ function* fetchReasoningResult(sessionId, query, searchType) {
     );
   }
 
-  const nextStatus = yield select(state => reasoningStatusForType(state, searchType));
+  const nextStatus = yield select(sharedReasoningStatus);
   if (nextStatus?.session_id !== sessionId) {
     return;
   }
@@ -245,8 +236,8 @@ function* finishReasoningSession(sessionId, query, searchType) {
     return;
   }
 
-  const currentResult = yield select(state => reasoningResultForType(state, searchType));
-  const wip = yield select(state => reasoningWipForType(state, searchType));
+  const currentResult = yield select(sharedReasoningResult);
+  const wip = yield select(sharedReasoningWip);
   if (!wip && currentResult?.session_id === sessionId) {
     return;
   }
@@ -262,7 +253,7 @@ function* runReasoningSession(sessionId, query, searchType) {
   try {
     yield call(finishReasoningSession, sessionId, query, searchType);
   } catch (err) {
-    const currentStatus = yield select(state => reasoningStatusForType(state, searchType));
+    const currentStatus = yield select(sharedReasoningStatus);
     if (isAgenticSearchType(searchType) && currentStatus?.session_id === sessionId) {
       yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err)), searchType }));
       yield put(actions.searchFailure({ error: err, searchType }));
@@ -294,7 +285,7 @@ function* cancelReasoningSearch() {
   }
 }
 
-function* finishReasoningSearchNow() {
+export function* finishReasoningSearchNow() {
   const searchType = yield select(searchGetSearchTypeSelector);
   const status    = yield select(searchGetReasoningStatusSelector);
   const sessionId = status?.session_id;
@@ -312,7 +303,10 @@ function* finishReasoningSearchNow() {
     }
 
     const reasoningResult = yield select(searchGetReasoningResultSelector);
-    const query = reasoningResult?.query || (yield select(searchGetQuerySelector));
+    const query = status.query
+      || reasoningResult?.display_query
+      || reasoningResult?.query
+      || (yield select(searchGetQuerySelector));
     yield call(fetchReasoningResult, sessionId, query, searchType);
   } catch (err) {
     yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err), responseStatus(err)), searchType }));
@@ -370,13 +364,16 @@ export function* search(action) {
     const uiLang     = yield select(settingsGetUILangSelector);
     const isFollowup = action && action.type === types['search/reasoningFollowup'];
     const isExplicitSearch = action && action.type === types['search/search'] && !action.payload?.hydrated;
-    const isSearchTypeChange = action && action.type === types['search/setSearchType'];
     const urlQuery   = yield* getQuery();
 
     // Redirect from home page.
     if (action && action.type === types['search/search'] && !action.payload) {
       yield put(push({ pathname: 'search' }));
-      yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
+      yield* urlUpdateQuery(q => Object.assign(q, {
+        q: query,
+        search_type: isAgenticSearchType(searchType) ? searchType : null,
+        session_id : null
+      }));
     }
 
     if (isAgenticSearchType(searchType)) {
@@ -387,11 +384,16 @@ export function* search(action) {
       }
 
       const previousReasoningResult = yield select(searchGetReasoningResultSelector);
+      const previousReasoningSearches = yield select(searchGetReasoningPreviousSearchesSelector);
       const previousReasoningStatus = yield select(searchGetReasoningStatusSelector);
       const sessionIdFromPrevious   = previousReasoningResult?.session_id;
       const runningSessionId        = !reasoningStatusTerminal(previousReasoningStatus) ? previousReasoningStatus?.session_id : null;
       const restoreSessionId        = !isExplicitSearch && !isFollowup && urlQuery.search_type === searchType ? urlQuery.session_id : null;
-      const originalQuery           = previousReasoningResult?.query || query?.trim();
+      const originalReasoningResult = previousReasoningSearches?.[0] || previousReasoningResult;
+      const originalQuery           = originalReasoningResult?.query || query?.trim();
+      const originalIsRapid         = typeof originalReasoningResult?.is_rapid === 'boolean'
+        ? originalReasoningResult.is_rapid
+        : reasoningSearchIsRapid(searchType);
       const q                       = isFollowup ? action.payload?.query?.trim() : query?.trim();
       let request                   = {
         q,
@@ -401,19 +403,9 @@ export function* search(action) {
         deb        : isDebEnabled(deb),
         is_rapid   : reasoningSearchIsRapid(searchType)
       };
-      let resultQuery               = isFollowup ? originalQuery : query;
+      let resultQuery               = isFollowup ? q : query;
       if (!q) {
         yield put(actions.searchFailure(null));
-        return;
-      }
-
-      if (
-        isSearchTypeChange
-        && (
-          sameSearchQuery(previousReasoningResult?.query, query)
-          || sameSearchQuery(previousReasoningStatus?.query, query)
-        )
-      ) {
         return;
       }
 
@@ -508,7 +500,15 @@ export function* search(action) {
         }
 
         // Follow-up sessions can expire. Recover the original search from cache, or start over with a combined query.
-        const recovery = yield call(recoverFollowupRequest, originalQuery, q, uiLang, deb, reasoningSearchIsRapid(searchType));
+        const recovery = yield call(
+          recoverFollowupRequest,
+          originalQuery,
+          q,
+          uiLang,
+          deb,
+          originalIsRapid,
+          reasoningSearchIsRapid(searchType)
+        );
         const { keepResult, request: recoveryRequest, resultQuery: recoveryResultQuery } = recovery;
         request = recoveryRequest;
         resultQuery = recoveryResultQuery;
@@ -591,12 +591,6 @@ export function* search(action) {
       pageNo,
       pageSize: 20
     };
-
-    const queryResult = yield select(searchGetQueryResultSelector);
-    const previousSearchRequest = yield select(state => state.search.searchRequest);
-    if (isSearchTypeChange && queryResult?.search_result && sameRegularSearchRequest(previousSearchRequest, request)) {
-      return;
-    }
 
     yield put(actions.setWip());
     const { data } = yield call(Api.search, request);
@@ -732,9 +726,9 @@ export function* hydrateUrl(action) {
       return;
     }
 
-    const result = yield select(state => reasoningResultForType(state, searchType));
-    const status = yield select(state => reasoningStatusForType(state, searchType));
-    const wip = yield select(state => reasoningWipForType(state, searchType));
+    const result = yield select(sharedReasoningResult);
+    const status = yield select(sharedReasoningStatus);
+    const wip = yield select(sharedReasoningWip);
     if (sameSearchQuery(result?.query, q) || (wip && sameSearchQuery(status?.query, q))) {
       return;
     }
@@ -775,7 +769,7 @@ function* updateSearchTypeInQuery(action) {
   const searchType = isAgenticSearchType(action.payload) ? action.payload : null;
   let status = null;
   if (searchType) {
-    status = yield select(state => reasoningStatusForType(state, searchType));
+    status = yield select(sharedReasoningStatus);
   }
 
   yield* urlUpdateQuery(query => Object.assign(query, {
@@ -799,7 +793,6 @@ function* watchSearch() {
     settingsTypes['settings/setContentLanguages'],
     types['search/search'],
     types['search/reasoningFollowup'],
-    types['search/setSearchType'],
     types['search/setDeb'],
     types['search/setPage'],
     types['search/setSortBy']

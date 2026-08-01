@@ -13,7 +13,7 @@ import 'moment/locale/de';
 import 'moment/locale/tr';
 import 'moment/locale/cs';
 import React from 'react';
-import { hydrateRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -75,7 +75,13 @@ function hydrateApp(kcInfo) {
       </React.StrictMode>
     );
     const el        = document.getElementById('root');
-    hydrateRoot(el, component);
+    // Temp change to prevent hydration for local run.
+    if (el.hasChildNodes()) {
+      hydrateRoot(el, component);
+    } else {
+      createRoot(el).render(component);
+    }
+
     // We ask for semi-quasi static data here since
     // we strip it from SSR to save initial network bandwidth
     console.log('hydrateApp fetchSQData');

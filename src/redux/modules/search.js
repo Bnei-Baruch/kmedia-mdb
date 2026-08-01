@@ -14,31 +14,28 @@ export const isAgenticSearchType = searchType => (
 
 const createReasoningSearchState = () => ({
   result: null,
-  previousResults: [],
+  previousSearches: [],
   status: null,
   requestKind: null,
   wip: false
 });
 
-const getReasoningSearchType = searchType => (
-  isAgenticSearchType(searchType) ? searchType : SEARCH_TYPES.AGENTIC
-);
+const REASONING_STATE_KEY = SEARCH_TYPES.AGENTIC;
 
 const getReasoningSearchState = state => (
-  state.reasoningByType?.[getReasoningSearchType(state.searchType)] || createReasoningSearchState()
+  state.reasoningByType?.[REASONING_STATE_KEY] || createReasoningSearchState()
 );
 
-const getReasoningSearchStateForPayload = (state, payload) => {
-  const searchType = getReasoningSearchType(payload?.searchType || state.searchType);
+const getReasoningSearchStateForUpdate = state => {
   if (!state.reasoningByType) {
     state.reasoningByType = {};
   }
 
-  if (!state.reasoningByType[searchType]) {
-    state.reasoningByType[searchType] = createReasoningSearchState();
+  if (!state.reasoningByType[REASONING_STATE_KEY]) {
+    state.reasoningByType[REASONING_STATE_KEY] = createReasoningSearchState();
   }
 
-  return state.reasoningByType[searchType];
+  return state.reasoningByType[REASONING_STATE_KEY];
 };
 
 const getSearchFailurePayload = payload => (
@@ -46,19 +43,6 @@ const getSearchFailurePayload = payload => (
     ? payload
     : { error: payload }
 );
-
-const dedupePreviousAgenticResults = results => {
-  const seen = new Set();
-  return (Array.isArray(results) ? results : []).filter(result => {
-    const mdbUid = result?.mdb_uid;
-    if (!mdbUid || seen.has(mdbUid)) {
-      return false;
-    }
-
-    seen.add(mdbUid);
-    return true;
-  });
-};
 
 const initialState = {
   suggestions: {},
@@ -68,8 +52,7 @@ const initialState = {
   queryResult: {},
   searchRequest: null,
   reasoningByType: {
-    [SEARCH_TYPES.AGENTIC]: createReasoningSearchState(),
-    [SEARCH_TYPES.AGENTIC_RAPID]: createReasoningSearchState()
+    [SEARCH_TYPES.AGENTIC]: createReasoningSearchState()
   },
   searchType: SEARCH_TYPES.REGULAR,
   pageNo: 1,
@@ -98,12 +81,12 @@ const searchSlice = createSlice({
     },
     search: () => void ({}),
     reasoningSearchStart: (state, { payload } = {}) => {
-      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+      const reasoningState = getReasoningSearchStateForUpdate(state);
       reasoningState.wip   = true;
       state.error          = null;
       if (!payload?.keepResult) {
-        reasoningState.result          = null;
-        reasoningState.previousResults = [];
+        reasoningState.result           = null;
+        reasoningState.previousSearches = [];
       }
 
       reasoningState.requestKind = payload?.requestKind || 'initial';
@@ -116,11 +99,10 @@ const searchSlice = createSlice({
       };
     },
     reasoningFollowup: () => void ({}),
-    reasoningCancel: (state, { payload } = {}) => {
-      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+    reasoningCancel: state => {
+      const reasoningState = getReasoningSearchStateForUpdate(state);
       reasoningState.wip         = false;
       state.error                = null;
-      reasoningState.requestKind = null;
       reasoningState.status = {
         ...reasoningState.status,
         session_id: reasoningState.status?.session_id,
@@ -140,23 +122,20 @@ const searchSlice = createSlice({
       state.pageNo           = payload.pageNo;
     },
     reasoningSearchSuccess: (state, { payload }) => {
-      const reasoningState = getReasoningSearchStateForPayload(state, payload);
-      const nextResults = Array.isArray(payload.searchResults?.results) ? payload.searchResults.results : [];
-      if (reasoningState.requestKind === 'followup') {
-        const nextResultIds = new Set(nextResults.map(result => result?.mdb_uid).filter(Boolean));
-        const currentResults = Array.isArray(reasoningState.result?.results) ? reasoningState.result.results : [];
-
-        reasoningState.previousResults = dedupePreviousAgenticResults([
-          ...currentResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid)),
-          ...reasoningState.previousResults.filter(result => result?.mdb_uid && !nextResultIds.has(result.mdb_uid))
-        ]);
-      } else {
-        reasoningState.previousResults = [];
+      const reasoningState = getReasoningSearchStateForUpdate(state);
+      if (reasoningState.requestKind === 'followup' && reasoningState.result) {
+        reasoningState.previousSearches.push(reasoningState.result);
+      } else if (reasoningState.requestKind !== 'followup') {
+        reasoningState.previousSearches = [];
       }
 
       reasoningState.wip         = false;
       state.error                = null;
-      reasoningState.result      = payload.searchResults;
+      reasoningState.result      = {
+        ...payload.searchResults,
+        display_query: payload.query || payload.searchResults.query,
+        is_rapid: payload.searchType === SEARCH_TYPES.AGENTIC_RAPID
+      };
       reasoningState.requestKind = null;
       reasoningState.status = {
         session_id: payload.searchResults.session_id || reasoningState.status?.session_id,
@@ -170,25 +149,24 @@ const searchSlice = createSlice({
     },
     reasoningStatusUpdate: (state, { payload }) => {
       const { searchType, ...status } = payload || {};
-      const reasoningState = getReasoningSearchStateForPayload(state, payload);
+      const reasoningState = getReasoningSearchStateForUpdate(state);
       reasoningState.status = {
         ...status,
         query: status.query || reasoningState.status?.query
       };
       if (status?.state === 'canceled' || status?.phase === 'canceled') {
         reasoningState.wip = false;
-        reasoningState.requestKind = null;
       }
     },
     searchFailure: (state, { payload }) => {
       const failure = getSearchFailurePayload(payload);
       if (isAgenticSearchType(failure.searchType)) {
-        const reasoningState = getReasoningSearchStateForPayload(state, failure);
+        const reasoningState = getReasoningSearchStateForUpdate(state);
         reasoningState.wip = false;
-        reasoningState.requestKind = null;
         if (state.searchType === failure.searchType) {
           state.error = null;
         }
+
         return;
       }
 
@@ -238,7 +216,8 @@ const searchSlice = createSlice({
     getQuery           : state => state.q,
     getPrevQuery       : state => state.prevQuery,
     getQueryResult     : state => state.queryResult,
-    getReasoningPreviousResults: state => getReasoningSearchState(state).previousResults,
+    getReasoningPreviousSearches: state => getReasoningSearchState(state).previousSearches,
+    getReasoningRequestKind: state => getReasoningSearchState(state).requestKind,
     getReasoningResult : state => getReasoningSearchState(state).result,
     getReasoningStatus : state => getReasoningSearchState(state).status,
     getSearchType      : state => state.searchType,

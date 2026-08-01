@@ -301,6 +301,18 @@
     "agentic": {
       "warningTitle": "Descrizioni ed etichette generate da AI",
       "warning": "Le descrizioni e le etichette in questa pagina di ricerca possono essere generate da AI e contenere errori o imprecisioni.",
+      "autocompleteAsk": "Chiedi all'AI: \"{{query}}\"",
+      "autocompleteDescription": "Cerca per significato, non solo per parole chiave",
+      "advancedThinking": "Ragionamento avanzato",
+      "searchDeeper": "Esegui una ricerca più approfondita",
+      "searchDeeperHint": "Fai clic qui per cercare la stessa richiesta più a fondo.",
+      "backToRegular": "Torna alla ricerca normale",
+      "nudge": {
+        "title": "Lascia che l'AI migliori la tua ricerca",
+        "message": "La modalità AI cerca in tutto l'archivio e riunisce il materiale più rilevante per «{{query}}».",
+        "button": "Chiedi alla modalità AI",
+        "dismiss": "Chiudi"
+      },
       "summary": "Sintesi AI",
       "rapidResultsLive": {
         "title": "Risultati preliminari",

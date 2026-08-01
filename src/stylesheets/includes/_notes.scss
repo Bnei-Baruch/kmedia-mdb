@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: end;
+  justify-content: flex-end;
 
   .rtl & {
     padding-left: 5px;

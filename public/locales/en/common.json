@@ -304,6 +304,18 @@
     "agentic": {
       "warningTitle": "AI-generated descriptions and labels",
       "warning": "Descriptions and labels on this search page may be AI-generated and may contain mistakes or inaccuracies.",
+      "autocompleteAsk": "Ask AI: \"{{query}}\"",
+      "autocompleteDescription": "Search by meaning, not just keywords",
+      "advancedThinking": "Advanced thinking",
+      "searchDeeper": "Perform a deeper search",
+      "searchDeeperHint": "Click here to search the same request more deeply.",
+      "backToRegular": "Back to regular search",
+      "nudge": {
+        "title": "Let AI improve your search",
+        "message": "AI Mode searches across the archive and brings together the most relevant material for “{{query}}”.",
+        "button": "Ask AI Mode",
+        "dismiss": "Dismiss"
+      },
       "summary": "AI summary",
       "rapidResultsLive": {
         "title": "Preliminary results",

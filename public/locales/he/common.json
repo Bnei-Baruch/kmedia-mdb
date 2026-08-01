@@ -303,6 +303,18 @@
     "agentic": {
       "warningTitle": "תיאורים ותוויות שנוצרו על ידי AI",
       "warning": "התיאורים והתוויות בדף החיפוש הזה עשויים להיווצר על ידי AI ועלולים להכיל טעויות או אי-דיוקים.",
+      "autocompleteAsk": "שאלו את ה-AI: \"{{query}}\"",
+      "autocompleteDescription": "חפשו לפי משמעות, לא רק לפי מילות מפתח",
+      "advancedThinking": "חשיבה מתקדמת",
+      "searchDeeper": "תבצע חיפוש מעמיק",
+      "searchDeeperHint": "לחצו כאן כדי לחפש את אותה הבקשה באופן מעמיק יותר.",
+      "backToRegular": "חזרה לחיפוש רגיל",
+      "nudge": {
+        "title": "תנו ל-AI לשפר את החיפוש שלכם",
+        "message": "מצב AI מחפש ברחבי הארכיון ומרכז את החומרים הרלוונטיים ביותר עבור ״{{query}}״.",
+        "button": "שאלו את מצב AI",
+        "dismiss": "סגירה"
+      },
       "summary": "סיכום AI",
       "rapidResultsLive": {
         "title": "תוצאות ראשוניות",

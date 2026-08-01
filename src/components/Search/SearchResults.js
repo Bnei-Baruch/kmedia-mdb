@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Button, Card, Container, Divider, Feed, Header, Icon, Input, Label, Message } from 'semantic-ui-react';
+import { Button, Card, Checkbox, Container, Divider, Feed, Header, Icon, Label, Message } from 'semantic-ui-react';
 
 import {
   CT_BLOG_POST,
@@ -65,7 +65,8 @@ import {
   settingsGetPageSizeSelector,
   settingsGetUILangSelector,
   searchGetQueryResultSelector,
-  searchGetReasoningPreviousResultsSelector,
+  searchGetReasoningPreviousSearchesSelector,
+  searchGetReasoningRequestKindSelector,
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
@@ -181,7 +182,8 @@ const cMapFromState = (state, results) => (
 
 const SearchResults = ({ t }) => {
   const queryResult   = useSelector(searchGetQueryResultSelector) || false;
-  const reasoningPreviousResults = useSelector(searchGetReasoningPreviousResultsSelector);
+  const reasoningPreviousSearches = useSelector(searchGetReasoningPreviousSearchesSelector);
+  const reasoningRequestKind = useSelector(searchGetReasoningRequestKindSelector);
   const reasoningResult = useSelector(searchGetReasoningResultSelector);
   const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
   const searchType    = useSelector(searchGetSearchTypeSelector);
@@ -197,9 +199,10 @@ const SearchResults = ({ t }) => {
 
   const wip = useSelector(searchGetWipSelector);
   const err = useSelector(searchGetErrorSelector);
-  const storedAgenticResults = Array.isArray(reasoningResult?.results) ? reasoningResult.results : [];
+  const storedAgenticResults = React.useMemo(() => (
+    Array.isArray(reasoningResult?.results) ? reasoningResult.results : []
+  ), [reasoningResult]);
   const rapidAgenticResults  = Array.isArray(reasoningStatus?.rapid_results) ? reasoningStatus.rapid_results : [];
-  const storedPreviousAgenticResults = Array.isArray(reasoningPreviousResults) ? reasoningPreviousResults : [];
   const isShowingRapidAgenticResults = (
     isRapidAgenticSearch
     && reasoningStatus?.rapid_results_available
@@ -208,20 +211,9 @@ const SearchResults = ({ t }) => {
 
   // Rapid search can stream provisional results from /status before the final /result snapshot is ready.
   const currentAgenticResults = isShowingRapidAgenticResults ? rapidAgenticResults : storedAgenticResults;
-  const currentAgenticResultIds = new Set(currentAgenticResults.map(result => result?.mdb_uid).filter(Boolean));
-  const previousAgenticResultsPool = isShowingRapidAgenticResults
-    ? [...storedAgenticResults, ...storedPreviousAgenticResults]
-    : storedPreviousAgenticResults;
-  const seenPreviousAgenticResultIds = new Set();
-  const visiblePreviousAgenticResults = previousAgenticResultsPool.filter(result => {
-    const mdbUid = result?.mdb_uid;
-    if (!mdbUid || currentAgenticResultIds.has(mdbUid) || seenPreviousAgenticResultIds.has(mdbUid)) {
-      return false;
-    }
-
-    seenPreviousAgenticResultIds.add(mdbUid);
-    return true;
-  });
+  const previousAgenticSearches = React.useMemo(() => (
+    Array.isArray(reasoningPreviousSearches) ? reasoningPreviousSearches : []
+  ), [reasoningPreviousSearches]);
 
   const pageNo   = useSelector(searchGetPageNoSelector);
   const pageSize = useSelector(settingsGetPageSizeSelector);
@@ -229,11 +221,15 @@ const SearchResults = ({ t }) => {
 
   const location = useLocation();
   const dispatch = useDispatch();
-  const agenticStatusRef = React.useRef(null);
+  const followupStatusRef = React.useRef(null);
+  const currentTurnRef = React.useRef(null);
+  const shouldScrollToCompletedFollowupRef = React.useRef(false);
+  const followupWasRunningRef = React.useRef(false);
   const [followupQuery, setFollowupQuery] = React.useState('');
-  const [followupStatusQuery, setFollowupStatusQuery] = React.useState('');
-  const [scrollToAgenticStatus, setScrollToAgenticStatus] = React.useState(false);
+  const [scrollToFollowupStatus, setScrollToFollowupStatus] = React.useState(false);
   const [blockedAgenticSearchType, setBlockedAgenticSearchType] = React.useState(null);
+  const [showAgenticNudge, setShowAgenticNudge] = React.useState(true);
+  const [isSearchDeeperHintVisible, setSearchDeeperHintVisible] = React.useState(true);
   const visibleSearchType = blockedAgenticSearchType || searchType;
   const shouldShowAgenticLoginPrompt = !canUseAgenticSearch && isAgenticSearchType(visibleSearchType);
 
@@ -248,11 +244,15 @@ const SearchResults = ({ t }) => {
       return [];
     }
 
-    return [...currentAgenticResults, ...visiblePreviousAgenticResults]
+    const previousResults = previousAgenticSearches.reduce((results, search) => (
+      results.concat(search?.results || [])
+    ), []);
+
+    return [...currentAgenticResults, ...storedAgenticResults, ...previousResults]
       .filter(isAgenticTweetResult)
       .map(result => result.mdb_uid)
       .filter((mdbUid, index, ids) => ids.indexOf(mdbUid) === index);
-  }, [currentAgenticResults, isAgenticSearch, visiblePreviousAgenticResults]);
+  }, [currentAgenticResults, isAgenticSearch, previousAgenticSearches, storedAgenticResults]);
   const agenticTweetsById = useSelector(state => agenticTweetIds.reduce((acc, mdbUid) => {
     const tweet = publicationsGetTwitterSelector(state, mdbUid);
     if (tweet) {
@@ -271,33 +271,49 @@ const SearchResults = ({ t }) => {
   }, [blockedAgenticSearchType, canUseAgenticSearch]);
 
   React.useEffect(() => {
-    if (!reasoningResult) {
-      setFollowupStatusQuery('');
-    }
-  }, [reasoningResult]);
-
-  React.useEffect(() => {
-    if (!isAgenticSearch || missingAgenticTweetIds.length === 0) {
+    if (!scrollToFollowupStatus || !wip || !followupStatusRef.current) {
       return;
     }
 
-    dispatch(publicationActions.fetchTweets('tweets_many', 1, { id: missingAgenticTweetIds }));
+    followupStatusRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setScrollToFollowupStatus(false);
+  }, [scrollToFollowupStatus, wip]);
+
+  React.useEffect(() => {
+    if (!shouldScrollToCompletedFollowupRef.current) {
+      return;
+    }
+
+    if (wip) {
+      followupWasRunningRef.current = true;
+      return;
+    }
+
+    if (!followupWasRunningRef.current) {
+      return;
+    }
+
+    if (reasoningStatus?.state === 'completed' && currentTurnRef.current) {
+      currentTurnRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    shouldScrollToCompletedFollowupRef.current = false;
+    followupWasRunningRef.current = false;
+  }, [reasoningResult, reasoningStatus?.state, wip]);
+
+  React.useEffect(() => {
+    if (!isAgenticSearch || !missingAgenticTweetIdsKey) {
+      return;
+    }
+
+    dispatch(publicationActions.fetchTweets('tweets_many', 1, { id: missingAgenticTweetIdsKey.split(',') }));
   }, [dispatch, isAgenticSearch, missingAgenticTweetIdsKey]);
-
-  React.useEffect(() => {
-    if (!scrollToAgenticStatus || !wip || !agenticStatusRef.current) {
-      return;
-    }
-
-    agenticStatusRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setScrollToAgenticStatus(false);
-  }, [scrollToAgenticStatus, wip]);
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
   };
 
-  const handleSearchTypeChange = nextSearchType => {
+  const handleSearchTypeChange = (nextSearchType, startSearch = false) => {
     if (isAgenticSearchType(nextSearchType) && !canUseAgenticSearch) {
       setBlockedAgenticSearchType(nextSearchType);
       return;
@@ -308,6 +324,41 @@ const SearchResults = ({ t }) => {
     if (nextSearchType !== searchType) {
       dispatch(actions.setSearchType(nextSearchType));
     }
+
+    if (startSearch) {
+      dispatch(actions.search());
+    }
+  };
+
+  const renderAgenticNudge = () => {
+    if (!showAgenticNudge) {
+      return null;
+    }
+
+    return (
+      <div className="agentic-search__nudge">
+        <span className="agentic-search__nudge-sparkle" aria-hidden="true">&#10022;</span>
+        <div className="agentic-search__nudge-copy">
+          <div className="agentic-search__nudge-title">{t('search.agentic.nudge.title')}</div>
+          <div className="agentic-search__nudge-message">{t('search.agentic.nudge.message', { query })}</div>
+        </div>
+        <Button
+          className="agentic-search__nudge-button"
+          onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC_RAPID, true)}
+        >
+          <span className="agentic-search__nudge-button-sparkle" aria-hidden="true">&#10022;</span>
+          {t('search.agentic.nudge.button')}
+        </Button>
+        <Button
+          basic
+          className="agentic-search__nudge-dismiss"
+          icon="close"
+          aria-label={t('search.agentic.nudge.dismiss')}
+          title={t('search.agentic.nudge.dismiss')}
+          onClick={() => setShowAgenticNudge(false)}
+        />
+      </div>
+    );
   };
 
   const renderHelmet = section => {
@@ -326,26 +377,16 @@ const SearchResults = ({ t }) => {
 
   const renderSearchTypeSwitch = () => (
     <Container className="padded" textAlign="right">
-      <Button.Group size="small">
-        <Button
-          active={visibleSearchType === SEARCH_TYPES.REGULAR}
-          onClick={() => handleSearchTypeChange(SEARCH_TYPES.REGULAR)}
-        >
-          {t('search.types.regular')}
-        </Button>
-        <Button
-          active={visibleSearchType === SEARCH_TYPES.AGENTIC}
-          onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC)}
-        >
-          {t('search.types.agentic')}
-        </Button>
-        <Button
-          active={visibleSearchType === SEARCH_TYPES.AGENTIC_RAPID}
-          onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC_RAPID)}
-        >
-          {t('search.types.agenticRapid')}
-        </Button>
-      </Button.Group>
+      {isAgenticSearchType(visibleSearchType) ? (
+        <Button basic size="small" icon="arrow left" content={t('search.agentic.backToRegular')} onClick={() => handleSearchTypeChange(SEARCH_TYPES.REGULAR)} />
+      ) : (
+        <Button.Group size="small">
+          <Button active>{t('search.types.regular')}</Button>
+          <Button onClick={() => handleSearchTypeChange(SEARCH_TYPES.AGENTIC_RAPID, true)}>
+            {t('search.types.agentic')}
+          </Button>
+        </Button.Group>
+      )}
       <Label basic color="blue" className="margin-left-8 margin-right-8">
         {t('search.types.beta')}
       </Label>
@@ -449,7 +490,7 @@ const SearchResults = ({ t }) => {
     return lines;
   };
 
-  const renderAgenticStatus = () => {
+  const renderAgenticStatus = (isFollowup = false) => {
     const hasErrorStatus = reasoningStatus?.phase === 'error' || reasoningStatus?.state === 'failed';
     const hasCanceledStatus = reasoningStatus?.phase === 'canceled' || reasoningStatus?.state === 'canceled';
     const hasEmptyErrorStatus = !wip && !hasCanceledStatus && !!reasoningResult && !reasoningResult?.no_results && currentAgenticResults.length === 0;
@@ -465,8 +506,11 @@ const SearchResults = ({ t }) => {
     }
 
     return (
-      <div ref={agenticStatusRef} className="agentic-search__status-anchor">
-        <Container className="padded">
+      <div
+        ref={isFollowup ? followupStatusRef : null}
+        className={`agentic-search__status-anchor${isFollowup ? ' agentic-search__status-anchor--followup' : ''}`}
+      >
+        <Container fluid={isFollowup} className={isFollowup ? '' : 'padded'}>
           <Message warning={hasTemporaryErrorStatus} info={!hasTemporaryErrorStatus} icon className="agentic-search__status-message">
             <div className="agentic-search__status-visual" aria-hidden="true">
               {hasTemporaryErrorStatus ? (
@@ -494,7 +538,9 @@ const SearchResults = ({ t }) => {
                         size="mini"
                         icon="redo"
                         content={t('buttons.retry')}
-                        onClick={() => dispatch(actions.search())}
+                        onClick={() => dispatch(isFollowup && reasoningStatus?.query
+                          ? actions.reasoningFollowup({ query: reasoningStatus.query })
+                          : actions.search())}
                       />
                     )}
                     {canFinishNow && (
@@ -533,11 +579,11 @@ const SearchResults = ({ t }) => {
               {statusMessage && (
                 <p className="agentic-search__status-error">{statusMessage}</p>
               )}
-              {followupStatusQuery && (
+              {isFollowup && reasoningStatus?.query && (
                 <p className="agentic-search__status-query">
                   <span className="agentic-search__status-query-label">{t('search.agentic.followupTitle')}:</span>
                   {' '}
-                  {followupStatusQuery}
+                  {reasoningStatus.query}
                 </p>
               )}
             </Message.Content>
@@ -714,6 +760,7 @@ const SearchResults = ({ t }) => {
           if (text) {
             acc.push({ field: '', text });
           }
+
           return acc;
         }
 
@@ -815,9 +862,20 @@ const SearchResults = ({ t }) => {
     }
 
     dispatch(actions.reasoningFollowup({ query }));
-    setFollowupStatusQuery(query);
-    setScrollToAgenticStatus(true);
     setFollowupQuery('');
+    shouldScrollToCompletedFollowupRef.current = true;
+  };
+
+  const handleDeeperSearch = () => {
+    const deeperQuery = t('search.agentic.searchDeeper').trim();
+    if (!deeperQuery || wip) {
+      return;
+    }
+
+    dispatch(actions.setSearchType(SEARCH_TYPES.AGENTIC));
+    dispatch(actions.reasoningFollowup({ query: deeperQuery }));
+    setScrollToFollowupStatus(true);
+    shouldScrollToCompletedFollowupRef.current = true;
   };
 
   const renderAgenticFollowup = () => {
@@ -827,61 +885,100 @@ const SearchResults = ({ t }) => {
 
     const remaining   = reasoningResult?.followups_remaining || 0;
     const canFollowup = !!reasoningResult?.session_id && remaining > 0;
+    const canSearchDeeper = canFollowup && reasoningResult?.is_rapid;
+    const showSearchDeeperHint = isSearchDeeperHintVisible && canSearchDeeper && previousAgenticSearches.length === 0;
 
     return (
-      <Container className="padded">
-        <Header as="h4" content={t('search.agentic.followupTitle')} />
+      <div className="agentic-search__followup" onClick={() => setSearchDeeperHintVisible(false)}>
         {canFollowup ? (
           <>
-            <div className="description margin-bottom-8">
-              {t('search.agentic.followupsRemaining', { count: remaining })}
-            </div>
-            <Input
-              fluid
-              value={followupQuery}
-              placeholder={t('search.agentic.followupPlaceholder')}
-              onChange={(e, data) => setFollowupQuery(data.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  handleReasoningFollowup();
-                }
-              }}
-              action={
+            <div className="agentic-search__followup-controls">
+              <textarea
+                className="agentic-search__followup-input"
+                rows="1"
+                value={followupQuery}
+                placeholder={t('search.agentic.followupPlaceholder')}
+                onChange={e => setFollowupQuery(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleReasoningFollowup();
+                  }
+                }}
+              />
+              <div className="agentic-search__followup-toolbar">
+                <div className={`agentic-search__advanced-option${isRapidAgenticSearch ? '' : ' is-active'}`}>
+                  <span className="agentic-search__brain-icon" aria-hidden="true">&#129504;</span>
+                  <span>{t('search.agentic.advancedThinking')}</span>
+                  <Checkbox
+                    toggle
+                    checked={!isRapidAgenticSearch}
+                    aria-label={t('search.agentic.advancedThinking')}
+                    title={t('search.agentic.advancedThinking')}
+                    onChange={() => dispatch(actions.setSearchType(
+                      isRapidAgenticSearch ? SEARCH_TYPES.AGENTIC : SEARCH_TYPES.AGENTIC_RAPID
+                    ))}
+                  />
+                </div>
+                {canSearchDeeper && (
+                  <div className="agentic-search__deeper-action">
+                    {showSearchDeeperHint && (
+                      <span id="agentic-search-deeper-hint" role="tooltip" className="agentic-search__deeper-hint">
+                        {t('search.agentic.searchDeeperHint')}
+                      </span>
+                    )}
+                    <Button
+                      basic
+                      compact
+                      className="agentic-search__deeper-search"
+                      aria-describedby={showSearchDeeperHint ? 'agentic-search-deeper-hint' : undefined}
+                      title={t('search.agentic.searchDeeper')}
+                      onClick={handleDeeperSearch}
+                    >
+                      <span className="agentic-search__brain-icon" aria-hidden="true">&#129504;</span>
+                      <span>{t('search.agentic.searchDeeper')}</span>
+                    </Button>
+                  </div>
+                )}
                 <Button
-                  primary
+                  circular
+                  className="agentic-search__followup-send"
+                  icon="arrow up"
+                  aria-label={t('search.agentic.followupButton')}
+                  title={t('search.agentic.followupButton')}
                   disabled={!followupQuery.trim()}
                   onClick={handleReasoningFollowup}
-                >
-                  {t('search.agentic.followupButton')}
-                </Button>
-              }
-            />
+                />
+              </div>
+              <div className="agentic-search__followup-hint">
+                {t('search.agentic.followupsRemaining', { count: remaining })}
+              </div>
+            </div>
           </>
         ) : (
           <Message info content={t('search.agentic.followupsExhausted')} />
         )}
-      </Container>
+      </div>
     );
   };
 
-  const getAgenticSummaryMessage = (results, resultQuery) => {
-    if (reasoningResult?.no_results) {
+  const getAgenticSummaryMessage = (searchResult, results, resultQuery, showFallback = false) => {
+    if (searchResult?.no_results) {
       return {
         header : t('search.agentic.summaryFallback.title'),
         content: t('search.agentic.summaryFallback.noResults', { query: resultQuery })
       };
     }
 
-    if (reasoningResult?.summary) {
-      return { header: t('search.agentic.summary'), content: reasoningResult.summary };
+    if (searchResult?.summary) {
+      return { header: t('search.agentic.summary'), content: searchResult.summary };
     }
 
-    if (
-      !isRapidAgenticSearch
-      || wip
+    if (!showFallback && (
+      wip
       || isShowingRapidAgenticResults
       || reasoningStatus?.state !== 'completed'
-    ) {
+    )) {
       return null;
     }
 
@@ -946,61 +1043,83 @@ const SearchResults = ({ t }) => {
   };
 
   const renderAgenticResults = query => {
-    const shouldHideAgenticResults = !!reasoningResult?.no_results;
     const showRapidResultsBanner = isShowingRapidAgenticResults && wip && reasoningStatus?.state !== 'completed';
-    const agenticResultRenderKey = [
-      reasoningStatus?.session_id || reasoningResult?.session_id || 'no-session',
-      reasoningResult?.followups_remaining ?? 'no-followups',
-      currentAgenticResults.map(result => result?.mdb_uid).filter(Boolean).join(','),
-      visiblePreviousAgenticResults.map(result => result?.mdb_uid).filter(Boolean).join(',')
-    ].join('|');
-    const resultQuery = (
-      (isShowingRapidAgenticResults ? reasoningStatus?.query : reasoningResult?.query)
-      || query
-    );
-    const summaryMessage = getAgenticSummaryMessage(currentAgenticResults, resultQuery);
+    const isFollowupStatus = reasoningRequestKind === 'followup';
+    const isRunningFollowup = isFollowupStatus && wip && !!reasoningResult;
+    const showRapidFollowupResults = isRunningFollowup && isShowingRapidAgenticResults;
+    const currentSearch = reasoningResult || {
+      query: reasoningStatus?.query || query,
+      results: currentAgenticResults
+    };
+    const rapidFollowupSearch = {
+      display_query: reasoningStatus?.query,
+      results      : rapidAgenticResults
+    };
 
-    return renderSearchFrame(
-      <>
-        {renderAgenticStatus()}
-        <Container key={agenticResultRenderKey} className="padded">
-          <div className="agentic-search__ai-note">
-            <Icon name="info circle" />
-            <span className="agentic-search__ai-note-title">{t('search.agentic.warningTitle')}:</span>
-            {' '}
-            {t('search.agentic.warning')}
-          </div>
-          {!isShowingRapidAgenticResults && summaryMessage && (
+    const renderAgenticTurn = (searchResult, results, isCurrent = false, turnKey = 'current') => {
+      const resultQuery = searchResult?.display_query || searchResult?.query || query;
+      const shouldHideAgenticResults = !!searchResult?.no_results;
+      const summaryMessage = getAgenticSummaryMessage(searchResult, results, resultQuery, !isCurrent);
+      const isCompletedTurn = !isCurrent || reasoningStatus?.state === 'completed';
+
+      return (
+        <section
+          ref={isCurrent ? currentTurnRef : null}
+          className="agentic-search__turn"
+          key={`${searchResult?.session_id || resultQuery}_${turnKey}`}
+        >
+          <Header as="h3" className="agentic-search__turn-query" content={resultQuery} />
+          {summaryMessage && (
             <Message
               info
               header={summaryMessage.header}
               content={summaryMessage.content}
             />
           )}
-          {showRapidResultsBanner && (
-            <div className="margin-bottom-8">
-              <Header as="h4" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <span>{t('search.agentic.rapidResultsLive.title')}</span>
-                <Icon name="circle notched" loading color="blue" />
-              </Header>
-              <div className="description">
-                {t('search.agentic.rapidResultsLive.message')}
-              </div>
-            </div>
-          )}
-          {currentAgenticResults.length === 0 && !wip && !summaryMessage && (
+          {results.length === 0 && isCompletedTurn && !wip && !summaryMessage && (
             <div>{t('search.agentic.no-results', { query: resultQuery })}</div>
           )}
-          {!shouldHideAgenticResults && currentAgenticResults.length > 0 && (
-            <div className="agentic-search__results">{renderAgenticResultsList(currentAgenticResults)}</div>
+          {!shouldHideAgenticResults && results.length > 0 && (
+            <div className="agentic-search__results">{renderAgenticResultsList(results)}</div>
           )}
+        </section>
+      );
+    };
+
+    const rapidResultsBanner = showRapidResultsBanner && (
+      <div className="margin-bottom-8">
+        <Header as="h4" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <span>{t('search.agentic.rapidResultsLive.title')}</span>
+          <Icon name="circle notched" loading color="blue" />
+        </Header>
+        <div className="description">
+          {t('search.agentic.rapidResultsLive.message')}
+        </div>
+      </div>
+    );
+
+    return renderSearchFrame(
+      <>
+        {!isFollowupStatus && renderAgenticStatus()}
+        <Container className="padded agentic-search__conversation">
+          <div className="agentic-search__ai-note">
+            <Icon name="info circle" />
+            <span className="agentic-search__ai-note-title">{t('search.agentic.warningTitle')}:</span>
+            {' '}
+            {t('search.agentic.warning')}
+          </div>
+          {!showRapidFollowupResults && rapidResultsBanner}
+          {previousAgenticSearches.map((search, index) => renderAgenticTurn(search, search?.results || [], false, `previous_${index}`))}
+          {renderAgenticTurn(
+            currentSearch,
+            showRapidFollowupResults ? storedAgenticResults : currentAgenticResults,
+            !isRunningFollowup,
+            isRunningFollowup ? 'active_previous' : 'current'
+          )}
+          {isFollowupStatus && renderAgenticStatus(true)}
+          {showRapidFollowupResults && rapidResultsBanner}
+          {showRapidFollowupResults && renderAgenticTurn(rapidFollowupSearch, rapidAgenticResults, true, 'rapid_followup')}
           {renderAgenticFollowup()}
-          {!shouldHideAgenticResults && visiblePreviousAgenticResults.length > 0 && (
-            <>
-              <Header as="h4" content={t('search.agentic.previousResultsTitle')} />
-              <div className="agentic-search__results">{renderAgenticResultsList(visiblePreviousAgenticResults)}</div>
-            </>
-          )}
         </Container>
       </>
     );
@@ -1142,6 +1261,7 @@ const SearchResults = ({ t }) => {
         found no results.
       </Trans>}
       {total !== 0 && <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t}/>}
+      {renderAgenticNudge()}
       <FilterLabels namespace={'search'}/>
       {/* Requested by Mizrahi renderTopNote() */}
       {hits.map((h, rank) => renderHit(h, rank, searchId, searchLanguage, deb))}
