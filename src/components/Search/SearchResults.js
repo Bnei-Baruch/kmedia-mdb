@@ -378,7 +378,7 @@ const SearchResults = ({ t }) => {
   const renderSearchTypeSwitch = () => (
     <Container className="padded" textAlign="right">
       {isAgenticSearchType(visibleSearchType) ? (
-        <Button basic size="small" icon="arrow left" content={t('search.agentic.backToRegular')} onClick={() => handleSearchTypeChange(SEARCH_TYPES.REGULAR)} />
+        <Button basic size="small" icon="arrow left" content={t('search.agentic.backToRegular')} onClick={() => handleSearchTypeChange(SEARCH_TYPES.REGULAR, true)} />
       ) : (
         <Button.Group size="small">
           <Button active>{t('search.types.regular')}</Button>
