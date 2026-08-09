@@ -80,6 +80,7 @@ import { login } from '../../pkg/ksAdapter/adapter';
 
 const REASONING_STATUS_PHASES = ['pending', 'planning', 'thinking', 'verifying', 'finalizing', 'done', 'error'];
 const AGENTIC_TWEET_RESULT_TYPES = new Set(['twitter', 'tweet', 'tweets', 'tweets_many']);
+const SEARCH_DEEPER_HINT_DISMISS_DELAY_MS = 60 * 1000;
 
 const getAgenticResultMeta = result => {
   const resultType = result.result_type || '';
@@ -308,6 +309,51 @@ const SearchResults = ({ t }) => {
 
     dispatch(publicationActions.fetchTweets('tweets_many', 1, { id: missingAgenticTweetIdsKey.split(',') }));
   }, [dispatch, isAgenticSearch, missingAgenticTweetIdsKey]);
+
+  React.useEffect(() => {
+    const shouldWaitForInteraction = (
+      isSearchDeeperHintVisible
+      && isAgenticSearch
+      && !wip
+      && reasoningStatus?.state === 'completed'
+      && reasoningResult?.is_rapid
+      && reasoningResult?.followups_remaining > 0
+      && previousAgenticSearches.length === 0
+    );
+    let timeoutId;
+    const removeInteractionListeners = () => {
+      window.removeEventListener('pointerdown', startDismissTimer);
+      window.removeEventListener('keydown', startDismissTimer);
+      window.removeEventListener('scroll', startDismissTimer, true);
+    };
+
+    const startDismissTimer = () => {
+      removeInteractionListeners();
+      timeoutId = window.setTimeout(
+        () => setSearchDeeperHintVisible(false),
+        SEARCH_DEEPER_HINT_DISMISS_DELAY_MS
+      );
+    };
+
+    if (shouldWaitForInteraction) {
+      window.addEventListener('pointerdown', startDismissTimer);
+      window.addEventListener('keydown', startDismissTimer);
+      window.addEventListener('scroll', startDismissTimer, true);
+    }
+
+    return () => {
+      removeInteractionListeners();
+      window.clearTimeout(timeoutId);
+    };
+  }, [
+    isAgenticSearch,
+    isSearchDeeperHintVisible,
+    previousAgenticSearches.length,
+    reasoningResult?.followups_remaining,
+    reasoningResult?.is_rapid,
+    reasoningStatus?.state,
+    wip
+  ]);
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
