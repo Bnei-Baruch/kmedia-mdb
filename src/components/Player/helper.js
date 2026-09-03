@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
+import logger from '../../helpers/logger';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 
 export const DEFAULT_PLAYER_VOLUME = 80;
@@ -52,7 +53,7 @@ export const getSavedTime = (cuId, ht) => {
   try {
     lt = JSON.parse(json);
   } catch (e) {
-    console.error('broken json', json);
+    logger.error('broken json', json);
   }
 
   if (!ht) {

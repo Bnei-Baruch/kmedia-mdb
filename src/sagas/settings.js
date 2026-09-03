@@ -2,6 +2,7 @@ import { put, select, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 
 import { LANG_UKRAINIAN } from '../helpers/consts';
+import logger from '../helpers/logger';
 import { changeDirection, getCurrentDirection, getLanguageDirection } from '../helpers/i18n-utils';
 import { types } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
@@ -23,7 +24,7 @@ function* setLanguages(action) {
 
   i18n.changeLanguage(newUILang, err => {
     if (err) {
-      console.log(`Error switching to ${newUILang}: ${err}`);
+      logger.error(`Error switching to ${newUILang}: ${err}`);
     }
   });
 

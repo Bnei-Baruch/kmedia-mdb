@@ -7,6 +7,7 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
+import logger from './logger';
 import {
   CT_ARTICLE,
   CT_CLIP,
@@ -429,7 +430,7 @@ export const partialAssign = (target, source, what = true) => {
     return target;
   }
 
-  console.error('Unexpected what for partialAssign:', what);
+  logger.error('Unexpected what for partialAssign:', what);
   return {};
 };
 

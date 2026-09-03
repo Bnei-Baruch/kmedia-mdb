@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
+import logger from '../../../helpers/logger';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery } from '../../../helpers/player';
@@ -17,7 +18,7 @@ const lockLandscape = () => {
   try {
     window.screen.orientation.lock('landscape');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 };
 
@@ -25,7 +26,7 @@ const unlockLandscape = () => {
   try {
     window.screen.orientation.unlock();
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 };
 

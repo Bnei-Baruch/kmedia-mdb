@@ -13,6 +13,7 @@ import {
   BLOGS
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
+import logger from '../../helpers/logger';
 import { getQuery, isDebMode } from '../../helpers/url';
 
 import { actions } from '../../redux/modules/search';
@@ -167,7 +168,7 @@ const SearchResults = ({ t }) => {
         result =
           <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData}/>;
       } else {
-        console.error('Unexpected result type!');
+        logger.error('Unexpected result type!');
       }
     }
 
