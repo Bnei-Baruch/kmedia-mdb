@@ -4,6 +4,7 @@ import { parse as cookieParse } from 'cookie';
 import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
 import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../pkg/ksAdapter/adapter';
 import { omit } from 'lodash/object';
+import logger from './logger';
 
 export const parse = str => qs.parse(str);
 
@@ -37,7 +38,7 @@ export const splitPathByLanguage = path => {
 export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
 
 export const getUILangFromPath = (path, headers, userAgent) => {
-  console.log('getUILangFromPath', path);
+  logger.log('getUILangFromPath', path);
   let { language } = splitPathByLanguage(path);
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
@@ -53,7 +54,7 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   language      = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
-    console.log(`language: ${language}, redirect: ${language !== DEFAULT_UI_LANGUAGE}`);
+    logger.log(`language: ${language}, redirect: ${language !== DEFAULT_UI_LANGUAGE}`);
     return { language, redirect: true };
   }
 
@@ -61,10 +62,10 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   const acceptLanguage = headers['accept-language'];
   if (acceptLanguage) {
     const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
-    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
+    logger.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
     const headerLanguages = languages.map(lang => lang.substr(0, 2)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
     if (headerLanguages.length > 0) {
-      console.log(`header-languages: ${headerLanguages}\n`);
+      logger.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
       language = headerLanguages[0];
       return { language, redirect: true };

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
+import logger from '../../../helpers/logger';
 
 import { actions } from '../../../redux/modules/filtersAside';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
@@ -43,7 +44,7 @@ const Filters = ({ namespace, baseParams }) => {
   }, [uiLang, contentLanguages, dispatch, isReady, wip, err]);
 
   useEffect(() => {
-    console.log('fetch stats hydrated', isReady, wip, err, !isReady && !wip && !err ? 'FETCHING' : '');
+    logger.log('fetch stats hydrated', isReady, wip, err, !isReady && !wip && !err ? 'FETCHING' : '');
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,

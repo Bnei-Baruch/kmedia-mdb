@@ -2,6 +2,7 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mbdActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import {
@@ -101,7 +102,7 @@ export function* fetch(action) {
     try {
       yield fetchViewsByUIDs(cu_uids);
     } catch (err) {
-      console.error('error on recommendation service', err);
+      logger.error('error on recommendation service', err);
     }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
@@ -151,7 +152,7 @@ function* add(action) {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
     yield put(actions.addSuccess({ namespace, item: data }));
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -163,7 +164,7 @@ function* edit(action) {
     const { data } = yield call(Api.my, namespace, params, token, 'PUT');
     yield put(actions.editSuccess({ namespace, item: data, changeItems: action.payload.changeItems }));
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -179,7 +180,7 @@ function* remove(action) {
       yield put(actions.removeSuccess({ namespace, key }));
     }
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -188,7 +189,7 @@ function* reactionsCount(action) {
     const { data } = yield call(Api.reactionsCount, action.payload);
     yield put(actions.reactionsCountSuccess(data));
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 

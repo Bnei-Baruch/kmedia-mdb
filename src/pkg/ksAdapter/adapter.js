@@ -1,3 +1,5 @@
+import logger from '../../helpers/logger';
+
 const KC_API_URL   = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
 const KC_REALM     = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
 const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
@@ -45,7 +47,7 @@ const getKeycloak = async () => {
 
     return keycloak;
   }).catch(error => {
-    console.error('Failed to load keycloak-js:', error);
+    logger.error('Failed to load keycloak-js:', error);
     return {};
   });
 
@@ -79,7 +81,7 @@ export const logout = async () => {
   kc.logout()
     .then(() => updateUser(null))
     .catch(err => {
-      console.error('Logout failed:', err);
+      logger.error('Logout failed:', err);
       updateUser(null);
     });
 };
@@ -116,7 +118,7 @@ export const initKC = async () => {
     resp.token          = kc.token;
     return resp;
   }).catch(error => {
-    console.error('Keycloak init error:', error);
+    logger.error('Keycloak init error:', error);
     return resp;
   });
 };
@@ -157,7 +159,7 @@ const renewToken = retry => {
         renewRetry(retry, refreshed);
       }
     }).catch(err => {
-      console.error('Token renewal failed:', err);
+      logger.error('Token renewal failed:', err);
       renewRetry(retry, err);
     });
   });
@@ -184,7 +186,7 @@ const healthCheckKC = async () => {
       return resp;
     })
     .catch(err => {
-      console.log(err.response.data);
+      logger.error(err.response.data);
     });
   if (!health.ok) {
     throw Error('keycloak server is down');

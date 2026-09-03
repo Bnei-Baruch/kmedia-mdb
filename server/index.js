@@ -3,6 +3,7 @@ require('ignore-styles');
 require('file-loader');
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
+const logger   = require('./logger');
 require('ignore-styles').default(undefined, (module, filename) => {
   if (filename.endsWith('.png')
     || filename.endsWith('.jpg')
@@ -36,10 +37,10 @@ const PORT = process.env.SERVER_PORT || 3001;
 
 app.listen(PORT, error => {
   if (error) {
-    return console.log(`something bad happened: ${error} :(`);
+    return logger.error(`something bad happened: ${error} :(`);
   }
 
-  return console.log(`App listening on port ${PORT}!`);
+  return logger.info(`App listening on port ${PORT}!`);
 });
 
 app.on('error', error => {
@@ -54,11 +55,11 @@ app.on('error', error => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(`${bind} requires elevated privileges`);
+      logger.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(`${bind} is already in use`);
+      logger.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
