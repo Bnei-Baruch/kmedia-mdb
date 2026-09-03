@@ -873,9 +873,11 @@
   align-items: center;
   gap: 20px;
 
-  .auto-scroll-play-btn.ui.button {
+  .auto-scroll-play-btn {
     width: 72px;
     height: 72px;
+    border-radius: 50%;
+    cursor: pointer;
     background: transparent;
     border: 3px solid #4caf50;
     color: #fff;
@@ -887,8 +889,10 @@
     &:hover { background: rgba(76, 175, 80, 0.15); }
   }
 
-  .auto-scroll-skip.ui.button {
+  .auto-scroll-skip {
     background: transparent;
+    border: none;
+    cursor: pointer;
     color: #fff;
     font-size: 1.4em;
     padding: 8px;
@@ -926,9 +930,11 @@
   align-items: center;
   gap: 12px;
 
-  .ui.button {
+  button {
     background: transparent;
     border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
     color: #fff;
     width: 36px;
     height: 36px;
@@ -939,7 +945,7 @@
     font-size: 1.1em;
 
     &:hover:not(:disabled) { background: rgba(255,255,255,0.1); }
-    &:disabled { opacity: 0.3; border-color: #aaa; color: #aaa; }
+    &:disabled { opacity: 0.3; border-color: #aaa; color: #aaa; cursor: default; }
   }
 }
 
