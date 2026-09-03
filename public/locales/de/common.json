@@ -845,6 +845,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} Min. Lesezeit",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
@@ -872,7 +873,17 @@
         "more-buttons": "More",
         "toc": "Inhalt",
         "copy-link": "Link kopieren",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Automatisches Scrollen",
+        "auto-scroll-speed": "Scrollgeschwindigkeit",
+        "auto-scroll-play": "Abspielen (Space)",
+        "auto-scroll-pause": "Pause (Space)",
+        "auto-scroll-skip-back": "Rückwärts (←)",
+        "auto-scroll-skip-fwd": "Vorwärts (→)",
+        "auto-scroll-slower": "Langsamer (↓)",
+        "auto-scroll-faster": "Schneller (↑)",
+        "auto-scroll-close": "Schließen",
+        "auto-scroll-time": "{{mins}} Min. bis Ende"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -884,7 +895,8 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Inhalt",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "auto-scroll": "Auto-Scroll"
       }
     }
   }

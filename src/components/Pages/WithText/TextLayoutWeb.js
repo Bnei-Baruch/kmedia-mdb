@@ -23,6 +23,7 @@ import {
   textPageGetIsSearchSelector
 } from '../../../redux/selectors';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
+import ReadingTimeEstimate from './ReadingTimeEstimate';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useFetchNotes } from './Notes/useFetchNotes';
 import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
@@ -100,6 +101,7 @@ const TextLayoutWeb = props => {
       })}>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer/>
+        <ReadingTimeEstimate />
       </div>
       <TextContentWeb playerPage={playerPage}/>
       {prevNext}
