@@ -9,7 +9,8 @@ ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
 # FROM bneibaruch/kmedia_base:30 AS build
-FROM node:latest AS build
+FROM node:24 AS build
+RUN corepack enable
 
 LABEL maintainer="edoshor@gmail.com"
 

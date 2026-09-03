@@ -22,6 +22,7 @@ import {
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
+import logger from '../src/helpers/logger';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import {
@@ -68,19 +69,17 @@ const windowEnvVariables = () => {
   return vars.join('');
 };
 
-let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.includes('anonymous')) return;
 
-  show_console = req.originalUrl.includes('ssr_debug');
-  show_console && console.log('serverRender', req.originalUrl);
-  show_console && console.log('headers', req.headers);
+  logger.log('serverRender', req.originalUrl);
+  logger.log('headers', req.headers);
 
   const { language: uiLang, redirect } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
-  show_console && console.log('getUILangFromPath', uiLang, redirect);
+  logger.log('getUILangFromPath', uiLang, redirect);
   if (redirect) {
     const newUrl = `${BASE_URL}${uiLang}${req.originalUrl}`;
-    show_console && console.log(`serverRender: redirect (${uiLang}) => ${newUrl}`);
+    logger.log(`serverRender: redirect (${uiLang}) => ${newUrl}`);
     res.writeHead(307, { Location: newUrl });
     res.end();
     return;
@@ -89,7 +88,7 @@ export default function serverRender(req, res, next, htmlData) {
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req) || !!req.query.embed;
 
-  show_console && console.log('serverRender: isbot', bot, req.headers['user-agent']);
+  logger.log('serverRender: isbot', bot, req.headers['user-agent']);
   if (cookies['authorised'] || req.query.authorised || bot) {
     serverRenderAuthorised(req, res, next, htmlData, uiLang, bot);
     return;
@@ -99,7 +98,7 @@ export default function serverRender(req, res, next, htmlData) {
 }
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
-  show_console && console.log('serverRender: AuthApp server render');
+  logger.log('serverRender: AuthApp server render');
   const rootDiv = `
     <div id="root"></div>
     <script>
@@ -112,8 +111,8 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
   res.send(html);
 }
 
-const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, show_console, { route, params }) => {
-  show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
+const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, { route, params }) => {
+  logger.log('serverRender: libraryPage source was found', route.ssrData?.name);
   return route.ssrData
     ? route.ssrData(
       store, {
@@ -121,20 +120,20 @@ const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, s
         parsedURL       : new URL(originalUrl, 'https://example.com'),
         uiLang          : cookieUILang,
         contentLanguages: cookieContentLanguages,
-      }, show_console)
+      })
     : Promise.resolve(null);
 };
 
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
-  show_console && console.log('serverRenderAuthorised uiLang', uiLang);
+  logger.log('serverRenderAuthorised uiLang', uiLang);
 
   moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(uiLang, err => {
-    show_console && console.log('language changed', uiLang, err);
+    logger.log('language changed', uiLang, err);
     if (err) {
-      console.log('Error next', err);
+      logger.error('Error next', err);
       next(err);
       return;
     }
@@ -160,7 +159,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
       }
     };
     // Update settings store with languages info.
-    show_console && console.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
+    logger.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
     onSetUILanguage(initialState.settings, { uiLang: cookieUILang });
     onSetContentLanguages(initialState.settings, { contentLanguages: cookieContentLanguages });
     if (uiLang !== cookieUILang) {
@@ -191,25 +190,25 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
     let hrstart = process.hrtime();
 
-    show_console && console.log('serverRender: ');
-    const promises    = branch.map(b => getPromises(store, req.originalUrl, cookieUILang, cookieContentLanguages, show_console, b));
+    logger.log('serverRender: ');
+    const promises    = branch.map(b => getPromises(store, req.originalUrl, cookieUILang, cookieContentLanguages, b));
     const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
-    show_console && console.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
+    logger.log('serverRender: promises %d, RTK promises %d', promises.length, rtkPromises.length);
     rtkPromises.forEach(promise => promises.push(promise));
     let hrend = process.hrtime(hrstart);
-    show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
+    logger.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
         hrend = process.hrtime(hrstart);
-        show_console && console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
+        logger.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
         hrstart = process.hrtime();
 
         store.rootSagaPromise
           .then(() => {
             hrend = process.hrtime(hrstart);
-            show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
+            logger.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart      = process.hrtime();
             // Actual render.
             const markup = ReactDOMServer.renderToString(
@@ -227,14 +226,14 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               </React.StrictMode>
             );
 
-            show_console && console.log('serverRender: markup', markup);
+            logger.log('serverRender: markup', markup);
             hrend = process.hrtime(hrstart);
-            show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
+            logger.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
             const { helmet } = helmetContext;
             hrend            = process.hrtime(hrstart);
-            show_console && console.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+            logger.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
               // Somewhere a `<Redirect>` was rendered.
@@ -255,10 +254,10 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               );
 
               store.dispatch(ssr.prepare());
-              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
+              // logger.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData    = store.getState();
               const storeDataStr = serialize(storeData);
-              show_console && console.log('serverRender: redux data before return', storeData.auth);
+              logger.log('serverRender: redux data before return', storeData.auth);
               const rootDiv = `
                 <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
                 <script>
@@ -278,7 +277,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
                 .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
 
-              show_console && console.log('serverRender: rendered html', html);
+              logger.log('serverRender: rendered html', html);
 
               if (context.code) {
                 res.status(context.code);
@@ -288,12 +287,12 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
             }
           })
           .catch((a, b, c) => {
-            console.log('Root saga error', a, b, c);
+            logger.error('Root saga error', a, b, c);
             return next(a);
           });
       })
       .catch((a, b, c) => {
-        console.log('SSR error', a, b, c);
+        logger.error('SSR error', a, b, c);
         return next(a);
       });
   });

@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import logger from '../helpers/logger';
+
 const useTraceUpdate = (props, prefix) => {
   const prev = useRef(props);
   useEffect(() => {
@@ -11,7 +13,7 @@ const useTraceUpdate = (props, prefix) => {
       return ps;
     }, {});
     if (Object.keys(changedProps).length > 0) {
-      console.log(`Changed props - ${prefix}:`, changedProps);
+      logger.log(`Changed props - ${prefix}:`, changedProps);
     }
 
     prev.current = props;

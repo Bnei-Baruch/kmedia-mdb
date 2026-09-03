@@ -1,5 +1,6 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/textPage';
+import logger from '../helpers/logger';
 import { selectSuitableLanguage } from '../helpers/language';
 import { cuToSubject, selectTextFile } from '../components/Pages/WithText/helper';
 import { fetchUnit, fetchLabels } from './mdb';
@@ -40,7 +41,7 @@ export function* fetchSubject(action) {
 
     const file = selectTextFile(subject.files, id, language, isSource, fileFilter);
     if (!file) {
-      console.warn('Did not find matching file', subject.files, id, language);
+      logger.warn('Did not find matching file', subject.files, id, language);
     }
 
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
