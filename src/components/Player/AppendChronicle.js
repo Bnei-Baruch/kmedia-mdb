@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { usePrevious } from '../../helpers/utils';
-import { getDuration, getMute } from '../../pkg/jwpAdapter/adapter';
+import { getDuration, getMute, getPlayTiming } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
 import {
   chroniclesGetEventSelector,
@@ -13,9 +13,19 @@ import {
   playerIsReadySelector
 } from '../../redux/selectors';
 
-const buildAppendData = (autoPlay, item, file) => {
+const hostOf = url => {
+  try {
+    return new URL(url).host;
+  } catch (e) {
+    return '';
+  }
+};
+
+const buildAppendData = (autoPlay, item, file, event) => {
   const { id: file_uid, language: file_language } = file || false;
   const { id: unit_uid }                          = item;
+  const src                                       = file?.src || '';
+  const t                                         = getPlayTiming();
 
   return {
     unit_uid,
@@ -24,7 +34,14 @@ const buildAppendData = (autoPlay, item, file) => {
     auto_play   : autoPlay,
     current_time: getSavedTime(unit_uid, null),
     duration    : getDuration(),
-    was_muted   : getMute()
+    was_muted   : getMute(),
+    // Media source + type, to slice latency by origin (cdn/files) and protocol.
+    src_host    : hostOf(src),
+    src_type    : file?.isHLS ? 'hls' : src.split('?')[0].split('.').pop(),
+    media_type  : /mp3|audio/.test(src) ? 'audio' : 'video',
+    // Perceived startup latency on play; mid-play stalls on stop.
+    ...(event === 'player-play' ? { click_to_play_ms: t.ctp ?? null } : {}),
+    ...(event === 'player-stop' ? { rebuffer_ms: t.rm ?? 0, rebuffer_count: t.rc ?? 0 } : {})
   };
 };
 
@@ -40,8 +57,8 @@ const AppendChronicle = () => {
 
   useEffect(() => {
     if (isPlayerReady && event && event !== prevEvent) {
-      const data           = buildAppendData(autoPlay, item, file);
-      const _defaultUnload = (event === 'player-play') ? () => chronicles.append('player-stop', buildAppendData(autoPlay, item, file)) : null;
+      const data           = buildAppendData(autoPlay, item, file, event);
+      const _defaultUnload = (event === 'player-play') ? () => chronicles.append('player-stop', buildAppendData(autoPlay, item, file, 'player-stop')) : null;
 
       chronicles.append(event, data, /*sync*/ false, _defaultUnload);
     }
