@@ -70,6 +70,11 @@ export const setPip        = () => functionByName('setPip', noop, true);
  */
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
+// Playback timing for chronicles: click_to_play_ms (intent -> playing) and rebuffering
+// (mid-play stalls). performance.now() based; reset per loaded file. See init() below.
+let _playTiming = {};
+export const getPlayTiming = () => _playTiming;
+
 const PLAYER_EVENTS = [
   'ready',
   'playlistItem',
@@ -124,6 +129,30 @@ export const init   = (dispatch, deviceInfo) => {
     player.on(name, e => {
       dispatch(action(e));
     });
+  });
+
+  // Chronicles playback timing (separate listeners; JWP allows many per event).
+  player.on('playlistItem', () => {   // new file loaded
+    _playTiming = {};
+  });
+  player.on('beforePlay', () => {     // play intent (incl. autoplay)
+    _playTiming.intentAt = performance.now();
+  });
+  player.on('buffer', () => {         // stall begins (only after playback has started)
+    if (_playTiming.ctp != null && _playTiming.buffAt == null) {
+      _playTiming.buffAt = performance.now();
+      _playTiming.rc = (_playTiming.rc || 0) + 1;
+    }
+  });
+  player.on('time', () => {           // first tick = perceived start (audio+video); later ticks close stalls
+    if (_playTiming.intentAt != null && _playTiming.ctp == null) {
+      _playTiming.ctp = Math.round(performance.now() - _playTiming.intentAt);
+    }
+
+    if (_playTiming.buffAt != null) {
+      _playTiming.rm = (_playTiming.rm || 0) + (performance.now() - _playTiming.buffAt);
+      _playTiming.buffAt = null;
+    }
   });
 };
 
