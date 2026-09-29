@@ -324,6 +324,10 @@
         "message": "Entre ou cadastre-se para obter resultados mais relevantes com o agente de IA.",
         "button": "Entrar / Cadastrar-se"
       },
+      "errors": {
+        "queryTooLongTitle": "Sua busca está um pouco longa demais",
+        "queryTooLong": "Reduza-a para {{maxCharacters}} caracteres ou menos e tente novamente."
+      },
       "summaryFallback": {
         "title": "Resumo",
         "message": "Encontramos algumas boas correspondencias: {{findingsText}}. Voce pode usar {{improveSearch}} abaixo para chegar a resultados mais focados.",

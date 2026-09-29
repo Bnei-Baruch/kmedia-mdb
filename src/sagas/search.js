@@ -64,14 +64,22 @@ const reasoningErrorMessage = err => {
   return err?.response?.data?.error || err?.message || 'Reasoning search failed';
 };
 
-const failedReasoningStatus = (sessionId, message, httpStatus) => ({
-  session_id: sessionId,
-  state     : 'failed',
-  phase     : 'error',
-  done      : true,
-  http_status: httpStatus,
-  message
-});
+const failedReasoningStatus = (sessionId, error, httpStatus) => {
+  const data = typeof error === 'string' ? {} : error?.response?.data || {};
+
+  return {
+    session_id      : sessionId,
+    state           : 'failed',
+    phase           : 'error',
+    done            : true,
+    http_status     : httpStatus,
+    message         : typeof error === 'string' ? error : reasoningErrorMessage(error),
+    code            : data.code,
+    field           : data.field,
+    max_characters  : data.max_characters,
+    actual_characters: data.actual_characters
+  };
+};
 
 const buildReasoningError = (message, response = null) => {
   const error = new Error(message || 'Reasoning search failed');
@@ -97,7 +105,7 @@ function* fetchReasoningStatus(sessionId) {
     if (response.status >= 400) {
       return failedReasoningStatus(
         sessionId,
-        response.data?.error || response.statusText || 'Reasoning search failed',
+        buildReasoningError(response.data?.error || response.statusText || 'Reasoning search failed', response),
         response.status
       );
     }
@@ -255,7 +263,7 @@ function* runReasoningSession(sessionId, query, searchType) {
   } catch (err) {
     const currentStatus = yield select(sharedReasoningStatus);
     if (isAgenticSearchType(searchType) && currentStatus?.session_id === sessionId) {
-      yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err)), searchType }));
+      yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, err, responseStatus(err)), searchType }));
       yield put(actions.searchFailure({ error: err, searchType }));
     }
   }
@@ -280,7 +288,7 @@ function* cancelReasoningSearch() {
 
     yield* urlUpdateQuery(query => Object.assign(query, { session_id: null }));
   } catch (err) {
-    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err)), searchType }));
+    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, err, responseStatus(err)), searchType }));
     yield put(actions.searchFailure({ error: err, searchType }));
   }
 }
@@ -309,7 +317,7 @@ export function* finishReasoningSearchNow() {
       || (yield select(searchGetQuerySelector));
     yield call(fetchReasoningResult, sessionId, query, searchType);
   } catch (err) {
-    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, reasoningErrorMessage(err), responseStatus(err)), searchType }));
+    yield put(actions.reasoningStatusUpdate({ ...failedReasoningStatus(sessionId, err, responseStatus(err)), searchType }));
     yield put(actions.searchFailure({ error: err, searchType }));
   }
 }
@@ -676,11 +684,9 @@ export function* search(action) {
   } catch (err) {
     const failedSearchType = yield select(searchGetSearchTypeSelector);
     if (isAgenticSearchType(failedSearchType)) {
+      const currentStatus = yield select(searchGetReasoningStatusSelector);
       yield put(actions.reasoningStatusUpdate({
-        state  : 'failed',
-        phase  : 'error',
-        done   : true,
-        message: reasoningErrorMessage(err),
+        ...failedReasoningStatus(currentStatus?.session_id, err, responseStatus(err)),
         searchType: failedSearchType
       }));
     }

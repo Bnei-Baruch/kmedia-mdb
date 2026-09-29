@@ -323,6 +323,10 @@
         "message": "Melde dich an oder registriere dich, um mit dem KI-Agenten relevantere Ergebnisse zu erhalten.",
         "button": "Anmelden / Registrieren"
       },
+      "errors": {
+        "queryTooLongTitle": "Deine Suchanfrage ist etwas zu lang",
+        "queryTooLong": "Kürze sie bitte auf höchstens {{maxCharacters}} Zeichen und versuche es erneut."
+      },
       "summaryFallback": {
         "title": "Zusammenfassung",
         "message": "Wir haben einige gute Treffer gefunden: {{findingsText}}. Mit {{improveSearch}} unten kannst du gezieltere Ergebnisse bekommen.",

@@ -326,6 +326,10 @@
         "message": "AI ajanıyla daha alakalı sonuçlar almak için giriş yapın veya kayıt olun.",
         "button": "Giriş / Kayıt"
       },
+      "errors": {
+        "queryTooLongTitle": "Arama sorgunuz biraz fazla uzun",
+        "queryTooLong": "Lütfen sorguyu {{maxCharacters}} karaktere veya daha kısa bir uzunluğa indirip tekrar deneyin."
+      },
       "summaryFallback": {
         "title": "Özet",
         "message": "Bazi iyi eslesmeler bulduk: {{findingsText}}. Daha odakli sonuçlara ulaşmak için aşağıdaki {{improveSearch}} alanını kullanabilirsiniz.",

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
@@ -10,10 +10,18 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
-import { actions, SEARCH_TYPES } from '../../redux/modules/search';
+import {
+  actions,
+  isAgenticSearchType,
+  REASONING_QUERY_TOO_LONG_ERROR,
+  SEARCH_TYPES
+} from '../../redux/modules/search';
 import {
   searchGetAutocompleteWipSelector,
   searchGetQuerySelector,
+  searchGetReasoningRequestKindSelector,
+  searchGetReasoningStatusSelector,
+  searchGetSearchTypeSelector,
   searchGetSuggestionsSelector,
   settingsGetUILangSelector
 } from '../../redux/selectors';
@@ -27,6 +35,9 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const query       = useSelector(searchGetQuerySelector);
   const suggestions = useSelector(searchGetSuggestionsSelector);
   const wip         = useSelector(searchGetAutocompleteWipSelector);
+  const reasoningRequestKind = useSelector(searchGetReasoningRequestKindSelector);
+  const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
+  const searchType = useSelector(searchGetSearchTypeSelector);
   const uiLang      = useSelector(settingsGetUILangSelector);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -36,6 +47,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const [autocompleteId, setAutocompleteId]           = useState('');
   const [inputFocused, setInputFocused]               = useState(!isMobileDevice);
   const [userInteracted, setUserInteracted]           = useState(false);
+  const queryInputRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,6 +61,18 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const displayedAutocompleteResults = agenticResult
     ? [agenticResult, ...autocompleteResults]
     : autocompleteResults;
+  const isQueryTooLong = (
+    isAgenticSearchType(searchType)
+    && reasoningRequestKind !== 'followup'
+    && reasoningStatus?.code === REASONING_QUERY_TOO_LONG_ERROR
+  );
+
+  useEffect(() => {
+    if (isQueryTooLong && queryInputRef.current) {
+      queryInputRef.current.focus();
+      queryInputRef.current.select();
+    }
+  }, [isQueryTooLong]);
 
   useEffect(() => {
     if (suggestions) {
@@ -151,7 +175,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
       placeholder={`${t('buttons.search')}...`}
       style={{ width: '100%' }}
       type="text">
-      <input/>
+      <input ref={queryInputRef}/>
       <Button type="submit" className="searchButton" onClick={doSearch}>
         {/* fix isLanguageRtl for style below */}
         {wip ? <Loader active size="tiny" style={{ position: 'relative', left: '0', marginLeft: '4px' }}/> :
@@ -166,6 +190,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
     </Input> :
     <Input
       autoFocus={inputFocused}  // auto focus on desktop only.
+      input={<input ref={queryInputRef}/>}
       onChange={inputChange}
       onKeyDown={keyDown}
       onFocus={onFocus}
@@ -174,7 +199,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   return <Search
     fluid
-    className="search-omnibox"
+    className={`search-omnibox${isQueryTooLong ? ' search-omnibox--query-error' : ''}`}
     size="small"
     results={displayedAutocompleteResults}
     open={userInteracted && inputFocused && !!displayedAutocompleteResults.length}

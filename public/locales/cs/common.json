@@ -326,6 +326,10 @@
         "message": "Přihlaste se nebo se zaregistrujte, abyste s AI agentem získali relevantnější výsledky.",
         "button": "Přihlásit / Registrovat"
       },
+      "errors": {
+        "queryTooLongTitle": "Vyhledávací dotaz je trochu příliš dlouhý",
+        "queryTooLong": "Zkraťte jej na {{maxCharacters}} znaků nebo méně a zkuste to znovu."
+      },
       "summaryFallback": {
         "title": "Shrnutí",
         "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",

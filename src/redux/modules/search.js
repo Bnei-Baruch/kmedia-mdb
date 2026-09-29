@@ -8,6 +8,8 @@ export const SEARCH_TYPES = {
   AGENTIC_RAPID: 'agentic_rapid'
 };
 
+export const REASONING_QUERY_TOO_LONG_ERROR = 'reasoning_search_query_too_long';
+
 export const isAgenticSearchType = searchType => (
   searchType === SEARCH_TYPES.AGENTIC || searchType === SEARCH_TYPES.AGENTIC_RAPID
 );

@@ -25,7 +25,12 @@ import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode, stringify } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 
-import { actions, isAgenticSearchType, SEARCH_TYPES } from '../../redux/modules/search';
+import {
+  actions,
+  isAgenticSearchType,
+  REASONING_QUERY_TOO_LONG_ERROR,
+  SEARCH_TYPES
+} from '../../redux/modules/search';
 import { actions as publicationActions } from '../../redux/modules/publications';
 
 import { filtersTransformer } from '../../filters';
@@ -223,6 +228,7 @@ const SearchResults = ({ t }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const followupStatusRef = React.useRef(null);
+  const followupInputRef = React.useRef(null);
   const currentTurnRef = React.useRef(null);
   const shouldScrollToCompletedFollowupRef = React.useRef(false);
   const followupWasRunningRef = React.useRef(false);
@@ -233,6 +239,7 @@ const SearchResults = ({ t }) => {
   const [isSearchDeeperHintVisible, setSearchDeeperHintVisible] = React.useState(true);
   const visibleSearchType = blockedAgenticSearchType || searchType;
   const shouldShowAgenticLoginPrompt = !canUseAgenticSearch && isAgenticSearchType(visibleSearchType);
+  const isReasoningQueryTooLong = reasoningStatus?.code === REASONING_QUERY_TOO_LONG_ERROR;
 
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
@@ -279,6 +286,20 @@ const SearchResults = ({ t }) => {
     followupStatusRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setScrollToFollowupStatus(false);
   }, [scrollToFollowupStatus, wip]);
+
+  React.useEffect(() => {
+    if (!isReasoningQueryTooLong || reasoningRequestKind !== 'followup') {
+      return undefined;
+    }
+
+    setFollowupQuery(reasoningStatus?.query || '');
+    const frameId = window.requestAnimationFrame(() => {
+      followupInputRef.current?.focus();
+      followupInputRef.current?.select();
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [isReasoningQueryTooLong, reasoningRequestKind, reasoningStatus?.query]);
 
   React.useEffect(() => {
     if (!shouldScrollToCompletedFollowupRef.current) {
@@ -543,8 +564,18 @@ const SearchResults = ({ t }) => {
     const hasTemporaryErrorStatus = hasErrorStatus || hasEmptyErrorStatus;
     const canCancel = wip && !hasErrorStatus && !hasCanceledStatus && !!reasoningStatus?.session_id;
     const canFinishNow = canCancel && !isRapidAgenticSearch && reasoningStatus?.has_draft_results;
-    const canRetry = hasTemporaryErrorStatus;
-    const statusMessage  = hasTemporaryErrorStatus ? t('search.agentic.summaryFallback.temporaryError') : null;
+    const canRetry = hasTemporaryErrorStatus && !isReasoningQueryTooLong;
+    let statusTitle = t('search.agentic.statusTitle');
+    let statusMessage = hasTemporaryErrorStatus ? t('search.agentic.summaryFallback.temporaryError') : null;
+    if (hasCanceledStatus) {
+      statusTitle = getAgenticStatusText(reasoningStatus);
+    } else if (isReasoningQueryTooLong) {
+      statusTitle = t('search.agentic.errors.queryTooLongTitle');
+      statusMessage = t('search.agentic.errors.queryTooLong', {
+        maxCharacters: reasoningStatus?.max_characters
+      });
+    }
+
     const statusLines = getAgenticStatusLines(reasoningStatus);
 
     if (!isAgenticSearch || (!wip && !hasTemporaryErrorStatus && !hasCanceledStatus)) {
@@ -560,7 +591,10 @@ const SearchResults = ({ t }) => {
           <Message warning={hasTemporaryErrorStatus} info={!hasTemporaryErrorStatus} icon className="agentic-search__status-message">
             <div className="agentic-search__status-visual" aria-hidden="true">
               {hasTemporaryErrorStatus ? (
-                <Icon name="clock outline" className="agentic-search__status-error-icon" />
+                <Icon
+                  name={isReasoningQueryTooLong ? 'edit outline' : 'clock outline'}
+                  className="agentic-search__status-error-icon"
+                />
               ) : hasCanceledStatus ? (
                 <Icon name="stop circle outline" className="agentic-search__status-canceled-icon" />
               ) : (
@@ -572,9 +606,7 @@ const SearchResults = ({ t }) => {
             </div>
             <Message.Content>
               <div className="agentic-search__status-heading">
-                <Message.Header>
-                  {hasCanceledStatus ? getAgenticStatusText(reasoningStatus) : t('search.agentic.statusTitle')}
-                </Message.Header>
+                <Message.Header>{statusTitle}</Message.Header>
                 {(canFinishNow || canCancel || canRetry) && (
                   <div className="agentic-search__status-actions">
                     {canRetry && (
@@ -625,7 +657,7 @@ const SearchResults = ({ t }) => {
               {statusMessage && (
                 <p className="agentic-search__status-error">{statusMessage}</p>
               )}
-              {isFollowup && reasoningStatus?.query && (
+              {isFollowup && reasoningStatus?.query && !isReasoningQueryTooLong && (
                 <p className="agentic-search__status-query">
                   <span className="agentic-search__status-query-label">{t('search.agentic.followupTitle')}:</span>
                   {' '}
@@ -940,7 +972,8 @@ const SearchResults = ({ t }) => {
           <>
             <div className="agentic-search__followup-controls">
               <textarea
-                className="agentic-search__followup-input"
+                ref={followupInputRef}
+                className={`agentic-search__followup-input${isReasoningQueryTooLong ? ' is-error' : ''}`}
                 rows="1"
                 value={followupQuery}
                 placeholder={t('search.agentic.followupPlaceholder')}

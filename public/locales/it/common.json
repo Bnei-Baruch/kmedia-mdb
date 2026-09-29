@@ -324,6 +324,10 @@
         "message": "Accedi o registrati per ottenere risultati più pertinenti con l'agente AI.",
         "button": "Accedi / Registrati"
       },
+      "errors": {
+        "queryTooLongTitle": "La ricerca è un po' troppo lunga",
+        "queryTooLong": "Riducila a {{maxCharacters}} caratteri o meno e riprova."
+      },
       "summaryFallback": {
         "title": "Sintesi",
         "message": "Abbiamo trovato alcune buone corrispondenze: {{findingsText}}. Puoi usare {{improveSearch}} qui sotto per ottenere risultati piu mirati.",

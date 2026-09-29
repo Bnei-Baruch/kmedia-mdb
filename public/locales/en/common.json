@@ -327,6 +327,10 @@
         "message": "Log in or register to get more relevant results with the AI agent.",
         "button": "Log in / Register"
       },
+      "errors": {
+        "queryTooLongTitle": "Your search is a little too long",
+        "queryTooLong": "Please shorten it to {{maxCharacters}} characters or fewer and try again."
+      },
       "summaryFallback": {
         "title": "Summary",
         "message": "We found some good matches: {{findingsText}}. You can use {{improveSearch}} below to get more focused results.",
