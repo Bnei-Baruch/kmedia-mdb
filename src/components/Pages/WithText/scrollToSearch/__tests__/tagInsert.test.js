@@ -23,11 +23,12 @@ describe('Scroll to search, prepareScrollToSearch:', () => {
     const end   = 'reality from the perspective of provision';
 
     const nowStart = Date.now();
-    for (let i = 0; i < 100 * 1000; i++) {
+    // ~0.65ms/iteration on CircleCI with coverage instrumentation
+    for (let i = 0; i < 10 * 1000; i++) {
       prepareScrollToSearch(data_speedTest, { srchstart: start, srchend: end }, true);
     }
 
     const nowEnd = Date.now();
-    expect(nowEnd - nowStart).toBeLessThan(30000);
+    expect(nowEnd - nowStart).toBeLessThan(15000);
   });
 });

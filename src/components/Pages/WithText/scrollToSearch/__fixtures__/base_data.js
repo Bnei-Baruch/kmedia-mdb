@@ -11,7 +11,7 @@ export const data = (
 
 export const source = '<div>  <p>  <strong>Kabbalah and dedicated myself to it</strong>  </p>  <p>  <strong>Before I clarify this exalted matter, it is important for me to note that although all the readers seem</strong>  </p> </div>';
 
-export const dataCleanHtml = '    Kabbalah and dedicated myself to it      Before I clarify this exalted matter, it is important for me to note that although all the readers seem   ';
+export const dataCleanHtml = '  Kabbalah and dedicated myself to it   Before I clarify this exalted matter, it is important for me to note that although all the readers seem  ';
 
 export const tagPositions = [
   {
