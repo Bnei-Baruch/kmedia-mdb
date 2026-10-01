@@ -1,6 +1,6 @@
 import { prepareScrollToSearch } from '../helper';
 
-import { data, expected_withP, data_speedTest, expected_highlightBorder } from './tagInsert_data';
+import { data, expected_withP, data_speedTest, expected_highlightBorder } from '../__fixtures__/tagInsert_data';
 
 describe('Scroll to search, prepareScrollToSearch:', () => {
 

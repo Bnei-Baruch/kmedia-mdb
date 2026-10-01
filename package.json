@@ -181,7 +181,10 @@
       "text-summary",
       "lcov"
     ],
-    "snapshotSerializers": []
+    "snapshotSerializers": [],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios|@standard-schema)/)"
+    ]
   },
   "browserslist": {
     "production": [

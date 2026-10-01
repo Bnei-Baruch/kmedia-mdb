@@ -1,6 +1,6 @@
 import { prepareScrollToSearch } from '../helper';
 
-import { data } from './base_data';
+import { data } from '../__fixtures__/base_data';
 
 const srchstart = 'dedicated myself to it';
 const srchend   = 'dedicated myself to it';
