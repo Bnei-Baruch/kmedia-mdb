@@ -1,6 +1,6 @@
 import { getPositionInHtml, prepareScrollToSearch, wrapSeekingPlace } from '../helper';
 import { RenderBase } from '../RenderBase';
-import { data, tagPositions, dataCleanHtml, source } from '../__fixtures__/base_data';
+import { data, tagPositions, cleanTagPositions, dataCleanHtml, source } from '../__fixtures__/base_data';
 
 describe('Base tests search', () => {
   const start          = 'Before I clarify';
@@ -14,7 +14,7 @@ describe('Base tests search', () => {
   test('RenderBase_clearHtmlFromTags', () => {
     render.clearHtmlFromTags();
     expect(render.dataCleanHtml).toEqual(dataCleanHtml);
-    expect(render.tagPositions).toEqual(tagPositions);
+    expect(render.tagPositions).toEqual(cleanTagPositions);
   });
 
   test('test_getPositionInHtml', () => {
