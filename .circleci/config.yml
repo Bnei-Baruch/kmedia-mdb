@@ -1,26 +1,16 @@
 version: 2.1
 
-orbs:
-  node: circleci/node@5.0.1
-
 jobs:
   build:
-    environment:
-      CC_TEST_REPORTER_ID: c4fca403424186ad9d84ef75219a2efaf4fa9d0994bf3a5f501bc0bbe64ec81c
     docker:
-      - image: cimg/node:16.20.2-browsers
+      - image: cimg/node:24.11.1-browsers
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: yarn
       - run:
-          name: Setup Code Climate test-reporter
+          name: Install dependencies (Yarn 4 via corepack)
           command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
+            corepack enable || sudo corepack enable
+            yarn install --immutable
       - run: # run tests
           name: Run Tests and Coverage
-          command: |
-            ./cc-test-reporter before-build
-            node ./node_modules/react-scripts/scripts/test.js --coverage --watchAll=false --maxWorkers=2
-            ./cc-test-reporter after-build --exit-code $?
+          command: node ./node_modules/react-scripts/scripts/test.js --coverage --watchAll=false --maxWorkers=2

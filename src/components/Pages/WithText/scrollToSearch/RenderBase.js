@@ -100,7 +100,12 @@ export class RenderBase {
   }
 
   buildMatch(search, data) {
-    const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter(word => !!word);
+    // punctuation from KEEP_LETTERS_RE becomes a `.` wildcard; escape any other regex metachar (e.g. `?`)
+    const words = search
+      .replace(KEEP_LETTERS_RE, '.')
+      .replace(/[?+|\\^$*()[\]{}]/g, '\\$&')
+      .split(' ')
+      .filter(word => !!word);
     const re    = new RegExp(words.map(word => `(${word})`).join('(.{0,5})'), 'sg');
     return Array.from(data.matchAll(re), m => m);
   };
