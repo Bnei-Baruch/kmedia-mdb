@@ -233,6 +233,7 @@ const SearchResults = ({ t }) => {
   const shouldScrollToCompletedFollowupRef = React.useRef(false);
   const followupWasRunningRef = React.useRef(false);
   const [followupQuery, setFollowupQuery] = React.useState('');
+  const [hasStartedFollowupQuery, setHasStartedFollowupQuery] = React.useState(false);
   const [scrollToFollowupStatus, setScrollToFollowupStatus] = React.useState(false);
   const [blockedAgenticSearchType, setBlockedAgenticSearchType] = React.useState(null);
   const [showAgenticNudge, setShowAgenticNudge] = React.useState(true);
@@ -277,6 +278,10 @@ const SearchResults = ({ t }) => {
       setBlockedAgenticSearchType(null);
     }
   }, [blockedAgenticSearchType, canUseAgenticSearch]);
+
+  React.useEffect(() => {
+    setHasStartedFollowupQuery(false);
+  }, [reasoningResult?.session_id]);
 
   React.useEffect(() => {
     if (!scrollToFollowupStatus || !wip || !followupStatusRef.current) {
@@ -963,7 +968,7 @@ const SearchResults = ({ t }) => {
 
     const remaining   = reasoningResult?.followups_remaining || 0;
     const canFollowup = !!reasoningResult?.session_id && remaining > 0;
-    const canSearchDeeper = canFollowup && reasoningResult?.is_rapid;
+    const canSearchDeeper = canFollowup && reasoningResult?.is_rapid && !hasStartedFollowupQuery;
     const showSearchDeeperHint = isSearchDeeperHintVisible && canSearchDeeper && previousAgenticSearches.length === 0;
 
     return (
@@ -977,7 +982,10 @@ const SearchResults = ({ t }) => {
                 rows="1"
                 value={followupQuery}
                 placeholder={t('search.agentic.followupPlaceholder')}
-                onChange={e => setFollowupQuery(e.target.value)}
+                onChange={e => {
+                  setFollowupQuery(e.target.value);
+                  setHasStartedFollowupQuery(true);
+                }}
                 onKeyDown={e => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
