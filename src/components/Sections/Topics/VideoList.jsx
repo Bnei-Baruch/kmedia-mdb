@@ -13,8 +13,8 @@ const VideoList = () => {
   const title = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
 
   return (
-    <div className="px-4  topics_media">
-      <h3 className="text-xl font-bold py-4 text-black">{title}</h3>
+    <div className="p-[14px] topics_media">
+      <h3 className="font-lato! text-[18px] leading-[1.28571429em] font-bold text-black -mt-[2.57px] mb-[14px]">{title}</h3>
       {
         items?.map((x, i) => {
           if (x.lID) {

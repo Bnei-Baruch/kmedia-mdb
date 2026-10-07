@@ -41,14 +41,14 @@ const RenderPage = () => {
           </Fragment>
         ))}
       </nav>
-      <div className="grid grid-cols-[1fr_3fr]">
-        <div className="filters-aside-wrapper px-1 border-e">
+      <div className="flex">
+        <div className="w-1/4 pt-[14px]! filters-aside-wrapper">
           <Filters
             namespace={`topics_${id}`}
             baseParams={baseParams}
           />
         </div>
-        <div>
+        <div className="w-3/4 p-[14px]">
           <FilterLabels namespace={`topics_${id}`} />
           <div className="grid grid-cols-[5fr_3fr]">
             <div>
