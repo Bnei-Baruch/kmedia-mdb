@@ -55,7 +55,6 @@ aside.sidebar-nav {
   margin-top: .5rem;
   padding: .3rem 1rem;
   color: rgba(colors-helpers.$white, .9);
-  background: transparent;
   border: 1px solid rgba(colors-helpers.$white, .5);
   border-radius: 4px;
   cursor: pointer;
@@ -63,7 +62,6 @@ aside.sidebar-nav {
   text-decoration: none;
 
   &:hover {
-    background: rgba(colors-helpers.$white, .08);
     color: #fff;
   }
 }
