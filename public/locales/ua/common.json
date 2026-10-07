@@ -937,6 +937,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} хв. читання",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
@@ -963,7 +964,17 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "copy-link": "Копіювати посилання",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "Автопрокрутка",
+        "auto-scroll-speed": "Швидкість прокрутки",
+        "auto-scroll-play": "Відтворити (Space)",
+        "auto-scroll-pause": "Пауза (Space)",
+        "auto-scroll-skip-back": "Назад (←)",
+        "auto-scroll-skip-fwd": "Вперед (→)",
+        "auto-scroll-slower": "Повільніше (↓)",
+        "auto-scroll-faster": "Швидше (↑)",
+        "auto-scroll-close": "Закрити",
+        "auto-scroll-time": "{{mins}} хв. до кінця"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -975,7 +986,8 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Content",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "auto-scroll": "Автопрокрутка"
       }
     }
   }

@@ -847,6 +847,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} دقيقة قراءة",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
@@ -874,7 +875,17 @@
         "more-buttons": "More",
         "toc": "جدول المحتويات",
         "copy-link": "أنسخ الرابط",
-        "article-toc": "All Articles"
+        "article-toc": "All Articles",
+        "auto-scroll": "التمرير التلقائي",
+        "auto-scroll-speed": "سرعة التمرير",
+        "auto-scroll-play": "تشغيل (Space)",
+        "auto-scroll-pause": "إيقاف مؤقت (Space)",
+        "auto-scroll-skip-back": "تخطي للخلف (←)",
+        "auto-scroll-skip-fwd": "تخطي للأمام (→)",
+        "auto-scroll-slower": "أبطأ (↓)",
+        "auto-scroll-faster": "أسرع (↑)",
+        "auto-scroll-close": "إغلاق",
+        "auto-scroll-time": "{{mins}} دقيقة للانتهاء"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -886,7 +897,8 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "Content",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "auto-scroll": "تمرير تلقائي"
       }
     }
   }

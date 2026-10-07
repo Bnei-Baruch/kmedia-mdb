@@ -131,7 +131,7 @@ export const insertAdded = (html, allTags, from, to) => {
     result += html.slice(start, t.pos) + t.str;
     start = t.pos;
   });
-  result += html.slice(start, to);
+  result += html.slice(start, to < 0 ? undefined : to);
   return result;
 };
 
