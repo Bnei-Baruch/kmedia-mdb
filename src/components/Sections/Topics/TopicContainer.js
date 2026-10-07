@@ -22,7 +22,7 @@ const namespace = 'topics';
 
 const hasChildren = node => node && isNotEmptyArray(node.children);
 
-export const sortRootsPosition = roots => {
+export const sortRootsPosition = (roots = []) => {
   const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
 
   return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
