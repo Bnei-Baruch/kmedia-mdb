@@ -20,8 +20,8 @@ const getItemsRecursive = (rootID, getById, base) => {
   if (base?.length === 0) return [];
 
   const root = getById(rootID);
-  if (!root.children || root.children.length === 0) {
-    return base.includes(rootID) ? [rootID] : null;
+  if (!root?.children || root.children.length === 0) {
+    return base?.includes(rootID) ? [rootID] : null;
   }
 
   const resp = root
@@ -55,7 +55,7 @@ const SubTopics = ({ namespace, rootID }) => {
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
+  const children = rootID ? root?.children?.filter(r => items.includes(r)) : roots;
 
   if (!(children?.length > 0))
     return null;
