@@ -27,7 +27,7 @@ const LanguageItem = ({ idx, language, disabled }) => {
           </div>
         </div>
         <span
-          className={`material-symbols-outlined language-trigger cursor-pointer ${(!!urlLang || disabled) ? 'opacity-50 pointer-events-none' : ''}`}
+          className={`material-symbols-outlined text-[17px]! leading-none cursor-pointer ${(!!urlLang || disabled) ? 'opacity-50 pointer-events-none' : ''}`}
           onClick={() => removeLanguage(idx)}
         >
           close
