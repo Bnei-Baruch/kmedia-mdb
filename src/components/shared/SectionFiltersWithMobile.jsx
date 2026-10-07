@@ -18,25 +18,25 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const toggleFilters = () => setOpenFilters(!openFilters);
 
   const render = () => (
-    <div className="flex gap-4">
-      <div className="w-1/4 filters-aside-wrapper">
+    <div className="flex">
+      <div className="w-1/4 pt-[14px]! filters-aside-wrapper">
         {filters}
       </div>
-      <div className="w-3/4">
+      <div className="w-3/4 p-[14px]">
         {children}
       </div>
     </div>
   );
 
   const renderMobile = () => (
-    <div className="px-2 pt-4">
+    <div>
       <FiltersHydrator namespace={namespace} />
-      <div>
+      <div className="p-[14px]">
         <button
-          className="border border-blue-500 text-blue-500 rounded px-3 py-2 hover:bg-blue-50 inline-flex items-center gap-1"
+          className="border border-blue-500 text-blue-500 rounded px-[21px] py-[11px] leading-none hover:bg-blue-50 inline-flex items-center gap-1.5"
           onClick={toggleFilters}
         >
-          <span className="material-symbols-outlined">filter_list</span>
+          <span className="material-symbols-outlined text-[14px]! leading-none!">filter_alt</span>
           {t('filters.aside-filter.filters-title')}
         </button>
       </div>

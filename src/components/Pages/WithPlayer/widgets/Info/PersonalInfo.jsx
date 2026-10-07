@@ -75,7 +75,7 @@ const PersonalInfo = ({ collection }) => {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
             <div
-              className="absolute top-2 right-2 cursor-pointer"
+              className="absolute top-2 end-2 cursor-pointer"
               onClick={() => setIsNeedLogin(false)}
             >
               <span className="material-symbols-outlined">close</span>

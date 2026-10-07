@@ -37,38 +37,38 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
   const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
 
   const sideBarIcon = sidebarActive
-    ? <Icon icon={faXmark} className="text-2xl font-bold leading-none text-white" />
-    : <Icon icon={faBars} className="text-2xl font-bold leading-none text-white" />;
+    ? <Icon icon={faXmark} className="text-2xl leading-none text-white/90" />
+    : <Icon icon={faBars} className="text-2xl leading-none text-white/90" />;
 
   const content = (
     <>
-      <div className="flex items-center justify-between gap-4 max-md:gap-2 px-4 bg-brand-blue text-white">
+      <div className="flex items-center justify-between gap-4 max-md:gap-2 px-[15px] bg-brand-blue text-white">
         <div ref={toggleSidebarBtnRef} className={clsx({ '2xl:!hidden': !isFullscreen })}>
           <a
-            className="flex items-center justify-start font-bold cursor-pointer"
+            className="flex items-center justify-start cursor-pointer px-[15.5px]"
             onClick={toggleSidebar}
           >
             {sideBarIcon}
           </a>
         </div>
         <Link
-          className="flex-initial min-w-0 xl:min-w-[300px] px-3 max-md:px-1 leading-4 gap-2 flex items-center text-white no-underline hover:text-white"
+          className="flex-initial min-w-0 min-[1490px]:min-w-[300px] ps-0 pe-3 -ms-4 max-md:pe-1 max-md:-ms-2 max-md:me-auto leading-4 gap-2.5 flex items-center text-white no-underline hover:text-white"
           to="/"
         >
-          <Logo width="42px" height="80px" />
+          <Logo width="43px" height="120px" viewBox="50 0 330 600" className="-my-5 shrink-0" />
           <div className="flex flex-col leading-4 justify-center min-w-0 overflow-hidden">
             {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle') && (
-              <div className="text-white text-[1.4rem] font-bold tracking-[0.02em] uppercase no-underline opacity-90 leading-none mb-[0.1rem] max-md:text-base whitespace-nowrap">
+              <div className="font-lato text-white opacity-90 uppercase no-underline leading-none mb-[1.4px] whitespace-nowrap text-[21px] font-[1000] tracking-[0.02em] max-[1199px]:text-[16.8px] rtl:text-[28px] rtl:font-black rtl:tracking-[-0.04em] rtl:max-[1199px]:text-[19.6px]">
                 {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
               </div>
             )}
-            <h1 className="text-white m-0 font-normal text-xl max-md:text-[.9rem] whitespace-nowrap">{t('nav.top.header')}</h1>
+            <h1 className="font-lato! text-white m-0 leading-[1.28571429em] whitespace-nowrap text-[17.5px] font-medium mt-[1.4px] max-[1199px]:text-[14px] rtl:text-[18.2px] rtl:font-thin rtl:-mt-[3px] rtl:max-[1199px]:text-[14px]">{t('nav.top.header')}</h1>
           </div>
         </Link>
         <div className={isMobile ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>
           {isNotHome && <OmniBox />}
         </div>
-        <div className="flex items-center flex-nowrap justify-between gap-4 shrink-0">
+        <div className={clsx('flex items-center flex-nowrap justify-between shrink-0 text-white/90', isMobile ? 'gap-4' : 'gap-6')}>
           <HandleLanguages />
           {
             isNotHome && isMobile &&
@@ -80,13 +80,13 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
           }
           {
             !isMobile && (
-              <>
+              <div className="flex items-center gap-1.5">
                 <DonateNow />
                 <VirtualHomeButton />
-              </>
+              </div>
             )
           }
-          <div>
+          <div className={clsx({ 'ms-1.5 pe-3': !isMobile })}>
             <Login />
           </div>
           <TopMost />

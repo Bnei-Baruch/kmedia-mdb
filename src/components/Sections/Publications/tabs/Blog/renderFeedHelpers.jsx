@@ -12,7 +12,7 @@ export const renderBlogItemForHomepage = (item, uiLang, t) => {
 
   return (
     <div key={url} className="post" style={{ direction: dir }}>
-      <h3 className="text-blue-600">
+      <h3 className="text-blue-600 text-[18px]">
         <a className="remove-indent" href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
       </h3>
       <div>

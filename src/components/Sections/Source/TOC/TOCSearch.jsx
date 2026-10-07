@@ -20,20 +20,20 @@ const TocSearch = () => {
 
   return (
     <div className="toc_filter">
-      <div className="relative w-full top-search">
-        {!match && (
-          <span className="material-symbols-outlined absolute end-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">search</span>
-        )}
+      <div className="toc_search relative">
         <input
-          className="toc_search w-full text-xs border border-gray-300 rounded px-2 py-2"
+          className="w-full border rounded pe-12! outline-none"
           placeholder={`${t('buttons.search')}...`}
           value={match}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />
+        {!match && (
+          // icon font sets direction:ltr on itself, so logical end-* would resolve to the right side in RTL
+          <span className="material-symbols-outlined icon absolute top-0 ltr:right-0 rtl:left-0 w-12 h-full flex! items-center justify-center pointer-events-none">search</span>
+        )}
       </div>
     </div>
-
   );
 };
 

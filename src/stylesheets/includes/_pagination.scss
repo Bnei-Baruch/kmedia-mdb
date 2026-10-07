@@ -1,9 +1,13 @@
 @use "responsive-helpers";
 
+.pagination-wrapper {
+  @include responsive-helpers.small-mobile {
+    padding-inline: 0 !important;
+  }
+}
+
 
 .pagination-menu {
-  font-size: 0.8rem;
-
 
   @include responsive-helpers.tablet {
     @for $i from 5 through 6 {
@@ -26,16 +30,9 @@
     border-radius: 0 !important;
     width: 100%;
 
-    .item {
-      border-radius: 0 !important;
-
-      flex: 1 1 auto !important;
-      padding: 0 !important;
-
-
-      display: flex !important;
-      justify-content: center;
-      // text-align: right !important;
+    .pagination-menu-item {
+      flex: 1 1 auto;
+      padding-inline: 0;
     }
 
     @for $i from 2 through 6 {
@@ -45,28 +42,58 @@
     }
   }
 
+  // Semantic UI "tiny compact icon menu"
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid rgba(34, 36, 38, .15);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+  overflow: hidden;
+
   .pagination-menu-item {
-    padding: .5rem .8rem;
-    border: grey 1px solid;
-    border-right: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .92857143em 1.14285714em;
+    line-height: 1;
+    color: #1b1c1d;
     cursor: pointer;
+    user-select: none;
+
+    // divider like Semantic's .item:before (takes no width)
+    & + .pagination-menu-item {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: 1px;
+        background: rgba(34, 36, 38, .1);
+      }
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, .03);
+      color: rgba(0, 0, 0, .95);
+    }
 
     &.active {
-      border-color: #2185d0;
+      background: rgba(0, 0, 0, .05);
       color: #2185d0;
     }
-    &:first-child {
-      border-radius: .28571429rem 0 0 .28571429rem;
-    }
-    &:last-child{
-      border-right: grey 1px solid;
-      border-radius: 0 .28571429rem .28571429rem 0
+
+    &.disabled {
+      color: rgba(40, 40, 40, .3);
+      cursor: default;
     }
   }
 
   .material-symbols-outlined {
-    font-size: .9rem;
-    line-height: .9rem;
-
+    font-size: 14px;
+    line-height: 12px;
+    font-variation-settings: 'wght' 700;
   }
 }

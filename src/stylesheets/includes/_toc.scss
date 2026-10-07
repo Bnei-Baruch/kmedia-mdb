@@ -5,7 +5,7 @@
 
 .toc {
   background: colors-helpers.$white;
-  padding: .5em 1em 1em;
+  padding: 1em;
   position: fixed;
   height: calc(100VH - variables.$main-menu-height - variables.$breadcrumb-height);
   bottom: 0;
@@ -228,6 +228,10 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   margin-bottom: 1.5em;
+
+  > button {
+    padding: 0;
+  }
 
   .button {
     display: flex;

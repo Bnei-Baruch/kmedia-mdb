@@ -75,7 +75,7 @@ const ShareTextModalBtn = () => {
               messageTitle={t('sources-library.share-title')}
             />
             <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2" dir="ltr">
-              {urlWithParams}
+              <div className="content">{urlWithParams}</div>
             </div>
             <div className="relative inline-block mt-2">
               <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>

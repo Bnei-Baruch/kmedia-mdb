@@ -47,7 +47,7 @@ const PlaylistHeader = () => {
       return !isMobile ? (
         <>
           {t('constants.content-types.DAILY_LESSON')}
-          <div className="text-xl display-iblock mx-1">
+          <div className="text-[0.7em] display-iblock px-[5px]">
             <span className="display-iblock mx-1">{t('values.date', { date: film_date })}</span>
             {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
           </div>
@@ -100,21 +100,27 @@ const PlaylistHeader = () => {
     }
 
     const _mobStyles = isMobile ? 'flex justify-between gap-2 items-end' : '';
+    const hasDatePicker = isLesson && !isMobile && !isMy;
 
     return (
-      <div className='avbox__playlist-header px-4 py-3'>
-        <div className='flex flex-justify gap-4 justify-between py-2'>
-          <h2 className='my-0 text-3xl font-bold'>{getTitle()}</h2>
-          {isLesson && !isMobile && !isMy && <LessonDatePickerContainer />}
+      <div className='avbox__playlist-header p-[14px]'>
+        <div className='flex flex-justify gap-4 justify-between px-[28px]'>
+          <h2 className='my-0 font-lato! text-[28px] leading-9 font-bold'>{getTitle()}</h2>
+          {hasDatePicker && <LessonDatePickerContainer />}
         </div>
         {
           subheader && (
-            <h4 className={clsx('font-normal', _mobStyles)}>
+            <h4 className={clsx('font-lato! font-normal text-[15px] leading-[1.28571429em] px-[28px]', _mobStyles)}>
               {subheader}
               {isLesson && isMobile && !isMy && <LessonDatePickerContainer />}
             </h4>)
         }
-        {playNow && (<h3 className="my-0 text-2xl font-bold">{playNow}</h3>)}
+        {playNow && (
+          // Semantic header margin: calc(2rem - .14em), or -.14em when it is the first element in the block
+          <h3 className={clsx('mb-0 px-[28px] font-lato! text-[24px] leading-[1.28571429em] font-bold', hasDatePicker || subheader ? 'mt-[24.57px]' : '-mt-[3.43px]')}>
+            {playNow}
+          </h3>
+        )}
       </div>
     );
   };

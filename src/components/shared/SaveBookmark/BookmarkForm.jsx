@@ -130,13 +130,13 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
         <h4 className="font-normal">{t('personal.bookmark.folders')}</h4>
         <div className="border border-gray-200 rounded p-4">
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+            <span className="material-symbols-outlined absolute ltr:left-2 rtl:right-2 top-1/2 -translate-y-1/2 text-gray-400">
               search
             </span>
             <input
               placeholder={t('personal.bookmark.searchFolders')}
               onChange={e => handleSearchChange(e, { value: e.target.value })}
-              className="pl-8 border-0 border-b border-gray-300 py-2 w-full focus:outline-none bg-transparent"
+              className="ps-8 border-0 border-b border-gray-300 py-2 w-full focus:outline-none bg-transparent"
             />
           </div>
           <div className=" px-4 folders_list">

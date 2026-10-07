@@ -24,7 +24,7 @@ export const ToPlaylistBtn = () => {
       onClick={handleOpen}
     >
       <PlaylistAddIcon className="playlist_add" fill="#767676"/>
-      <span className="!hidden sm:!inline">{t('buttons.save')}</span>
+      <span>{t('buttons.save')}</span>
     </div>
   );
 };

@@ -65,7 +65,7 @@ const ZipFileModal = ({ id, path }) => {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="bg-white rounded shadow-xl max-w-3xl w-full p-4 relative" dir={uiDir}>
             <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+              className="absolute top-2 end-2 text-gray-500 hover:text-black"
               onClick={() => setOpen(false)}
             >
               <span className="material-symbols-outlined">close</span>

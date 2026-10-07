@@ -23,7 +23,7 @@ const MediaTypeControlMobile = () => {
           className="sr-only peer"
         />
         <div className="relative w-9 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-500 transition-colors after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-4"></div>
-        <span className="small">{t(`player.settings.audio-only-${type === MT_AUDIO ? 'on' : 'off'}`)}</span>
+        <span className="text-[11px] leading-4">{t(`player.settings.audio-only-${type === MT_AUDIO ? 'on' : 'off'}`)}</span>
       </label>
     </div>
   );

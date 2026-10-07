@@ -2,7 +2,7 @@
 @use 'colors-helpers';
 
 .dateButton {
-  border-radius: .28571429rem !important;
+  border-radius: 4px !important;
 }
 
 .hide-native-date-input {
@@ -41,15 +41,15 @@
     color: white;
     background-color: transparent;
     margin: 0;
-    font-size: 1.1rem;
+    padding: .78571429em .5em;
+    font-family: inherit;
+    font-size: 15.4px;
+    line-height: 1;
     font-weight: normal;
     white-space: nowrap;
 
     &:hover {
       background-color: rgba(colors-helpers.$white, 0.2);
-    }
-    @include responsive-helpers.mobile {
-      font-size: 0.8rem;
     }
   }
 }

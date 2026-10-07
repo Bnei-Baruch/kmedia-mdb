@@ -12,7 +12,7 @@ export const VirtualHomeButton = () => {
     content  : t('home.virtual-home'),
     href     : `https://kli.one/?bbref_internal=kmedia&bbref_lang=${uiLang}&lang=${uiLang}`,
     icon     : 'globe',
-    className: 'vh-button'
+    className: 'vh-button bg-white text-semantic-blue!'
   });
 };
 
@@ -21,9 +21,13 @@ const DButton = ({ content, href, icon, className }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={clsx('inline-flex items-center gap-1.5 px-3 py-1 small border border-semantic-blue text-semantic-blue rounded', className)}
+    className={clsx('inline-flex items-center gap-[5.5px] h-[33px] px-[14.6px] text-[13px] leading-none border border-semantic-blue text-semantic-blue rounded', className)}
   >
-    {icon && <span className="material-symbols-outlined text-base">{icon === 'heart' ? 'favorite' : icon}</span>}
+    {icon && (
+      <span className={clsx('material-symbols-outlined text-[14px]! leading-none! opacity-80', { '[font-variation-settings:"FILL"_1]': icon === 'heart' })}>
+        {icon === 'heart' ? 'favorite' : icon}
+      </span>
+    )}
     <span className="hidden lg:inline">{content}</span>
   </a>
 );

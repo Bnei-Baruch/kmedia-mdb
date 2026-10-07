@@ -87,7 +87,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
         <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
           <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full relative">
             <button
-              className="absolute top-2 right-2"
+              className="absolute top-2 end-2"
               onClick={handleCancel}
             >
               <span className="material-symbols-outlined">close</span>

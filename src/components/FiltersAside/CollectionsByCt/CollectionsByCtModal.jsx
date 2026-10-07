@@ -80,7 +80,7 @@ const CollectionsByCtModal = ({ namespace, onClose, ct }) => {
             </button>
           </div>
           <button
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            className="absolute top-2 end-2 text-gray-400 hover:text-gray-600"
             onClick={handleClose}
           >
             <span className="material-symbols-outlined">cancel</span>

@@ -89,7 +89,7 @@ const FilterLabels = ({ namespace }) => {
   );
 
   return (
-    <div className=" px-4 py-2 filter_aside_labels">
+    <div className="max-md:px-[14px] filter_aside_labels">
       <span>{t('filters.filters')}:</span>
       {
         list.filter(f => f.values?.length > 0).flatMap((f, j) =>

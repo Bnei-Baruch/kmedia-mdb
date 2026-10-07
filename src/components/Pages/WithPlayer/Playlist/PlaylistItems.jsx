@@ -44,7 +44,7 @@ const PlaylistItems               = () => {
     <div id="avbox_playlist" className="avbox__playlist-view max-h-[40rem]" onScroll={handleScroll}>
       {
         !isMobile && (
-          <h3 className="avbox__playlist-header text-2xl font-bold px-4 py-2">
+          <h3 className="avbox__playlist-header text-xl font-bold px-4 py-2">
             {title || t(`playlist.title-by-type.${content_type}`)}
           </h3>
         )

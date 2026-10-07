@@ -49,9 +49,9 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
 
   const personal = !loggedIn ? (
     <div key="personal" className="sidebar-nav__personal p-2">
-      <h3 className="text-xl">
+      <h3 className="text-[18px] font-normal">
         {t('nav.sidebar.personal')}
-        <span className="text-lg">{t('personal.needToLogin')}</span>
+        <span className="text-[14px] leading-[1.2]">{t('personal.needToLogin')}</span>
       </h3>
       <a
         className="sidebar-nav__login"

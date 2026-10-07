@@ -102,7 +102,12 @@ const OmniBox = ({ isHomePage = false }) => {
       <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage })}>
         <div className={clsx('flex items-stretch w-full')}>
           <ComboboxInput
-            className={clsx('flex-1 bg-white px-4 py-2 text-black outline-none w-full border border-gray-300 rounded-4xl', { 'rounded-e-none': isHomePage })}
+            className={clsx(
+              'flex-1 bg-white px-4 outline-none w-full border rounded-4xl',
+              isHomePage
+                ? 'py-[11px] leading-[1.21428571em] text-black/80 border-[rgba(34,36,38,0.15)] focus:border-[#7dcff5] rounded-e-none'
+                : 'py-2 text-black border-gray-300'
+            )}
             placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
             onChange={inputChange}
             onKeyDown={keyDown}
@@ -116,7 +121,7 @@ const OmniBox = ({ isHomePage = false }) => {
               <button
                 type="button"
                 onClick={doSearch}
-                className="flex items-center gap-2 px-4 py-2 font-bold bg-gray-100 hover:bg-gray-200 border border-gray-300 border-s-0 rounded-e text-sm text-gray-500 whitespace-nowrap cursor-pointer me-4"
+                className={clsx('flex items-center gap-1.5 ps-[15px] py-[11px] font-bold bg-[#e0e1e2] hover:bg-[#cacbcd] rounded-e text-[14px] leading-none text-black/60 whitespace-nowrap cursor-pointer', isMobile ? 'pe-[12px] me-[5px]' : 'pe-[21px] me-[45px]')}
               >
                 {wip ? (
                   <Icon icon={faSpinner} className="animate-spin" />

@@ -29,6 +29,8 @@ body {
   margin: 0;
   overflow-y: scroll;
   font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4285em;
 
   &.noscroll {
     overflow: hidden;
@@ -142,7 +144,7 @@ body {
 .donate-button {
   background: #fc6719 !important;
   color: white !important;
-  font-size: .92857143rem !important;
+  font-size: 13px !important;
 }
 
 .auth-button {
@@ -186,7 +188,7 @@ body {
   .donate-button {
     background: #fc6719 !important;
     color: white !important;
-    font-size: .92857143rem !important;
+    font-size: 13px !important;
 
     i {
       margin-inline-start: 6px !important;
@@ -231,8 +233,4 @@ body {
 
     margin-inline-start: $sidebar-width;
   }
-}
-
-.headroom .vh-button{
-  color: $white;
 }

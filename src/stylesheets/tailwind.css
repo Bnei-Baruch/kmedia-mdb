@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  /* Semantic UI header font (used by the site logo) */
+  --font-lato: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+
   /* Custom breakpoint */
   --breakpoint-3xl: 1920px;
 
@@ -25,6 +28,11 @@
 }
 
 @layer base {
+  /* Semantic UI heading defaults (preflight resets them to inherit) */
+  h1, h2, h3, h4, h5 {
+    font-weight: 700;
+    line-height: 1.28571429em;
+  }
   a {
     color: #4183c4;
     text-decoration: none;

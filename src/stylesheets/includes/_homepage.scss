@@ -14,6 +14,14 @@
   &__section {
     max-width: 1200px;
     margin: 0 auto;
+
+    &.homepage__featured,
+    &.homepage__thumbnails,
+    &.home-social-section {
+      @include responsive-helpers.mobile {
+        padding-inline: 14px;
+      }
+    }
     
     &__iconsrow {
       .iconsTitleRow {
@@ -66,12 +74,13 @@
 
   &__header {
     @include responsive-helpers.mobile {
-      padding-bottom: 2rem;
-      padding-top: 1rem;
+      padding-bottom: 28px;
+      padding-top: 14px;
     }
     background: #1A4378;
     margin-top: 0;
-    padding-bottom: 4rem;
+    padding-bottom: 56px;
+    padding-top: 28px;
   }
 
   &__website-sections {
@@ -202,7 +211,8 @@
     text-shadow: 0 1px colors-helpers.$black, 0 2px colors-helpers.$black;
     transition: transform .5s;
     z-index: 2;
-    font-size: 1.5em;
+    font-size: 1.71428571em;
+    line-height: 1.28571429em;
 
     .content,
     .sub {
@@ -212,7 +222,8 @@
 
     .sub {
       text-transform: uppercase;
-      font-size: 0.75em;
+      font-size: 16px;
+      line-height: 1.2em;
     }
   }
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +18,7 @@ import {
   authGetUserSelector
 } from '../../redux/selectors';
 
-const SubscribeBtn = ({ collection }) => {
+const SubscribeBtn = ({ collection, large = false }) => {
   const { t } = useTranslation();
   const [alertMsg, setAlertMsg] = useState();
   const [confirm, setConfirm] = useState();
@@ -90,7 +91,7 @@ const SubscribeBtn = ({ collection }) => {
           <DialogPanel className="relative bg-white rounded-lg p-6 max-w-lg w-full shadow-xl">
             <div
               onClick={() => setIsNeedLogin(false)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="absolute top-2 end-2 text-gray-400 hover:text-gray-600 cursor-pointer"
               aria-label="Close"
             >
               <span className="material-symbols-outlined">close</span>
@@ -123,7 +124,7 @@ const SubscribeBtn = ({ collection }) => {
         </div>
       </Dialog>
       <div
-        className={`uppercase border rounded px-2 py-0.5 text-sm ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
+        className={`uppercase border rounded px-[14.2px] py-[6.4px] text-[12.6px] leading-none ${large ? 'md:px-[16.2px] md:py-[8.5px] md:text-[14.4px]' : ''} ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
         onClick={() => subsUnsubs(sub)}
       >
         {t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
@@ -134,8 +135,8 @@ const SubscribeBtn = ({ collection }) => {
 
 SubscribeBtn.propTypes = {
   unit: shapes.ContentUnit,
-  collection: shapes.Collection
-
+  collection: shapes.Collection,
+  large: PropTypes.bool,
 };
 
 export default SubscribeBtn;

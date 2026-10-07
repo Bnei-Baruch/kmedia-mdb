@@ -20,3 +20,4 @@
 @.claude/tailwind-migration.md
 @.claude/upgrade_dep.md
 @.claude/e2e.md
+@.claude/design-compare.md

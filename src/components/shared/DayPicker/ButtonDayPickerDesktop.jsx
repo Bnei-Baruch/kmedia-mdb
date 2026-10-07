@@ -29,8 +29,8 @@ const ButtonDayPickerDesktop = ({ value = null, label = '', onDayChange = noop }
 
   return (
     <Popover className="relative inline-block">
-      <PopoverButton className="dateButton flex items-center gap-2 p-2 pe-4 bg-gray-100 hover:bg-gray-200 rounded text-sm font-bold text-gray-500 whitespace-nowrap cursor-pointer h-full">
-        <Icon icon={faCalendarDays} className="text-gray-600 " />
+      <PopoverButton className="dateButton flex items-center gap-1.5 py-[11px] px-[21px] bg-[#e0e1e2] hover:bg-[#cacbcd] rounded text-[14px] leading-none font-bold text-black/60 whitespace-nowrap cursor-pointer h-full">
+        <Icon icon={faCalendarDays} className="opacity-80" />
         {label}
       </PopoverButton>
       <PopoverPanel

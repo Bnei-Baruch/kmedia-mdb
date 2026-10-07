@@ -82,7 +82,7 @@ const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4
         type="button"
         onClick={onScrollLeft}
         className="scroll_intents absolute top-1/2 -translate-y-1/2 border border-gray-300 rounded bg-white p-2 hover:bg-gray-50 large"
-        style={{ [dir]: '-40px' }}
+        style={{ [dir]: '-41px' }}
       >
         <span className={`material-symbols-outlined`}>chevron_{dir}</span>
       </button>
@@ -95,7 +95,7 @@ const LatestUpdatesCardList = ({ title, maxItems, cts, itemsByCT, itemsCount = 4
         type="button"
         onClick={onScrollRight}
         className="scroll_intents absolute top-1/2 -translate-y-1/2 border border-gray-300 rounded bg-white p-2 hover:bg-gray-50 large"
-        style={{ [leftRight]: '-45px' }}
+        style={{ [leftRight]: '-41px' }}
       >
         <span className={`material-symbols-outlined`}>chevron_{leftRight}</span>
       </button>

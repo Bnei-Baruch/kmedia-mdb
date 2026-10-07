@@ -57,10 +57,7 @@ const visibleRange = (current, total, windowSize) => {
 };
 
 const renderPage = (content, value, key, disabled, onChange, active = false, exClass = []) => {
-  const classes = clsx(exClass, {
-    'opacity-50 pointer-events-none': disabled,
-    'font-bold bg-blue-100': active
-  });
+  const classes = clsx(exClass, { 'pointer-events-none': disabled });
 
   if (disabled) {
     return (
@@ -96,19 +93,21 @@ const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = 
   const nextDisabled = current === totalBlocks;
 
   return (
-    <nav className="pagination-menu flex items-center justify-center py-4">
-      {renderPage(title(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled, onChange)}
-      {renderPage(title(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled, onChange, false, ['prev-page'])}
+    <div className="pagination-wrapper flex justify-center p-[14px]">
+      <nav className="pagination-menu inline-flex items-stretch">
+        {renderPage(title(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled, onChange)}
+        {renderPage(title(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled, onChange, false, ['prev-page'])}
 
-      {
-        vr.map(x => (
-          renderPage(x, x, x, false, onChange, x === current,
-            x === current ? [] : [`distance-${Math.abs(x - current)}`])))
-      }
+        {
+          vr.map(x => (
+            renderPage(x, x, x, false, onChange, x === current,
+              x === current ? [] : [`distance-${Math.abs(x - current)}`])))
+        }
 
-      {renderPage(title(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled, onChange, false, ['next-page'])}
-      {renderPage(title(isRTL ? 'first' : 'last'), totalBlocks, 'last', nextDisabled, onChange)}
-    </nav>
+        {renderPage(title(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled, onChange, false, ['next-page'])}
+        {renderPage(title(isRTL ? 'first' : 'last'), totalBlocks, 'last', nextDisabled, onChange)}
+      </nav>
+    </div>
   );
 };
 

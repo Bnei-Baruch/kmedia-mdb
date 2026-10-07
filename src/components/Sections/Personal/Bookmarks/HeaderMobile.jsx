@@ -84,7 +84,7 @@ const BookmarkHeaderMobile = () => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="relative mx-auto w-full max-w-lg rounded bg-white p-6" dir={uiDir}>
-            <button className="absolute top-2 right-2" onClick={handleToggle}>
+            <button className="absolute top-2 end-2" onClick={handleToggle}>
               <span className="material-symbols-outlined">close</span>
             </button>
             <div className="no-padding">
@@ -96,9 +96,9 @@ const BookmarkHeaderMobile = () => {
         </div>
       </Dialog>
       <div className="relative bookmark_search_mobile">
-        <span className="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+        <span className="material-symbols-outlined absolute ltr:left-2 rtl:right-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
         <input
-          className="w-full rounded border border-gray-300 py-2 pl-8 pr-3"
+          className="w-full rounded border border-gray-300 py-2 ps-8 pe-3"
           placeholder={placeholder}
           defaultValue={query}
           onChange={e => handleSearch(e.target.value)}

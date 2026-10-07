@@ -18,7 +18,7 @@ const NeedToLoginModal = () => {
       <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
         <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
           <button
-            className="absolute top-2 right-2"
+            className="absolute top-2 end-2"
             onClick={handleClose}
           >
             <span className="material-symbols-outlined">close</span>

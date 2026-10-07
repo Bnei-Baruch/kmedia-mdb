@@ -63,18 +63,18 @@ const ShareTextBtn = () => {
           icon={<span className="material-symbols-outlined">share</span>}
         />
       </Popover.Button>
-      <Popover.Panel className="absolute z-10 mt-2 bg-white rounded shadow-lg p-4">
+      <Popover.Panel className="absolute z-10 end-0 mt-[10px] w-max bg-white rounded py-[11.66px] px-[14px] shadow-[0_2px_4px_0_rgba(34,36,38,.12),0_2px_10px_0_rgba(34,36,38,.15)]">
         <ShareBar
           url={urlWithParams}
           buttonSize={buttonSize}
           messageTitle={t('sources-library.share-title')}
         />
-        <div className="share-bar__message text_ellipsis rounded bg-blue-50 p-2 small mt-2">
-          {urlWithParams}
+        <div className="share-bar__message my-[11px] rounded bg-[#f8f8f9] py-[11px] px-[16.5px] text-[11px] shadow-[inset_0_0_0_1px_rgba(34,36,38,.22)]" dir="ltr">
+          <div className="content">{urlWithParams}</div>
         </div>
-        <div className="relative inline-block mt-2">
+        <div className="relative inline-block ms-[3.25px]">
           <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
-            <button className="px-3 py-1 small rounded border border-gray-300 hover:bg-gray-50">
+            <button className="rounded bg-[#e0e1e2] py-[7.66px] px-[14.6px] text-[13px] leading-none font-bold text-black/60 hover:bg-[#cacbcd]">
               {t('buttons.copy')}
             </button>
           </CopyToClipboard>

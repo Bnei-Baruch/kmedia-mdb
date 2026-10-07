@@ -53,9 +53,9 @@ const Login = () => {
     <a
       href="#"
       onClick={login}
-      className={`inline-flex items-center gap-1.5 border border-semantic-blue text-semantic-blue rounded hover:bg-semantic-blue hover:text-white transition-colors ${isMobile ? 'auth-button w-8 h-8 justify-center rounded-full p-0' : 'donate-button px-3 py-1.5 small'}`}
+      className={`inline-flex items-center border border-semantic-blue text-semantic-blue rounded hover:bg-semantic-blue hover:text-white transition-colors ${isMobile ? 'auth-button w-8 h-8 justify-center rounded-full p-0' : 'donate-button gap-[5.5px] h-[33px] px-[14.6px] text-[13px] leading-none'}`}
     >
-      <span className="material-symbols-outlined text-base">account_circle</span>
+      <span className="material-symbols-outlined text-[14px]! leading-none! opacity-80">account_circle</span>
       {isMobile ? null : t('personal.login')}
     </a>
   );

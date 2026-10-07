@@ -59,7 +59,7 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, uiLang, t) => (
 
 const renderSearchBar = location => (
   <div className="homepage__header">
-    <div className="px-4 max-w-[1200px] mx-auto">
+    <div className="px-[14px] mx-auto w-full min-[768px]:w-7/8 min-[992px]:w-3/4">
       <SearchBar location={location} />
     </div>
   </div>

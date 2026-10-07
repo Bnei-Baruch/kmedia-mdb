@@ -22,24 +22,25 @@ const CollectionPageHeader = ({ collection = null }) => {
       <Helmets.Basic title={collection.name} description={collection.description} />
       <Helmets.Image unitOrUrl={assetUrl(`logos/collections/${collection.id}.jpg`)} />
 
-      <div className=" px-4 ">
-        <div className="flex py-2 gap-4">
-          <div className="w-2/12">
+      <div className="p-[14px]">
+        <div className="flex gap-[28px]">
+          {/* Semantic grid: 3/16 column minus gutters */}
+          <div className="w-[calc(18.75%-24px)] shrink-0">
             <CollectionLogo collectionId={collection.id} />
           </div>
-          <div className="w-1/2 flex flex-col gap-2 justify-between">
-            <h1 className="collection-header__title text-2xl font-bold">{collection.name}</h1>
-            <p className="section-header__description text-gray-600">{collection.description}</p>
-            <div className="flex gap-3 items-stretch">
+          <div className="flex-1 md:flex-none md:w-1/2 flex flex-col">
+            <h1 className="collection-header__title -mt-1.5 font-lato! text-[42px] leading-[1.28571429em] font-normal">{collection.name}</h1>
+            <p className="section-header__description font-lato text-[14px] min-[1200px]:text-[16px] leading-[1.4285em] text-black/60 mt-[3.2px] mb-[1em]">{collection.description}</p>
+            <div className="flex gap-[3px] items-center mt-2 mb-[7px]">
               <a
-                className="inline-flex items-center px-2 py-1 text-md font-bold bg-orange-500 rounded hover:bg-orange-600"
+                className="inline-flex items-center justify-center w-[26px] h-[24px] bg-[#f2711c] rounded-[4px] hover:bg-[#f26202]"
                 href={getRSSLinkByTopic(collection.id, contentLanguages)}
               >
-                <span className="material-symbols-outlined  text-white">rss_feed</span>
+                <span className="material-symbols-outlined text-white text-[14px]!">rss_feed</span>
               </a>
               <ShareForm collection={collection} />
               <div className="display-iblock">
-                <SubscribeBtn collection={collection} />
+                <SubscribeBtn collection={collection} large />
               </div>
             </div>
           </div>

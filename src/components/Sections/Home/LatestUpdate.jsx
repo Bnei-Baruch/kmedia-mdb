@@ -76,10 +76,10 @@ const LatestUpdate = ({ item, t, label }) => {
       <div className="cu_item_img">
         <UnitLogo unitId={id} width={300} fallbackImg={canonicalSection}/>
       </div>
-      <div className="p-3 flex-1">
+      <div className="p-3 flex-1 max-[1199px]:text-[1.3em]">
         <div className="font-bold">{title}</div>
       </div>
-      <div className="cu_info_description px-3 pb-3 small text-gray-500">
+      <div className="cu_info_description px-3 pb-3 text-gray-500">
         {subheader.map((d, i) => (<span key={i}>{d}</span>))}
       </div>
     </Link>

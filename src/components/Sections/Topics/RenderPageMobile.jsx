@@ -39,7 +39,7 @@ const RenderPageMobile = () => {
       <div className="fixed inset-0 flex items-center justify-center p-4" dir={uiDir}>
         <Dialog.Panel className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
           <button
-            className="absolute top-2 right-2 p-1"
+            className="absolute top-2 end-2 p-1"
             onClick={closeFilters}
           >
             <span className="material-symbols-outlined">close</span>

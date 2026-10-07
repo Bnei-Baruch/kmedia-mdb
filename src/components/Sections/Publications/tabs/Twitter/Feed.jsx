@@ -132,7 +132,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
     <Fragment>
       <div key={tID} className="tweet py-2">
         <div>
-          <div className="tweet-title-wrapper flex items-center gap-2">
+          <div className="tweet-title-wrapper flex items-center gap-2 font-bold">
             {
               snippetVersion
                 ? <img className="twitter-avatar w-8 h-8 rounded-full" src={twitterAvatar} alt="" />

@@ -128,12 +128,12 @@ class FastDayPicker extends Component {
       return (
         <div>
           <div className="flex">
-            <span className="inline-flex items-center self-stretch px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l small to-from-label">
+            <span className="inline-flex items-center self-stretch px-3 bg-gray-100 border border-e-0 border-gray-300 rounded-s small to-from-label">
               {label}
             </span>
             <input
               type="text"
-              className="border border-gray-300 rounded-r px-3 py-1 small"
+              className="border border-gray-300 rounded-e px-3 py-1 small"
               readOnly
               value={selectedInLocaleFormat}
               onClick={this.openNativeDatePicker}
@@ -157,20 +157,20 @@ class FastDayPicker extends Component {
       <div className="relative">
         <div className="flex w-full items-center">
           {label && (
-            <span className="inline-flex items-center self-stretch px-2 bg-gray-100 border border-r-0 border-gray-300 rounded-l small min-w-14">
+            <span className="inline-flex items-center self-stretch px-2 bg-gray-100 border border-e-0 border-gray-300 rounded-s small min-w-14">
               {label}
             </span>
           )}
           <div className="relative flex-1">
             <input
-              className={clsx('w-full border border-gray-300 px-3 py-1 small pr-8', label ? 'rounded-r' : 'rounded')}
+              className={clsx('w-full border border-gray-300 px-3 py-1 small pe-8', label ? 'rounded-e' : 'rounded')}
               placeholder={dayjs(new Date()).locale(locale).format('l')}
               value={stringValue}
               onChange={this.handleDateInputChange}
               onKeyDown={this.handleKeyDown}
               onFocus={this.openPopup}
             />
-            <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none large">
+            <span className="material-symbols-outlined absolute ltr:right-2 rtl:left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none large">
               calendar_month
             </span>
           </div>

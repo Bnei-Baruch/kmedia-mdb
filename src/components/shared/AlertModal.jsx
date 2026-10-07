@@ -12,7 +12,7 @@ const AlertModal = ({ message, open, onClose }) => {
         <DialogPanel className="relative bg-white rounded-lg p-6 max-w-sm w-full shadow-xl" dir={uiDir}>
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            className="absolute top-2 end-2 text-gray-400 hover:text-gray-600"
             aria-label="Close"
           >
             <span className="material-symbols-outlined">close</span>

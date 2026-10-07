@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { clsx } from 'clsx';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -15,7 +16,11 @@ const MainTabPage = ({ tabs, content, section }) => {
     <NavLink
       key={x}
       to={`/${section}/${x}`}
-      className={`px-4 py-2 ${tab === x ? 'font-bold border-b-2 border-blue-500' : 'text-gray-600 hover:text-gray-900'}`}
+      className={clsx(
+        // Semantic "tabular menu" item
+        'px-[24.3px] py-[15.8px] leading-none border border-b-0 rounded-t-[4px] -mb-px',
+        tab === x ? 'bg-white font-bold text-black/95! border-[#d4d4d5]' : 'border-transparent text-black/87! hover:text-black/95!'
+      )}
     >
       {t(`${section}.tabs.${x}`)}
     </NavLink>

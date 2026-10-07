@@ -162,12 +162,22 @@
     }
   }
 
+  .cu_item_img .cu_item_img_info .cu_item_info_co h4 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.28571429em;
+  }
+
   .cu_item_body {
     padding: 0.75rem;
+
+    // prod: .cu_item .content { font-size: 1.3em } below 1200px
+    @media only screen and (max-width: 1199px) {
+      font-size: 1.3em;
+    }
   }
 
   .cu_info_description {
-    font-size: 0.875em;
     color: colors-helpers.$midGrey;
   }
 
@@ -265,6 +275,7 @@
 
 
   &.small {
+    font-size: inherit; // override generic .small (.875em)
     padding: 0.7em;
     min-height: 100px;
 
@@ -385,6 +396,7 @@
 
   .cu_item_name {
     margin: 0 0 .25em;
+    font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
     color: colors-helpers.$black;
     display: inline-block;
 
@@ -397,9 +409,9 @@
       overflow: hidden;
       max-height: 56px;
       color: colors-helpers.$grey;
-      font-size: .9rem;
-      font-weight: 600;
-      line-height: 1rem;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.28571429em;
     }
   }
 
