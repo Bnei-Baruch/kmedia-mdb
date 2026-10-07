@@ -39,8 +39,6 @@ const HandleLanguages = () => {
   const popupStyle = { direction: uiDir };
   const dispatch = useDispatch();
 
-  console.log('HandleLanguages render', contentLanguages, urlLang, origUILang, uiDir, leftRight, showAllContent);
-
   useClickOutside(() => setUiLangOpen(false), [uiLangRef]);
 
   const uiLanguageSelected = language => {
