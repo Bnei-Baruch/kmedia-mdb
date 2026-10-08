@@ -462,11 +462,18 @@
     flex-direction: column;
     justify-content: space-between;
 
+    // Semantic `.ui.header` in a list item
     h5 {
-      margin: 0;
-      font-size: 1em;
+      margin: -2.2px 0 0;
+      font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+      font-size: 15.4px;
       font-weight: bold;
-      line-height: 1em;
+      line-height: 1.28571429em;
+      color: #134d78;
+
+      a {
+        color: inherit;
+      }
     }
 
   }
@@ -480,7 +487,7 @@
       line-height: .9em;
       border-inline-end: 1px solid colors-helpers.$midGrey;
       display: inline-block;
-      font-size: .8em;
+      font-size: 14px;
 
       &:first-child {
         padding-inline-start: 0;

@@ -78,7 +78,7 @@ const TagSourceItem = props => {
   const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
 
   const renderSubList = () => (
-    <div className="pr-1.5 pl-1.5">
+    <div className="ps-[7px] pt-[10.5px] pb-[3.5px]">
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (<TagSourceItem {...props} id={x} deep={deep - 1} defaultSel={isSelected} key={x} />)
@@ -88,8 +88,8 @@ const TagSourceItem = props => {
   );
 
   return (
-    <div key={`${filterName}_${id}`} className={`pt-1/2 ${finalStat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
-      <div className="flex items-baseline no-wrap gap-2">
+    <div key={`${filterName}_${id}`} className={`${deep === 1 ? 'py-[3px]' : 'py-[2px] first:pt-0 last:pb-0'} ${finalStat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className="flex items-center no-wrap gap-2 leading-4">
         <input
           ref={checkboxRef}
           type="checkbox"
@@ -98,13 +98,13 @@ const TagSourceItem = props => {
           onChange={handleSelect}
           disabled={finalStat === 0}
         />
-        <div className="flex items-start gap-1 flex-1">
+        <div className="flex items-center flex-1">
           <span className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
             {item[isTag ? 'label' : 'name']}
           </span>
           {
             (deep === 0) && (childrenIDs.length > 0) && (
-              <span className="material-symbols-outlined text-blue-600 cursor-pointer text-2xl shrink-0 leading-none" onClick={toggleOpen}>
+              <span className="material-symbols-outlined text-[#2185d0] cursor-pointer text-[20px]! leading-4! h-4 shrink-0" onClick={toggleOpen}>
                 {arrowIcon}
               </span>
             )

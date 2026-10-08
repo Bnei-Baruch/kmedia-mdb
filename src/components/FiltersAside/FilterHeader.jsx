@@ -8,9 +8,9 @@ const FilterHeader = ({ filterName, children }) => {
   return (
     <div className="filter_aside">
       <div className="title flex items-center justify-between">
-        <span className="text-lg font-bold">{t(`filters.aside-filter.${filterName}`)}</span>
-        <span className="material-symbols-outlined text-blue-500 cursor-pointer text-3xl" onClick={toggleOpen}>
-          {`arrow_drop_${open ? 'down' : 'up'}`}
+        <span>{t(`filters.aside-filter.${filterName}`)}</span>
+        <span className="material-symbols-outlined text-[#2185d0] cursor-pointer text-[28px]! leading-[20px]! h-5" onClick={toggleOpen}>
+          {`arrow_drop_${open ? 'up' : 'down'}`}
         </span>
       </div>
       {open && children}

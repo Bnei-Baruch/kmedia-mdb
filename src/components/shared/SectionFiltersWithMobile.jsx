@@ -33,7 +33,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
       <FiltersHydrator namespace={namespace} />
       <div className="p-[14px]">
         <button
-          className="border border-blue-500 text-blue-500 rounded px-[21px] py-[11px] leading-none hover:bg-blue-50 inline-flex items-center gap-1.5"
+          className="border border-[#2185d0] text-[#2185d0] rounded px-[21px] py-[11px] leading-none hover:bg-blue-50 inline-flex items-center gap-1.5"
           onClick={toggleFilters}
         >
           <span className="material-symbols-outlined text-[14px]! leading-none!">filter_alt</span>

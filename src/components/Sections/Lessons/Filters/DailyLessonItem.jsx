@@ -25,11 +25,11 @@ const DailyLessonItem = ({ id }) => {
         <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
       </Link>
       <div className="media_item__content">
-        <h5 className="font-bold">
+        <h5>
           <Link to={canonicalLink(ccu)}>
             {t('constants.content-types.DAILY_LESSON')}
-            <small className="text-sm font-normal">
-              <span className="px-2">{t('values.date', { date: film_date })}</span>
+            <small className="text-[0.8em]">
+              <span className="inline-block mx-2">{t('values.date', { date: film_date })}</span>
               {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
             </small>
           </Link>

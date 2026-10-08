@@ -118,10 +118,10 @@ const DateFilter = ({ namespace }) => {
   const iconName      = isLanguageRtl(uiLang) ? 'arrow_left' : 'arrow_right';
   const renderContent = () => (
     <div className="filter-popup__wrapper">
-      <div className="flex flex-col">
+      <div className="flex flex-col leading-[17px]">
         {datePresets.map((x, i) => (
           <div key={`${FN_DATE_FILTER}_${i}`} className="flex items-center justify-between">
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-[9px] cursor-pointer">
               <input
                 type="checkbox"
                 checked={preset === x}
@@ -134,9 +134,9 @@ const DateFilter = ({ namespace }) => {
           </div>
         ))}
         <div>
-          <div className="cursor-pointer flex items-center gap-1" onClick={toggleDay}>
+          <div className="cursor-pointer flex items-center gap-1 leading-5" onClick={toggleDay}>
             {t('filters.date-filter.presets.CUSTOM_DAY')}
-            <span className="material-symbols-outlined text-blue-500 text-2xl">{iconName}</span>
+            <span className="material-symbols-outlined text-[#2185d0] text-[20px]! leading-5! h-5">{iconName}</span>
           </div>
           {showDay && (
             <div className="mt-2">
@@ -150,9 +150,9 @@ const DateFilter = ({ namespace }) => {
           )}
         </div>
         <div>
-          <div className="cursor-pointer flex items-center gap-1" onClick={toggleRange}>
+          <div className="cursor-pointer flex items-center gap-1 leading-5" onClick={toggleRange}>
             {t('filters.date-filter.presets.CUSTOM_RANGE')}
-            <span className="material-symbols-outlined text-blue-500 text-2xl">{iconName}</span>
+            <span className="material-symbols-outlined text-[#2185d0] text-[20px]! leading-5! h-5">{iconName}</span>
           </div>
           {showRange && (
             <div className="mt-2 flex flex-col gap-2">

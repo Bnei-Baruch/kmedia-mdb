@@ -223,13 +223,35 @@
 //aside filters styles
 .filters-aside-wrapper {
   background-color: colors-helpers.$offWhite;
-  padding: 0 1rem;
+  padding: 0 14px;
+  padding-inline-start: 28px; // Semantic: 14px column gutter + 14px padded container
   min-width: 200px;
 }
 
 .filter_aside {
   border-bottom: 1px solid colors-helpers.$midWhite;
-  padding: 1rem 0;
+  padding: 0 0 14px;
+
+  // Semantic UI checkbox: 17px white box, light-grey border
+  input[type=checkbox] {
+    appearance: none;
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    border: 1px solid #d4d4d5;
+    border-radius: 3px;
+    background: #fff center / 13px no-repeat;
+    cursor: pointer;
+
+    &:checked {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='rgba(0,0,0,.95)' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/%3E%3C/svg%3E");
+    }
+
+    &:indeterminate {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='rgba(0,0,0,.95)' d='M5 11h14v2H5z'/%3E%3C/svg%3E");
+    }
+  }
 
   &:last-child {
     border-bottom: none;
@@ -291,6 +313,7 @@
     border: 1px solid colors-helpers.$blue;
     border-radius: 8px;
     font-size: 14px;
+    line-height: 17px;
   }
 
   .stat {
@@ -348,25 +371,28 @@
 .filters-aside-ct {
   font-weight: bold;
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: center;
+  padding: 3px 0;
+  line-height: 16px;
 
   &__group {
     display: flex;
-    align-items: flex-start;
-    gap: 0.25rem;
+    align-items: center;
     flex: 1;
   }
 
   &__label {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 9px;
+    line-height: 17px;
   }
 
-  &__caret {
+  & &__caret {
     flex-shrink: 0;
-    line-height: 1;
+    font-size: 20px;
+    line-height: 16px;
+    height: 16px;
     cursor: pointer;
   }
 

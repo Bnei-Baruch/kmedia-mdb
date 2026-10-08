@@ -64,7 +64,7 @@ const PartOfDayFilterModal = ({ namespace, ct }) => {
             />
             {t(`filters.content-types.${CT_DAILY_LESSON}`)}
           </label>
-          <span className="filters-aside-ct__caret material-symbols-outlined text-blue-500" onClick={toggleOpen}>
+          <span className="filters-aside-ct__caret material-symbols-outlined text-[#2185d0]" onClick={toggleOpen}>
             {caretIcon}
           </span>
         </div>

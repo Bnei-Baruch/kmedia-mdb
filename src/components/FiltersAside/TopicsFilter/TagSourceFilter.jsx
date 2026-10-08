@@ -21,7 +21,7 @@ const TagSourceFilter = ({ namespace, filterName }) => {
       children={
         <>
           <input
-            className="search-input w-full border border-gray-300 rounded px-3 py-2"
+            className="search-input"
             placeholder={t('sources-library.filter')}
             onChange={handleSetQuery}
             defaultValue={query}

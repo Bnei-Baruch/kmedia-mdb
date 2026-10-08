@@ -22,7 +22,7 @@ const OriginalLanguageItem = ({ namespace, id }) => {
   };
 
   return (
-    <div className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+    <div className={`filters-aside-ct font-normal! ${stat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
       <div className="filters-aside-ct__group">
         <label className="filters-aside-ct__label">
           <input
