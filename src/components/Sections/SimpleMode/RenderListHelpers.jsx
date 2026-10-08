@@ -82,7 +82,7 @@ const renderHorizontalFilesList = (language, files, contentType, t, chroniclesAp
     return (
       <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })} className="media-file-button">
         {label} ({file.language})
-        <div className="file-list-icon inline-block">
+        <div className="file-list-icon">
           <SectionLogo name="downloads" />
         </div>
       </a>
@@ -228,7 +228,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         if (duration) description.push(duration);
 
         title = (
-          <div className="unit-header font-bold">
+          <div className="unit-header">
             <div className="margin-bottom-4">
               <Link className="unit-link" to={to}>
                 {ccu?.name || NO_NAME}
@@ -242,7 +242,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
         );
       } else {
         title = (
-          <div className="unit-header font-bold">
+          <div className="unit-header">
             <Link className="unit-link" to={to}>
               {unit.name || NO_NAME}
             </Link>
@@ -253,7 +253,7 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
 
       return (
         <div key={unit.id} className="unit-header">
-          <h4 className='text-xl font-bold'>{title}</h4>
+          {title}
           {files.length > 0 ? (
             files.map(f => <div className="horizontal-list remove-bottom-border" key={f.id}>{f}</div>)
           ) : (
@@ -284,13 +284,13 @@ export const renderCollection = (collection, contentLanguages, t, helpChooseLang
   const units = renderUnits(collection.content_units, contentLanguages, t, helpChooseLang, chroniclesAppend);
 
   return (
-    <div className="rounded shadow border border-gray-300 w-full my-4" key={id}>
-      <div className={`p-4 ${number ? 'gray-header' : ''}`}>
-        <Link to={canonicalLink(collection)} className="font-bold text-xl unit-header" >
+    <div className="simple-mode-card" key={id}>
+      <div className={`simple-mode-card__header ${number ? 'gray-header' : ''}`}>
+        <Link to={canonicalLink(collection)}>
           {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
         </Link>
       </div>
-      <div className="p-4 border-t border-gray-300">
+      <div className="simple-mode-card__body">
         {units}
       </div>
     </div>
@@ -318,16 +318,12 @@ const renderOtherCollection = (title, collectionArray, contentLanguages, t, help
     <div key={title} className="my-4">
       {items.length ? (
         <div className="type-header-top-margin">
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <div className="simple-mode-type-icon">
-              <SectionLogo name={icon} />
-            </div>
+          <h2 className="simple-mode-type-header">
+            <SectionLogo name={icon} width="1em" height="1em" />
             {t(`nav.sidebar.${title.toLowerCase()}`)}
           </h2>
-          <div className="rounded shadow border w-full border-gray-300">
-            <div className="p-4">
-              <div className="large">{items}</div>
-            </div>
+          <div className="simple-mode-card">
+            <div className="simple-mode-card__body">{items}</div>
           </div>
         </div>
       ) : null}

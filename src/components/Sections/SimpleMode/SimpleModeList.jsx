@@ -51,8 +51,8 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
       {
         lessons.length > 0 &&
         <div>
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <SectionLogo name="lessons" />
+          <h2 className="simple-mode-type-header">
+            <SectionLogo name="lessons" width="1em" height="1em" />
             {t('simple-mode.today-lessons')}
           </h2>
           <div>
@@ -62,9 +62,9 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
       }
       {
         others.length > 0 &&
-        <ul className="large">
+        <div>
           {renderUnit(others, filesLanguages, t)}
-        </ul>
+        </div>
       }
     </div>
   );

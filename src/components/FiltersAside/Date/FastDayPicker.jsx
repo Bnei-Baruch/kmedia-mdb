@@ -74,17 +74,10 @@ class FastDayPicker extends Component {
     }
   };
 
-  handleNativeDateInputRef = ref => {
-    this.nativeDateInput = ref;
-  };
-
   handleNativeDateInputChange = event => {
-    if (!event) return;
+    // iOS "Reset" clears the input
+    if (!event?.target.valueAsDate) return;
     this.props.onDayChange(event.target.valueAsDate);
-  };
-
-  openNativeDatePicker = () => {
-    this.nativeDateInput?.showPicker?.();
   };
 
   openPopup = () => this.setState({ isOpen: true });
@@ -126,7 +119,7 @@ class FastDayPicker extends Component {
       const selectedToString       = dayjs(selected).format('YYYY-MM-DD');
       const selectedInLocaleFormat = dayjs(selected).locale(locale).format(this.localeDateFormat);
       return (
-        <div>
+        <div className="relative">
           <div className="flex">
             <span className="inline-flex items-center self-stretch px-3 bg-gray-100 border border-e-0 border-gray-300 rounded-s small to-from-label">
               {label}
@@ -136,7 +129,7 @@ class FastDayPicker extends Component {
               className="border border-gray-300 rounded-e px-3 py-1 small"
               readOnly
               value={selectedInLocaleFormat}
-              onClick={this.openNativeDatePicker}
+              tabIndex={-1}
             />
           </div>
           <input
@@ -147,7 +140,6 @@ class FastDayPicker extends Component {
             step="1"
             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
             onChange={this.handleNativeDateInputChange}
-            ref={this.handleNativeDateInputRef}
           />
         </div>
       );

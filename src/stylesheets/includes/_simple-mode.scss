@@ -10,8 +10,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-bottom: 1em;
+
+  h4 {
+    font-size: 15px;
+  }
 
   &.adjust-height {
     height: 2.68em;
@@ -70,7 +74,37 @@
       .date-container {
         display: flex;
 
-        input {
+        .ui.input {
+          position: relative;
+          display: inline-flex;
+
+          .dropdown-icon {
+            // Material Symbols CSS forces direction: ltr, so logical insets resolve to the right
+            position: absolute;
+            inset-block: 0;
+            right: 0;
+            width: 2.67142857em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: .5;
+            pointer-events: none;
+            font-size: 20px;
+
+            [dir='rtl'] & {
+              right: auto;
+              left: 0;
+            }
+          }
+        }
+
+        // Not the transparent native date input laid over it
+        .ui.input input {
+          padding: 10.85714286px 42.74285714px 10.85714286px 16px;
+          padding-inline: 16px 42.74285714px;
+          border: 1px solid rgba(34, 36, 38, .15);
+          border-radius: 4px;
+          line-height: 1.21428571em;
           background: #ebecf0;
           color: #1a4179;
           display: inline-block;
@@ -107,9 +141,159 @@
   }
 }
 
+.simple-mode-type-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 14px;
+  font-size: 24px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Semantic `.ui.fluid.card` (16px font base)
+.simple-mode-card {
+  margin: 0 0 16px;
+  font-size: 16px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+
+  &__header {
+    padding: 1em;
+    border-radius: 4px 4px 0 0;
+
+    > a {
+      display: inline-block;
+      margin: 12px 0;
+      font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      font-size: 1.28571429em;
+      font-weight: 300;
+      line-height: 1.28571429em;
+    }
+  }
+
+  &__body {
+    // Card content padding + Semantic `.ui.list` padding (12px 0 4px 8px)
+    padding: 12px 16px 16px;
+    padding-inline-start: 24px;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+
+    // Semantic list item + list header margins don't collapse
+    > .unit-header {
+      display: flow-root;
+    }
+
+    .unit-header .unit-header {
+      font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      line-height: 1.14285714em;
+    }
+  }
+}
+
 .gray-header {
   background-color: #ebecf0;
   padding: 0.2em 1em;
+}
+
+// react-day-picker styled like the prod (v7) calendar inside a Semantic card
+.simple-mode-calendar {
+  width: 290px;
+  margin-top: 14px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+
+  .rdp-root {
+    --rdp-day-width: 28px;
+    --rdp-day-height: 34px;
+    --rdp-day_button-width: 28px;
+    --rdp-day_button-height: 28px;
+    --rdp-day_button-border-radius: 50%;
+    --rdp-nav-height: 20px;
+    --rdp-nav_button-width: 21px;
+    --rdp-nav_button-height: 20px;
+    --rdp-weekday-opacity: 1;
+    --rdp-weekday-padding: 6.125px 0;
+    --rdp-disabled-opacity: 1;
+    --rdp-today-color: #d0021b;
+    --rdp-accent-color: #4a90e2;
+    --rdp-selected-border: none;
+    padding: 14px 14px 14px;
+  }
+
+  .rdp-months {
+    width: 238px;
+    max-width: none;
+  }
+
+  .rdp-month_grid {
+    margin-inline-start: 34px;
+    margin-top: 14px;
+  }
+
+  .rdp-month_caption,
+  .rdp-caption_label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .rdp-chevron {
+    width: 12px;
+    height: 12px;
+    fill: rgba(0, 0, 0, .87);
+  }
+
+  .rdp-nav .rdp-chevron {
+    fill: #8b9898;
+  }
+
+  .rdp-weekday {
+    font-size: 12.25px;
+    font-weight: 400;
+    color: #8b9898;
+  }
+
+  .rdp-day {
+    font-size: 14px;
+  }
+
+  .rdp-disabled:not(.rdp-selected) {
+    color: #dce0e0;
+  }
+
+  .rdp-today:not(.rdp-outside) {
+    font-weight: 700;
+  }
+
+  .rdp-selected {
+    font-size: 14px;
+
+    .rdp-day_button {
+      background-color: #4a90e2;
+      color: #f0f8ff;
+    }
+  }
+
+  .today-button {
+    width: 80px;
+    margin: 5px;
+    padding: 11px 21px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(0, 0, 0, .6);
+    background: #e0e1e2;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background: #cacbcd;
+      color: rgba(0, 0, 0, .8);
+    }
+  }
 }
 
 .type-header-top-margin {

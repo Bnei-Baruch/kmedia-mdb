@@ -1,6 +1,6 @@
 import dayjs from '../../../helpers/dayjs';
 import PropTypes from 'prop-types';
-import { useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useContext, useEffect, useState, useSyncExternalStore } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { useTranslation } from 'react-i18next';
@@ -22,17 +22,18 @@ const changeDay = (amount, selectedDate, onDayClick) => {
 };
 
 
-const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobile) =>
+const datePickerButton = (handleNativeDateInputChange, data, isMobile) =>
   isMobile
     ? (
-      <div>
+      <div className="relative">
         <div className="ui input">
           <input
             type="text"
             readOnly
+            tabIndex={-1}
             value={data.selectedInLocaleFormat}
-            onClick={() => openNativeDatePicker(nativeDateInput)}
           />
+          <span className="material-symbols-outlined dropdown-icon">arrow_drop_down</span>
         </div>
         <input
           className="hide-native-date-input"
@@ -42,15 +43,10 @@ const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, is
           step="1"
           pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
           onChange={handleNativeDateInputChange}
-          ref={nativeDateInput}
         />
       </div>
     )
     : <span>{dayjs(data.selectedDate).format(data.dateFormat)}</span>;
-
-const openNativeDatePicker = nativeDateInput => {
-  nativeDateInput.current?.showPicker?.();
-};
 
 // Read at call time (not module load) so it tracks the global dayjs locale.
 const getLocaleDateFormat = () => dayjs.localeData().longDateFormat('L');
@@ -81,8 +77,10 @@ const SimpleModePage = (
     }
   });
 
-  const nativeDateInput = useRef(null);
   const { isMobile } = useContext(DeviceInfoContext);
+
+  const [month, setMonth] = useState(selectedDate);
+  useEffect(() => setMonth(selectedDate), [selectedDate]);
 
   useEffect(() => {
     const selected = selectedDate || today().toDate();
@@ -106,36 +104,36 @@ const SimpleModePage = (
 
   const renderDatePicker = () =>
     isClient &&
-    <div className="rounded shadow border border-gray-300 overflow-hidden px-3">
+    <div className="simple-mode-calendar">
       <DayPicker
         mode="single"
         captionLayout="dropdown"
         locale={locale}
         selected={selectedDate}
-        month={selectedDate}
+        month={month}
+        onMonthChange={setMonth}
+        startMonth={new Date(1970, 0)}
         endMonth={today().toDate()}
         disabled={{ after: new Date() }}
         onSelect={onDayClick}
       />
-      <div className="py-4">
-        <button className="bg-gray-300 rounded-md py-2 px-4 min-w-10" onClick={() => onDayClick(new Date())}>
-          {t('simple-mode.today-button')}
-        </button>
-      </div>
+      <button className="today-button" onClick={() => onDayClick(new Date())}>
+        {t('simple-mode.today-button')}
+      </button>
     </div>;
 
   return (
     <div>
       <SectionHeader section="simple-mode" />
-      <div className="p-4 flex gap-4">
-        <div className="w-full lg:flex-1">
+      <div className="p-[14px] flex flex-wrap">
+        <div className="w-full min-[992px]:w-3/4 px-[14px]">
           <div className="summary-container">
             <div className="controller">
-              <h4 className='font-bold'>{t('simple-mode.date')}</h4>
+              <h4>{t('simple-mode.date')}</h4>
               <div className="date-container">
                 <button type="button"
                   onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobile)}
+                {datePickerButton(handleNativeDateInputChange, data, isMobile)}
                 <button
                   type="button"
                   disabled={isToday(selectedDate)}
@@ -144,7 +142,7 @@ const SimpleModePage = (
               </div>
             </div>
             <div className="controller">
-              <h4 className='font-bold'>
+              <h4>
                 {t('simple-mode.media-language')}
                 {' (one of) '}
               </h4>
@@ -158,10 +156,10 @@ const SimpleModePage = (
           </div>
           <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate} />
         </div>
-        <div className="hidden md:block w-full lg:w-auto">
+        <div className="hidden min-[768px]:block w-full min-[992px]:w-1/4 px-[14px]">
           <div className="stick-calendar">
             <div className="summary-container adjust-height">
-              <h4 className="controller font-bold">{t('simple-mode.choose-date')}</h4>
+              <h4 className="controller">{t('simple-mode.choose-date')}</h4>
             </div>
             {renderDatePicker()}
           </div>

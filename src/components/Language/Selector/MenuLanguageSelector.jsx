@@ -101,19 +101,19 @@ const MultiSelectDropdown = ({ upward, value, onChange, options }) => {
   return (
     <div className="relative" ref={ref}>
       <div
-        className="border border-gray-300 rounded px-2 py-1 flex items-center gap-1 min-w-50 w-full text-left cursor-pointer"
+        className="border border-[rgba(34,36,38,0.15)] rounded ps-[5px] pe-1 py-[3px] min-h-[38px] flex items-center gap-1 min-w-[196px] w-full text-start cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex flex-1 flex-wrap gap-1">
+        <div className="flex flex-1 flex-wrap">
           {
             selectedOptions.map(o => (
               <div
                 key={o.value}
-                className="inline-flex items-center gap-0.5 bg-gray-100 border border-gray-300 rounded  py-0.5 px-1 text-sm leading-tight"
+                className="inline-flex items-center bg-[#e8e8e8] text-black/60 font-bold text-[14px] leading-none rounded py-[5px] px-[11px] my-[2px] me-1 shadow-[inset_0_0_0_1px_rgba(34,36,38,0.15)]"
               >
                 {o.text || o.name}
                 <span
-                  className="material-symbols-outlined leading-none text-gray-400 hover:text-gray-600 cursor-pointer text-xl"
+                  className="material-symbols-outlined leading-none text-[14px]! ms-[6.5px] opacity-50 hover:opacity-100 cursor-pointer [font-variation-settings:'wght'_700]"
                   onClick={e => {
                     e.stopPropagation();
                     toggleValue(o.value);
@@ -123,7 +123,7 @@ const MultiSelectDropdown = ({ upward, value, onChange, options }) => {
             ))
           }
         </div>
-        <span className="material-symbols-outlined text-2xl">arrow_drop_down</span>
+        <span className="material-symbols-outlined opacity-80">arrow_drop_down</span>
       </div>
       {isOpen && (
         <div className={clsx('absolute z-20 bg-white border rounded shadow-lg max-h-60 overflow-y-auto w-full', { 'bottom-full mb-1': upward })}>

@@ -203,11 +203,11 @@
 
 .horizontal-list {
   display: flex;
-  padding-bottom: 1em;
+  padding: 13.5px 0 16px;
+  line-height: 1.14285714em;
   border-bottom: 1px solid #ebecf0;
   overflow-x: auto;
   align-items: center;
-  gap: 1em;
 
   &.remove-bottom-border {
     border: 0;
@@ -261,7 +261,8 @@
     margin-inline-end: 8px;
     text-decoration: none;
     display: flex;
-    padding: 2px 8px;
+    height: 24px;
+    padding: 0 8px;
     justify-content: center;
     align-items: center;
     border: 1px solid #e0e0e0;
@@ -269,11 +270,19 @@
     color: #fff;
     background-color: #ef702e;
     font-size: 12px;
+    font-weight: 400;
+    line-height: 1.14285714em;
     flex-shrink: 0;
 
     .file-list-icon {
       width: 12px;
       margin-inline-start: 5px;
+
+      svg {
+        display: block;
+        width: 12px;
+        height: 12px;
+      }
     }
 
     a {
