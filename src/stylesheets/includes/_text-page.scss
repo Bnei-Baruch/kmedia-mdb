@@ -412,10 +412,6 @@
     flex-grow: 3;
     flex-basis: max-content;
 
-    @include responsive-helpers.mobile {
-      padding: 0;
-    }
-
     .stick_toolbar_long_translation & {
       padding: 0 8px;
     }

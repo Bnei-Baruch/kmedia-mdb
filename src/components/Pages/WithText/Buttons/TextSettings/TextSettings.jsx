@@ -22,17 +22,19 @@ const TextSettings = ({ popPos = 'bottom' }) => {
               icon={<span className="material-symbols-outlined">text_fields</span>}
             />
           </Popover.Button>
+          {/* Semantic "basic flowing popup" with "fluid item menu" rows; menu order stays LTR as on prod */}
           <Popover.Panel
-            className="sources-settings z-10"
-            anchor={popPos}
+            className="z-10 w-[204px] bg-white rounded-[4px] shadow-[0_2px_4px_0_rgba(34,36,38,0.12),0_2px_10px_0_rgba(34,36,38,0.15)] font-lato text-[16px] text-black/87"
+            anchor={{ to: popPos, gap: 21 }}
+            dir="ltr"
           >
             <div className="flex">
               <ZoomSizeBtns />
             </div>
-            <div className="flex">
+            <div className="flex border-t border-[rgba(34,36,38,0.1)]">
               <FontTypeBtn />
             </div>
-            <div className="flex">
+            <div className="flex border-t border-[rgba(34,36,38,0.1)]">
               <ThemeBtn />
             </div>
           </Popover.Panel>

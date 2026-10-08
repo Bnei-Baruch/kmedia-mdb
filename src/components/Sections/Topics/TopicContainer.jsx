@@ -162,7 +162,7 @@ const TopicContainer = () => {
 
     return (
       <>
-        <ul className="list-none pl-4">
+        <ul>
           {
             children
               .filter(isIncluded)
@@ -180,10 +180,10 @@ const TopicContainer = () => {
         {
           showExpandButton &&
           <button
-            className="inline-flex items-center gap-1 mt-1 text-sm text-gray-500 hover:text-gray-700"
+            className="topics__button"
             onClick={() => handleShowMoreClick(id)}
           >
-            <span className="material-symbols-outlined font-bold text-xl text-sky-500">{expanded ? 'remove' : 'add'}</span>
+            <span className="material-symbols-outlined">{expanded ? 'remove' : 'add'}</span>
             {t(`topics.show-${expanded ? 'less' : 'more'}`)}
           </button>
         }
@@ -253,12 +253,12 @@ const TopicContainer = () => {
   return (
     <>
       <SectionHeader section="topics"/>
-      <hr className="m-0"/>
-      <div className="p-4">
-        <div className="relative max-w-[800px] mx-auto">
-          <span className="material-symbols-outlined absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+      <hr className="m-0 border-[rgba(34,36,38,0.15)]"/>
+      <div className="p-[14px]">
+        <div className="relative max-w-[600px] mx-auto">
+          <span className="material-symbols-outlined absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-[20px]! text-black/50 pointer-events-none">search</span>
           <input
-            className="search-omnibox rounded-full w-full border border-blue-300 ps-3 pe-10 py-2"
+            className="search-omnibox w-full bg-white text-black/87 text-base leading-[1.21428571em] border border-[#7dcff5] rounded-[20px] ps-4 pe-[42.74px] py-[10.86px] outline-none placeholder:text-[rgba(191,191,191,0.87)]"
             placeholder={t('sources-library.filter')}
             onChange={handleFilterChange}
             onKeyDown={handleFilterKeyDown}

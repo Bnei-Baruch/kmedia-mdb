@@ -24,7 +24,7 @@ const Footer = () => {
           <h5 className="font-lato! text-white">
             {t('nav.top.header')}
             <br/>
-            <small className="text-gray-400">
+            <small className="text-[#767676]">
               {t('nav.footer.copyright', { year })}
               {' '}
               {t('nav.footer.rights')}

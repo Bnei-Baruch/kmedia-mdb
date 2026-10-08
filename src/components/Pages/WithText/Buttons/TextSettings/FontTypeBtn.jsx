@@ -20,7 +20,7 @@ const FontTypeBtn = () => {
           <button
             key={d}
             onClick={() => handleSet(d)}
-            className={`flex-1 px-4 py-2 text-center ${d === fontType ? 'bg-blue-50 font-semibold' : ''}`}
+            className={`flex-1 min-w-0 px-4 py-[14.86px] leading-none text-center capitalize whitespace-nowrap ${d === fontType ? 'bg-black/5' : 'hover:bg-black/3'}`}
             disabled={isPdf}
           >
             {d}

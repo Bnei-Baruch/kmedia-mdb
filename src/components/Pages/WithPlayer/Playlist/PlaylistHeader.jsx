@@ -90,7 +90,7 @@ const PlaylistHeader = () => {
       } else if (content_type === CT_LESSONS_SERIES) {
         playNow = <>
           {t(cuPartNameByCCUType(content_type), { name: part })}
-          <span className="mx-1 text-sm font-normal">
+          <span className="inline-block mx-2 p-[5px] text-[0.7em] font-normal">
             {t('values.date', { date: unit.film_date })}
           </span>
         </>;
@@ -110,14 +110,14 @@ const PlaylistHeader = () => {
         </div>
         {
           subheader && (
-            <h4 className={clsx('font-lato! font-normal text-[15px] leading-[1.28571429em] px-[28px]', _mobStyles)}>
+            <h4 className={clsx('-mt-[2.14px] mb-[14px] last:mb-0 font-lato! font-normal text-[15px] leading-[1.28571429em] text-white px-[28px]', _mobStyles)}>
               {subheader}
               {isLesson && isMobile && !isMy && <LessonDatePickerContainer />}
             </h4>)
         }
         {playNow && (
           // Semantic header margin: calc(2rem - .14em), or -.14em when it is the first element in the block
-          <h3 className={clsx('mb-0 px-[28px] font-lato! text-[24px] leading-[1.28571429em] font-bold', hasDatePicker || subheader ? 'mt-[24.57px]' : '-mt-[3.43px]')}>
+          <h3 className={clsx('mb-0 px-[28px] font-lato! text-[24px] leading-[1.28571429em] font-bold text-white', hasDatePicker || subheader ? 'mt-[24.57px]' : '-mt-[3.43px]')}>
             {playNow}
           </h3>
         )}

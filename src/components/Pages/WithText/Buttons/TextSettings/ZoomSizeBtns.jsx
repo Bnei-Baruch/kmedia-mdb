@@ -16,13 +16,13 @@ const ZoomSizeBtns = () => {
 
   return (
     <>
-      <button onClick={handleSetPlus} className="flex-1 px-4 py-2 flex items-center justify-center gap-1">
-        <span className="material-symbols-outlined large">text_format</span>
-        <span className="material-symbols-outlined small">add</span>
+      <button onClick={handleSetPlus} className="flex-1 flex items-center justify-center px-4 py-[14.86px] hover:bg-black/3">
+        <span className="font-bold text-[24px] leading-none">A</span>
+        <span className="material-symbols-outlined text-[14px]! [font-variation-settings:'wght'_700]">add</span>
       </button>
-      <button onClick={handleSetMinus} className="flex-1 px-4 py-2 flex items-center justify-center gap-1">
-        <span className="material-symbols-outlined large">text_format</span>
-        <span className="material-symbols-outlined small">remove</span>
+      <button onClick={handleSetMinus} className="flex-1 flex items-center justify-center px-4 py-[14.86px] hover:bg-black/3">
+        <span className="font-bold text-[24px] leading-none">A</span>
+        <span className="material-symbols-outlined text-[14px]! [font-variation-settings:'wght'_700]">remove</span>
       </button>
     </>
   );
