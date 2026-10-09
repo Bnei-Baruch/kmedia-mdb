@@ -1,9 +1,10 @@
-import logger from 'redux-logger';
+import reduxLogger from 'redux-logger';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware, { END } from 'redux-saga';
 
 import { rootSaga } from '../sagas';
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
+import logger from '../helpers/logger';
 
 import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
@@ -41,7 +42,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const verboseDebug = false;
 
 const sagaMiddleware = createSagaMiddleware(
-  verboseDebug ? { sagaMonitor: sagaMonitor(), logger: console.log } : {}
+  verboseDebug ? { sagaMonitor: sagaMonitor(), logger: logger.log } : {}
 );
 
 const setupMiddleware = history => getDefaultMiddleware => {
@@ -57,7 +58,7 @@ const setupMiddleware = history => getDefaultMiddleware => {
   );
   // Conditionally add another middleware in dev
   if (verboseDebug) {
-    middleware.push(logger);
+    middleware.push(reduxLogger);
   }
 
   return middleware;
@@ -98,7 +99,7 @@ const setupReducers = history => ({
 });
 
 export default function createStore(preloadedState, history) {
-  console.log('configureStore, apply middleware');
+  logger.log('configureStore, apply middleware');
   const store = configureStore({
     preloadedState,
     reducer   : setupReducers(history),

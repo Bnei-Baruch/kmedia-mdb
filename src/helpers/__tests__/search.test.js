@@ -25,7 +25,7 @@ describe('SuggestionsHelper', () => {
       { text: '2 3', title: '1 > 2 > 3', result_type: ES_RESULT_TYPE_SOURCES },
       { text: '2', title: '1 > 2', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['2', '2 > 3']);
+    expect(sh.getSuggestions()).toEqual(['1 > 2', '1 > 2 > 3']);
   });
 
   test('simple same level', () => {
@@ -34,7 +34,7 @@ describe('SuggestionsHelper', () => {
       { text: '2', title: '1 > 2', result_type: ES_RESULT_TYPE_SOURCES },
       { text: '2 a', title: '3 > 2 a', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['2', '2 a', '2 > 3']);
+    expect(sh.getSuggestions()).toEqual(['1 > 2', '1 > 2 > 3', '3 > 2 a']);
   });
 
   test('simple dash', () => {
@@ -49,7 +49,7 @@ describe('SuggestionsHelper', () => {
     const sh = new SuggestionsHelper(buildResults('3', [
       { text: '3 - nice', title: '1 > 2 > 3 - nice', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['3 - nice']);
+    expect(sh.getSuggestions()).toEqual(['1 > 2 > 3 - nice']);
   });
 
   test('partial match', () => {
@@ -60,7 +60,7 @@ describe('SuggestionsHelper', () => {
         result_type: ES_RESULT_TYPE_SOURCES
       },
     ]));
-    expect(sh.getSuggestions()).toEqual(['book of shamati > there is none one else beside him']);
+    expect(sh.getSuggestions()).toEqual(['bs > book of shamati > there is none one else beside him']);
   });
 
   test('order', () => {
@@ -68,7 +68,7 @@ describe('SuggestionsHelper', () => {
       { text: 'a b 3 c d', title: '1 > 2 a b > 3 c d', result_type: ES_RESULT_TYPE_SOURCES },
       { text: 'a c d', title: '1 > 2 > a c d', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['a c d', '2 a b > 3 c d']);
+    expect(sh.getSuggestions()).toEqual(['1 > 2 > a c d', '1 > 2 a b > 3 c d']);
   });
 
   test('prefix', () => {
@@ -76,7 +76,7 @@ describe('SuggestionsHelper', () => {
       { text: '21 3', title: '1 > 1 21 > 3', result_type: ES_RESULT_TYPE_SOURCES },
       { text: '21 1 3', title: '1 > 21 1 > 3', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['21 1 > 3', '1 21 > 3']);
+    expect(sh.getSuggestions()).toEqual(['1 > 1 21 > 3', '1 > 21 1 > 3']);
   });
 
   test('dedup', () => {
@@ -84,7 +84,7 @@ describe('SuggestionsHelper', () => {
       { text: '21 3', title: '1 > 1 21 > 3', result_type: ES_RESULT_TYPE_SOURCES },
       { text: '21 3', title: '1 > 1 21 > 3', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
-    expect(sh.getSuggestions()).toEqual(['1 21 > 3']);
+    expect(sh.getSuggestions()).toEqual(['1 > 1 21 > 3']);
   });
 
   test('sort with year', () => {

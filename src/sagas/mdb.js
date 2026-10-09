@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
@@ -210,7 +211,7 @@ function* createLabel(action) {
     const { content_unit } = action.payload;
     yield fetchLabels({ content_unit, language });
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -226,7 +227,7 @@ export function* fetchLabels(payload) {
     const { data }         = yield call(Api.labels, params);
     yield put(mdbActions.receiveLabels(data.labels));
   } catch (err) {
-    console.error('fetchLabels errors', err);
+    logger.error('fetchLabels errors', err);
   }
 }
 

@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import { actions, selectors, types } from '../redux/modules/preparePage';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
@@ -24,7 +25,7 @@ function* fetchCollectionsList(action) {
       yield put(actions.receiveCollections(namespace));
     }
   } catch (err) {
-    console.log('fetch programs error', err);
+    logger.error('fetch programs error', err);
   }
 }
 

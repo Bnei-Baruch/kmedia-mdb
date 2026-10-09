@@ -51,6 +51,8 @@ app.use(helmet({
         '*.kab.info',
         '*.kab.sh',
         '*.jwplayer.com',
+        'cdn-cookieyes.com',            // CookieYes CMP
+        '*.cookieyes.com',              // CookieYes config + consent log (connect-src falls back to default-src)
       ],
       'script-src': [
         '\'self\'',
@@ -66,6 +68,7 @@ app.use(helmet({
         '*.jwpcdn.com',
         '*.hlsjs.js',
         'blob:',
+        'cdn-cookieyes.com',            // CookieYes loader
       ],
       'style-src': [
         '\'self\'',
@@ -101,6 +104,7 @@ app.use(helmet({
         '*.usersnap.com',
         '*.twimg.com',
         '*.jwpltx.com',
+        'cdn-cookieyes.com',            // CookieYes banner assets
       ],
       'media-src': [
         '\'self\'',

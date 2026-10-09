@@ -959,6 +959,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} dk okuma",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
@@ -985,7 +986,17 @@
         "scan": "Scan of the original text",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Bağlantıyı kopyala"
+        "copy-link": "Bağlantıyı kopyala",
+        "auto-scroll": "Otomatik kaydırma",
+        "auto-scroll-speed": "Kaydırma hızı",
+        "auto-scroll-play": "Oynat (Space)",
+        "auto-scroll-pause": "Duraklat (Space)",
+        "auto-scroll-skip-back": "Geri (←)",
+        "auto-scroll-skip-fwd": "İleri (→)",
+        "auto-scroll-slower": "Yavaşlat (↓)",
+        "auto-scroll-faster": "Hızlandır (↑)",
+        "auto-scroll-close": "Kapat",
+        "auto-scroll-time": "{{mins}} dk kaldı"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -997,7 +1008,8 @@
         "download": "Download",
         "more-buttons": "More",
         "toc": "İçindekiler",
-        "copy-link": "Link"
+        "copy-link": "Link",
+        "auto-scroll": "Otomatik"
       }
     }
   }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
+import logger from '../../../helpers/logger';
 import {
   LANG_ENGLISH,
   LANG_HEBREW,
@@ -88,9 +89,9 @@ const HomePageContainer = ({ t }) => {
 
   useEffect(() => {
     const now = Date.now();
-    console.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
+    logger.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
     if (!fetchTimestamp || now - fetchTimestamp > FETCH_TIMEOUT) {
-      console.log('Fetching!');
+      logger.log('Fetching!');
       fetchData(true);
       fetchSocialMedia('blog', fetchBlogList, contentLanguages);
       fetchSocialMedia('tweet', fetchTweetsList, contentLanguages);

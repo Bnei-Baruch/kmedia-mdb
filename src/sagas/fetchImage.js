@@ -1,6 +1,7 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types, selectors } from '../redux/modules/fetchImage';
 import { knownFallbackImages } from '../helpers/images';
+import logger from '../helpers/logger';
 
 const buffer = [];
 
@@ -50,7 +51,7 @@ function* fetch(payload) {
         break;
       }
     } catch (e) {
-      console.log('fetchImage catch', src, e);
+      logger.error('fetchImage catch', src, e);
     }
   }
 

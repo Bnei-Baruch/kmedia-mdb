@@ -60,7 +60,7 @@ export class RenderBase {
       if (end) {
         const match     = this.findClose(this.buildMatch(end[0], this.dataCleanHtml), end[1]);
         const noHtmlPos = match?.index + end[0].length + 1;
-        const str       = `<span class={${prefixes.class}} id="${prefixes.end}${id}"></span>`;
+        const str       = `<span class="${prefixes.class}" id="${prefixes.end}${id}"></span>`;
         acc.push({ str, noHtmlPos, isAdded: true });
       }
 
@@ -100,7 +100,12 @@ export class RenderBase {
   }
 
   buildMatch(search, data) {
-    const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter(word => !!word);
+    // punctuation from KEEP_LETTERS_RE becomes a `.` wildcard; escape any other regex metachar (e.g. `?`)
+    const words = search
+      .replace(KEEP_LETTERS_RE, '.')
+      .replace(/[?+|\\^$*()[\]{}]/g, '\\$&')
+      .split(' ')
+      .filter(word => !!word);
     const re    = new RegExp(words.map(word => `(${word})`).join('(.{0,5})'), 'sg');
     return Array.from(data.matchAll(re), m => m);
   };

@@ -32,6 +32,7 @@ import {
   CT_RESEARCH_MATERIAL
 } from '../helpers/consts';
 import MediaHelper from './../helpers/media';
+import logger from '../helpers/logger';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
 import { selectSuitableLanguage } from '../helpers/language';
@@ -96,7 +97,7 @@ export const cuPage = async (store, match) => {
 
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
   if (!cuID || !unit) {
-    console.error(`Error, failed fetching unit ${cuID}: ${unit}`);
+    logger.error(`Error, failed fetching unit ${cuID}: ${unit}`);
     return Promise.reject();
   }
 
@@ -142,7 +143,7 @@ export const cuPage = async (store, match) => {
       file                   = summaryGetFile(unit, summaryLanguage);
       break;
     default:
-      console.warn('Unsupported active tab', activeTab);
+      logger.warn('Unsupported active tab', activeTab);
       break;
   }
 
@@ -220,7 +221,7 @@ export const playlistCollectionPage = (store, match) => {
       const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
       if (!cuId && !c?.cuIDs) {
         // This can happen when collection is empty (unit is not secure or published).
-        console.error(`Failed fetching unit for ${cuId} for ${cID}`);
+        logger.error(`Failed fetching unit for ${cuId} for ${cID}`);
         return Promise.reject();
       }
 
@@ -315,19 +316,19 @@ const fetchSQData = async (store, uiLang, contentLanguages) => {
   }).catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
 };
 
-export const libraryPage = async (store, match, show_console = false) => {
+export const libraryPage = async (store, match) => {
   const state            = store.getState();
   const location         = state?.router.location ?? {};
   const query            = getQuery(location);
   const uiLang           = query.language || settings.getUILang(state.settings);
   const sourceLanguage   = query.source_language;
   const contentLanguages = settingsGetContentLanguagesSelector(state);
-  show_console && console.log('serverRender: libraryPage before fetch sources');
+  logger.log('serverRender: libraryPage before fetch sources');
   await fetchSQData(store, uiLang, contentLanguages);
 
-  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id);
+  logger.log('serverRender: libraryPage sources was fetched', match.params.id);
   const sourceID = firstLeafId(match.params.id, store.getState());
-  show_console && console.log('serverRender: libraryPage source was found', sourceID);
+  logger.log('serverRender: libraryPage source was found', sourceID);
 
   await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage)).done;
   const file = textPageGetFileSelector(store.getState()) || {};
@@ -345,7 +346,7 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
   [LANG_ENGLISH, 'laitman']
 ]);
 
-export const likutPage = async (store, match, show_console = false) => {
+export const likutPage = async (store, match) => {
   const { id } = match.params;
 
   const location       = store.getState()?.router.location ?? {};

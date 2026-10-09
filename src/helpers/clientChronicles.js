@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { ulid } from 'ulid';
 import { chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
+import logger from './logger';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
@@ -96,7 +97,7 @@ export default class ClientChronicles {
       // Check for inactivity, only if was active since last inactive timestamp.
       if (this.isUserActive() && !this.isPlayerPlaying() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
-        console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
+        logger.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
         this.append('user-inactive', { activities: Array.from(this.sessionActivities) });
         store.dispatch(actions.userInactive());
       }

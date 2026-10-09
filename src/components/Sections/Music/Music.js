@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
+import logger from '../../../helpers/logger';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -24,7 +25,7 @@ const Music = () => {
   let wipErr = WipErr({ wip: isLoading, err: isError, t });
   if (wipErr) {
     if (error) {
-      console.error('========> Music error', error);
+      logger.error('========> Music error', error);
     }
   }
 

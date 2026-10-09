@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import logger from '../helpers/logger';
+
 class ErrorBoundary extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
@@ -21,7 +23,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, info) {
     // You can also log the error to an error reporting service
-    console.error(error, info);
+    logger.error(error, info);
   }
 
   render() {

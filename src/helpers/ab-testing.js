@@ -1,5 +1,7 @@
 import { emitter } from '@marvelapp/react-ab-test';
 
+import logger from './logger';
+
 // Specific A/B test constants.
 
 // Recommendations.
@@ -29,7 +31,7 @@ export const selectVariant = (experiment, userId) => {
 
   emitter.calculateActiveVariant(experiment, userId);
   const variant = emitter.getActiveVariant(experiment);
-  console.log('Variant', variant);
+  logger.log('Variant', variant);
   return variant;
 }
 

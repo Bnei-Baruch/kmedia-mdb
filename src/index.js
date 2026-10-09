@@ -19,6 +19,7 @@ import { createBrowserHistory } from 'history';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
+import logger from './helpers/logger';
 import i18n, { initializeI18n } from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as ssr } from './redux/modules/ssr';
@@ -84,7 +85,7 @@ function hydrateApp(kcInfo) {
 
     // We ask for semi-quasi static data here since
     // we strip it from SSR to save initial network bandwidth
-    console.log('hydrateApp fetchSQData');
+    logger.log('hydrateApp fetchSQData');
     store.dispatch(mdbActions.fetchSQData());
   });
 }

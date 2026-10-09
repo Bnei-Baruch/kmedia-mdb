@@ -1,13 +1,14 @@
 import { createId } from '@paralleldrive/cuid2';
+import logger from './logger';
 
 export function logErrors(err, req, res, next) {
   if (err && err.stack) {
-    console.log(err.stack);
+    logger.error(err.stack);
   } else {
-    console.log(err);
+    logger.error(err);
   }
 
-  console.info(`error handling ${req.originalUrl}`);
+  logger.info(`error handling ${req.originalUrl}`);
   next(err);
 }
 
@@ -21,7 +22,7 @@ export function errorHandler(err, req, res, next) {
 }
 
 export function logAll(req, res, next) {
-  console.info('>>> %s %s %s %s', new Date().toISOString(), req.method, req.url, req.path);
+  logger.info('>>> %s %s %s %s', new Date().toISOString(), req.method, req.url, req.path);
   next();
 }
 
@@ -48,7 +49,7 @@ function createLogDuration(entry, opts, msg) {
         status: this.statusCode,
         duration: durationInMilliseconds
       };
-      console.log(JSON.stringify(doneEntry));
+      logger.log(JSON.stringify(doneEntry));
     }
 	}
 }
@@ -67,7 +68,7 @@ export function duration(req, res, next) {
       ip,
       user_agent: userAgent,
     };
-    console.log(JSON.stringify(entry));
+    logger.log(JSON.stringify(entry));
 
     const opts = {
       start: process.hrtime(),
