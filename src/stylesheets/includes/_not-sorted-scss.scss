@@ -74,12 +74,46 @@
       }
     }
   }
+
+  &__agentic-row {
+    align-items: center;
+    display: flex;
+    gap: .8em;
+  }
+
+  &__agentic-sparkle {
+    align-items: center;
+    background: #e6f7f9;
+    border-radius: 9px;
+    color: #0e7490;
+    display: inline-flex;
+    flex: 0 0 36px;
+    font-size: 22px;
+    height: 36px;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  &__result-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__agentic-arrow.icon {
+    color: #aab2bc;
+    margin: 0;
+  }
 }
 
 .search-result-rtl {
   .title {
     direction: rtl;
     display: inline-block;
+  }
+
+  .search-omnibox__agentic-row {
+    direction: rtl;
+    text-align: right;
   }
 }
 

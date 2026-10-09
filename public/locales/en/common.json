@@ -153,6 +153,7 @@
       "KITEI_MAKOR": "Sources Materials",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Kabbalah Library",
+      "TAG": "Topic",
       "PICNIC": "Picnic",
       "R_TWEET": "Tweets",
       "PUBLIC_EVENTS": "Public Events"
@@ -174,6 +175,7 @@
     "copy": "Copy",
     "view-all": "View All",
     "save": "Save",
+    "retry": "Retry",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -291,6 +293,112 @@
       "relevance": "Relevance",
       "newertoolder": "Newer to older",
       "oldertonewer": "Older to newer"
+    },
+    "types": {
+      "regular": "Regular Search",
+      "agentic": "Agentic Search",
+      "agenticRapid": "Agentic Search (Rapid)",
+      "beta": "Beta",
+      "agenticBeta": "Agentic Search is in beta."
+    },
+    "agentic": {
+      "warningTitle": "AI-generated descriptions and labels",
+      "warning": "Descriptions and labels on this search page may be AI-generated and may contain mistakes or inaccuracies.",
+      "autocompleteAsk": "Ask AI: \"{{query}}\"",
+      "autocompleteDescription": "Search by meaning, not just keywords",
+      "advancedThinking": "Advanced thinking",
+      "searchDeeper": "Perform a deeper search",
+      "searchDeeperHint": "Click here to search the same request more deeply.",
+      "backToRegular": "Back to regular search",
+      "nudge": {
+        "title": "Let AI improve your search",
+        "message": "AI Mode searches across the archive and brings together the most relevant material for “{{query}}”.",
+        "button": "Ask AI Mode",
+        "dismiss": "Dismiss"
+      },
+      "summary": "AI summary",
+      "rapidResultsLive": {
+        "title": "Preliminary results",
+        "badge": "Updating",
+        "message": "These results may still change while the search continues. Final results will appear once the search is complete."
+      },
+      "loginRequired": {
+        "title": "Sign in to use Agentic Search",
+        "message": "Log in or register to get more relevant results with the AI agent.",
+        "button": "Log in / Register"
+      },
+      "errors": {
+        "queryTooLongTitle": "Your search is a little too long",
+        "queryTooLong": "Please shorten it to {{maxCharacters}} characters or fewer and try again."
+      },
+      "summaryFallback": {
+        "title": "Summary",
+        "message": "We found some good matches: {{findingsText}}. You can use {{improveSearch}} below to get more focused results.",
+        "messagePossibleOnly": "We were able to find {{count}} possible results that may help. You can check them or use {{improveSearch}} below to focus the search.",
+        "noResults": "We could not find suitable results in the available content. The search may not be related to the sources in the system, or it may help to phrase it more precisely.",
+        "temporaryError": "We could not complete the search because of a temporary issue. You can try again in a moment.",
+        "and": "and",
+        "highlyRelevant": "{{count}} highly accurate results",
+        "relevant": "{{count}} relevant results",
+        "possible": "{{count}} additional results that may help"
+      },
+      "reason": "Why this result",
+      "highlights": "Highlights",
+      "no-results": "Agentic Search found no results for \"{{query}}\".",
+      "followupTitle": "Refine these results",
+      "previousResultsTitle": "Results from previous searches in this context",
+      "followupPlaceholder": "Ask a follow-up...",
+      "followupButton": "Refine",
+      "finishNowButton": "Immediate results",
+      "followupsRemaining": "{{count}} follow-ups remaining",
+      "followupsExhausted": "No follow-ups remain for this session. Start a new Agentic Search to continue.",
+      "statusTitle": "Search progress",
+      "statusIteration": "Step {{iteration}}",
+      "progress": {
+        "queryAnalyzed": "Query analyzed",
+        "initialResults": "Initial results found",
+        "goodCandidates": "Some promising results found",
+        "mayTakeLonger": "This is a deeper search, so it may take a little longer",
+        "nearFinish": "Close to finishing"
+      },
+      "status": {
+        "pending": "Starting the search...",
+        "planning": "Understanding the query and building the search path...",
+        "initializingAgent": "Preparing the search...",
+        "thinking": [
+          "Planning additional steps...",
+          "Analyzing the findings we received...",
+          "There are some interesting findings...",
+          "Ranking results...",
+          "Arranging the best results...",
+          "Checking whether more sources can enrich the results...",
+          "Making good progress...",
+          "Filtering out less suitable results...",
+          "Checking how the findings fit together...",
+          "Focusing the search around the original intent of the query...",
+          "Checking the depth of the match between the query and the results...",
+          "Checking which supporting materials strengthen the results found...",
+          "Reviewing the findings and strengthening the main direction..."
+        ],
+        "verifying": "Verifying the quality of the results...",
+        "finalizing": "Finalizing the results...",
+        "done": "Search completed",
+        "error": "We could not complete the search",
+        "canceled": "Search stopped",
+        "working": "Search is still running...",
+        "tools": {
+          "usingTool": "Checking another source...",
+          "elasticsearch_search": "Searching the archive...",
+          "query_source_ai": "Searching inside source text...",
+          "query_transcript_ai": "Checking insights from a transcript...",
+          "get_available_books": "Checking available books...",
+          "get_sources_by_author": "Checking sources by author...",
+          "get_sources_by_source": "Checking the source structure...",
+          "get_collections": "Checking relevant collections...",
+          "get_content_unit": "Checking a content item...",
+          "get_content_units_by_collection": "Checking items inside a collection..."
+        }
+      }
     },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",

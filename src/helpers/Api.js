@@ -218,6 +218,51 @@ class Api {
     })}`)
   );
 
+  static reasoningSearchStart = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/start'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearchCache = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cache'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearch = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearchStatus = sessionId => Requests.get(`search/reasoning/status?${Requests.makeParams({
+    session_id: sessionId,
+    _: Date.now()
+  })}`);
+
+  static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({
+    session_id: sessionId,
+    _: Date.now()
+  })}`);
+
+  static reasoningSearchCancel = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cancel'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
+
+  static reasoningSearchFinishNow = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/finish-now'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
+
   static getAsset = path => Requests.getAsset(path);
 
   static getUnzipUIDs = ({ path, ids }) => {

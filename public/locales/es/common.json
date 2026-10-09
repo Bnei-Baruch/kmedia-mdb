@@ -151,7 +151,9 @@
       "KITEI_MAKOR": "Extractos de Fuentes",
       "LIKUTIM": "Compilaciones",
       "SOURCE": "Biblioteca",
+      "TAG": "Tema",
       "PICNIC": "Picnic",
+      "R_TWEET": "Tweets",
       "PUBLIC_EVENTS": "Eventos publicos"
     }
   },
@@ -171,6 +173,7 @@
     "copy": "Copiar",
     "view-all": "Ver todo",
     "save": "Guardar",
+    "retry": "Intentar de nuevo",
     "remove": "Eliminar",
     "edit": "Editar"
   },
@@ -288,6 +291,112 @@
       "relevance": "Relevante",
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
+    },
+    "types": {
+      "regular": "Búsqueda normal",
+      "agentic": "Búsqueda con agente",
+      "agenticRapid": "Búsqueda con agente (rápida)",
+      "beta": "Beta",
+      "agenticBeta": "La búsqueda con agente está en beta."
+    },
+    "agentic": {
+      "warningTitle": "Descripciones y etiquetas generadas por AI",
+      "warning": "Las descripciones y etiquetas de esta página de búsqueda pueden haber sido generadas por AI y contener errores o imprecisiones.",
+      "autocompleteAsk": "Preguntar a la IA: \"{{query}}\"",
+      "autocompleteDescription": "Busca por significado, no solo por palabras clave",
+      "advancedThinking": "Pensamiento avanzado",
+      "searchDeeper": "Realiza una búsqueda más profunda",
+      "searchDeeperHint": "Haz clic aquí para buscar la misma solicitud con más profundidad.",
+      "backToRegular": "Volver a la búsqueda regular",
+      "nudge": {
+        "title": "Deja que la IA mejore tu búsqueda",
+        "message": "El modo IA busca en todo el archivo y reúne el material más relevante para «{{query}}».",
+        "button": "Preguntar al modo IA",
+        "dismiss": "Cerrar"
+      },
+      "summary": "Resumen de AI",
+      "rapidResultsLive": {
+        "title": "Resultados preliminares",
+        "badge": "Actualizando",
+        "message": "Estos resultados aún pueden cambiar mientras la búsqueda continúa. Los resultados finales aparecerán cuando la búsqueda termine."
+      },
+      "loginRequired": {
+        "title": "Inicia sesión para usar la búsqueda con agente",
+        "message": "Inicia sesión o regístrate para obtener resultados más relevantes con el agente de IA.",
+        "button": "Iniciar sesión / Registrarse"
+      },
+      "errors": {
+        "queryTooLongTitle": "Tu búsqueda es un poco demasiado larga",
+        "queryTooLong": "Acórtala a {{maxCharacters}} caracteres o menos e inténtalo de nuevo."
+      },
+      "summaryFallback": {
+        "title": "Resumen",
+        "message": "Encontramos algunas coincidencias buenas: {{findingsText}}. Puedes usar {{improveSearch}} abajo para obtener resultados más enfocados.",
+        "messagePossibleOnly": "Logramos encontrar {{count}} resultados posibles que pueden ayudar. Puedes revisarlos o usar {{improveSearch}} abajo para enfocar la búsqueda.",
+        "noResults": "No encontramos resultados adecuados en el contenido disponible. Es posible que la búsqueda no esté relacionada con las fuentes del sistema, o que convenga formularla de manera más precisa.",
+        "temporaryError": "No pudimos completar la búsqueda debido a un problema temporal. Puedes intentarlo de nuevo en un momento.",
+        "and": "y",
+        "highlyRelevant": "{{count}} resultados especialmente precisos",
+        "relevant": "{{count}} resultados relevantes",
+        "possible": "{{count}} resultados adicionales que pueden ayudar"
+      },
+      "reason": "Por qué este resultado",
+      "highlights": "Fragmentos destacados",
+      "no-results": "La búsqueda con agente no encontró resultados para \"{{query}}\".",
+      "followupTitle": "Refinar estos resultados",
+      "previousResultsTitle": "Resultados de búsquedas anteriores en este contexto",
+      "followupPlaceholder": "Haz una pregunta de seguimiento...",
+      "followupButton": "Refinar",
+      "finishNowButton": "Resultados inmediatos",
+      "followupsRemaining": "{{count}} seguimientos restantes",
+      "followupsExhausted": "No quedan seguimientos para esta sesión. Inicia una nueva búsqueda con agente para continuar.",
+      "statusTitle": "Progreso de la búsqueda",
+      "statusIteration": "Paso {{iteration}}",
+      "progress": {
+        "queryAnalyzed": "La consulta fue analizada",
+        "initialResults": "Se encontraron resultados iniciales",
+        "goodCandidates": "Se encontraron algunos resultados prometedores",
+        "mayTakeLonger": "Esta es una búsqueda profunda, por lo que puede tardar un poco más",
+        "nearFinish": "Cerca de terminar"
+      },
+      "status": {
+        "pending": "Iniciando la búsqueda...",
+        "planning": "Entendiendo la consulta y construyendo la ruta de búsqueda...",
+        "initializingAgent": "Preparando la búsqueda...",
+        "thinking": [
+          "Planificando pasos adicionales...",
+          "Analizando los hallazgos recibidos...",
+          "Hay algunos hallazgos interesantes...",
+          "Clasificando resultados...",
+          "Ordenando los mejores resultados...",
+          "Comprobando si fuentes adicionales pueden enriquecer los resultados...",
+          "Avanzando bien...",
+          "Filtrando resultados menos adecuados...",
+          "Comprobando cómo encajan los hallazgos entre sí...",
+          "Enfocando la búsqueda alrededor de la intención original de la consulta...",
+          "Comprobando la profundidad de la coincidencia entre la consulta y los resultados...",
+          "Comprobando qué materiales complementarios refuerzan los resultados encontrados...",
+          "Revisando los hallazgos y reforzando la dirección principal..."
+        ],
+        "verifying": "Verificando la calidad de los resultados...",
+        "finalizing": "Finalizando los resultados...",
+        "done": "Búsqueda completada",
+        "error": "No pudimos completar la búsqueda",
+        "canceled": "Búsqueda detenida",
+        "working": "La búsqueda sigue en curso...",
+        "tools": {
+          "usingTool": "Comprobando otra fuente...",
+          "elasticsearch_search": "Buscando en el archivo...",
+          "query_source_ai": "Buscando dentro del texto fuente...",
+          "query_transcript_ai": "Comprobando ideas de una transcripción...",
+          "get_available_books": "Comprobando libros disponibles...",
+          "get_sources_by_author": "Comprobando fuentes por autor...",
+          "get_sources_by_source": "Comprobando la estructura de la fuente...",
+          "get_collections": "Comprobando colecciones relevantes...",
+          "get_content_unit": "Comprobando un elemento de contenido...",
+          "get_content_units_by_collection": "Comprobando elementos dentro de una colección..."
+        }
+      }
     },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
