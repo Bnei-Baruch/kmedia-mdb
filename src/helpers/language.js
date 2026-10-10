@@ -1,4 +1,5 @@
 import { DEFAULT_CONTENT_LANGUAGE, LANGUAGE_OPTIONS, POPULAR_LANGUAGES } from './consts';
+import { getLanguageLocaleWORegion } from './i18n-utils';
 
 /**
  * Selects language to use.
@@ -47,7 +48,7 @@ export const getOptions = ({ languages = [] }) =>
 
 export const updateHtmlLang = lang => {
   if (document) {
-    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('lang', getLanguageLocaleWORegion(lang));
   }
 };
 
