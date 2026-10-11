@@ -1,7 +1,7 @@
-import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import dayjs from '../../helpers/dayjs';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,10 +12,18 @@ import { SuggestionsHelper } from '../../helpers/search';
 import ButtonDayPicker from '../shared/DayPicker/ButtonDayPicker';
 
 import { clsx } from 'clsx';
-import { actions } from '../../redux/modules/search';
+import {
+  actions,
+  isAgenticSearchType,
+  REASONING_QUERY_TOO_LONG_ERROR,
+  SEARCH_TYPES
+} from '../../redux/modules/search';
 import {
   searchGetAutocompleteWipSelector,
   searchGetQuerySelector,
+  searchGetReasoningRequestKindSelector,
+  searchGetReasoningStatusSelector,
+  searchGetSearchTypeSelector,
   searchGetSuggestionsSelector,
   settingsGetUILangSelector,
 } from '../../redux/selectors';
@@ -31,6 +39,9 @@ const OmniBox = ({ isHomePage = false }) => {
   const query = useSelector(searchGetQuerySelector);
   const suggestions = useSelector(searchGetSuggestionsSelector);
   const wip = useSelector(searchGetAutocompleteWipSelector);
+  const reasoningRequestKind = useSelector(searchGetReasoningRequestKindSelector);
+  const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
+  const searchType = useSelector(searchGetSearchTypeSelector);
   const uiLang = useSelector(settingsGetUILangSelector);
 
   const { isMobile } = useContext(DeviceInfoContext);
@@ -41,8 +52,32 @@ const OmniBox = ({ isHomePage = false }) => {
   const [inputFocused, setInputFocused] = useState(!isMobile);
   const [userInteracted, setUserInteracted] = useState(false);
 
+  const queryInputRef = useRef(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const agenticQuery = (query || '').trim();
+  const agenticResult = agenticQuery ? makeResult(uiLang, {
+    key: `agentic_${agenticQuery}`,
+    title: t('search.agentic.autocompleteAsk', { query: agenticQuery }),
+    description: t('search.agentic.autocompleteDescription'),
+    agenticQuery
+  }) : null;
+  const displayedAutocompleteResults = agenticResult
+    ? [agenticResult, ...autocompleteResults]
+    : autocompleteResults;
+  const isQueryTooLong = (
+    isAgenticSearchType(searchType)
+    && reasoningRequestKind !== 'followup'
+    && reasoningStatus?.code === REASONING_QUERY_TOO_LONG_ERROR
+  );
+
+  useEffect(() => {
+    if (isQueryTooLong && queryInputRef.current) {
+      queryInputRef.current.focus();
+      queryInputRef.current.select();
+    }
+  }, [isQueryTooLong]);
 
   useEffect(() => {
     if (suggestions) {
@@ -56,7 +91,7 @@ const OmniBox = ({ isHomePage = false }) => {
   }, [suggestions, uiLang]);
 
   useEffect(() => {
-    dispatch(actions.hydrateUrl());
+    dispatch(actions.hydrateUrl({ searchAfterHydrate: true }));
   }, [dispatch]);
 
   const doSearch = () => {
@@ -88,9 +123,36 @@ const OmniBox = ({ isHomePage = false }) => {
 
   const handleResultSelect = title => {
     if (!title) return;
-    chronicles.autocompleteSelected(title, autocompleteId);
-    dispatch(actions.updateQuery({ query: title, autocomplete: false }));
+    const isAgenticResult = !!agenticResult && title === agenticResult.title;
+    const selectedQuery = isAgenticResult ? agenticResult.agenticQuery : title;
+    chronicles.autocompleteSelected(selectedQuery, autocompleteId);
+    dispatch(actions.updateQuery({ query: selectedQuery, autocomplete: false }));
+    if (isAgenticResult) {
+      setUserInteracted(true);
+      setInputFocused(false);
+      dispatch(actions.setSearchType(SEARCH_TYPES.AGENTIC_RAPID));
+      dispatch(actions.search());
+      return;
+    }
+
     doSearch();
+  };
+
+  const renderAutocompleteResult = result => {
+    if (result.agenticQuery) {
+      return (
+        <div className="search-omnibox__agentic-row">
+          <span className="search-omnibox__agentic-sparkle" aria-hidden="true">&#10022;</span>
+          <div className="search-omnibox__result-copy">
+            <div className="title">{result.title}</div>
+            <div className="text-[13px] text-black/60">{result.description}</div>
+          </div>
+          <Icon icon={faArrowRight} className="text-[#aab2bc] rtl:-scale-x-100" />
+        </div>
+      );
+    }
+
+    return result.title;
   };
 
   const handleFromInputChange = value => {
@@ -98,10 +160,11 @@ const OmniBox = ({ isHomePage = false }) => {
   };
 
   return (
-    <Combobox value={query ?? ''} onChange={handleResultSelect}  className={clsx('mx-auto', { 'max-w-[800px]': !isHomePage })}>
-      <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage })}>
+    <Combobox value={query ?? ''} onChange={handleResultSelect} className={clsx('mx-auto', { 'max-w-[800px]': !isHomePage })}>
+      <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage, 'search-omnibox--query-error': isQueryTooLong })}>
         <div className={clsx('flex items-stretch w-full')}>
           <ComboboxInput
+            ref={queryInputRef}
             className={clsx(
               'flex-1 bg-white px-4 outline-none w-full border rounded-4xl',
               isHomePage
@@ -142,12 +205,12 @@ const OmniBox = ({ isHomePage = false }) => {
           )}
         </div>
 
-        {userInteracted && inputFocused && autocompleteResults.length > 0 && (
+        {userInteracted && inputFocused && displayedAutocompleteResults.length > 0 && (
           <ComboboxOptions
             static
             className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-auto"
           >
-            {autocompleteResults.map(result => (
+            {displayedAutocompleteResults.map(result => (
               <ComboboxOption
                 key={result.key}
                 value={result.title}
@@ -159,7 +222,7 @@ const OmniBox = ({ isHomePage = false }) => {
                   )
                 }
               >
-                {result.title}
+                {renderAutocompleteResult(result)}
               </ComboboxOption>
             ))}
           </ComboboxOptions>

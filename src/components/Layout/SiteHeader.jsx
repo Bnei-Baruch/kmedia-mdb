@@ -66,7 +66,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
           </div>
         </Link>
         <div className={isMobile ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>
-          {isNotHome && <OmniBox />}
+          {isNotHome && !isMobile && <OmniBox />}
         </div>
         <div className={clsx('flex items-center flex-nowrap justify-between shrink-0 text-white/90', isMobile ? 'gap-4' : 'gap-6')}>
           <HandleLanguages />

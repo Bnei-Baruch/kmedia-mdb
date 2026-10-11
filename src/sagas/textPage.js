@@ -34,7 +34,8 @@ export function* fetchSubject(action) {
     const isSource      = subject.type === CT_SOURCE;
     let prefereLanguage = action.payload.source_language || (isSource && _language);
     if (!prefereLanguage && typeof window !== 'undefined') {
-      prefereLanguage = getQuery(window.location).source_language;
+      const query = getQuery(window.location);
+      prefereLanguage = query.source_language || query.language;
     }
 
     prefereLanguage = prefereLanguage || (isSource && cu.original_language);
@@ -60,4 +61,3 @@ function* watchFetchSubject() {
 export const sagas = [
   watchFetchSubject,
 ];
-

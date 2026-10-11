@@ -308,7 +308,7 @@ export const searchPage = store =>
   Promise.all([
     store.sagaMiddleWare.run(searchSagas.hydrateUrl).toPromise(),
     store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).toPromise(),
-  ]).then(() => store.dispatch(searchActions.search()));
+  ]).then(() => store.dispatch(searchActions.search({ hydrated: true })));
 
 function firstLeafId(sourceId, state) {
   const source = sourcesGetSourceByIdSelector(state)(sourceId);
