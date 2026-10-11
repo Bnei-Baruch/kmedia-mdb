@@ -1,7 +1,7 @@
 import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 
 const NAMESPACE = 'jwplayer';
 

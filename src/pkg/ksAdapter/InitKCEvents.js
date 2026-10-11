@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { actions } from '../../redux/modules/auth';
 import { KC_UPDATE_USER, KC_UPDATE_TOKEN } from './adapter';
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 
 const NAMESPACE = 'InitKCEvents';
 

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 import { getEscapedRegExp, isEmpty, isNotEmptyArray, strCmp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
 import { selectors as mdb } from './mdb';

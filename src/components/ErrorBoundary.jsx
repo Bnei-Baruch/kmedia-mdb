@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'ErrorBoundary';
 

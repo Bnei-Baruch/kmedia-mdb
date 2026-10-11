@@ -11,7 +11,7 @@ import {
 } from '../../helpers/consts';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 
 import { actions } from '../../redux/modules/search';
 

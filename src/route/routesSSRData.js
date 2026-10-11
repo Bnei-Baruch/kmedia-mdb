@@ -71,7 +71,7 @@ import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import * as textPageSagas from './../sagas/textPage';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'routesSSRData';
 

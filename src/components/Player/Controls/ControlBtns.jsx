@@ -6,7 +6,7 @@ import { clsx } from 'clsx';
 import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery } from '../../../helpers/player';

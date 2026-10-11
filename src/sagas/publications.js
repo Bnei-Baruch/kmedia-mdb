@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { CT_ARTICLES } from '../helpers/consts';
 import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';

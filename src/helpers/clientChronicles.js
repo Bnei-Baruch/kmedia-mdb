@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { ulid } from 'ulid';
 import { chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';

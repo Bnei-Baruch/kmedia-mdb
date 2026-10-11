@@ -9,7 +9,7 @@ import ClientChronicles from '../../helpers/clientChronicles';
 import { DEFAULT_UI_LANGUAGE } from '../../helpers/consts';
 import { initializeI18n } from '../../helpers/i18nnext';
 import { initKC } from '../../pkg/ksAdapter/adapter';
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 import { createStore } from '../../redux/createStore';
 import { actions as authActions } from '../../redux/modules/auth';
 import { actions as ssr } from '../../redux/modules/ssr';

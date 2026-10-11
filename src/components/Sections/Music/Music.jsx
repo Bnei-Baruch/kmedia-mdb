@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import { getWipErr } from '../../shared/WipErr/WipErr';

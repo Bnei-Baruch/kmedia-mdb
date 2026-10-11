@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import {
   FN_LANGUAGES,
   FN_SHOW_LESSON_AS_UNITS,

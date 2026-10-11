@@ -32,7 +32,7 @@ import {
 } from './consts';
 import { canonicalSectionByUnit } from './links';
 import { CollectionsBreakdown } from './mdb';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'utils';
 

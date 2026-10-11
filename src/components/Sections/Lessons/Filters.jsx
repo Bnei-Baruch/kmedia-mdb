@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 
 import { actions } from '../../../redux/modules/filtersAside';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';

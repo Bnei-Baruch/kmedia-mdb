@@ -2,7 +2,7 @@ import dayjs from '../../helpers/dayjs';
 
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import logger from '../../logger/logger';
+import logger from '../../logger/logger.js';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 
 const NAMESPACE = 'player_helper';

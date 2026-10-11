@@ -7,7 +7,7 @@ import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlig
 import { actions } from '../../../redux/modules/textPage';
 import { textPageGetIsSearchSelector } from '../../../redux/selectors';
 import { isEmpty } from '../../../helpers/utils';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 
 const NAMESPACE = 'SearchOnPageBar';
 

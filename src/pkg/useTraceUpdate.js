@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'useTraceUpdate';
 

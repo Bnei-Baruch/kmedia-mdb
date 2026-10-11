@@ -2,7 +2,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/myNotes';
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { MY_NAMESPACE_NOTES } from '../helpers/consts';
 

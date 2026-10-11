@@ -2,7 +2,7 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { actions as publications } from '../redux/modules/publications';

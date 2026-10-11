@@ -1,6 +1,6 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/textPage';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { selectSuitableLanguage } from '../helpers/language';
 import { cuToSubject, selectTextFile } from '../components/Pages/WithText/helper';
 import { fetchUnit, fetchLabels } from './mdb';

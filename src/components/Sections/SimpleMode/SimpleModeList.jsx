@@ -7,7 +7,7 @@ import { getWipErr } from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { isEmpty, isToday, noop } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 import {
   mdbGetDenormCollectionWUnitsSelector,
   mdbGetDenormContentUnitSelector,

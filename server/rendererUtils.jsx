@@ -12,7 +12,7 @@ import { matchRoutes } from 'react-router-dom';
 import serialize from 'serialize-javascript';
 import { URL } from 'url';
 import { AppServer } from '../src/components/App/AppServer';
-import logger from '../src/logger/logger';
+import logger from '../src/logger/logger.js';
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-fs-backend';
 import { options, registerDateFormats } from '../src/helpers/i18nnext';

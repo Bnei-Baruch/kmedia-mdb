@@ -1,5 +1,5 @@
 import axios from 'axios';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 

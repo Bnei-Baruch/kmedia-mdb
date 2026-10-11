@@ -1,7 +1,7 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types, selectors } from '../redux/modules/fetchImage';
 import { knownFallbackImages } from '../helpers/images';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'fetchImage_sagas';
 

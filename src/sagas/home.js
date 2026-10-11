@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { actions, types } from '../redux/modules/home';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';

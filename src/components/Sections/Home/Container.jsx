@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useInterval } from '../../../helpers/timer';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 import {
   LANG_ENGLISH,
   LANG_HEBREW,

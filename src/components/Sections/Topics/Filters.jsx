@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { actions } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
-import logger from '../../../logger/logger';
+import logger from '../../../logger/logger.js';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';

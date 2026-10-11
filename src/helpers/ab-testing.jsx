@@ -1,7 +1,7 @@
 import pkg from '@marvelapp/react-ab-test';
 const { emitter } = pkg;
 
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 
 const NAMESPACE = 'ab-testing';
 

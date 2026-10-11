@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import { settingsGetUIDirSelector } from '../../../../../../redux/selectors';
-import logger from '../../../../../../logger/logger';
+import logger from '../../../../../../logger/logger.js';
 
 const NAMESPACE = 'SketchesGallery';
 

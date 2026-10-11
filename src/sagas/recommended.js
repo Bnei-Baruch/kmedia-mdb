@@ -2,7 +2,7 @@ import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effect
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import {
   CT_LESSONS_SERIES,
   CT_TAG,

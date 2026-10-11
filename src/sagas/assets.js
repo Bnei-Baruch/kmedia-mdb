@@ -1,7 +1,7 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../logger/logger';
+import logger from '../logger/logger.js';
 import { types, actions } from '../redux/modules/assets';
 import { settingsGetContentLanguagesSelector } from '../redux/selectors';
 import { DEFAULT_CONTENT_LANGUAGE } from '../helpers/consts';
