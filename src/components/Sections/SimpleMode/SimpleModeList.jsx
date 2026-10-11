@@ -7,6 +7,7 @@ import { getWipErr } from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { isEmpty, isToday, noop } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
+import logger from '../../../helpers/logger';
 import {
   mdbGetDenormCollectionWUnitsSelector,
   mdbGetDenormContentUnitSelector,
@@ -36,7 +37,7 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
   const wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
-      console.error('========> SimpleModeList error', error);
+      logger.error('========> SimpleModeList error', error);
     }
 
     return wipErr;

@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useInterval } from '../../../helpers/timer';
+import logger from '../../../helpers/logger';
 import {
   LANG_ENGLISH,
   LANG_HEBREW,
@@ -86,9 +87,9 @@ const HomePageContainer = () => {
 
   useEffect(() => {
     const now = Date.now();
-    console.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
+    logger.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
     if (!fetchTimestamp || now - fetchTimestamp > FETCH_TIMEOUT) {
-      console.log('Fetching!');
+      logger.log('Fetching!');
       fetchData(true);
       fetchSocialMedia('blog', fetchBlogList, contentLanguages);
       fetchSocialMedia('tweet', fetchTweetsList, contentLanguages);

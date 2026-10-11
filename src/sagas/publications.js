@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import { CT_ARTICLES } from '../helpers/consts';
 import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';
@@ -89,7 +90,7 @@ function* fetchArticlesList(action) {
       yield put(actions.fetchCollections(data.collections));
     }
   } catch (err) {
-    console.log('fetch lectures error', err);
+    logger.error('fetch lectures error', err);
   }
 }
 

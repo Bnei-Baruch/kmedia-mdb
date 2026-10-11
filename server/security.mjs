@@ -29,6 +29,8 @@ export const securityHeaders = helmet({
         '*.kab.info',
         '*.kab.sh',
         '*.jwplayer.com',
+        'cdn-cookieyes.com', // CookieYes CMP
+        '*.cookieyes.com', // CookieYes config + consent log (connect-src falls back to default-src)
       ],
       'script-src': [
         "'self'",
@@ -44,6 +46,7 @@ export const securityHeaders = helmet({
         '*.jwpcdn.com',
         '*.hlsjs.js',
         'blob:',
+        'cdn-cookieyes.com', // CookieYes loader
       ],
       'style-src': ["'self'", "'unsafe-inline'", '*.googleapis.com'],
       'font-src': [
@@ -75,6 +78,7 @@ export const securityHeaders = helmet({
         '*.usersnap.com',
         '*.twimg.com',
         '*.jwpltx.com',
+        'cdn-cookieyes.com', // CookieYes banner assets
       ],
       'media-src': ["'self'", 'data:', 'blob:', '*.kabbalahmedia.info', '*.kab.info', '*.kab.sh'],
       'worker-src': ['blob:', '*.kabbalahmedia.info'],

@@ -2,6 +2,7 @@ import dayjs from '../../helpers/dayjs';
 
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
+import logger from '../../helpers/logger';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 
 export const DEFAULT_PLAYER_VOLUME = 80;

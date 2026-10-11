@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import logger from '../helpers/logger';
 
 class ErrorBoundary extends Component {
   static propTypes = {
@@ -21,7 +22,7 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     // You can also log the error to an error reporting service
-    console.error(error, info);
+    logger.error(error, info);
   }
 
   render() {

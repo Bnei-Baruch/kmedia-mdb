@@ -861,6 +861,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} min čtení",
     "buttons": {
       "web": {
         "lessons": "To all lessons on the article",
@@ -916,7 +917,6 @@
         },
         "auto-scroll": "Auto-scroll"
       }
-    },
-    "reading-time": "~{{mins}} min čtení"
+    }
   }
 }

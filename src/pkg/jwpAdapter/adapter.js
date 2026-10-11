@@ -1,6 +1,7 @@
 import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
+import logger from '../../helpers/logger';
 
 export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
 export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
@@ -27,7 +28,7 @@ const functionByName = (name, def = 0, val) => {
   try {
     resp = foo(val);
   } catch (e) {
-    console.log('jwplayer error', e);
+    logger.error('jwplayer error', e);
   }
 
   return resp;
@@ -89,12 +90,12 @@ const PLAYER_EVENTS = [
 export const init   = dispatch => {
   const player = window.jwplayer();
   player.on('error', e => {
-    console.error(e);
+    logger.error(e);
     dispatch(actions.setLoaded(true));
   });
 
   player.on('warning', e => {
-    console.error(e);
+    logger.error(e);
     dispatch(actions.setLoaded(true));
   });
 
@@ -110,7 +111,7 @@ export const init   = dispatch => {
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
-      console.log(`no redux for action: ${name}`);
+      logger.log(`no redux for action: ${name}`);
       return;
     }
 

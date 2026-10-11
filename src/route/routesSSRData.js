@@ -71,6 +71,7 @@ import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import * as textPageSagas from './../sagas/textPage';
+import logger from '../helpers/logger';
 
 export const home = store => {
   const state = store.getState();
@@ -108,7 +109,7 @@ export const cuPage = async (store, match) => {
 
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
   if (!cuID || !unit) {
-    console.error(`Error, failed fetching unit ${cuID}: ${unit}`);
+    logger.error(`Error, failed fetching unit ${cuID}: ${unit}`);
     return Promise.reject();
   }
 
@@ -155,7 +156,7 @@ export const cuPage = async (store, match) => {
     }
 
     default:
-      console.warn('Unsupported active tab', activeTab);
+      logger.warn('Unsupported active tab', activeTab);
       break;
   }
 
@@ -334,7 +335,7 @@ const fetchSQData = async (store, uiLang, contentLanguages) => {
     .catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
 };
 
-export const libraryPage = async (store, match, show_console = false) => {
+export const libraryPage = async (store, match) => {
   const state = store.getState();
   const location = state?.router.location ?? {};
   const query = getQuery(location);
@@ -343,9 +344,9 @@ export const libraryPage = async (store, match, show_console = false) => {
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   await fetchSQData(store, uiLang, contentLanguages);
 
-  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id);
+  logger.log('serverRender: libraryPage sources was fetched', match.params.id);
   const sourceID = firstLeafId(match.params.id, store.getState());
-  show_console && console.log('serverRender: libraryPage source was found', sourceID);
+  logger.log('serverRender: libraryPage source was found', sourceID);
 
   await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage))
     .toPromise();

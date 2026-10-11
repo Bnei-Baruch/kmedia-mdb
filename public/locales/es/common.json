@@ -849,6 +849,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} min de lectura",
     "buttons": {
       "web": {
         "lessons": "A todas las lecciones sobre el artículo",
@@ -904,7 +905,6 @@
         },
         "auto-scroll": "Auto-scroll"
       }
-    },
-    "reading-time": "~{{mins}} min de lectura"
+    }
   }
 }

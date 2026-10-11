@@ -2,6 +2,7 @@ import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effect
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import {
   CT_LESSONS_SERIES,
   CT_TAG,
@@ -260,7 +261,7 @@ export function* fetchRecommended(action) {
 
     yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     yield put(actions.fetchRecommendedFailure(err));
   }
 }
@@ -282,7 +283,7 @@ export function* fetchViewsByUIDs(uids) {
         : [];
       yield put(actions.receiveViews(views));
     } catch (e) {
-      console.error('error load views', e);
+      logger.error('error load views', e);
     }
   }
 }

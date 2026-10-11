@@ -943,6 +943,7 @@
     }
   },
   "page-with-text": {
+    "reading-time": "~{{mins}} דק' קריאה",
     "buttons": {
       "web": {
         "lessons": "לכל השיעורים על המאמר",
@@ -998,7 +999,6 @@
         },
         "auto-scroll": "גלילה אוטו'"
       }
-    },
-    "reading-time": "~{{mins}} דק' קריאה"
+    }
   }
 }

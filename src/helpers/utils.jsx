@@ -32,6 +32,7 @@ import {
 } from './consts';
 import { canonicalSectionByUnit } from './links';
 import { CollectionsBreakdown } from './mdb';
+import logger from './logger';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
@@ -441,7 +442,7 @@ export const partialAssign = (target, source, what = true) => {
     return target;
   }
 
-  console.error('Unexpected what for partialAssign:', what);
+  logger.error('Unexpected what for partialAssign:', what);
   return {};
 };
 

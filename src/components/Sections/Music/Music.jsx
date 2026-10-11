@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 
+import logger from '../../../helpers/logger';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import { getWipErr } from '../../shared/WipErr/WipErr';
@@ -19,7 +20,7 @@ const Music = () => {
   let wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
-      console.error('========> Music error', error);
+      logger.error('========> Music error', error);
     }
   }
 

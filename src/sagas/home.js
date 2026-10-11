@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import logger from '../helpers/logger';
 import { actions, types } from '../redux/modules/home';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
@@ -10,7 +11,7 @@ export function* fetchData() {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
-    console.log('fetchData home', uiLang, contentLanguages);
+    logger.log('fetchData home', uiLang, contentLanguages);
     const { data } = yield call(Api.home, {
       ui_language      : uiLang,
       content_languages: contentLanguages

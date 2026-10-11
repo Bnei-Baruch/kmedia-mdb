@@ -19,8 +19,8 @@ const getItemsRecursive = (rootID, getById, base) => {
   if (base?.length === 0) return [];
 
   const root = getById(rootID);
-  if (!root || !root.children || root.children.length === 0) {
-    return base.includes(rootID) ? [rootID] : null;
+  if (!root?.children || root.children.length === 0) {
+    return base?.includes(rootID) ? [rootID] : null;
   }
 
   const resp = root

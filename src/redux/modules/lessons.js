@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import logger from '../../helpers/logger';
 import { getEscapedRegExp, isEmpty, isNotEmptyArray, strCmp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
 import { selectors as mdb } from './mdb';
@@ -20,7 +21,7 @@ const initialState = {
 };
 
 const onSetLanguage = state => {
-  console.log('lessons onSetLanguage');
+  logger.log('lessons onSetLanguage');
   state.seriesIDs    = [];
   state.seriesLoaded = false;
 };
