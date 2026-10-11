@@ -88,12 +88,12 @@ const TagSourceItem = props => {
   );
 
   return (
-    <div key={`${filterName}_${id}`} className={`${deep === 1 ? 'py-[3px]' : 'py-[2px] first:pt-0 last:pb-0'} ${finalStat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
-      <div className="flex items-center no-wrap gap-2 leading-4">
+    <div key={`${filterName}_${id}`} className={`${deep === 1 ? 'py-[3px] last:pb-0' : 'py-[2px] first:pt-0 last:pb-0'} ${finalStat === 0 ? 'filter-item-disabled' : ''}`}>
+      <div className="flex items-center no-wrap leading-4">
         <input
           ref={checkboxRef}
           type="checkbox"
-          className="shrink-0"
+          className="shrink-0 me-2"
           checked={isSelected}
           onChange={handleSelect}
           disabled={finalStat === 0}

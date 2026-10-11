@@ -20,7 +20,7 @@ const CollectionItem = ({ namespace, item: { id, name } }) => {
   };
 
   return (
-    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+    <div className={stat === 0 ? 'filter-item-disabled' : ''}>
       <div className="flex items-baseline gap-2 w-full">
         <input
           type="checkbox"

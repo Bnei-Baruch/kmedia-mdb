@@ -23,7 +23,7 @@ const PersonItem = ({ namespace, id }) => {
   };
 
   return (
-    <div key={`${FN_PERSON}_${id}`} className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+    <div key={`${FN_PERSON}_${id}`} className={`filters-aside-ct${stat === 0 ? ' filter-item-disabled' : ''}`}>
       <div className="filters-aside-ct__group">
         <label className="filters-aside-ct__label">
           <input

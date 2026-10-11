@@ -50,7 +50,7 @@ const CountryItem = ({ namespace, loc }) => {
 
   return (
     <>
-      <div key={id} className={`pt-1/2 ${stat === 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div key={id} className={`pt-1/2 ${stat === 0 ? 'filter-item-disabled' : ''}`}>
         <div className="flex items-baseline gap-2 w-full">
           <input
             ref={checkboxRef}

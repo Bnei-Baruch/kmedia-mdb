@@ -32,7 +32,7 @@ const CityItem = ({ namespace, id, country }) => {
   };
 
   return (
-    <div key={getTitle(id, t)} className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+    <div key={getTitle(id, t)} className={stat === 0 ? 'filter-item-disabled' : ''}>
       <div className="flex items-baseline gap-2 w-full">
         <input
           type="checkbox"

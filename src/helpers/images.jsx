@@ -22,7 +22,7 @@ import {
   PublicationsFallback as PublicationsFallbackIcon,
   SourcesFallback as SourcesFallbackIcon,
 } from '../images/fallbacks';
-import ImagePlaceholder from '../images/image.svg?react';
+import ImagePlaceholderSvg from '../images/image.svg?react';
 
 const sectionLogo = {
   lessons: DailyLessonsIcon,
@@ -50,6 +50,9 @@ export const SectionLogo = ({ name, ...props }) => {
 };
 
 export const NoneFallbackImage = 'none';
+
+// viewBox sets ratio 16x9
+const ImagePlaceholder = props => <ImagePlaceholderSvg viewBox="0 122 960 552" {...props} />;
 
 const sectionThumbnailFallback = {
   lessons: DailyLessonsFallbackIcon,

@@ -57,7 +57,7 @@ const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
 
 const SearchHeader = ({ as: Tag = 'h3', content, children, className = '', ...rest }) => (
-  <Tag className={`text-lg font-bold ${className}`} {...rest}>{content || children}</Tag>
+  <Tag className={`font-lato! text-[15.4px]! leading-[1.28571429em]! font-bold text-[#134d78]! -mt-[2.2px]! ${className}`} {...rest}>{content || children}</Tag>
 );
 
 const SearchContainer = ({ content, children, ...rest }) => (
@@ -494,7 +494,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const filters                      = useSelector(state => filtersGetFiltersSelector(state, 'search'));
 
   const click                            = searchResultClick(chronicles, dispatch, clickData);
-  const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
+  const logo                             = <SectionLogo name={'lessons'} height="32.5" width="32.5" />;
   const { lectures: wipL, series: wipS } = useSelector(lessonsGetWipSelector);
   const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
   const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
@@ -523,8 +523,8 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
     <div className="media_item list-none">
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className="text-lg font-bold flex items-end gap-1">
-            <span className="inline-block align-bottom">{logo}</span>
+          <div className="font-lato text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px]">
+            <span className="inline-block align-bottom mt-[1.86px]">{logo}</span>
             &nbsp;
             <span>{t(`constants.content-types.${CT_LESSONS_SERIES}`)}</span>
           </div>

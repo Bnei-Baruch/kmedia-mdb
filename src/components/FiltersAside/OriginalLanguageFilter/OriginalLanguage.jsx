@@ -37,10 +37,10 @@ const OriginalLanguage = ({ namespace }) => {
           {
             items.length > POPULAR_LANGUAGES.length &&
             <button
-              className="clear_button text-blue-600 inline-flex items-center gap-1"
+              className="clear_button text-[#2185d0] leading-[14px] inline-flex items-center"
               onClick={toggleShowAll}
             >
-              <span className="material-symbols-outlined">{showAll ? 'remove' : 'add'}</span>
+              <span className="material-symbols-outlined text-[14px]! leading-[14px]! -ms-[3px] me-[6px] [font-variation-settings:'wght'_700]">{showAll ? 'remove' : 'add'}</span>
               {t(`topics.show-${showAll ? 'less' : 'more'}`)}
             </button>
           }

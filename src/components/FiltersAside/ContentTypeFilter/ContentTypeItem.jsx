@@ -30,7 +30,7 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false }) => {
   };
 
   return (
-    <div className={`filters-aside-ct${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
+    <div className={`filters-aside-ct${stat === 0 ? ' filter-item-disabled' : ''}`}>
       <div className="filters-aside-ct__group">
         <label className="filters-aside-ct__label">
           <input

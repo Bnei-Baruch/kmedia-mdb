@@ -50,7 +50,7 @@ const CollectionsByCtBtn = ({ namespace, ct }) => {
 
   const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
   return (
-    <div className={stat === 0 ? 'opacity-50 pointer-events-none' : ''}>
+    <div className={stat === 0 ? 'filter-item-disabled' : ''}>
       <div className="filters-aside-ct">
         <div className="filters-aside-ct__group">
           <label className="filters-aside-ct__label">

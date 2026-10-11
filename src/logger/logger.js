@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 
 // Usage: logger.<level>(NAMESPACE, ...args) — output is prefixed with `[ NAMESPACE ]`.
 // error / warn are always printed. log / info / debug / trace are printed only in development

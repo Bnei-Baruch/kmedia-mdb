@@ -28,11 +28,11 @@ const SortBy = ({ namespace, t }) => {
   };
 
   const renderSortBy = () => (
-    <div className="filter-popup__wrapper border rounded">
+    <div className="filter-popup__wrapper mt-[14px]">
       {SORTS.map(sort => (
         <li key={sort} className="list-none">
           <div>
-            <label className="flex items-center gap-2 cursor-pointer px-2 py-1">
+            <label className="flex items-center gap-[9px] cursor-pointer min-h-5 leading-[17px]">
               <input
                 type="checkbox"
                 checked={sortBy === sort}

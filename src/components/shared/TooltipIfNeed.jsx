@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import { clsx } from 'clsx';
 
 import { settingsGetUIDirSelector } from '../../redux/selectors';
 
@@ -17,7 +18,7 @@ const TooltipIfNeed = props => {
   const [need, setNeed] = useState(false);
   const [show, setShow] = useState(false);
 
-  const { Component, text, as: asTag, content: contentProp, ...propz } = props;
+  const { Component, text, as: asTag, content: contentProp, className, ...propz } = props;
 
   const ref = useRef();
 
@@ -35,7 +36,7 @@ const TooltipIfNeed = props => {
 
   const content = (
     <div ref={ref}>
-      <Component {...compProps} className="line_clamp_2_lines font-lato! text-[15.4px]! leading-[1.28571429em]! font-bold text-[#134d78]! -mt-[2.2px]!">
+      <Component {...compProps} className={clsx('line_clamp_2_lines', className)}>
         {childContent}
       </Component>
     </div>

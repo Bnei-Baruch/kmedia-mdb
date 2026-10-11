@@ -44,7 +44,7 @@ const ContentTypeItemGroup = ({ namespace, group }) => {
   };
 
   return (
-    <div className={stats === 0 ? 'opacity-50 pointer-events-none' : ''}>
+    <div className={stats === 0 ? 'filter-item-disabled' : ''}>
       <div className="filters-aside-ct">
         <div className="filters-aside-ct__group">
           <label className="filters-aside-ct__label cursor-pointer">
@@ -58,9 +58,9 @@ const ContentTypeItemGroup = ({ namespace, group }) => {
             <span className="font-bold">{t(`nav.sidebar.${key}`)}</span>
           </label>
         </div>
-        <span className="stat">{`(${stats})`}</span>
+        <span className="stat font-normal">{`(${stats})`}</span>
       </div>
-      <div className="pl-4">
+      <div className="filters-aside-ct__children">
         {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id}/>)}
       </div>
     </div>

@@ -401,6 +401,49 @@
   }
 }
 
+// Semantic `.ui.list > .item:last-child` has no bottom padding
+.filter_aside .filters-aside-ct:last-child {
+  padding-bottom: 0;
+}
+
+// Semantic nested `.ui.list .list`: indent 7px, children padding 2px 0
+.filters-aside-ct__children {
+  padding: 5px 0 7px;
+  padding-inline-start: 7px;
+
+  :last-child > & {
+    padding-bottom: 3.5px;
+  }
+
+  .filters-aside-ct {
+    font-weight: normal;
+    padding: 2px 0;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+// Semantic `.ui.list > .disabled.item` + `.ui.disabled.checkbox`
+.filter-item-disabled {
+  pointer-events: none;
+  color: rgba(40, 40, 40, .3);
+
+  input[type=checkbox] {
+    opacity: .5;
+  }
+
+  .filters-aside-ct__label {
+    color: #000;
+    opacity: .5;
+
+    input[type=checkbox] {
+      opacity: 1;
+    }
+  }
+}
+
 
 .filter-popup {
   &__body {
