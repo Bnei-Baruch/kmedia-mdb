@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { call, select } from 'redux-saga/effects';
 
 import Api from '../../helpers/Api';
@@ -9,19 +10,19 @@ import {
 } from '../../redux/selectors';
 import { finishReasoningSearchNow, recoverFollowupRequest } from '../search';
 
-jest.mock('../../helpers/Api', () => ({
+vi.mock('../../helpers/Api', () => ({
   __esModule: true,
   default: {
-    reasoningSearchCache    : jest.fn(),
-    reasoningSearchFinishNow: jest.fn()
+    reasoningSearchCache    : vi.fn(),
+    reasoningSearchFinishNow: vi.fn()
   }
 }));
-jest.mock('../../redux/modules/mdb', () => ({ actions: {} }));
-jest.mock('../../redux/selectors', () => ({
-  searchGetQuerySelector          : jest.fn(),
-  searchGetReasoningResultSelector: jest.fn(),
-  searchGetReasoningStatusSelector: jest.fn(),
-  searchGetSearchTypeSelector     : jest.fn()
+vi.mock('../../redux/modules/mdb', () => ({ actions: {} }));
+vi.mock('../../redux/selectors', () => ({
+  searchGetQuerySelector          : vi.fn(),
+  searchGetReasoningResultSelector: vi.fn(),
+  searchGetReasoningStatusSelector: vi.fn(),
+  searchGetSearchTypeSelector     : vi.fn()
 }));
 
 describe('reasoning search sagas', () => {
@@ -89,7 +90,7 @@ describe('reasoning search sagas', () => {
       .toEqual(select(searchGetReasoningResultSelector));
 
     const fetchResultEffect = generator.next({ query: 'previous query' }).value;
-    expect(fetchResultEffect.CALL.fn.name).toBe('fetchReasoningResult');
-    expect(fetchResultEffect.CALL.args).toEqual(['session', 'active follow-up', SEARCH_TYPES.AGENTIC]);
+    expect(fetchResultEffect.payload.fn.name).toBe('fetchReasoningResult');
+    expect(fetchResultEffect.payload.args).toEqual(['session', 'active follow-up', SEARCH_TYPES.AGENTIC]);
   });
 });
