@@ -70,34 +70,36 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
             </span>
           </h2>
         </div>
-        <button className="clear_button border-none bg-transparent" onClick={toggleEditName}>
-          <span className="material-symbols-outlined text-2xl">edit</span>
-        </button>
-        <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
-              <p>{t('personal.confirmRemovePlaylist', { name: playlist.name })}</p>
-              <div className="mt-4 flex justify-end gap-2">
-                <button
-                  className="rounded border border-gray-300 px-4 py-2 small"
-                  onClick={handleConfirmCancel}
-                >
-                  {t('buttons.cancel')}
-                </button>
-                <button
-                  className="rounded bg-blue-500 px-4 py-2 small text-white"
-                  onClick={confirmSuccess}
-                >
-                  {t('buttons.apply')}
-                </button>
-              </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-        <button className="clear_button border-none bg-transparent" onClick={remove}>
-          <span className="material-symbols-outlined text-2xl">delete</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="clear_button border-none bg-transparent" onClick={toggleEditName}>
+            <span className="material-symbols-outlined text-2xl">edit</span>
+          </button>
+          <Dialog open={!!confirm} onClose={handleConfirmCancel} className="relative">
+            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+              <Dialog.Panel className="mx-auto max-w-sm rounded bg-white p-6" dir={uiDir}>
+                <p>{t('personal.confirmRemovePlaylist', { name: playlist.name })}</p>
+                <div className="mt-4 flex justify-end gap-2">
+                  <button
+                    className="rounded border border-gray-300 px-4 py-2 small"
+                    onClick={handleConfirmCancel}
+                  >
+                    {t('buttons.cancel')}
+                  </button>
+                  <button
+                    className="rounded bg-blue-500 px-4 py-2 small text-white"
+                    onClick={confirmSuccess}
+                  >
+                    {t('buttons.apply')}
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </div>
+          </Dialog>
+          <button className="clear_button border-none bg-transparent" onClick={remove}>
+            <span className="material-symbols-outlined text-2xl">delete</span>
+          </button>
+        </div>
       </div>
       {
         (playlist.total_items > 0) && (<Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>

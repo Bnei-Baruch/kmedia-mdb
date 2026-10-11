@@ -40,20 +40,19 @@ const Actions = ({ history }) => {
       <button className="p-1" onClick={open ? handleClose : handleOpen}>
         <span className="material-symbols-outlined">more_vert</span>
       </button>
-      {open && (
-        <div className="absolute end-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
-          <div className="px-4 py-2">
-            <PlaylistInfo cuID={content_unit_uid} t={t} handleClose={handleClose}/>
-          </div>
-          <button
-            className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
-            onClick={removeItem}
-          >
-            <span className="material-symbols-outlined text-base">cancel</span>
-            {t('personal.removeHistory')}
-          </button>
+      {/* keep mounted when closed: the save-to-playlist modal lives inside */}
+      <div className={`absolute end-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg ${open ? '' : 'hidden'}`}>
+        <div className="px-4 py-2">
+          <PlaylistInfo cuID={content_unit_uid} t={t} handleClose={handleClose}/>
         </div>
-      )}
+        <button
+          className="flex w-full items-center gap-2 px-4 py-2 text-left small hover:bg-gray-100"
+          onClick={removeItem}
+        >
+          <span className="material-symbols-outlined text-base">cancel</span>
+          {t('personal.removeHistory')}
+        </button>
+      </div>
     </div>
   );
 };

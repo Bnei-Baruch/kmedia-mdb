@@ -15,19 +15,20 @@ import {
   settingsGetUIDirSelector
 } from '../../../../../redux/selectors';
 
-const SaveAsPlaylistItem = ({ setModalMode, label }) => {
+const SaveAsPlaylistItem = ({ setModalMode, label, cuId: propCuId }) => {
   const [selected, setSelected] = useState([]);
   const [isNew, setIsNew]       = useState(false);
 
   const dispatch = useDispatch();
   const { t }    = useTranslation();
 
-  const { cuId }  = useSelector(playlistGetInfoSelector);
+  const playerCuId = useSelector(state => playlistGetInfoSelector(state).cuId);
+  const cuId       = propCuId || playerCuId;
   const unit      = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
   const playlists = useSelector(state => myGetListSelector(state, MY_NAMESPACE_PLAYLIST_EDIT));
   const uiDir     = useSelector(settingsGetUIDirSelector);
 
-  const [name, setName] = useState(unit.name);
+  const [name, setName] = useState(unit?.name);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
@@ -51,7 +52,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   };
 
   const handleSave = () => {
-    const { properties } = label;
+    const { properties } = label || {};
 
     selected.forEach(p => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
       id         : p.id,
@@ -60,7 +61,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
     })));
 
     setIsNew(false);
-    setModalMode(ADD_PLAYLIST_ITEM_MODES.label);
+    setModalMode(label ? ADD_PLAYLIST_ITEM_MODES.label : ADD_PLAYLIST_ITEM_MODES.none);
   };
 
   const handleNameChange = e => setName(e.target.value);
