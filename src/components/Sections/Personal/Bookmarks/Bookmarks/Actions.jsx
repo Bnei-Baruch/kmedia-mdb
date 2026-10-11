@@ -7,7 +7,7 @@ import { Dialog } from '@headlessui/react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
-import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
+import BookmarkForm, { BOOKMARK_MODAL_PANEL, BOOKMARK_MODAL_TITLE } from '../../../../shared/SaveBookmark/BookmarkForm';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
 import AlertModal from '../../../../shared/AlertModal';
@@ -38,6 +38,7 @@ const Actions = ({ bookmark }) => {
 
   const handleOpenEdit = e => {
     stopBubbling(e);
+    setOpen(false);
     setOpenEdit(true);
   };
 
@@ -84,12 +85,12 @@ const Actions = ({ bookmark }) => {
           </Dialog.Panel>
         </div>
       </Dialog>
-      <div className="relative inline-block" ref={menuRef}>
+      <div className="relative flex" ref={menuRef}>
         <button
-          className="p-1"
+          className="me-[8px] mt-[6px] flex leading-none"
           onClick={open ? handleClose : handleOpen}
         >
-          <span className="material-symbols-outlined text-2xl text-gray-400 mt-1">more_vert</span>
+          <span className="material-symbols-outlined text-[#767676] leading-none!">more_vert</span>
         </button>
         {open && (
           <div className="absolute inset-e-0 z-10 mt-1 w-48 rounded border border-gray-200 bg-white shadow-lg">
@@ -113,10 +114,10 @@ const Actions = ({ bookmark }) => {
       <Dialog open={!!openEdit} onClose={() => handleCloseEdit()} className="relative">
         <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="mx-auto max-w-sm rounded bg-white bookmark_modal" dir={uiDir}>
-            <h3 className="border-b p-4 large font-semibold">
+          <Dialog.Panel className={BOOKMARK_MODAL_PANEL} dir={uiDir}>
+            <Dialog.Title className={BOOKMARK_MODAL_TITLE}>
               {t('personal.bookmark.editBookmark')}
-            </h3>
+            </Dialog.Title>
             <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id}/>
           </Dialog.Panel>
         </div>

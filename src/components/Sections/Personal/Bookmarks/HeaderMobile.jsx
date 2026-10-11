@@ -45,15 +45,15 @@ const BookmarkHeaderMobile = () => {
   const leftRight = useSelector(settingsGetLeftRightByDirSelector);
 
   const trigger = (
-    <div className=" px-4">
+    <div>
       <span
-        className="inline-flex items-center cursor-pointer text-blue-500 large no-border padding_r_l_0"
+        className="inline-flex items-center cursor-pointer py-[10.5px] text-[18px] font-bold leading-none text-[#2185d0]"
         onClick={handleToggle}
       >
-        <span className="material-symbols-outlined text-gray-400">folder_open</span>
+        <span className="material-symbols-outlined text-[18px]! text-[#767676] ltr:mr-[13.5px] rtl:ml-[13.5px]">folder_open</span>
         {t('personal.bookmark.folders')}
-        <span className="material-symbols-outlined margin-left-8 margin-right-8">
-          {leftRight === 'right' ? 'chevron_right' : 'chevron_left'}
+        <span className="material-symbols-outlined text-[18px]! mx-[8px]">
+          {leftRight === 'right' ? 'arrow_right' : 'arrow_left'}
         </span>
       </span>
       {
@@ -73,8 +73,8 @@ const BookmarkHeaderMobile = () => {
   );
 
   return (
-    <div className=" px-4 ">
-      <h2 className="my_header padding-top_1em">
+    <div className="p-[14px]">
+      <h2 className="my_header justify-start! p-0! mb-[4px]! leading-[1.28571429em]">
         <span className="material-symbols-outlined display-iblock">bookmark</span>
         {t('personal.bookmark.title')}
       </h2>
@@ -96,9 +96,9 @@ const BookmarkHeaderMobile = () => {
         </div>
       </Dialog>
       <div className="relative bookmark_search_mobile">
-        <span className="material-symbols-outlined absolute ltr:left-2 rtl:right-2 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+        <span className="material-symbols-outlined pointer-events-none absolute ltr:left-0 rtl:right-0 top-1/2 -translate-y-1/2 w-[37px] text-center text-[16px]! opacity-50">search</span>
         <input
-          className="w-full rounded border border-gray-300 py-2 ps-8 pe-3"
+          className="w-full rounded-[4px] py-[8px] ps-[42.74px] pe-[16px] text-[16px] leading-[1.21428571em]"
           placeholder={placeholder}
           defaultValue={query}
           onChange={e => handleSearch(e.target.value)}

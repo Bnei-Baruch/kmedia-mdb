@@ -47,8 +47,8 @@ const BookmarksItem = ({ bookmark }) => {
     citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
-    <div className="bookmark_item flex items-start gap-3 border-b py-3">
-      <div className="flex-shrink-0">
+    <div className="bookmark_item flex items-start border-t border-[rgba(34,36,38,.15)] first:border-t-0 py-[14px] leading-[1.14285714em]">
+      <div className="flex-shrink-0 ps-[5px] pe-[16px]">
         <Link to={to}>
           <div className="inline-block align-middle">
             <SectionLogo name={icon} width="25" height="25"/>
@@ -56,17 +56,17 @@ const BookmarksItem = ({ bookmark }) => {
         </Link>
       </div>
       <Link to={to} className="flex-1 align-bottom">
-        <h3 className="display-iblock">
+        <h3 className="display-iblock font-lato! text-[18px] text-black/87">
           {name}
           <span className="separator">|</span>
           <span className="source_name">
             {title}
           </span>
         </h3>
-        <em className="block text-gray-500">
+        <em className="block mt-[8px] text-black/70">
           {citates.join(' ... ')}
         </em>
-        <div>
+        <div className="mt-[8px]">
           {folders.map(renderFolder)}
         </div>
       </Link>

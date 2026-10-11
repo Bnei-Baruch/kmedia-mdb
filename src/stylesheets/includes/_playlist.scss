@@ -37,7 +37,9 @@
 .my_header {
   font-size: 1.5rem;
   font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
   align-items: center;
+  gap: 10.5px;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -45,8 +47,6 @@
 
   .material-symbols-outlined {
     font-size: 1.5rem;
-    margin-right: 8px;
-    margin-inline-end: .5em;
   }
 }
 

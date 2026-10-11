@@ -1,17 +1,15 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
-import BookmarkForm from '../../../shared/SaveBookmark/BookmarkForm';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import BookmarkForm, { BOOKMARK_MODAL_PANEL, BOOKMARK_MODAL_TITLE } from '../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const AddBookmarkBtn = () => {
-  const { isMobile } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
   const dir                = useSelector(state => settings.getUIDir(state.settings));
   const { select, search } = useSelector(textPageGetUrlInfoSelector);
@@ -84,11 +82,8 @@ const AddBookmarkBtn = () => {
       <Dialog open={open} onClose={handleClose} className="relative">
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel
-            className={`bookmark_modal mx-auto rounded bg-white px-4 pt-6 pb-0 ${!isMobile ? 'w-[520px]' : 'w-[90%]'} max-h-[90%] overflow-y-auto `}
-            dir={dir}
-          >
-            <Dialog.Title className="text-2xl font-bold mb-2">
+          <Dialog.Panel className={BOOKMARK_MODAL_PANEL} dir={dir}>
+            <Dialog.Title className={BOOKMARK_MODAL_TITLE}>
               {t('personal.bookmark.saveBookmark')}
             </Dialog.Title>
             <BookmarkForm onClose={handleClose} properties={urlProps} />

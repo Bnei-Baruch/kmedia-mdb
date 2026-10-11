@@ -7,6 +7,7 @@ import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { actions as filtersActions } from '../../../../../redux/modules/bookmarkFilter';
 import FolderItem from './Item';
+import BookmarkSearch from '../../../../shared/SaveBookmark/BookmarkSearch';
 import { bookmarkFilterGetByKeySelector, myGetListSelector } from '../../../../../redux/selectors';
 
 const FolderList = ({ close }) => {
@@ -60,20 +61,17 @@ const FolderList = ({ close }) => {
   };
 
   const renderHeader = () => (
-    <div className="flex flex-wrap w-full gap-2 justify-between border-b items-center pb-2">
-      <div className="w-[43.75%]">
-        <h3>{t('personal.bookmark.folders')}</h3>
+    <div className="flex w-full items-center border-b border-[#dcddde]">
+      <div className="w-7/16">
+        <h3 className="font-lato! text-[18px] -mt-[2.57px]">{t('personal.bookmark.folders')}</h3>
       </div>
-      <div className="flex-1">
-        <div className="bookmark_search flex w-full items-center gap-2 rounded border border-gray-300 pe-2">
-          <input
-            className="flex-1 border-0 bg-transparent py-2 ps-3 focus:outline-none"
-            placeholder={t('personal.bookmark.searchFolders')}
-            onChange={searchChange}
-            defaultValue={query}
-          />
-          <span className="material-symbols-outlined text-gray-400">search</span>
-        </div>
+      <div className="w-9/16">
+        <BookmarkSearch
+          className="w-full"
+          placeholder={t('personal.bookmark.searchFolders')}
+          onChange={searchChange}
+          defaultValue={query}
+        />
       </div>
     </div>
   );
@@ -102,7 +100,7 @@ const FolderList = ({ close }) => {
   const renderActions = () => (
     <>
       <button
-        className="rounded border border-blue-500 px-4 py-2 text-blue-500"
+        className="rounded-[4px] px-[21px] py-[11px] leading-none text-[#2185d0] shadow-[inset_0_0_0_1px_#2185d0] hover:bg-[#2185d0]/5"
         onClick={newFolder}
       >
         {t('personal.bookmark.newFolder')}
@@ -123,7 +121,7 @@ const FolderList = ({ close }) => {
   return (
     <>
       {renderHeader()}
-      <div className="px-4 folders_list">
+      <div className="folders_list mt-[14px]!">
         <FolderItem
           folder={{ id: 'all', name: t('personal.bookmark.allFolders') }}
           key={'all'}
@@ -135,7 +133,7 @@ const FolderList = ({ close }) => {
           items.map(f => (<FolderItem folder={f} key={f.id} selectedId={selectedId} selectFolder={selectFolder} />))
         }
       </div>
-      <hr className="my-4" />
+      <hr className="my-[14px] border-t border-[rgba(34,36,38,.15)]" />
       {renderActions()}
     </>
   );

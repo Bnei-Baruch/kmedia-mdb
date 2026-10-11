@@ -6,6 +6,11 @@ import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/c
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import { myGetListSelector, myGetItemByKeySelector, textPageGetSubjectSelector } from '../../../redux/selectors';
+import BookmarkSearch from './BookmarkSearch';
+
+// Semantic "ui tiny modal": 510px on desktop, 95% on small screens
+export const BOOKMARK_MODAL_PANEL = 'bookmark_modal mx-auto w-[510px] max-w-[95%] max-h-[90%] overflow-y-auto rounded-[4px] bg-white shadow-[1px_3px_3px_0_rgba(0,0,0,.2),1px_3px_15px_2px_rgba(0,0,0,.2)]';
+export const BOOKMARK_MODAL_TITLE = 'font-lato! text-[20px] font-bold leading-[1.28571429em] text-black/85 my-[10px] px-[21px] py-[17.5px]';
 
 const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
   const { t } = useTranslation();
@@ -115,31 +120,25 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
 
   return (
     <Fragment>
-      <div className="pt-2">
-        <div className="flex items-center gap-3 mb-3">
-          <span className="font-normal whitespace-nowrap">{t('personal.bookmark.name')}</span>
+      <div className="px-[21px] pb-[21px]">
+        <div className="flex items-center gap-[8px]">
+          <h4 className="font-lato! text-[15px] font-normal my-[7.5px] whitespace-nowrap">{t('personal.bookmark.name')}</h4>
           <input
             onChange={e => changeName(e, { value: e.target.value })}
             defaultValue={name}
-            className={`flex-1 border rounded px-3 py-2 ${!name && !isEdit ? 'border-red-500' : 'border-gray-300'}`}
+            className={`flex-1 rounded-[4px] border px-[16px] py-[4px] text-[16px] leading-[1.21428571em] text-black/80 focus:border-[#85b7d9] focus:outline-none ${!name && !isEdit ? 'border-red-500' : 'border-[rgba(34,36,38,.15)]'}`}
             onFocus={() => setIsEdit(true)}
             onBlur={() => setIsEdit(false)}
             autoFocus
           />
         </div>
-        <h4 className="font-normal">{t('personal.bookmark.folders')}</h4>
-        <div className="border border-gray-200 rounded p-4">
-          <div className="relative">
-            <span className="material-symbols-outlined absolute ltr:left-2 rtl:right-2 top-1/2 -translate-y-1/2 text-gray-400">
-              search
-            </span>
-            <input
-              placeholder={t('personal.bookmark.searchFolders')}
-              onChange={e => handleSearchChange(e, { value: e.target.value })}
-              className="ps-8 border-0 border-b border-gray-300 py-2 w-full focus:outline-none bg-transparent"
-            />
-          </div>
-          <div className=" px-4 folders_list">
+        <h4 className="font-lato! text-[15px] font-normal my-[7.5px]">{t('personal.bookmark.folders')}</h4>
+        <div className="rounded-[4px] border border-[rgba(34,36,38,.15)] p-[14px] shadow-[0_1px_2px_0_rgba(34,36,38,.15)]">
+          <BookmarkSearch
+            placeholder={t('personal.bookmark.searchFolders')}
+            onChange={e => handleSearchChange(e, { value: e.target.value })}
+          />
+          <div className="folders_list mt-[14px]!">
             {
               items.map(renderFolder)
             }
@@ -169,24 +168,24 @@ const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
         </div>
       </div>
       {!editFolder &&
-        <div className="flex justify-between py-4 border-t">
+        <div className="flex justify-between p-[14px]">
           <button
-            className="border border-blue-500 text-blue-500 rounded max-sm:text-xs px-4 py-2 hover:bg-blue-50"
+            className="rounded-[4px] px-[14px] py-[9.8px] leading-none text-[#2185d0] shadow-[inset_0_0_0_1px_#2185d0] hover:bg-[#2185d0]/5"
             onClick={handleNewFolder}
             disabled={editFolder}
           >
             {t('personal.bookmark.newFolder')}
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-[8px]">
             <button
-              className="bg-gray-500 text-white rounded max-sm:text-xs px-4 py-2 hover:bg-gray-600"
+              className="rounded-[4px] bg-[#767676] px-[14px] py-[9.8px] font-bold leading-none text-white hover:bg-[#838383]"
               onClick={onClose}
               disabled={editFolder}
             >
               {t('buttons.cancel')}
             </button>
             <button
-              className="bg-blue-500 text-white rounded max-sm:text-xs px-4 py-2 hover:bg-blue-600"
+              className="rounded-[4px] bg-[#2185d0] px-[14px] py-[9.8px] font-bold leading-none text-white hover:bg-[#1678c2] disabled:opacity-45"
               onClick={handleSave}
               disabled={!name || editFolder}
             >

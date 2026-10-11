@@ -9,6 +9,7 @@ import {
 } from '../../../../helpers/consts';
 import { getMyItemKey } from '../../../../helpers/my';
 import { bookmarkFilterGetByKeySelector, myGetItemByKeySelector } from '../../../../redux/selectors';
+import BookmarkSearch from '../../../shared/SaveBookmark/BookmarkSearch';
 
 const BookmarkHeader = () => {
   const { t } = useTranslation();
@@ -24,22 +25,16 @@ const BookmarkHeader = () => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
   return (
-    <div className="flex w-full items-center gap-2 justify-between px-4 py-2 ms-[350px]">
-      <h2 className="my_header !w-auto">
-        <span className="material-symbols-outlined">bookmark</span>
-        {t('personal.bookmark.title')}
-      </h2>
-
-      <div>
-        <div className="bookmark_search flex items-center gap-2 border-b border-gray-300">
-          <span className="material-symbols-outlined text-gray-400">search</span>
-          <input
-            className="border-0 bg-transparent py-2 pe-3 focus:outline-none"
-            placeholder={placeholder}
-            defaultValue={query}
-            onChange={e => handleSearch(e.target.value)}
-          />
-        </div>
+    <div className="flex w-full items-end py-[14px]">
+      <div className="w-1/4" />
+      <div className="w-5/16 px-[14px]">
+        <h2 className="my_header justify-start! p-0! mb-[4px]! leading-[1.28571429em]">
+          <span className="material-symbols-outlined">bookmark</span>
+          {t('personal.bookmark.title')}
+        </h2>
+      </div>
+      <div className="w-7/16 px-[14px] text-end">
+        <BookmarkSearch className="w-[181px]" placeholder={placeholder} defaultValue={query} onChange={e => handleSearch(e.target.value)} />
       </div>
     </div>
   );

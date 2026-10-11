@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Dialog } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 
-import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
+import BookmarkForm, { BOOKMARK_MODAL_PANEL, BOOKMARK_MODAL_TITLE } from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import ScanBtnTpl from './ScanBtnTpl';
 
@@ -27,8 +27,8 @@ const AddScanBookmarkBtn = () => {
       <Dialog open={open} onClose={handleClose} className="relative">
         <div className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className="bookmark_modal mx-auto max-w-sm rounded bg-white p-6" dir={dir}>
-            <Dialog.Title className="large font-semibold">
+          <Dialog.Panel className={BOOKMARK_MODAL_PANEL} dir={dir}>
+            <Dialog.Title className={BOOKMARK_MODAL_TITLE}>
               {t('personal.bookmark.saveBookmark')}
             </Dialog.Title>
             <BookmarkForm onClose={handleClose} properties={urlProps}/>
