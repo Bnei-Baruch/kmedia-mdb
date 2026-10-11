@@ -1,5 +1,5 @@
 
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,6 +20,12 @@ const ToggleScanBtn = () => {
   const open = query.scan === 'true' && typeof window !== 'undefined';
   const file = useSelector(textPageGetScanFileSelector);
   const [zoom, setZoom] = useState(100);
+  const [container, setContainer] = useState(null);
+
+  // The layout div is not in the DOM yet during the first render (initial load with ?scan=true)
+  useEffect(() => {
+    if (open) setContainer(document.getElementById('text_layout'));
+  }, [open]);
 
   if (!file) return null;
 
@@ -37,12 +43,12 @@ const ToggleScanBtn = () => {
         icon={<span className="material-symbols-outlined">image</span>}
         onClick={toggleOpen}
       />
-      {open &&
+      {open && container &&
         createPortal(
           <Suspense fallback={null}>
             <ScanPDF />
           </Suspense>,
-          window.document.getElementById('text_layout')
+          container
         )}
     </ScanZoomContext.Provider>
   );

@@ -46,6 +46,7 @@ const TextLayoutMobile = props => {
   return (
     <div
       ref={ref}
+      id="text_layout"
       className={clsx(
         `is-mobile text_layout is-${theme}`,
         { 'stick_toolbar_long_translation': isLongTranslation }
