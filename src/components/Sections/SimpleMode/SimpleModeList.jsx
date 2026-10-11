@@ -7,7 +7,7 @@ import { getWipErr } from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { isEmpty, isToday, noop } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 import {
   mdbGetDenormCollectionWUnitsSelector,
   mdbGetDenormContentUnitSelector,
@@ -15,6 +15,8 @@ import {
 } from '../../../redux/selectors';
 import { useSimpleModeQuery } from '../../../redux/api/simpleMode';
 import { useInterval } from '../../../helpers/timer';
+
+const NAMESPACE = 'SimpleModeList';
 
 const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
   const { t } = useTranslation();
@@ -37,7 +39,7 @@ const SimpleModeList = ({ filesLanguages, renderUnit, selectedDate }) => {
   const wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
-      logger.error('========> SimpleModeList error', error);
+      logger.error(NAMESPACE, '========> SimpleModeList error', error);
     }
 
     return wipErr;

@@ -7,7 +7,9 @@ import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlig
 import { actions } from '../../../redux/modules/textPage';
 import { textPageGetIsSearchSelector } from '../../../redux/selectors';
 import { isEmpty } from '../../../helpers/utils';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
+
+const NAMESPACE = 'SearchOnPageBar';
 
 const SearchOnPageBar = () => {
   const [val, setVal]     = useState('');
@@ -83,7 +85,7 @@ const SearchOnPageBar = () => {
 
     const range = refResults.current[_index];
     if (!range) {
-      logger.error('not found next range by index', _index);
+      logger.error(NAMESPACE, 'not found next range by index', _index);
       return;
     }
 

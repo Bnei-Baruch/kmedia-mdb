@@ -5,13 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { actions } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import SubTopics from './SubTopics';
 import { filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector } from '../../../redux/selectors';
+
+const NAMESPACE = 'TopicsFilters';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -32,7 +34,7 @@ const Filters = ({ namespace, baseParams }) => {
   const needFetch         = isHydrated && isReady;
   const selectedSignature = selected.slice().sort((a, b) => a.name.localeCompare(b.name)).reduce((acc, f) => `${acc}-${f.name}|${f.values.slice().sort().join('_')}`, '');
   useEffect(() => {
-    logger.log('fetchStats needFetch', needFetch, selected, baseParams, namespace, isHydrated, isReady);
+    logger.log(NAMESPACE, 'fetchStats needFetch', needFetch, selected, baseParams, namespace, isHydrated, isReady);
     if (needFetch && prevSelRef.current !== selectedSignature) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, countC: true, countL: true }));
       prevSelRef.current = selectedSignature;

@@ -11,7 +11,7 @@ import {
 } from '../../helpers/consts';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
-import logger from '../../helpers/logger';
+import logger from '../../logger/logger';
 
 import { actions } from '../../redux/modules/search';
 
@@ -48,6 +48,8 @@ import {
   SearchResultSource,
   SearchResultTweets
 } from './SearchResultHooks';
+
+const NAMESPACE = 'SearchResults';
 
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
@@ -166,7 +168,7 @@ const SearchResults = () => {
         result =
           <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData} />;
       } else {
-        logger.error('Unexpected result type!');
+        logger.error(NAMESPACE, 'Unexpected result type!');
       }
     }
 

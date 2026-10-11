@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 
 import { actions } from '../../../redux/modules/filtersAside';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
@@ -21,6 +21,8 @@ import {
   settingsGetUILangSelector,
   filtersAsideGetWipErrSelector
 } from '../../../redux/selectors';
+
+const NAMESPACE = 'LessonsFilters';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -42,7 +44,7 @@ const Filters = ({ namespace, baseParams }) => {
   }, [uiLang, contentLanguages, dispatch, isReady, wip, err]);
 
   useEffect(() => {
-    logger.log('fetch stats hydrated', isReady, wip, err, !isReady && !wip && !err ? 'FETCHING' : '');
+    logger.log(NAMESPACE, 'fetch stats hydrated', isReady, wip, err, !isReady && !wip && !err ? 'FETCHING' : '');
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,

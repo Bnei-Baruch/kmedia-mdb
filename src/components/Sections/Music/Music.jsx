@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import { getWipErr } from '../../shared/WipErr/WipErr';
@@ -8,6 +8,8 @@ import CollectionListTemplate from '../../shared/ContentItem/CollectionListTempl
 import { useMusicQuery } from '../../../redux/api/music';
 import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 import NotFound from '../../shared/NotFound';
+
+const NAMESPACE = 'Music';
 
 const Music = () => {
   const uiLanguage = useSelector(settingsGetUILangSelector);
@@ -20,7 +22,7 @@ const Music = () => {
   let wipErr = getWipErr(isLoading, isError);
   if (wipErr) {
     if (error) {
-      logger.error('========> Music error', error);
+      logger.error(NAMESPACE, '========> Music error', error);
     }
   }
 

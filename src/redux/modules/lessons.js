@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import logger from '../../helpers/logger';
+import logger from '../../logger/logger';
 import { getEscapedRegExp, isEmpty, isNotEmptyArray, strCmp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
 import { selectors as mdb } from './mdb';
@@ -8,6 +8,8 @@ import { actions as settingsActions } from './settings';
 import { selectors as sources } from './sources';
 import { selectors as tags } from './tags';
 import { actions as ssrActions } from './ssr';
+
+const NAMESPACE = 'lessons_module';
 
 const initialState = {
   seriesIDs   : [],
@@ -21,7 +23,7 @@ const initialState = {
 };
 
 const onSetLanguage = state => {
-  logger.log('lessons onSetLanguage');
+  logger.log(NAMESPACE, 'lessons onSetLanguage');
   state.seriesIDs    = [];
   state.seriesLoaded = false;
 };

@@ -179,7 +179,7 @@ export function* fetchSQData() {
   try {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-    console.log('[fetchSQData] start', { uiLang, contentLanguages });
+    logger.log(NAMESPACE, '[fetchSQData] start', { uiLang, contentLanguages });
     const res              = yield call(Api.sqdata, {
       ui_language      : uiLang,
       content_languages: contentLanguages
@@ -190,14 +190,14 @@ export function* fetchSQData() {
     }
 
     const { data }         = res;
-    console.log('[fetchSQData] success', { sources: data?.sources?.length, tags: data?.tags?.length, publishers: data?.publishers?.length, persons: data?.persons?.length });
+    logger.log(NAMESPACE, '[fetchSQData] success', { sources: data?.sources?.length, tags: data?.tags?.length, publishers: data?.publishers?.length, persons: data?.persons?.length });
     yield put(sources.receiveSources({ sources: data.sources, uiLang }));
     yield put(tags.receiveTags(data.tags));
     yield put(publications.receivePublishers(data.publishers));
     yield put(mdbActions.receivePersons(data.persons));
     yield put(mdbActions.fetchSQDataSuccess());
   } catch (err) {
-    console.log('[fetchSQData] FAILED', err?.message || err);
+    logger.error(NAMESPACE, '[fetchSQData] FAILED', err?.message || err);
     yield put(mdbActions.fetchSQDataFailure(err));
   }
 }
@@ -224,7 +224,7 @@ function* createLabel(action) {
     const { content_unit } = action.payload;
     yield fetchLabels({ content_unit, language });
   } catch (err) {
-    console.log(err);
+    logger.error(NAMESPACE, err);
   }
 }
 
@@ -240,7 +240,7 @@ export function* fetchLabels(payload) {
     const { data }         = yield call(Api.labels, params);
     yield put(mdbActions.receiveLabels(data.labels));
   } catch (err) {
-    console.error('fetchLabels errors', err);
+    logger.error(NAMESPACE, 'fetchLabels errors', err);
   }
 }
 

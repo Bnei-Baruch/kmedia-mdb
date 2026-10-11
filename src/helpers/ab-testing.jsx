@@ -1,7 +1,9 @@
 import pkg from '@marvelapp/react-ab-test';
 const { emitter } = pkg;
 
-import logger from './logger';
+import logger from '../logger/logger';
+
+const NAMESPACE = 'ab-testing';
 
 // Specific A/B test constants.
 
@@ -35,7 +37,7 @@ export const selectVariant = (experiment, userId) => {
 
   emitter.calculateActiveVariant(experiment, userId);
   const variant = emitter.getActiveVariant(experiment);
-  logger.log('Variant', variant);
+  logger.log(NAMESPACE, 'Variant', variant);
   return variant;
 };
 

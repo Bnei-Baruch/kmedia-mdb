@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import { settingsGetUIDirSelector } from '../../../../../../redux/selectors';
-import logger from '../../../../../../helpers/logger';
+import logger from '../../../../../../logger/logger';
+
+const NAMESPACE = 'SketchesGallery';
 
 const SketchesGallery = ({ items }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
 
-  const handleImageError = event => logger.error('Image Gallery loading error ', event.target);
+  const handleImageError = event => logger.error(NAMESPACE, 'Image Gallery loading error ', event.target);
 
   const renderLeftNav = (onClick, disabled) => (
     <button

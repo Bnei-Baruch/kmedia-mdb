@@ -2,7 +2,7 @@ import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effect
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
 import {
   CT_LESSONS_SERIES,
   CT_TAG,
@@ -20,6 +20,8 @@ import {
   recommendedGetViewsSelector,
   settingsGetContentLanguagesSelector
 } from '../redux/selectors';
+
+const NAMESPACE = 'recommended_sagas';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -261,7 +263,7 @@ export function* fetchRecommended(action) {
 
     yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
   } catch (err) {
-    logger.error(err);
+    logger.error(NAMESPACE, err);
     yield put(actions.fetchRecommendedFailure(err));
   }
 }
@@ -283,7 +285,7 @@ export function* fetchViewsByUIDs(uids) {
         : [];
       yield put(actions.receiveViews(views));
     } catch (e) {
-      logger.error('error load views', e);
+      logger.error(NAMESPACE, 'error load views', e);
     }
   }
 }

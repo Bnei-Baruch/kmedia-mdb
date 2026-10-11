@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
 import {
   FN_LANGUAGES,
   FN_SHOW_LESSON_AS_UNITS,
@@ -18,6 +18,8 @@ import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
 import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
 import { actions as mdbActions } from '../redux/modules/mdb';
+
+const NAMESPACE = 'filtersAside_sagas';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -216,7 +218,7 @@ export function* collectionsByCt(action) {
     const { data }          = yield call(Api.unitsStats, params);
     yield put(actions.receiveSingleTypeStats({ dataCU: data.collections, namespace, isPrepare: true, fn: FN_COLLECTION_MULTI }));
   } catch (err) {
-    logger.error(err);
+    logger.error(NAMESPACE, err);
   }
 }
 

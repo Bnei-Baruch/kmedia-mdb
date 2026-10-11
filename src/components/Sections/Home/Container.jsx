@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useInterval } from '../../../helpers/timer';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 import {
   LANG_ENGLISH,
   LANG_HEBREW,
@@ -30,6 +30,8 @@ import {
   settingsGetContentLanguagesSelector,
   settingsGetUILangSelector
 } from '../../../redux/selectors';
+
+const NAMESPACE = 'HomePage';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
@@ -87,9 +89,9 @@ const HomePageContainer = () => {
 
   useEffect(() => {
     const now = Date.now();
-    logger.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
+    logger.log(NAMESPACE, 're-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
     if (!fetchTimestamp || now - fetchTimestamp > FETCH_TIMEOUT) {
-      logger.log('Fetching!');
+      logger.log(NAMESPACE, 'Fetching!');
       fetchData(true);
       fetchSocialMedia('blog', fetchBlogList, contentLanguages);
       fetchSocialMedia('tweet', fetchTweetsList, contentLanguages);

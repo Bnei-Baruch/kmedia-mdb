@@ -6,17 +6,19 @@ import { clsx } from 'clsx';
 import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
-import logger from '../../../helpers/logger';
+import logger from '../../../logger/logger';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery } from '../../../helpers/player';
 import { playerGetOverModeSelector, playerIsFullScreenSelector } from '../../../redux/selectors';
 
+const NAMESPACE = 'ControlBtns';
+
 const lockLandscape = () => {
   try {
     window.screen.orientation.lock('landscape');
   } catch (e) {
-    logger.error(e);
+    logger.error(NAMESPACE, e);
   }
 };
 
@@ -24,7 +26,7 @@ const unlockLandscape = () => {
   try {
     window.screen.orientation.unlock();
   } catch (e) {
-    logger.error(e);
+    logger.error(NAMESPACE, e);
   }
 };
 

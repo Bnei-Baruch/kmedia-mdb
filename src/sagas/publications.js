@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
 import { CT_ARTICLES } from '../helpers/consts';
 import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';
@@ -11,6 +11,8 @@ import { setTab, updateQuery } from './helpers/url';
 import { isEmpty } from '../helpers/utils';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+
+const NAMESPACE = 'publications_sagas';
 
 export function* fetchTweets(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
@@ -90,7 +92,7 @@ function* fetchArticlesList(action) {
       yield put(actions.fetchCollections(data.collections));
     }
   } catch (err) {
-    logger.error('fetch lectures error', err);
+    logger.error(NAMESPACE, 'fetch lectures error', err);
   }
 }
 

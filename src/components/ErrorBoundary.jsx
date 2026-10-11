@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
+
+const NAMESPACE = 'ErrorBoundary';
 
 class ErrorBoundary extends Component {
   static propTypes = {
@@ -22,7 +24,7 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     // You can also log the error to an error reporting service
-    logger.error(error, info);
+    logger.error(NAMESPACE, error, info);
   }
 
   render() {

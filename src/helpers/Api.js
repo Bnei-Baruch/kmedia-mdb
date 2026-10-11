@@ -97,7 +97,7 @@ export class Requests {
             .then(token => Requests.auth(params, url, token, method, false));
         }
 
-        console.log('axios auth catch', err);
+        logger.error(NAMESPACE, 'axios auth catch', err);
         return err;
       });
   };

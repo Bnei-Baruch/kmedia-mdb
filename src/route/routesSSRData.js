@@ -71,7 +71,9 @@ import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import * as textPageSagas from './../sagas/textPage';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
+
+const NAMESPACE = 'routesSSRData';
 
 export const home = store => {
   const state = store.getState();
@@ -109,7 +111,7 @@ export const cuPage = async (store, match) => {
 
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
   if (!cuID || !unit) {
-    logger.error(`Error, failed fetching unit ${cuID}: ${unit}`);
+    logger.error(NAMESPACE, `Error, failed fetching unit ${cuID}: ${unit}`);
     return Promise.reject();
   }
 
@@ -156,7 +158,7 @@ export const cuPage = async (store, match) => {
     }
 
     default:
-      logger.warn('Unsupported active tab', activeTab);
+      logger.warn(NAMESPACE, 'Unsupported active tab', activeTab);
       break;
   }
 
@@ -344,9 +346,9 @@ export const libraryPage = async (store, match) => {
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   await fetchSQData(store, uiLang, contentLanguages);
 
-  logger.log('serverRender: libraryPage sources was fetched', match.params.id);
+  logger.log(NAMESPACE, 'serverRender: libraryPage sources was fetched', match.params.id);
   const sourceID = firstLeafId(match.params.id, store.getState());
-  logger.log('serverRender: libraryPage source was found', sourceID);
+  logger.log(NAMESPACE, 'serverRender: libraryPage source was found', sourceID);
 
   await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage))
     .toPromise();

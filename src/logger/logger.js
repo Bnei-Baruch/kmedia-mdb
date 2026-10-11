@@ -1,43 +1,35 @@
+/* eslint-disable no-console */
 
+// Usage: logger.<level>(NAMESPACE, ...args) — output is prefixed with `[ NAMESPACE ]`.
+// error / warn are always printed. log / info / debug / trace are printed only in development
+// (Vite `import.meta.env.DEV`, or NODE_ENV !== 'production' for plain Node) or when LOG_VERBOSE=true.
 
-const isServer = true// typeof window === 'undefined';
+const isDev = () => {
+  const viteDev = import.meta.env?.DEV;
+  if (viteDev !== undefined) return !!viteDev;
+  return typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production';
+};
 
-const filterByNameSpace = ns => (
-  ns !== 'Api_Requests' &&
-  ns !== 'mdb_sagas'
-);
+const isVerbose = isDev() || (typeof process !== 'undefined' && process.env?.LOG_VERBOSE === 'true');
+
+// Noisy namespaces muted for verbose levels (errors and warnings still pass).
+const MUTED_NAMESPACES = ['Api_Requests', 'mdb_sagas'];
+
+const verbose = method => (nameSpace, ...args) => {
+  if (isVerbose && !MUTED_NAMESPACES.includes(nameSpace)) {
+    console[method](`[ ${nameSpace} ]`, ...args);
+  }
+};
+
+const always = method => (nameSpace, ...args) => console[method](`[ ${nameSpace} ]`, ...args);
 
 const logger = {
-  log: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.log(`[ ${nameSpace} ]`, ...args);
-    }
-  },
-  error: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.error(`[ ${nameSpace} ]`, ...args);
-    }
-  },
-  warn: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.warn(`[ ${nameSpace} ]`, ...args);
-    }
-  },
-  info: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.info(`[ ${nameSpace} ]`, ...args);
-    }
-  },
-  debug: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.debug(`[ ${nameSpace} ]`, ...args);
-    }
-  },
-  trace: (nameSpace, ...args) => {
-    if (isServer && filterByNameSpace(nameSpace)) {
-      console.trace(`[ ${nameSpace} ]`, ...args);
-    }
-  },
+  error: always('error'),
+  warn : always('warn'),
+  log  : verbose('log'),
+  info : verbose('info'),
+  debug: verbose('debug'),
+  trace: verbose('trace'),
 };
 
 export default logger;

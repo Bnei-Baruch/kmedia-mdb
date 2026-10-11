@@ -1,10 +1,12 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
+import logger from '../logger/logger';
 import { types, actions } from '../redux/modules/assets';
 import { settingsGetContentLanguagesSelector } from '../redux/selectors';
 import { DEFAULT_CONTENT_LANGUAGE } from '../helpers/consts';
+
+const NAMESPACE = 'assets_sagas';
 
 function* unzip(action) {
   const id = action.payload;
@@ -83,7 +85,7 @@ function* fetchTimeCode(action) {
     const { data } = yield call(Api.getAsset, `api/time_code?uid=${uid}&language=${language}`);
     yield put(actions.fetchTimeCodeSuccess(data));
   } catch (e) {
-    logger.error('fetch time code', e);
+    logger.error(NAMESPACE, 'fetch time code', e);
   }
 }
 
