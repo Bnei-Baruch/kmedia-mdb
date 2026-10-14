@@ -1,0 +1,123 @@
+@use 'variables' as *;
+@use 'responsive-helpers' as *;
+@use 'colors-helpers';
+
+nav.sidebar-nav,
+aside.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 17px;
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+  .sidebar-nav__link {
+    display: block;
+    padding: .92857143em 1.14285714em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    line-height: 1;
+    color: rgba(colors-helpers.$fullBlack, .87);
+
+    &:hover {
+      background: rgba(colors-helpers.$fullBlack, .03);
+    }
+
+    &.active {
+      background: rgba(colors-helpers.$fullBlack, .03);
+      color: #2185d0;
+    }
+  }
+}
+
+.sidebar-nav__personal {
+  padding: .92857143em 1.14285714em;
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+  h3 {
+    font-family: inherit;
+    color: rgba(colors-helpers.$fullBlack, .87);
+
+    span {
+      color: rgba(colors-helpers.$fullBlack, .6);
+    }
+  }
+}
+
+.sidebar-nav__title {
+  margin: 0 0 .28571429rem;
+  font-size: 1.28571429rem;
+  font-weight: 400;
+  color: #fff;
+}
+
+.sidebar-nav__subtitle {
+  display: block;
+  font-size: .85714286rem;
+  color: rgba(colors-helpers.$white, .7);
+  margin: .25em .25rem;
+}
+
+.sidebar-nav__login {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  margin-top: 8px;
+  padding: 7.66px 14.625px;
+  font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #fc6719;
+  text-decoration: none;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.sidebar-nav__rss {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  padding: .92857143em 1.14285714em;
+}
+
+.sidebar-nav__rss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .6em .5em;
+  font-size: .78571429rem;
+  color: #fff;
+  border: none;
+  border-radius: .28571429rem;
+  text-decoration: none;
+  cursor: pointer;
+
+  &--orange {
+    background: #f2711c;
+  }
+
+  &--grey {
+    background: #767676;
+  }
+}
+
+.sidebar-nav__rss-label {
+  margin: 0 .5em;
+  line-height: 1;
+}
+
+.sidebar-nav__feed {
+  padding: 1em 1.2em;
+}
+
+.sidebar-nav--aside {
+  &.is-hidden {
+    display: none;
+  }
+}

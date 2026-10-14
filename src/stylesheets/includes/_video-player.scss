@@ -1,24 +1,13 @@
+@use "colors-helpers";
+@use "responsive-helpers";
+
 @use "sass:math";
 
 .avbox {
-  @include mobile {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  background-color: $darkWhite;
-  width: 100% !important;
+  background-color: colors-helpers.$darkWhite;
 
   .unit_container {
-    @include mobile {
-      padding-bottom: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    background-color: $darkWhite;
-    padding: 1em;
-    width: 100%
+    background-color: colors-helpers.$darkWhite;
   }
 
   /* player on mobile devices */
@@ -53,13 +42,13 @@
   }
 
   &__player {
-    background: $black;
+    background: colors-helpers.$black;
     height: 0;
-    padding-top: percentage(math.div(9, 16));
+    padding-top: math.percentage(math.div(9, 16));
     position: relative;
 
     &--is-4x3 {
-      padding-top: percentage(3 * 0.25);
+      padding-top: math.percentage(3 * 0.25);
     }
 
     &--is-audio {
@@ -71,7 +60,7 @@
         transition: height 1s;
       }
 
-      @media screen and (min-width: $tabletBreakpoint) {
+      @media screen and (min-width: responsive-helpers.$screen-md) {
         &--edit-mode {
           height: 310px;
         }
@@ -105,52 +94,22 @@
     width: 100%;
   }
 
-  #avbox_playlist {
-    max-height: 40rem;
+  .avbox__playlist-header {
+    color: colors-helpers.$darkWhite;
+    background-image: linear-gradient(0deg, colors-helpers.$black, rgba(colors-helpers.$black, .85));
 
-    > .header, .sub {
-      color: $darkWhite;
-      align-items: flex-start;
+    .content {
+      padding: 0 1em;
+      vertical-align: middle;
     }
 
-    > .header {
-      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
-      @include mobile {
-        padding: 1em 0.5em;
-        font-size: 18px;
-
-        & small {
-          font-size: 14px !important;
-
-        }
-      }
-      font-size: 2.0rem;
-      padding: 0.5em;
-      margin-top: 0;
-      margin-bottom: 0;
-
-      .content {
-        padding: 0 1em;
-        vertical-align: middle;
-      }
-
-      .playlist_icon {
-        vertical-align: bottom;
-      }
-
-      & small {
-        font-size: 70%;
-        padding: 5px;
-      }
-
-      &.h3 {
-        font-size: 1.5rem;
-      }
+    .playlist_icon {
+      vertical-align: bottom;
     }
   }
 
   &__playlist-wrapper {
-    @include mobile {
+    @include responsive-helpers.mobile {
       display: block;
       padding-bottom: 1em;
       padding-top: -1em;
@@ -163,18 +122,18 @@
         content: none;
       }
 
-      > .header {
+      >.header {
         &::before {
           content: none;
         }
       }
     }
 
-    background: $darkWhite;
+    background: colors-helpers.$darkWhite;
     display: flex;
     flex-direction: column;
 
-    > .header {
+    >.header {
       flex: 0 0 auto;
       position: relative;
       padding: 0 0.5em;
@@ -182,18 +141,18 @@
   }
 
   &__playlist-view {
-    border: 1px solid $midWhite;
+    border: 1px solid colors-helpers.$midWhite;
     clear: both;
     overflow-y: auto;
     position: relative;
     margin: 0;
 
     &.container {
-      border: 1px solid $midWhite;
+      border: 1px solid colors-helpers.$midWhite;
     }
 
     .header {
-      color: $blue;
+      color: colors-helpers.$blue;
     }
 
     .list {
@@ -203,7 +162,7 @@
         padding: 0 !important;
 
         .active {
-          background-color: rgba($blue, .2) !important;
+          background-color: rgba(colors-helpers.$blue, .2) !important;
         }
 
         table {
@@ -215,75 +174,38 @@
     }
 
 
-    .menu > .item {
+    .menu>.item {
       &.active {
-        background-color: rgba($blue, .2) !important;
+        background-color: rgba(colors-helpers.$blue, .2) !important;
       }
     }
   }
 }
 
 
-.avbox__playlist-prev-button, .avbox__playlist-next-button {
-  @include mobile {
-    padding: 0 4px;
-  }
+.avbox__playlist-prev-button,
+.avbox__playlist-next-button {
+  color: white;
+  display: inline-block;
 
-  i.icon {
-    margin: 0 .25rem !important;
+  &:hover {
+    opacity: 0.8;
     color: white;
-    width: 15px;
-    display: inline-block;
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 }
 
 
-.cut_and_download_btn, .embed-share-button {
+.cut_and_download_btn {
   padding: 0 !important;
   margin: 0 1px !important;
   position: relative;
   font-size: 1.7em !important;
   align-self: flex-start;
 
-  & > .icon {
+  &>.icon {
     margin: 0 !important;
     width: auto !important;
   }
 
-  & > .ui.floating.label {
-    right: 100%;
-    left: auto;
-    margin: 0 -1.5em 0 !important;
-  }
 }
 
-
-.rtl .cut_and_download_btn, .embed-share-button {
-
-  & > .ui.floating.label {
-    left: 100%;
-    right: auto;
-  }
-}
-
-
-.ui.modal > .content.cut_and_download_modal {
-  text-align: center;
-  padding: 3em 1em !important;
-
-  & > .header {
-    padding-bottom: 1em;
-  }
-
-  & > .container {
-    padding-top: 2em;
-  }
-
-  .button {
-    margin: 0 1em;
-  }
-}

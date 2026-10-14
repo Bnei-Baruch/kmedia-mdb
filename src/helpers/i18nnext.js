@@ -1,19 +1,10 @@
-import i18n from 'i18next';
-import backend from 'i18next-http-backend';
-import moment from 'moment';
-import 'moment/locale/he';
-import 'moment/locale/ru';
-import 'moment/locale/es';
-import 'moment/locale/uk';
-import 'moment/locale/it';
-import 'moment/locale/de';
-import 'moment/locale/tr';
-import 'moment/locale/cs';
+import i18next from 'i18next';
+import HttpBackend from 'i18next-http-backend';
+import dayjs from './dayjs';
 
 import { DEFAULT_UI_LANGUAGE } from './consts';
 
-const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
-
+let i18n;
 export const options = {
   load: 'languageOnly',
   fallbackLng: DEFAULT_UI_LANGUAGE,
@@ -26,27 +17,41 @@ export const options = {
 
   interpolation: {
     escapeValue: false, // Not needed for react!
-    format: (value, format) => (
-      // Our beloved backend is using UTC so we do it here as well
-      moment.utc(value).format(format)
-    ),
+  },
+
+  react: {
+    wait: true,
+    useSuspense: false,
   },
 };
 
-// Client side.
-export const initializeI18n = () => i18n
-  .use(backend)
-  .init({
-    ...options,
-    backend: {
-      loadPath: `${LOCALES_BACKEND}locales/{{lng}}/{{ns}}.json`,
-      crossDomain: true
-    },
-
-    react: {
-      wait: true, // Globally set to wait for loaded translations in withTranslation hoc.
-      useSuspense: true,
-    },
+// i18next v26 overwrites interpolation.format with its Formatter; register dayjs
+// formats after init so {{date, ll}} / {{date, l}} keep working.
+// Only lowercase variants — the Formatter lowercases all names, so 'LL' would
+// overwrite 'll' if both were registered.
+export const registerDateFormats = instance => {
+  ['l', 'll', 'lll', 'llll'].forEach(fmt => {
+    instance.services.formatter.add(fmt, (value, lng) =>
+      dayjs.utc(value).locale(lng || DEFAULT_UI_LANGUAGE).format(fmt)
+    );
   });
+};
 
-export default i18n;
+export const initializeI18n = async (resources, lng) => {
+  // eslint-disable-next-line import/no-named-as-default-member
+  await i18next.use(HttpBackend).init({
+    ...options,
+    resources,
+    partialBundledLanguages: true,
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
+    ...(lng ? { lng } : {}),
+    initImmediate: false,
+  });
+  registerDateFormats(i18next);
+  i18n = i18next;
+  return i18next;
+};
+
+export { i18n as default };

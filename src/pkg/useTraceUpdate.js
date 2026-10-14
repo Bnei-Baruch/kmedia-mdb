@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import logger from '../helpers/logger';
+import logger from '../logger/logger.js';
+
+const NAMESPACE = 'useTraceUpdate';
 
 const useTraceUpdate = (props, prefix) => {
   const prev = useRef(props);
@@ -13,7 +15,7 @@ const useTraceUpdate = (props, prefix) => {
       return ps;
     }, {});
     if (Object.keys(changedProps).length > 0) {
-      logger.log(`Changed props - ${prefix}:`, changedProps);
+      logger.log(NAMESPACE, `Changed props - ${prefix}:`, changedProps);
     }
 
     prev.current = props;

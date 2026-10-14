@@ -1,0 +1,49 @@
+import { useSelector } from 'react-redux';
+
+import logger from '../../../logger/logger.js';
+import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import SectionHeader from '../../shared/SectionHeader';
+import { getWipErr } from '../../shared/WipErr/WipErr';
+import CollectionListTemplate from '../../shared/ContentItem/CollectionListTemplate';
+import { useMusicQuery } from '../../../redux/api/music';
+import { settingsGetUILangSelector, settingsGetContentLanguagesSelector } from '../../../redux/selectors';
+import NotFound from '../../shared/NotFound';
+
+const NAMESPACE = 'Music';
+
+const Music = () => {
+  const uiLanguage = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const { isError, isLoading, isSuccess, error, data } = useMusicQuery({
+    uiLanguage,
+    contentLanguages
+  });
+
+  let wipErr = getWipErr(isLoading, isError);
+  if (wipErr) {
+    if (error) {
+      logger.error(NAMESPACE, '========> Music error', error);
+    }
+  }
+
+  const music = data?.collections;
+  if (!isSuccess || !music) {
+    wipErr = <NotFound />;
+  }
+
+  const content = wipErr || (
+    <div className=" px-4 ">
+      <ResultsPageHeader pageNo={1} pageSize={1000} total={music.length || 0} />
+      {music.map(item => <CollectionListTemplate key={item.id} cID={item.id} size='small' />)}
+    </div>
+  );
+
+  return (
+    <>
+      <SectionHeader section="music" />
+      {content}
+    </>
+  );
+};
+
+export default Music;

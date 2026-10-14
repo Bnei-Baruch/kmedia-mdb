@@ -91,12 +91,6 @@ const onSSRPrepare = state => {
   state.about.err       = state.about.err ? state.about.err.toString() : state.about.err;
 };
 
-const recursiveFindPrevTimeByPos = (pos, state) => {
-  if (pos === 0 || Object.keys(state.timeCode).length === 0) return 0;
-  if (state.timeCode[pos]) return state.timeCode[pos];
-  return recursiveFindPrevTimeByPos(pos - 1, state);
-};
-
 const assetsSlice = createSlice({
   name: 'assets',
   initialState,
@@ -142,7 +136,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    fetchAsset       : (state, _) => state.asset.wip = true,
+    fetchAsset       : state => void (state.asset.wip = true),
     fetchAssetSuccess: (state, action) => {
       state.asset.data = action.payload;
       state.asset.wip  = false;
@@ -153,7 +147,7 @@ const assetsSlice = createSlice({
       state.asset.err = action.payload;
     },
 
-    fetchPerson           : (state, _) => void (state.person.wip = true),
+    fetchPerson           : state => void (state.person.wip = true),
     fetchPersonSuccess    : (state, action) => {
       state.person.data = action.payload;
       state.person.wip  = false;
@@ -163,7 +157,7 @@ const assetsSlice = createSlice({
       state.person.wip = false;
       state.person.err = action.payload;
     },
-    fetchAbout            : (state, _) => void (state.about.wip = true),
+    fetchAbout            : state => void (state.about.wip = true),
     fetchAboutSuccess     : (state, action) => {
       state.about.data = action.payload;
       state.about.wip  = false;
@@ -209,8 +203,7 @@ const assetsSlice = createSlice({
     getAsset          : state => state.asset,
     getPerson         : state => state.person,
     getAbout          : state => state.about,
-    getTimeCode       : state => pos => recursiveFindPrevTimeByPos(pos, state),
-    hasTimeCode       : state => Object.keys(state.timeCode).length > 0,
+    getTimeCode       : state => state.timeCode,
     getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]
   }
 });

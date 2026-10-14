@@ -153,6 +153,7 @@ function* updatePageInQuery(action) {
       return { ...query, page: pageNo };
     }
 
+    // eslint-disable-next-line no-unused-vars
     const { _page, ...result } = query;
     return result;
   });

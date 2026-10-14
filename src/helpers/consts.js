@@ -784,6 +784,7 @@ export const FN_MEDIA_TYPE         = 'media-type-filter';
 export const FN_LOCATIONS          = 'locations-filter';
 export const FN_FREE_TEXT          = 'free-text';
 export const FN_SORT_BY_FILTER     = 'sort-by-filter';
+export const FN_PUBLISHER          = 'publishers-filter';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';

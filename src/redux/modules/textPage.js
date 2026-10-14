@@ -9,6 +9,7 @@ import { selectSuitableLanguage } from '../../helpers/language';
 import { CT_SOURCE, LOCALSTORAGE_KEY_ADDITIONS_MODS } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
+  if (typeof window === 'undefined') return;
   localStorage.setItem('library-settings', JSON.stringify(state.settings));
 };
 
@@ -125,7 +126,9 @@ const textPageSlice = createSlice({
     setSideOffset      : (state, { payload }) => void (state.sideOffset = payload),
     setAdditionsMode   : (state, { payload }) => {
       state.additionsMode = payload;
-      localStorage.setItem(LOCALSTORAGE_KEY_ADDITIONS_MODS, payload);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LOCALSTORAGE_KEY_ADDITIONS_MODS, payload);
+      }
     },
     setIsSearch        : state => void (state.isSearch = !state.isSearch),
     fetchSubject       : {

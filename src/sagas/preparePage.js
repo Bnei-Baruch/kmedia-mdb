@@ -1,10 +1,12 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
+import logger from '../logger/logger.js';
 import { actions, selectors, types } from '../redux/modules/preparePage';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+
+const NAMESPACE = 'preparePage_sagas';
 
 const DEF_PARAMS = { pageNo: 1, pageSize: 1000, with_units: false };
 
@@ -25,7 +27,7 @@ function* fetchCollectionsList(action) {
       yield put(actions.receiveCollections(namespace));
     }
   } catch (err) {
-    logger.error('fetch programs error', err);
+    logger.error(NAMESPACE, 'fetch programs error', err);
   }
 }
 

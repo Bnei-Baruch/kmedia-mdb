@@ -1,7 +1,7 @@
 import Link from '../../Language/MultiLanguageLink';
 
 export const getBreadCrumbSection = (p, index, arr) => {
-  if (!p) return arr;
+  if (!p) return null;
   const section = {
     key: p.id,
     content: p.label,

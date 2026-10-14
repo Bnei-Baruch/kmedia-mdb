@@ -1,16 +1,13 @@
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { findPlayedFile } from '../../components/Player/helper';
 import { actions } from '../../redux/modules/player';
-import { load, setup, init, isPlayerReady } from './adapter';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { playlistGetInfoSelector, playlistGetPlayedSelector } from '../../redux/selectors';
+import { init, isPlayerReady, load, setup } from './adapter';
 
 const PlayerBehavior = () => {
   const dispatch = useDispatch();
-
-  const { deviceInfo } = useContext(DeviceInfoContext);
 
   const item = useSelector(playlistGetPlayedSelector);
   const info = useSelector(playlistGetInfoSelector);
@@ -39,7 +36,7 @@ const PlayerBehavior = () => {
         autostart: false,
         pipIcon  : 'enabled'
       });
-      init(dispatch, deviceInfo);
+      init(dispatch);
     } else {
       const { file: prevSrc } = window.jwplayer().getPlaylist()?.[0] || false;
       if (prevSrc === file.src) return;
@@ -48,7 +45,7 @@ const PlayerBehavior = () => {
     }
 
     dispatch(actions.setFile(file));
-  }, [file, info.isReady, dispatch, deviceInfo]);
+  }, [file, info.isReady, dispatch]);
 
   return null;
 };

@@ -1,13 +1,16 @@
-import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
-import logger from '../../helpers/logger';
+import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
+import logger from '../../logger/logger.js';
+
+const NAMESPACE = 'jwplayer';
 
 export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
 export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
 export const getQualitiesFromLS   = () => {
+  if (typeof window === 'undefined') return undefined;
   const lsKey = localStorage.getItem(LOCALSTORAGE_QUALITY);
-  const pair  = Object.entries(VS_NAMES).find(([k, v]) => lsKey === v);
+  const pair  = Object.entries(VS_NAMES).find(([, v]) => lsKey === v);
   return pair?.[0];
 };
 
@@ -27,7 +30,7 @@ const functionByName = (name, def = 0, val) => {
   try {
     resp = foo(val);
   } catch (e) {
-    logger.error('jwplayer error', e);
+    logger.error(NAMESPACE, 'jwplayer error', e);
   }
 
   return resp;
@@ -86,22 +89,15 @@ const PLAYER_EVENTS = [
   'complete',
   'buffer'
 ];
-export const init   = (dispatch, deviceInfo) => {
+export const init   = dispatch => {
   const player = window.jwplayer();
-  //for debug, catch all jwplayer events
-  /*player.on('all', (name, e) => {
-    if (!['bufferChange', 'time'].includes(name)) {
-      console.log('bag: jwplayer all events', name, e);
-    }
-  });*/
-
   player.on('error', e => {
-    logger.error(e);
+    logger.error(NAMESPACE, e);
     dispatch(actions.setLoaded(true));
   });
 
   player.on('warning', e => {
-    logger.error(e);
+    logger.error(NAMESPACE, e);
     dispatch(actions.setLoaded(true));
   });
 
@@ -117,7 +113,7 @@ export const init   = (dispatch, deviceInfo) => {
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
-      logger.log(`no redux for action: ${name}`);
+      logger.log(NAMESPACE, `no redux for action: ${name}`);
       return;
     }
 

@@ -22,28 +22,28 @@ export const useKeyboardControl = runTimeout => {
         case 'Down': // IE/Edge specific value
         case 'ArrowDown': {
           const v = getVolume();
-          setVolume(Math.max(0, v - coef * 5));
+          setVolume(Math.max(0, v - (coef * 5)));
           break;
         }
 
         case 'Up': // IE/Edge specific value
         case 'ArrowUp': {
           const v = getVolume();
-          setVolume(Math.min(100, v + coef * 5));
+          setVolume(Math.min(100, v + (coef * 5)));
           break;
         }
 
         case 'Left': // IE/Edge specific value
         case 'ArrowLeft': {
           const pos = getPosition();
-          seek(Math.max(pos - coef * 5, 0));
+          seek(Math.max(pos - (coef * 5), 0));
           break;
         }
 
         case 'Right': // IE/Edge specific value
         case 'ArrowRight': {
           const pos = getPosition();
-          seek(Math.min(pos + coef * 5, getDuration()));
+          seek(Math.min(pos + (coef * 5), getDuration()));
           break;
         }
 
@@ -71,6 +71,7 @@ export const useKeyboardControl = runTimeout => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { actions as mdbActions } from '../../../../redux/modules/mdb';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getSavedTime } from '../../../Player/helper';
-import moment from 'moment';
+import dayjs from '../../../../helpers/dayjs';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 import { getEmbedFromQuery, EMBED_INDEX_BY_TYPE } from '../../../../helpers/player';
 import {
@@ -48,8 +48,8 @@ const BuildPlaylistLastDaily = () => {
       const timestamp = getSavedTime(id, ht);
       return { id, timestamp };
     }).filter(x => !!x.timestamp).sort((a, b) => {
-      const mta = moment(a.timestamp);
-      const mtb = moment(b.timestamp);
+      const mta = dayjs(a.timestamp);
+      const mtb = dayjs(b.timestamp);
       return mta.isAfter(mtb) ? -1 : 1;
     });
 
@@ -57,6 +57,7 @@ const BuildPlaylistLastDaily = () => {
     const to   = canonicalLink(denormCU(cuId), null, ccu);
     if (embed) to.search = `embed=${embedIdx}`;
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` }, { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ccu, historyItems, navigate, embed, embedIdx]);
 
   return null;

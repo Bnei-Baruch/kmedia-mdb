@@ -21,7 +21,7 @@ const calcPxPerWord = () => {
   return wordCount > 0 ? scrollableH / wordCount : null;
 };
 
-const calcMinsLeft = (wpm) => {
+const calcMinsLeft = wpm => {
   const el = document.querySelector('.font_settings.text__content');
   if (!el) return null;
   const wordCount = el.innerText.trim().split(/\s+/).filter(Boolean).length;
@@ -34,13 +34,13 @@ const calcMinsLeft = (wpm) => {
 
 export const useAutoScroll = () => {
   const [isScrolling, setIsScrolling] = useState(false);
-  const [wpm, setWpmState]            = useState(loadWpm);
+  const [wpm, setWpmState]            = useState(DEFAULT_WPM);
   const [minsLeft, setMinsLeft]       = useState(null);
   const [finished, setFinished]       = useState(false);
 
   const rafRef         = useRef(null);
   const lastTimeRef    = useRef(null);
-  const wpmRef         = useRef(loadWpm());
+  const wpmRef         = useRef(DEFAULT_WPM);
   const posRef         = useRef(0);
   const pxPerWordRef   = useRef(null);
   const lastTimeUpdate = useRef(0);
@@ -130,6 +130,12 @@ export const useAutoScroll = () => {
     const px = calcPxPerWord();
     if (px) pxPerWordRef.current = px;
     setMinsLeft(calcMinsLeft(wpmRef.current));
+  }, []);
+
+  useEffect(() => {
+    const saved = loadWpm();
+    wpmRef.current = saved;
+    setWpmState(saved);
   }, []);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);

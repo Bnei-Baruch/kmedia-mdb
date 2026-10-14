@@ -6,7 +6,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 let lastScrollTop              = 0;
 export const useScrollBehavior = ref => {
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobile } = useContext(DeviceInfoContext);
   const dispatch           = useDispatch();
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +28,8 @@ export const useScrollBehavior = ref => {
     window.addEventListener('scroll', handleScroll);
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [ref.current, isMobileDevice, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, dispatch]);
 
   return null;
 };

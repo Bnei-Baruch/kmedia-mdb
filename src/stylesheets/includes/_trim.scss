@@ -1,42 +1,38 @@
-.ltr .trimmed_files {
-  right: 2em;
-  left: auto;
+@use "colors-helpers";
+@use "responsive-helpers";
+
+.trimmed_files {
+  position: fixed;
+  bottom: 0;
+  inset-inline-end: 2em;
+  width: 600px;
+  background: colors-helpers.$white;
+  z-index: 1900;
+  border: 1px solid colors-helpers.$midGrey;
+  border-radius: 5px 5px 0 0;
+
+  @media (max-width: responsive-helpers.$screen-sm) {
+    width: auto;
+    inset-inline: 0 !important;
+  }
 
   &.minimized {
     width: calc(600px - 200px);
-    right: 200px;
+    inset-inline-end: 200px;
 
     & > .segment {
       padding: 0.3em 0.5em;
     }
 
-    @media (max-width: $mobileBreakpoint) {
+    @media (max-width: responsive-helpers.$screen-sm) {
       width: auto;
-      right: 150px!important;
+      inset-inline-end: 150px !important;
       bottom: .5em;
     }
   }
-}
-
-.trimmed_files {
-  position: fixed;
-  bottom: 0;
-  left: 2em;
-  right: auto;
-  width: 600px;
-  background: $white;
-  z-index: 1900;
-  border: 1px solid $midGrey;
-  border-radius: 5px 5px 0 0;
-
-  @media (max-width: $mobileBreakpoint) {
-    width: auto;
-    left: 0!important;
-    right: 0!important;
-  }
 
   & > .segment {
-    background: $blue;
+    background: colors-helpers.$blue;
     color: white;
     padding: 1em 0.5em;
     border-radius: 0;
@@ -49,28 +45,6 @@
 
   .button {
     padding: 0 !important;
-  }
-
-  .ui.basic.icon.button {
-    box-shadow: none !important;
-
-    &:first-child {
-      margin: 0 8px;
-    }
-
-    &:hover, &:active, &:focus {
-      box-shadow: none !important;
-    }
-
-    &:hover {
-      opacity: 0.8;
-    }
-
-    & > .icon {
-      font-size: 1.4em;
-      line-height: 1.2em;
-      align-self: center;
-    }
   }
 
   .splash {

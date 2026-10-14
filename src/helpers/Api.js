@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+import logger from '../logger/logger.js';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
-import logger from './logger';
+import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+
+const NAMESPACE = 'Api_Requests';
 
 export const API_BACKEND        = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND            = process.env.REACT_APP_ASSETS_BACKEND;
@@ -25,7 +27,7 @@ export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 const makeParams = params => (
   `${Object
     .entries(params)
-    .filter(([_, v]) => v !== undefined && v !== null)
+    .filter(([, v]) => v !== undefined && v !== null)
     .map(pair => {
       const key   = pair[0];
       const value = pair[1];
@@ -46,9 +48,11 @@ export class Requests {
 
   static get = async path => {
     try {
+      logger.log(NAMESPACE, 'Requests.get', path);
       return await axios.get(backendUrl(path));
-    } catch ({ response }) {
-      return response;
+    } catch (err) {
+      logger.error(NAMESPACE, `Requests.get failed for ${backendUrl(path)}: ${err?.message}`);
+      return err?.response;
     }
   };
 
@@ -93,7 +97,7 @@ export class Requests {
             .then(token => Requests.auth(params, url, token, method, false));
         }
 
-        logger.error('axios auth catch', err);
+        logger.error(NAMESPACE, 'axios auth catch', err);
         return err;
       });
   };
@@ -217,6 +221,51 @@ class Api {
       deb,
     })}`)
   );
+
+  static reasoningSearchStart = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/start'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearchCache = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cache'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearch = request => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify(request)
+  });
+
+  static reasoningSearchStatus = sessionId => Requests.get(`search/reasoning/status?${Requests.makeParams({
+    session_id: sessionId,
+    _: Date.now()
+  })}`);
+
+  static reasoningSearchResult = sessionId => Requests.get(`search/reasoning/result?${Requests.makeParams({
+    session_id: sessionId,
+    _: Date.now()
+  })}`);
+
+  static reasoningSearchCancel = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/cancel'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
+
+  static reasoningSearchFinishNow = sessionId => axios({
+    method : 'post',
+    url    : backendUrl('search/reasoning/finish-now'),
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ session_id: sessionId })
+  });
 
   static getAsset = path => Requests.getAsset(path);
 

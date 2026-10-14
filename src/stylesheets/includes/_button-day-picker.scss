@@ -1,0 +1,87 @@
+@use 'responsive-helpers';
+@use 'colors-helpers';
+
+.dateButton {
+  border-radius: 4px !important;
+}
+
+.hide-native-date-input {
+  // Transparent native date input laid over its trigger (parent must be positioned):
+  // the user taps it directly. showPicker() on a hidden input does not work in iOS Safari.
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  // >= 16px prevents iOS zoom on focus
+  font-size: 16px;
+}
+
+// react-day-picker v10 theming. (The old .DayPicker-* rules below target v7
+// class names that no longer exist after the v7 → v10 upgrade.)
+.rdp-root {
+  --rdp-accent-color: #{colors-helpers.$blue};
+  --rdp-today-color: #{colors-helpers.$blue};
+  // Fill the selected day with a background instead of the default border.
+  --rdp-selected-border: none;
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: #{colors-helpers.$blue-bright};
+  color: #{colors-helpers.$white};
+}
+
+.DayPicker-Day {
+  outline: none !important;
+  min-width: 2.5em;
+}
+
+.avbox__playlist-header {
+
+  .dateButton,
+  .dateButton:hover,
+  .dateButton:active,
+  .dateButton:focus {
+    color: white;
+    background-color: transparent;
+    margin: 0;
+    padding: .78571429em .5em;
+    font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif; // body font (header is Lato)
+    font-size: 15.4px;
+    line-height: 1;
+    font-weight: normal;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(colors-helpers.$white, 0.2);
+    }
+  }
+}
+
+
+.day-picker-button {
+  color: white;
+  outline: none;
+  border: none;
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(colors-helpers.$white, 0.2);
+  }
+}
+
+.to-from-label {
+  min-width: 70px;
+}
+
+.FastDayPicker-DayPicker-NavButton {
+  width: 17em;
+
+  .DayPicker-NavButton {
+    top: 0;
+    float: right;
+  }
+}

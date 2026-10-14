@@ -1,22 +1,25 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import logger from '../helpers/logger';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
+import logger from '../logger/logger.js';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { actions as publications } from '../redux/modules/publications';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
-import { fetch as fetchMy } from './my';
 import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+import { fetch as fetchMy } from './my';
+
+const NAMESPACE = 'mdb_sagas';
 
 export function* fetchUnit(action) {
   const id = action.payload;
+  logger.log(NAMESPACE, 'fetchUnit start', id);
   try {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-
+    logger.log(NAMESPACE, 'fetchUnit call Api.unit', id, uiLang, contentLanguages);
     const result = yield call(Api.unit, {
       id,
       ui_language      : uiLang,
@@ -25,6 +28,7 @@ export function* fetchUnit(action) {
     });
 
     const { data, status, statusText } = result;
+    logger.log(NAMESPACE, 'fetchUnit result', data, status, statusText);
     if (status >= 400) {
       const err = `${status} ${statusText}`;
       yield put(mdbActions.fetchUnitFailure({ id, err }));
@@ -175,16 +179,25 @@ export function* fetchSQData() {
   try {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-    const { data }         = yield call(Api.sqdata, {
+    logger.log(NAMESPACE, '[fetchSQData] start', { uiLang, contentLanguages });
+    const res              = yield call(Api.sqdata, {
       ui_language      : uiLang,
       content_languages: contentLanguages
     });
+
+    if (!res?.data) {
+      throw new Error(`sqdata returned no data (ui_language=${uiLang}, content_languages=${contentLanguages})`);
+    }
+
+    const { data }         = res;
+    logger.log(NAMESPACE, '[fetchSQData] success', { sources: data?.sources?.length, tags: data?.tags?.length, publishers: data?.publishers?.length, persons: data?.persons?.length });
     yield put(sources.receiveSources({ sources: data.sources, uiLang }));
     yield put(tags.receiveTags(data.tags));
     yield put(publications.receivePublishers(data.publishers));
     yield put(mdbActions.receivePersons(data.persons));
     yield put(mdbActions.fetchSQDataSuccess());
   } catch (err) {
+    logger.error(NAMESPACE, '[fetchSQData] FAILED', err?.message || err);
     yield put(mdbActions.fetchSQDataFailure(err));
   }
 }
@@ -211,7 +224,7 @@ function* createLabel(action) {
     const { content_unit } = action.payload;
     yield fetchLabels({ content_unit, language });
   } catch (err) {
-    logger.error(err);
+    logger.error(NAMESPACE, err);
   }
 }
 
@@ -227,7 +240,7 @@ export function* fetchLabels(payload) {
     const { data }         = yield call(Api.labels, params);
     yield put(mdbActions.receiveLabels(data.labels));
   } catch (err) {
-    logger.error('fetchLabels errors', err);
+    logger.error(NAMESPACE, 'fetchLabels errors', err);
   }
 }
 

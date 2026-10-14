@@ -1,6 +1,5 @@
-import { Requests } from '../src/helpers/Api';
-import { canonicalLink } from '../src/helpers/links';
-import logger from '../src/helpers/logger';
+import { Requests } from '../src/helpers/Api.js';
+import { canonicalLink } from '../src/helpers/links.js';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -27,7 +26,7 @@ function kmRedirect(req, res, path) {
 }
 
 export async function kmediaContainer(req, res, next) {
-  logger.log('kmediaContainer', req.originalUrl);
+  console.log('kmediaContainer', req.originalUrl);
   switch (req.params.cnID) {
     case 'homepage':
     case 'google_ads':
@@ -50,7 +49,7 @@ export async function kmediaContainer(req, res, next) {
 }
 
 export async function kmediaSearch(req, res, next) {
-  logger.log('kmediaSearch', req.query);
+  console.log('kmediaSearch', req.query);
   const { search } = req.query;
 
   if (!search) {

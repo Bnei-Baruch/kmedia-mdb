@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { ulid } from 'ulid';
 import { chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
-import logger from './logger';
+import logger from '../logger/logger.js';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
@@ -17,6 +17,8 @@ import {
   settingsGetUILangSelector
 } from '../redux/selectors';
 import { chroniclesApi } from '../redux/api/chronicles';
+
+const NAMESPACE = 'clientChronicles';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
@@ -97,7 +99,7 @@ export default class ClientChronicles {
       // Check for inactivity, only if was active since last inactive timestamp.
       if (this.isUserActive() && !this.isPlayerPlaying() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
-        logger.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
+        logger.log(NAMESPACE, `User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
         this.append('user-inactive', { activities: Array.from(this.sessionActivities) });
         store.dispatch(actions.userInactive());
       }
@@ -110,7 +112,7 @@ export default class ClientChronicles {
       }
     }, APPENDS_FLUSH_MS);
 
-    window.addEventListener('beforeunload', event => {
+    window.addEventListener('beforeunload', () => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.
@@ -118,7 +120,7 @@ export default class ClientChronicles {
       }
 
       for (const { onBeforeUnloadClosure } of this.lastEntriesByType.values()) {
-        if (!!onBeforeUnloadClosure) {
+        if (onBeforeUnloadClosure) {
           onBeforeUnloadClosure();
         }
       }
@@ -371,7 +373,7 @@ export default class ClientChronicles {
       // 2. We delete the start event so that other events won't use it as flow-event.
       const { start }  = FLOWS_BY_END.get(eventType);
       const startEvent = this.lastEntriesByType.get(start);
-      if (!!startEvent) {
+      if (startEvent) {
         flowId = startEvent.eventId;
         this.lastEntriesByType.delete(start);
       }

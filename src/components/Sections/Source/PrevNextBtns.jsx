@@ -1,0 +1,106 @@
+import { useContext } from 'react';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { isTaas } from '../../shared/PDF/helper';
+import { getFullPath, fixPrevNextZoharTaas } from './helper';
+import Link from '../../Language/MultiLanguageLink';
+import { getIndex } from './TOC/TOC';
+import {
+  textPageGetSubjectSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  sourcesGetSourceByIdSelector,
+  textPageGetFileSelector
+} from '../../../redux/selectors';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+
+const PrevNextBtns = () => {
+  const { id } = useSelector(textPageGetSubjectSelector);
+  const { isPdf } = useSelector(textPageGetFileSelector);
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+
+  if (isTaas(id) && isPdf) {
+    return null;
+  }
+
+  const fullPath = getFullPath(id, getPathByID);
+  const len = fullPath.length;
+  if (len < 2) {
+    return null;
+  }
+
+  const index = getIndex(fullPath[len - 2], fullPath[len - 1]);
+  if (index === -1) {
+    return null;
+  }
+
+  const { children } = fullPath[len - 2];
+  const prevId = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
+  const nextId = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
+
+  return (
+    <div className='mx-auto text__content-wrapper mb-2'>
+      <div className='text__content flex justify-between w-full'>
+        {prevId && <PrevBtn id={prevId} />}
+        <span />
+        {nextId && <NextBtn id={nextId} />}
+      </div>
+    </div>
+  );
+};
+
+const PrevBtn = ({ id }) => {
+  const { t } = useTranslation();
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const icon = uiDir === 'ltr' ? 'chevron_left' : 'chevron_right';
+
+  const source = getSourceById(id);
+
+  const arrowSide = uiDir === 'ltr' ? 'left' : 'right';
+  const btnContentClassName = `btn-content prev ${arrowSide}`;
+
+  return (
+    <Link
+      to={`sources/${id}`}
+      title={source.name}
+      className="prev-next-btn inline-flex items-center border border-gray-300 rounded p-1.5 bg-white hover:bg-gray-50"
+    >
+      <div className={btnContentClassName}>
+        <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
+        {isMobile ? ('') : (<span>{t('buttons.previous-article')}</span>)}
+      </div>
+    </Link>
+  );
+};
+
+const NextBtn = ({ id }) => {
+  const { t } = useTranslation();
+  const { isMobile } = useContext(DeviceInfoContext);
+
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const icon = uiDir !== 'ltr' ? 'chevron_left' : 'chevron_right';
+
+  const source = getSourceById(id);
+  const arrowSide = uiDir === 'ltr' ? 'right' : 'left';
+  const btnContentClassName = `btn-content next ${arrowSide}`;
+
+  return (
+    <Link
+      to={`sources/${id}`}
+      title={source.name}
+      className="prev-next-btn inline-flex items-center border border-gray-300 rounded px-3 py-1.5 bg-white hover:bg-gray-50"
+    >
+      <div className={btnContentClassName}>
+        {isMobile ? ('') : (<span>{t('buttons.next-article')}</span>)}
+        <span className="material-symbols-outlined prev-next-btn-icon">{icon}</span>
+      </div>
+    </Link>
+  );
+};
+
+export default PrevNextBtns;

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from '../../helpers/dayjs';
 
 import { DATE_FORMAT } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
@@ -12,21 +12,21 @@ const dateFilter = {
     }
 
     const { from, to } = value;
-    return `${moment(from).format(DATE_FORMAT)}_${moment(to).format(DATE_FORMAT)}`;
+    return `${dayjs(from).format(DATE_FORMAT)}_${dayjs(to).format(DATE_FORMAT)}`;
   },
   queryToValue: queryValue => {
     const parts = queryValue.split('_');
 
     return {
-      from: moment(parts[0], DATE_FORMAT).toDate(),
-      to: moment(parts[1], DATE_FORMAT).toDate()
+      from: dayjs(parts[0], DATE_FORMAT).toDate(),
+      to: dayjs(parts[1], DATE_FORMAT).toDate()
     };
   },
   valueToApiParam: value => {
     const { from, to } = value;
     return {
-      start_date: moment(from).format(DATE_FORMAT),
-      end_date: moment(to).format(DATE_FORMAT)
+      start_date: dayjs(from).format(DATE_FORMAT),
+      end_date: dayjs(to).format(DATE_FORMAT)
     };
   },
   valueToTagLabel: value => {
@@ -35,8 +35,8 @@ const dateFilter = {
     }
 
     const { from, to } = value;
-    const mFrom        = moment(from);
-    const mTo          = moment(to);
+    const mFrom        = dayjs(from);
+    const mTo          = dayjs(to);
 
     if (mFrom.isSame(mTo, 'day')) {
       return mFrom.format('D MMM YYYY');

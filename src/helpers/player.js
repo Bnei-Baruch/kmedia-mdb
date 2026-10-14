@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from './dayjs';
 
 import { assetUrl } from './Api';
 import {
@@ -18,7 +18,8 @@ import { getQuery } from './url';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
-const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
+const restorePreferredMediaType = () =>
+  (typeof window === 'undefined' ? MT_VIDEO : localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO);
 
 export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
 
@@ -121,11 +122,11 @@ export const playlist = collection => {
   let items;
   if (EVENT_TYPES.indexOf(content_type) !== -1) {
     const { start_date: sDate, end_date: eDate } = collection;
-    const mSDate                                 = moment(sDate);
-    const mEDate                                 = moment(eDate);
+    const mSDate                                 = dayjs(sDate);
+    const mEDate                                 = dayjs(eDate);
 
     const breakdown = units.reduce((acc, val) => {
-      const fDate = moment(val.film_date);
+      const fDate = dayjs(val.film_date);
 
       let k;
       if (fDate.isBefore(mSDate)) {

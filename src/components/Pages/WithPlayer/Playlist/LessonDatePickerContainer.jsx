@@ -1,0 +1,105 @@
+import { useEffect } from 'react';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
+import Link from '../../../Language/MultiLanguageLink';
+import CollectionDatePicker from './LessonDatePicker';
+import { actions as mdbActions } from '../../../../redux/modules/mdb';
+import dayjs from '../../../../helpers/dayjs';
+import { DATE_FORMAT } from '../../../../helpers/consts';
+import { canonicalLink } from '../../../../helpers/links';
+import { useLocation } from 'react-router-dom';
+import { getEmbedFromQuery, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
+import {
+  playlistGetInfoSelector,
+  settingsGetUIDirSelector,
+  mdbGetWindowSelector,
+  mdbGetWipFn,
+  mdbNestedGetDenormCollectionSelector
+} from '../../../../redux/selectors';
+
+const getStartEndByFilmDate = d => {
+  const filmDate = dayjs.utc(d);
+  return (
+    {
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }
+  );
+};
+
+const LessonDatePickerContainer = () => {
+  const { t } = useTranslation();
+
+  const wipMap = useSelector(mdbGetWipFn, shallowEqual);
+  const cWindow = useSelector(mdbGetWindowSelector, shallowEqual);
+
+  const { isReady, cId } = useSelector(playlistGetInfoSelector);
+  const denorm = useSelector(mdbNestedGetDenormCollectionSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+
+  const location = useLocation();
+  const { type } = getEmbedFromQuery(location);
+
+  const dispatch = useDispatch();
+
+  const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
+  useEffect(() => {
+    if (isReady && curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
+      const { film_date } = denorm(cId);
+      const { start_date, end_date } = getStartEndByFilmDate(film_date);
+      dispatch(mdbActions.fetchWindow({ id: cId, start_date, end_date }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, cId, cWindow, wipMap.cWindow, curIndex]);
+
+  if (!isReady || !cId) {
+    return null;
+  }
+
+  const isLtr = uiDir === 'ltr';
+  const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
+  const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
+
+  const prevTo = prevCollection ? canonicalLink(prevCollection) : null;
+  const nextTo = nextCollection ? canonicalLink(nextCollection) : null;
+  if (type === EMBED_TYPE_PLAYLIST) {
+    if (prevTo) prevTo.search = 'embed=2';
+    if (nextTo) nextTo.search = 'embed=2';
+  }
+
+  return (
+    <div className="flex items-center justify-between flex-nowrap">
+      {
+        !!prevTo && (
+          <Link
+            to={prevTo}
+            className="avbox__playlist-prev-button material-symbols-outlined text-4xl"
+            title={t('buttons.previous-lesson')}
+          >
+            {isLtr ? 'arrow_left' : 'arrow_right'}
+          </Link>
+        )
+      }
+      <CollectionDatePicker />
+      {
+        !nextTo ? (
+          <span className="avbox__playlist-next-button material-symbols-outlined text-4xl opacity-50">
+            {isLtr ? 'arrow_right' : 'arrow_left'}
+          </span>
+        ) : (
+          <Link
+            to={nextTo}
+            className="avbox__playlist-next-button material-symbols-outlined text-4xl"
+            title={t('buttons.next-lesson')}
+          >
+            {isLtr ? 'arrow_right' : 'arrow_left'}
+          </Link>
+
+        )
+      }
+    </div>
+  );
+};
+
+export default LessonDatePickerContainer;

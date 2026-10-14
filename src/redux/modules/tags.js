@@ -21,7 +21,8 @@ const tagsSlice = createSlice({
     error: null,
     dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
     loaded: false,
-    byId: {}
+    byId: {},
+    roots: [],
   },
 
   reducers: {
@@ -35,7 +36,7 @@ const tagsSlice = createSlice({
     },
     fetchDashboardFailure: {
       prepare: (id, err) => ({ payload: { id, err } }),
-      reducer: (state, { payload: { id, err } }) => {
+      reducer: (state, { payload: { err } }) => {
         state.wip   = false;
         state.error = err;
       }

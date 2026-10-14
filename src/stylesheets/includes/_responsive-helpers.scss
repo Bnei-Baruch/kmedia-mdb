@@ -1,49 +1,53 @@
-$mobileBreakpoint: 480px;
-$tabletBreakpoint: 768px;
-$computerBreakpoint: 1200px;
-$largeMonitorBreakpoint: 1490px;
-$widescreenMonitorBreakpoint: 1920px;
-
-/// ALL BREAKING POINTS SHOULD BE IN SYNC WITH THEME
-/// KBB Theme / 'site.variables' file / LINE 183
+// Breakpoints in sync with tailwind.config.js theme.screens
+$screen-sm: 640px;
+$screen-md: 768px;
+$screen-lg: 1024px;
+$screen-xl: 1280px;
+$screen-2xl: 1536px;
+$screen-3xl: 1920px;
 
 // MIXINGS
 
 @mixin small-mobile {
-  @media only screen and (max-width: $mobileBreakpoint) {
+  @media only screen and (max-width: $screen-sm) {
     @content;
   }
 }
 @mixin mobile {
-  @media only screen and (max-width: $tabletBreakpoint - 1){
+  @media only screen and (max-width: $screen-sm - 1){
     @content;
   }
-  @media only screen and (max-width: $computerBreakpoint - 1) {
+  @media only screen and (max-width: $screen-xl - 1) {
     @content;
   }
 }
 @mixin tablet-mobile {
-  @media only screen and (max-width: $computerBreakpoint - 1){
+  @media only screen and (max-width: $screen-md - 1){
     @content;
   }
 }
 @mixin tablet {
-  @media only screen and (min-width: $tabletBreakpoint) and (max-width: $computerBreakpoint - 1) {
+  @media only screen and (min-width: $screen-md) and (max-width: $screen-xl - 1) {
     @content;
   }
 }
 @mixin computer {
-  @media only screen and (min-width: $computerBreakpoint) and (max-width: $largeMonitorBreakpoint - 1) {
+  @media only screen and (min-width: $screen-xl) and (max-width: $screen-2xl - 1) {
     @content;
   }
 }
 @mixin large-screen {
-  @media only screen and (min-width: $largeMonitorBreakpoint) and (max-width: $widescreenMonitorBreakpoint - 1) {
+  @media only screen and (min-width: $screen-2xl) and (max-width: $screen-3xl - 1) {
     @content;
   }
 }
 @mixin widescreen {
-  @media only screen and (min-width: $widescreenMonitorBreakpoint) {
+  @media only screen and (min-width: $screen-3xl) {
+    @content;
+  }
+}
+@mixin computer-and-above {
+  @media only screen and (min-width: $screen-xl) {
     @content;
   }
 }
