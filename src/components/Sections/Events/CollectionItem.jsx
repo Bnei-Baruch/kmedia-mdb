@@ -30,7 +30,7 @@ const CollectionItem = ({ id }) => {
         <UnitLogoWithDuration unit={cus[0]} />
       </Link>
       <div className="media_item__content">
-        <h5 className="font-bold">{name}</h5>
+        <h5>{name}</h5>
         <div className="description">{getDate()}</div>
       </div>
     </div>

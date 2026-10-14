@@ -20,7 +20,7 @@ const UnitItem = ({ id }) => {
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <h5 className="font-bold"><Link to={link}>{cu.name}</Link></h5>
+        <h5><Link to={link}>{cu.name}</Link></h5>
         {
           !isEmpty(collections) && (
             <div className="additional_links">

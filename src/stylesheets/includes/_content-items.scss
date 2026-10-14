@@ -123,6 +123,28 @@
   }
 }
 
+// Semantic `.ui.card` (Sketches)
+.basic_card {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  overflow: hidden;
+
+  &__content {
+    padding: 14px;
+    border-top: 1px solid rgba(34, 36, 38, .1);
+  }
+
+  &__description {
+    color: rgba(0, 0, 0, .68);
+  }
+
+  &__meta {
+    margin: 0 14px 14px 7px;
+    color: rgba(0, 0, 0, .4);
+  }
+}
+
 // CardTemplate
 .cu_item_card {
   display: block;
@@ -239,6 +261,11 @@
   font-weight: normal;
 }
 
+// Semantic `.ui.list > .item` line-height in recommended lists (playlist items keep 20px)
+.avbox__playlist-wrapper .cu_item_list {
+  line-height: 1.14285714em;
+}
+
 .cu_item_list {
   border-bottom: 1px solid colors-helpers.$midWhite;
   display: flex;
@@ -292,6 +319,7 @@
 
     .cu_item_info {
       overflow: hidden;
+      padding-inline-end: 1em;
 
       .cu_item_name {
         -webkit-line-clamp: 2;
@@ -376,15 +404,15 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
     @include responsive-helpers.mobile {
       padding: 0;
     }
   }
 
+  // Semantic: name and subtitle flow from the top, description sticks to the bottom
   .cu_info_description {
-    margin: 0;
+    margin: auto 0 0;
     opacity: 0.43;
     color: colors-helpers.$black;
     display: -webkit-box;
@@ -447,13 +475,25 @@
     border-bottom: none;
   }
 
+  // Semantic `.ui.items > .item` with a top aligned image (Likutim, AudioBlog lists)
   &>.image {
-    margin-inline-end: .5em;
+    margin-inline-end: 7px;
     width: auto;
 
     svg {
-      min-width: 50px;
-      min-height: 50px;
+      display: block;
+      width: 56px;
+      height: 56px;
+
+      @media (max-width: 767px) {
+        width: 51px;
+        height: 51px;
+      }
+    }
+
+    &+.text_item__content {
+      display: block;
+      flex: 1;
     }
   }
 
@@ -462,8 +502,9 @@
     flex-direction: column;
     justify-content: space-between;
 
-    // Semantic `.ui.header` in a list item
-    h5 {
+    // Semantic `.ui.header` in a list item (Likutim, AudioBlog lists)
+    h5,
+    .text_item__header {
       margin: -2.2px 0 0;
       font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
       font-size: 15.4px;
@@ -503,10 +544,6 @@
         line-height: 1.1em;
       }
     }
-  }
-
-  &.daily_lesson .media_item__content {
-    justify-content: flex-start;
   }
 
   &.daily_lesson .media_item__content {

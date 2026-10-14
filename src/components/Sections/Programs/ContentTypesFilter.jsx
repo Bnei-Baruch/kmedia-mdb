@@ -1,6 +1,18 @@
-import { FN_CONTENT_TYPE, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
+import {
+  CT_CLIP,
+  CT_CLIPS,
+  CT_VIDEO_PROGRAM,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  FN_CONTENT_TYPE,
+  UNIT_PROGRAMS_TYPE
+} from '../../../helpers/consts';
 import FilterHeader from '../../FiltersAside/FilterHeader';
-import CollectionsByCtBtn from './CollectionsByCtBtn';
+import CollectionsByCtBtn from '../../FiltersAside/CollectionsByCt/CollectionsByCtBtn';
+
+const cCtByUnitCt = {
+  [CT_VIDEO_PROGRAM_CHAPTER]: CT_VIDEO_PROGRAM,
+  [CT_CLIP]                 : CT_CLIPS,
+};
 
 const ContentTypesFilter = ({ namespace }) => (
   <FilterHeader
@@ -10,6 +22,7 @@ const ContentTypesFilter = ({ namespace }) => (
         namespace={namespace}
         key={ct}
         ct={ct}
+        modalCt={cCtByUnitCt[ct]}
       />
     )
     )}

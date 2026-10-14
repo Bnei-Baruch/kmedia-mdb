@@ -23,13 +23,13 @@ const SingleMediaPage = ({ playerContainer }) => {
 
   return (
     <>
-      <div className='flex flex-wrap avbox max-md:p4'>
-        <div className='flex-1 min-w-0'>
+      <div className='avbox avbox--grid'>
+        <div className='avbox__main'>
           <div>
             {playerContainer}
           </div>
           <div>
-            <div className="md:px-4">
+            <div className="avbox__unit">
               <Info />
               <Materials />
             </div>
@@ -37,7 +37,7 @@ const SingleMediaPage = ({ playerContainer }) => {
         </div>
         {
           !isMobile && (
-            <div className="w-[36%]">
+            <div className="avbox__aside">
               <Recommended cuId={cuId} />
             </div>
           )

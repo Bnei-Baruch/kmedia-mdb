@@ -18,7 +18,7 @@ const SectionHeader = ({ section, submenuItems }) => {
       <Helmets.Basic title={title} description={subText1} />
       <div className={clsx('p-[14px]', { 'pb-0': hasMenu })}>
         <div className="flex flex-wrap">
-          <div className="w-full md:w-3/4 min-[992px]:w-[62.5%]">
+          <div className="w-full min-[768px]:w-3/4 min-[992px]:w-[62.5%]">
             <h1 className="font-lato! text-[42px] leading-[1.28571429em] -mt-1.5 font-normal text-blue-600">
               <div className="section-header__title">
                 {title}

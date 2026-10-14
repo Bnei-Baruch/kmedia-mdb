@@ -36,7 +36,7 @@ const CollectionItem = ({ id }) => {
 
   return (
     <div key={id} className="media_item">
-      <Link to={link} style={{ minWidth: '140px' }}>
+      <Link to={link}>
         <UnitLogoWithDuration unit={logoUnit} displayDuration={displayDuration}/>
       </Link>
       <div className="media_item__content">

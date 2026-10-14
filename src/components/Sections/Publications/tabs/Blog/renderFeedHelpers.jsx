@@ -32,9 +32,9 @@ export const renderBlogItemForPublications = (item, uiLang) => {
 
   return (
     <div key={url} className="post" style={{ direction: dir }}>
-      <h3>
+      <h3 className="post__header">
         <div dangerouslySetInnerHTML={{ __html: title }} />
-        <div className="small font-normal text-gray-500">
+        <div className="post__subheader">
           <a
             href={url}
             target="_blank"
@@ -44,7 +44,7 @@ export const renderBlogItemForPublications = (item, uiLang) => {
           </a>
         </div>
       </h3>
-      <div className="p-0">
+      <div className="post__body">
         <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
       </div>
     </div>

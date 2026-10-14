@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -116,11 +117,12 @@ const DateFilter = ({ namespace }) => {
   };
 
   const iconName      = isLanguageRtl(uiLang) ? 'arrow_left' : 'arrow_right';
+  const withStats     = ENABLED_STATS_NAMESPACE.includes(namespace);
   const renderContent = () => (
     <div className="filter-popup__wrapper mt-[14px]">
       <div className="flex flex-col leading-[17px]">
         {datePresets.map((x, i) => (
-          <div key={`${FN_DATE_FILTER}_${i}`} className="flex items-center justify-between min-h-5">
+          <div key={`${FN_DATE_FILTER}_${i}`} className={clsx('flex items-center justify-between', { 'min-h-5': withStats })}>
             <label className="flex items-center gap-[9px] cursor-pointer">
               <input
                 type="checkbox"
@@ -130,7 +132,7 @@ const DateFilter = ({ namespace }) => {
               />
               {t(`filters.date-filter.presets.${x}`)}
             </label>
-            {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat leading-5">{`(${stats[i]})`}</span>}
+            {withStats && <span className="stat leading-5">{`(${stats[i]})`}</span>}
           </div>
         ))}
         <div className="pt-[10.5px] pb-[3.5px] ps-[7px]">

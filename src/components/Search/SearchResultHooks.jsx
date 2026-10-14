@@ -337,7 +337,7 @@ export const SearchResultOneItem = props => {
   !!views && views > 0 && description.push(t('pages.unit.info.views', { views }));
 
   return (
-    <div key={id} className="media_item list-none">
+    <div key={id} className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
         <TooltipIfNeed text={title} Component={SearchHeader} as={Link} to={link} onClick={() => click(link)} content={title} />
@@ -426,7 +426,7 @@ export const SearchResultManyItems = (
   const wipError = getWipErr(wip || items.some(item => !item), err);
 
   return (
-    <div className="media_item list-none">
+    <div className="media_item">
       <div>
         <div className={clsx(' px-4 ', { 'padding_r_l_0': !isMobile })}>
           <h2 className="flex items-end gap-1">
@@ -515,7 +515,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const mediaLanguage = getMediaLanguage(filters);
 
   return (
-    <div className="media_item list-none">
+    <div className="media_item">
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className="font-lato text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px]">
@@ -641,7 +641,7 @@ export const SearchResultTweets = ({ source }) => {
   };
 
   return (
-    <div className="media_item list-none">
+    <div className="media_item">
       <div className="search__block" style={{ position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 className="text-blue-600">{t('home.twitter-title')}</h2>

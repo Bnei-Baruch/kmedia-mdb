@@ -1124,7 +1124,7 @@ video {
   align-items: center;
   justify-content: flex-end;
   margin-top: 8px;
-  color: #767676;
+  color: rgba(0, 0, 0, .6); // Semantic basic buttons
 
   & > .item {
     margin: 0;
@@ -1153,4 +1153,37 @@ video {
 
 .share-publication {
   margin: 0 5px;
+}
+
+// Player pages layout — Semantic `ui padded grid avbox`:
+// ten wide player column + six wide playlist/recommended column, 14px column padding
+.avbox--grid {
+  display: flex;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.avbox__main {
+  flex: 1 1 0;
+  min-width: 0;
+
+  @media (min-width: 768px) {
+    padding: 14px;
+  }
+}
+
+.avbox__aside {
+  width: 37.5%;
+  padding: 14px;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+// Semantic `ui container unit_container` under the player (single media page only)
+.avbox__unit {
+  padding: 14px;
 }

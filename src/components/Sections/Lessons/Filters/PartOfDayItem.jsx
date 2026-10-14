@@ -22,14 +22,18 @@ const PartOfDayItem = ({ namespace, dayPart }) => {
   };
 
   return (
-    <div key={FN_COLLECTION_MULTI} className={`flex items-baseline gap-2 w-full${stat === 0 ? ' opacity-50 pointer-events-none' : ''}`}>
-      <input
-        type="checkbox"
-        checked={!!selected?.find(x => x === dayPart)}
-        onChange={handleSelect}
-        disabled={stat === 0}
-      />
-      <span className="tree_item_title flex-1">{t(`lessons.list.nameByNum_${dayPart}`)}</span>
+    <div key={FN_COLLECTION_MULTI} className={`filters-aside-ct filters-aside-ct--normal ${stat === 0 ? 'filter-item-disabled' : ''}`}>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            type="checkbox"
+            checked={!!selected?.find(x => x === dayPart)}
+            onChange={handleSelect}
+            disabled={stat === 0}
+          />
+          <span className="tree_item_title">{t(`lessons.list.nameByNum_${dayPart}`)}</span>
+        </label>
+      </div>
       <span className="stat">{`(${stat})`}</span>
     </div>
   );

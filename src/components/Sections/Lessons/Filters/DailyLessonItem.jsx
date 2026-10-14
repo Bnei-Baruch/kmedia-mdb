@@ -21,7 +21,7 @@ const DailyLessonItem = ({ id }) => {
 
   return (
     <div key={id} className="media_item daily_lesson">
-      <Link to={link} style={{ minWidth: '140px' }}>
+      <Link to={link}>
         <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
       </Link>
       <div className="media_item__content">

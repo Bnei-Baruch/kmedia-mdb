@@ -27,11 +27,11 @@ const ItemOfList = ({ id }) => {
 
   return (
     <div key={id} className="media_item">
-      <Link to={to} style={{ minWidth: '140px' }}>
+      <Link to={to}>
         <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <Link to={to}><TooltipIfNeed text={cu.name} Component="h5" className="font-bold" content={cu.name}/></Link>
+        <Link to={to}><TooltipIfNeed text={cu.name} Component="h5" content={cu.name}/></Link>
         {
           cu.description && (
             <TooltipIfNeed

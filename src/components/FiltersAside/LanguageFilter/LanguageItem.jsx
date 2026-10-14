@@ -20,7 +20,7 @@ const LanguageItem = ({ namespace, id }) => {
   };
 
   return (
-    <div className={`filters-aside-ct font-normal! ${stat === 0 ? 'filter-item-disabled' : ''}`}>
+    <div className={`filters-aside-ct filters-aside-ct--normal ${stat === 0 ? 'filter-item-disabled' : ''}`}>
       <div className="filters-aside-ct__group">
         <label className="filters-aside-ct__label cursor-pointer">
           <input

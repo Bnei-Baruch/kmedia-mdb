@@ -1,11 +1,11 @@
 import isEqual from 'lodash/isEqual';
 import { useEffect, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
+import FiltersAsideTitle from '../../FiltersAside/FiltersAsideTitle';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
@@ -15,8 +15,6 @@ import { filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector } fro
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
-
-  const { t }      = useTranslation();
   const isReady    = useSelector(state => filtersAsideGetIsReadySelector(state, namespace));
   const selected   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
   const prevSelRef = useRef(-1);
@@ -48,16 +46,16 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <div className=" px-4 ">
+    <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <h3 className="font-lato! text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px] mb-[14px]">{t('filters.aside-filter.filters-title')}</h3>
+      <FiltersAsideTitle/>
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
       <Language namespace={namespace}/>
       <OriginalLanguageFilter namespace={namespace}/>
       <DateFilter namespace={namespace}/>
       <MediaTypeFilter namespace={namespace}/>
-    </div>
+    </>
   );
 };
 

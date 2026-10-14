@@ -32,19 +32,19 @@ const CityItem = ({ namespace, id, country }) => {
   };
 
   return (
-    <div key={getTitle(id, t)} className={stat === 0 ? 'filter-item-disabled' : ''}>
-      <div className="flex items-baseline gap-2 w-full">
-        <input
-          type="checkbox"
-          checked={!!selected.find(x => x === id || x === country)}
-          onChange={e => handleSelect(e, { checked: e.target.checked })}
-          disabled={stat === 0}
-        />
-        <span className="tree_item_title flex-1">
-          {getTitle(id, t)}
-        </span>
-        <span className="stat">{`(${stat})`}</span>
+    <div key={getTitle(id, t)} className={`filters-aside-ct filters-aside-ct--normal ${stat === 0 ? 'filter-item-disabled' : ''}`}>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            type="checkbox"
+            checked={!!selected.find(x => x === id || x === country)}
+            onChange={e => handleSelect(e, { checked: e.target.checked })}
+            disabled={stat === 0}
+          />
+          <span className="tree_item_title">{getTitle(id, t)}</span>
+        </label>
       </div>
+      <span className="stat">{`(${stat})`}</span>
     </div>
   );
 };

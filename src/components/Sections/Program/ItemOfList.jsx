@@ -26,7 +26,7 @@ const ItemOfList = ({ id, ccu }) => {
   return (<div key={id} className="media_item">
     <UnitLogoWithDuration unit={cu}/>
     <div className="media_item__content">
-      <Link to={to}><TooltipIfNeed text={cu.name} Component="h5" className="font-bold" content={cu.name}/></Link>
+      <Link to={to}><TooltipIfNeed text={cu.name} Component="h5" content={cu.name}/></Link>
       {
         cu.description && (
           <TooltipIfNeed

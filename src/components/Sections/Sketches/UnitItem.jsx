@@ -51,31 +51,32 @@ const UnitItem = ({ id }) => {
 
   const to  = canonicalLink(cu);
   to.search = [to.search, stringify({ activeTab: 'sketches' })].filter(x => !!x).join('&');
+
+  const renderBody = () => (
+    <>
+      <div className="basic_card__content">
+        <Link to={to} className="basic_card__description">{cu.name}</Link>
+      </div>
+      <div className={`basic_card__meta cu_info_description ${uiDir}`}>
+        {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
+      </div>
+    </>
+  );
   return (
     <>
       {
         imgs?.map(f => (
-          <div key={f.id} className="rounded shadow border overflow-hidden">
+          <div key={f.id} className="basic_card">
             <ImageFileModal file={f}/>
-            <div className="p-4">
-              <Link to={to} className="font-semibold">{cu.name}</Link>
-            </div>
-            <div className={`cu_info_description ${uiDir} px-4 pb-4 small text-gray-500`}>
-              {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
-            </div>
+            {renderBody()}
           </div>
         ))
       }
       {
         uniq?.map(path => (
-          <div key={path} className="rounded shadow border overflow-hidden">
+          <div key={path} className="basic_card">
             <GalleryModal id={zip.id} path={path}/>
-            <div className="p-4">
-              <Link to={to} className="font-semibold">{cu.name}</Link>
-            </div>
-            <div className={`cu_info_description ${uiDir} px-4 pb-4 small text-gray-500`}>
-              {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
-            </div>
+            {renderBody()}
           </div>
         ))
       }

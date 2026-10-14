@@ -20,19 +20,19 @@ const CollectionItem = ({ namespace, item: { id, name } }) => {
   };
 
   return (
-    <div className={stat === 0 ? 'filter-item-disabled' : ''}>
-      <div className="flex items-baseline gap-2 w-full">
-        <input
-          type="checkbox"
-          checked={!!selected.find(x => x === id)}
-          onChange={handleSelect}
-          disabled={stat === 0}
-        />
-        <span className="tree_item_title flex-1">
-          {name}
-        </span>
-        <span className="stat">{`(${stat})`}</span>
+    <div className={`filters-aside-ct filters-aside-ct--normal ${stat === 0 ? 'filter-item-disabled' : ''}`}>
+      <div className="filters-aside-ct__group">
+        <label className="filters-aside-ct__label">
+          <input
+            type="checkbox"
+            checked={!!selected.find(x => x === id)}
+            onChange={handleSelect}
+            disabled={stat === 0}
+          />
+          <span className="tree_item_title">{name}</span>
+        </label>
       </div>
+      <span className="stat">{`(${stat})`}</span>
     </div>
   );
 };

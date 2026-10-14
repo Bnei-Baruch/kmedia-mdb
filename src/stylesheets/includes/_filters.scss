@@ -396,6 +396,16 @@
     cursor: pointer;
   }
 
+  // Plain (non-bold) rows: languages, locations, collections, part of day
+  &--normal {
+    font-weight: normal;
+  }
+
+  // Semantic `.ui.list .item` text keeps the row line-height
+  .tree_item_title {
+    line-height: 16px;
+  }
+
   .filters-aside-ct {
     font-weight: normal;
   }

@@ -93,7 +93,7 @@ const TagSourceItem = props => {
         <input
           ref={checkboxRef}
           type="checkbox"
-          className="shrink-0 me-2"
+          className="shrink-0 me-2!"
           checked={isSelected}
           onChange={handleSelect}
           disabled={finalStat === 0}

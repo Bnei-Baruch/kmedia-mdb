@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
+import FiltersAsideTitle from '../../FiltersAside/FiltersAsideTitle';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
 import logger from '../../../logger/logger.js';
 import DateFilter from '../../FiltersAside/DateFilter';
@@ -17,7 +17,6 @@ const NAMESPACE = 'TopicsFilters';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
-  const { t }                       = useTranslation();
 
   const isReady    = useSelector(state => filtersAsideGetIsReadySelector(state, namespace));
   const selected   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace));
@@ -45,15 +44,15 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <div className=" px-4 ">
+    <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <h3 className="font-lato! text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px] mb-[14px]">{t('filters.aside-filter.filters-title')}</h3>
+      <FiltersAsideTitle/>
       <SubTopics namespace={namespace} rootID={baseParams.tag}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>
       <ContentType namespace={namespace}/>
       <Language namespace={namespace}/>
       <DateFilter namespace={namespace}/>
-    </div>
+    </>
   );
 };
 

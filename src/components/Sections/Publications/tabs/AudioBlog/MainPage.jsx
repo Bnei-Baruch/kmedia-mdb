@@ -19,7 +19,7 @@ import {
   settingsGetPageSizeSelector,
 } from '../../../../../redux/selectors';
 import Filters from './Filters';
-import AudioListTemplate from './AudioListTemplate';
+import SimpleListTemplate from '../../../../shared/ContentItem/SimpleListTemplate';
 
 const NAMESPACE     = 'publications-audio-blog';
 const FILTER_PARAMS = { content_type: CT_BLOG_POST };
@@ -55,7 +55,7 @@ const AudioBlogMainPage = () => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={NAMESPACE} />
-      {wipErr || items?.map(id => <AudioListTemplate  cuID={id} key={id}/>)}
+      {wipErr || items?.map(id => <SimpleListTemplate cuID={id} key={id} icon="audio"/>)}
       <hr className="m-0 border-t" />
       {total > 0 && (
         <Pagination

@@ -87,7 +87,7 @@ const MainPage = () => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_SKETCHES} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[21px] gap-y-[14px] min-[768px]:gap-y-[24.5px]">
         {
           cus?.map(({ id }) => <UnitItem id={id} key={id} />)
         }

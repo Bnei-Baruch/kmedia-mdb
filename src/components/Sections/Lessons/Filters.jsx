@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
 import logger from '../../../logger/logger.js';
@@ -7,6 +6,7 @@ import logger from '../../../logger/logger.js';
 import { actions } from '../../../redux/modules/filtersAside';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
 import FiltersHydrator from '../../FiltersAside/FiltersHydrator';
+import FiltersAsideTitle from '../../FiltersAside/FiltersAsideTitle';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
@@ -26,8 +26,6 @@ const NAMESPACE = 'LessonsFilters';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
-
-  const { t }            = useTranslation();
   const uiLang           = useSelector(settingsGetUILangSelector);
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const isReady          = useSelector(state => filtersAsideGetIsReadySelector(state, namespace));
@@ -78,7 +76,7 @@ const Filters = ({ namespace, baseParams }) => {
   return (
     <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <h3 className="font-lato! text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px] mb-[14px]">{t('filters.aside-filter.filters-title')}</h3>
+      <FiltersAsideTitle/>
       <ContentTypeFilter namespace={namespace}/>
       <PersonFilter namespace={namespace}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>

@@ -14,7 +14,7 @@ import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import { getWipErr } from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
-import TextListTemplate from './TextListTemplate';
+import SimpleListTemplate from '../../shared/ContentItem/SimpleListTemplate';
 import {
   settingsGetContentLanguagesSelector,
   listsGetNamespaceStateSelector,
@@ -62,7 +62,7 @@ const MainPage = () => {
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_LIKUTIM} />
       {
-        wipErr || items?.map(id => <TextListTemplate cuID={id} key={id} />)
+        wipErr || items?.map(id => <SimpleListTemplate cuID={id} key={id} />)
       }
       <hr className="m-0" />
       {total > 0 && <Pagination

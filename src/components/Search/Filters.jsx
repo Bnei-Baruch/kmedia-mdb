@@ -7,6 +7,7 @@ import { actions as searchActions } from '../../redux/modules/search';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
 import FiltersHydrator from '../FiltersAside/FiltersHydrator';
+import FiltersAsideTitle from '../FiltersAside/FiltersAsideTitle';
 import FilterHeader from '../FiltersAside/FilterHeader';
 import Language from '../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../FiltersAside/DateFilter';
@@ -74,7 +75,7 @@ const Filters = ({ namespace }) => {
   return (
     <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated}/>
-      <h3 className="font-lato! text-[18px] leading-[1.28571429em] font-bold -mt-[2.57px] mb-[14px]">{t('filters.aside-filter.filters-title')}</h3>
+      <FiltersAsideTitle/>
       <ContentType namespace={namespace}/>
       <PersonFilter namespace={namespace}/>
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI}/>

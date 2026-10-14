@@ -11,7 +11,8 @@ import {
 } from '../../../redux/selectors';
 import CollectionsByCtModal from './CollectionsByCtModal';
 
-const CollectionsByCtBtn = ({ namespace, ct }) => {
+// modalCt: collection content type listed in the modal, when it differs from the unit `ct`
+const CollectionsByCtBtn = ({ namespace, ct, modalCt = ct }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -50,8 +51,8 @@ const CollectionsByCtBtn = ({ namespace, ct }) => {
 
   const arrowIcon = leftRight === 'right' ? 'arrow_right' : 'arrow_left';
   return (
-    <div className={stat === 0 ? 'filter-item-disabled' : ''}>
-      <div className="filters-aside-ct">
+    <>
+      <div className={`filters-aside-ct ${stat === 0 ? 'filter-item-disabled' : ''}`}>
         <div className="filters-aside-ct__group">
           <label className="filters-aside-ct__label">
             <input ref={checkboxRef} type="checkbox" checked={isSelected} onChange={handleSelect} disabled={stat === 0} />
@@ -63,8 +64,8 @@ const CollectionsByCtBtn = ({ namespace, ct }) => {
         </div>
         <span className="stat">{`(${stat})`}</span>
       </div>
-      {open && <CollectionsByCtModal onClose={handleClose} namespace={namespace} ct={ct} />}
-    </div>
+      {open && <CollectionsByCtModal onClose={handleClose} namespace={namespace} ct={modalCt} />}
+    </>
   );
 };
 

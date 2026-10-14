@@ -50,8 +50,31 @@
     font-size: 10px;
   }
 
+  // Semantic `.ui.header` + `.sub.header`
+  &__header {
+    margin: -2.57px 0 14px;
+    font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.28571429em;
+  }
+
+  &__subheader {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.2em;
+    color: rgba(0, 0, 0, .6);
+  }
+
+  // Semantic `.ui.basic.segment`
+  &__body {
+    margin-top: 14px;
+    padding: 14px;
+  }
+
   .entry p {
     margin: 0 0 0.6ex 0;
+    line-height: 1.4285em; // Semantic global `p`
   }
 
   .entry .bb-p {

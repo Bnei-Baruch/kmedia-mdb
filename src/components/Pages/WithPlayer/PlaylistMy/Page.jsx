@@ -18,9 +18,9 @@ const PlaylistMyPage = ({ playerContainer }) => {
     return getWipErr(!isReady, null);
 
   return (
-    <div className="py-4 lg:px-4 md:px-2 avbox flex gap-4 max-md:flex-col max-md:pt-0">
+    <div className="avbox avbox--grid">
       <div
-        className="flex-1 min-w-0">
+        className="avbox__main">
         <PlaylistHeader />
         {playerContainer}
         <div id="unit_container">
@@ -30,9 +30,9 @@ const PlaylistMyPage = ({ playerContainer }) => {
       </div>
       {
         !isMobile && (
-          <div className="max-w-[360px] max-md:hidden md:w-full xl:w-auto xl:max-w-[480px] 2xl:max-w-[540px]">
+          <div className="avbox__aside">
             <PlaylistItems />
-            <div className="my-4" />
+            <div className="h-[30px]" />
             <Recommended cuId={cuId} filterOutUnits={[]} />
           </div>
         )

@@ -8,26 +8,22 @@ import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
-const TextListTemplate = ({ cuID }) => {
+// Semantic `.ui.items` row: section icon, title and date (Likutim, AudioBlog lists)
+const SimpleListTemplate = ({ cuID, icon }) => {
   const { t } = useTranslation();
   const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
 
   if (!cu) return null;
 
   const { content_type, film_date, name } = cu;
-  const icon                              = iconByContentTypeMap.get(content_type);
-  const to                                = canonicalLink(cu);
 
   return (
-    <div
-      key={cuID}
-      className="text_item"
-    >
-      <div className="align-top">
-        <SectionLogo name={icon} height="60" width="60"/>
+    <div className="text_item">
+      <div className="image">
+        <SectionLogo name={icon || iconByContentTypeMap.get(content_type)} height="60" width="60"/>
       </div>
       <div className="text_item__content">
-        <Link to={to} className="text-lg font-bold">{name}</Link>
+        <Link to={canonicalLink(cu)} className="text_item__header">{name}</Link>
         <div className="description is_single">
           <span>{t('values.date', { date: film_date })}</span>
         </div>
@@ -36,8 +32,9 @@ const TextListTemplate = ({ cuID }) => {
   );
 };
 
-TextListTemplate.propTypes = {
-  cuID: PropTypes.string
+SimpleListTemplate.propTypes = {
+  cuID: PropTypes.string,
+  icon: PropTypes.string
 };
 
-export default TextListTemplate;
+export default SimpleListTemplate;

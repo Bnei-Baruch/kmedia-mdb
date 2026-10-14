@@ -124,7 +124,7 @@ const SubscribeBtn = ({ collection, large = false }) => {
         </div>
       </Dialog>
       <div
-        className={`uppercase border rounded px-[14.2px] py-[6.4px] text-[12.6px] leading-none ${large ? 'md:px-[16.2px] md:py-[8.5px] md:text-[14.4px]' : ''} ${!sub ? 'border-blue-500 text-blue-500 hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
+        className={`uppercase border rounded px-[14.2px] py-[6.4px] text-[12.6px] leading-none ${large ? 'md:px-[16.2px] md:py-[8.5px] md:text-[14.4px]' : ''} ${!sub ? 'border-[#2185d0] text-[#2185d0] hover:bg-blue-50' : 'border-gray-400 text-gray-500 hover:bg-gray-50'}`}
         onClick={() => subsUnsubs(sub)}
       >
         {t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}

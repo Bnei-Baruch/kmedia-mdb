@@ -1,8 +1,9 @@
 @use "responsive-helpers";
 
 .pagination-wrapper {
+  // Semantic: the menu sits flush under the list divider on small screens
   @include responsive-helpers.small-mobile {
-    padding-inline: 0 !important;
+    padding: 0 !important;
   }
 }
 
