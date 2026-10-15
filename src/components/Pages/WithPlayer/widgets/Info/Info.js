@@ -27,7 +27,12 @@ import {
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
     tags.map(x => {
-      const { id, label } = getTagById(x);
+      const tag = getTagById(x);
+      if (!tag?.label) {
+        return '';
+      }
+
+      const { id, label } = tag;
       if (!label) {
         return '';
       }
