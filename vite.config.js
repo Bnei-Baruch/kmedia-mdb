@@ -47,6 +47,11 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         "/api": "http://localhost:8080",
+        "/smart-search": {
+          target: "http://localhost:8090",
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/smart-search/, ""),
+        },
       },
     },
     build: {

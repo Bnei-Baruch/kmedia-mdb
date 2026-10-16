@@ -419,6 +419,14 @@
       "lessons-source": "Lessons by source:",
       "programs-topic": "Programs on topic:",
       "programs-source": "Programs by source:"
+    },
+    "smart": {
+      "maybe": "Maybe «{{text}}»:",
+      "asText": "Search «{{text}}» as text",
+      "broaden": "Whole «{{name}}»",
+      "remove": "Remove filter",
+      "dismiss": "Keep as text",
+      "clearAll": "Clear all"
     }
   },
   "home": {

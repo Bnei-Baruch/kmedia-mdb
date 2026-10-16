@@ -220,6 +220,9 @@ export const searchGetQuerySelector            = createSelector([getSearch], s =
 export const searchGetDebSelector              = createSelector([getSearch], s => searchSel.getDeb(s));
 export const searchGetPrevQuerySelector        = createSelector([getSearch], s => searchSel.getPrevQuery(s));
 export const searchGetSuggestionsSelector      = createSelector([getSearch], s => searchSel.getSuggestions(s));
+export const searchGetSmartMetaSelector        = createSelector([getSearch], s => searchSel.getSmartMeta(s));
+export const searchGetSmartSuggestionsSelector = createSelector([getSearch], s => searchSel.getSmartSuggestions(s));
+export const searchGetSmartLiveSelector        = createSelector([getSearch], s => searchSel.getSmartLive(s));
 export const searchGetAutocompleteWipSelector  = createSelector([getSearch], s => searchSel.getAutocompleteWip(s));
 export const searchGetQueryResultSelector      = createSelector([getSearch], s => searchSel.getQueryResult(s));
 export const searchGetReasoningPreviousSearchesSelector = createSelector([getSearch], s => searchSel.getReasoningPreviousSearches(s));

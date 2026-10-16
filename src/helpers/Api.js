@@ -15,6 +15,8 @@ export const CHRONICLES_BACKEND = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND      = process.env.REACT_APP_PERSONAL_API_BACKEND;
 const FILE_TRIMMER_API          = process.env.REACT_APP_FILE_TRIMMER_API;
 const MDB_REST_API_URL          = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
+// Smart search parser (natural language → filters). In dev proxied by server/app-server.mjs to SMART_SEARCH_URL.
+const SMART_SEARCH_BACKEND      = process.env.REACT_APP_SMART_SEARCH_BACKEND || '/smart-search/';
 
 const backendUrl                      = path => `${API_BACKEND}${path}`;
 const imaginaryUrl                    = path => `${IMAGINARY_URL}${path}`;
@@ -221,6 +223,14 @@ class Api {
       deb,
     })}`)
   );
+
+  static smartParse = ({ text, uiLang, sectionScope }) => axios({
+    method : 'post',
+    url    : `${SMART_SEARCH_BACKEND}parse`,
+    headers: { 'Content-Type': 'application/json' },
+    data   : JSON.stringify({ text, uiLang, sectionScope }),
+    timeout: 3000
+  });
 
   static reasoningSearchStart = request => axios({
     method : 'post',

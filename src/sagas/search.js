@@ -9,9 +9,11 @@ import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
 import { actions as filterActions, types as filterTypes } from '../redux/modules/filters';
 import { actions as lessonsActions } from '../redux/modules/lessons';
+import { actions as listsActions } from '../redux/modules/lists';
 import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
+import { appendMention, applyParsedFilters, chipKey, groupSuggestions, removeMention, SLOT_TO_FILTER, SMART_NAMESPACE } from '../helpers/smartSearch';
 import { push } from '@lagunovsky/redux-react-router';
 import {
   filtersGetFiltersSelector,
@@ -22,12 +24,15 @@ import {
   searchGetPrevQuerySelector,
   searchGetQuerySelector,
   searchGetQueryResultSelector,
+  searchGetSmartLiveSelector,
+  searchGetSmartMetaSelector,
   searchGetReasoningPreviousSearchesSelector,
   searchGetReasoningResultSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
   searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
+  settingsGetPageSizeSelector,
   settingsGetUILangSelector,
   authGetUserSelector
 } from '../redux/selectors';
@@ -557,14 +562,16 @@ export function* search(action) {
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
     const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
 
-    // Clear pagination and filters.
-    if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || !!filterParams)) {
+    // Clear pagination and filters on a new query. Filters are kept when smart search has just set them
+    // for this query, and when the search is triggered by a filter change (chip removed in the omnibox).
+    const keepFilters = !!action?.payload?.keepFilters || action?.type !== types['search/search'];
+    if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || (!!filterParams && !keepFilters))) {
       if (pageNo !== 1) {
         yield* urlUpdateQuery(query => Object.assign(query, { page: 1 }));
         pageNo = 1;
       }
 
-      if (filterParams) {
+      if (filterParams && !keepFilters) {
         for (const filter of filters) {
           const { name } = filter;
           yield put(filterActions.resetFilter('search', name));
@@ -578,6 +585,14 @@ export function* search(action) {
         // Don't search if filters have not changed.
         return;
       }
+    }
+
+    // Only filters, no text: list items by filters like the lessons/events pages (search needs terms).
+    if (!query?.trim() && filterParams) {
+      const pageSize = yield select(settingsGetPageSizeSelector);
+      yield put(listsActions.fetchSectionList(SMART_NAMESPACE, pageNo, { pageSize, withViews: true }));
+      yield put(actions.filtersListing({ filterParams, pageNo }));
+      return;
     }
 
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
@@ -697,6 +712,104 @@ export function* search(action) {
   }
 }
 
+// Smart search, live: while typing, after a word is completed (space) or on a pause, parse the text
+// and propose filters in the omnibox dropdown. Nothing is applied until the user picks a proposal.
+const LIVE_PARSE_PAUSE_MS = 500;
+
+function* smartLiveParse(action) {
+  if (!action.payload.autocomplete) return;
+
+  const searchType = yield select(searchGetSearchTypeSelector);
+  const raw        = action.payload.query || '';
+  if (isAgenticSearchType(searchType) || !raw.trim()) {
+    yield put(actions.smartLiveSuccess([]));
+    return;
+  }
+
+  // takeLatest: the next keystroke cancels the wait and the request.
+  if (!/\s$/.test(raw)) {
+    yield call(delay, LIVE_PARSE_PAUSE_MS);
+  }
+
+  try {
+    const uiLang   = yield select(settingsGetUILangSelector);
+    const { data } = yield call(Api.smartParse, { text: raw.trim(), uiLang });
+    const current  = yield* currentSmartFilters();
+    yield put(actions.smartLiveSuccess(groupSuggestions([...(data.filters || []), ...(data.suggestions || [])], current)));
+  } catch {
+    yield put(actions.smartLiveSuccess([]));
+  }
+}
+
+// Smart search, submit: search by the current chips and text. Proposals that were not picked
+// are shown over the results («Maybe …»).
+export function* smartSearch() {
+  const query   = ((yield select(searchGetQuerySelector)) || '').trim();
+  const live    = yield select(searchGetSmartLiveSelector);
+  const current = yield* currentSmartFilters();
+
+  yield put(actions.smartParseSuccess({ meta: {}, suggestions: live }));
+  yield call(applySmartFilters, current, query);
+}
+
+function* currentSmartFilters() {
+  const list = yield select(state => filtersGetFiltersSelector(state, SMART_NAMESPACE));
+  return list
+    .filter(f => f.values?.length)
+    .reduce((acc, f) => Object.assign(acc, { [f.name]: [...f.values] }), {});
+}
+
+// Chip → back to text: drop the filter and put its mention into the query.
+function* smartChipToText({ payload: { name, value } }) {
+  const filters = yield* currentSmartFilters();
+  const meta    = yield select(searchGetSmartMetaSelector);
+  const query   = (yield select(searchGetQuerySelector)) || '';
+  const mention = meta[chipKey(name, value)]?.mention;
+
+  filters[name] = (filters[name] || []).filter(v => chipKey(name, v) !== chipKey(name, value));
+  yield call(applySmartFilters, filters, appendMention(query, mention));
+}
+
+// Proposal / suggestion picked: apply it as a filter (chip) and remove its mention from the text.
+function* smartAcceptSuggestion({ payload: { mention, item } }) {
+  const current           = yield* currentSmartFilters();
+  const query             = (yield select(searchGetQuerySelector)) || '';
+  const { filters, meta } = applyParsedFilters(current, [{ ...item, mention }]);
+
+  for (const [key, m] of Object.entries(meta)) {
+    yield put(actions.smartSetChipMeta({ key, meta: m }));
+  }
+
+  yield put(actions.smartRemoveSuggestion(mention));
+  yield call(applySmartFilters, filters, removeMention(query, mention));
+}
+
+// Writes filters and query to redux and URL at once, then runs a single search.
+export function* applySmartFilters(filters, text) {
+  const router = yield select(state => state.router);
+
+  yield put(filterActions.setHydratedFilterValues(SMART_NAMESPACE, filters));
+  yield put(actions.updateQuery({ query: text, autocomplete: false }));
+
+  if (!isSearchPath(router.location?.pathname)) {
+    yield put(push({ pathname: 'search' }));
+  }
+
+  // Null every smart filter key first so removed filters disappear from the URL too.
+  const cleared = Object.values(SLOT_TO_FILTER)
+    .map(name => filtersTransformer.definitionsByName[name]?.queryKey)
+    .filter(Boolean)
+    .reduce((acc, key) => Object.assign(acc, { [key]: null }), {});
+  const list    = Object.entries(filters).map(([name, values]) => ({ name, values }));
+  yield* urlUpdateQuery(q => Object.assign(q, cleared, filtersTransformer.toQueryParams(list), {
+    q         : text || null,
+    page      : null,
+    session_id: null
+  }));
+
+  yield put(actions.search({ hydrated: true, keepFilters: true }));
+}
+
 // Propagate URL search params to redux.
 export function* hydrateUrl(action) {
   const router                                              = yield select(state => state.router);
@@ -788,6 +901,7 @@ function* updateSearchTypeInQuery(action) {
 function* watchQueryUpdate() {
   yield takeEvery(types['search/updateQuery'], updateUrl);
   yield takeLatest(types['search/updateQuery'], autocomplete);
+  yield takeLatest(types['search/updateQuery'], smartLiveParse);
 }
 
 function* watchSearch() {
@@ -803,6 +917,13 @@ function* watchSearch() {
     types['search/setPage'],
     types['search/setSortBy']
   ], search);
+}
+
+function* watchSmartSearch() {
+  yield takeLatest(types['search/smartSearch'], smartSearch);
+  yield takeLatest(types['search/smartChipToText'], smartChipToText);
+  yield takeLatest(types['search/smartAcceptSuggestion'], smartAcceptSuggestion);
+  yield takeLatest(types['search/smartApplyFilters'], ({ payload: { filters, text } }) => applySmartFilters(filters, text));
 }
 
 function* watchReasoningCancel() {
@@ -833,6 +954,7 @@ export const sagas = [
   watchHydrateUrl,
   watchQueryUpdate,
   watchSearch,
+  watchSmartSearch,
   watchReasoningCancel,
   watchReasoningFinishNow,
   watchSetPage,

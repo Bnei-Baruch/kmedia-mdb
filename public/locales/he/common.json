@@ -390,7 +390,7 @@
           "usingTool": "בודקים מקור נוסף...",
           "elasticsearch_search": "מחפשים בארכיון...",
           "query_source_ai": "מחפשים בתוך כתב מקור...",
-          "query_transcript_ai" : "בודקים תובנות מתוך תמליל…",
+          "query_transcript_ai": "בודקים תובנות מתוך תמליל…",
           "get_available_books": "בודקים ספרים זמינים...",
           "get_sources_by_author": "בודקים מקורות לפי מחבר...",
           "get_sources_by_source": "בודקים את מבנה המקור...",
@@ -418,6 +418,14 @@
       "lessons-source": "שיעורים לפי מקור:",
       "programs-topic": "תוכניות בנושא:",
       "programs-source": "תוכניות לפי מקור:"
+    },
+    "smart": {
+      "maybe": "אולי «{{text}}»:",
+      "asText": "לחפש «{{text}}» כטקסט",
+      "broaden": "כל «{{name}}»",
+      "remove": "הסר מסנן",
+      "dismiss": "השאר כטקסט",
+      "clearAll": "נקה הכל"
     }
   },
   "home": {

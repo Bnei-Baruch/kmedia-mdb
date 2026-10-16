@@ -15,6 +15,7 @@ import {
   PAGE_NS_SKETCHES
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
+import { SMART_NAMESPACE } from '../helpers/smartSearch';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
@@ -29,7 +30,9 @@ import { fetchViewsByUIDs } from './recommended';
 const endpointByNamespace = {
   [PAGE_NS_LESSONS] : Api.lessons,
   [PAGE_NS_EVENTS]  : Api.events,
-  [PAGE_NS_SKETCHES]: Api.units
+  [PAGE_NS_SKETCHES]: Api.units,
+  // Search page with filters only (no text): `lessons` without content_type is the generic items listing.
+  [SMART_NAMESPACE] : Api.lessons
 };
 
 function* fetchList(action) {

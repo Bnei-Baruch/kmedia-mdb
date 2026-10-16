@@ -57,6 +57,13 @@ const initialState = {
     [SEARCH_TYPES.AGENTIC]: createReasoningSearchState()
   },
   searchType: SEARCH_TYPES.REGULAR,
+  // Smart search: chips meta (chipKey → { mention, label, slot }), not applied suggestions grouped by mention
+  // (shown over the results) and live proposals for the text being typed (shown in the omnibox dropdown).
+  smart: {
+    meta       : {},
+    suggestions: [],
+    live       : []
+  },
   pageNo: 1,
   sortBy: 'relevance',
   deb: false,
@@ -82,6 +89,32 @@ const searchSlice = createSlice({
       state.wip = true;
     },
     search: () => void ({}),
+    smartSearch: () => void ({}),
+    smartChipToText: () => void ({}),
+    smartAcceptSuggestion: () => void ({}),
+    smartApplyFilters: () => void ({}),
+    smartParseSuccess: (state, { payload: { meta, suggestions } }) => {
+      state.smart = {
+        ...state.smart,
+        meta       : { ...state.smart?.meta, ...meta },
+        suggestions,
+        live       : []
+      };
+    },
+    smartLiveSuccess: (state, { payload }) => {
+      state.smart      ||= { meta: {}, suggestions: [] };
+      state.smart.live = payload;
+    },
+    smartRemoveSuggestion: (state, { payload: mention }) => {
+      state.smart.suggestions = state.smart.suggestions.filter(g => g.mention !== mention);
+      state.smart.live        = (state.smart.live || []).filter(g => g.mention !== mention);
+    },
+    smartClearSuggestions: state => {
+      state.smart.suggestions = [];
+    },
+    smartSetChipMeta: (state, { payload: { key, meta } }) => {
+      state.smart.meta[key] = meta;
+    },
     reasoningSearchStart: (state, { payload } = {}) => {
       const reasoningState = getReasoningSearchStateForUpdate(state);
       reasoningState.wip   = true;
@@ -114,6 +147,16 @@ const searchSlice = createSlice({
       };
     },
     reasoningFinishNow: () => void ({}),
+    // Filters without text: the search page shows a filters listing (lists namespace 'search') instead of search.
+    filtersListing: (state, { payload }) => {
+      state.wip              = false;
+      state.error            = null;
+      state.queryResult      = {};
+      state.searchRequest    = null;
+      state.prevFilterParams = payload.filterParams;
+      state.prevQuery        = '';
+      state.pageNo           = payload.pageNo;
+    },
     searchSuccess: (state, { payload }) => {
       state.wip              = false;
       state.error            = null;
@@ -225,6 +268,9 @@ const searchSlice = createSlice({
     getSearchType      : state => state.searchType,
     getSortBy          : state => state.sortBy,
     getSuggestions     : state => state.suggestions,
+    getSmartMeta       : state => state.smart?.meta || {},
+    getSmartSuggestions: state => state.smart?.suggestions || [],
+    getSmartLive       : state => state.smart?.live || [],
     getWip             : state => isAgenticSearchType(state.searchType) ? getReasoningSearchState(state).wip : state.wip
   }
 });

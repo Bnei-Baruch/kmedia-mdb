@@ -4,7 +4,7 @@ import dayjs from '../../helpers/dayjs';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
@@ -24,15 +24,22 @@ import {
   searchGetReasoningRequestKindSelector,
   searchGetReasoningStatusSelector,
   searchGetSearchTypeSelector,
+  searchGetSmartLiveSelector,
   searchGetSuggestionsSelector,
   settingsGetUILangSelector,
 } from '../../redux/selectors';
 import Icon from '../Icon';
+import SmartFilterChips from './SmartFilters/SmartFilterChips';
+import SmartProposal from './SmartFilters/SmartProposal';
+import useSmartChips from './SmartFilters/useSmartChips';
 
 const makeResult = (uiLang, result) => ({
   ...result,
   className: isLanguageRtl(uiLang) ? 'search-result-rtl' : '',
 });
+
+const SMART_OPTION_PREFIX = 'smart:';
+const MAX_SMART_PROPOSALS = 6;
 
 const OmniBox = ({ isHomePage = false }) => {
   const { t } = useTranslation();
@@ -43,6 +50,7 @@ const OmniBox = ({ isHomePage = false }) => {
   const reasoningStatus = useSelector(searchGetReasoningStatusSelector);
   const searchType = useSelector(searchGetSearchTypeSelector);
   const uiLang = useSelector(settingsGetUILangSelector);
+  const smartLive = useSelector(searchGetSmartLiveSelector);
 
   const { isMobile } = useContext(DeviceInfoContext);
   const chronicles = useContext(ClientChroniclesContext);
@@ -56,6 +64,12 @@ const OmniBox = ({ isHomePage = false }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  // Smart search chips live in the header omnibox of the search page only.
+  const showChips = !isHomePage && /\/search\/?$/.test(pathname);
+  const { chips, removeChip, broadenChip, labelOf } = useSmartChips();
+  const visibleChips = showChips ? chips : [];
   const agenticQuery = (query || '').trim();
   const agenticResult = agenticQuery ? makeResult(uiLang, {
     key: `agentic_${agenticQuery}`,
@@ -63,9 +77,16 @@ const OmniBox = ({ isHomePage = false }) => {
     description: t('search.agentic.autocompleteDescription'),
     agenticQuery
   }) : null;
-  const displayedAutocompleteResults = agenticResult
-    ? [agenticResult, ...autocompleteResults]
-    : autocompleteResults;
+  // Filters proposed while typing (smart search); picking one turns it into a chip.
+  const smartResults = smartLive
+    .flatMap(({ mention, items }) => items.map(item => ({ mention, item })))
+    .slice(0, MAX_SMART_PROPOSALS)
+    .map(({ mention, item }) => ({ key: `${SMART_OPTION_PREFIX}${item.slot}:${item.value}`, title: `${SMART_OPTION_PREFIX}${item.slot}:${JSON.stringify(item.value)}`, smart: { mention, item } }));
+  const displayedAutocompleteResults = [
+    ...(agenticResult ? [agenticResult] : []),
+    ...smartResults,
+    ...autocompleteResults
+  ];
   const isQueryTooLong = (
     isAgenticSearchType(searchType)
     && reasoningRequestKind !== 'followup'
@@ -97,14 +118,20 @@ const OmniBox = ({ isHomePage = false }) => {
   const doSearch = () => {
     setUserInteracted(true);
     setInputFocused(false);
-    dispatch(actions.search());
+    // Regular search keeps the smart filter chips; agentic gets the raw query.
+    dispatch(isAgenticSearchType(searchType) ? actions.search() : actions.smartSearch());
   };
 
   const keyDown = e => {
     if (e.keyCode === 13) {
       doSearch();
     }
+
+    if (e.key === 'Backspace' && !e.target.value && visibleChips.length) {
+      removeChip(visibleChips[visibleChips.length - 1]);
+    }
   };
+
 
   const inputChange = e => {
     setUserInteracted(true);
@@ -123,6 +150,12 @@ const OmniBox = ({ isHomePage = false }) => {
 
   const handleResultSelect = title => {
     if (!title) return;
+    const smartResult = smartResults.find(r => r.title === title);
+    if (smartResult) {
+      dispatch(actions.smartAcceptSuggestion(smartResult.smart));
+      return;
+    }
+
     const isAgenticResult = !!agenticResult && title === agenticResult.title;
     const selectedQuery = isAgenticResult ? agenticResult.agenticQuery : title;
     chronicles.autocompleteSelected(selectedQuery, autocompleteId);
@@ -139,6 +172,11 @@ const OmniBox = ({ isHomePage = false }) => {
   };
 
   const renderAutocompleteResult = result => {
+    if (result.smart) {
+      const { mention, item } = result.smart;
+      return <SmartProposal item={item} mention={mention} label={labelOf(item.name, item.value, item.path || mention)}/>;
+    }
+
     if (result.agenticQuery) {
       return (
         <div className="search-omnibox__agentic-row">
@@ -163,22 +201,30 @@ const OmniBox = ({ isHomePage = false }) => {
     <Combobox value={query ?? ''} onChange={handleResultSelect} className={clsx('mx-auto', { 'max-w-[800px]': !isHomePage })}>
       <div className={clsx('relative w-full search-omnibox', { 'homepage': isHomePage, 'search-omnibox--query-error': isQueryTooLong })}>
         <div className={clsx('flex items-stretch w-full')}>
-          <ComboboxInput
-            ref={queryInputRef}
+          <div
             className={clsx(
-              'flex-1 bg-white px-4 outline-none w-full border rounded-4xl',
-              isHomePage
-                ? 'py-[11px] leading-[1.21428571em] text-black/80 border-[rgba(34,36,38,0.15)] focus:border-[#7dcff5] rounded-e-none'
-                : 'py-2 text-black border-gray-300'
+              'flex-1 flex items-center gap-1 min-w-0',
+              !isHomePage && 'bg-white px-4 py-2 pe-10 border border-gray-300 rounded-4xl'
             )}
-            placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
-            onChange={inputChange}
-            onKeyDown={keyDown}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            autoFocus={inputFocused}
-            displayValue={item => item}
-          />
+          >
+            <SmartFilterChips chips={visibleChips} onRemove={removeChip} onBroaden={broadenChip}/>
+            <ComboboxInput
+              ref={queryInputRef}
+              className={clsx(
+                'flex-1 min-w-[120px] outline-none w-full',
+                isHomePage
+                  ? 'bg-white px-4 border rounded-4xl py-[11px] leading-[1.21428571em] text-black/80 border-[rgba(34,36,38,0.15)] focus:border-[#7dcff5] rounded-e-none'
+                  : 'bg-transparent text-black'
+              )}
+              placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
+              onChange={inputChange}
+              onKeyDown={keyDown}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              autoFocus={inputFocused}
+              displayValue={item => item}
+            />
+          </div>
           {isHomePage ? (
             <>
               <button

@@ -67,6 +67,8 @@ import UnitLogo from '../shared/Logo/UnitLogo';
 import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
 import { getWipErr } from '../shared/WipErr/WipErr';
+import SmartFiltersListing from './SmartFilters/SmartFiltersListing';
+import SmartSuggestions from './SmartFilters/SmartSuggestions';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
 import { buildHighlightLinkTarget } from './highlightLink';
@@ -1277,6 +1279,11 @@ const SearchResults = () => {
     return renderSearchFrame(renderAgenticLoginPrompt());
   }
 
+  // Filters without text — listing by filters instead of search results.
+  if (!isAgenticSearch && !query.trim() && Object.values(filtersTransformer.toApiParams(filters)).length) {
+    return renderSearchFrame(<SmartFiltersListing/>);
+  }
+
   const wipErr = getWipErr(!isAgenticSearch && (wip || !areSourcesLoaded || !areTagsLoaded), isAgenticSearch ? null : err);
   if (wipErr) {
     return renderSearchFrame(
@@ -1314,6 +1321,7 @@ const SearchResults = () => {
       namespace={'search'}
       filters={<Filters namespace={'search'} />}
     >
+      <SmartSuggestions/>
       {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
       {total === 0 && <Trans i18nKey="search.results.no-results">
         Your search for

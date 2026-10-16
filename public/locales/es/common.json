@@ -417,6 +417,14 @@
       "lessons-source": "Lecciones según fuente:",
       "programs-topic": "Programas sobre:",
       "programs-source": "Programas según fuente:"
+    },
+    "smart": {
+      "maybe": "Quizás «{{text}}»:",
+      "asText": "Buscar «{{text}}» como texto",
+      "broaden": "Todo «{{name}}»",
+      "remove": "Quitar filtro",
+      "dismiss": "Mantener como texto",
+      "clearAll": "Borrar todo"
     }
   },
   "home": {

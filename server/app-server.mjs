@@ -29,6 +29,13 @@ async function createServer() {
     app.use(securityHeaders);
     app.use(express.static(path.resolve(__dirname, '..', 'build'), { index: false, maxAge: '30d' }));
   } else {
+    // Smart search parser (natural language → filters); in production nginx routes /smart-search/.
+    const { createProxyMiddleware } = await import('http-proxy-middleware');
+    app.use('/smart-search', createProxyMiddleware({
+      target      : process.env.SMART_SEARCH_URL || 'http://localhost:8090',
+      changeOrigin: true,
+    }));
+
     const { createServer: createViteServer } = await import('vite');
     vite = await createViteServer({
       server: { middlewareMode: true },
