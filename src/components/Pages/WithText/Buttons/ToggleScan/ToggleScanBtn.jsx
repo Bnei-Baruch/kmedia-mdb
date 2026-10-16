@@ -10,7 +10,7 @@ import { ScanZoomContext } from './ScanZoomContext';
 
 
 const ScanPDF = lazy(() =>
-  Promise.all([import('./ScanPDF'), new Promise(resolve => setTimeout(resolve, 300))])
+  Promise.all([import('./ScanPDF'), new Promise(resolve => setTimeout(resolve, 300))]).then(([module]) => module)
 );
 
 const ToggleScanBtn = () => {
