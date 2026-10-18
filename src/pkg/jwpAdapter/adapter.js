@@ -70,10 +70,20 @@ export const setPip        = () => functionByName('setPip', noop, true);
  */
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
-// Playback timing for chronicles: click_to_play_ms (intent -> playing) and rebuffering
-// (mid-play stalls). performance.now() based; reset per loaded file. See init() below.
-let _playTiming = {};
-export const getPlayTiming = () => _playTiming;
+// Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
+// click_to_play_ms (intent -> first `time` tick) and rebuffering (mid-play stalls, seeks excluded).
+// performance.now() based. See init() below.
+let _t = {};
+// Returns the current segment's timing (empty if src is no longer the loaded file) and starts a new segment.
+export const takePlayTiming = src => {
+  const { ctp = null, rc = 0, rm = 0, buffAt } = _t.src === src ? _t : {};
+  _t = { src: _t.src };
+  return {
+    click_to_play_ms: ctp,
+    rebuffer_count  : rc,
+    rebuffer_ms     : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
+  };
+};
 
 const PLAYER_EVENTS = [
   'ready',
@@ -112,6 +122,33 @@ export const init   = (dispatch, deviceInfo) => {
 
   player.on('remove', () => player.off('all'));
 
+  // Chronicles playback timing (separate listeners; JWP allows many per event).
+  // Registered before the HLS autoplay listener so the reset can't wipe its beforePlay intent.
+  player.on('playlistItem', e => {    // new file loaded
+    _t = { src: e.item.file };
+  });
+  player.on('beforePlay', () => {     // play intent (incl. autoplay)
+    _t.intentAt = performance.now();
+  });
+  player.on('seek', () => void (_t.seeking = true));
+  player.on('seeked', () => void (_t.seeking = false));
+  player.on('buffer', () => {         // stall begins (only after playback has started, not caused by a seek)
+    if (_t.ctp != null && _t.buffAt == null && !_t.seeking) {
+      _t.buffAt = performance.now();
+      _t.rc     = (_t.rc || 0) + 1;
+    }
+  });
+  player.on('time', () => {           // first tick = perceived start (audio+video); later ticks close stalls
+    if (_t.intentAt != null && _t.ctp == null) {
+      _t.ctp = Math.round(performance.now() - _t.intentAt);
+    }
+
+    if (_t.buffAt != null) {
+      _t.rm     = (_t.rm || 0) + (performance.now() - _t.buffAt);
+      _t.buffAt = null;
+    }
+  });
+
   player.on('playlistItem', e => {
     if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
       player.play();
@@ -129,30 +166,6 @@ export const init   = (dispatch, deviceInfo) => {
     player.on(name, e => {
       dispatch(action(e));
     });
-  });
-
-  // Chronicles playback timing (separate listeners; JWP allows many per event).
-  player.on('playlistItem', () => {   // new file loaded
-    _playTiming = {};
-  });
-  player.on('beforePlay', () => {     // play intent (incl. autoplay)
-    _playTiming.intentAt = performance.now();
-  });
-  player.on('buffer', () => {         // stall begins (only after playback has started)
-    if (_playTiming.ctp != null && _playTiming.buffAt == null) {
-      _playTiming.buffAt = performance.now();
-      _playTiming.rc = (_playTiming.rc || 0) + 1;
-    }
-  });
-  player.on('time', () => {           // first tick = perceived start (audio+video); later ticks close stalls
-    if (_playTiming.intentAt != null && _playTiming.ctp == null) {
-      _playTiming.ctp = Math.round(performance.now() - _playTiming.intentAt);
-    }
-
-    if (_playTiming.buffAt != null) {
-      _playTiming.rm = (_playTiming.rm || 0) + (performance.now() - _playTiming.buffAt);
-      _playTiming.buffAt = null;
-    }
   });
 };
 
