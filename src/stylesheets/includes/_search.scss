@@ -614,6 +614,14 @@
     .media_item__content {
       flex: 1 1 auto;
       min-width: 0;
+
+      // Agentic content (highlights + reason) must not be clamped to 2 lines.
+      > div > div.line_clamp_2_lines {
+        display: block !important;
+        -webkit-line-clamp: unset;
+        line-clamp: unset;
+        overflow: visible;
+      }
     }
   }
 
