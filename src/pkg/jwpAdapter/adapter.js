@@ -77,7 +77,7 @@ let _t = {};
 // Returns the current segment's timing (empty if src is no longer the loaded file) and starts a new segment.
 export const takePlayTiming = src => {
   const { ctp = null, rc = 0, rm = 0, buffAt } = _t.src === src ? _t : {};
-  _t = { src: _t.src };
+  if (_t.src === src) _t = { src };   // a stale stop must not reset the new file's segment
   return {
     click_to_play_ms: ctp,
     rebuffer_count  : rc,
