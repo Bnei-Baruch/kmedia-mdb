@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
-import { usePrevious } from '../../helpers/utils';
+import { filenameExtension, usePrevious } from '../../helpers/utils';
 import { getDuration, getMute, takePlayTiming } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
 import {
@@ -36,9 +36,9 @@ const buildAppendData = (autoPlay, item, file, event) => {
     was_muted   : getMute(),
     // Media source + type, to slice latency by origin (cdn/files) and protocol.
     src_host    : hostOf(src),
-    src_type    : item.isHLS ? 'hls' : src.split('?')[0].split('.').pop(),
+    src_type    : item.isHLS ? 'hls' : filenameExtension(file?.name || ''),
     media_type  : file?.type,
-    // Startup latency and stalls of the play segment this stop closes (null click_to_play_ms = never started).
+    // Startup latency and stalls of the play segment this stop closes (see takePlayTiming).
     ...(event === 'player-stop' ? takePlayTiming(src) : {})
   };
 };

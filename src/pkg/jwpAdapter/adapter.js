@@ -71,18 +71,34 @@ export const setPip        = () => functionByName('setPip', noop, true);
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 // Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
-// click_to_play_ms (intent -> first `time` tick) and rebuffering (mid-play stalls, seeks excluded).
+// click_to_play_ms (intent -> first `time` tick while playing) and rebuffering (stalls after the start, seeks excluded).
 // performance.now() based. See init() below.
 let _t = {};
-// Returns the current segment's timing (empty if src is no longer the loaded file) and starts a new segment.
+const closeStall = () => {
+  if (_t.buffAt == null) return;
+  _t.rm     = (_t.rm || 0) + (performance.now() - _t.buffAt);
+  _t.buffAt = null;
+};
+
+// Returns the current segment's timing and starts a new segment. {} = unknown: src is no longer the loaded file
+// (a stale stop must not reset the new file's segment), or nothing was asked for or played.
+// click_to_play_ms: null = never started; omitted = no play intent seen (e.g. resumed from OS media keys).
 export const takePlayTiming = src => {
-  const { ctp = null, rc = 0, rm = 0, buffAt } = _t.src === src ? _t : {};
-  if (_t.src === src) _t = { src };   // a stale stop must not reset the new file's segment
+  if (_t.src !== src) return {};
+  const { intentAt, started, ctp = null, rc = 0, rm = 0, buffAt } = _t;
+  _t = { src };
+  if (intentAt == null && !started) return {};
   return {
-    click_to_play_ms: ctp,
-    rebuffer_count  : rc,
-    rebuffer_ms     : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
+    ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
+    rebuffer_count: rc,
+    rebuffer_ms   : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
   };
+};
+
+// A programmatic play is about to be paused (no autostart): the user never asked for this segment,
+// so its `pause` (after the last `time` tick) discards it. Only if playing: otherwise no pause event comes.
+export const dropPlayIntent = () => {
+  if (['playing', 'buffering'].includes(window.jwplayer().getState())) _t.dropped = true;
 };
 
 const PLAYER_EVENTS = [
@@ -123,33 +139,36 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   // Chronicles playback timing (separate listeners; JWP allows many per event).
-  // Registered before the HLS autoplay listener so the reset can't wipe its beforePlay intent.
-  player.on('playlistItem', e => {    // new file loaded
-    _t = { src: e.item.file };
-  });
-  player.on('beforePlay', () => {     // play intent (incl. autoplay)
+  player.on('beforePlay', () => {     // play intent (incl. autoplay); the last one before the start counts
     _t.intentAt = performance.now();
+    _t.dropped  = false;
   });
-  player.on('seek', () => void (_t.seeking = true));
+  player.on('pause', () => {
+    if (_t.dropped) _t = { src: _t.src };
+  });
+  player.on('seek', () => {           // a stall open at the seek ends there; buffering until `seeked` is not a stall
+    closeStall();
+    _t.seeking = true;
+  });
   player.on('seeked', () => void (_t.seeking = false));
   player.on('buffer', () => {         // stall begins (only after playback has started, not caused by a seek)
-    if (_t.ctp != null && _t.buffAt == null && !_t.seeking) {
+    if (_t.started && _t.buffAt == null && !_t.seeking) {
       _t.buffAt = performance.now();
       _t.rc     = (_t.rc || 0) + 1;
     }
   });
-  player.on('time', () => {           // first tick = perceived start (audio+video); later ticks close stalls
-    if (_t.intentAt != null && _t.ctp == null) {
-      _t.ctp = Math.round(performance.now() - _t.intentAt);
+  player.on('time', () => {           // first tick while playing = perceived start (a seek's position tick doesn't count)
+    if (player.getState() !== 'playing') return;
+    if (!_t.started) {
+      _t.started = true;
+      if (_t.intentAt != null) _t.ctp = Math.round(performance.now() - _t.intentAt);
     }
 
-    if (_t.buffAt != null) {
-      _t.rm     = (_t.rm || 0) + (performance.now() - _t.buffAt);
-      _t.buffAt = null;
-    }
+    closeStall();
   });
 
-  player.on('playlistItem', e => {
+  player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
+    _t = { src: e.item.file };
     if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
       player.play();
     }

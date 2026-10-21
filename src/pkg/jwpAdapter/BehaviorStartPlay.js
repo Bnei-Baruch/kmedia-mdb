@@ -6,7 +6,7 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
-import { seek, play, pause } from './adapter';
+import { seek, play, pause, dropPlayIntent } from './adapter';
 import {
   playerGetFileSelector,
   playlistGetInfoSelector,
@@ -57,6 +57,7 @@ const BehaviorStartPlay                = () => {
 
     if (!autostart) {
       setTimeout(() => {
+        dropPlayIntent();   // before pause(): its events may be synchronous
         pause();
         dispatch(actions.setLoaded(true));
       }, 0);
