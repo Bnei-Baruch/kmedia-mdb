@@ -143,12 +143,9 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   // Chronicles playback timing (separate listeners; JWP allows many per event).
-  player.on('beforePlay', () => {     // play intent; a user play after the page's own (auto) one starts a new segment
+  player.on('beforePlay', () => {     // play intent = a new segment, even if the last one's stop wasn't taken
     if (['playing', 'buffering'].includes(player.getState())) return;   // e.g. a 2nd play() while starting: no new intent
-    if (!_t.autoNext && _t.trigger === 'auto') _t = { src: _t.src };
-    _t.trigger  = _t.autoNext ? 'auto' : 'user';
-    _t.autoNext = false;
-    _t.intentAt = performance.now();
+    _t = { src: _t.src, trigger: _t.autoNext ? 'auto' : 'user', intentAt: performance.now() };
   });
   player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
   player.on('firstFrame', () => {    // not JWP's loadTime: it restarts at every play() call; a seek's frame while paused isn't a start

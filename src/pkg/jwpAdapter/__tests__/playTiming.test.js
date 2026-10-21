@@ -84,6 +84,32 @@ test('a seek tick while paused is not a start; a user play after a blocked autop
   expect(takePlayTiming('a.m3u8')).toEqual({ start_trigger: 'user', click_to_play_ms: 260, rebuffer_count: 0, rebuffer_ms: 0 });
 });
 
+test('a seek while paused doesn\'t start the next play; an untaken stop doesn\'t leak into it', () => {
+  at(0, 'beforePlay');
+  at(10, 'play');
+  at(250, 'time');
+  at(1000, 'pause');
+  takePlayTiming('a.mp3');
+  at(2000, 'seek');           // seek while paused: a position tick, not playing
+  at(2000, 'time');
+  at(2050, 'seeked');
+  at(3000, 'beforePlay');
+  at(3010, 'play');
+  at(3200, 'time');
+  expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 200, rebuffer_count: 0, rebuffer_ms: 0 });
+
+  at(4000, 'play');           // keeps playing after that stop (e.g. a stop on page leave)
+  at(4250, 'time');
+  at(5000, 'buffer');         // a stall, then a pause whose stop is not taken
+  at(5400, 'play');
+  at(5400, 'time');
+  at(6000, 'pause');
+  at(7000, 'beforePlay');
+  at(7010, 'play');
+  at(7200, 'time');
+  expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 200, rebuffer_count: 0, rebuffer_ms: 0 });
+});
+
 test('never started; no intent (native resume)', () => {
   at(0, 'beforePlay');
   expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: null, rebuffer_count: 0, rebuffer_ms: 0 });
@@ -175,6 +201,7 @@ test('a saved-position seek before the no-autostart pause is auto too', () => {
   at(100, 'beforePlay');
   at(100, 'seek');
   at(110, 'buffer');
+  at(112, 'time');            // the seek's position tick while buffering: not a start
   at(115, 'firstFrame');      // the frame at the saved position, not a start
   at(120, 'pause');
   expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'auto', click_to_play_ms: null, rebuffer_count: 0, rebuffer_ms: 0 });

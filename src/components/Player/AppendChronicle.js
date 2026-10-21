@@ -38,7 +38,7 @@ const buildAppendData = (autoPlay, item, file, event) => {
     src_host    : hostOf(src),
     src_type    : item.isHLS ? 'hls' : filenameExtension(file?.name || ''),
     media_type  : file?.type,
-    // Startup latency and stalls of the play segment this stop closes (see takePlayTiming).
+    // Startup latency and stalls of the play segment this stop closes; takes (resets) it: once per stop.
     ...(event === 'player-stop' ? takePlayTiming(src) : {})
   };
 };
