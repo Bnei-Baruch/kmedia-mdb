@@ -22,6 +22,7 @@ beforeEach(() => {
   handlers = {};
   jest.spyOn(performance, 'now').mockImplementation(() => now);
   window.jwplayer = () => ({
+    id      : 'test',
     on      : (name, h) => (handlers[name] = [...(handlers[name] || []), h]),
     off     : () => null,
     play    : () => null,
@@ -159,6 +160,16 @@ test('blocked autoplay leaves nothing behind; the next click is a user start', (
   expect(takePlayTiming('a.m3u8')).toEqual({ start_trigger: 'user', click_to_play_ms: 250, rebuffer_count: 0, rebuffer_ms: 0 });
 });
 
+test('a media-key play after a blocked autoplay is user, not timed from the blocked attempt', () => {
+  load(0, 'a.m3u8', 'hls');
+  at(460, 'beforePlay');      // HLS autoplay, blocked
+  at(470, 'pause');
+  at(470, 'playAttemptFailed');
+  at(9000, 'play');           // OS media keys
+  at(9250, 'time');
+  expect(takePlayTiming('a.m3u8')).toEqual({ start_trigger: 'user', rebuffer_count: 0, rebuffer_ms: 0 });
+});
+
 test('a saved-position seek before the no-autostart pause is auto too', () => {
   markAutoStart();            // BehaviorStartPlay seek(offset) on an idle mp4
   at(100, 'beforePlay');
@@ -174,7 +185,7 @@ test('next unit autoplay after complete is auto; an HLS audio/video switch while
   at(20, 'play');
   at(30, 'time');
   at(5000, 'complete');
-  takePlayTiming('a.mp3');    // the old file's stop is taken before the next unit loads
+  takePlayTiming('a.mp3');    // a stop for the old file may come before the next unit loads: no effect on it
   load(5010, 'b.mp4');
   at(5020, 'beforePlay');     // JWP plays the next unit itself
   at(5040, 'play');

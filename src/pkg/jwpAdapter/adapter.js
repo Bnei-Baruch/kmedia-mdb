@@ -102,7 +102,7 @@ export const takePlayTiming = src => {
 // Not when paused: a seek there fires no beforePlay, and the mark would stick to the user's next play.
 // Not after a user switch (audio/video, another unit) while playing or paused: that start is the user's.
 export const markAutoStart = () => {
-  if (window.jwplayer().getState() === 'idle' && !_t.switched) _t.autoNext = true;
+  if (functionByName('getState', '') === 'idle' && !_t.switched) _t.autoNext = true;
 };
 
 const PLAYER_EVENTS = [
