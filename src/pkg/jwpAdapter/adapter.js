@@ -71,7 +71,8 @@ export const setPip        = () => functionByName('setPip', noop, true);
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 // Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
-// click_to_play_ms (intent -> first `time` tick while playing) and rebuffering (stalls after the start, seeks excluded).
+// click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (JWP firstFrame loadTime, once per file),
+// rebuffering (stalls after the start, seeks excluded) and start_trigger (auto = the page's own play, user = the rest).
 // performance.now() based. See init() below.
 let _t = {};
 const closeStall = () => {
@@ -85,20 +86,21 @@ const closeStall = () => {
 // click_to_play_ms: null = never started; omitted = no play intent seen (e.g. resumed from OS media keys).
 export const takePlayTiming = src => {
   if (_t.src !== src) return {};
-  const { intentAt, started, ctp = null, rc = 0, rm = 0, buffAt } = _t;
+  const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = _t;
   _t = { src };
   if (intentAt == null && !started) return {};
   return {
+    start_trigger: trigger,
     ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
+    ...(ff != null ? { first_frame_ms: ff } : {}),
     rebuffer_count: rc,
     rebuffer_ms   : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
   };
 };
 
-// A programmatic play is about to be paused (no autostart): the user never asked for this segment,
-// so its `pause` (after the last `time` tick) discards it. Only if playing: otherwise no pause event comes.
-export const dropPlayIntent = () => {
-  if (['playing', 'buffering'].includes(window.jwplayer().getState())) _t.dropped = true;
+// The page's own play (BehaviorStartPlay's seek/play before its no-autostart pause): tag the segment "auto".
+export const markAutoPlay = () => {
+  if (_t.intentAt != null) _t.trigger = 'auto';
 };
 
 const PLAYER_EVENTS = [
@@ -139,12 +141,16 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   // Chronicles playback timing (separate listeners; JWP allows many per event).
-  player.on('beforePlay', () => {     // play intent (incl. autoplay); the last one before the start counts
+  player.on('beforePlay', () => {     // play intent; a user play after the page's own (auto) one starts a new segment
+    if (['playing', 'buffering'].includes(player.getState())) return;   // e.g. a 2nd play() while starting: no new intent
+    if (!_t.autoNext && _t.trigger === 'auto') _t = { src: _t.src };
+    _t.trigger  = _t.autoNext ? 'auto' : 'user';
+    _t.autoNext = false;
     _t.intentAt = performance.now();
-    _t.dropped  = false;
   });
-  player.on('pause', () => {
-    if (_t.dropped) _t = { src: _t.src };
+  player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
+  player.on('firstFrame', e => {     // loadTime = last play attempt -> first frame; a seek's frame while paused isn't a start
+    if (player.getState() === 'playing') _t.ff = Math.round(e.loadTime);
   });
   player.on('seek', () => {           // a stall open at the seek ends there; buffering until `seeked` is not a stall
     closeStall();
@@ -170,6 +176,7 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
     _t = { src: e.item.file };
     if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
+      _t.autoNext = true;
       player.play();
     }
   });
