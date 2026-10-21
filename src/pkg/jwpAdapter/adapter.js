@@ -71,7 +71,7 @@ export const setPip        = () => functionByName('setPip', noop, true);
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 // Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
-// click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (JWP firstFrame loadTime, once per file),
+// click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (intent -> JWP firstFrame, once per file),
 // rebuffering (stalls after the start, seeks excluded) and start_trigger (auto = the page's own play, user = the rest).
 // performance.now() based. See init() below.
 let _t = {};
@@ -98,9 +98,11 @@ export const takePlayTiming = src => {
   };
 };
 
-// The page's own play (BehaviorStartPlay's seek/play before its no-autostart pause): tag the segment "auto".
-export const markAutoPlay = () => {
-  if (_t.intentAt != null) _t.trigger = 'auto';
+// The page's own seek/play (BehaviorStartPlay) is about to start an idle player: its beforePlay is "auto".
+// Not when paused: a seek there fires no beforePlay, and the mark would stick to the user's next play.
+// Not after a user switch (audio/video, another unit) while playing or paused: that start is the user's.
+export const markAutoStart = () => {
+  if (window.jwplayer().getState() === 'idle' && !_t.switched) _t.autoNext = true;
 };
 
 const PLAYER_EVENTS = [
@@ -149,8 +151,8 @@ export const init   = (dispatch, deviceInfo) => {
     _t.intentAt = performance.now();
   });
   player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
-  player.on('firstFrame', e => {     // loadTime = last play attempt -> first frame; a seek's frame while paused isn't a start
-    if (player.getState() === 'playing') _t.ff = Math.round(e.loadTime);
+  player.on('firstFrame', () => {    // not JWP's loadTime: it restarts at every play() call; a seek's frame while paused isn't a start
+    if (_t.intentAt != null && player.getState() === 'playing') _t.ff = Math.round(performance.now() - _t.intentAt);
   });
   player.on('seek', () => {           // a stall open at the seek ends there; buffering until `seeked` is not a stall
     closeStall();
@@ -174,11 +176,16 @@ export const init   = (dispatch, deviceInfo) => {
   });
 
   player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
-    _t = { src: e.item.file };
-    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
-      _t.autoNext = true;
-      player.play();
-    }
+    const hls   = e.item.sources[0]?.type.toLowerCase() === 'hls';
+    const state = player.getState();
+    // The page's own start: JWP playing the next unit after `complete`, or the HLS autoplay on page load (idle).
+    // Not a reload after a user switch (audio/video) while playing or paused.
+    _t = {
+      src     : e.item.file,
+      autoNext: state === 'complete' || (hls && state === 'idle'),
+      switched: ['playing', 'paused'].includes(state)
+    };
+    if (hls) player.play();
   });
 
   dispatch(actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));

@@ -6,7 +6,7 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
-import { seek, play, pause, markAutoPlay } from './adapter';
+import { seek, play, pause, markAutoStart } from './adapter';
 import {
   playerGetFileSelector,
   playlistGetInfoSelector,
@@ -49,7 +49,9 @@ const BehaviorStartPlay                = () => {
     const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
     const offset = getSavedTime(cuId, historyItem);
-    if (!isNaN(offset) && offset > 0 && duration > MIN_DURATION_FOR_USE_HISTORY_SEC && (offset + 10 < duration)) {
+    const resume = !isNaN(offset) && offset > 0 && duration > MIN_DURATION_FOR_USE_HISTORY_SEC && (offset + 10 < duration);
+    if (resume || autostart) markAutoStart();
+    if (resume) {
       seek(offset);
     } else if (autostart) {
       play();
@@ -57,7 +59,6 @@ const BehaviorStartPlay                = () => {
 
     if (!autostart) {
       setTimeout(() => {
-        markAutoPlay();     // before pause(): its events may be synchronous
         pause();
         dispatch(actions.setLoaded(true));
       }, 0);
