@@ -87,8 +87,8 @@ const closeStall = () => {
 export const takePlayTiming = src => {
   if (_t.src !== src) return {};
   const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = _t;
+  if (intentAt == null && !started) return {};   // nothing to report: keep the flags (autoNext, switched, seeking)
   _t = { src };
-  if (intentAt == null && !started) return {};
   return {
     start_trigger: trigger,
     ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
@@ -98,7 +98,7 @@ export const takePlayTiming = src => {
   };
 };
 
-// The page's own seek/play (BehaviorStartPlay) is about to start an idle player: its beforePlay is "auto".
+// The page's own seek/play (BehaviorStartPlay, BehaviorStartStopSlice's clip start) is about to start an idle player: its beforePlay is "auto".
 // Not when paused: a seek there fires no beforePlay, and the mark would stick to the user's next play.
 // Not after a user switch (audio/video, another unit) while playing or paused: that start is the user's.
 export const markAutoStart = () => {

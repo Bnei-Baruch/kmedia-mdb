@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import { pause, seek } from './adapter';
+import { pause, seek, markAutoStart } from './adapter';
 import { noop } from '../../helpers/utils';
 import { playlistGetPlayedSelector, playerIsMetadataReadySelector, playerIsReadySelector } from '../../redux/selectors';
 
@@ -28,6 +28,7 @@ const BehaviorStartStopSlice = () => {
       }
     };
 
+    markAutoStart();    // the clip's start is the page's own play
     seek(start);
     jwp.on('time', checkStopTime);
 

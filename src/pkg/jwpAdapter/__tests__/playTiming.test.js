@@ -238,6 +238,7 @@ test('an mp4 audio/video switch while playing is user, though BehaviorStartPlay 
   at(30, 'time');
   load(5000, 'a.mp3?audio');  // user switches to audio while playing
   at(5001, 'idle');
+  expect(takePlayTiming('a.mp3?audio')).toEqual({});   // a stop for the new file before its play: keeps `switched`
   markAutoStart();            // BehaviorStartPlay re-runs (was played): play()
   at(5010, 'beforePlay');
   at(5040, 'play');
