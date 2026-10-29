@@ -1,3 +1,4 @@
+import './html5Player';
 import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';

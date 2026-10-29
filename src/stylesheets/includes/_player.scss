@@ -406,6 +406,15 @@ video {
 
 
 .jwplayer {
+  .is-fullscreen & {
+    height: 100%;
+
+    video {
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
   .is-mobile.is-fullscreen & {
     @media only screen and (orientation: portrait) {
       height: 100VW !important;
