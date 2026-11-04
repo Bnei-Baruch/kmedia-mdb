@@ -268,8 +268,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
                 `;
 
               const html = htmlData
-                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
-                .replace(/lang="en"/, `lang="${getLanguageLocaleWORegion(uiLang)}"`)
+                .replace(/<html lang="en"([^>]*)>/, `<html lang="${getLanguageLocaleWORegion(uiLang)}"$1 ${helmet.htmlAttributes.toString()}>`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
