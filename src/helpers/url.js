@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
 
-import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
+import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from './consts';
 import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../pkg/ksAdapter/adapter';
 import { omit } from 'lodash/object';
 import logger from './logger';
@@ -63,7 +63,7 @@ export const getUILangFromPath = (path, headers, userAgent) => {
   if (acceptLanguage) {
     const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
     logger.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
-    const headerLanguages = languages.map(lang => lang.substr(0, 2)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
+    const headerLanguages = languages.map(lang => lang.substr(0, 2).replace(/^uk$/, LANG_UKRAINIAN)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
     if (headerLanguages.length > 0) {
       logger.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
