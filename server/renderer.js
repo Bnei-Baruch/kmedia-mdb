@@ -16,7 +16,6 @@ import {
   COOKIE_CONTENT_LANGS,
   COOKIE_SHOW_ALL_CONTENT,
   LANG_UI_LANGUAGES,
-  LANG_UKRAINIAN,
   KC_BOT_USER_NAME
 } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
@@ -127,7 +126,7 @@ const getPromises = (store, originalUrl, cookieUILang, cookieContentLanguages, {
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
   logger.log('serverRenderAuthorised uiLang', uiLang);
 
-  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
+  moment.locale(getLanguageLocaleWORegion(uiLang));
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(uiLang, err => {
