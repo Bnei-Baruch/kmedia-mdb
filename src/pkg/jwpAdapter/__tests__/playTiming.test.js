@@ -1,4 +1,4 @@
-import { init, takePlayTiming, markAutoStart } from '../adapter';
+import { init, takePlayTiming, markAutoStart, markAutoNext } from '../adapter';
 
 const STATE_BY_EVENT = { play: 'playing', buffer: 'buffering', pause: 'paused', idle: 'idle', complete: 'complete' };
 
@@ -265,4 +265,46 @@ test('a stale stop is unknown and keeps the new file segment', () => {
   at(80, 'time');
   expect(takePlayTiming('a.mp3')).toEqual({});
   expect(takePlayTiming('b.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 30, rebuffer_count: 0, rebuffer_ms: 0 });
+});
+
+test('a late stop takes the segment a new file replaced, whether it comes before or after the new file loads', () => {
+  at(10, 'beforePlay');
+  at(20, 'play');
+  at(30, 'time');
+  at(100, 'buffer');          // a stall open at the switch: closed there
+  load(400, 'b.mp3');         // a same-path switch while playing: no stop for a.mp3 yet
+  at(401, 'idle');
+  at(410, 'beforePlay');
+  at(420, 'play');
+  at(450, 'time');
+  expect(takePlayTiming('a.mp3', true)).toEqual({ start_trigger: 'user', click_to_play_ms: 20, rebuffer_count: 1, rebuffer_ms: 300 });
+  expect(takePlayTiming('a.mp3', true)).toEqual({});   // taken once
+  expect(takePlayTiming('b.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 40, rebuffer_count: 0, rebuffer_ms: 0 });
+
+  at(480, 'pause');           // its stop is lost too
+  at(500, 'beforePlay');      // b plays again; the late stop runs before the next file loads: takes the current segment
+  at(510, 'play');
+  at(530, 'time');
+  expect(takePlayTiming('b.mp3', true)).toEqual({ start_trigger: 'user', click_to_play_ms: 30, rebuffer_count: 0, rebuffer_ms: 0 });
+});
+
+test('the page\'s own advance to the next file while playing is auto, though the late stop came first', () => {
+  at(10, 'beforePlay');
+  at(20, 'play');
+  at(30, 'time');
+  markAutoNext();             // BehaviorStartStopSliceMy at the clip end, then navigate(link)
+  expect(takePlayTiming('a.mp3', true)).toEqual({ start_trigger: 'user', click_to_play_ms: 20, rebuffer_count: 0, rebuffer_ms: 0 });
+  load(5000, 'b.mp3');
+  at(5001, 'idle');
+  at(5010, 'beforePlay');
+  at(5040, 'play');
+  at(5100, 'time');
+  expect(takePlayTiming('b.mp3')).toEqual({ start_trigger: 'auto', click_to_play_ms: 90, rebuffer_count: 0, rebuffer_ms: 0 });
+
+  load(6000, 'c.mp3');        // a later user switch is user again
+  at(6001, 'idle');
+  at(6010, 'beforePlay');
+  at(6020, 'play');
+  at(6050, 'time');
+  expect(takePlayTiming('c.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 40, rebuffer_count: 0, rebuffer_ms: 0 });
 });

@@ -74,21 +74,31 @@ export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 // click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (intent -> JWP firstFrame, once per file),
 // rebuffering (stalls after the start, seeks excluded) and start_trigger (auto = the page's own play, user = the rest).
 // performance.now() based. See init() below.
-let _t = {};
+let _t    = {};
+let _prev = {};   // a segment that a new file or play intent replaced before its stop took it (that stop comes late)
 const closeStall = () => {
   if (_t.buffAt == null) return;
   _t.rm     = (_t.rm || 0) + (performance.now() - _t.buffAt);
   _t.buffAt = null;
 };
 
+const replace = next => {   // start a new segment; keep the old one for its late stop if a player-play was appended for it
+  closeStall();
+  if (_t.played) _prev = _t;
+  _t = next;
+};
+
 // Returns the current segment's timing and starts a new segment. {} = unknown: src is no longer the loaded file
 // (a stale stop must not reset the new file's segment), or nothing was asked for or played.
 // click_to_play_ms: null = never started; omitted = no play intent seen (e.g. resumed from OS media keys).
-export const takePlayTiming = src => {
-  if (_t.src !== src) return {};
-  const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = _t;
+// late: the stop of a play whose own stop was lost (its file was replaced, or a new play started): take the replaced segment.
+export const takePlayTiming = (src, late = false) => {
+  const t = late && _prev.src === src ? _prev : _t;
+  if (t.src !== src) return {};
+  const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = t;
   if (intentAt == null && !started) return {};   // nothing to report: keep the flags (autoNext, switched, seeking)
-  _t = { src };
+  if (t === _prev) _prev = {};
+  else _t = { src };
   return {
     start_trigger: trigger,
     ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
@@ -104,6 +114,11 @@ export const takePlayTiming = src => {
 export const markAutoStart = () => {
   if (functionByName('getState', '') === 'idle' && !_t.switched) _t.autoNext = true;
 };
+
+// The page itself moves on to the next file while playing (a My-playlist clip reached its end): that start is "auto", like after `complete`.
+// Not in _t: the late stop of the current segment can take (reset) it before the next file's playlistItem.
+let _advance = false;
+export const markAutoNext = () => void (_advance = true);
 
 const PLAYER_EVENTS = [
   'ready',
@@ -143,11 +158,12 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   // Chronicles playback timing (separate listeners; JWP allows many per event).
-  player.on('beforePlay', () => {     // play intent = a new segment, even if the last one's stop wasn't taken
+  player.on('beforePlay', () => {     // play intent = a new segment (one whose stop wasn't taken yet is kept for that late stop)
     if (['playing', 'buffering'].includes(player.getState())) return;   // e.g. a 2nd play() while starting: no new intent
-    _t = { src: _t.src, trigger: _t.autoNext ? 'auto' : 'user', intentAt: performance.now() };
+    replace({ src: _t.src, trigger: _t.autoNext ? 'auto' : 'user', intentAt: performance.now() });
   });
   player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
+  player.on('play', () => void (_t.played = true));   // a player-play is appended for this segment
   player.on('firstFrame', () => {    // not JWP's loadTime: it restarts at every play() call; a seek's frame while paused isn't a start
     if (_t.intentAt != null && player.getState() === 'playing') _t.ff = Math.round(performance.now() - _t.intentAt);
   });
@@ -177,11 +193,12 @@ export const init   = (dispatch, deviceInfo) => {
     const state = player.getState();
     // The page's own start: JWP playing the next unit after `complete`, or the HLS autoplay on page load (idle).
     // Not a reload after a user switch (audio/video) while playing or paused.
-    _t = {
+    replace({
       src     : e.item.file,
-      autoNext: state === 'complete' || (hls && state === 'idle'),
-      switched: ['playing', 'paused'].includes(state)
-    };
+      autoNext: _advance || state === 'complete' || (hls && state === 'idle'),
+      switched: !_advance && ['playing', 'paused'].includes(state)
+    });
+    _advance = false;
     if (hls) player.play();
   });
 

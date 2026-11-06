@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import { seek, pause } from './adapter';
+import { seek, pause, markAutoNext } from './adapter';
 import { noop } from '../../helpers/utils';
 import { stringify } from '../../helpers/url';
 import {
@@ -39,8 +39,10 @@ const BehaviorStartStopSliceMy = () => {
       if (d.currentTime < end) return;
       jwp.off('time', checkStopTime);
 
-      if (link) navigate(link);
-      else pause();
+      if (link) {
+        markAutoNext();   // the page's own move to the next clip
+        navigate(link);
+      } else pause();
     };
 
     seek(start);
