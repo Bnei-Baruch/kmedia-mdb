@@ -72,7 +72,7 @@ export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 // Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
 // click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (intent -> JWP firstFrame, once per file),
-// rebuffering (stalls after the start, seeks excluded) and start_trigger (auto = the page's own play, user = the rest).
+// rebuffering (stalls after the start, seeks excluded) and start_trigger (user = within seconds of a user gesture: click, key; auto = the rest, e.g. the page's own play).
 // performance.now() based. See init() below.
 let _t    = {};
 let _prev = {};   // a segment that a new file or play intent replaced before its stop took it (that stop comes late)
@@ -96,7 +96,7 @@ export const takePlayTiming = (src, late = false) => {
   const t = late && _prev.src === src ? _prev : _t;
   if (t.src !== src) return {};
   const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = t;
-  if (intentAt == null && !started) return {};   // nothing to report: keep the flags (autoNext, switched, seeking)
+  if (intentAt == null && !started) return {};   // nothing to report: keep the flags (seeking)
   if (t === _t) _t = { src };
   _prev = {};   // also a stale one: a normal stop came after the next play intent (sub-frame pause+play)
   return {
@@ -108,17 +108,8 @@ export const takePlayTiming = (src, late = false) => {
   };
 };
 
-// The page's own seek/play (BehaviorStartPlay, BehaviorStartStopSlice's clip start) is about to start an idle player: its beforePlay is "auto".
-// Not when paused: a seek there fires no beforePlay, and the mark would stick to the user's next play.
-// Not after a user switch (audio/video, another unit) while playing or paused: that start is the user's.
-export const markAutoStart = () => {
-  if (functionByName('getState', '') === 'idle' && !_t.switched) _t.autoNext = true;
-};
-
-// The page itself moves on to the next file while playing (a My-playlist clip reached its end): that start is "auto", like after `complete`.
-// Not in _t: the late stop of the current segment can take (reset) it before the next file's playlistItem.
-let _advance = false;
-export const markAutoNext = () => void (_advance = true);
+// The browser knows if a user gesture (click, key) came in the last seconds: then the play is the user's. No API: user.
+const startTrigger = () => (navigator.userActivation?.isActive === false ? 'auto' : 'user');
 
 const PLAYER_EVENTS = [
   'ready',
@@ -160,7 +151,7 @@ export const init   = (dispatch, deviceInfo) => {
   // Chronicles playback timing (separate listeners; JWP allows many per event).
   player.on('beforePlay', () => {     // play intent = a new segment (one whose stop wasn't taken yet is kept for that late stop)
     if (['playing', 'buffering'].includes(player.getState())) return;   // e.g. a 2nd play() while starting: no new intent
-    replace({ src: _t.src, trigger: _t.autoNext ? 'auto' : 'user', intentAt: performance.now() });
+    replace({ src: _t.src, trigger: startTrigger(), intentAt: performance.now() });
   });
   player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
   player.on('play', () => void (_t.played = true));   // a player-play is appended for this segment
@@ -190,15 +181,7 @@ export const init   = (dispatch, deviceInfo) => {
 
   player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
     const hls   = e.item.sources[0]?.type.toLowerCase() === 'hls';
-    const state = player.getState();
-    // The page's own start: JWP playing the next unit after `complete`, or the HLS autoplay on page load (idle).
-    // Not a reload after a user switch (audio/video) while playing or paused.
-    replace({
-      src     : e.item.file,
-      autoNext: _advance || state === 'complete' || (hls && state === 'idle'),
-      switched: !_advance && ['playing', 'paused'].includes(state)
-    });
-    _advance = false;
+    replace({ src: e.item.file });
     if (hls) player.play();
   });
 
