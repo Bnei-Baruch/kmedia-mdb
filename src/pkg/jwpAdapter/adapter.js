@@ -97,8 +97,8 @@ export const takePlayTiming = (src, late = false) => {
   if (t.src !== src) return {};
   const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = t;
   if (intentAt == null && !started) return {};   // nothing to report: keep the flags (autoNext, switched, seeking)
-  if (t === _prev) _prev = {};
-  else _t = { src };
+  if (t === _t) _t = { src };
+  _prev = {};   // also a stale one: a normal stop came after the next play intent (sub-frame pause+play)
   return {
     start_trigger: trigger,
     ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
