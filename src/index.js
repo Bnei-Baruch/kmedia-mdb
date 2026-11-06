@@ -18,7 +18,8 @@ import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
+import { DEFAULT_UI_LANGUAGE, KC_BOT_USER_NAME } from './helpers/consts';
+import { getLanguageLocaleWORegion } from './helpers/i18n-utils';
 import logger from './helpers/logger';
 import i18n, { initializeI18n } from './helpers/i18nnext';
 import createStore from './redux/createStore';
@@ -51,7 +52,7 @@ function hydrateApp(kcInfo) {
 
   // Initialize moment global locale to default language
   const language = i18nData.initialLanguage ?? DEFAULT_UI_LANGUAGE;
-  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  moment.locale(getLanguageLocaleWORegion(language));
 
   initializeI18n().then(() => {
     const deviceInfo       = new UAParser().getResult();
