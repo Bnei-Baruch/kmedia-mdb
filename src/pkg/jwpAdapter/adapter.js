@@ -154,7 +154,7 @@ export const init   = (dispatch, deviceInfo) => {
     replace({ src: _t.src, trigger: startTrigger(), intentAt: performance.now() });
   });
   player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
-  player.on('play', () => void (_t.played = true));   // a player-play is appended for this segment
+  player.on('play', () => void (_t.played = true));   // this segment started playing (AppendChronicle sends its player-play)
   player.on('firstFrame', () => {    // not JWP's loadTime: it restarts at every play() call; a seek's frame while paused isn't a start
     if (_t.intentAt != null && player.getState() === 'playing') _t.ff = Math.round(performance.now() - _t.intentAt);
   });
@@ -180,7 +180,7 @@ export const init   = (dispatch, deviceInfo) => {
   });
 
   player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
-    const hls   = e.item.sources[0]?.type.toLowerCase() === 'hls';
+    const hls = e.item.sources[0]?.type.toLowerCase() === 'hls';
     replace({ src: e.item.file });
     if (hls) player.play();
   });
