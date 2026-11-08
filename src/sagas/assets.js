@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import logger from '../logger/logger.js';
@@ -89,6 +89,19 @@ function* fetchTimeCode(action) {
   }
 }
 
+function* fetchMarkup(action) {
+  const uid = action.payload;
+
+  try {
+    const { data } = yield call(Api.getLessonMarkup, uid);
+    if (!Array.isArray(data?.chapters)) throw new Error('invalid markup');
+    yield put(actions.fetchMarkupSuccess({ uid, data }));
+  } catch (e) {
+    // 404 / network error = lesson has no markup; the page stays unchanged
+    yield put(actions.fetchMarkupFailure({ uid, err: e?.message || 'error' }));
+  }
+}
+
 function* mergeKiteiMakor(action) {
   const { id, language } = action.payload;
 
@@ -128,6 +141,10 @@ function* watchFetchTimeCode() {
   yield takeLatest([types['assets/fetchTimeCode']], fetchTimeCode);
 }
 
+function* watchFetchMarkup() {
+  yield takeEvery(types['assets/fetchMarkup'], fetchMarkup);
+}
+
 function* watchMergeKiteiMakor() {
   yield takeLatest(types['assets/mergeKiteiMakor'], mergeKiteiMakor);
 }
@@ -140,5 +157,6 @@ export const sagas = [
   watchFetchPerson,
   watchFetchAbout,
   watchFetchTimeCode,
+  watchFetchMarkup,
   watchMergeKiteiMakor
 ];

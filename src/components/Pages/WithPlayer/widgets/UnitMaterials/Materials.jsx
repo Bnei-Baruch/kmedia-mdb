@@ -32,6 +32,8 @@ import {
 import TranscriptionTab from './Transcription/TranscriptionTab';
 import ArticleTab from './Article/ArticleTab';
 import ResearchTab from './Research/ResearchTab';
+import useLessonMarkup from '../LessonFlow/useLessonMarkup';
+import LessonFlowChapters from '../LessonFlow/LessonFlowChapters';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -54,6 +56,7 @@ const Materials = () => {
   const { cuId, isSingleMedia, isMy } = useSelector(playlistGetInfoSelector);
   const unit                          = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
   const contentLanguages              = useSelector(settingsGetContentLanguagesSelector);
+  const markup                        = useLessonMarkup();
 
   if (!unit) return null;
 
@@ -104,6 +107,14 @@ const Materials = () => {
       };
 
     items.unshift(item);
+
+    if (markup) {
+      items.unshift({
+        name     : 'lesson-flow',
+        label    : t('lesson-flow.header'),
+        component: <LessonFlowChapters markup={markup} className="max-h-[60vh]"/>
+      });
+    }
   }
 
   if (derivedTexts[CT_ARTICLE]) {
@@ -133,7 +144,8 @@ const Materials = () => {
     }
   }
 
-  return <TabsMenu items={items.filter(x => !!x)}/>;
+  // remount when markup arrives so "lesson flow" becomes the default tab
+  return <TabsMenu key={markup ? 'flow' : 'plain'} items={items.filter(x => !!x)}/>;
 };
 
 Materials.propTypes = {

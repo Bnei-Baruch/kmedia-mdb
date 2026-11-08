@@ -10,6 +10,9 @@ import { getEmbedFromQuery, EMBED_TYPE_PLAYER, EMBED_TYPE_PLAYLIST } from '../..
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
+import useLessonMarkup from '../widgets/LessonFlow/useLessonMarkup';
+import LessonFlowPanel from '../widgets/LessonFlow/LessonFlowPanel';
+import NowNext from '../widgets/LessonFlow/NowNext';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobile } = useContext(DeviceInfoContext);
@@ -17,6 +20,7 @@ const PlaylistPage = ({ playerContainer }) => {
   const { isReady } = useSelector(playlistGetInfoSelector);
   const { cuId } = useSelector(playlistGetInfoSelector);
   const { embed, type } = getEmbedFromQuery(location);
+  const markup          = useLessonMarkup();
 
   if (embed && type === EMBED_TYPE_PLAYER) return playerContainer;
   if (type === EMBED_TYPE_PLAYLIST) {
@@ -33,6 +37,7 @@ const PlaylistPage = ({ playerContainer }) => {
       <div className='avbox__main'>
         <PlaylistHeader />
         {isReady && playerContainer}
+        {isReady && markup && <NowNext markup={markup} />}
         <div id="unit_container">
           <Info />
           <Materials />
@@ -41,9 +46,26 @@ const PlaylistPage = ({ playerContainer }) => {
       {
         !isMobile && (
           <div className="avbox__aside">
-            {isReady && <PlaylistItems />}
-            <div className="h-[30px]" />
-            {isReady && <Recommended cuId={cuId} filterOutUnits={[]} />}
+            {
+              isReady && markup ? (
+                <LessonFlowPanel
+                  markup={markup}
+                  playlist={(
+                    <>
+                      <PlaylistItems />
+                      <div className="h-[30px]" />
+                      <Recommended cuId={cuId} filterOutUnits={[]} />
+                    </>
+                  )}
+                />
+              ) : (
+                <>
+                  {isReady && <PlaylistItems />}
+                  <div className="h-[30px]" />
+                  {isReady && <Recommended cuId={cuId} filterOutUnits={[]} />}
+                </>
+              )
+            }
           </div>
         )
       }

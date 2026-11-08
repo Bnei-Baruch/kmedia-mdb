@@ -6,6 +6,7 @@ ARG personal_api_url="https://kabbalahmedia.info/backend/my/"
 ARG chronicles_url="https://chronicles.kli.one/"
 ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
+ARG ai_trns_backend="https://ai-tools.kab.info/ai-trns/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
 # FROM bneibaruch/kmedia_base:30 AS build
@@ -22,6 +23,7 @@ ARG personal_api_url
 ARG chronicles_url
 ARG file_trimmer_api_url
 ARG mdb_rest_api_url
+ARG ai_trns_backend
 ARG kc_api_url
 
 WORKDIR /app
@@ -40,6 +42,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
     REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
     REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url} \
+    REACT_APP_AI_TRNS_BACKEND=${ai_trns_backend} \
     REACT_KC_API_URL=${kc_api_url}
 
 COPY . .
@@ -59,6 +62,7 @@ ARG personal_api_url
 ARG chronicles_url
 ARG file_trimmer_api_url
 ARG mdb_rest_api_url
+ARG ai_trns_backend
 ARG kc_api_url
 
 WORKDIR /app
@@ -78,6 +82,7 @@ ENV NODE_ENV=production \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
     REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
     REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url} \
+    REACT_APP_AI_TRNS_BACKEND=${ai_trns_backend} \
     REACT_KC_API_URL=${kc_api_url}
 
 EXPOSE 3000

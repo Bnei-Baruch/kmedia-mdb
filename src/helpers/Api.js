@@ -16,6 +16,8 @@ const PERSONAL_API_BACKEND      = process.env.REACT_APP_PERSONAL_API_BACKEND;
 const FILE_TRIMMER_API          = process.env.REACT_APP_FILE_TRIMMER_API;
 const MDB_REST_API_URL          = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
 
+const AI_TRNS_BACKEND           = process.env.REACT_APP_AI_TRNS_BACKEND;
+
 const backendUrl                      = path => `${API_BACKEND}${path}`;
 const imaginaryUrl                    = path => `${IMAGINARY_URL}${path}`;
 const feedUrl                         = path => `${API_FEED}${path}`;
@@ -268,6 +270,10 @@ class Api {
   });
 
   static getAsset = path => Requests.getAsset(path);
+
+  static getLessonMarkup = uid => axios(
+    AI_TRNS_BACKEND ? `${AI_TRNS_BACKEND}markup/${uid}` : Promise.reject(new Error('AI_TRNS_BACKEND is not defined'))
+  );
 
   static getUnzipUIDs = ({ path, ids }) => {
     const params = Requests.makeParams({ uid: ids });

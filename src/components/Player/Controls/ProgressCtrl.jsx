@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';
+import ChaptersBar from '../../Pages/WithPlayer/widgets/LessonFlow/ChaptersBar';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
 import { playerGetPlayerWidthSelector } from '../../../redux/selectors';
@@ -51,6 +52,7 @@ const Child = () => {
       <div className="controls__slider">
         <div className="slider__wrapper" ref={widthRef}>
           <SlicesBar/>
+          <ChaptersBar/>
           <ProgressBar left={left} right={right}/>
         </div>
       </div>

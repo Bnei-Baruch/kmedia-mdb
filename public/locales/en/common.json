@@ -660,6 +660,36 @@
       }
     }
   },
+  "lesson-flow": {
+    "header": "Lesson flow",
+    "playlist": "Playlist",
+    "now": "Now",
+    "next": "Next",
+    "to-current": "To current",
+    "to-text": "To text",
+    "to-text-now": "Open what is playing now in the transcript",
+    "copy-link": "Copy a link to this moment",
+    "qa": {
+      "question": "Question",
+      "follow-up": "Follow-up",
+      "answer": "Answer"
+    },
+    "show-text": "Show text",
+    "hide-text": "Hide text",
+    "no-text": "Text not available",
+    "filters": {
+      "all": "All",
+      "reading": "Reading",
+      "qa": "Questions"
+    },
+    "types": {
+      "reading": "Reading",
+      "commentary": "Explanation",
+      "qa": "Question",
+      "intro": "Introduction",
+      "other": "Other"
+    }
+  },
   "materials": {
     "summary": {
       "header": "Summary",

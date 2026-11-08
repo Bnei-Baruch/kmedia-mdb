@@ -35,9 +35,13 @@ const ContentHtml = ({ labels = EMPTY_LABELS }) => {
 
   const _needScroll = !!__html && !!srchstart && !!srchend;
   useEffect(() => {
-    const el = document.getElementById(SCROLL_SEARCH_ID);
-    el && el.scrollIntoView({ behavior: 'smooth' });
-  }, [_needScroll]);
+    // center: at the top the quote would be under the sticky text toolbar
+    const scroll = () => document.getElementById(SCROLL_SEARCH_ID)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    scroll();
+    // once more when the page has settled (player, images): on a fresh load the text still moves down
+    const timer = setTimeout(scroll, 1200);
+    return () => clearTimeout(timer);
+  }, [_needScroll, srchstart, srchend, id]);
 
   const wipErr = useTextContent();
 

@@ -9,6 +9,9 @@ import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
 import { getWipErr } from '../../../shared/WipErr/WipErr';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
+import useLessonMarkup from '../widgets/LessonFlow/useLessonMarkup';
+import LessonFlowPanel from '../widgets/LessonFlow/LessonFlowPanel';
+import NowNext from '../widgets/LessonFlow/NowNext';
 
 const SingleMediaPage = ({ playerContainer }) => {
   const { isMobile } = useContext(DeviceInfoContext);
@@ -17,6 +20,7 @@ const SingleMediaPage = ({ playerContainer }) => {
   const { embed } = getEmbedFromQuery(location);
   const { isReady } = useSelector(playlistGetInfoSelector);
   const { cuId } = useSelector(playlistGetInfoSelector);
+  const markup   = useLessonMarkup();
 
   if (embed) return playerContainer;
   if (!isReady) return getWipErr(!isReady, null);
@@ -28,6 +32,7 @@ const SingleMediaPage = ({ playerContainer }) => {
           <div>
             {playerContainer}
           </div>
+          {markup && <NowNext markup={markup} />}
           <div>
             <div className="avbox__unit">
               <Info />
@@ -38,7 +43,11 @@ const SingleMediaPage = ({ playerContainer }) => {
         {
           !isMobile && (
             <div className="avbox__aside">
-              <Recommended cuId={cuId} />
+              {
+                markup
+                  ? <LessonFlowPanel markup={markup} playlist={<Recommended cuId={cuId} />} />
+                  : <Recommended cuId={cuId} />
+              }
             </div>
           )
         }

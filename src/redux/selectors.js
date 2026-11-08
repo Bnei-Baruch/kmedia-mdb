@@ -206,6 +206,7 @@ export const assetsGetDoc2htmlByIdSelector    = createSelector([getAssets], a =>
 export const assetsGetPersonSelector          = createSelector([getAssets], a => assetsSel.getPerson(a));
 export const assetsGetAboutSelector           = createSelector([getAssets], a => assetsSel.getAbout(a));
 export const assetsGetMergeStatusSelector     = createSelector([getAssets], a => assetsSel.getMergeStatus(a));
+export const assetsGetMarkupByIdSelector      = createSelector([getAssets], a => assetsSel.getMarkupById(a));
 export const assetsNestedGetZipByIdSelector   = createSelector([getAssets], a => assetsSel.nestedGetZipById(a));
 export const assetsGetTimeCodeSelector        = createSelector([getAssets], a => assetsSel.getTimeCode(a));
 

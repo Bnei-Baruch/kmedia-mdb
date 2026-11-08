@@ -23,7 +23,8 @@ const initialState = {
     err : null
   },
   timeCode       : {},
-  mergedStatus   : {}
+  mergedStatus   : {},
+  markupById     : {}
 };
 
 const buildKey = (uid, lang) => `${uid}_${lang}`;
@@ -178,6 +179,20 @@ const assetsSlice = createSlice({
         state.timeCode[index]         = tc;
       }
     },
+    fetchMarkup           : (state, { payload: uid }) => {
+      state.markupById ||= {};
+      state.markupById[uid] = { wip: true, data: null, err: null };
+    },
+    fetchMarkupSuccess    : (state, { payload }) => {
+      const { uid, data }   = payload;
+      state.markupById ||= {};
+      state.markupById[uid] = { wip: false, data, err: null };
+    },
+    fetchMarkupFailure    : (state, { payload }) => {
+      const { uid, err }    = payload;
+      state.markupById ||= {};
+      state.markupById[uid] = { wip: false, data: null, err };
+    },
     mergeKiteiMakor       : (state, { payload }) => {
       const { id, language }                     = payload;
       state.mergedStatus[buildKey(id, language)] = 'wip';
@@ -204,6 +219,7 @@ const assetsSlice = createSlice({
     getPerson         : state => state.person,
     getAbout          : state => state.about,
     getTimeCode       : state => state.timeCode,
+    getMarkupById     : state => state.markupById || {},
     getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]
   }
 });

@@ -659,6 +659,36 @@
       }
     }
   },
+  "lesson-flow": {
+    "header": "מהלך השיעור",
+    "playlist": "רשימת השמעה",
+    "now": "עכשיו",
+    "next": "הבא",
+    "to-current": "לקטע הנוכחי",
+    "to-text": "לטקסט",
+    "to-text-now": "פתח בתמלול את מה שמושמע עכשיו",
+    "copy-link": "העתק קישור לרגע הזה",
+    "qa": {
+      "question": "שאלה",
+      "follow-up": "שאלת המשך",
+      "answer": "תשובה"
+    },
+    "show-text": "הצג טקסט",
+    "hide-text": "הסתר טקסט",
+    "no-text": "הטקסט אינו זמין",
+    "filters": {
+      "all": "הכול",
+      "reading": "קריאה",
+      "qa": "שאלות"
+    },
+    "types": {
+      "reading": "קריאה",
+      "commentary": "הסבר",
+      "qa": "שאלה",
+      "intro": "פתיחה",
+      "other": "אחר"
+    }
+  },
   "materials": {
     "summary": {
       "header": "תקציר",
