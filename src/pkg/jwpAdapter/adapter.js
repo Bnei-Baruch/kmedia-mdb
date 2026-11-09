@@ -108,6 +108,9 @@ export const takePlayTiming = (src, late = false) => {
   };
 };
 
+// A new play intent or file replaced this file's segment before its stop took it (its stop comes late).
+export const wasReplaced = src => _prev.src === src;
+
 // The browser knows if a user gesture (click, key) came in the last seconds: then the play is the user's. No API: user.
 const startTrigger = () => (navigator.userActivation?.isActive === false ? 'auto' : 'user');
 

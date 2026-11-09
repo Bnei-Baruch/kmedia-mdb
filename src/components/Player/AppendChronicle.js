@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { filenameExtension, usePrevious } from '../../helpers/utils';
-import { getDuration, getMute, takePlayTiming } from '../../pkg/jwpAdapter/adapter';
+import { getDuration, getMute, takePlayTiming, wasReplaced } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
 import {
   chroniclesGetEventSelector,
@@ -69,7 +69,10 @@ const AppendChronicle = () => {
   useEffect(() => {
     if (!isPlayerReady || !event || event === prevEvent) return;
     if (event === 'player-stop' && !open.current) return;                                 // no play to stop: already stopped
-    if (event === 'player-play' && open.current) appendLateStop(chronicles, autoPlay, open);   // the last play's stop was lost
+    if (event === 'player-play' && open.current) {
+      if (!wasReplaced(file?.src)) return;                                               // the open play goes on (JWP play after a stall or seek)
+      appendLateStop(chronicles, autoPlay, open);                                        // the last play's stop was lost
+    }
 
     const data           = buildAppendData(autoPlay, item, file, event);
     const _defaultUnload = (event === 'player-play') ? () => chronicles.append('player-stop', buildAppendData(autoPlay, item, file, 'player-stop')) : null;

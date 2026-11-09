@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import AppendChronicle from '../AppendChronicle';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 
-let mockState;
+let mockState, mockReplaced;
 jest.mock('react-redux', () => ({ ...jest.requireActual('react-redux'), useSelector: selector => selector(mockState) }));
 jest.mock('../../../redux/selectors', () => ({
   chroniclesGetEventSelector: s => s.event,
@@ -16,7 +16,8 @@ jest.mock('../../../redux/selectors', () => ({
 jest.mock('../../../pkg/jwpAdapter/adapter', () => ({
   getDuration   : () => 0,
   getMute       : () => false,
-  takePlayTiming: (src, late) => ({ start_trigger: late ? 'late' : 'on time' })
+  takePlayTiming: (src, late) => ({ start_trigger: late ? 'late' : 'on time' }),
+  wasReplaced   : () => mockReplaced
 }));
 jest.mock('../helper', () => ({ getSavedTime: () => 0 }));
 
@@ -32,7 +33,8 @@ const step       = s => {
 };
 
 beforeEach(() => {
-  appends   = [];
+  appends      = [];
+  mockReplaced = true;
   mockState = { event: null, file: A, item: { id: 'u' }, ready: true };
   ({ rerender } = render(ui()));
 });
@@ -65,4 +67,13 @@ test('a stop without a play is dropped; a play whose stop was lost is stopped be
   step({ event: 'player-stop', ready: false });            // lost: player not ready
   step({ event: 'player-play', ready: true });             // same file plays again
   expect(appends).toEqual(['player-play a', 'player-stop a late', 'player-play a']);
+});
+
+test('a play event while the open play goes on (JWP play after a stall, a mute before it) appends nothing', () => {
+  step({ event: 'player-play' });
+  step({ event: 'mute-unmute' });
+  mockReplaced = false;                                    // no new play intent: the same play
+  step({ event: 'player-play' });
+  step({ event: 'player-stop' });
+  expect(appends).toEqual(['player-play a', 'mute-unmute a', 'player-stop a on time']);
 });

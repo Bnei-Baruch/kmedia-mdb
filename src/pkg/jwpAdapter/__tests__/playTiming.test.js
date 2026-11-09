@@ -1,4 +1,6 @@
 import { init, takePlayTiming } from '../adapter';
+import chronicles from '../../../redux/modules/chronicles';
+import { actions as player } from '../../../redux/modules/player';
 
 const STATE_BY_EVENT = { play: 'playing', buffer: 'buffering', pause: 'paused', idle: 'idle', complete: 'complete' };
 
@@ -324,4 +326,20 @@ test('without the userActivation API every start is user', () => {
   at(300, 'play');
   at(550, 'time');
   expect(takePlayTiming('a.m3u8')).toMatchObject({ start_trigger: 'user' });
+});
+
+test('the end of the file stops the play; a replay is its own segment', () => {
+  expect(chronicles(undefined, player.playerComplete()).event).toBe('player-stop');
+  click(0);
+  at(200, 'play');
+  at(200, 'time');
+  at(1000, 'buffer');
+  at(1500, 'play');
+  at(1500, 'time');
+  at(9000, 'complete');
+  expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 200, rebuffer_count: 1, rebuffer_ms: 500 });
+  click(20000);
+  at(20050, 'play');
+  at(20050, 'time');
+  expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 50, rebuffer_count: 0, rebuffer_ms: 0 });
 });
