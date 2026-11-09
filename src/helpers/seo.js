@@ -28,6 +28,7 @@ export const canonicalPath = (originalUrl, lang) => {
   if (lang && (path === `/${lang}` || path.startsWith(`/${lang}/`))) {
     path = path.substring(lang.length + 1);
   }
+
   path = path.replace(/^\/+|\/+$/g, '');
 
   const gr = /(.+)\/gr-(.+)$/.exec(path);
@@ -75,5 +76,6 @@ export const compact = obj => {
     });
     return out;
   }
+
   return obj;
 };

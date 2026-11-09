@@ -13,7 +13,6 @@ import { wholeSimpleMode } from '../../redux/api/simpleMode';
 import { actions } from '../../redux/modules/settings';
 import {
   settingsGetContentLanguagesSelector,
-  settingsGetLeftRightByDirSelector,
   settingsGetShowAllContentSelector,
   settingsGetUIDirSelector,
   settingsGetUILangSelector,
@@ -34,7 +33,6 @@ const HandleLanguages = () => {
   const urlLang = useSelector(settingsGetUrlLangSelector);
   const origUILang = useSelector(state => settingsGetUILangSelector(state, true /* skipUrl */));
   const uiDir = useSelector(settingsGetUIDirSelector);
-  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
   const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
   const popupStyle = { direction: uiDir };
   const dispatch = useDispatch();

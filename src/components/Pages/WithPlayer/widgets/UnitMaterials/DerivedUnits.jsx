@@ -5,7 +5,7 @@ const DerivedUnits = ({ selectedUnits }) => (
     {
       selectedUnits
         .filter(x => !!x)
-        .map((unit, i) => <ContentItem id={unit.id} key={unit.id} asList={true} withCCUInfo={true} size="sm" />)
+        .map(unit => <ContentItem id={unit.id} key={unit.id} asList={true} withCCUInfo={true} size="sm" />)
     }
   </div>
 );

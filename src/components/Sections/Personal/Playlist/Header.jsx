@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Dialog } from '@headlessui/react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import { PlaylistPlay as PlaylistPlayIcon } from '../../../../images/icons';
 import { useSelector } from 'react-redux';
@@ -16,7 +15,6 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist }) => {
   const [name, setName] = useState();
   const [confirm, setConfirm] = useState();
 
-  const { isMobile } = useContext(DeviceInfoContext);
   const uiDir = useSelector(settingsGetUIDirSelector);
 
   const handleChangeName = e => setName(e.target.value);

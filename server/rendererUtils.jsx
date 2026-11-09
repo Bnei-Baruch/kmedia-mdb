@@ -5,7 +5,6 @@ import pick from 'lodash/pick';
 import { setDayjsLocale } from '../src/helpers/dayjs';
 import path from 'path';
 import { PassThrough } from 'stream';
-import React from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
 import serialize from 'serialize-javascript';
@@ -41,6 +40,7 @@ import { fetchSQData } from '../src/sagas/mdb';
 import buildRoutes from '../src/route/routes';
 
 const initializeI18nBackend = async uiLang => {
+  // eslint-disable-next-line import/no-named-as-default-member -- named export is unbound
   const i18n = i18next.createInstance();
   await i18n.use(i18nextBackend).init({
     ...options,
@@ -84,7 +84,9 @@ function renderToBuffer(element) {
     writable.on('error', reject);
 
     const { pipe } = renderToPipeableStream(element, {
-      onAllReady() { pipe(writable); },
+      onAllReady() {
+        pipe(writable);
+      },
       onError: reject,
       // Everything is ready before piping, so inline every Suspense boundary.
       // With the default (~12.8KB) React outlines big boundaries into <div hidden id="S:0">
@@ -107,9 +109,13 @@ function pipeToResponse(element, res, suffix) {
     pt.on('error', reject);
 
     const { pipe } = renderToPipeableStream(element, {
-      onShellReady() { pipe(pt); },
+      onShellReady() {
+        pipe(pt);
+      },
       onShellError: reject,
-      onError(error) { logger.error(NAMESPACE, 'stream render error', error); },
+      onError(error) {
+        logger.error(NAMESPACE, 'stream render error', error);
+      },
     });
   });
 }
@@ -141,6 +147,7 @@ const awaitDataPromises = async promises => {
     logger.error(NAMESPACE, 'SSR promises error', fatal);
     throw fatal;
   }
+
   logger.info(NAMESPACE, 'RTK queries prepared', failures.length ? '(not found)' : '');
   return failures.length > 0;
 };
@@ -162,6 +169,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Error initializing i18n backend', error);
     throw error;
   }
+
   t.mark('i18n init');
 
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
@@ -215,6 +223,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Root saga error', error);
     throw error;
   }
+
   t.mark('root saga');
 
   const deviceInfo = prepareDeviceInfo(req);
@@ -279,13 +288,13 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   res.setHeader('Transfer-Encoding', 'chunked');
 
   const headCloseIdx = htmlData.indexOf('</head>');
-  const headHtml = htmlData
-      .slice(0, headCloseIdx)
-      .replace('<html lang="en">', `<html lang="${uiLang}" dir="${direction}">`)
+  const headHtml = `${htmlData
+    .slice(0, headCloseIdx)
+    .replace('<html lang="en">', `<html lang="${uiLang}" dir="${direction}">`)
     + canonicalLink(req, uiLang)
     + alternateLinks(req, uiLang)
     + ogUrl(req, uiLang)
-    + '</head>';
+     }</head>`;
 
   res.write(headHtml);
   res.write('<body>');
@@ -299,6 +308,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Error initializing i18n backend', error);
     throw error;
   }
+
   t.mark('i18n init');
 
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
@@ -351,6 +361,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
     logger.error(NAMESPACE, 'Root saga error', error);
     throw error;
   }
+
   t.mark('root saga');
 
   // Phase 3: serialize store + i18n for client hydration
@@ -406,10 +417,10 @@ export function canonicalLink(req, lang) {
 // see https://yoast.com/hreflang-ultimate-guide/
 export function alternateLinks(req, lang) {
   const cPath = canonicalPath(req.originalUrl, lang);
-  return LANG_UI_LANGUAGES.map(x => {
+  return `${LANG_UI_LANGUAGES.map(x => {
     const l = getLanguageLocaleWORegion(x);
     return `<link rel="alternate" href="${escapeAttr(absoluteUrl(x, cPath))}" hreflang="${l}" />`;
-  }).join('') + `<link rel="alternate" href="${escapeAttr(absoluteUrl('', cPath))}" hreflang="x-default" />`;
+  }).join('')  }<link rel="alternate" href="${escapeAttr(absoluteUrl('', cPath))}" hreflang="x-default" />`;
 }
 
 export function ogUrl(req, lang) {

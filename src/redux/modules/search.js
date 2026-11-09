@@ -150,7 +150,8 @@ const searchSlice = createSlice({
       state.pageNo          = 1;
     },
     reasoningStatusUpdate: (state, { payload }) => {
-      const { searchType, ...status } = payload || {};
+      const status = { ...payload };
+      delete status.searchType;
       const reasoningState = getReasoningSearchStateForUpdate(state);
       reasoningState.status = {
         ...status,

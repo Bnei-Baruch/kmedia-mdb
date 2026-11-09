@@ -6,6 +6,7 @@ import { options } from '../src/helpers/i18nnext.js';
 
 const _dirname = typeof __dirname !== 'undefined' ? __dirname : '';
 
+// eslint-disable-next-line import/no-named-as-default-member -- named `use` is unbound
 i18next
   .use(i18nextBackend)
   .init({

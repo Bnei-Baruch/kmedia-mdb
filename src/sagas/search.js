@@ -129,7 +129,7 @@ export function* recoverFollowupRequest(originalQuery, followupQuery, uiLang, de
       is_rapid   : originalIsRapid
     });
     cacheData = cacheResponse?.data;
-  } catch (_) {
+  } catch {
     cacheData = null;
   }
 
@@ -462,7 +462,7 @@ export function* search(action) {
             is_rapid   : true
           });
           cacheData = cacheResponse?.data;
-        } catch (_) {
+        } catch {
           cacheData = null;
         }
 
@@ -471,7 +471,7 @@ export function* search(action) {
           if (runningSessionId && runningSessionId !== cacheSessionId) {
             try {
               yield call(Api.reasoningSearchCancel, runningSessionId);
-            } catch (_) {
+            } catch {
               // Cached result is still valid even if best-effort cancellation fails.
             }
           }
