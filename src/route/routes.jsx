@@ -48,6 +48,7 @@ const Topics              = lazy(() => import('../components/Sections/Topics/Top
 const Topic               = lazy(() => import('../components/Sections/Topics/TopicPage'));
 const AboutPage           = lazy(() => import('../components/Sections/About/AboutPage'));
 const PlaylistMy          = lazy(() => import('../components/Pages/WithPlayer/PlaylistMy/Container'));
+const PageNotFound        = lazy(() => import('../components/shared/PageNotFound'));
 
 const buildRoutes = playerContainer => ([
   { path: '', component: <HomePage/>, ssrData: ssrDataLoaders.home },
@@ -162,6 +163,8 @@ const buildRoutes = playerContainer => ([
   { path: 'likutim/:id', component: <Likut/>, ssrData: ssrDataLoaders.likutPage },
   { path: 'sketches', component: <Sketches/>, ssrData: ssrDataLoaders.programsPage },
   { path: 'about', component: <AboutPage/>, ssrData: ssrDataLoaders.aboutPage },
+  // must stay last: the server answers 404 when only this route matches (server/rendererUtils.jsx)
+  { path: '*', component: <PageNotFound/>, notFound: true },
 ]);
 
 export default buildRoutes;

@@ -71,12 +71,12 @@ async function createServer() {
         ? await import(path.resolve(__dirname, '..', 'build/server/renderer.js'))
         : await vite.ssrLoadModule('/server/renderer.js');
 
-      const { html, skipTransform } = await render(req);
+      const { html, status = 200, skipTransform } = await render(req);
       const appHtml = !isProd && !skipTransform
         ? await vite.transformIndexHtml(url, html)
         : html;
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(appHtml);
+      res.status(status).set({ 'Content-Type': 'text/html' }).end(appHtml);
     } catch (e) {
       logger.error(NAMESPACE, 'error rendering app', e);
       if (vite) vite.ssrFixStacktrace(e);

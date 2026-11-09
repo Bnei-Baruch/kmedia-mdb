@@ -25,18 +25,18 @@ export async function render(req) {
   logger.info(NAMESPACE, 'render request', url);
   if (isBot(req) || req.query.embed) {
     logger.info(NAMESPACE, 'bot/embed render', url);
-    return { html: await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } }), skipTransform: false };
+    return { ...(await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } })), skipTransform: false };
   }
 
   const cookies = cookieParse(req.headers.cookie || '');
   const isKcCallback = req.query.code && req.query.session_state;
   if (cookies.authorised || req.query.authorised || isKcCallback) {
     logger.info(NAMESPACE, 'auth render', url);
-    return { html: await renderSSR(req), skipTransform: false };
+    return { ...(await renderSSR(req)), skipTransform: false };
   }
 
   logger.info(NAMESPACE, 'anon render', url);
-  return { html: htmlDataAnon, skipTransform: true };
+  return { html: htmlDataAnon, status: 200, skipTransform: true };
 }
 
 export default async function serverRender(req, res, next) {
@@ -44,8 +44,8 @@ export default async function serverRender(req, res, next) {
   try {
     if (isBot(req) || req.query.embed) {
       logger.info(NAMESPACE, 'bot/embed render', url);
-      const html = await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } });
-      return res.send(html);
+      const { html, status } = await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } });
+      return res.status(status).send(html);
     }
 
     const cookies = cookieParse(req.headers.cookie || '');

@@ -445,7 +445,13 @@ const SearchResults = () => {
   const renderHelmet = section => {
     const title = t(`${section}.header.text`);
     const subText1 = t(`${section}.header.subtext`);
-    return <Helmets.Basic title={title} description={subText1} />;
+    // Search result pages are thin, unbounded (?q=anything) and duplicate the content pages — keep them out of the index.
+    return (
+      <>
+        <Helmets.Basic title={title} description={subText1} />
+        <Helmets.NoIndex />
+      </>
+    );
   };
 
   const renderSearchTypeSwitch = () => (

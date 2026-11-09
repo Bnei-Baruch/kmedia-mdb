@@ -10,6 +10,36 @@ export const absoluteUrl = (lang, pathname = '', search = '') => {
   return `${SITE_URL}${lang ? `${lang}/` : ''}${path}${q ? `?${q}` : ''}`;
 };
 
+// Query params that don't change the page content (player position, UI tab, auth/tracking noise).
+// Dropped from canonical, og:url and hreflang so every variant of a page collapses to one URL.
+export const NON_CANONICAL_PARAMS = ['sstart', 'send', 'language', 'ap', 'activeTab', 'authorised', 'fbclid', 'gclid'];
+const isNonCanonicalParam = key => NON_CANONICAL_PARAMS.includes(key) || key.startsWith('utm_');
+
+/**
+ * Normalized page path (no language prefix, no leading/trailing slash) + content-relevant query.
+ * Single source for <link rel=canonical>, og:url and hreflang alternates — they must always agree.
+ *   ("/en/lessons/cu/x/?sstart=10s&activeTab=sources", "en") -> "lessons/cu/x"
+ *   ("/he/lessons/gr-abc", "he")                            -> "lessons/abc"
+ */
+export const canonicalPath = (originalUrl, lang) => {
+  const [rawPath, rawQuery = ''] = `${originalUrl || ''}`.split('?');
+
+  let path = rawPath;
+  if (lang && (path === `/${lang}` || path.startsWith(`/${lang}/`))) {
+    path = path.substring(lang.length + 1);
+  }
+  path = path.replace(/^\/+|\/+$/g, '');
+
+  const gr = /(.+)\/gr-(.+)$/.exec(path);
+  if (gr) path = `${gr[1]}/${gr[2]}`;
+
+  const params = new URLSearchParams(rawQuery);
+  [...params.keys()].filter(isNonCanonicalParam).forEach(k => params.delete(k));
+  const query = params.toString();
+
+  return query ? `${path}?${query}` : path;
+};
+
 // ISO 8601 duration from seconds: 3725 -> "PT1H2M5S"
 export const isoDuration = seconds => {
   const s = Math.round(Number(seconds));

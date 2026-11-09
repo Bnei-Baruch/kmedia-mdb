@@ -290,6 +290,12 @@
   h4,
   h5 {
     line-height: 1.28571429em;
+    // Semantic UI: margin: calc(2rem - .14285714em) 0 1rem (rem = 14px there)
+    margin: calc(28px - 0.14285714em) 0 14px;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   p {

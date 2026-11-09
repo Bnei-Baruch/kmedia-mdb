@@ -1,4 +1,5 @@
 import uniq from 'lodash/uniq';
+import { NotFoundError } from '../helpers/errors';
 import dayjs from '../helpers/dayjs';
 import {
   getSummaryLanguages,
@@ -112,7 +113,7 @@ export const cuPage = async (store, match) => {
   const unit = mdbGetDenormContentUnitSelector(state, cuID);
   if (!cuID || !unit) {
     logger.error(NAMESPACE, `Error, failed fetching unit ${cuID}: ${unit}`);
-    return Promise.reject();
+    return Promise.reject(new NotFoundError(`unit ${cuID}`));
   }
 
   let activeTab = 'transcription';
@@ -237,7 +238,7 @@ export const playlistCollectionPage = (store, match) => {
     if (!cuId && !c?.cuIDs) {
       // This can happen when collection is empty (unit is not secure or published).
       console.error(`Failed fetching unit for ${cuId} for ${cID}`);
-      return Promise.reject();
+      return Promise.reject(new NotFoundError(`collection ${cID}`));
     }
 
     store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));

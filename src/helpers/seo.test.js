@@ -1,6 +1,17 @@
-import { absoluteUrl, bcp47, compact, isoDuration, seoText, SITE_URL } from './seo';
+import { absoluteUrl, bcp47, canonicalPath, compact, isoDuration, seoText, SITE_URL } from './seo';
 
 describe('seo helpers', () => {
+  test('canonicalPath strips language, slashes and non-content params', () => {
+    expect(canonicalPath('/en/lessons/cu/x?sstart=10s&send=20s&activeTab=sources', 'en')).toBe('lessons/cu/x');
+    expect(canonicalPath('/en/lessons/cu/x/?authorised=true&utm_source=fb&fbclid=1', 'en')).toBe('lessons/cu/x');
+    expect(canonicalPath('/he/search?q=zohar&page=2&language=he', 'he')).toBe('search?q=zohar&page=2');
+    expect(canonicalPath('/ru/lessons/gr-abc', 'ru')).toBe('lessons/abc');
+    expect(canonicalPath('/en/', 'en')).toBe('');
+    expect(canonicalPath('/en', 'en')).toBe('');
+    // a path that merely starts with the language letters is not a prefix
+    expect(canonicalPath('/events/x', 'ev')).toBe('events/x');
+  });
+
   test('isoDuration', () => {
     expect(isoDuration(3674)).toBe('PT1H1M14S');
     expect(isoDuration(60)).toBe('PT1M');

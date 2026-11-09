@@ -5,7 +5,6 @@ import pick from 'lodash/pick';
 import { setDayjsLocale } from '../src/helpers/dayjs';
 import path from 'path';
 import { PassThrough } from 'stream';
-import qs from 'qs';
 import React from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
@@ -26,7 +25,8 @@ import {
 import { getDeviceInfo } from '../src/helpers/deviceInfo';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
-import { isEmpty } from '../src/helpers/utils';
+import { absoluteUrl, canonicalPath } from '../src/helpers/seo';
+import { isNotFoundError } from '../src/helpers/errors';
 import { backendApi } from '../src/redux/api/backendApi';
 import { wholeMusic } from '../src/redux/api/music';
 import { wholeSimpleMode } from '../src/redux/api/simpleMode';
@@ -131,6 +131,20 @@ export const getPromises = (store, originalUrl, { route, params }) => {
     : Promise.resolve(null);
 };
 
+// Waits for all SSR data loaders. Returns true when one reported a missing entity (NotFoundError);
+// any other failure is rethrown (-> 500).
+const awaitDataPromises = async promises => {
+  const results  = await Promise.allSettled(promises);
+  const failures = results.filter(r => r.status === 'rejected').map(r => r.reason);
+  const fatal    = failures.find(e => !isNotFoundError(e));
+  if (fatal) {
+    logger.error(NAMESPACE, 'SSR promises error', fatal);
+    throw fatal;
+  }
+  logger.info(NAMESPACE, 'RTK queries prepared', failures.length ? '(not found)' : '');
+  return failures.length > 0;
+};
+
 export const prepareDeviceInfo = req => getDeviceInfo(req.get('user-agent'));
 
 // Full SSR pipeline shared by bot and auth renderers.
@@ -189,13 +203,9 @@ export async function renderSSR(req, extraInitialState = {}) {
   promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
   t.mark(`dispatch data fetches (${promises.length})`);
 
-  try {
-    await Promise.all(promises);
-    logger.info(NAMESPACE, 'RTK queries prepared');
-  } catch (error) {
-    logger.error(NAMESPACE, 'SSR promises error', error);
-    throw error;
-  }
+  // A missing entity (NotFoundError) still renders the page, but with HTTP 404; the catch-all route is a 404 too.
+  let status = branch.some(b => b.route.notFound) ? 404 : 200;
+  if (await awaitDataPromises(promises)) status = 404;
   t.mark('await data fetches');
 
   try {
@@ -253,7 +263,7 @@ export async function renderSSR(req, extraInitialState = {}) {
 
   t.mark('html assembly + serialize');
   logger.log(NAMESPACE, 'rendered html');
-  return html;
+  return { html, status };
 }
 
 // Streaming SSR: sends <head> (CSS) immediately, fetches data, then streams body.
@@ -330,13 +340,8 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   promises.push(store.sagaMiddleWare.run(fetchSQData).toPromise());
   t.mark(`dispatch data fetches (${promises.length})`);
 
-  try {
-    await Promise.all(promises);
-    logger.info(NAMESPACE, 'RTK queries prepared');
-  } catch (error) {
-    logger.error(NAMESPACE, 'SSR promises error', error);
-    throw error;
-  }
+  // Headers are already sent: a missing entity can't change the status here, just keep rendering.
+  await awaitDataPromises(promises);
   t.mark('await data fetches');
 
   try {
@@ -389,66 +394,24 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   });
 }
 
+// canonical, og:url and hreflang are all built from the same canonicalPath() so they always agree.
+const escapeAttr = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+// Self-referencing canonical: each language version is its own page (tied together by hreflang).
 // see https://yoast.com/rel-canonical/
 export function canonicalLink(req, lang) {
-  let cPath = req.originalUrl;
-  if (lang && cPath.startsWith(`/${lang}`)) {
-    cPath = cPath.substring(3);
-  }
-
-  const s = cPath.split('?');
-  cPath = s[0];
-
-  if (cPath.startsWith('/')) {
-    cPath = cPath.substring(1);
-  }
-  if (cPath.endsWith('/')) {
-    cPath = cPath.substring(0, cPath.length - 1);
-  }
-
-  if (s.length > 1) {
-    const q = qs.parse(s[1]);
-    delete q.sstart;
-    delete q.send;
-    delete q.language;
-    delete q.ap;
-    if (!isEmpty(q)) {
-      cPath = `${cPath}?${qs.stringify(q)}`;
-    }
-  }
-
-  if (/\/gr-/.test(cPath)) {
-    const result = /(.+)\/gr-(.+)$/.exec(cPath);
-    cPath = `${result[1]}/${result[2]}`;
-  }
-
-  // Self-referencing canonical: each language version is its own page (tied together by hreflang).
-  // Without the language prefix it pointed to a URL that 307-redirects by Accept-Language.
-  return `<link rel="canonical" href="${BASE_URL}${lang ? `${lang}/` : ''}${cPath}" />`;
+  return `<link rel="canonical" href="${escapeAttr(absoluteUrl(lang, canonicalPath(req.originalUrl, lang)))}" />`;
 }
 
 // see https://yoast.com/hreflang-ultimate-guide/
 export function alternateLinks(req, lang) {
-  let aPath = req.originalUrl;
-  if (lang && aPath.startsWith(`/${lang}`)) {
-    aPath = aPath.substring(3);
-  }
-  if (aPath.startsWith('/')) {
-    aPath = aPath.substring(1);
-  }
+  const cPath = canonicalPath(req.originalUrl, lang);
   return LANG_UI_LANGUAGES.map(x => {
     const l = getLanguageLocaleWORegion(x);
-    return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
-  }).join('') + `<link rel="alternate" href="${BASE_URL}${aPath}" hreflang="x-default" />`;
+    return `<link rel="alternate" href="${escapeAttr(absoluteUrl(x, cPath))}" hreflang="${l}" />`;
+  }).join('') + `<link rel="alternate" href="${escapeAttr(absoluteUrl('', cPath))}" hreflang="x-default" />`;
 }
 
 export function ogUrl(req, lang) {
-  let aPath = req.originalUrl;
-  if (lang && aPath.startsWith(`/${lang}`)) {
-    aPath = aPath.substring(3);
-  }
-  if (aPath.startsWith('/')) {
-    aPath = aPath.substring(1);
-  }
-  return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
+  return `<meta property="og:url" content="${escapeAttr(absoluteUrl(lang, canonicalPath(req.originalUrl, lang)))}" />`;
 }
