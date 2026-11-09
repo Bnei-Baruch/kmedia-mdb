@@ -10,6 +10,7 @@ import { getEmbedFromQuery, EMBED_TYPE_PLAYER, EMBED_TYPE_PLAYLIST } from '../..
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { playlistGetInfoSelector } from '../../../../redux/selectors';
+import { PlayerPlaceholder } from '../../../Player/PlayerContainer';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobile } = useContext(DeviceInfoContext);
@@ -32,7 +33,8 @@ const PlaylistPage = ({ playerContainer }) => {
     <div className='avbox avbox--grid'>
       <div className='avbox__main'>
         <PlaylistHeader />
-        {isReady && playerContainer}
+        {/* keep the player's box while the playlist builds — otherwise the page jumps when it appears */}
+        {isReady ? playerContainer : <PlayerPlaceholder />}
         <div id="unit_container">
           <Info />
           <Materials />

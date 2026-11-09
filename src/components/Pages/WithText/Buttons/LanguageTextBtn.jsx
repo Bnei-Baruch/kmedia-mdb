@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { getOptions } from '../../../../helpers/language';
 import { actions } from '../../../../redux/modules/textPage';
@@ -8,6 +9,7 @@ import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 import { isEmpty } from '../../../../helpers/utils';
 
 const LanguageTextBtn = () => {
+  const { t }    = useTranslation();
   const dispatch = useDispatch();
 
   const { language }  = useSelector(textPageGetFileSelector);
@@ -30,6 +32,7 @@ const LanguageTextBtn = () => {
       />
       <select
         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        aria-label={t('page-with-text.buttons.web.languages')}
         disabled={noLangs}
         value={language}
         onChange={e => onChange(e, { value: e.target.value })}

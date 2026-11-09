@@ -121,6 +121,10 @@ function pipeToResponse(element, res, suffix) {
 }
 
 const htmlDir = process.env.NODE_ENV === 'production' ? 'build' : '.';
+// Match the whole <html …> tag: the build adds attributes to it (Beasties adds data-beasties-container),
+// so matching an exact string silently leaves lang="en" and no dir on every page.
+const HTML_TAG_RE = /<html\b[^>]*>/;
+
 export const htmlData = fs.readFileSync(path.resolve(process.cwd(), htmlDir, 'index.html'), 'utf8');
 
 export const getPromises = (store, originalUrl, { route, params }) => {
@@ -261,7 +265,7 @@ export async function renderSSR(req, extraInitialState = {}) {
   `;
 
   const html = htmlData
-    .replace(/<html lang="en" translate="no">/, `<html lang="${uiLang}" dir="${direction}" translate="no" ${helmet.htmlAttributes.toString()}>`)
+    .replace(HTML_TAG_RE, `<html lang="${uiLang}" dir="${direction}" translate="no" ${helmet.htmlAttributes.toString()}>`)
     .replace(/<title>.*<\/title>/, helmet.title.toString())
     .replace(
       /<\/head>/,
@@ -290,7 +294,7 @@ export async function renderSSRStream(req, res, extraInitialState = {}) {
   const headCloseIdx = htmlData.indexOf('</head>');
   const headHtml = `${htmlData
     .slice(0, headCloseIdx)
-    .replace('<html lang="en">', `<html lang="${uiLang}" dir="${direction}">`)
+    .replace(HTML_TAG_RE, `<html lang="${uiLang}" dir="${direction}" translate="no">`)
     + canonicalLink(req, uiLang)
     + alternateLinks(req, uiLang)
     + ogUrl(req, uiLang)

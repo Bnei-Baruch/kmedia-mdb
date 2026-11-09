@@ -8,7 +8,7 @@ import VideoList from './VideoList';
 import TextList from './TextList';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-import { getBreadCrumbSection } from './helper';
+import { getBreadCrumbSection, topicDescription, TOPIC_H1_CLASS } from './helper';
 import Link from '../../Language/MultiLanguageLink';
 import { tagsGetPathByIDSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
 
@@ -26,7 +26,10 @@ const RenderPage = () => {
   const baseParams         = useMemo(() => ({ tag: id }), [id]);
 
   return <>
-    <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
+    <HelmetsBasic
+      title={breadCrumbSections[breadCrumbSections.length - 1]?.content}
+      description={topicDescription(breadCrumbSections, t)}
+    />
     <div className="w-full topics">
       <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-1 text-xl font-bold p-4 border-b border-gray-200">
         {breadCrumbSections.map((section, i) => (
@@ -35,7 +38,7 @@ const RenderPage = () => {
               <span className="material-symbols-outlined text-2xl text-gray-400 font-bold" aria-hidden="true">{breadCrumbIcon}</span>
             )}
             {section.active
-              ? <span className="font-bold" aria-current="page">{section.content}</span>
+              ? <h1 className={TOPIC_H1_CLASS} aria-current="page">{section.content}</h1>
               : <Link to={section.to}>{section.content}</Link>
             }
           </Fragment>

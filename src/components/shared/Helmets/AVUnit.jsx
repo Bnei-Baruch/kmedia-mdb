@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import dayjs from '../../../helpers/dayjs';
 
 import { CT_DAILY_LESSON, getVideoRes } from '../../../helpers/consts';
@@ -51,15 +52,27 @@ const buildSchema = ({ unit, description, uiLang, mediaFile, isVideo }) => {
   };
 };
 
+// Description of a unit page: own description → collection description →
+// "<content type>, <date> — <collection name>" (most lessons have neither, and an empty
+// description makes Google invent a snippet from the page chrome).
+export const unitDescription = (unit, t) => {
+  // a description that only repeats the title says nothing (some programs have description === name)
+  const useful = d => !isEmpty(d) && d.trim() !== unit.name?.trim();
+  if (useful(unit.description)) return unit.description;
+  const collections = Object.values(unit.collections || {});
+  const withDescription = collections.find(c => useful(c.description));
+  if (withDescription) return withDescription.description;
+
+  const type = unit.content_type ? t(`constants.content-types.${unit.content_type}`, { defaultValue: '' }) : '';
+  const date = unit.film_date ? dayjs.utc(unit.film_date).format('LL') : '';
+  const head = [type, date].filter(Boolean).join(', ');
+  const coll = collections.find(c => c.name && c.name !== unit.name)?.name;
+  return [head, coll].filter(Boolean).join(' — ');
+};
+
 const AVUnitWithDep = ({ unit, uiLang, contentLanguages }) => {
-  // if unit.description doesn't exist, use the collection description
-  let { description } = unit;
-  if (isEmpty(description)) {
-    const collections = Object.values(unit.collections || {});
-    if (collections.length > 0) {
-      ({ description } = collections[0]);
-    }
-  }
+  const { t }       = useTranslation();
+  const description = unitDescription(unit, t);
 
   const videoDate = dayjs.utc(unit.film_date).toDate();
 

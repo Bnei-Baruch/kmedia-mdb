@@ -47,6 +47,7 @@ import {
   mdbGetDenormContentUnitSelector,
   mdbGetLastLessonIdSelector,
   settingsGetContentLanguagesSelector,
+  assetsGetPersonSelector,
   settingsGetPageSizeSelector,
   settingsGetUILangSelector,
   sourcesGetSourceByIdSelector,
@@ -65,6 +66,8 @@ import { selectors as settings } from './../redux/modules/settings';
 import { actions as sources } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
 import * as assetsSagas from './../sagas/assets';
+import * as playlistSagas from './../sagas/playlist';
+import { actions as playlistActions } from '../redux/modules/playlist';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
@@ -241,8 +244,10 @@ export const playlistCollectionPage = (store, match) => {
       return Promise.reject(new NotFoundError(`collection ${cID}`));
     }
 
-    store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
-    return Promise.resolve(null);
+    // Build the playlist on the server (it fetches the active unit too): without it the bot gets an
+    // empty player page — no unit name/h1, no head (title, description, VideoObject).
+    // The client sees the playlist already built for this collection and doesn't rebuild it.
+    return store.sagaMiddleWare.run(playlistSagas.build, playlistActions.build(cID, cuId)).toPromise().then(() => null);
   });
 };
 
@@ -251,7 +256,8 @@ export const latestLesson = store =>
     const state = store.getState();
     const cID = mdbGetLastLessonIdSelector(state);
     const [c] = mdbGetCollectionByIdSelector(state, [cID]);
-    store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
+    if (!c?.cuIDs?.length) return null;
+    return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(c.cuIDs[0])).toPromise();
   });
 
 export const musicPage = (store, match) => {
@@ -358,6 +364,21 @@ export const libraryPage = async (store, match) => {
   if (!file.isPdf) {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).toPromise();
   }
+};
+
+// Person (CMS) page: the content is the whole page, so it must be in the SSR html.
+export const personPage = async (store, match) => {
+  const contentLanguages = settingsGetContentLanguagesSelector(store.getState());
+  await store.sagaMiddleWare
+    .run(assetsSagas.fetchPerson, assetsActions.fetchPerson({ sourceId: match.params.id, contentLanguages }))
+    .toPromise();
+
+  const { data, err } = assetsGetPersonSelector(store.getState());
+  if (!data && err?.response?.status === 404) {
+    return Promise.reject(new NotFoundError(`person ${match.params.id}`));
+  }
+
+  return null;
 };
 
 const TWEETER_USERTNAMES_BY_LANG = new Map([

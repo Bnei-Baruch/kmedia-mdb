@@ -29,6 +29,10 @@ describe('seo helpers', () => {
     expect(out.endsWith('word…')).toBe(true);
   });
 
+  test('seoText decodes html entities', () => {
+    expect(seoText('10&nbsp;сфирот &amp; &quot;ор&quot; &#39;x&#x27;')).toBe('10 сфирот & "ор" \'x\'');
+  });
+
   test('absoluteUrl', () => {
     expect(absoluteUrl('en', '/lessons/cu/x', '?c=1')).toBe(`${SITE_URL}en/lessons/cu/x?c=1`);
     expect(absoluteUrl('he')).toBe(`${SITE_URL}he/`);

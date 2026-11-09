@@ -52,9 +52,16 @@ export const isoDuration = seconds => {
 };
 
 // Plain text suitable for meta description / schema: no tags, collapsed whitespace, cut on a word boundary.
+// Text cut from HTML (doc2html, CMS) carries entities; meta content is escaped again by Helmet,
+// so "&nbsp;" would show up literally in the snippet.
+const ENTITIES = { nbsp: ' ', amp: '&', quot: '"', apos: '\'', lt: '<', gt: '>' };
+const decodeEntities = text => text
+  .replace(/&(nbsp|amp|quot|apos|lt|gt);/g, (_, e) => ENTITIES[e])
+  .replace(/&#(x?)([0-9a-f]+);/gi, (_, x, n) => String.fromCodePoint(parseInt(n, x ? 16 : 10)));
+
 export const seoText = (text, max = 160) => {
   if (!text) return '';
-  const plain = `${text}`.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const plain = decodeEntities(`${text}`.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
   if (plain.length <= max) return plain;
   const cut = plain.slice(0, max - 1);
   const sp  = cut.lastIndexOf(' ');

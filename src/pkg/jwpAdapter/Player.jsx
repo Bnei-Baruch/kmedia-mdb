@@ -17,7 +17,9 @@ const Player = () => {
   return (
     <>
       <PlayerBehaviorBuilder />
-      <div id={JWPLAYER_ID} ref={ref}></div>
+      {/* 16:9 until jwplayer replaces this host with its own (also 16:9) box — otherwise the player is 0px high
+          for a moment after mounting and the page below jumps up and back down (CLS) */}
+      <div id={JWPLAYER_ID} ref={ref} className="aspect-video"></div>
     </>
   );
 };

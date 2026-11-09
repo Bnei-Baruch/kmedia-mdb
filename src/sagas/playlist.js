@@ -30,7 +30,7 @@ import { fetchViewsByUIDs } from './recommended';
 
 const ONE_FETCH_SIZE = 50;
 
-function* build(action) {
+export function* build(action) {
   const { cId } = action.payload;
   let { cuId }  = action.payload;
 

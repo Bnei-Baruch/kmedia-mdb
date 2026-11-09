@@ -14,12 +14,18 @@ import {
 import { ChroniclesActions } from '../../helpers/clientChronicles';
 import StyleShadowDOM from '../../pkg/StyleShadowDOM';
 import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
+// FontAwesome injects its CSS at runtime by default — SSR html then has unsized icons (an <svg> of
+// 448×512px), which on mobile widens the page until the JS runs (whole-page layout shift). Ship it as CSS.
+import { config as faConfig } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import '../../stylesheets/tailwind.css';
 import '../../stylesheets/Kmedia.scss';
 import Layout from '../Layout/Layout';
 import PlayerContainer from '../Player/PlayerContainer';
 import * as shapes from '../shapes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
+
+faConfig.autoAddCss = false;
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);

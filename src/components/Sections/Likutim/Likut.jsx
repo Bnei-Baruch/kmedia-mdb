@@ -9,6 +9,7 @@ import Helmets from '../../shared/Helmets';
 import TextLayoutMobile from '../../Pages/WithText/TextLayoutMobile';
 import TextLayoutWeb from '../../Pages/WithText/TextLayoutWeb';
 import { usePrepareLikutAudio } from './usePrepareLikutAudio';
+import { useTextExcerpt } from '../../Pages/WithText/hooks/useTextExcerpt';
 import LikutToolbarMobile from './LikutToolbarMobile';
 import LikutToolbarWeb from './LikutToolbarWeb';
 
@@ -21,10 +22,11 @@ const LikutContainer = () => {
   const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
 
   usePrepareLikutAudio();
+  const excerpt = useTextExcerpt();
 
   return (
     <>
-      <Helmets.Basic title={`${t('likutim.item-header')} ${cu?.name}`} />
+      <Helmets.Basic title={`${t('likutim.item-header')} ${cu?.name}`} description={cu?.description || excerpt} />
       {
         isMobile
           ? <TextLayoutMobile toolbar={<LikutToolbarMobile />} />

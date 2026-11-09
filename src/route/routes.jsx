@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { matchRoutes } from 'react-router-dom';
 import {
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
@@ -10,45 +11,61 @@ import * as ssrDataLoaders from './routesSSRData';
 
 const d = path => mod => ({ default: mod[path] });
 
-const PlaylistCollectionPage  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistCollectionPage')));
-const PlaylistItemPageEvent   = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageEvent')));
-const PlaylistItemPageLesson  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageLesson')));
-const PlaylistItemPageProgram = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageProgram')));
-const PlaylistItemPageSeries  = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageSeries')));
-const PlaylistItemPageVirtual = lazy(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageVirtual')));
+// lazy() that can be loaded ahead of rendering. The client preloads the current route's chunk before
+// hydrateRoot (see preloadRoute): otherwise the route suspends while hydrating, any store update before its chunk
+// arrives makes React drop the server HTML for the Suspense fallback (null), and the page blanks and re-renders —
+// a layout shift on every page load. Once preloaded, the component renders synchronously; a lazy component adds
+// no DOM, so the server markup (rendered through lazy) still matches.
+const lazyPreload = factory => {
+  const Lazy = lazy(factory);
+  let Loaded = null;
+  const Component = props => (Loaded ? <Loaded {...props}/> : <Lazy {...props}/>);
+  Component.preload = () => factory().then(mod => {
+    Loaded = mod.default;
+    return mod;
+  });
+  return Component;
+};
 
-const SourceContainer     = lazy(() => import('../components/Sections/Source/SourceContainer'));
-const LibraryHomepage     = lazy(() => import('../components/Sections/Sources/Homepage'));
-const LibraryPerson       = lazy(() => import('../components/Sections/Sources/LibraryPerson'));
-const PlaylistLastDaily   = lazy(() => import('../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily'));
-const SearchResults       = lazy(() => import('../components/Search/SearchResults'));
-const Events              = lazy(() => import('../components/Sections/Events/MainPage'));
-const ExcerptContainer    = lazy(() => import('../components/Sections/Excerpt/ExcerptContainer'));
-const Help                = lazy(() => import('../components/Sections/Help/Help'));
-const HomePage            = lazy(() => import('../components/Sections/Home/Container'));
-const LessonCollection    = lazy(() => import('../components/Sections/Lesson/LessonPage'));
-const Lessons             = lazy(() => import('../components/Sections/Lessons/MainPage'));
-const Likut               = lazy(() => import('../components/Sections/Likutim/Likut'));
-const LikutimMain         = lazy(() => import('../components/Sections/Likutim/MainPage'));
-const Music               = lazy(() => import('../components/Sections/Music/Music'));
-const BookmarksPage       = lazy(() => import('../components/Sections/Personal/Bookmarks/Page'));
-const HistoryPage         = lazy(() => import('../components/Sections/Personal/History/Page'));
-const Main                = lazy(() => import('../components/Sections/Personal/Main/Page'));
-const PlaylistPage        = lazy(() => import('../components/Sections/Personal/Playlist/Page'));
-const ReactionPage        = lazy(() => import('../components/Sections/Personal/Reaction/Page'));
-const Program             = lazy(() => import('../components/Sections/Program/ProgramPage'));
-const Programs            = lazy(() => import('../components/Sections/Programs/MainPage'));
-const Publications        = lazy(() => import('../components/Sections/Publications/MainPage'));
-const ArticleCollection   = lazy(() => import('../components/Sections/Publications/tabs/Articles/Collection'));
-const ArticlePage         = lazy(() => import('../components/Sections/Publications/tabs/Articles/ArticlePage'));
-const BlogPost            = lazy(() => import('../components/Sections/Publications/tabs/Blog/Post/Container'));
-const SimpleModeContainer = lazy(() => import('../components/Sections/SimpleMode/Container'));
-const Sketches            = lazy(() => import('../components/Sections/Sketches/MainPage'));
-const Topics              = lazy(() => import('../components/Sections/Topics/TopicContainer'));
-const Topic               = lazy(() => import('../components/Sections/Topics/TopicPage'));
-const AboutPage           = lazy(() => import('../components/Sections/About/AboutPage'));
-const PlaylistMy          = lazy(() => import('../components/Pages/WithPlayer/PlaylistMy/Container'));
-const PageNotFound        = lazy(() => import('../components/shared/PageNotFound'));
+const PlaylistCollectionPage  = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistCollectionPage')));
+const PlaylistItemPageEvent   = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageEvent')));
+const PlaylistItemPageLesson  = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageLesson')));
+const PlaylistItemPageProgram = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageProgram')));
+const PlaylistItemPageSeries  = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageSeries')));
+const PlaylistItemPageVirtual = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistPageDispecher').then(d('PlaylistItemPageVirtual')));
+
+const SourceContainer     = lazyPreload(() => import('../components/Sections/Source/SourceContainer'));
+const LibraryHomepage     = lazyPreload(() => import('../components/Sections/Sources/Homepage'));
+const LibraryPerson       = lazyPreload(() => import('../components/Sections/Sources/LibraryPerson'));
+const PlaylistLastDaily   = lazyPreload(() => import('../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily'));
+const SearchResults       = lazyPreload(() => import('../components/Search/SearchResults'));
+const Events              = lazyPreload(() => import('../components/Sections/Events/MainPage'));
+const ExcerptContainer    = lazyPreload(() => import('../components/Sections/Excerpt/ExcerptContainer'));
+const Help                = lazyPreload(() => import('../components/Sections/Help/Help'));
+const HomePage            = lazyPreload(() => import('../components/Sections/Home/Container'));
+const LessonCollection    = lazyPreload(() => import('../components/Sections/Lesson/LessonPage'));
+const Lessons             = lazyPreload(() => import('../components/Sections/Lessons/MainPage'));
+const Likut               = lazyPreload(() => import('../components/Sections/Likutim/Likut'));
+const LikutimMain         = lazyPreload(() => import('../components/Sections/Likutim/MainPage'));
+const Music               = lazyPreload(() => import('../components/Sections/Music/Music'));
+const BookmarksPage       = lazyPreload(() => import('../components/Sections/Personal/Bookmarks/Page'));
+const HistoryPage         = lazyPreload(() => import('../components/Sections/Personal/History/Page'));
+const Main                = lazyPreload(() => import('../components/Sections/Personal/Main/Page'));
+const PlaylistPage        = lazyPreload(() => import('../components/Sections/Personal/Playlist/Page'));
+const ReactionPage        = lazyPreload(() => import('../components/Sections/Personal/Reaction/Page'));
+const Program             = lazyPreload(() => import('../components/Sections/Program/ProgramPage'));
+const Programs            = lazyPreload(() => import('../components/Sections/Programs/MainPage'));
+const Publications        = lazyPreload(() => import('../components/Sections/Publications/MainPage'));
+const ArticleCollection   = lazyPreload(() => import('../components/Sections/Publications/tabs/Articles/Collection'));
+const ArticlePage         = lazyPreload(() => import('../components/Sections/Publications/tabs/Articles/ArticlePage'));
+const BlogPost            = lazyPreload(() => import('../components/Sections/Publications/tabs/Blog/Post/Container'));
+const SimpleModeContainer = lazyPreload(() => import('../components/Sections/SimpleMode/Container'));
+const Sketches            = lazyPreload(() => import('../components/Sections/Sketches/MainPage'));
+const Topics              = lazyPreload(() => import('../components/Sections/Topics/TopicContainer'));
+const Topic               = lazyPreload(() => import('../components/Sections/Topics/TopicPage'));
+const AboutPage           = lazyPreload(() => import('../components/Sections/About/AboutPage'));
+const PlaylistMy          = lazyPreload(() => import('../components/Pages/WithPlayer/PlaylistMy/Container'));
+const PageNotFound        = lazyPreload(() => import('../components/shared/PageNotFound'));
 
 const buildRoutes = playerContainer => ([
   { path: '', component: <HomePage/>, ssrData: ssrDataLoaders.home },
@@ -154,7 +171,7 @@ const buildRoutes = playerContainer => ([
   { path: 'sources/:id', component: <SourceContainer/>, ssrData: ssrDataLoaders.libraryPage },
   { path: 'topics', component: <Topics/> },
   { path: 'topics/:id', component: <Topic/>, ssrData: ssrDataLoaders.topicsPage },
-  { path: 'persons/:id', component: <LibraryPerson/>, ssrData: ssrDataLoaders.libraryPage },
+  { path: 'persons/:id', component: <LibraryPerson/>, ssrData: ssrDataLoaders.personPage },
   { path: 'search', component: <SearchResults/>, ssrData: ssrDataLoaders.searchPage },
   { path: 'help', component: <Help/> },
   { path: 'simple-mode', component: <SimpleModeContainer/>, ssrData: ssrDataLoaders.simpleMode },
@@ -166,5 +183,13 @@ const buildRoutes = playerContainer => ([
   // must stay last: the server answers 404 when only this route matches (server/rendererUtils.jsx)
   { path: '*', component: <PageNotFound/>, notFound: true },
 ]);
+
+// Load the chunk of the route matching `pathname` (/:lang/…) — call before hydrating.
+export const preloadRoute = pathname => {
+  const routes  = [{ path: '/:lang', children: buildRoutes(null) }];
+  const matches = matchRoutes(routes, pathname) || [];
+  const preload = matches[matches.length - 1]?.route.component?.type?.preload;
+  return preload ? preload() : Promise.resolve();
+};
 
 export default buildRoutes;

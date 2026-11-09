@@ -62,7 +62,7 @@ const SiteHeader = ({ toggleSidebarBtnRef, toggleSidebar, sidebarActive }) => {
                 {i18n.getResource(i18n.language, 'common', 'nav.top.subtitle')}
               </div>
             )}
-            <h1 className="font-lato! text-white m-0 leading-[1.28571429em] whitespace-nowrap text-[17.5px] font-medium mt-[1.4px] max-[1199px]:text-[14px] rtl:text-[18.2px] rtl:font-thin rtl:-mt-[3px] rtl:max-[1199px]:text-[14px]">{t('nav.top.header')}</h1>
+            <div className="font-lato! text-white m-0 leading-[1.28571429em] whitespace-nowrap text-[17.5px] font-medium mt-[1.4px] max-[1199px]:text-[14px] rtl:text-[18.2px] rtl:font-thin rtl:-mt-[3px] rtl:max-[1199px]:text-[14px]">{t('nav.top.header')}</div>
           </div>
         </Link>
         <div className={isMobile ? 'flex-auto text-base p-4 max-md:hidden' : 'flex-auto text-base p-4 max-[480px]:max-w-[150px]'}>

@@ -9,7 +9,7 @@ import VideoList from './VideoList';
 import TextList from './TextList';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-import { getBreadCrumbSection } from './helper';
+import { getBreadCrumbSection, topicDescription, TOPIC_H1_CLASS } from './helper';
 import Link from '../../Language/MultiLanguageLink';
 import {
   tagsGetPathByIDSelector,
@@ -61,7 +61,10 @@ const RenderPageMobile = () => {
         </Dialog.Panel>
       </div>
     </Dialog>
-    <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
+    <HelmetsBasic
+      title={breadCrumbSections[breadCrumbSections.length - 1]?.content}
+      description={topicDescription(breadCrumbSections, t)}
+    />
     <div className=" px-4  topics">
       <nav>
         <ol className="flex flex-wrap items-center text-2xl">
@@ -74,7 +77,7 @@ const RenderPageMobile = () => {
               )}
               <li>
                 {section.active
-                  ? <span className="font-bold">{section.content}</span>
+                  ? <h1 className={TOPIC_H1_CLASS}>{section.content}</h1>
                   : <Link to={section.to}>{section.content}</Link>
                 }
               </li>

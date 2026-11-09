@@ -172,6 +172,7 @@ const OmniBox = ({ isHomePage = false }) => {
                 : 'py-2 text-black border-gray-300'
             )}
             placeholder={isHomePage ? `${t('buttons.search')}...` : ''}
+            aria-label={t('buttons.search')}
             onChange={inputChange}
             onKeyDown={keyDown}
             onFocus={onFocus}
@@ -199,7 +200,7 @@ const OmniBox = ({ isHomePage = false }) => {
               />
             </>
           ) : (
-            <button type="button" onClick={doSearch} className="omnibox-inline-search">
+            <button type="button" onClick={doSearch} className="omnibox-inline-search" aria-label={t('buttons.search')}>
               {wip ? <Icon icon={faSpinner} className="animate-spin" /> : <Icon icon={faSearch} />}
             </button>
           )}

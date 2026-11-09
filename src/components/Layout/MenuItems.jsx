@@ -101,6 +101,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
           <a
             className="sidebar-nav__rss-btn sidebar-nav__rss-btn--orange"
             href={getRSSLinkByLangs(contentLanguages)}
+            aria-label="RSS"
           >
             <Icon icon={faRss} />
           </a>
@@ -108,6 +109,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
           <a
             className="sidebar-nav__rss-btn sidebar-nav__rss-btn--grey"
             href={getPodcastLinkByLangs(contentLanguages)}
+            aria-label={t('nav.sidebar.podcast')}
           >
             <Icon icon={faAppleWhole} />
           </a>

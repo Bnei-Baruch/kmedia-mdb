@@ -109,9 +109,9 @@ const Info = () => {
             </>
           )
         }
-        <h2 className="unit-info__header">
+        <h1 className="unit-info__header">
           <div className="unit-info__name">{name}</div>
-        </h2>
+        </h1>
 
         <div className="text grey unit-info__film-date">
           {episodeInfo}

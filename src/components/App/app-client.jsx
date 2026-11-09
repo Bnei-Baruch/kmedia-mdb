@@ -14,6 +14,7 @@ import { createStore } from '../../redux/createStore';
 import { actions as authActions } from '../../redux/modules/auth';
 import { actions as ssr } from '../../redux/modules/ssr';
 import AppClient from './AppClient';
+import { preloadRoute } from '../../route/routes';
 
 const NAMESPACE = 'app-client';
 
@@ -42,6 +43,9 @@ async function buildApp(kcInfo = null) {
   const clientChronicles = new ClientChronicles(history, store);
   const abTesting = CreateAbTesting(clientChronicles.userId);
   clientChronicles.setAbTesting(abTesting);
+
+  // Hydrate with the route's chunk already loaded — see lazyPreload in routes.jsx.
+  await preloadRoute(window.location.pathname).catch(err => logger.error(NAMESPACE, 'preloadRoute', err));
 
   hydrateRoot(
     document.getElementById('root'),

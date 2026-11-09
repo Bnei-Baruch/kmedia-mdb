@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 import Helmets from '../../shared/Helmets';
 import { sourcesGetSourceByIdSelector, sourcesGetPathByIDSelector } from '../../../redux/selectors';
+import { useTextExcerpt } from '../../Pages/WithText/hooks/useTextExcerpt';
 import TextLayoutWeb from '../../Pages/WithText/TextLayoutWeb';
 import SourceToolbarWeb from './SourceToolbarWeb';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -28,6 +29,11 @@ const SourceContainer = () => {
 
   const childId = source.children?.[0];
 
+  // Source descriptions are missing or just a subtitle ("Igulim and Yosher") —
+  // follow it with the opening of the text (Basic cuts the result to 160 chars).
+  const excerpt     = useTextExcerpt();
+  const description = [source.description || parent?.description, excerpt].filter(Boolean).join('. ');
+
   //TODO: David use https://reactrouter.com/en/main/route/loader
   useEffect(() => {
     childId && navigate(`../sources/${childId}`, { replace: true });
@@ -40,7 +46,7 @@ const SourceContainer = () => {
   return <>
     <Helmets.Basic
       title={`${source.name} - ${parent?.name} - ${root?.name}`}
-      description={parent?.description}
+      description={description}
     />
     {
       isMobile ? (

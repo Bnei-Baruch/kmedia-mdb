@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
+import { Helmet } from '../../shared/Helmets/helmetESM';
 import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import ActiveSections from './ActiveSections';
@@ -71,6 +72,8 @@ const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPos
 
   return (
     <div className="homepage">
+      {/* the home title is the site name itself: no "| <site name>" postfix ("Kabbalah Media | Kabbalah Media") */}
+      <Helmet titleTemplate="%s" />
       <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
       <Helmets.WebSite uiLang={uiLang} description={t('home.header.subtext')} />
       {renderSearchBar(location)}
