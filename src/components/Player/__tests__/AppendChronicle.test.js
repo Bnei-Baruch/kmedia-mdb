@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 
 import AppendChronicle from '../AppendChronicle';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
+import chroniclesReducer from '../../../redux/modules/chronicles';
+import { actions as player } from '../../../redux/modules/player';
 
 let mockState, mockReplaced;
 jest.mock('react-redux', () => ({ ...jest.requireActual('react-redux'), useSelector: selector => selector(mockState) }));
@@ -76,4 +78,8 @@ test('a play event while the open play goes on (JWP play after a stall, a mute b
   step({ event: 'player-play' });
   step({ event: 'player-stop' });
   expect(appends).toEqual(['player-play a', 'mute-unmute a', 'player-stop a on time']);
+});
+
+test('the end of the file is a stop', () => {
+  expect(chroniclesReducer(undefined, player.playerComplete()).event).toBe('player-stop');
 });

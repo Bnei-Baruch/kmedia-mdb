@@ -69,10 +69,8 @@ const AppendChronicle = () => {
   useEffect(() => {
     if (!isPlayerReady || !event || event === prevEvent) return;
     if (event === 'player-stop' && !open.current) return;                                 // no play to stop: already stopped
-    if (event === 'player-play' && open.current) {
-      if (!wasReplaced(file?.src)) return;                                               // the open play goes on (JWP play after a stall or seek)
-      appendLateStop(chronicles, autoPlay, open);                                        // the last play's stop was lost
-    }
+    if (event === 'player-play' && open.current && !wasReplaced(file?.src)) return;          // the open play goes on (JWP play after a stall or seek)
+    if (event === 'player-play' && open.current) appendLateStop(chronicles, autoPlay, open);   // the last play's stop was lost
 
     const data           = buildAppendData(autoPlay, item, file, event);
     const _defaultUnload = (event === 'player-play') ? () => chronicles.append('player-stop', buildAppendData(autoPlay, item, file, 'player-stop')) : null;

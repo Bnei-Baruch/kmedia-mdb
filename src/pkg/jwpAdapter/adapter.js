@@ -88,12 +88,15 @@ const replace = next => {   // start a new segment; keep the old one for its lat
   _t = next;
 };
 
+// A new play intent or file replaced this file's segment before its stop took it (its stop comes late).
+export const wasReplaced = src => _prev.src === src;
+
 // Returns the current segment's timing and starts a new segment. {} = unknown: src is no longer the loaded file
 // (a stale stop must not reset the new file's segment), or nothing was asked for or played.
 // click_to_play_ms: null = never started; omitted = no play intent seen (e.g. resumed from OS media keys).
 // late: the stop of a play whose own stop was lost (its file was replaced, or a new play started): take the replaced segment.
 export const takePlayTiming = (src, late = false) => {
-  const t = late && _prev.src === src ? _prev : _t;
+  const t = late && wasReplaced(src) ? _prev : _t;
   if (t.src !== src) return {};
   const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = t;
   if (intentAt == null && !started) return {};   // nothing to report: keep the flags (seeking)
@@ -107,9 +110,6 @@ export const takePlayTiming = (src, late = false) => {
     rebuffer_ms   : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
   };
 };
-
-// A new play intent or file replaced this file's segment before its stop took it (its stop comes late).
-export const wasReplaced = src => _prev.src === src;
 
 // The browser knows if a user gesture (click, key) came in the last seconds: then the play is the user's. No API: user.
 const startTrigger = () => (navigator.userActivation?.isActive === false ? 'auto' : 'user');

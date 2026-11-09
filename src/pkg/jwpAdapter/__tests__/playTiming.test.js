@@ -1,6 +1,4 @@
-import { init, takePlayTiming } from '../adapter';
-import chronicles from '../../../redux/modules/chronicles';
-import { actions as player } from '../../../redux/modules/player';
+import { init, takePlayTiming, wasReplaced } from '../adapter';
 
 const STATE_BY_EVENT = { play: 'playing', buffer: 'buffering', pause: 'paused', idle: 'idle', complete: 'complete' };
 
@@ -329,7 +327,6 @@ test('without the userActivation API every start is user', () => {
 });
 
 test('the end of the file stops the play; a replay is its own segment', () => {
-  expect(chronicles(undefined, player.playerComplete()).event).toBe('player-stop');
   click(0);
   at(200, 'play');
   at(200, 'time');
@@ -342,4 +339,16 @@ test('the end of the file stops the play; a replay is its own segment', () => {
   at(20050, 'play');
   at(20050, 'time');
   expect(takePlayTiming('a.mp3')).toEqual({ start_trigger: 'user', click_to_play_ms: 50, rebuffer_count: 0, rebuffer_ms: 0 });
+});
+
+test('a stall\'s play keeps the segment; a new play intent replaces it', () => {
+  click(0);
+  at(50, 'play');
+  at(60, 'time');
+  at(500, 'buffer');
+  at(900, 'play');            // JWP play on leaving buffering: no beforePlay
+  expect(wasReplaced('a.mp3')).toBe(false);
+  at(1000, 'pause');
+  click(2000);
+  expect(wasReplaced('a.mp3')).toBe(true);
 });
