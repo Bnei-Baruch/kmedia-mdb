@@ -45,14 +45,16 @@ export default async function serverRender(req, res, next) {
     if (isBot(req) || req.query.embed) {
       logger.info(NAMESPACE, 'bot/embed render', url);
       const { html, status } = await renderSSR(req, { auth: { user: { name: KC_BOT_USER_NAME } } });
-      return res.status(status).send(html);
+      res.status(status).send(html);
+      return;
     }
 
     const cookies = cookieParse(req.headers.cookie || '');
     const isKcCallback = req.query.code && req.query.session_state;
     if (cookies.authorised || req.query.authorised || isKcCallback) {
       logger.info(NAMESPACE, 'auth stream render', url);
-      return await renderSSRStream(req, res);
+      await renderSSRStream(req, res);
+      return;
     }
 
     logger.info(NAMESPACE, 'anon render', url);

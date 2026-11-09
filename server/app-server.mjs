@@ -60,7 +60,8 @@ async function createServer() {
 
   app.use(async (req, res, next) => {
     if (isNonPage(req.path)) {
-      return next();
+      next();
+      return;
     }
 
     const url = req.originalUrl;

@@ -57,7 +57,7 @@ export default defineConfig([
 
     rules: {
       ..._import.configs.recommended.rules,
-      'import/no-unresolved': ['error', { ignore: ['\\.css$', '\\.svg\\?'] }],
+      'import/no-unresolved': ['error', { ignore: ['\\.css$', '\\.svg\\?', '^vite$' /* exports-only package, no "main" */] }],
       'arrow-body-style': 'warn',
       'array-bracket-spacing': 'warn',
       'arrow-parens': ['warn', 'as-needed'],
