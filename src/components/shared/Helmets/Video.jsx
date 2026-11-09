@@ -22,8 +22,8 @@ const Video = ({ url, releaseDate = undefined, duration = undefined, mimetype = 
       {/* {!isEmpty(tvShowUrl) ? <meta name="video:series" content={tvShowUrl} /> : null} */}
 
 
-      {!isEmpty(releaseDate) ? <meta name="og:video:release_date" content={releaseDate} /> : null}
-      {duration ? <meta name="og:video:duration" content={duration} /> : null}
+      {!isEmpty(releaseDate) ? <meta property="video:release_date" content={releaseDate} /> : null}
+      {duration ? <meta property="video:duration" content={Math.round(duration)} /> : null}
       {/* {tags.map((tag, index) => <meta name="og:video:tag" content={tag} key={index} />)} */}
     </Helmet>
   );

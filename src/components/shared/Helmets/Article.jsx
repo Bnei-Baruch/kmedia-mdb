@@ -17,11 +17,11 @@ const Article = props => {
 
       {
         !isEmpty(publishedTime)
-          ? <meta name="article:published_time" content={publishedTime} />
+          ? <meta property="article:published_time" content={publishedTime} />
           : null
       }
 
-      {tags.map(tag => <meta name="article:tag" key={tag} content={tag} />)}
+      {tags.map(tag => <meta property="article:tag" key={tag} content={tag} />)}
     </Helmet>
   );
 };

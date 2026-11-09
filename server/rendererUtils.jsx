@@ -86,6 +86,11 @@ function renderToBuffer(element) {
     const { pipe } = renderToPipeableStream(element, {
       onAllReady() { pipe(writable); },
       onError: reject,
+      // Everything is ready before piping, so inline every Suspense boundary.
+      // With the default (~12.8KB) React outlines big boundaries into <div hidden id="S:0">
+      // and moves them with an inline script — no-JS crawlers, link previews and
+      // browser reader mode then see an empty page.
+      progressiveChunkSize: Number.MAX_SAFE_INTEGER,
     });
   });
 }
@@ -241,7 +246,7 @@ export async function renderSSR(req, extraInitialState = {}) {
     .replace(/<title>.*<\/title>/, helmet.title.toString())
     .replace(
       /<\/head>/,
-      `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`
+      `${helmet.meta.toString()}${helmet.link.toString()}${helmet.script.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`
     )
     .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()}>`)
     .replace(/<div id="root"><\/div>/, rootDiv);
@@ -417,7 +422,9 @@ export function canonicalLink(req, lang) {
     cPath = `${result[1]}/${result[2]}`;
   }
 
-  return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
+  // Self-referencing canonical: each language version is its own page (tied together by hreflang).
+  // Without the language prefix it pointed to a URL that 307-redirects by Accept-Language.
+  return `<link rel="canonical" href="${BASE_URL}${lang ? `${lang}/` : ''}${cPath}" />`;
 }
 
 // see https://yoast.com/hreflang-ultimate-guide/
@@ -432,7 +439,7 @@ export function alternateLinks(req, lang) {
   return LANG_UI_LANGUAGES.map(x => {
     const l = getLanguageLocaleWORegion(x);
     return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
-  }).join('');
+  }).join('') + `<link rel="alternate" href="${BASE_URL}${aPath}" hreflang="x-default" />`;
 }
 
 export function ogUrl(req, lang) {

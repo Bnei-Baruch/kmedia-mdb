@@ -72,6 +72,7 @@ const HomePage = ({ uiLang, latestItems = [], latestLesson = null, latestBlogPos
   return (
     <div className="homepage">
       <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
+      <Helmets.WebSite uiLang={uiLang} description={t('home.header.subtext')} />
       {renderSearchBar(location)}
       <HomeBanners latestLesson={latestLesson} />
       <ActiveSections />

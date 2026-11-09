@@ -14,7 +14,7 @@ const Locale = () => {
       {
         LANG_UI_LANGUAGES
           .filter(x => x !== uiLang)
-          .map(lang => <meta name="og:locale:alternate" content={getLanguageLocale(lang)} key={lang}/>)
+          .map(lang => <meta property="og:locale:alternate" content={getLanguageLocale(lang)} key={lang}/>)
       }
     </Helmet>
   );

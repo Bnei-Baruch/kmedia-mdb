@@ -7,6 +7,8 @@ import Locale from './Locale';
 import AVUnit from './AVUnit';
 import ArticleUnit from './ArticleUnit';
 import NoIndex from './NoIndex';
+import JsonLd from './JsonLd';
+import WebSite from './WebSite';
 
 const Helmets = {
   TopMost,
@@ -18,6 +20,8 @@ const Helmets = {
   AVUnit,
   ArticleUnit,
   NoIndex,
+  JsonLd,
+  WebSite,
 };
 
 export default Helmets;

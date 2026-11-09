@@ -380,7 +380,8 @@ export const likutPage = async (store, match) => {
     .then(() => {
       const state = store.getState();
       const file = textPageGetFileSelector(state) || {};
-      store.dispatch(assetsActions.doc2html(file.id));
+      if (!file.id || file.isPdf) return null;
+      return store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).toPromise();
     });
 };
 
@@ -485,7 +486,7 @@ export const articleCUPage = (store, match) => {
 
     const unit = mdbGetDenormContentUnitSelector(state, cuID);
     if (!unit) {
-      return;
+      return null;
     }
 
     const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
@@ -494,15 +495,23 @@ export const articleCUPage = (store, match) => {
       language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
     }
 
-    if (language) {
-      const selected = textFiles.find(x => x.language === language) || textFiles[0];
-      store.dispatch(assetsActions.doc2html(selected.id));
-    }
-
     const c = canonicalCollection(unit);
     if (c) {
       store.dispatch(mdbActions.fetchCollection(c.id));
     }
+
+    if (!language) return null;
+
+    // ContentHtml reads the file from textPage — select it there and await the html,
+    // so the article text is in the SSR markup (SEO, browser reader mode).
+    return store.sagaMiddleWare
+      .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(cuID, language))
+      .toPromise()
+      .then(() => {
+        const file = textPageGetFileSelector(store.getState()) || {};
+        if (!file.id || file.isPdf) return null;
+        return store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).toPromise();
+      });
   });
 };
 

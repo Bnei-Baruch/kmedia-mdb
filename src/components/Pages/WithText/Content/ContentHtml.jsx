@@ -45,10 +45,11 @@ const ContentHtml = ({ labels = EMPTY_LABELS }) => {
 
   const dir = getLanguageDirection(language);
 
+  // <article> marks the main text for browser reader mode (Readability) and crawlers.
   return (
-    <div className={`${language}_styles`} dir={dir}>
+    <article className={`${language}_styles`} dir={dir} lang={language}>
       <div id={DOM_ROOT_ID} dangerouslySetInnerHTML={{ __html }} ref={ref} />
-    </div>
+    </article>
   );
 };
 

@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { Helmet } from './helmetESM';
 
 import { isEmpty, publicFile } from '../../../helpers/utils';
+import { seoText } from '../../../helpers/seo';
 import Image from './Image';
 
 const buildTitle = title => (
@@ -10,19 +11,22 @@ const buildTitle = title => (
     <title>{title}</title>
     {/* Open Graph */}
     <meta property="og:title" content={title} />
+    <meta name="twitter:title" content={title} />
     {/* Schema.org */}
     {/* <meta itemProp="name" content={title} /> */}
   </Helmet>
 );
 
-const buildDescription = description => (
-  <Helmet>
-    <meta name="description" content={description} />
-    <meta property="og:description" content={description} />
-    {/* <meta itemProp="description" content={description} /> */}
-    {/* <meta name="twitter:description" content={description} /> */}
-  </Helmet>
-);
+const buildDescription = description => {
+  const text = seoText(description);
+  return (
+    <Helmet>
+      <meta name="description" content={text} />
+      <meta property="og:description" content={text} />
+      <meta name="twitter:description" content={text} />
+    </Helmet>
+  );
+};
 
 const Basic = props => {
   const { title = null, description = null, keywords = null, /* url = null, */ imageUrl = publicFile('seo/default2.png') } = props;
@@ -41,7 +45,7 @@ const Basic = props => {
         <meta property="og:type" content="website" />
 
         {/* Twitter */}
-        {/* <meta name="twitter:card" content="summary" /> */}
+        <meta name="twitter:card" content="summary_large_image" />
 
 
         {/* Whatsapp */}

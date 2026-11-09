@@ -2,7 +2,7 @@ import { Helmet } from './helmetESM';
 
 const NoIndex = () => (
   <Helmet>
-    <meta property="robots" content="noindex" />
+    <meta name="robots" content="noindex" />
   </Helmet>
 );
 
