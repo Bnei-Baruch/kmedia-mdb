@@ -14,23 +14,23 @@ Allow: /it/$
 Allow: /tr/$
 Allow: /cs/$
 Allow: /bg/$
-Allow: /*/publications/*
-Allow: /*/lessons/*
-Allow: /*/programs/*
-Allow: /*/events/*
-Allow: /*/music/*
-Allow: /*/sources/*
-Allow: /*/topics/*
-Allow: /*/persons/*
-Allow: /*/simple-mode/*
-Allow: /*/likutim/*
-Allow: /*/sketches/*
+Allow: /pt/$
+# Content sections are allowed by default. Don't add "Allow: /*/<section>/*" here:
+# Google applies the longest matching rule, so such Allows would override the shorter
+# query-param Disallows below.
 
 # Don't index backend
 Disallow: /backend/*
 
 # Prevent duplicate content of blogs
 Disallow: /*/publications/blog/*
+
+# Same page with player position / autoplay / embed params (canonical has none of them)
+Disallow: /*?*sstart=*
+Disallow: /*?*send=*
+Disallow: /*?ap=*
+Disallow: /*&ap=*
+Disallow: /*?*embed=*
 
 # No need to scan personalized content
 Disallow: /feed_api/*
