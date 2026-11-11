@@ -70,6 +70,50 @@ export const setPip        = () => functionByName('setPip', noop, true);
  */
 export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
+// Playback timing for chronicles, per play segment (play intent -> player-stop) of the loaded file:
+// click_to_play_ms (intent -> first `time` tick while playing), first_frame_ms (intent -> JWP firstFrame, once per file),
+// rebuffering (stalls after the start, seeks excluded) and start_trigger (user = within seconds of a user gesture: click, key; auto = the rest, e.g. the page's own play).
+// performance.now() based. See init() below.
+let _t    = {};
+let _prev = {};   // a segment that a new file or play intent replaced before its stop took it (that stop comes late)
+const closeStall = () => {
+  if (_t.buffAt == null) return;
+  _t.rm     = (_t.rm || 0) + (performance.now() - _t.buffAt);
+  _t.buffAt = null;
+};
+
+const replace = next => {   // start a new segment; keep the old one for its late stop if a player-play was appended for it
+  closeStall();
+  if (_t.played) _prev = _t;
+  _t = next;
+};
+
+// A new play intent or file replaced this file's segment before its stop took it (its stop comes late).
+export const wasReplaced = src => _prev.src === src;
+
+// Returns the current segment's timing and starts a new segment. {} = unknown: src is no longer the loaded file
+// (a stale stop must not reset the new file's segment), or nothing was asked for or played.
+// click_to_play_ms: null = never started; omitted = no play intent seen (e.g. resumed from OS media keys).
+// late: the stop of a play whose own stop was lost (its file was replaced, or a new play started): take the replaced segment.
+export const takePlayTiming = (src, late = false) => {
+  const t = late && wasReplaced(src) ? _prev : _t;
+  if (t.src !== src) return {};
+  const { intentAt, started, trigger = 'user', ctp = null, ff, rc = 0, rm = 0, buffAt } = t;
+  if (intentAt == null && !started) return {};   // nothing to report: keep the flags (seeking)
+  if (t === _t) _t = { src };
+  _prev = {};   // also a stale one: a normal stop came after the next play intent (sub-frame pause+play)
+  return {
+    start_trigger: trigger,
+    ...(intentAt != null ? { click_to_play_ms: ctp } : {}),
+    ...(ff != null ? { first_frame_ms: ff } : {}),
+    rebuffer_count: rc,
+    rebuffer_ms   : Math.round(rm + (buffAt != null ? performance.now() - buffAt : 0))
+  };
+};
+
+// The browser knows if a user gesture (click, key) came in the last seconds: then the play is the user's. No API: user.
+const startTrigger = () => (navigator.userActivation?.isActive === false ? 'auto' : 'user');
+
 const PLAYER_EVENTS = [
   'ready',
   'playlistItem',
@@ -107,10 +151,41 @@ export const init   = (dispatch, deviceInfo) => {
 
   player.on('remove', () => player.off('all'));
 
-  player.on('playlistItem', e => {
-    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
-      player.play();
+  // Chronicles playback timing (separate listeners; JWP allows many per event).
+  player.on('beforePlay', () => {     // play intent = a new segment (one whose stop wasn't taken yet is kept for that late stop)
+    if (['playing', 'buffering'].includes(player.getState())) return;   // e.g. a 2nd play() while starting: no new intent
+    replace({ src: _t.src, trigger: startTrigger(), intentAt: performance.now() });
+  });
+  player.on('playAttemptFailed', () => void (_t = { src: _t.src }));   // e.g. autoplay blocked: nothing was started
+  player.on('play', () => void (_t.played = true));   // this segment started playing (AppendChronicle sends its player-play)
+  player.on('firstFrame', () => {    // not JWP's loadTime: it restarts at every play() call; a seek's frame while paused isn't a start
+    if (_t.intentAt != null && player.getState() === 'playing') _t.ff = Math.round(performance.now() - _t.intentAt);
+  });
+  player.on('seek', () => {           // a stall open at the seek ends there; buffering until `seeked` is not a stall
+    closeStall();
+    _t.seeking = true;
+  });
+  player.on('seeked', () => void (_t.seeking = false));
+  player.on('buffer', () => {         // stall begins (only after playback has started, not caused by a seek)
+    if (_t.started && _t.buffAt == null && !_t.seeking) {
+      _t.buffAt = performance.now();
+      _t.rc     = (_t.rc || 0) + 1;
     }
+  });
+  player.on('time', () => {           // first tick while playing = perceived start (a seek's position tick doesn't count)
+    if (player.getState() !== 'playing') return;
+    if (!_t.started) {
+      _t.started = true;
+      if (_t.intentAt != null) _t.ctp = Math.round(performance.now() - _t.intentAt);
+    }
+
+    closeStall();
+  });
+
+  player.on('playlistItem', e => {    // new file: reset timing first, so the HLS autoplay's beforePlay starts its segment
+    const hls = e.item.sources[0]?.type.toLowerCase() === 'hls';
+    replace({ src: e.item.file });
+    if (hls) player.play();
   });
 
   dispatch(actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));

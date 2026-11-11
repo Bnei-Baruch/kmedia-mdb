@@ -29,6 +29,7 @@ const chronicles = createSlice({
 
       .addCase(player.playerPlay, state => void (state.event = 'player-play'))
       .addCase(player.playerPause, state => void (state.event = 'player-stop'))
+      .addCase(player.playerComplete, state => void (state.event = 'player-stop'))   // the end of the file ends the play
       .addCase(player.playerRemove, state => void (state.event = 'player-stop'))
       .addCase(player.playerToggleMute, state => void (state.event = 'mute-unmute'));
   },
