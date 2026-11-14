@@ -126,3 +126,16 @@
 .filter-popup.mobile {
   transform: none !important;
 }
+
+// CookieYes's revisit button carries data-tooltip="Consent Preferences", which
+// collides with Semantic UI's global [data-tooltip] pseudo-element tooltip
+// (public/semantic_v4*.min.css) and renders broken artifacts on hover.
+// Suppress the leaked tooltip on CookieYes elements only; the button keeps its
+// aria-label, so accessibility is unaffected.
+[class*='cky-'][data-tooltip] {
+  &::before,
+  &::after {
+    content: none !important;
+    display: none !important;
+  }
+}
