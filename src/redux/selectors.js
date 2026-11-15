@@ -223,6 +223,11 @@ export const searchGetPrevQuerySelector        = createSelector([getSearch], s =
 export const searchGetSuggestionsSelector      = createSelector([getSearch], s => searchSel.getSuggestions(s));
 export const searchGetAutocompleteWipSelector  = createSelector([getSearch], s => searchSel.getAutocompleteWip(s));
 export const searchGetQueryResultSelector      = createSelector([getSearch], s => searchSel.getQueryResult(s));
+export const searchGetReasoningPreviousSearchesSelector = createSelector([getSearch], s => searchSel.getReasoningPreviousSearches(s));
+export const searchGetReasoningRequestKindSelector = createSelector([getSearch], s => searchSel.getReasoningRequestKind(s));
+export const searchGetReasoningResultSelector  = createSelector([getSearch], s => searchSel.getReasoningResult(s));
+export const searchGetReasoningStatusSelector  = createSelector([getSearch], s => searchSel.getReasoningStatus(s));
+export const searchGetSearchTypeSelector       = createSelector([getSearch], s => searchSel.getSearchType(s));
 export const searchGetWipSelector              = createSelector([getSearch], s => searchSel.getWip(s));
 export const searchGetErrorSelector            = createSelector([getSearch], s => searchSel.getError(s));
 export const searchGetPageNoSelector           = createSelector([getSearch], s => searchSel.getPageNo(s));

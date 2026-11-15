@@ -32,7 +32,7 @@ const TagsByUnit = ({ id }) => {
   if (isEmpty(unit?.tags) && isEmpty(lids))
     return null;
 
-  const names        = [...(new Set([...(unit?.tags || []), ...labelTags]))].map(getTagById);
+  const names        = [...(new Set([...(unit?.tags || []), ...labelTags]))].map(getTagById).filter(Boolean);
   const handleScroll = e => {
     const _t = e.target;
     if (Math.abs(_t.scrollLeft) < 10) {

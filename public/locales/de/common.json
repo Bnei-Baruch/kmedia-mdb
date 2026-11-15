@@ -152,7 +152,9 @@
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Bibliothek",
+      "TAG": "Thema",
       "PICNIC": "Picknick",
+      "R_TWEET": "Tweets",
       "PUBLIC_EVENTS": "Public Events"
     }
   },
@@ -172,6 +174,7 @@
     "copy": "Kopieren",
     "view-all": "Alle ansehen",
     "save": "Save",
+    "retry": "Erneut versuchen",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -286,6 +289,112 @@
       "relevance": "Relevanz",
       "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
       "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
+    },
+    "types": {
+      "regular": "Normale Suche",
+      "agentic": "Agenten-Suche",
+      "agenticRapid": "Agenten-Suche (schnell)",
+      "beta": "Beta",
+      "agenticBeta": "Die Agenten-Suche befindet sich in der Beta-Version."
+    },
+    "agentic": {
+      "warningTitle": "AI-generierte Beschreibungen und Labels",
+      "warning": "Beschreibungen und Labels auf dieser Suchseite können von AI generiert sein und Fehler oder Ungenauigkeiten enthalten.",
+      "autocompleteAsk": "KI fragen: \"{{query}}\"",
+      "autocompleteDescription": "Suchen Sie nach Bedeutung, nicht nur nach Schlüsselwörtern",
+      "advancedThinking": "Erweitertes Denken",
+      "searchDeeper": "Führen Sie eine tiefere Suche durch",
+      "searchDeeperHint": "Hier klicken, um dieselbe Anfrage gründlicher zu durchsuchen.",
+      "backToRegular": "Zurück zur regulären Suche",
+      "nudge": {
+        "title": "Lassen Sie KI Ihre Suche verbessern",
+        "message": "Der KI-Modus durchsucht das gesamte Archiv und stellt die relevantesten Inhalte zu „{{query}}“ zusammen.",
+        "button": "KI-Modus fragen",
+        "dismiss": "Schließen"
+      },
+      "summary": "AI-Zusammenfassung",
+      "rapidResultsLive": {
+        "title": "Vorläufige Ergebnisse",
+        "badge": "Wird aktualisiert",
+        "message": "Diese Ergebnisse können sich noch ändern, solange die Suche weiterläuft. Die endgültigen Ergebnisse erscheinen, sobald die Suche abgeschlossen ist."
+      },
+      "loginRequired": {
+        "title": "Melde dich an, um die Agenten-Suche zu nutzen",
+        "message": "Melde dich an oder registriere dich, um mit dem KI-Agenten relevantere Ergebnisse zu erhalten.",
+        "button": "Anmelden / Registrieren"
+      },
+      "errors": {
+        "queryTooLongTitle": "Deine Suchanfrage ist etwas zu lang",
+        "queryTooLong": "Kürze sie bitte auf höchstens {{maxCharacters}} Zeichen und versuche es erneut."
+      },
+      "summaryFallback": {
+        "title": "Zusammenfassung",
+        "message": "Wir haben einige gute Treffer gefunden: {{findingsText}}. Mit {{improveSearch}} unten kannst du gezieltere Ergebnisse bekommen.",
+        "messagePossibleOnly": "Wir konnten {{count}} mögliche Ergebnisse finden, die hilfreich sein könnten. Du kannst sie prüfen oder unten {{improveSearch}} nutzen, um die Suche gezielter zu machen.",
+        "noResults": "Wir konnten in den verfügbaren Inhalten keine passenden Ergebnisse finden. Möglicherweise bezieht sich die Suche nicht auf die Quellen im System, oder es hilft, sie gezielter zu formulieren.",
+        "temporaryError": "Wir konnten die Suche wegen eines vorübergehenden Problems nicht abschließen. Du kannst es gleich noch einmal versuchen.",
+        "and": "und",
+        "highlyRelevant": "{{count}} besonders genaue Ergebnisse",
+        "relevant": "{{count}} relevante Ergebnisse",
+        "possible": "{{count}} weitere Ergebnisse, die hilfreich sein könnten"
+      },
+      "reason": "Warum dieses Ergebnis",
+      "highlights": "Hervorhebungen",
+      "no-results": "Die Agenten-Suche hat keine Ergebnisse für \"{{query}}\" gefunden.",
+      "followupTitle": "Diese Ergebnisse verfeinern",
+      "previousResultsTitle": "Ergebnisse aus vorherigen Suchen in diesem Kontext",
+      "followupPlaceholder": "Stelle eine Folgefrage...",
+      "followupButton": "Verfeinern",
+      "finishNowButton": "Sofortige Ergebnisse",
+      "followupsRemaining": "{{count}} Folgefragen verbleibend",
+      "followupsExhausted": "Für diese Sitzung sind keine Folgefragen mehr verfügbar. Starte eine neue Agenten-Suche, um fortzufahren.",
+      "statusTitle": "Suchfortschritt",
+      "statusIteration": "Schritt {{iteration}}",
+      "progress": {
+        "queryAnalyzed": "Die Suchanfrage wurde analysiert",
+        "initialResults": "Erste Ergebnisse wurden gefunden",
+        "goodCandidates": "Einige vielversprechende Ergebnisse wurden gefunden",
+        "mayTakeLonger": "Dies ist eine Tiefensuche und kann daher etwas länger dauern",
+        "nearFinish": "Kurz vor dem Abschluss"
+      },
+      "status": {
+        "pending": "Die Suche wird gestartet...",
+        "planning": "Die Suchanfrage wird verstanden und der Suchweg aufgebaut...",
+        "initializingAgent": "Die Suche wird vorbereitet...",
+        "thinking": [
+          "Weitere Schritte werden geplant...",
+          "Die erhaltenen Erkenntnisse werden analysiert...",
+          "Es gibt interessante Erkenntnisse...",
+          "Ergebnisse werden gewichtet...",
+          "Die besten Ergebnisse werden geordnet...",
+          "Es wird geprüft, ob zusätzliche Quellen die Ergebnisse bereichern können...",
+          "Es geht gut voran...",
+          "Weniger passende Ergebnisse werden herausgefiltert...",
+          "Es wird geprüft, wie die Erkenntnisse zusammenpassen...",
+          "Die Suche wird auf die ursprüngliche Absicht der Anfrage fokussiert...",
+          "Die Tiefe der Übereinstimmung zwischen Anfrage und Ergebnissen wird geprüft...",
+          "Es wird geprüft, welche ergänzenden Materialien die gefundenen Ergebnisse stärken...",
+          "Die Erkenntnisse werden geprüft und die Hauptrichtung gestärkt..."
+        ],
+        "verifying": "Die Qualität der Ergebnisse wird überprüft...",
+        "finalizing": "Die Ergebnisse werden fertiggestellt...",
+        "done": "Suche abgeschlossen",
+        "error": "Die Suche konnte nicht abgeschlossen werden",
+        "canceled": "Suche gestoppt",
+        "working": "Die Suche läuft noch...",
+        "tools": {
+          "usingTool": "Eine weitere Quelle wird geprüft...",
+          "elasticsearch_search": "Das Archiv wird durchsucht...",
+          "query_source_ai": "Im Quellentext wird gesucht...",
+          "query_transcript_ai": "Erkenntnisse aus einem Transkript werden geprüft...",
+          "get_available_books": "Verfügbare Bücher werden geprüft...",
+          "get_sources_by_author": "Quellen nach Autor werden geprüft...",
+          "get_sources_by_source": "Die Quellenstruktur wird geprüft...",
+          "get_collections": "Relevante Sammlungen werden geprüft...",
+          "get_content_unit": "Ein Inhaltselement wird geprüft...",
+          "get_content_units_by_collection": "Elemente in einer Sammlung werden geprüft..."
+        }
+      }
     },
     "results": {
       "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",

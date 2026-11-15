@@ -152,6 +152,7 @@
       "KITEI_MAKOR": "Zdrojové materiály",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Knihovna",
+      "TAG": "Téma",
       "PICNIC": "Piknik",
       "R_TWEET": "Tweets",
       "PUBLIC_EVENTS": "Public Events"
@@ -173,6 +174,7 @@
     "copy": "Kopírovat",
     "view-all": "View All",
     "save": "Save",
+    "retry": "Zkusit znovu",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -290,6 +292,112 @@
       "relevance": "relevantnost",
       "newertoolder": "od novějších ke starším",
       "oldertonewer": "od starších k novějším"
+    },
+    "types": {
+      "regular": "Běžné vyhledávání",
+      "agentic": "Agentní vyhledávání",
+      "agenticRapid": "Agentní vyhledávání (rychlé)",
+      "beta": "Beta",
+      "agenticBeta": "Agentní vyhledávání je v beta verzi."
+    },
+    "agentic": {
+      "warningTitle": "Popisy a štítky generované AI",
+      "warning": "Popisy a štítky na této stránce vyhledávání mohou být generované AI a mohou obsahovat chyby nebo nepřesnosti.",
+      "autocompleteAsk": "Zeptat se AI: \"{{query}}\"",
+      "autocompleteDescription": "Hledejte podle významu, nejen podle klíčových slov",
+      "advancedThinking": "Pokročilé přemýšlení",
+      "searchDeeper": "Proveďte podrobnější hledání",
+      "searchDeeperHint": "Kliknutím vyhledejte stejný dotaz podrobněji.",
+      "backToRegular": "Zpět na běžné vyhledávání",
+      "nudge": {
+        "title": "Nechte AI vylepšit vaše vyhledávání",
+        "message": "Režim AI prohledá celý archiv a spojí nejrelevantnější materiály pro „{{query}}“.",
+        "button": "Zeptat se režimu AI",
+        "dismiss": "Zavřít"
+      },
+      "summary": "Shrnutí AI",
+      "rapidResultsLive": {
+        "title": "Předběžné výsledky",
+        "badge": "Aktualizuje se",
+        "message": "Tyto výsledky se ještě mohou změnit, zatímco vyhledávání pokračuje. Konečné výsledky se zobrazí po dokončení vyhledávání."
+      },
+      "loginRequired": {
+        "title": "Přihlaste se, abyste mohli používat agentní vyhledávání",
+        "message": "Přihlaste se nebo se zaregistrujte, abyste s AI agentem získali relevantnější výsledky.",
+        "button": "Přihlásit / Registrovat"
+      },
+      "errors": {
+        "queryTooLongTitle": "Vyhledávací dotaz je trochu příliš dlouhý",
+        "queryTooLong": "Zkraťte jej na {{maxCharacters}} znaků nebo méně a zkuste to znovu."
+      },
+      "summaryFallback": {
+        "title": "Shrnutí",
+        "message": "Našli jsme několik dobrých shod: {{findingsText}}. Pomocí {{improveSearch}} níže můžete získat přesněji zaměřené výsledky.",
+        "messagePossibleOnly": "Podařilo se nám najít {{count}} možných výsledků, které mohou pomoci. Můžete je projít nebo pomocí {{improveSearch}} níže vyhledávání lépe zaměřit.",
+        "noResults": "V dostupném obsahu jsme nenašli vhodné výsledky. Je možné, že hledání nesouvisí se zdroji v systému, nebo pomůže formulovat ho přesněji.",
+        "temporaryError": "Vyhledávání se nepodařilo dokončit kvůli dočasnému problému. Za chvíli to můžete zkusit znovu.",
+        "and": "a",
+        "highlyRelevant": "{{count}} mimořádně přesných výsledků",
+        "relevant": "{{count}} relevantních výsledků",
+        "possible": "{{count}} dalších výsledků, které mohou pomoci"
+      },
+      "reason": "Proč tento výsledek",
+      "highlights": "Zvýraznění",
+      "no-results": "Agentní vyhledávání nenašlo žádné výsledky pro \"{{query}}\".",
+      "followupTitle": "Upřesnit tyto výsledky",
+      "previousResultsTitle": "Výsledky z předchozích hledání v tomto kontextu",
+      "followupPlaceholder": "Položte doplňující otázku...",
+      "followupButton": "Upřesnit",
+      "finishNowButton": "Okamžité výsledky",
+      "followupsRemaining": "Zbývá doplňujících dotazů: {{count}}",
+      "followupsExhausted": "Pro tuto relaci nezbývají žádné doplňující dotazy. Pro pokračování spusťte nové agentní vyhledávání.",
+      "statusTitle": "Průběh vyhledávání",
+      "statusIteration": "Krok {{iteration}}",
+      "progress": {
+        "queryAnalyzed": "Dotaz byl analyzován",
+        "initialResults": "Byly nalezeny první výsledky",
+        "goodCandidates": "Bylo nalezeno několik slibných výsledků",
+        "mayTakeLonger": "Toto je hlubší vyhledávání, takže může trvat o něco déle",
+        "nearFinish": "Blížíme se k dokončení"
+      },
+      "status": {
+        "pending": "Spouštím vyhledávání...",
+        "planning": "Rozumíme dotazu a sestavujeme cestu vyhledávání...",
+        "initializingAgent": "Připravujeme vyhledávání...",
+        "thinking": [
+          "Plánujeme dodatečné kroky...",
+          "Analyzujeme získaná zjištění...",
+          "Máme několik zajímavých zjištění...",
+          "Řadíme výsledky...",
+          "Uspořádáváme nejlepší výsledky...",
+          "Kontrolujeme, zda lze výsledky obohatit z dalších zdrojů...",
+          "Postupujeme dobře...",
+          "Filtrujeme méně vhodné výsledky...",
+          "Kontrolujeme, jak zjištění zapadají do sebe...",
+          "Zaměřujeme vyhledávání kolem původního záměru dotazu...",
+          "Kontrolujeme hloubku shody mezi dotazem a výsledky...",
+          "Kontrolujeme, které doplňující materiály posilují nalezené výsledky...",
+          "Procházíme zjištění a posilujeme hlavní směr..."
+        ],
+        "verifying": "Ověřujeme kvalitu výsledků...",
+        "finalizing": "Dokončujeme výsledky...",
+        "done": "Vyhledávání dokončeno",
+        "error": "Vyhledávání se nepodařilo dokončit",
+        "canceled": "Vyhledávání bylo zastaveno",
+        "working": "Vyhledávání stále běží...",
+        "tools": {
+          "usingTool": "Kontrolujeme další zdroj...",
+          "elasticsearch_search": "Hledáme v archivu...",
+          "query_source_ai": "Hledáme uvnitř zdrojového textu...",
+          "query_transcript_ai": "Kontrolujeme poznatky z přepisu...",
+          "get_available_books": "Kontrolujeme dostupné knihy...",
+          "get_sources_by_author": "Kontrolujeme zdroje podle autora...",
+          "get_sources_by_source": "Kontrolujeme strukturu zdroje...",
+          "get_collections": "Kontrolujeme relevantní kolekce...",
+          "get_content_unit": "Kontrolujeme položku obsahu...",
+          "get_content_units_by_collection": "Kontrolujeme položky v kolekci..."
+        }
+      }
     },
     "suggestions": {
       "categories": {

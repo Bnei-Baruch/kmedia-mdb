@@ -152,7 +152,9 @@
       "KITEI_MAKOR": "Kaynak Materyaller",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Kütüphane",
+      "TAG": "Konu",
       "PICNIC": "Piknik",
+      "R_TWEET": "Tweetler",
       "PUBLIC_EVENTS": "Public Events"
     }
   },
@@ -172,6 +174,7 @@
     "copy": "Kopyala",
     "view-all": "Hepsini Görüntüle",
     "save": "Save",
+    "retry": "Tekrar dene",
     "remove": "Remove",
     "edit": "Edit"
   },
@@ -289,6 +292,112 @@
       "relevance": "uygunluğana",
       "newertoolder": "yeniden eskiye",
       "oldertonewer": "eskiden yeniye"
+    },
+    "types": {
+      "regular": "Normal arama",
+      "agentic": "Ajanlı arama",
+      "agenticRapid": "Ajanlı arama (hızlı)",
+      "beta": "Beta",
+      "agenticBeta": "Ajanlı arama beta aşamasındadır."
+    },
+    "agentic": {
+      "warningTitle": "AI tarafından oluşturulan açıklamalar ve etiketler",
+      "warning": "Bu arama sayfasındaki açıklamalar ve etiketler AI tarafından oluşturulmuş olabilir ve hata veya yanlışlık içerebilir.",
+      "autocompleteAsk": "Yapay zekaya sor: \"{{query}}\"",
+      "autocompleteDescription": "Yalnızca anahtar kelimelere göre değil, anlama göre arayın",
+      "advancedThinking": "Gelişmiş düşünme",
+      "searchDeeper": "Daha derin bir arama yap",
+      "searchDeeperHint": "Aynı isteği daha derin aramak için buraya tıklayın.",
+      "backToRegular": "Normal aramaya dön",
+      "nudge": {
+        "title": "Yapay zeka aramanızı iyileştirsin",
+        "message": "Yapay zeka modu tüm arşivde arama yapar ve “{{query}}” için en ilgili materyalleri bir araya getirir.",
+        "button": "Yapay zeka moduna sor",
+        "dismiss": "Kapat"
+      },
+      "summary": "AI özeti",
+      "rapidResultsLive": {
+        "title": "Geçici sonuçlar",
+        "badge": "Güncelleniyor",
+        "message": "Arama devam ederken bu sonuçlar hâlâ değişebilir. Nihai sonuçlar arama tamamlandığında görünecek."
+      },
+      "loginRequired": {
+        "title": "Ajanlı aramayı kullanmak için giriş yapın",
+        "message": "AI ajanıyla daha alakalı sonuçlar almak için giriş yapın veya kayıt olun.",
+        "button": "Giriş / Kayıt"
+      },
+      "errors": {
+        "queryTooLongTitle": "Arama sorgunuz biraz fazla uzun",
+        "queryTooLong": "Lütfen sorguyu {{maxCharacters}} karaktere veya daha kısa bir uzunluğa indirip tekrar deneyin."
+      },
+      "summaryFallback": {
+        "title": "Özet",
+        "message": "Bazi iyi eslesmeler bulduk: {{findingsText}}. Daha odakli sonuçlara ulaşmak için aşağıdaki {{improveSearch}} alanını kullanabilirsiniz.",
+        "messagePossibleOnly": "{{count}} olasi sonuç bulmayi basardik; bunlar yardimci olabilir. Bunlari inceleyebilir ya da aramayi odaklamak için aşağıdaki {{improveSearch}} alanini kullanabilirsiniz.",
+        "noResults": "Mevcut içerikte uygun sonuçlar bulamadık. Arama sistemdeki kaynaklarla ilgili olmayabilir ya da daha odaklı ifade etmek daha iyi olabilir.",
+        "temporaryError": "Geçici bir sorun nedeniyle aramayı tamamlayamadık. Biraz sonra tekrar deneyebilirsiniz.",
+        "and": "ve",
+        "highlyRelevant": "{{count}} özellikle isabetli sonuç",
+        "relevant": "{{count}} ilgili sonuç",
+        "possible": "{{count}} yardimci olabilecek ek sonuç"
+      },
+      "reason": "Bu sonucun nedeni",
+      "highlights": "Öne çıkanlar",
+      "no-results": "Ajanlı arama \"{{query}}\" için sonuç bulamadı.",
+      "followupTitle": "Bu sonuçları iyileştir",
+      "previousResultsTitle": "Bu bağlamdaki önceki aramalardan sonuçlar",
+      "followupPlaceholder": "Bir takip sorusu sorun...",
+      "followupButton": "İyileştir",
+      "finishNowButton": "Anında sonuçlar",
+      "followupsRemaining": "{{count}} takip hakkı kaldı",
+      "followupsExhausted": "Bu oturum için takip hakkı kalmadı. Devam etmek için yeni bir ajanlı arama başlatın.",
+      "statusTitle": "Arama ilerlemesi",
+      "statusIteration": "Adım {{iteration}}",
+      "progress": {
+        "queryAnalyzed": "Sorgu analiz edildi",
+        "initialResults": "İlk sonuçlar bulundu",
+        "goodCandidates": "Bazı umut verici sonuçlar bulundu",
+        "mayTakeLonger": "Bu derin bir arama, bu yüzden biraz daha uzun sürebilir",
+        "nearFinish": "Bitirmeye yakınız"
+      },
+      "status": {
+        "pending": "Arama başlatılıyor...",
+        "planning": "Sorgu anlaşılıyor ve arama yolu oluşturuluyor...",
+        "initializingAgent": "Arama hazırlanıyor...",
+        "thinking": [
+          "Ek adımlar planlanıyor...",
+          "Gelen bulgular analiz ediliyor...",
+          "Bazı ilginç bulgular var...",
+          "Sonuçlar sıralanıyor...",
+          "En iyi sonuçlar düzenleniyor...",
+          "Sonuçların ek kaynaklarla zenginleştirilip zenginleştirilemeyeceği kontrol ediliyor...",
+          "İyi ilerliyoruz...",
+          "Daha az uygun sonuçlar filtreleniyor...",
+          "Bulguların birbirine nasıl uyduğu kontrol ediliyor...",
+          "Arama, sorgunun özgün niyeti etrafında odaklanıyor...",
+          "Sorgu ile sonuçlar arasındaki eşleşmenin derinliği kontrol ediliyor...",
+          "Bulunan sonuçları hangi destekleyici materyallerin güçlendirdiği kontrol ediliyor...",
+          "Bulgular gözden geçiriliyor ve ana yön güçlendiriliyor..."
+        ],
+        "verifying": "Sonuçların kalitesi doğrulanıyor...",
+        "finalizing": "Sonuçlar hazırlanıyor...",
+        "done": "Arama tamamlandı",
+        "error": "Aramayı tamamlayamadık",
+        "canceled": "Arama durduruldu",
+        "working": "Arama hala devam ediyor...",
+        "tools": {
+          "usingTool": "Başka bir kaynak kontrol ediliyor...",
+          "elasticsearch_search": "Arşivde aranıyor...",
+          "query_source_ai": "Kaynak metnin içinde aranıyor...",
+          "query_transcript_ai": "Bir transkriptten çıkan içgörüler kontrol ediliyor...",
+          "get_available_books": "Mevcut kitaplar kontrol ediliyor...",
+          "get_sources_by_author": "Yazara göre kaynaklar kontrol ediliyor...",
+          "get_sources_by_source": "Kaynak yapısı kontrol ediliyor...",
+          "get_collections": "İlgili koleksiyonlar kontrol ediliyor...",
+          "get_content_unit": "Bir içerik öğesi kontrol ediliyor...",
+          "get_content_units_by_collection": "Bir koleksiyondaki öğeler kontrol ediliyor..."
+        }
+      }
     },
     "results": {
       "empty-query": "Hiç bir sıralama koşulu verilmedi. Sıralamak için lütfen yukarıdaki kutudan seçin.",

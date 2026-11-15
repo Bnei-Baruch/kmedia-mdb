@@ -57,11 +57,12 @@ const makeSourceLink = (source, getSourceById) => {
 };
 
 const makeTagLink = (tag, getTagById) => {
-  const { id, label } = getTagById(tag);
-  if (!label) {
+  const tagInfo = getTagById(tag);
+  if (!tagInfo?.label) {
     return '';
   }
 
+  const { id, label } = tagInfo;
   return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
 };
 
