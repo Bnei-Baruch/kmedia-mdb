@@ -47,7 +47,7 @@ const Footer = () => {
                 floated={isMobileDevice ? 'left' : 'right'}
                 href={getRSSLinkByLangs(contentLanguages)}/>
 
-              {/* Reopens the CookieYes preferences, so consent can be changed as easily as it was given (GDPR 7(3)) */}
+              {/* Reopens the CookieYes preferences */}
               <Button
                 icon
                 size="tiny"
@@ -57,7 +57,7 @@ const Footer = () => {
                 title={t('nav.footer.cookieSettings')}
                 aria-label={t('nav.footer.cookieSettings')}
                 onClick={() => window.revisitCkyConsent?.()}>
-                <img src="https://cdn-cookieyes.com/assets/images/revisit.svg" alt="" width="16" height="16"/>
+                <img src="https://cdn-cookieyes.com/assets/images/revisit.svg" alt="" style={{ width: '1.18em', height: '1em', verticalAlign: 'top' }}/>
               </Button>
             </Grid.Column>
           </Grid.Row>
