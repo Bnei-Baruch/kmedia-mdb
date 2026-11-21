@@ -31,6 +31,7 @@
       "about": "About Kabbalah Media"
     },
     "footer": {
+      "cookieSettings": "Cookie settings",
       "copyright": "Copyright © 2003-{{year}}",
       "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved",
       "bottomTextStart": "Kabbalah Media is the official archive of the Bnei Baruch Kabbalah Education & Research Institute - ",

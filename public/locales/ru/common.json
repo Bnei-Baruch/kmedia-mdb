@@ -31,6 +31,7 @@
       "about": "О Каббала Медиа"
     },
     "footer": {
+      "cookieSettings": "Настройки cookie",
       "copyright": "Copyright © 2003-{{year}}",
       "rights": "Бней Барух – Ассоциация \"Каббала Ла-Ам\", Все права защищены",
       "bottomTextStart": "",

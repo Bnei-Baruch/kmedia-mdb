@@ -30,6 +30,7 @@
       "about": "אודות קבלה מדיה"
     },
     "footer": {
+      "cookieSettings": "הגדרות עוגיות",
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
       "rights": "בני ברוך - קבלה לעם",
       "bottomTextStart": "",
