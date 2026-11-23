@@ -31,6 +31,7 @@
       "about": "About Kabbalah Media"
     },
     "footer": {
+      "cookieSettings": "Impostazioni cookie",
       "copyright": "Copyright © 2003-{{year}}",
       "rights": "Bnei Baruch – Kabbalah L’Am Association, Tutti i diritti riservati",
       "bottomTextStart": "",

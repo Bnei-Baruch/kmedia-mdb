@@ -30,6 +30,7 @@
       "sketches": "Креслення"
     },
     "footer": {
+      "cookieSettings": "Налаштування cookie",
       "copyright": "Copyright © 2003-{{year}}",
       "rights": "Бней Барух – Асоціація Кабала Ла-Ам, Всі права захищені",
       "bottomTextStart": "",
