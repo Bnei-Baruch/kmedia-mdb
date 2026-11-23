@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLangs } from '../../helpers/utils';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { CookieSettings } from '../../images/icons';
 import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 
 const Footer = () => {
@@ -11,6 +12,15 @@ const Footer = () => {
   const year               = new Date().getFullYear();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
+  const [hasCky, setHasCky] = useState(false);
+
+  // CookieYes is loaded async by GTM and may be blocked
+  useEffect(() => {
+    const check = () => setHasCky(typeof window.revisitCkyConsent === 'function');
+    check();
+    document.addEventListener('cookieyes_banner_load', check);
+    return () => document.removeEventListener('cookieyes_banner_load', check);
+  }, []);
 
   const getBottomText = () => (
     <>
@@ -47,18 +57,23 @@ const Footer = () => {
                 floated={isMobileDevice ? 'left' : 'right'}
                 href={getRSSLinkByLangs(contentLanguages)}/>
 
-              {/* Reopens the CookieYes preferences */}
-              <Button
-                icon
-                size="tiny"
-                basic
-                inverted
-                floated={isMobileDevice ? 'left' : 'right'}
-                title={t('nav.footer.cookieSettings')}
-                aria-label={t('nav.footer.cookieSettings')}
-                onClick={() => window.revisitCkyConsent?.()}>
-                <img src="https://cdn-cookieyes.com/assets/images/revisit.svg" alt="" style={{ width: '1.18em', height: '1em', verticalAlign: 'top' }}/>
-              </Button>
+              {/* Reopens the CookieYes preferences; hides its floating widget where this footer is shown (not in embeds) */}
+              {hasCky && (
+                <>
+                  <style>{'.cky-btn-revisit-wrapper { display: none !important; }'}</style>
+                  <Button
+                    icon
+                    size="tiny"
+                    basic
+                    inverted
+                    floated={isMobileDevice ? 'left' : 'right'}
+                    title={t('nav.footer.cookieSettings')}
+                    aria-label={t('nav.footer.cookieSettings')}
+                    onClick={() => window.revisitCkyConsent()}>
+                    <CookieSettings style={{ verticalAlign: 'top' }}/>
+                  </Button>
+                </>
+              )}
             </Grid.Column>
           </Grid.Row>
         </Grid>
